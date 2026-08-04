@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 use super::combat::CombatSet;
+use super::hero_abilities::TimedSpeedEffect;
 use super::pooling::{CombatPools, EnemySceneKey};
 use super::{
     BossEnemy, ChallengeKind, CommandGrowth, DamageMeter, Enemy, GameAssets, GameSession,
@@ -574,7 +575,12 @@ fn move_challenge_enemies(
     mut vitals: ResMut<HeroVitals>,
     hero: Query<&Transform, (With<Hero>, Without<TrialEnemy>)>,
     mut challenges: Query<
-        (&Enemy, &mut ChallengeFighter, &mut Transform),
+        (
+            &Enemy,
+            &mut ChallengeFighter,
+            Option<&TimedSpeedEffect>,
+            &mut Transform,
+        ),
         (With<TrialEnemy>, Without<Hero>),
     >,
 ) {
@@ -584,14 +590,17 @@ fn move_challenge_enemies(
     let Ok(hero) = hero.single() else {
         return;
     };
-    for (enemy, mut fighter, mut transform) in &mut challenges {
+    for (enemy, mut fighter, speed_effect, mut transform) in &mut challenges {
         let to_hero = Vec3::new(
             hero.translation.x - transform.translation.x,
             0.0,
             hero.translation.z - transform.translation.z,
         );
         if to_hero.length_squared() > CHALLENGE_ATTACK_RANGE * CHALLENGE_ATTACK_RANGE {
-            transform.translation += to_hero.normalize_or_zero() * enemy.speed * time.delta_secs();
+            transform.translation += to_hero.normalize_or_zero()
+                * enemy.speed
+                * speed_effect.map_or(1.0, |effect| effect.multiplier)
+                * time.delta_secs();
         } else {
             fighter.attack_remaining -= time.delta_secs();
             while fighter.attack_remaining <= 0.0 && vitals.alive {

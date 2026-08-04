@@ -4374,6 +4374,8 @@ name = "rogue_commander"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "js-sys",
+ "web-sys",
 ]
 
 [[package]]

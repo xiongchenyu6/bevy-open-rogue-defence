@@ -17,16 +17,29 @@ pub enum HeroKind {
     SpiritKeeper,
     TideWalker,
     StarWagerer,
+    FrostOracle,
+    IronBerserker,
+    RiftDancer,
+    GroveArtificer,
+    SolarVanguard,
+    VoidReaper,
 }
 
 impl HeroKind {
-    pub const ALL: [Self; 6] = [
+    pub const COUNT: usize = 12;
+    pub const ALL: [Self; Self::COUNT] = [
         Self::StormSavant,
         Self::EmberRanger,
         Self::StoneWarden,
         Self::SpiritKeeper,
         Self::TideWalker,
         Self::StarWagerer,
+        Self::FrostOracle,
+        Self::IronBerserker,
+        Self::RiftDancer,
+        Self::GroveArtificer,
+        Self::SolarVanguard,
+        Self::VoidReaper,
     ];
 
     pub const fn from_index(index: usize) -> Self {

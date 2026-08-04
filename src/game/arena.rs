@@ -24,6 +24,12 @@ fn setup_arena(
         asset_server.load("models/hero_spirit_keeper.glb#Scene0"),
         asset_server.load("models/hero_tide_walker.glb#Scene0"),
         asset_server.load("models/hero_star_wagerer.glb#Scene0"),
+        asset_server.load("models/hero_frost_oracle.glb#Scene0"),
+        asset_server.load("models/hero_iron_berserker.glb#Scene0"),
+        asset_server.load("models/hero_rift_dancer.glb#Scene0"),
+        asset_server.load("models/hero_grove_artificer.glb#Scene0"),
+        asset_server.load("models/hero_solar_vanguard.glb#Scene0"),
+        asset_server.load("models/hero_void_reaper.glb#Scene0"),
     ];
     let enemy_scenes = [
         asset_server.load("models/enemy_rift_sapper.glb#Scene0"),
@@ -110,6 +116,42 @@ fn setup_arena(
             base_color: Color::srgb(0.88, 0.66, 0.16),
             emissive: LinearRgba::new(1.4, 0.62, 0.03, 1.0),
             metallic: 0.28,
+            ..default()
+        }),
+        materials.add(StandardMaterial {
+            base_color: Color::srgb(0.48, 0.82, 0.94),
+            emissive: LinearRgba::new(0.18, 1.2, 2.4, 1.0),
+            metallic: 0.2,
+            ..default()
+        }),
+        materials.add(StandardMaterial {
+            base_color: Color::srgb(0.56, 0.12, 0.08),
+            emissive: LinearRgba::new(1.35, 0.08, 0.02, 1.0),
+            metallic: 0.62,
+            ..default()
+        }),
+        materials.add(StandardMaterial {
+            base_color: Color::srgb(0.72, 0.18, 0.86),
+            emissive: LinearRgba::new(1.35, 0.08, 2.1, 1.0),
+            metallic: 0.22,
+            ..default()
+        }),
+        materials.add(StandardMaterial {
+            base_color: Color::srgb(0.22, 0.66, 0.25),
+            emissive: LinearRgba::new(0.16, 1.15, 0.18, 1.0),
+            metallic: 0.18,
+            ..default()
+        }),
+        materials.add(StandardMaterial {
+            base_color: Color::srgb(0.96, 0.63, 0.12),
+            emissive: LinearRgba::new(2.2, 0.68, 0.04, 1.0),
+            metallic: 0.42,
+            ..default()
+        }),
+        materials.add(StandardMaterial {
+            base_color: Color::srgb(0.26, 0.08, 0.42),
+            emissive: LinearRgba::new(0.55, 0.04, 1.45, 1.0),
+            metallic: 0.3,
             ..default()
         }),
     ];

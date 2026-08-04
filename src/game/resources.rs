@@ -777,7 +777,7 @@ pub fn parse_run_seed(value: &str) -> Option<u64> {
 
 #[derive(Resource, Clone)]
 pub struct GameAssets {
-    pub hero_scenes: [Handle<WorldAsset>; 6],
+    pub hero_scenes: [Handle<WorldAsset>; HeroKind::COUNT],
     pub enemy_scenes: [Handle<WorldAsset>; 12],
     pub boss_scenes: [Handle<WorldAsset>; 5],
     pub summon_scenes: [Handle<WorldAsset>; 6],
@@ -790,7 +790,7 @@ pub struct GameAssets {
     pub enemy_materials: [Handle<StandardMaterial>; 4],
     pub elite_material: Handle<StandardMaterial>,
     pub boss_materials: [Handle<StandardMaterial>; 5],
-    pub hero_materials: [Handle<StandardMaterial>; 6],
+    pub hero_materials: [Handle<StandardMaterial>; HeroKind::COUNT],
     pub projectile_material: Handle<StandardMaterial>,
     pub storm_material: Handle<StandardMaterial>,
 }

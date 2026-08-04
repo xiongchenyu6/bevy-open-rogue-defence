@@ -1,18 +1,15 @@
 use std::cmp::Ordering;
 
-use bevy::{prelude::*, window::PrimaryWindow};
+use bevy::prelude::*;
 
-#[cfg(test)]
-use super::bonds::DamageElement;
-use super::bonds::{DamageClass, DamageProfile, summon_cap};
+use super::bonds::{DamageClass, DamageElement, DamageProfile, summon_cap};
 use super::combat::CombatSet;
 use super::market::MarketEffects;
-use super::mobile_layout::hud_metrics;
 use super::pooling::{CombatPools, SummonVisual};
 use super::{
     ActiveSkill, BondId, BossEnemy, Core, Enemy, GameAssets, GameSession, Hero, HeroIdentity,
     HeroKind, HeroVitals, ImpactFx, MoveIntent, PlayerBuild, PlayerSummon, Projectile,
-    SelectedHero, SkillButtonLabel,
+    SelectedHero,
 };
 
 pub struct HeroAbilitiesPlugin;
@@ -20,6 +17,8 @@ pub struct HeroAbilitiesPlugin;
 impl Plugin for HeroAbilitiesPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<HeroAbilityRuntime>()
+            .init_resource::<HeroAttackSpeedModifier>()
+            .init_resource::<BasicAttackCounter>()
             .add_systems(PostStartup, attach_default_identity)
             .add_systems(PreUpdate, configure_ultimate)
             .add_systems(
@@ -38,11 +37,11 @@ impl Plugin for HeroAbilitiesPlugin {
             .add_systems(
                 PostUpdate,
                 (
+                    observe_basic_attack_passives,
                     observe_projectile_passives,
                     maintain_passive_state,
                     tick_tide_passive,
                     observe_ultimate_cast,
-                    update_active_skill_label,
                 )
                     .chain(),
             );
@@ -50,12 +49,12 @@ impl Plugin for HeroAbilitiesPlugin {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-struct UltimateProfile {
-    name: &'static str,
-    cooldown_secs: f32,
+pub(crate) struct UltimateProfile {
+    pub(crate) name: &'static str,
+    pub(crate) cooldown_secs: f32,
 }
 
-const fn ultimate_profile(kind: HeroKind) -> UltimateProfile {
+pub(crate) const fn ultimate_profile(kind: HeroKind) -> UltimateProfile {
     match kind {
         HeroKind::StormSavant => UltimateProfile {
             name: "THUNDER DOMAIN",
@@ -81,6 +80,30 @@ const fn ultimate_profile(kind: HeroKind) -> UltimateProfile {
             name: "LOADED FATE",
             cooldown_secs: 48.0,
         },
+        HeroKind::FrostOracle => UltimateProfile {
+            name: "ABSOLUTE ZERO",
+            cooldown_secs: 54.0,
+        },
+        HeroKind::IronBerserker => UltimateProfile {
+            name: "IRON RAMPAGE",
+            cooldown_secs: 48.0,
+        },
+        HeroKind::RiftDancer => UltimateProfile {
+            name: "PHASE TEMPEST",
+            cooldown_secs: 46.0,
+        },
+        HeroKind::GroveArtificer => UltimateProfile {
+            name: "OVERDRIVE CITADEL",
+            cooldown_secs: 58.0,
+        },
+        HeroKind::SolarVanguard => UltimateProfile {
+            name: "DAWN BASTION",
+            cooldown_secs: 52.0,
+        },
+        HeroKind::VoidReaper => UltimateProfile {
+            name: "EVENT HORIZON",
+            cooldown_secs: 50.0,
+        },
     }
 }
 
@@ -98,13 +121,16 @@ struct HeroAbilityRuntime {
     previous_ultimate_remaining: f32,
     sequence: Option<UltimateSequence>,
     storm_spell_signals: u8,
+    frost_spell_signals: u8,
+    void_attack_signals: u8,
     ember_stacks: u8,
     ember_decay_timer: f32,
-    ember_multiplier: f32,
     passive_timer: f32,
     star_kill_progress: u32,
+    hero_kill_progress: u32,
     last_total_kills: u32,
     last_core_hp: f32,
+    last_basic_attacks: u64,
 }
 
 impl Default for HeroAbilityRuntime {
@@ -114,13 +140,16 @@ impl Default for HeroAbilityRuntime {
             previous_ultimate_remaining: 0.0,
             sequence: None,
             storm_spell_signals: 0,
+            frost_spell_signals: 0,
+            void_attack_signals: 0,
             ember_stacks: 0,
             ember_decay_timer: 0.0,
-            ember_multiplier: 1.0,
             passive_timer: 0.0,
             star_kill_progress: 0,
+            hero_kill_progress: 0,
             last_total_kills: 0,
             last_core_hp: GameSession::default().core_hp,
+            last_basic_attacks: 0,
         }
     }
 }
@@ -128,9 +157,24 @@ impl Default for HeroAbilityRuntime {
 #[derive(Component)]
 pub(crate) struct AbilityGenerated;
 
+/// Counts completed basic-attack volleys directly at their source. This is
+/// independent of projectile lifetime, so point-blank hits cannot lose a
+/// passive trigger when the projectile is recycled in the same frame.
+#[derive(Resource, Default, Debug, Clone, Copy)]
+pub(crate) struct BasicAttackCounter(pub(crate) u64);
+
+#[derive(Resource, Debug, Clone, Copy)]
+pub(crate) struct HeroAttackSpeedModifier(pub(crate) f32);
+
+impl Default for HeroAttackSpeedModifier {
+    fn default() -> Self {
+        Self(1.0)
+    }
+}
+
 #[derive(Component)]
 pub(crate) struct TimedSpeedEffect {
-    pub(crate) original_speed: f32,
+    pub(crate) multiplier: f32,
     pub(crate) remaining: f32,
 }
 
@@ -183,15 +227,14 @@ fn tick_speed_effects(
     mut commands: Commands,
     time: Res<Time>,
     session: Res<GameSession>,
-    mut enemies: Query<(Entity, &mut Enemy, &mut TimedSpeedEffect)>,
+    mut enemies: Query<(Entity, &mut TimedSpeedEffect)>,
 ) {
     if session.paused || session.finished {
         return;
     }
-    for (entity, mut enemy, mut effect) in &mut enemies {
+    for (entity, mut effect) in &mut enemies {
         effect.remaining -= time.delta_secs();
         if effect.remaining <= 0.0 {
-            enemy.speed = effect.original_speed;
             commands.entity(entity).remove::<TimedSpeedEffect>();
         }
     }
@@ -214,12 +257,84 @@ fn tick_wet_marks(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
+fn observe_basic_attack_passives(
+    mut commands: Commands,
+    selected: Res<SelectedHero>,
+    vitals: Res<HeroVitals>,
+    attacks: Res<BasicAttackCounter>,
+    assets: Option<Res<GameAssets>>,
+    build: Res<PlayerBuild>,
+    mut attack_speed: ResMut<HeroAttackSpeedModifier>,
+    hero: Query<&Transform, With<Hero>>,
+    enemies: Query<(&Transform, Option<&BossEnemy>), With<Enemy>>,
+    mut runtime: ResMut<HeroAbilityRuntime>,
+    mut pools: ResMut<CombatPools>,
+) {
+    if runtime.observed_kind != selected.kind {
+        runtime.last_basic_attacks = attacks.0;
+        return;
+    }
+
+    let basic_attacks = attacks.0.wrapping_sub(runtime.last_basic_attacks);
+    runtime.last_basic_attacks = attacks.0;
+    if basic_attacks == 0 || !vitals.can_act() {
+        return;
+    }
+
+    match selected.kind {
+        HeroKind::EmberRanger => {
+            let gained = basic_attacks.min(u8::MAX as u64) as u8;
+            runtime.ember_stacks = runtime.ember_stacks.saturating_add(gained).min(12);
+            runtime.ember_decay_timer = 0.0;
+            attack_speed.0 = ember_attack_speed_multiplier(runtime.ember_stacks);
+            if let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) {
+                spawn_ability_fx(
+                    &mut commands,
+                    &mut pools,
+                    assets,
+                    HeroKind::EmberRanger,
+                    hero.translation,
+                    0.7 + runtime.ember_stacks as f32 * 0.04,
+                    0.18,
+                );
+            }
+        }
+        HeroKind::VoidReaper => {
+            let gained = basic_attacks.min(u8::MAX as u64) as u8;
+            runtime.void_attack_signals = runtime.void_attack_signals.saturating_add(gained);
+            while runtime.void_attack_signals >= 5 {
+                runtime.void_attack_signals -= 5;
+                let (Some(assets), Ok(hero), Some(target)) = (
+                    assets.as_deref(),
+                    hero.single(),
+                    preferred_target(hero.single().ok(), &enemies),
+                ) else {
+                    continue;
+                };
+                spawn_projectile_fan(
+                    &mut commands,
+                    &mut pools,
+                    assets,
+                    HeroKind::VoidReaper,
+                    hero.translation,
+                    target,
+                    2,
+                    build.attack_damage * 0.45,
+                    &build,
+                );
+            }
+        }
+        _ => {}
+    }
+}
+
 fn observe_projectile_passives(
     mut commands: Commands,
     selected: Res<SelectedHero>,
     vitals: Res<HeroVitals>,
     assets: Option<Res<GameAssets>>,
-    mut build: ResMut<PlayerBuild>,
+    build: Res<PlayerBuild>,
     hero: Query<&Transform, With<Hero>>,
     enemies: Query<(&Transform, Option<&BossEnemy>), With<Enemy>>,
     projectiles: Query<
@@ -232,15 +347,13 @@ fn observe_projectile_passives(
     if !vitals.can_act() {
         return;
     }
-    let mut external_shots = 0_u8;
     let mut spell_signals = 0_u8;
     for (_, profile) in &projectiles {
-        external_shots = external_shots.saturating_add(1);
         if is_storm_spell_signal(profile) {
             spell_signals = spell_signals.saturating_add(1);
         }
     }
-    if external_shots == 0 {
+    if spell_signals == 0 {
         return;
     }
 
@@ -282,23 +395,27 @@ fn observe_projectile_passives(
                 0.26,
             );
         }
-        HeroKind::EmberRanger => {
-            runtime.ember_stacks = runtime.ember_stacks.saturating_add(1).min(12);
-            runtime.ember_decay_timer = 0.0;
-            let next_multiplier = ember_attack_speed_multiplier(runtime.ember_stacks);
-            build.attacks_per_second *= next_multiplier / runtime.ember_multiplier.max(0.01);
-            runtime.ember_multiplier = next_multiplier;
-            if let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) {
-                spawn_ability_fx(
-                    &mut commands,
-                    &mut pools,
-                    assets,
-                    HeroKind::EmberRanger,
-                    hero.translation,
-                    0.7 + runtime.ember_stacks as f32 * 0.04,
-                    0.18,
-                );
+        HeroKind::FrostOracle => {
+            runtime.frost_spell_signals = runtime.frost_spell_signals.saturating_add(spell_signals);
+            if runtime.frost_spell_signals < 5 {
+                return;
             }
+            runtime.frost_spell_signals -= 5;
+            let (Some(assets), Some(target)) = (
+                assets.as_deref(),
+                preferred_target(hero.single().ok(), &enemies),
+            ) else {
+                return;
+            };
+            spawn_damage_zone(
+                &mut commands,
+                &mut pools,
+                assets,
+                HeroKind::FrostOracle,
+                target,
+                build.attack_damage * 0.55,
+                2.4,
+            );
         }
         _ => {}
     }
@@ -308,11 +425,12 @@ fn maintain_passive_state(
     mut commands: Commands,
     time: Res<Time>,
     selected: Res<SelectedHero>,
-    vitals: Res<HeroVitals>,
+    mut vitals: ResMut<HeroVitals>,
     assets: Option<Res<GameAssets>>,
     intent: Res<MoveIntent>,
     mut session: ResMut<GameSession>,
-    mut build: ResMut<PlayerBuild>,
+    build: Res<PlayerBuild>,
+    mut attack_speed: ResMut<HeroAttackSpeedModifier>,
     hero: Query<&Transform, With<Hero>>,
     core: Query<&Transform, (With<Core>, Without<Hero>)>,
     passive_spirits: Query<Entity, With<PassiveSpirit>>,
@@ -321,26 +439,37 @@ fn maintain_passive_state(
     mut runtime: ResMut<HeroAbilityRuntime>,
     mut pools: ResMut<CombatPools>,
 ) {
-    if session.paused || session.finished || !vitals.can_act() {
-        runtime.last_core_hp = session.core_hp;
-        runtime.last_total_kills = session.total_kills;
-        return;
-    }
-
     if runtime.observed_kind != selected.kind {
-        if runtime.ember_multiplier > 0.01 {
-            build.attacks_per_second /= runtime.ember_multiplier;
-        }
+        attack_speed.0 = 1.0;
         runtime.observed_kind = selected.kind;
         runtime.sequence = None;
         runtime.storm_spell_signals = 0;
+        runtime.frost_spell_signals = 0;
+        runtime.void_attack_signals = 0;
         runtime.ember_stacks = 0;
         runtime.ember_decay_timer = 0.0;
-        runtime.ember_multiplier = 1.0;
         runtime.passive_timer = 0.0;
         runtime.star_kill_progress = 0;
+        runtime.hero_kill_progress = 0;
         runtime.last_total_kills = session.total_kills;
         runtime.last_core_hp = session.core_hp;
+    }
+
+    let gained = session.total_kills.saturating_sub(runtime.last_total_kills);
+    match selected.kind {
+        HeroKind::StarWagerer => {
+            runtime.star_kill_progress = runtime.star_kill_progress.saturating_add(gained);
+        }
+        HeroKind::IronBerserker | HeroKind::SolarVanguard => {
+            runtime.hero_kill_progress = runtime.hero_kill_progress.saturating_add(gained);
+        }
+        _ => {}
+    }
+    runtime.last_total_kills = session.total_kills;
+
+    if session.paused || session.finished || !vitals.can_act() {
+        runtime.last_core_hp = session.core_hp;
+        return;
     }
 
     match selected.kind {
@@ -350,10 +479,7 @@ fn maintain_passive_state(
                 if runtime.ember_decay_timer >= 0.55 {
                     runtime.ember_decay_timer -= 0.55;
                     runtime.ember_stacks -= 1;
-                    let next_multiplier = ember_attack_speed_multiplier(runtime.ember_stacks);
-                    build.attacks_per_second *=
-                        next_multiplier / runtime.ember_multiplier.max(0.01);
-                    runtime.ember_multiplier = next_multiplier;
+                    attack_speed.0 = ember_attack_speed_multiplier(runtime.ember_stacks);
                 }
             }
         }
@@ -410,8 +536,6 @@ fn maintain_passive_state(
             }
         }
         HeroKind::StarWagerer => {
-            let gained = session.total_kills.saturating_sub(runtime.last_total_kills);
-            runtime.star_kill_progress = runtime.star_kill_progress.saturating_add(gained);
             while runtime.star_kill_progress >= 12 {
                 runtime.star_kill_progress -= 12;
                 session.gold = session.gold.saturating_add(18);
@@ -429,11 +553,78 @@ fn maintain_passive_state(
                 }
             }
         }
-        HeroKind::StormSavant | HeroKind::TideWalker => {}
+        HeroKind::IronBerserker => {
+            while runtime.hero_kill_progress >= 8 {
+                runtime.hero_kill_progress -= 8;
+                vitals.health = (vitals.health + iron_berserker_kill_heal(vitals.max_health))
+                    .min(vitals.max_health);
+                if let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) {
+                    spawn_ability_fx(
+                        &mut commands,
+                        &mut pools,
+                        assets,
+                        HeroKind::IronBerserker,
+                        hero.translation,
+                        1.8,
+                        0.32,
+                    );
+                }
+            }
+        }
+        HeroKind::RiftDancer => {
+            attack_speed.0 = rift_dancer_attack_speed_multiplier(intent.0.length_squared());
+        }
+        HeroKind::GroveArtificer => {
+            let in_repair_range = hero
+                .single()
+                .ok()
+                .zip(core.single().ok())
+                .is_some_and(|(hero, core)| hero.translation.distance(core.translation) <= 9.0);
+            if in_repair_range {
+                runtime.passive_timer += time.delta_secs();
+            } else {
+                runtime.passive_timer = 0.0;
+            }
+            if runtime.passive_timer >= 6.0 {
+                session.core_hp = (session.core_hp + 12.0).min(session.core_max_hp);
+                runtime.passive_timer -= 6.0;
+                if let (Some(assets), Ok(core)) = (assets.as_deref(), core.single()) {
+                    spawn_ability_fx(
+                        &mut commands,
+                        &mut pools,
+                        assets,
+                        HeroKind::GroveArtificer,
+                        core.translation,
+                        2.0,
+                        0.38,
+                    );
+                }
+            }
+        }
+        HeroKind::SolarVanguard => {
+            while runtime.hero_kill_progress >= 10 {
+                runtime.hero_kill_progress -= 10;
+                session.core_hp = (session.core_hp + 24.0).min(session.core_max_hp);
+                if let (Some(assets), Ok(core)) = (assets.as_deref(), core.single()) {
+                    spawn_ability_fx(
+                        &mut commands,
+                        &mut pools,
+                        assets,
+                        HeroKind::SolarVanguard,
+                        core.translation,
+                        2.2,
+                        0.4,
+                    );
+                }
+            }
+        }
+        HeroKind::StormSavant
+        | HeroKind::TideWalker
+        | HeroKind::FrostOracle
+        | HeroKind::VoidReaper => {}
     }
 
     runtime.last_core_hp = session.core_hp;
-    runtime.last_total_kills = session.total_kills;
 }
 
 fn tick_tide_passive(
@@ -491,21 +682,17 @@ fn tick_tide_passive(
     };
 
     let mut mutable_enemies = enemies.p1();
-    let Ok((mut enemy, transform, boss, wet, speed_effect)) = mutable_enemies.get_mut(target)
-    else {
+    let Ok((_enemy, transform, boss, wet, speed_effect)) = mutable_enemies.get_mut(target) else {
         return;
     };
     let position = transform.translation;
     if wet.is_some() {
-        let original_speed = speed_effect
-            .map(|effect| effect.original_speed)
-            .unwrap_or(enemy.speed);
         let multiplier = if boss.is_some() { 0.4 } else { 0.0 };
-        enemy.speed = original_speed * multiplier;
-        commands.entity(target).insert(TimedSpeedEffect {
-            original_speed,
-            remaining: if boss.is_some() { 1.0 } else { 1.2 },
-        });
+        commands.entity(target).insert(merged_speed_effect(
+            speed_effect,
+            multiplier,
+            if boss.is_some() { 1.0 } else { 1.2 },
+        ));
         commands.entity(target).remove::<WetMark>();
         if let Some(assets) = assets.as_deref() {
             spawn_damage_zone(
@@ -537,7 +724,7 @@ fn tick_tide_passive(
 fn observe_ultimate_cast(
     mut commands: Commands,
     selected: Res<SelectedHero>,
-    vitals: Res<HeroVitals>,
+    mut vitals: ResMut<HeroVitals>,
     active: Res<ActiveSkill>,
     assets: Option<Res<GameAssets>>,
     mut session: ResMut<GameSession>,
@@ -595,18 +782,13 @@ fn observe_ultimate_cast(
             });
         }
         HeroKind::StoneWarden => {
-            for (entity, mut enemy, transform, _, speed_effect) in &mut enemies {
+            for (entity, _enemy, transform, _, speed_effect) in &mut enemies {
                 if hero.translation.distance(transform.translation) > 7.5 {
                     continue;
                 }
-                let original_speed = speed_effect
-                    .map(|effect| effect.original_speed)
-                    .unwrap_or(enemy.speed);
-                enemy.speed = original_speed * 0.28;
-                commands.entity(entity).insert(TimedSpeedEffect {
-                    original_speed,
-                    remaining: 6.0,
-                });
+                commands
+                    .entity(entity)
+                    .insert(merged_speed_effect(speed_effect, 0.28, 6.0));
             }
             session.core_hp = (session.core_hp + 90.0).min(session.core_max_hp);
             runtime.sequence = Some(UltimateSequence {
@@ -641,20 +823,17 @@ fn observe_ultimate_cast(
             }
         }
         HeroKind::TideWalker => {
-            for (entity, mut enemy, _, boss, speed_effect) in &mut enemies {
-                let original_speed = speed_effect
-                    .map(|effect| effect.original_speed)
-                    .unwrap_or(enemy.speed);
+            for (entity, _enemy, _, boss, speed_effect) in &mut enemies {
                 let (multiplier, remaining) = if boss.is_some() {
                     (0.4, 5.0)
                 } else {
                     (0.0, 3.0)
                 };
-                enemy.speed = original_speed * multiplier;
-                commands.entity(entity).insert(TimedSpeedEffect {
-                    original_speed,
+                commands.entity(entity).insert(merged_speed_effect(
+                    speed_effect,
+                    multiplier,
                     remaining,
-                });
+                ));
             }
         }
         HeroKind::StarWagerer => {
@@ -717,6 +896,81 @@ fn observe_ultimate_cast(
                 }
             }
         }
+        HeroKind::FrostOracle => {
+            for (entity, _enemy, _, boss, speed_effect) in &mut enemies {
+                let (multiplier, remaining) = if boss.is_some() {
+                    (0.5, 4.0)
+                } else {
+                    (0.0, 2.5)
+                };
+                commands.entity(entity).insert(merged_speed_effect(
+                    speed_effect,
+                    multiplier,
+                    remaining,
+                ));
+            }
+            runtime.sequence = Some(UltimateSequence {
+                kind: selected.kind,
+                pulses_left: 4,
+                pulse_timer: 0.0,
+                pulse_interval: 0.55,
+            });
+        }
+        HeroKind::IronBerserker => {
+            let missing_health = (vitals.max_health - vitals.health).max(0.0);
+            vitals.health = (vitals.health + missing_health * 0.25).min(vitals.max_health);
+            runtime.sequence = Some(UltimateSequence {
+                kind: selected.kind,
+                pulses_left: 6,
+                pulse_timer: 0.0,
+                pulse_interval: 0.32,
+            });
+        }
+        HeroKind::RiftDancer => {
+            runtime.sequence = Some(UltimateSequence {
+                kind: selected.kind,
+                pulses_left: 8,
+                pulse_timer: 0.0,
+                pulse_interval: 0.22,
+            });
+        }
+        HeroKind::GroveArtificer => {
+            session.core_hp = (session.core_hp + 160.0).min(session.core_max_hp);
+            runtime.sequence = Some(UltimateSequence {
+                kind: selected.kind,
+                pulses_left: 6,
+                pulse_timer: 0.0,
+                pulse_interval: 0.75,
+            });
+        }
+        HeroKind::SolarVanguard => {
+            session.core_hp = (session.core_hp + 120.0).min(session.core_max_hp);
+            vitals.health = (vitals.health + vitals.max_health * 0.25).min(vitals.max_health);
+            for (entity, _enemy, _, _, speed_effect) in &mut enemies {
+                commands
+                    .entity(entity)
+                    .insert(merged_speed_effect(speed_effect, 0.75, 2.0));
+            }
+            runtime.sequence = Some(UltimateSequence {
+                kind: selected.kind,
+                pulses_left: 5,
+                pulse_timer: 0.0,
+                pulse_interval: 0.6,
+            });
+        }
+        HeroKind::VoidReaper => {
+            for (entity, _enemy, _, _, speed_effect) in &mut enemies {
+                commands
+                    .entity(entity)
+                    .insert(merged_speed_effect(speed_effect, 0.55, 4.0));
+            }
+            runtime.sequence = Some(UltimateSequence {
+                kind: selected.kind,
+                pulses_left: 5,
+                pulse_timer: 0.0,
+                pulse_interval: 0.5,
+            });
+        }
     }
 }
 
@@ -728,6 +982,7 @@ fn tick_ultimate_sequence(
     build: Res<PlayerBuild>,
     assets: Option<Res<GameAssets>>,
     hero: Query<&Transform, With<Hero>>,
+    core: Query<&Transform, (With<Core>, Without<Hero>)>,
     enemies: Query<(&Transform, Option<&BossEnemy>), With<Enemy>>,
     mut runtime: ResMut<HeroAbilityRuntime>,
     mut pools: ResMut<CombatPools>,
@@ -791,6 +1046,86 @@ fn tick_ultimate_sequence(
                 4.2,
                 0.72,
             );
+        }
+        HeroKind::FrostOracle => {
+            if let Some(target) = preferred_target(Some(hero), &enemies) {
+                spawn_damage_zone(
+                    &mut commands,
+                    &mut pools,
+                    assets,
+                    sequence.kind,
+                    target,
+                    build.attack_damage * 0.6 + session.level as f32 * 5.0,
+                    3.0,
+                );
+            }
+        }
+        HeroKind::IronBerserker => {
+            spawn_damage_zone(
+                &mut commands,
+                &mut pools,
+                assets,
+                sequence.kind,
+                hero.translation,
+                build.attack_damage * 0.75,
+                2.8,
+            );
+        }
+        HeroKind::RiftDancer => {
+            if let Some(target) = preferred_target(Some(hero), &enemies) {
+                spawn_projectile_fan(
+                    &mut commands,
+                    &mut pools,
+                    assets,
+                    sequence.kind,
+                    hero.translation,
+                    target,
+                    3,
+                    build.attack_damage * 0.55,
+                    &build,
+                );
+            }
+        }
+        HeroKind::GroveArtificer => {
+            let center = core
+                .single()
+                .map(|core| core.translation)
+                .unwrap_or(hero.translation);
+            spawn_damage_zone(
+                &mut commands,
+                &mut pools,
+                assets,
+                sequence.kind,
+                center,
+                build.attack_damage * 0.65,
+                5.0,
+            );
+        }
+        HeroKind::SolarVanguard => {
+            if let Some(target) = preferred_target(Some(hero), &enemies) {
+                spawn_damage_zone(
+                    &mut commands,
+                    &mut pools,
+                    assets,
+                    sequence.kind,
+                    target,
+                    build.attack_damage * 0.8,
+                    3.2,
+                );
+            }
+        }
+        HeroKind::VoidReaper => {
+            if let Some(target) = preferred_target(Some(hero), &enemies) {
+                spawn_damage_zone(
+                    &mut commands,
+                    &mut pools,
+                    assets,
+                    sequence.kind,
+                    target,
+                    build.attack_damage * 1.15,
+                    4.0,
+                );
+            }
         }
         HeroKind::SpiritKeeper | HeroKind::TideWalker | HeroKind::StarWagerer => {}
     }
@@ -882,30 +1217,6 @@ fn update_spirit_companions(
     }
 }
 
-fn update_active_skill_label(
-    selected: Res<SelectedHero>,
-    active: Res<ActiveSkill>,
-    windows: Query<&Window, With<PrimaryWindow>>,
-    mut labels: Query<&mut Text, With<SkillButtonLabel>>,
-) {
-    let profile = ultimate_profile(selected.kind);
-    let compact = windows
-        .single()
-        .map(|window| hud_metrics(window.width(), window.height()).compact)
-        .unwrap_or(false);
-    for mut label in &mut labels {
-        **label = if active.remaining <= 0.0 {
-            if compact {
-                format!("{}\nREADY", profile.name)
-            } else {
-                format!("{} READY\nSPACE / TAP", profile.name)
-            }
-        } else {
-            format!("{}\n{:.1}s", profile.name, active.remaining)
-        };
-    }
-}
-
 fn preferred_target(
     hero: Option<&Transform>,
     enemies: &Query<(&Transform, Option<&BossEnemy>), With<Enemy>>,
@@ -961,7 +1272,9 @@ fn spawn_projectile_fan(
         ) else {
             break;
         };
-        commands.entity(entity).insert(AbilityGenerated);
+        commands
+            .entity(entity)
+            .insert((AbilityGenerated, ability_damage_profile(kind)));
     }
 }
 
@@ -989,7 +1302,9 @@ fn spawn_damage_zone(
     ) else {
         return;
     };
-    commands.entity(entity).insert(AbilityGenerated);
+    commands
+        .entity(entity)
+        .insert((AbilityGenerated, ability_damage_profile(kind)));
     spawn_ability_fx(commands, pools, assets, kind, center, radius, 0.38);
 }
 
@@ -1056,6 +1371,42 @@ const fn ember_attack_speed_multiplier(stacks: u8) -> f32 {
     1.0 + capped as f32 * 0.025
 }
 
+const fn iron_berserker_kill_heal(max_health: f32) -> f32 {
+    max_health * 0.06
+}
+
+const fn rift_dancer_attack_speed_multiplier(movement_squared: f32) -> f32 {
+    if movement_squared > 0.04 { 1.15 } else { 1.0 }
+}
+
+const fn ability_damage_profile(kind: HeroKind) -> DamageProfile {
+    match kind {
+        HeroKind::StormSavant => DamageProfile::new(DamageElement::Storm, DamageClass::Spell),
+        HeroKind::EmberRanger => DamageProfile::new(DamageElement::Flame, DamageClass::Attack),
+        HeroKind::StoneWarden => DamageProfile::new(DamageElement::Physical, DamageClass::Attack),
+        HeroKind::SpiritKeeper => DamageProfile::new(DamageElement::Physical, DamageClass::Summon),
+        HeroKind::TideWalker => DamageProfile::new(DamageElement::Frost, DamageClass::Spell),
+        HeroKind::StarWagerer => DamageProfile::new(DamageElement::Arcane, DamageClass::Spell),
+        HeroKind::FrostOracle => DamageProfile::new(DamageElement::Frost, DamageClass::Spell),
+        HeroKind::IronBerserker => DamageProfile::new(DamageElement::Physical, DamageClass::Attack),
+        HeroKind::RiftDancer => DamageProfile::new(DamageElement::Arcane, DamageClass::Attack),
+        HeroKind::GroveArtificer => DamageProfile::new(DamageElement::Storm, DamageClass::Summon),
+        HeroKind::SolarVanguard => DamageProfile::new(DamageElement::Flame, DamageClass::Spell),
+        HeroKind::VoidReaper => DamageProfile::new(DamageElement::Arcane, DamageClass::Attack),
+    }
+}
+
+fn merged_speed_effect(
+    existing: Option<&TimedSpeedEffect>,
+    multiplier: f32,
+    remaining: f32,
+) -> TimedSpeedEffect {
+    TimedSpeedEffect {
+        multiplier: existing.map_or(multiplier, |effect| effect.multiplier.min(multiplier)),
+        remaining: existing.map_or(remaining, |effect| effect.remaining.max(remaining)),
+    }
+}
+
 fn is_storm_spell_signal(profile: Option<&DamageProfile>) -> bool {
     profile.is_some_and(|profile| profile.class == DamageClass::Spell)
 }
@@ -1101,6 +1452,12 @@ mod tests {
             "spirit_keeper",
             "tide_walker",
             "star_wagerer",
+            "frost_oracle",
+            "iron_berserker",
+            "rift_dancer",
+            "grove_artificer",
+            "solar_vanguard",
+            "void_reaper",
         ];
         for (index, kind) in HeroKind::ALL.into_iter().enumerate() {
             assert_eq!(kind.index(), index);
@@ -1120,7 +1477,12 @@ mod tests {
                 profile.cooldown_secs
             })
             .collect();
-        assert_eq!(cooldowns, [50.0, 45.0, 50.0, 55.0, 52.0, 48.0]);
+        assert_eq!(
+            cooldowns,
+            [
+                50.0, 45.0, 50.0, 55.0, 52.0, 48.0, 54.0, 48.0, 46.0, 58.0, 52.0, 50.0,
+            ]
+        );
     }
 
     #[test]
@@ -1146,6 +1508,51 @@ mod tests {
         assert_eq!(ember_attack_speed_multiplier(4), 1.1);
         assert_eq!(ember_attack_speed_multiplier(12), 1.3);
         assert_eq!(ember_attack_speed_multiplier(200), 1.3);
+    }
+
+    #[test]
+    fn new_sustain_and_movement_passives_have_exact_boundaries() {
+        assert!((iron_berserker_kill_heal(1_000.0) - 60.0).abs() < 0.001);
+        assert_eq!(rift_dancer_attack_speed_multiplier(0.04), 1.0);
+        assert_eq!(rift_dancer_attack_speed_multiplier(0.041), 1.15);
+        assert_eq!(HeroAttackSpeedModifier::default().0, 1.0);
+    }
+
+    #[test]
+    fn every_hero_ability_carries_its_runtime_damage_semantics() {
+        let expected = [
+            (DamageElement::Storm, DamageClass::Spell),
+            (DamageElement::Flame, DamageClass::Attack),
+            (DamageElement::Physical, DamageClass::Attack),
+            (DamageElement::Physical, DamageClass::Summon),
+            (DamageElement::Frost, DamageClass::Spell),
+            (DamageElement::Arcane, DamageClass::Spell),
+            (DamageElement::Frost, DamageClass::Spell),
+            (DamageElement::Physical, DamageClass::Attack),
+            (DamageElement::Arcane, DamageClass::Attack),
+            (DamageElement::Storm, DamageClass::Summon),
+            (DamageElement::Flame, DamageClass::Spell),
+            (DamageElement::Arcane, DamageClass::Attack),
+        ];
+        for (kind, expected) in HeroKind::ALL.into_iter().zip(expected) {
+            let profile = ability_damage_profile(kind);
+            assert_eq!((profile.element, profile.class), expected);
+        }
+    }
+
+    #[test]
+    fn overlapping_speed_effects_keep_the_strongest_slow_and_longest_time() {
+        let existing = TimedSpeedEffect {
+            multiplier: 0.5,
+            remaining: 2.0,
+        };
+        let extended = merged_speed_effect(Some(&existing), 0.75, 4.0);
+        assert_eq!(extended.multiplier, 0.5);
+        assert_eq!(extended.remaining, 4.0);
+
+        let strengthened = merged_speed_effect(Some(&existing), 0.2, 1.0);
+        assert_eq!(strengthened.multiplier, 0.2);
+        assert_eq!(strengthened.remaining, 2.0);
     }
 
     #[test]

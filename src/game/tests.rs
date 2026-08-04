@@ -1,12 +1,12 @@
 use std::collections::HashSet;
 
-use super::content::{BONDS, BOSSES, ENEMIES, HEROES, Rarity, SKILLS};
+use super::content::{Attribute, BONDS, BOSSES, ENEMIES, HEROES, Rarity, SKILLS};
 use super::progression::bond_cost;
-use super::{BondId, GameSession, PlayerBuild, SkillId};
+use super::{BondId, GameSession, HeroKind, PlayerBuild, SkillId};
 
 #[test]
 fn content_catalog_has_expected_unique_counts() {
-    assert_eq!(HEROES.len(), 6);
+    assert_eq!(HEROES.len(), HeroKind::COUNT);
     assert_eq!(SKILLS.len(), 30);
     assert_eq!(BONDS.len(), 10);
     assert_eq!(ENEMIES.len(), 12);
@@ -23,6 +23,31 @@ fn content_catalog_has_expected_unique_counts() {
     {
         assert!(ids.insert(id), "duplicate content id: {id}");
     }
+}
+
+#[test]
+fn every_hero_has_three_valid_theme_starts_and_attributes_are_balanced() {
+    let mut attribute_counts = [0_usize; 3];
+    for hero in HEROES {
+        let primary_index = match hero.primary {
+            Attribute::Strength => 0,
+            Attribute::Agility => 1,
+            Attribute::Intelligence => 2,
+        };
+        attribute_counts[primary_index] += 1;
+
+        assert_eq!(hero.starting_skill, hero.starting_skill_pool[0]);
+        let unique: HashSet<_> = hero.starting_skill_pool.into_iter().collect();
+        assert_eq!(unique.len(), hero.starting_skill_pool.len(), "{}", hero.id);
+        for starting_skill in hero.starting_skill_pool {
+            assert!(
+                SKILLS.iter().any(|skill| skill.id == starting_skill),
+                "{} has missing starting skill {starting_skill}",
+                hero.id
+            );
+        }
+    }
+    assert_eq!(attribute_counts, [4, 4, 4]);
 }
 
 #[test]

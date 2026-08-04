@@ -193,6 +193,54 @@
       const status = document.querySelector("#status");
       let wakeLock;
 
+      function normalizeRunSeed(value) {
+        const raw = value?.trim() ?? "";
+        if (!/^(?:0[xX][0-9a-fA-F]+|[0-9]+)$/.test(raw)) return null;
+        try {
+          const parsed = BigInt(raw);
+          if (parsed < 0n || parsed > 0xffffffffffffffffn) return null;
+          return `0x${parsed.toString(16).padStart(16, "0")}`;
+        } catch {
+          return null;
+        }
+      }
+
+      function ensureRunSeedInUrl() {
+        try {
+          const url = new URL(window.location.href);
+          const supplied = normalizeRunSeed(url.searchParams.get("seed"));
+          if (supplied) {
+            url.searchParams.set("seed", supplied);
+            history.replaceState(history.state, "", url);
+            return;
+          }
+
+          let seed;
+          if (globalThis.crypto?.getRandomValues) {
+            const words = new Uint32Array(2);
+            do {
+              globalThis.crypto.getRandomValues(words);
+            } while (words[0] === 0 && words[1] === 0);
+            seed = `0x${words[0].toString(16).padStart(8, "0")}${words[1]
+              .toString(16)
+              .padStart(8, "0")}`;
+          } else {
+            const fallback =
+              (BigInt(Date.now()) << 20n) ^
+              BigInt(Math.floor(Math.random() * 0x100000000));
+            seed = `0x${BigInt.asUintN(64, fallback)
+              .toString(16)
+              .padStart(16, "0")}`;
+          }
+          url.searchParams.set("seed", seed);
+          history.replaceState(history.state, "", url);
+        } catch (error) {
+          console.warn("Run seed URL setup failed; using engine entropy.", error);
+        }
+      }
+
+      ensureRunSeedInUrl();
+
       async function enterMobilePlayMode() {
         if (!window.matchMedia("(pointer: coarse)").matches) return;
         try {

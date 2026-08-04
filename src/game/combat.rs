@@ -13,6 +13,7 @@ use super::bonds::{
 };
 use super::bosses::BossSummon;
 use super::content::{BOSSES, ENEMIES, EnemyBehavior};
+use super::hero_abilities::{BasicAttackCounter, HeroAttackSpeedModifier, TimedSpeedEffect};
 use super::market::MarketEffects;
 use super::pooling::{CombatPools, DAMAGE_NUMBER_RENDER_LAYER, EnemySceneKey};
 use super::skills::SkillRuntime;
@@ -908,6 +909,7 @@ fn move_enemies(
                 Option<&mut EnemyHeroThreat>,
                 Option<&EliteAffix>,
                 Option<&CommanderAuraState>,
+                Option<&TimedSpeedEffect>,
                 &mut Transform,
             ),
             (Without<TrialEnemy>, Without<ArchiveEcho>),
@@ -943,6 +945,7 @@ fn move_enemies(
         mut threat,
         affix,
         commander_aura,
+        speed_effect,
         mut transform,
     ) in &mut enemies.p1()
     {
@@ -954,6 +957,7 @@ fn move_enemies(
         let movement_speed = enemy.speed
             * action_speed
             * commander_multiplier
+            * speed_effect.map_or(1.0, |effect| effect.multiplier)
             * market_effects.enemy_movement_multiplier(boss.is_some());
         let attack_damage = enemy.damage * commander_multiplier;
         let behavior =
@@ -1397,6 +1401,8 @@ fn auto_attack(
     session: Res<GameSession>,
     vitals: Res<HeroVitals>,
     build: Res<PlayerBuild>,
+    attack_speed_modifier: Option<Res<HeroAttackSpeedModifier>>,
+    mut basic_attacks: Option<ResMut<BasicAttackCounter>>,
     mut market_effects: ResMut<MarketEffects>,
     assets: Option<Res<GameAssets>>,
     mut pools: ResMut<CombatPools>,
@@ -1425,8 +1431,12 @@ fn auto_attack(
     let Ok(hero) = hero_query.single() else {
         return;
     };
+    let attacks_per_second = build.attacks_per_second
+        * attack_speed_modifier
+            .as_deref()
+            .map_or(1.0, |modifier| modifier.0);
     clock.0.set_duration(std::time::Duration::from_secs_f32(
-        1.0 / build.attacks_per_second.max(0.2),
+        1.0 / attacks_per_second.max(0.2),
     ));
     clock.0.tick(time.delta());
     if !clock.0.just_finished() {
@@ -1497,6 +1507,7 @@ fn auto_attack(
 
     let base_direction = (target - hero.translation).normalize_or_zero();
     let shot_count = build.multishot.max(1);
+    let mut fired = false;
     for i in 0..shot_count {
         let spread_index = i as f32 - (shot_count as f32 - 1.0) * 0.5;
         let spread = spread_index * 0.14;
@@ -1521,6 +1532,10 @@ fn auto_attack(
         commands
             .entity(entity)
             .insert(DamageProfile::PHYSICAL_ATTACK);
+        fired = true;
+    }
+    if fired && let Some(attacks) = basic_attacks.as_deref_mut() {
+        attacks.0 = attacks.0.wrapping_add(1);
     }
 }
 
@@ -2619,6 +2634,41 @@ mod tests {
             })
             .insert_resource(test_game_assets());
         app
+    }
+
+    #[test]
+    fn basic_attack_counter_advances_once_per_successful_volley() {
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<PlayerBuild>()
+            .init_resource::<MarketEffects>()
+            .init_resource::<CombatPools>()
+            .init_resource::<AttackClock>()
+            .init_resource::<BasicAttackCounter>()
+            .insert_resource(test_game_assets());
+        app.world_mut().resource_mut::<PlayerBuild>().multishot = 3;
+        app.world_mut().spawn((Hero, Transform::default()));
+        app.world_mut()
+            .spawn((test_enemy(100.0), Transform::from_xyz(2.0, 0.0, 0.0)));
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs(1));
+
+        app.world_mut()
+            .run_system_once(auto_attack)
+            .expect("auto attack should run");
+
+        assert_eq!(app.world().resource::<BasicAttackCounter>().0, 1);
+        assert_eq!(
+            app.world_mut()
+                .query_filtered::<Entity, With<Projectile>>()
+                .iter(app.world())
+                .count(),
+            3,
+            "multishot projectiles still represent one basic-attack volley"
+        );
     }
 
     #[test]

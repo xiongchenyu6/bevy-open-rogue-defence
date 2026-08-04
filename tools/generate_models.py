@@ -7,6 +7,7 @@ from math import pi
 from pathlib import Path
 
 import bpy
+from mathutils import Vector
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,6 +21,12 @@ HERO_MODEL_NAMES = (
     "hero_spirit_keeper",
     "hero_tide_walker",
     "hero_star_wagerer",
+    "hero_frost_oracle",
+    "hero_iron_berserker",
+    "hero_rift_dancer",
+    "hero_grove_artificer",
+    "hero_solar_vanguard",
+    "hero_void_reaper",
 )
 
 ENEMY_MODEL_NAMES = (
@@ -52,6 +59,13 @@ SUMMON_MODEL_NAMES = (
     "summon_bolt_turret",
     "summon_frost_wyrm",
     "summon_ancestor_colossus",
+)
+
+MODEL_NAME_GROUPS = (
+    HERO_MODEL_NAMES,
+    ENEMY_MODEL_NAMES,
+    BOSS_MODEL_NAMES,
+    SUMMON_MODEL_NAMES,
 )
 
 
@@ -137,6 +151,16 @@ def torus(name, loc, major, minor, mat, rot=(0.0, 0.0, 0.0)):
     obj = bpy.context.object
     obj.name = name
     return assign(obj, mat)
+
+
+def rod_between(name, start, end, radius, mat, vertices=6):
+    start = Vector(start)
+    end = Vector(end)
+    delta = end - start
+    obj = cylinder(name, (start + end) * 0.5, radius, delta.length, mat, vertices=vertices)
+    obj.rotation_mode = "QUATERNION"
+    obj.rotation_quaternion = delta.to_track_quat("Z", "Y")
+    return obj
 
 
 def humanoid_base(primary, accent, dark, heavy=False):
@@ -252,6 +276,118 @@ def hero_star():
         cube("fate_card", (x, -0.06, 1.35 + (i % 2) * 0.18), (0.12, 0.025, 0.19), gold, (0.0, 0.12 * x, x * 0.28), 0.02)
     sphere("fate_die", (0.0, -0.12, 2.22), (0.18, 0.18, 0.18), white)
     export("hero_star_wagerer")
+
+
+def hero_frost_oracle():
+    reset()
+    ice = material("oracle_ice", (0.30, 0.72, 0.88), 0.22, 0.30)
+    crystal = material("oracle_crystal", (0.68, 0.96, 1.0), 0.30, 0.18)
+    midnight = material("oracle_midnight", (0.025, 0.08, 0.18), 0.20, 0.58)
+    humanoid_base(ice, crystal, midnight)
+    cube("frost_mantle", (0.0, 0.20, 1.25), (0.38, 0.06, 0.62), midnight, (0.16, 0.0, 0.0), 0.035)
+    cylinder("moon_staff", (0.61, 0.0, 0.86), 0.045, 1.70, midnight, vertices=7)
+    crescent_points = (
+        (0.60, 0.0, 2.40),
+        (0.35, 0.0, 2.34),
+        (0.17, 0.0, 2.19),
+        (0.12, 0.0, 2.00),
+        (0.23, 0.0, 1.82),
+        (0.47, 0.0, 1.70),
+        (0.61, 0.0, 1.72),
+    )
+    for start, end in zip(crescent_points, crescent_points[1:]):
+        rod_between("moon_crescent", start, end, 0.052, crystal)
+    for x, z in ((-0.48, 2.18), (-0.05, 2.38), (0.30, 2.24)):
+        cone("floating_ice", (x, 0.16, z + 0.07), 0.085, 0.0, 0.28, crystal, vertices=6)
+        cone("floating_ice", (x, 0.16, z - 0.07), 0.085, 0.0, 0.28, crystal, (pi, 0.0, 0.0), 6)
+    export("hero_frost_oracle")
+
+
+def hero_iron_berserker():
+    reset()
+    iron = material("berserker_iron", (0.055, 0.065, 0.075), 0.82, 0.28)
+    crimson = material("berserker_crimson", (0.48, 0.025, 0.025), 0.42, 0.42)
+    furnace = material("berserker_furnace", (1.0, 0.25, 0.025), 0.28, 0.18)
+    humanoid_base(iron, furnace, crimson, heavy=True)
+    for side in (-1, 1):
+        cube("iron_pauldron", (side * 0.50, 0.0, 1.52), (0.24, 0.24, 0.18), crimson, bevel=0.055)
+        cylinder("axe_handle", (side * 0.70, 0.0, 1.04), 0.055, 1.46, iron, vertices=7)
+        cube("axe_head", (side * 0.70, 0.0, 1.75), (0.25, 0.10, 0.11), crimson, bevel=0.025)
+        cone("axe_edge", (side * 0.96, 0.0, 1.75), 0.15, 0.015, 0.40, iron, (0.0, side * pi / 2, 0.0), 6)
+    sphere("furnace_core", (0.0, -0.35, 1.22), (0.20, 0.10, 0.22), furnace)
+    torus("furnace_rim", (0.0, -0.37, 1.22), 0.25, 0.045, crimson, (pi / 2, 0.0, 0.0))
+    export("hero_iron_berserker")
+
+
+def hero_rift_dancer():
+    reset()
+    magenta = material("dancer_magenta", (0.76, 0.055, 0.58), 0.18, 0.30)
+    teal = material("dancer_teal", (0.03, 0.82, 0.68), 0.26, 0.22)
+    void = material("dancer_void", (0.035, 0.025, 0.08), 0.30, 0.46)
+    humanoid_base(magenta, teal, void)
+    for side in (-1, 1):
+        cube("split_coat", (side * 0.19, 0.20, 0.83), (0.14, 0.045, 0.48), magenta, (0.18, 0.0, side * 0.18), 0.025)
+        torus("moon_blade", (side * 0.68, 0.0, 1.22), 0.31, 0.045, teal, (pi / 2, 0.0, 0.0))
+        cone("moon_tip", (side * 0.68, 0.0, 1.60), 0.075, 0.0, 0.28, magenta, vertices=6)
+    for x, z, tilt in ((-0.30, 2.22, -0.30), (-0.13, 2.37, -0.78), (0.16, 2.37, 0.78), (0.34, 2.18, 0.30)):
+        cube("broken_halo", (x, 0.12, z), (0.13, 0.035, 0.045), teal, (0.0, tilt, 0.0), 0.012)
+    sphere("rift_shard", (0.0, -0.10, 2.18), (0.10, 0.07, 0.15), magenta)
+    export("hero_rift_dancer")
+
+
+def hero_grove_artificer():
+    reset()
+    moss = material("artificer_moss", (0.14, 0.38, 0.16), 0.10, 0.78)
+    brass = material("artificer_brass", (0.63, 0.36, 0.07), 0.72, 0.30)
+    leaf = material("artificer_leaf_crystal", (0.34, 0.90, 0.42), 0.18, 0.22)
+    humanoid_base(moss, leaf, brass)
+    cube("turret_pack", (0.0, 0.28, 1.26), (0.33, 0.19, 0.38), brass, bevel=0.045)
+    cylinder("turret_pivot", (0.0, 0.30, 1.72), 0.15, 0.34, moss, vertices=8)
+    cube("turret_barrel", (-0.25, 0.30, 1.84), (0.38, 0.075, 0.075), brass, (0.0, -0.08, 0.0), 0.018)
+    cone("turret_muzzle", (-0.67, 0.30, 1.84), 0.11, 0.055, 0.28, leaf, (0.0, -pi / 2, 0.0), 7)
+    cylinder("wrench_staff", (0.66, 0.0, 1.12), 0.05, 1.90, brass, vertices=7)
+    cube("wrench_jaw", (0.53, 0.0, 2.06), (0.055, 0.065, 0.19), brass, (0.0, -0.48, 0.0), 0.016)
+    cube("wrench_jaw", (0.79, 0.0, 2.06), (0.055, 0.065, 0.19), brass, (0.0, 0.48, 0.0), 0.016)
+    cone("leaf_crystal", (0.66, -0.03, 2.23), 0.13, 0.0, 0.36, leaf, vertices=6)
+    cone("leaf_crystal", (0.66, -0.03, 2.05), 0.13, 0.0, 0.36, leaf, (pi, 0.0, 0.0), 6)
+    for side in (-1, 1):
+        cone("leaf_mantle", (side * 0.37, 0.10, 1.62), 0.15, 0.0, 0.46, leaf, (0.0, side * 0.42, 0.0), 6)
+    export("hero_grove_artificer")
+
+
+def hero_solar_vanguard():
+    reset()
+    ivory = material("vanguard_ivory", (0.78, 0.80, 0.76), 0.62, 0.28)
+    gold = material("vanguard_gold", (0.98, 0.62, 0.08), 0.76, 0.20)
+    navy = material("vanguard_navy", (0.035, 0.08, 0.16), 0.34, 0.42)
+    humanoid_base(ivory, gold, navy, heavy=True)
+    cube("sun_breastplate", (0.0, -0.22, 1.26), (0.31, 0.10, 0.38), ivory, bevel=0.055)
+    cylinder("sun_shield", (-0.66, -0.02, 1.18), 0.47, 0.14, ivory, (0.0, pi / 2, 0.0), 12)
+    torus("sun_wheel", (-0.57, -0.02, 1.18), 0.34, 0.055, gold, (0.0, pi / 2, 0.0))
+    sphere("sun_core", (-0.56, -0.10, 1.18), (0.13, 0.08, 0.13), gold)
+    for y, z in ((-0.02, 1.61), (-0.02, 0.75), (-0.42, 1.18), (0.38, 1.18)):
+        cube("sun_ray", (-0.56, y, z), (0.045, 0.10 if z == 1.18 else 0.045, 0.10 if z != 1.18 else 0.045), gold, bevel=0.012)
+    cylinder("short_spear", (0.67, 0.0, 1.12), 0.05, 1.58, navy, vertices=7)
+    cone("spear_tip", (0.67, 0.0, 2.02), 0.13, 0.0, 0.44, gold, vertices=7)
+    cube("spear_guard", (0.67, 0.0, 1.70), (0.20, 0.055, 0.045), ivory, bevel=0.018)
+    export("hero_solar_vanguard")
+
+
+def hero_void_reaper():
+    reset()
+    violet = material("reaper_violet", (0.22, 0.025, 0.38), 0.20, 0.42)
+    singularity = material("reaper_singularity", (0.78, 0.05, 0.88), 0.34, 0.16)
+    black = material("reaper_black", (0.012, 0.012, 0.025), 0.40, 0.36)
+    humanoid_base(violet, singularity, black)
+    cube("reaper_cloak", (0.0, 0.20, 1.18), (0.38, 0.055, 0.68), black, (0.18, 0.0, 0.0), 0.035)
+    cylinder("moon_scythe", (0.68, 0.0, 1.14), 0.05, 2.10, black, vertices=7)
+    torus("scythe_crescent", (0.50, 0.0, 2.10), 0.39, 0.060, violet, (pi / 2, 0.0, 0.0))
+    sphere("crescent_cut", (0.66, -0.055, 2.10), (0.34, 0.07, 0.34), black)
+    cone("scythe_tip", (0.14, 0.0, 2.28), 0.105, 0.0, 0.48, singularity, (0.0, -1.08, 0.0), 6)
+    sphere("singularity_orb", (-0.56, -0.02, 1.62), (0.22, 0.22, 0.22), black)
+    sphere("singularity_core", (-0.56, -0.18, 1.62), (0.09, 0.06, 0.09), singularity)
+    torus("singularity_orbit", (-0.56, -0.02, 1.62), 0.29, 0.025, singularity, (0.50, 0.0, 0.74))
+    export("hero_void_reaper")
 
 
 def enemy_sapper():
@@ -727,6 +863,12 @@ hero_stone()
 hero_spirit()
 hero_tide()
 hero_star()
+hero_frost_oracle()
+hero_iron_berserker()
+hero_rift_dancer()
+hero_grove_artificer()
+hero_solar_vanguard()
+hero_void_reaper()
 enemy_sapper()
 enemy_gnawling()
 enemy_guard()
@@ -750,7 +892,8 @@ summon_tide_elemental()
 summon_bolt_turret()
 summon_frost_wyrm()
 summon_ancestor_colossus()
-print(f"Generated 29 GLB models in {OUT}")
+model_count = sum(len(names) for names in MODEL_NAME_GROUPS)
+print(f"Generated {model_count} GLB models in {OUT}")
 validate_models(HERO_MODEL_NAMES, "Hero")
 validate_models(ENEMY_MODEL_NAMES, "Enemy")
 validate_models(BOSS_MODEL_NAMES, "Boss")

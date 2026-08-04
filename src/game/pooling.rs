@@ -1617,7 +1617,7 @@ mod tests {
             BossEnemy { index: 4 },
             EnemyArmor(9.0),
             TimedSpeedEffect {
-                original_speed: 3.0,
+                multiplier: 0.3,
                 remaining: 7.0,
             },
             WetMark { remaining: 6.0 },

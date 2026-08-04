@@ -69,7 +69,10 @@ pub struct HeroDef {
     pub growth: Stats,
     pub base_health: f32,
     pub base_energy: f32,
+    /// Canonical starting skill used by non-interactive simulations.
     pub starting_skill: ContentId,
+    /// Seeded hero offers choose exactly one of these thematic skills.
+    pub starting_skill_pool: [ContentId; 3],
     pub passive: PassiveDef,
     pub ultimate: UltimateDef,
 }
@@ -214,7 +217,7 @@ pub struct BossDef {
     pub mechanics: &'static [&'static str],
 }
 
-pub const HEROES: [HeroDef; 6] = [
+pub const HEROES: [HeroDef; 12] = [
     HeroDef {
         id: "storm_savant",
         name: "玄霆术师",
@@ -234,6 +237,7 @@ pub const HEROES: [HeroDef; 6] = [
         base_health: 520.0,
         base_energy: 280.0,
         starting_skill: "arc_chain",
+        starting_skill_pool: ["arc_chain", "static_seal", "storm_matrix"],
         passive: PassiveDef {
             name: "余响算式",
             description: "每累积六枚法术投射物，追加一发40%攻击伤害的雷霆回响。",
@@ -264,6 +268,7 @@ pub const HEROES: [HeroDef; 6] = [
         base_health: 500.0,
         base_energy: 210.0,
         starting_skill: "ember_arrow",
+        starting_skill_pool: ["ember_arrow", "cinder_aura", "meteor_seed"],
         passive: PassiveDef {
             name: "追猎节拍",
             description: "连续攻击叠加攻速；移动时层数缓慢衰减。",
@@ -294,6 +299,7 @@ pub const HEROES: [HeroDef; 6] = [
         base_health: 680.0,
         base_energy: 190.0,
         starting_skill: "ground_pulse",
+        starting_skill_pool: ["ground_pulse", "execution_brand", "oath_banner"],
         passive: PassiveDef {
             name: "守门山势",
             description: "英雄位于城门8米内时，返还城门所受伤害的15%。",
@@ -324,6 +330,7 @@ pub const HEROES: [HeroDef; 6] = [
         base_health: 550.0,
         base_energy: 300.0,
         starting_skill: "bone_sentry",
+        starting_skill_pool: ["bone_sentry", "spirit_hound", "tide_elemental"],
         passive: PassiveDef {
             name: "契群",
             description: "在共享召唤上限内维持一只永久灵体，以110%攻击伤害协战。",
@@ -354,6 +361,7 @@ pub const HEROES: [HeroDef; 6] = [
         base_health: 590.0,
         base_energy: 270.0,
         starting_skill: "tidal_fan",
+        starting_skill_pool: ["tidal_fan", "frost_lance", "vortex_column"],
         passive: PassiveDef {
             name: "潮霜交界",
             description: "每3.2秒在最近敌人间交替施加潮湿与冻结，并触发一次潮霜伤害。",
@@ -384,6 +392,7 @@ pub const HEROES: [HeroDef; 6] = [
         base_health: 520.0,
         base_energy: 240.0,
         starting_skill: "arcane_star",
+        starting_skill_pool: ["arcane_star", "transmute_spark", "fate_cube"],
         passive: PassiveDef {
             name: "有利筹码",
             description: "每累计12个有效击杀获得18金币和1木材。",
@@ -393,6 +402,192 @@ pub const HEROES: [HeroDef; 6] = [
             cooldown_secs: 48.0,
             tags: &[Tag::Fortune, Tag::Arcane],
             description: "城门低于65%时治疗；敌人至少8名时攻击，否则获得资源。",
+        },
+    },
+    HeroDef {
+        id: "frost_oracle",
+        name: "霜脉先知",
+        rarity: Rarity::Sr,
+        primary: Attribute::Intelligence,
+        tags: &[Tag::Spell, Tag::Frost, Tag::Control, Tag::Arcane],
+        base_stats: Stats {
+            strength: 19.0,
+            agility: 17.0,
+            intelligence: 31.0,
+        },
+        growth: Stats {
+            strength: 1.9,
+            agility: 1.8,
+            intelligence: 3.6,
+        },
+        base_health: 500.0,
+        base_energy: 310.0,
+        starting_skill: "frost_lance",
+        starting_skill_pool: ["frost_lance", "glacier_core", "frost_wyrm"],
+        passive: PassiveDef {
+            name: "冰镜预言",
+            description: "每累计五枚法术投射物，在优先目标处触发一次55%攻击伤害的冰爆。",
+        },
+        ultimate: UltimateDef {
+            name: "绝对零度",
+            cooldown_secs: 54.0,
+            tags: &[Tag::Spell, Tag::Frost, Tag::Control],
+            description: "冻结普通敌人并重度减速首领，随后连续引爆四次寒霜冲击。",
+        },
+    },
+    HeroDef {
+        id: "iron_berserker",
+        name: "铁血狂战",
+        rarity: Rarity::R,
+        primary: Attribute::Strength,
+        tags: &[Tag::Attack, Tag::Physical, Tag::Flame],
+        base_stats: Stats {
+            strength: 31.0,
+            agility: 23.0,
+            intelligence: 15.0,
+        },
+        growth: Stats {
+            strength: 3.5,
+            agility: 2.5,
+            intelligence: 1.5,
+        },
+        base_health: 640.0,
+        base_energy: 180.0,
+        starting_skill: "execution_brand",
+        starting_skill_pool: ["execution_brand", "blood_wheel", "ember_rebirth"],
+        passive: PassiveDef {
+            name: "铁血续战",
+            description: "每累计八个有效击杀，恢复6%最大生命。",
+        },
+        ultimate: UltimateDef {
+            name: "钢铁狂袭",
+            cooldown_secs: 48.0,
+            tags: &[Tag::Attack, Tag::Physical],
+            description: "冲入狂战状态，以连续重击撕开附近敌群并恢复自身。",
+        },
+    },
+    HeroDef {
+        id: "rift_dancer",
+        name: "裂隙舞者",
+        rarity: Rarity::R,
+        primary: Attribute::Agility,
+        tags: &[Tag::Attack, Tag::Qi, Tag::Arcane],
+        base_stats: Stats {
+            strength: 21.0,
+            agility: 31.0,
+            intelligence: 20.0,
+        },
+        growth: Stats {
+            strength: 2.1,
+            agility: 3.4,
+            intelligence: 2.0,
+        },
+        base_health: 530.0,
+        base_energy: 215.0,
+        starting_skill: "orbit_blade",
+        starting_skill_pool: ["orbit_blade", "flying_swords", "prism_echo"],
+        passive: PassiveDef {
+            name: "相位步",
+            description: "移动时攻击速度提高15%；停止移动后立即还原。",
+        },
+        ultimate: UltimateDef {
+            name: "相位剑暴",
+            cooldown_secs: 46.0,
+            tags: &[Tag::Attack, Tag::Qi, Tag::Arcane],
+            description: "在裂隙间穿梭，连续释放八轮自动索敌的剑雨。",
+        },
+    },
+    HeroDef {
+        id: "grove_artificer",
+        name: "森垒机巧师",
+        rarity: Rarity::Sr,
+        primary: Attribute::Strength,
+        tags: &[Tag::Summon, Tag::Guard, Tag::Storm],
+        base_stats: Stats {
+            strength: 29.0,
+            agility: 17.0,
+            intelligence: 23.0,
+        },
+        growth: Stats {
+            strength: 3.2,
+            agility: 1.8,
+            intelligence: 2.7,
+        },
+        base_health: 610.0,
+        base_energy: 250.0,
+        starting_skill: "bolt_turret",
+        starting_skill_pool: ["bolt_turret", "bone_sentry", "oath_banner"],
+        passive: PassiveDef {
+            name: "活木修缮",
+            description: "位于城门9米内时，每6秒修复12点城门耐久。",
+        },
+        ultimate: UltimateDef {
+            name: "城垒超载",
+            cooldown_secs: 58.0,
+            tags: &[Tag::Summon, Tag::Guard, Tag::Storm],
+            description: "立即大幅修复城门，并从防线连续释放六次超载脉冲。",
+        },
+    },
+    HeroDef {
+        id: "solar_vanguard",
+        name: "曜光先锋",
+        rarity: Rarity::Sr,
+        primary: Attribute::Strength,
+        tags: &[Tag::Guard, Tag::Flame, Tag::Spell],
+        base_stats: Stats {
+            strength: 30.0,
+            agility: 20.0,
+            intelligence: 22.0,
+        },
+        growth: Stats {
+            strength: 3.3,
+            agility: 2.0,
+            intelligence: 2.5,
+        },
+        base_health: 620.0,
+        base_energy: 245.0,
+        starting_skill: "ground_pulse",
+        starting_skill_pool: ["ground_pulse", "sky_judgment", "meteor_seed"],
+        passive: PassiveDef {
+            name: "黎明誓约",
+            description: "每累计十个有效击杀，修复24点城门耐久。",
+        },
+        ultimate: UltimateDef {
+            name: "曙光壁垒",
+            cooldown_secs: 52.0,
+            tags: &[Tag::Guard, Tag::Flame, Tag::Spell],
+            description: "召来日轮守护防线，以灼热冲击清理并压制敌群。",
+        },
+    },
+    HeroDef {
+        id: "void_reaper",
+        name: "虚空收割者",
+        rarity: Rarity::Sr,
+        primary: Attribute::Agility,
+        tags: &[Tag::Attack, Tag::Physical, Tag::Arcane],
+        base_stats: Stats {
+            strength: 22.0,
+            agility: 29.0,
+            intelligence: 23.0,
+        },
+        growth: Stats {
+            strength: 2.2,
+            agility: 3.2,
+            intelligence: 2.5,
+        },
+        base_health: 550.0,
+        base_energy: 245.0,
+        starting_skill: "piercing_volley",
+        starting_skill_pool: ["piercing_volley", "arcane_star", "triune_engine"],
+        passive: PassiveDef {
+            name: "虚相回声",
+            description: "每五次攻击追加两枚造成45%攻击伤害的虚空回声。",
+        },
+        ultimate: UltimateDef {
+            name: "事件视界",
+            cooldown_secs: 50.0,
+            tags: &[Tag::Attack, Tag::Arcane, Tag::Control],
+            description: "展开事件视界牵制全场，并在中心连续收割敌群。",
         },
     },
 ];

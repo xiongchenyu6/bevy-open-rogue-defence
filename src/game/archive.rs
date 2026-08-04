@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 use super::combat::CombatSet;
+use super::hero_abilities::TimedSpeedEffect;
 use super::pooling::{CombatPools, EnemySceneKey};
 use super::{
     BossEnemy, Enemy, GameAssets, GameSession, GoldChallengeState, Hero, HeroVitals, ImpactFx,
@@ -209,7 +210,10 @@ fn run_archive(
     mut archive: ResMut<ArchiveState>,
     mut vitals: ResMut<HeroVitals>,
     mut hero: Query<(&Transform, &mut Visibility), (With<Hero>, Without<ArchiveEcho>)>,
-    mut echoes: Query<(Entity, &Enemy, &mut Transform), With<ArchiveEcho>>,
+    mut echoes: Query<
+        (Entity, &Enemy, Option<&TimedSpeedEffect>, &mut Transform),
+        With<ArchiveEcho>,
+    >,
     assets: Option<Res<GameAssets>>,
     mut pools: ResMut<CombatPools>,
 ) {
@@ -242,7 +246,7 @@ fn run_archive(
         return;
     }
 
-    let Ok((echo_entity, echo, mut echo_transform)) = echoes.single_mut() else {
+    let Ok((echo_entity, echo, speed_effect, mut echo_transform)) = echoes.single_mut() else {
         return;
     };
     let Ok((hero_transform, mut hero_visibility)) = hero.single_mut() else {
@@ -252,7 +256,10 @@ fn run_archive(
     let to_hero = hero_transform.translation - echo_transform.translation;
     let distance = to_hero.length();
     if distance > ARCHIVE_ATTACK_RANGE {
-        echo_transform.translation += to_hero.normalize_or_zero() * echo.speed * time.delta_secs();
+        echo_transform.translation += to_hero.normalize_or_zero()
+            * echo.speed
+            * speed_effect.map_or(1.0, |effect| effect.multiplier)
+            * time.delta_secs();
     } else {
         archive.attack_timer -= delta;
         if archive.attack_timer <= 0.0 {

@@ -2,6 +2,7 @@ use bevy::{prelude::*, window::PrimaryWindow};
 
 use super::archive::{ArchiveEcho, ArchiveOutcome, ArchiveState};
 use super::combat::BOSS_NAMES;
+use super::hero_abilities::ultimate_profile;
 use super::mobile_layout::hud_metrics;
 use super::progression::{SkillEconomy, bond_cost, skill_cost};
 use super::trial::{GOLD_LEVEL_COUNT, GOLD_TARGET_COUNT, GOLD_UNLOCK_AT, TOWER_UNLOCK_AT};
@@ -747,6 +748,7 @@ fn handle_manual_pause(
     resume_buttons: Query<&Interaction, (With<PauseResumeButton>, Changed<Interaction>)>,
     mut session: ResMut<GameSession>,
     mut state: ResMut<ManualPauseState>,
+    run_seed: Res<RunSeed>,
 ) {
     let focused = windows
         .single()
@@ -810,6 +812,14 @@ fn handle_manual_pause(
                     ..default()
                 },
                 TextColor(Color::srgb(0.68, 0.78, 0.86)),
+            ));
+            overlay.spawn((
+                Text::new(format_run_seed(run_seed.0)),
+                TextFont {
+                    font_size: FontSize::Px(14.0),
+                    ..default()
+                },
+                TextColor(Color::srgb(0.52, 0.76, 0.86)),
             ));
             overlay
                 .spawn((
@@ -1117,15 +1127,7 @@ fn update_hud(
                 )
             }
         } else if skill.is_some() {
-            if active.remaining <= 0.0 {
-                if compact {
-                    "STORM\nREADY".to_string()
-                } else {
-                    "STORM READY\nSPACE / TAP".to_string()
-                }
-            } else {
-                format!("STORM\n{:.1}s", active.remaining)
-            }
+            ultimate_button_text(vitals.kind, active.remaining, compact)
         } else if trial_marker.is_some() {
             trial_status.clone()
         } else if gold_marker.is_some() {
@@ -1184,10 +1186,24 @@ fn update_hud(
     }
 }
 
+fn ultimate_button_text(kind: super::HeroKind, remaining: f32, compact: bool) -> String {
+    let ultimate = ultimate_profile(kind);
+    if remaining <= 0.0 {
+        if compact {
+            format!("{}\nREADY", ultimate.name)
+        } else {
+            format!("{} READY\nSPACE / TAP", ultimate.name)
+        }
+    } else {
+        format!("{}\n{remaining:.1}s", ultimate.name)
+    }
+}
+
 fn show_result(
     mut commands: Commands,
     session: Res<GameSession>,
     archive: Res<ArchiveState>,
+    run_seed: Res<RunSeed>,
     existing: Query<Entity, With<ResultRoot>>,
 ) {
     if !session.finished || !existing.is_empty() {
@@ -1239,6 +1255,14 @@ fn show_result(
                 },
                 TextColor(Color::srgb(0.78, 0.85, 0.92)),
             ));
+            root.spawn((
+                Text::new(format_run_seed(run_seed.0)),
+                TextFont {
+                    font_size: FontSize::Px(15.0),
+                    ..default()
+                },
+                TextColor(Color::srgb(0.52, 0.76, 0.86)),
+            ));
             if archive.outcome != ArchiveOutcome::Pending {
                 root.spawn((
                     Text::new(format!(
@@ -1255,6 +1279,10 @@ fn show_result(
                 ));
             }
         });
+}
+
+fn format_run_seed(seed: u64) -> String {
+    format!("SEED 0x{seed:016X}")
 }
 
 #[cfg(test)]
@@ -1293,5 +1321,76 @@ mod tests {
         let market_left = width - 18.0 - 230.0;
 
         assert!(action_right <= market_left);
+    }
+
+    #[test]
+    fn run_seed_text_preserves_all_sixty_four_bits() {
+        assert_eq!(
+            format_run_seed(0x1234_5678_9ABC_DEF0),
+            "SEED 0x123456789ABCDEF0"
+        );
+        assert_eq!(format_run_seed(0xA11CE), "SEED 0x00000000000A11CE");
+    }
+
+    #[test]
+    fn ultimate_button_uses_the_selected_hero_profile() {
+        assert_eq!(
+            ultimate_button_text(super::super::HeroKind::SolarVanguard, 0.0, true),
+            "DAWN BASTION\nREADY"
+        );
+        assert_eq!(
+            ultimate_button_text(super::super::HeroKind::VoidReaper, 12.34, false),
+            "EVENT HORIZON\n12.3s"
+        );
+    }
+
+    #[test]
+    fn result_overlay_includes_the_complete_run_seed() {
+        let seed = 0x1234_5678_9ABC_DEF0;
+        let mut app = App::new();
+        app.insert_resource(GameSession {
+            finished: true,
+            ..default()
+        })
+        .insert_resource(ArchiveState::default())
+        .insert_resource(RunSeed(seed))
+        .add_systems(Update, show_result);
+
+        app.update();
+
+        let world = app.world_mut();
+        let mut texts = world.query::<&Text>();
+        assert!(
+            texts
+                .iter(world)
+                .any(|text| text.0 == format_run_seed(seed))
+        );
+    }
+
+    #[test]
+    fn pause_overlay_includes_the_complete_run_seed() {
+        let seed = 0x0FED_CBA9_8765_4321;
+        let mut app = App::new();
+        app.init_resource::<ButtonInput<KeyCode>>()
+            .init_resource::<GameSession>()
+            .init_resource::<ManualPauseState>()
+            .insert_resource(RunSeed(seed))
+            .add_systems(Update, handle_manual_pause);
+        app.world_mut().spawn((Window::default(), PrimaryWindow));
+        app.world_mut()
+            .resource_mut::<ButtonInput<KeyCode>>()
+            .press(KeyCode::KeyP);
+
+        app.update();
+
+        let world = app.world_mut();
+        let mut roots = world.query_filtered::<Entity, With<PauseRoot>>();
+        assert_eq!(roots.iter(world).count(), 1);
+        let mut texts = world.query::<&Text>();
+        assert!(
+            texts
+                .iter(world)
+                .any(|text| text.0 == format_run_seed(seed))
+        );
     }
 }
