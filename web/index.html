@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"
+    />
+    <meta name="theme-color" content="#07111c" />
+    <meta
+      name="description"
+      content="Rogue Commander — 以 Bevy 製作的原創俯視角生存塔防。"
+    />
+    <title>Rogue Commander</title>
+    <link rel="icon" href="data:," />
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: Inter, "Noto Sans TC", system-ui, sans-serif;
+        background: #07111c;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        overscroll-behavior: none;
+      }
+
+      body {
+        background:
+          radial-gradient(circle at 80% 50%, #9a2d2638, transparent 30%),
+          radial-gradient(circle at 20% 50%, #2678912e, transparent 32%),
+          #07111c;
+      }
+
+      #bevy-canvas {
+        display: block;
+        width: 100vw !important;
+        height: 100vh !important;
+        outline: none;
+        touch-action: none;
+      }
+
+      #loading,
+      #rotate {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        display: grid;
+        place-items: center;
+        padding: max(1.5rem, env(safe-area-inset-top))
+          max(1.5rem, env(safe-area-inset-right))
+          max(1.5rem, env(safe-area-inset-bottom))
+          max(1.5rem, env(safe-area-inset-left));
+        background:
+          linear-gradient(90deg, #07111cf2, #101b29e8),
+          repeating-linear-gradient(0deg, #ffffff06 0 1px, transparent 1px 42px);
+        text-align: center;
+        transition: opacity 300ms ease;
+      }
+
+      #loading.hidden {
+        pointer-events: none;
+        opacity: 0;
+      }
+
+      .panel {
+        width: min(620px, 90vw);
+      }
+
+      .sigil {
+        width: 72px;
+        height: 72px;
+        margin: 0 auto 1.25rem;
+        transform: rotate(45deg);
+        border: 2px solid #ffcf70;
+        background: linear-gradient(135deg, #e65d37 0 48%, #2cb0c0 52% 100%);
+        box-shadow: 0 0 36px #e7773e55;
+      }
+
+      h1 {
+        margin: 0;
+        color: #f5e4bc;
+        font-size: clamp(2rem, 6vw, 4.5rem);
+        letter-spacing: 0.09em;
+        text-shadow: 0 3px 24px #000;
+      }
+
+      .subtitle {
+        margin: 0.5rem 0 1.5rem;
+        color: #8db8c6;
+        font-size: clamp(0.75rem, 1.5vw, 1rem);
+        letter-spacing: 0.22em;
+      }
+
+      #status {
+        min-height: 1.5em;
+        color: #c6d3d8;
+      }
+
+      #start {
+        min-width: 190px;
+        min-height: 52px;
+        margin-top: 0.5rem;
+        border: 1px solid #ffd88c;
+        border-radius: 4px;
+        background: linear-gradient(180deg, #a64731, #69291f);
+        color: #fff4d6;
+        font: inherit;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        cursor: pointer;
+        box-shadow: 0 8px 30px #0008;
+      }
+
+      #start:disabled {
+        cursor: wait;
+        filter: saturate(0.4);
+      }
+
+      .progress {
+        width: min(360px, 72vw);
+        height: 5px;
+        margin: 1rem auto 0;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #ffffff18;
+      }
+
+      #progress-fill {
+        display: block;
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #2cb0c0, #ffcf70, #e65d37);
+        transition: width 180ms ease;
+      }
+
+      .hint {
+        margin-top: 1rem;
+        color: #718793;
+        font-size: 0.78rem;
+      }
+
+      #rotate {
+        z-index: 20;
+        display: none;
+      }
+
+      #rotate strong {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #f5e4bc;
+        font-size: 1.5rem;
+      }
+
+      @media (orientation: portrait) and (pointer: coarse) {
+        #rotate {
+          display: grid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="bevy-canvas" tabindex="0"></canvas>
+    <main id="loading">
+      <div class="panel">
+        <div class="sigil" aria-hidden="true"></div>
+        <h1>ROGUE COMMANDER</h1>
+        <p class="subtitle">守住裂隙 · 構築軍勢 · 擊破五王</p>
+        <p id="status">點擊後載入遊戲，首次啟動需要一點時間。</p>
+        <button id="start" type="button">開始遊戲</button>
+        <div class="progress" aria-hidden="true"><span id="progress-fill"></span></div>
+        <p class="hint">推薦使用 Chrome／Edge；手機請橫向遊玩。</p>
+      </div>
+    </main>
+    <aside id="rotate">
+      <p><strong>請旋轉裝置</strong>Rogue Commander 使用 16:9 橫向戰場。</p>
+    </aside>
+    <script type="module">
+      const loading = document.querySelector("#loading");
+      const progress = document.querySelector("#progress-fill");
+      const start = document.querySelector("#start");
+      const status = document.querySelector("#status");
+
+      async function downloadCompressedWasm() {
+        if (typeof DecompressionStream !== "function") return undefined;
+
+        const response = await fetch("./rogue_commander_bg.wasm.gz");
+        if (!response.ok || !response.body) return undefined;
+
+        const total = Number(response.headers.get("content-length") || 0);
+        let received = 0;
+        const meter = new TransformStream({
+          transform(chunk, controller) {
+            received += chunk.byteLength;
+            if (total) {
+              const percent = Math.min(92, 8 + (received / total) * 84);
+              progress.style.width = `${percent}%`;
+              status.textContent = `正在下載戰場 ${(received / 1048576).toFixed(1)} / ${(total / 1048576).toFixed(1)} MB`;
+            } else {
+              status.textContent = `正在下載戰場 ${(received / 1048576).toFixed(1)} MB`;
+            }
+            controller.enqueue(chunk);
+          },
+        });
+        const decompressed = response.body
+          .pipeThrough(meter)
+          .pipeThrough(new DecompressionStream("gzip"));
+        return new Response(decompressed).arrayBuffer();
+      }
+
+      start.addEventListener("click", async () => {
+        start.disabled = true;
+        start.textContent = "載入中";
+        status.textContent = "正在部署英雄、敵軍與戰場資源…";
+        progress.style.width = "8%";
+
+        try {
+          const { default: init } = await import("./rogue_commander.js");
+          const wasm = await downloadCompressedWasm();
+          status.textContent = "正在初始化 Bevy…";
+          progress.style.width = "96%";
+          await init(wasm ? { module_or_path: wasm } : undefined);
+          status.textContent = "防線已建立";
+          progress.style.width = "100%";
+          document.querySelector("#bevy-canvas")?.focus();
+          window.setTimeout(() => loading.classList.add("hidden"), 250);
+        } catch (error) {
+          console.error(error);
+          const message = String(error);
+          if (message.includes("Using exceptions for control flow")) {
+            loading.classList.add("hidden");
+          } else {
+            status.textContent = "載入失敗，請更新瀏覽器後重試。";
+            progress.style.width = "0";
+            start.disabled = false;
+            start.textContent = "重新載入";
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

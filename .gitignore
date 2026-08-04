@@ -1,0 +1,13 @@
+.agents
+AGENTS.md
+.codex
+bevy.md
+/target
+/dist
+/screenshots/*
+!/screenshots/balance-25m.png
+!/screenshots/rogue-commander-final.mp4
+!/screenshots/rogue-commander-final-review.png
+/.direnv
+__pycache__/
+*.py[cod]
