@@ -42,14 +42,29 @@ const EPIC_SKILL_UNLOCK_AT: f32 = 12.0 * 60.0;
 const FREE_SKILL_LEVELS: [u32; 5] = [5, 10, 15, 20, 25];
 const SKILL_SLOT_LIMIT: usize = 6;
 const BOND_SLOT_LIMIT: usize = 7;
-const REPLACEMENT_GRID_WIDTH_PERCENT: f32 = 94.0;
+const DRAFT_OVERLAY_PADDING: f32 = 8.0;
+const NORMAL_HEADING_SIZE: f32 = 22.0;
+const REPLACEMENT_HEADING_SIZE: f32 = 20.0;
+const REPLACEMENT_HELPER_SIZE: f32 = 11.0;
+const NORMAL_GRID_WIDTH_PERCENT: f32 = 96.0;
+const NORMAL_GRID_MAX_WIDTH: f32 = 1_000.0;
+const NORMAL_GRID_HEIGHT: f32 = 240.0;
+const NORMAL_CARD_WIDTH_PERCENT: f32 = 31.0;
+const NORMAL_COLUMN_GAP: f32 = 8.0;
+const REPLACEMENT_GRID_WIDTH_PERCENT: f32 = 96.0;
 const REPLACEMENT_GRID_MAX_WIDTH: f32 = 1080.0;
-const REPLACEMENT_GRID_HEIGHT: f32 = 320.0;
-const REPLACEMENT_CARD_WIDTH_PERCENT: f32 = 30.0;
-const REPLACEMENT_CARD_MIN_WIDTH: f32 = 170.0;
-const REPLACEMENT_CARD_MIN_HEIGHT: f32 = 96.0;
-const REPLACEMENT_COLUMN_GAP: f32 = 12.0;
+const REPLACEMENT_GRID_HEIGHT: f32 = 230.0;
+const REPLACEMENT_CARD_WIDTH_PERCENT: f32 = 23.0;
+const REPLACEMENT_COLUMN_GAP: f32 = 8.0;
 const REPLACEMENT_ROW_GAP: f32 = 8.0;
+const NORMAL_OVERLAY_GAP: f32 = 8.0;
+const REPLACEMENT_OVERLAY_GAP: f32 = 5.0;
+const ACTION_ROW_WIDTH_PERCENT: f32 = 96.0;
+const ACTION_ROW_MAX_WIDTH: f32 = 560.0;
+const ACTION_BUTTON_WIDTH_PERCENT: f32 = 31.0;
+const ACTION_GAP: f32 = 8.0;
+const MIN_TOUCH_TARGET: f32 = 48.0;
+const _: () = assert!(MIN_TOUCH_TARGET >= 48.0);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum SkillDrawPayment {
@@ -569,10 +584,15 @@ fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKi
                 position_type: PositionType::Absolute,
                 width: percent(100),
                 height: percent(100),
+                padding: UiRect::all(px(DRAFT_OVERLAY_PADDING)),
                 flex_direction: FlexDirection::Column,
                 align_items: AlignItems::Center,
                 justify_content: JustifyContent::Center,
-                row_gap: px(if replacing { 8 } else { 18 }),
+                row_gap: px(if replacing {
+                    REPLACEMENT_OVERLAY_GAP
+                } else {
+                    NORMAL_OVERLAY_GAP
+                }),
                 ..default()
             },
             BackgroundColor(Color::srgba(0.01, 0.02, 0.045, 0.9)),
@@ -582,7 +602,11 @@ fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKi
             parent.spawn((
                 Text::new(heading),
                 TextFont {
-                    font_size: FontSize::Px(if replacing { 26.0 } else { 34.0 }),
+                    font_size: FontSize::Px(if replacing {
+                        REPLACEMENT_HEADING_SIZE
+                    } else {
+                        NORMAL_HEADING_SIZE
+                    }),
                     ..default()
                 },
                 TextColor(Color::srgb(0.75, 0.93, 1.0)),
@@ -591,7 +615,7 @@ fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKi
                 parent.spawn((
                     Text::new("The draw is already paid. Choose one current family to remove."),
                     TextFont {
-                        font_size: FontSize::Px(16.0),
+                        font_size: FontSize::Px(REPLACEMENT_HELPER_SIZE),
                         ..default()
                     },
                     TextColor(Color::srgb(0.72, 0.8, 0.88)),
@@ -603,17 +627,17 @@ fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKi
                     width: percent(if replacing {
                         REPLACEMENT_GRID_WIDTH_PERCENT
                     } else {
-                        90.0
+                        NORMAL_GRID_WIDTH_PERCENT
                     }),
                     max_width: px(if replacing {
                         REPLACEMENT_GRID_MAX_WIDTH
                     } else {
-                        980.0
+                        NORMAL_GRID_MAX_WIDTH
                     }),
                     height: px(if replacing {
                         REPLACEMENT_GRID_HEIGHT
                     } else {
-                        230.0
+                        NORMAL_GRID_HEIGHT
                     }),
                     flex_direction: FlexDirection::Row,
                     flex_wrap: if replacing {
@@ -622,13 +646,14 @@ fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKi
                         FlexWrap::NoWrap
                     },
                     justify_content: JustifyContent::Center,
+                    align_content: AlignContent::Center,
                     align_items: AlignItems::Stretch,
                     column_gap: px(if replacing {
                         REPLACEMENT_COLUMN_GAP
                     } else {
-                        16.0
+                        NORMAL_COLUMN_GAP
                     }),
-                    row_gap: px(if replacing { REPLACEMENT_ROW_GAP } else { 12.0 }),
+                    row_gap: px(if replacing { REPLACEMENT_ROW_GAP } else { 0.0 }),
                     ..default()
                 })
                 .with_children(|cards| {
@@ -641,7 +666,7 @@ fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKi
                             ) => (
                                 format!("{}  REPLACE {}", index + 1, old_bond.title()),
                                 format!(
-                                    "Remove all {} progress\n→ Add {} 1/{}",
+                                    "Remove all {} progress\n-> Add {} 1/{}",
                                     old_bond.title(),
                                     new_bond.title(),
                                     new_bond.required()
@@ -660,29 +685,22 @@ fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKi
                                     width: percent(if replacing {
                                         REPLACEMENT_CARD_WIDTH_PERCENT
                                     } else {
-                                        30.0
+                                        NORMAL_CARD_WIDTH_PERCENT
                                     }),
-                                    min_width: px(if replacing {
-                                        REPLACEMENT_CARD_MIN_WIDTH
-                                    } else {
-                                        210.0
-                                    }),
-                                    min_height: px(if replacing {
-                                        REPLACEMENT_CARD_MIN_HEIGHT
-                                    } else {
-                                        0.0
-                                    }),
+                                    min_width: px(MIN_TOUCH_TARGET),
+                                    height: percent(if replacing { 48.0 } else { 100.0 }),
+                                    min_height: px(MIN_TOUCH_TARGET),
                                     flex_direction: FlexDirection::Column,
                                     align_items: AlignItems::Center,
                                     justify_content: JustifyContent::Center,
-                                    padding: UiRect::all(px(if replacing { 8 } else { 16 })),
+                                    padding: UiRect::all(px(if replacing { 5 } else { 8 })),
                                     border: UiRect::all(px(2)),
                                     border_radius: BorderRadius::all(px(if replacing {
-                                        12
+                                        9
                                     } else {
-                                        16
+                                        12
                                     })),
-                                    row_gap: px(if replacing { 6 } else { 14 }),
+                                    row_gap: px(if replacing { 4 } else { 8 }),
                                     ..default()
                                 },
                                 BackgroundColor(Color::srgb(0.055, 0.11, 0.18)),
@@ -693,21 +711,22 @@ fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKi
                                     Text::new(title),
                                     TextFont {
                                         font_size: FontSize::Px(if replacing {
-                                            16.0
+                                            13.0
                                         } else {
-                                            23.0
+                                            18.0
                                         }),
                                         ..default()
                                     },
                                     TextColor(Color::WHITE),
+                                    TextLayout::justify(Justify::Center),
                                 ));
                                 card.spawn((
                                     Text::new(description),
                                     TextFont {
                                         font_size: FontSize::Px(if replacing {
-                                            13.0
+                                            10.0
                                         } else {
-                                            17.0
+                                            13.0
                                         }),
                                         ..default()
                                     },
@@ -719,9 +738,12 @@ fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKi
                 });
             parent
                 .spawn(Node {
-                    height: px(if replacing { 44 } else { 48 }),
+                    width: percent(ACTION_ROW_WIDTH_PERCENT),
+                    max_width: px(ACTION_ROW_MAX_WIDTH),
+                    height: px(MIN_TOUCH_TARGET),
                     flex_direction: FlexDirection::Row,
-                    column_gap: px(12),
+                    justify_content: JustifyContent::Center,
+                    column_gap: px(ACTION_GAP),
                     ..default()
                 })
                 .with_children(|actions| {
@@ -746,9 +768,10 @@ fn spawn_draft_action(parent: &mut ChildSpawnerCommands, action: DraftAction, la
             Button,
             DraftActionButton(action),
             Node {
-                min_width: px(150),
-                height: px(42),
-                padding: UiRect::horizontal(px(14)),
+                width: percent(ACTION_BUTTON_WIDTH_PERCENT),
+                min_width: px(MIN_TOUCH_TARGET),
+                height: px(MIN_TOUCH_TARGET),
+                padding: UiRect::horizontal(px(6)),
                 align_items: AlignItems::Center,
                 justify_content: JustifyContent::Center,
                 border_radius: BorderRadius::all(px(8)),
@@ -760,7 +783,7 @@ fn spawn_draft_action(parent: &mut ChildSpawnerCommands, action: DraftAction, la
             button.spawn((
                 Text::new(label),
                 TextFont {
-                    font_size: FontSize::Px(14.0),
+                    font_size: FontSize::Px(11.0),
                     ..default()
                 },
                 TextColor(Color::WHITE),
@@ -1808,22 +1831,68 @@ mod tests {
     }
 
     #[test]
-    fn replacement_grid_fits_capture_and_compact_landscape_phone_sizes() {
-        fn fits(width: f32, height: f32) -> bool {
-            let grid_width =
-                (width * REPLACEMENT_GRID_WIDTH_PERCENT / 100.0).min(REPLACEMENT_GRID_MAX_WIDTH);
-            let card_width = (grid_width * REPLACEMENT_CARD_WIDTH_PERCENT / 100.0)
-                .max(REPLACEMENT_CARD_MIN_WIDTH);
-            let three_cards = card_width * 3.0 + REPLACEMENT_COLUMN_GAP * 2.0;
-            let three_rows = REPLACEMENT_CARD_MIN_HEIGHT * 3.0 + REPLACEMENT_ROW_GAP * 2.0;
-            // 26px heading + 16px helper copy use a conservative 1.2 line height.
-            let vertical = REPLACEMENT_GRID_HEIGHT + 26.0 * 1.2 + 16.0 * 1.2 + 44.0 + 8.0 * 3.0;
-            three_cards <= grid_width && three_rows <= REPLACEMENT_GRID_HEIGHT && vertical <= height
+    fn all_draft_overlays_fit_compact_landscape_phone_sizes() {
+        fn fits(width: f32, height: f32, replacing: bool) -> bool {
+            let inner_width = width - DRAFT_OVERLAY_PADDING * 2.0;
+            let (grid_percent, grid_max_width, grid_height, card_percent, columns, rows) =
+                if replacing {
+                    (
+                        REPLACEMENT_GRID_WIDTH_PERCENT,
+                        REPLACEMENT_GRID_MAX_WIDTH,
+                        REPLACEMENT_GRID_HEIGHT,
+                        REPLACEMENT_CARD_WIDTH_PERCENT,
+                        4.0,
+                        2.0,
+                    )
+                } else {
+                    (
+                        NORMAL_GRID_WIDTH_PERCENT,
+                        NORMAL_GRID_MAX_WIDTH,
+                        NORMAL_GRID_HEIGHT,
+                        NORMAL_CARD_WIDTH_PERCENT,
+                        3.0,
+                        1.0,
+                    )
+                };
+            let grid_width = (inner_width * grid_percent / 100.0).min(grid_max_width);
+            let column_gap = if replacing {
+                REPLACEMENT_COLUMN_GAP
+            } else {
+                NORMAL_COLUMN_GAP
+            };
+            let row_gap = if replacing { REPLACEMENT_ROW_GAP } else { 0.0 };
+            let cards_width =
+                grid_width * card_percent / 100.0 * columns + column_gap * (columns - 1.0);
+            let card_height_percent = if replacing { 48.0 } else { 100.0 };
+            let cards_height =
+                grid_height * card_height_percent / 100.0 * rows + row_gap * (rows - 1.0);
+            let vertical = if replacing {
+                DRAFT_OVERLAY_PADDING * 2.0
+                    + REPLACEMENT_HEADING_SIZE * 1.2
+                    + REPLACEMENT_HELPER_SIZE * 1.2
+                    + REPLACEMENT_GRID_HEIGHT
+                    + MIN_TOUCH_TARGET
+                    + REPLACEMENT_OVERLAY_GAP * 3.0
+            } else {
+                DRAFT_OVERLAY_PADDING * 2.0
+                    + NORMAL_HEADING_SIZE * 1.2
+                    + NORMAL_GRID_HEIGHT
+                    + MIN_TOUCH_TARGET
+                    + NORMAL_OVERLAY_GAP * 2.0
+            };
+            cards_width <= grid_width && cards_height <= grid_height && vertical <= height
         }
 
-        assert!(fits(1280.0, 720.0));
-        assert!(fits(960.0, 540.0));
-        assert!(fits(800.0, 450.0));
+        for (width, height) in [(667.0, 375.0), (844.0, 390.0), (1280.0, 720.0)] {
+            assert!(
+                fits(width, height, false),
+                "normal draft at {width}x{height}"
+            );
+            assert!(
+                fits(width, height, true),
+                "replacement draft at {width}x{height}"
+            );
+        }
     }
 
     #[test]

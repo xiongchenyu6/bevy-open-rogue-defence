@@ -1,7 +1,11 @@
-use bevy::{prelude::*, window::PrimaryWindow};
+use bevy::{
+    prelude::*,
+    window::{PrimaryWindow, WindowFocused},
+};
 
 use super::combat::{CombatSet, SurvivalSet};
 use super::market::MarketEffects;
+use super::mobile_layout::{HudMetrics, hud_metrics};
 use super::{
     ActiveSkill, Autoplay, DODGE_COOLDOWN_SECONDS, DODGE_DISTANCE, DODGE_INVULNERABILITY,
     DodgeButton, DodgeState, GameSession, Hero, HeroVitals, MoveIntent, PlayerBuild,
@@ -17,7 +21,7 @@ pub struct MobileInputPlugin;
 
 impl Plugin for MobileInputPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(
+        app.init_resource::<TouchJoystickState>().add_systems(
             Update,
             (read_move_input, move_and_dodge_hero)
                 .chain()
@@ -27,25 +31,73 @@ impl Plugin for MobileInputPlugin {
     }
 }
 
+#[derive(Resource, Debug, Default)]
+struct TouchJoystickState {
+    touch_id: Option<u64>,
+    origin: Vec2,
+}
+
+impl TouchJoystickState {
+    fn begin(&mut self, id: u64, origin: Vec2) -> bool {
+        if self.touch_id.is_some() {
+            return false;
+        }
+        self.touch_id = Some(id);
+        self.origin = origin;
+        true
+    }
+
+    fn clear(&mut self) {
+        self.touch_id = None;
+        self.origin = Vec2::ZERO;
+    }
+}
+
 #[allow(clippy::too_many_arguments)]
 fn read_move_input(
     time: Res<Time>,
     keyboard: Res<ButtonInput<KeyCode>>,
     touches: Res<Touches>,
-    window_query: Query<&Window, With<PrimaryWindow>>,
+    window_query: Query<(Entity, &Window), With<PrimaryWindow>>,
+    mut focus_events: MessageReader<WindowFocused>,
     session: Res<GameSession>,
     vitals: Res<HeroVitals>,
     mut intent: ResMut<MoveIntent>,
+    mut joystick: ResMut<TouchJoystickState>,
     mut dodge: ResMut<DodgeState>,
     mut active: ResMut<ActiveSkill>,
-    dodge_buttons: Query<&Interaction, (With<DodgeButton>, Changed<Interaction>)>,
-    ultimate_buttons: Query<&Interaction, (With<UltimateButton>, Changed<Interaction>)>,
+    dodge_buttons: Query<
+        (
+            Ref<Interaction>,
+            &ComputedNode,
+            &UiGlobalTransform,
+            &InheritedVisibility,
+        ),
+        With<DodgeButton>,
+    >,
+    ultimate_buttons: Query<
+        (
+            Ref<Interaction>,
+            &ComputedNode,
+            &UiGlobalTransform,
+            &InheritedVisibility,
+        ),
+        With<UltimateButton>,
+    >,
     autoplay: Option<Res<Autoplay>>,
 ) {
+    let primary_window = window_query.single().ok();
+    let lost_focus = focus_events.read().any(|event| {
+        !event.focused
+            && primary_window.is_some_and(|(window_entity, _)| event.window == window_entity)
+    });
+    if lost_focus {
+        clear_transient_input(&mut intent, &mut joystick, &mut dodge, &mut active);
+        return;
+    }
+
     if session.paused || session.finished || !vitals.can_act() {
-        intent.0 = Vec2::ZERO;
-        dodge.requested = false;
-        active.requested = false;
+        clear_transient_input(&mut intent, &mut joystick, &mut dodge, &mut active);
         return;
     }
 
@@ -63,6 +115,16 @@ fn read_move_input(
         return;
     }
 
+    if joystick.touch_id.is_some_and(|id| {
+        touch_tracking_ended(
+            touches.get_pressed(id).is_some(),
+            touches.just_released(id),
+            touches.just_canceled(id),
+        )
+    }) {
+        joystick.clear();
+    }
+
     let mut movement = Vec2::ZERO;
     if keyboard.pressed(KeyCode::ArrowLeft) {
         movement.x -= 1.0;
@@ -76,35 +138,110 @@ fn read_move_input(
     if keyboard.pressed(KeyCode::ArrowDown) {
         movement.y += 1.0;
     }
-    if keyboard.just_pressed(KeyCode::Space)
-        || ultimate_buttons
-            .iter()
-            .any(|interaction| *interaction == Interaction::Pressed)
-    {
-        active.requested = true;
-    }
-    if keyboard.just_pressed(KeyCode::ShiftLeft)
-        || keyboard.just_pressed(KeyCode::ShiftRight)
-        || keyboard.just_pressed(KeyCode::ControlLeft)
-        || keyboard.just_pressed(KeyCode::ControlRight)
-        || dodge_buttons
-            .iter()
-            .any(|interaction| *interaction == Interaction::Pressed)
-    {
-        dodge.request();
-    }
+    if let Some((_, window)) = primary_window {
+        // Bevy's legacy `Interaction` focus path uses only the first active touch.
+        // Hit-test every newly pressed touch as well so a right-hand action still
+        // fires while the left hand keeps the movement stick held down.
+        let pressed_touch_positions = touches
+            .iter_just_pressed()
+            .map(|touch| touch.position() * window.scale_factor())
+            .collect::<Vec<_>>();
+        let ultimate_pressed =
+            ultimate_buttons
+                .iter()
+                .any(|(interaction, node, transform, visibility)| {
+                    (*interaction == Interaction::Pressed && interaction.is_changed())
+                        || (visibility.get()
+                            && pressed_touch_positions
+                                .iter()
+                                .any(|position| node.contains_point(*transform, *position)))
+                });
+        let dodge_pressed =
+            dodge_buttons
+                .iter()
+                .any(|(interaction, node, transform, visibility)| {
+                    (*interaction == Interaction::Pressed && interaction.is_changed())
+                        || (visibility.get()
+                            && pressed_touch_positions
+                                .iter()
+                                .any(|position| node.contains_point(*transform, *position)))
+                });
+        if keyboard.just_pressed(KeyCode::Space) || ultimate_pressed {
+            active.requested = true;
+        }
+        if keyboard.just_pressed(KeyCode::ShiftLeft)
+            || keyboard.just_pressed(KeyCode::ShiftRight)
+            || keyboard.just_pressed(KeyCode::ControlLeft)
+            || keyboard.just_pressed(KeyCode::ControlRight)
+            || dodge_pressed
+        {
+            dodge.request();
+        }
 
-    if let Ok(window) = window_query.single() {
-        for touch in touches.iter() {
-            if touch.start_position().x < window.width() * 0.55 {
-                let drag = touch.distance() / 72.0;
-                movement = Vec2::new(drag.x, drag.y).clamp_length_max(1.0);
-                break;
+        let metrics = hud_metrics(window.width(), window.height());
+        if joystick.touch_id.is_none() {
+            let candidate = touches
+                .iter_just_pressed()
+                .filter(|touch| joystick_contains(touch.start_position(), metrics))
+                .min_by(|left, right| {
+                    let left_distance = left
+                        .start_position()
+                        .distance_squared(metrics.joystick_center);
+                    let right_distance = right
+                        .start_position()
+                        .distance_squared(metrics.joystick_center);
+                    left_distance
+                        .total_cmp(&right_distance)
+                        .then_with(|| left.id().cmp(&right.id()))
+                });
+            if let Some(touch) = candidate {
+                joystick.begin(touch.id(), touch.start_position());
             }
+        }
+        if let Some(touch) = joystick
+            .touch_id
+            .and_then(|touch_id| touches.get_pressed(touch_id))
+        {
+            movement = joystick_intent(
+                joystick.origin,
+                touch.position(),
+                metrics.drag_radius,
+                metrics.deadzone,
+            );
         }
     }
 
     intent.0 = movement.clamp_length_max(1.0);
+}
+
+fn clear_transient_input(
+    intent: &mut MoveIntent,
+    joystick: &mut TouchJoystickState,
+    dodge: &mut DodgeState,
+    active: &mut ActiveSkill,
+) {
+    intent.0 = Vec2::ZERO;
+    joystick.clear();
+    dodge.requested = false;
+    active.requested = false;
+}
+
+fn joystick_contains(position: Vec2, metrics: HudMetrics) -> bool {
+    position.distance_squared(metrics.joystick_center) <= (metrics.joystick_size * 0.5).powi(2)
+}
+
+fn touch_tracking_ended(is_pressed: bool, just_released: bool, just_canceled: bool) -> bool {
+    !is_pressed || just_released || just_canceled
+}
+
+fn joystick_intent(origin: Vec2, position: Vec2, drag_radius: f32, deadzone: f32) -> Vec2 {
+    let drag = position - origin;
+    let distance = drag.length();
+    if distance <= deadzone || drag_radius <= deadzone {
+        return Vec2::ZERO;
+    }
+    let strength = ((distance - deadzone) / (drag_radius - deadzone)).clamp(0.0, 1.0);
+    drag.normalize_or_zero() * strength
 }
 
 fn autoplay_movement(elapsed: f32) -> Vec2 {
@@ -178,6 +315,75 @@ fn clamp_hero_position(position: &mut Vec3) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn phone_joystick_only_starts_inside_the_visible_lower_left_pad() {
+        for (width, height) in [(667.0, 375.0), (844.0, 390.0)] {
+            let metrics = hud_metrics(width, height);
+            assert!(joystick_contains(metrics.joystick_center, metrics));
+            assert!(joystick_contains(
+                metrics.joystick_center + Vec2::X * metrics.joystick_size * 0.49,
+                metrics
+            ));
+            assert!(!joystick_contains(Vec2::new(metrics.safe_x, 40.0), metrics));
+            assert!(!joystick_contains(
+                Vec2::new(width - 40.0, height - 40.0),
+                metrics
+            ));
+        }
+    }
+
+    #[test]
+    fn joystick_deadzone_scales_then_clamps_drag_strength() {
+        let metrics = hud_metrics(844.0, 390.0);
+        let origin = metrics.joystick_center;
+
+        assert_eq!(
+            joystick_intent(
+                origin,
+                origin + Vec2::X * (metrics.deadzone - 0.1),
+                metrics.drag_radius,
+                metrics.deadzone,
+            ),
+            Vec2::ZERO
+        );
+        let partial = joystick_intent(
+            origin,
+            origin + Vec2::new(metrics.drag_radius * 0.5, 0.0),
+            metrics.drag_radius,
+            metrics.deadzone,
+        );
+        assert!(partial.x > 0.0 && partial.x < 1.0);
+        assert_eq!(
+            joystick_intent(
+                origin,
+                origin + Vec2::Y * metrics.drag_radius * 2.0,
+                metrics.drag_radius,
+                metrics.deadzone,
+            ),
+            Vec2::Y
+        );
+    }
+
+    #[test]
+    fn joystick_keeps_the_first_touch_until_it_is_cleared() {
+        let mut joystick = TouchJoystickState::default();
+        assert!(joystick.begin(7, Vec2::new(80.0, 320.0)));
+        assert!(!joystick.begin(11, Vec2::new(90.0, 315.0)));
+        assert_eq!(joystick.touch_id, Some(7));
+
+        joystick.clear();
+        assert!(joystick.begin(11, Vec2::new(90.0, 315.0)));
+        assert_eq!(joystick.touch_id, Some(11));
+    }
+
+    #[test]
+    fn release_cancel_or_missing_touch_ends_joystick_tracking() {
+        assert!(!touch_tracking_ended(true, false, false));
+        assert!(touch_tracking_ended(false, false, false));
+        assert!(touch_tracking_ended(false, true, false));
+        assert!(touch_tracking_ended(false, false, true));
+    }
 
     #[test]
     fn dodge_moves_exact_distance_until_it_reaches_the_arena_edge() {

@@ -15,6 +15,7 @@ mod hero;
 mod hero_abilities;
 mod market;
 mod mobile_input;
+mod mobile_layout;
 mod pooling;
 mod progression;
 mod resources;

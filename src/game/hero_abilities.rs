@@ -1,12 +1,13 @@
 use std::cmp::Ordering;
 
-use bevy::prelude::*;
+use bevy::{prelude::*, window::PrimaryWindow};
 
 #[cfg(test)]
 use super::bonds::DamageElement;
 use super::bonds::{DamageClass, DamageProfile, summon_cap};
 use super::combat::CombatSet;
 use super::market::MarketEffects;
+use super::mobile_layout::hud_metrics;
 use super::pooling::{CombatPools, SummonVisual};
 use super::{
     ActiveSkill, BondId, BossEnemy, Core, Enemy, GameAssets, GameSession, Hero, HeroIdentity,
@@ -884,12 +885,21 @@ fn update_spirit_companions(
 fn update_active_skill_label(
     selected: Res<SelectedHero>,
     active: Res<ActiveSkill>,
+    windows: Query<&Window, With<PrimaryWindow>>,
     mut labels: Query<&mut Text, With<SkillButtonLabel>>,
 ) {
     let profile = ultimate_profile(selected.kind);
+    let compact = windows
+        .single()
+        .map(|window| hud_metrics(window.width(), window.height()).compact)
+        .unwrap_or(false);
     for mut label in &mut labels {
         **label = if active.remaining <= 0.0 {
-            format!("{} READY\nSPACE / TAP", profile.name)
+            if compact {
+                format!("{}\nREADY", profile.name)
+            } else {
+                format!("{} READY\nSPACE / TAP", profile.name)
+            }
         } else {
             format!("{}\n{:.1}s", profile.name, active.remaining)
         };

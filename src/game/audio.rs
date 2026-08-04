@@ -100,3 +100,27 @@ fn play_once(commands: &mut Commands, source: &Handle<AudioSource>, volume: f32)
         PlaybackSettings::DESPAWN.with_volume(Volume::Linear(volume)),
     ));
 }
+
+#[cfg(test)]
+mod tests {
+    use bevy::audio::Decodable;
+
+    use super::*;
+
+    fn assert_audio_decodes(bytes: &[u8]) {
+        let source = AudioSource {
+            bytes: bytes.to_vec().into(),
+        };
+        assert!(source.decoder().next().is_some());
+    }
+
+    #[test]
+    fn every_shipped_audio_asset_has_an_enabled_decoder() {
+        assert_audio_decodes(include_bytes!("../../assets/audio/arena_loop.ogg"));
+        assert_audio_decodes(include_bytes!("../../assets/audio/shot.wav"));
+        assert_audio_decodes(include_bytes!("../../assets/audio/impact.wav"));
+        assert_audio_decodes(include_bytes!("../../assets/audio/draft.wav"));
+        assert_audio_decodes(include_bytes!("../../assets/audio/ultimate.wav"));
+        assert_audio_decodes(include_bytes!("../../assets/audio/boss_spawn.wav"));
+    }
+}

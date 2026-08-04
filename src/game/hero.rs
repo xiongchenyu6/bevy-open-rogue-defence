@@ -9,6 +9,22 @@ use super::{
 
 pub struct HeroPlugin;
 
+const OVERLAY_PADDING: f32 = 8.0;
+const HERO_HEADING_SIZE: f32 = 22.0;
+const HERO_GRID_WIDTH_PERCENT: f32 = 96.0;
+const HERO_GRID_MAX_WIDTH: f32 = 1_000.0;
+const HERO_GRID_HEIGHT: f32 = 292.0;
+const HERO_CARD_WIDTH_PERCENT: f32 = 31.0;
+const HERO_CARD_HEIGHT_PERCENT: f32 = 48.0;
+const HERO_GRID_GAP: f32 = 8.0;
+const EVOLUTION_GRID_WIDTH_PERCENT: f32 = 94.0;
+const EVOLUTION_GRID_MAX_WIDTH: f32 = 900.0;
+const EVOLUTION_GRID_HEIGHT: f32 = 260.0;
+const EVOLUTION_CARD_WIDTH_PERCENT: f32 = 48.0;
+const EVOLUTION_GRID_GAP: f32 = 10.0;
+const MIN_TOUCH_TARGET: f32 = 48.0;
+const _: () = assert!(MIN_TOUCH_TARGET >= 48.0);
+
 impl Plugin for HeroPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<HeroState>()
@@ -59,9 +75,9 @@ fn setup_hero_ui(mut commands: Commands) {
             HeroSelectorStatusPanel,
             Node {
                 position_type: PositionType::Absolute,
-                left: px(22),
-                top: px(212),
-                width: px(205),
+                left: percent(43),
+                top: px(64),
+                width: px(168),
                 padding: UiRect::all(px(8)),
                 flex_direction: FlexDirection::Column,
                 row_gap: px(6),
@@ -100,7 +116,7 @@ fn setup_hero_ui(mut commands: Commands) {
                 ))
                 .with_children(|button| {
                     button.spawn((
-                        Text::new("F1  CHOOSE HERO"),
+                        Text::new("CHOOSE HERO"),
                         TextFont {
                             font_size: FontSize::Px(12.0),
                             ..default()
@@ -159,10 +175,11 @@ fn spawn_hero_selector(commands: &mut Commands) -> Entity {
                 position_type: PositionType::Absolute,
                 width: percent(100),
                 height: percent(100),
+                padding: UiRect::all(px(OVERLAY_PADDING)),
                 flex_direction: FlexDirection::Column,
                 align_items: AlignItems::Center,
                 justify_content: JustifyContent::Center,
-                row_gap: px(16),
+                row_gap: px(HERO_GRID_GAP),
                 ..default()
             },
             BackgroundColor(Color::srgba(0.01, 0.02, 0.04, 0.92)),
@@ -172,19 +189,21 @@ fn spawn_hero_selector(commands: &mut Commands) -> Entity {
             root.spawn((
                 Text::new("CHOOSE YOUR COMMANDER"),
                 TextFont {
-                    font_size: FontSize::Px(32.0),
+                    font_size: FontSize::Px(HERO_HEADING_SIZE),
                     ..default()
                 },
                 TextColor(Color::srgb(0.76, 0.94, 1.0)),
             ));
             root.spawn(Node {
-                width: percent(82),
-                max_width: px(940),
+                width: percent(HERO_GRID_WIDTH_PERCENT),
+                max_width: px(HERO_GRID_MAX_WIDTH),
+                height: px(HERO_GRID_HEIGHT),
                 flex_direction: FlexDirection::Row,
                 flex_wrap: FlexWrap::Wrap,
                 justify_content: JustifyContent::Center,
-                row_gap: px(12),
-                column_gap: px(12),
+                align_content: AlignContent::Center,
+                row_gap: px(HERO_GRID_GAP),
+                column_gap: px(HERO_GRID_GAP),
                 ..default()
             })
             .with_children(|grid| {
@@ -198,16 +217,17 @@ fn spawn_hero_selector(commands: &mut Commands) -> Entity {
                         Button,
                         HeroChoiceButton(index as u8),
                         Node {
-                            width: percent(30),
-                            min_width: px(245),
-                            height: px(125),
-                            padding: UiRect::all(px(13)),
+                            width: percent(HERO_CARD_WIDTH_PERCENT),
+                            min_width: px(MIN_TOUCH_TARGET),
+                            height: percent(HERO_CARD_HEIGHT_PERCENT),
+                            min_height: px(MIN_TOUCH_TARGET),
+                            padding: UiRect::all(px(6)),
                             flex_direction: FlexDirection::Column,
                             align_items: AlignItems::Center,
                             justify_content: JustifyContent::Center,
-                            row_gap: px(8),
+                            row_gap: px(5),
                             border: UiRect::all(px(2)),
-                            border_radius: BorderRadius::all(px(12)),
+                            border_radius: BorderRadius::all(px(10)),
                             ..default()
                         },
                         BackgroundColor(Color::srgb(0.055, 0.11, 0.18)),
@@ -217,10 +237,11 @@ fn spawn_hero_selector(commands: &mut Commands) -> Entity {
                         card.spawn((
                             Text::new(display_id(hero.id)),
                             TextFont {
-                                font_size: FontSize::Px(20.0),
+                                font_size: FontSize::Px(17.0),
                                 ..default()
                             },
                             TextColor(Color::WHITE),
+                            TextLayout::justify(Justify::Center),
                         ));
                         card.spawn((
                             Text::new(format!(
@@ -228,7 +249,7 @@ fn spawn_hero_selector(commands: &mut Commands) -> Entity {
                                 display_id(hero.starting_skill)
                             )),
                             TextFont {
-                                font_size: FontSize::Px(13.0),
+                                font_size: FontSize::Px(11.0),
                                 ..default()
                             },
                             TextColor(Color::srgb(0.68, 0.78, 0.88)),
@@ -319,10 +340,11 @@ fn spawn_evolution(commands: &mut Commands, hero_index: u8, stage: u8) -> Entity
                 position_type: PositionType::Absolute,
                 width: percent(100),
                 height: percent(100),
+                padding: UiRect::all(px(OVERLAY_PADDING)),
                 flex_direction: FlexDirection::Column,
                 align_items: AlignItems::Center,
                 justify_content: JustifyContent::Center,
-                row_gap: px(22),
+                row_gap: px(EVOLUTION_GRID_GAP),
                 ..default()
             },
             BackgroundColor(Color::srgba(0.015, 0.02, 0.035, 0.92)),
@@ -336,17 +358,17 @@ fn spawn_evolution(commands: &mut Commands, hero_index: u8, stage: u8) -> Entity
                     stage + 1
                 )),
                 TextFont {
-                    font_size: FontSize::Px(32.0),
+                    font_size: FontSize::Px(HERO_HEADING_SIZE),
                     ..default()
                 },
                 TextColor(Color::srgb(1.0, 0.78, 0.28)),
             ));
             root.spawn(Node {
-                width: percent(72),
-                max_width: px(820),
-                height: px(230),
+                width: percent(EVOLUTION_GRID_WIDTH_PERCENT),
+                max_width: px(EVOLUTION_GRID_MAX_WIDTH),
+                height: px(EVOLUTION_GRID_HEIGHT),
                 flex_direction: FlexDirection::Row,
-                column_gap: px(18),
+                column_gap: px(EVOLUTION_GRID_GAP),
                 justify_content: JustifyContent::Center,
                 ..default()
             })
@@ -379,14 +401,16 @@ fn spawn_evolution_card(
             Button,
             EvolutionChoiceButton(branch),
             Node {
-                width: percent(47),
-                min_width: px(280),
+                width: percent(EVOLUTION_CARD_WIDTH_PERCENT),
+                min_width: px(MIN_TOUCH_TARGET),
+                min_height: px(MIN_TOUCH_TARGET),
+                padding: UiRect::all(px(8)),
                 flex_direction: FlexDirection::Column,
                 align_items: AlignItems::Center,
                 justify_content: JustifyContent::Center,
-                row_gap: px(16),
+                row_gap: px(10),
                 border: UiRect::all(px(3)),
-                border_radius: BorderRadius::all(px(15)),
+                border_radius: BorderRadius::all(px(12)),
                 ..default()
             },
             BackgroundColor(Color::srgb(0.075, 0.10, 0.17)),
@@ -400,7 +424,7 @@ fn spawn_evolution_card(
             card.spawn((
                 Text::new(title),
                 TextFont {
-                    font_size: FontSize::Px(25.0),
+                    font_size: FontSize::Px(20.0),
                     ..default()
                 },
                 TextColor(Color::WHITE),
@@ -408,7 +432,7 @@ fn spawn_evolution_card(
             card.spawn((
                 Text::new(description),
                 TextFont {
-                    font_size: FontSize::Px(17.0),
+                    font_size: FontSize::Px(13.0),
                     ..default()
                 },
                 TextColor(Color::srgb(0.72, 0.8, 0.9)),
@@ -532,6 +556,53 @@ fn hero_color(index: usize) -> Color {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn overlay_width(width: f32, percent: f32, max_width: f32) -> f32 {
+        ((width - OVERLAY_PADDING * 2.0) * percent / 100.0).min(max_width)
+    }
+
+    #[test]
+    fn hero_and_evolution_overlays_fit_compact_landscape() {
+        for (width, height) in [(667.0, 375.0), (844.0, 390.0), (1280.0, 720.0)] {
+            let hero_grid_width =
+                overlay_width(width, HERO_GRID_WIDTH_PERCENT, HERO_GRID_MAX_WIDTH);
+            let hero_row_width =
+                hero_grid_width * HERO_CARD_WIDTH_PERCENT / 100.0 * 3.0 + HERO_GRID_GAP * 2.0;
+            let hero_grid_rows =
+                HERO_GRID_HEIGHT * HERO_CARD_HEIGHT_PERCENT / 100.0 * 2.0 + HERO_GRID_GAP;
+            let hero_vertical =
+                OVERLAY_PADDING * 2.0 + HERO_HEADING_SIZE * 1.2 + HERO_GRID_GAP + HERO_GRID_HEIGHT;
+            assert!(
+                hero_row_width <= hero_grid_width,
+                "hero row at {width}x{height}"
+            );
+            assert!(
+                hero_grid_rows <= HERO_GRID_HEIGHT,
+                "hero rows at {width}x{height}"
+            );
+            assert!(hero_vertical <= height, "hero overlay at {width}x{height}");
+
+            let evolution_width = overlay_width(
+                width,
+                EVOLUTION_GRID_WIDTH_PERCENT,
+                EVOLUTION_GRID_MAX_WIDTH,
+            );
+            let evolution_row =
+                evolution_width * EVOLUTION_CARD_WIDTH_PERCENT / 100.0 * 2.0 + EVOLUTION_GRID_GAP;
+            let evolution_vertical = OVERLAY_PADDING * 2.0
+                + HERO_HEADING_SIZE * 1.2
+                + EVOLUTION_GRID_GAP
+                + EVOLUTION_GRID_HEIGHT;
+            assert!(
+                evolution_row <= evolution_width,
+                "evolution row at {width}x{height}"
+            );
+            assert!(
+                evolution_vertical <= height,
+                "evolution overlay at {width}x{height}"
+            );
+        }
+    }
 
     #[test]
     fn selector_status_panel_hides_only_after_hero_is_locked() {
