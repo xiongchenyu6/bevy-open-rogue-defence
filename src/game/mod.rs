@@ -18,6 +18,7 @@ mod mobile_input;
 mod mobile_layout;
 mod pooling;
 mod progression;
+mod rarity;
 mod resources;
 mod skills;
 mod trial;

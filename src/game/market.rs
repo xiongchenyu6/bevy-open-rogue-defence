@@ -2,7 +2,9 @@ use bevy::{prelude::*, window::PrimaryWindow};
 
 use super::bonds::FortuneMarketRules;
 use super::combat::SurvivalSet;
+use super::content::Rarity as BuildRarity;
 use super::mobile_layout::hud_metrics;
+use super::rarity::rarity_color;
 use super::{Autoplay, GameSession, HeroVitals, PlayerBuild, RunRng};
 
 pub struct MarketPlugin;
@@ -132,7 +134,7 @@ const ALL_EQUIPMENT: [MarketItem; 19] = [
 ];
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-enum Rarity {
+enum MarketQuality {
     White,
     Blue,
     Purple,
@@ -140,7 +142,7 @@ enum Rarity {
     Red,
 }
 
-impl Rarity {
+impl MarketQuality {
     const ALL: [Self; 5] = [
         Self::White,
         Self::Blue,
@@ -149,16 +151,6 @@ impl Rarity {
         Self::Red,
     ];
 
-    fn label(self) -> &'static str {
-        match self {
-            Self::White => "WHITE",
-            Self::Blue => "BLUE",
-            Self::Purple => "PURPLE",
-            Self::Orange => "ORANGE",
-            Self::Red => "RED",
-        }
-    }
-
     const fn index(self) -> usize {
         match self {
             Self::White => 0,
@@ -166,16 +158,6 @@ impl Rarity {
             Self::Purple => 2,
             Self::Orange => 3,
             Self::Red => 4,
-        }
-    }
-
-    fn color(self) -> Color {
-        match self {
-            Self::White => Color::srgb(0.82, 0.84, 0.86),
-            Self::Blue => Color::srgb(0.24, 0.62, 1.0),
-            Self::Purple => Color::srgb(0.72, 0.38, 1.0),
-            Self::Orange => Color::srgb(1.0, 0.58, 0.16),
-            Self::Red => Color::srgb(1.0, 0.24, 0.28),
         }
     }
 }
@@ -261,17 +243,17 @@ impl MarketItem {
         }
     }
 
-    fn rarity(self) -> Rarity {
+    fn market_quality(self) -> MarketQuality {
         if self == Self::CorePatch || WHITE_EQUIPMENT.contains(&self) {
-            Rarity::White
+            MarketQuality::White
         } else if self == Self::SkillTuner || BLUE_EQUIPMENT.contains(&self) {
-            Rarity::Blue
+            MarketQuality::Blue
         } else if self == Self::BondCompass || PURPLE_EQUIPMENT.contains(&self) {
-            Rarity::Purple
+            MarketQuality::Purple
         } else if self == Self::SlowHourglass || ORANGE_EQUIPMENT.contains(&self) {
-            Rarity::Orange
+            MarketQuality::Orange
         } else {
-            Rarity::Red
+            MarketQuality::Red
         }
     }
 
@@ -284,11 +266,22 @@ impl MarketItem {
     }
 
     fn tag(self) -> &'static str {
-        self.rarity().label()
+        self.build_rarity().label()
     }
 
     fn color(self) -> Color {
-        self.rarity().color()
+        rarity_color(self.build_rarity())
+    }
+
+    /// Keep the observed five internal stock bands while presenting the same
+    /// four build tiers used by heroes, skills and bonds.
+    fn build_rarity(self) -> BuildRarity {
+        match self.market_quality() {
+            MarketQuality::White => BuildRarity::R,
+            MarketQuality::Blue => BuildRarity::Sr,
+            MarketQuality::Purple | MarketQuality::Orange => BuildRarity::Ssr,
+            MarketQuality::Red => BuildRarity::Ur,
+        }
     }
 
     fn effect_text(self) -> &'static str {
@@ -1917,7 +1910,7 @@ fn roll_slot(
     level: u8,
     avoid: &[MarketItem],
 ) -> MarketOffer {
-    let rarity = roll_rarity(level, fortune.rarity_bonus, rng);
+    let rarity = roll_market_quality(level, fortune.rarity_bonus, rng);
     let item = match index {
         0 | 1 => roll_equipment(rarity, effects, rng, avoid),
         2 => roll_consumable(rarity, rng, avoid),
@@ -1927,7 +1920,7 @@ fn roll_slot(
     MarketOffer { item }
 }
 
-fn roll_consumable(rarity: Rarity, rng: &mut RunRng, avoid: &[MarketItem]) -> MarketItem {
+fn roll_consumable(rarity: MarketQuality, rng: &mut RunRng, avoid: &[MarketItem]) -> MarketItem {
     let preferred = CONSUMABLES[rarity.index()];
     if !avoid.contains(&preferred) {
         return preferred;
@@ -1943,17 +1936,17 @@ fn roll_consumable(rarity: Rarity, rng: &mut RunRng, avoid: &[MarketItem]) -> Ma
 }
 
 fn roll_equipment(
-    rarity: Rarity,
+    rarity: MarketQuality,
     effects: &MarketEffects,
     rng: &mut RunRng,
     avoid: &[MarketItem],
 ) -> MarketItem {
     let pool: &[MarketItem] = match rarity {
-        Rarity::White => &WHITE_EQUIPMENT,
-        Rarity::Blue => &BLUE_EQUIPMENT,
-        Rarity::Purple => &PURPLE_EQUIPMENT,
-        Rarity::Orange => &ORANGE_EQUIPMENT,
-        Rarity::Red => &RED_EQUIPMENT,
+        MarketQuality::White => &WHITE_EQUIPMENT,
+        MarketQuality::Blue => &BLUE_EQUIPMENT,
+        MarketQuality::Purple => &PURPLE_EQUIPMENT,
+        MarketQuality::Orange => &ORANGE_EQUIPMENT,
+        MarketQuality::Red => &RED_EQUIPMENT,
     };
     for _ in 0..pool.len() * 2 {
         let candidate = pool[rng.next_u32() as usize % pool.len()];
@@ -1971,26 +1964,26 @@ fn roll_equipment(
     }
 }
 
-fn rarity_for_roll(level: u8, roll: u8) -> Rarity {
+fn market_quality_for_roll(level: u8, roll: u8) -> MarketQuality {
     let weights = RARITY_WEIGHTS[(level.clamp(1, MARKET_LEVEL_COUNT) - 1) as usize];
     let mut upper = 0_u8;
-    for (rarity, weight) in Rarity::ALL.into_iter().zip(weights) {
+    for (rarity, weight) in MarketQuality::ALL.into_iter().zip(weights) {
         upper = upper.saturating_add(weight);
         if roll < upper {
             return rarity;
         }
     }
-    Rarity::Red
+    MarketQuality::Red
 }
 
-fn roll_rarity(level: u8, rarity_bonus: f32, rng: &mut RunRng) -> Rarity {
+fn roll_market_quality(level: u8, rarity_bonus: f32, rng: &mut RunRng) -> MarketQuality {
     let roll = (rng.next_u32() % 100) as u8;
-    rarity_for_fortune_roll(level, roll, rarity_bonus)
+    market_quality_for_fortune_roll(level, roll, rarity_bonus)
 }
 
-fn rarity_for_fortune_roll(level: u8, roll: u8, rarity_bonus: f32) -> Rarity {
+fn market_quality_for_fortune_roll(level: u8, roll: u8, rarity_bonus: f32) -> MarketQuality {
     let shift = (rarity_bonus.clamp(0.0, 1.0) * 100.0).round() as u8;
-    rarity_for_roll(level, roll.saturating_add(shift).min(99))
+    market_quality_for_roll(level, roll.saturating_add(shift).min(99))
 }
 
 #[cfg(test)]
@@ -2030,6 +2023,22 @@ mod tests {
         let mut input = app.world_mut().resource_mut::<ButtonInput<KeyCode>>();
         input.release(KeyCode::KeyB);
         input.clear();
+    }
+
+    #[test]
+    fn five_internal_market_bands_present_the_shared_four_build_tiers() {
+        assert_eq!(MarketItem::CorePatch.build_rarity(), BuildRarity::R);
+        assert_eq!(MarketItem::SkillTuner.build_rarity(), BuildRarity::Sr);
+        assert_eq!(MarketItem::BondCompass.build_rarity(), BuildRarity::Ssr);
+        assert_eq!(MarketItem::SlowHourglass.build_rarity(), BuildRarity::Ssr);
+        assert_eq!(MarketItem::RevivalSeed.build_rarity(), BuildRarity::Ur);
+        assert_eq!(MarketItem::ThreefoldRelic.build_rarity(), BuildRarity::Ssr);
+        assert_eq!(MarketItem::AscendantCrown.build_rarity(), BuildRarity::Ssr);
+
+        for item in CONSUMABLES.into_iter().chain(ALL_EQUIPMENT) {
+            assert!(matches!(item.tag(), "R" | "SR" | "SSR" | "UR"));
+            assert_eq!(item.color(), rarity_color(item.build_rarity()));
+        }
     }
 
     #[test]
@@ -2166,8 +2175,11 @@ mod tests {
         state.stock_generation += 1;
         assert_eq!(state.refresh_price(&effects, &fortune), 0);
 
-        assert_eq!(rarity_for_roll(1, 70), Rarity::White);
-        assert_eq!(rarity_for_fortune_roll(1, 70, 0.15), Rarity::Blue);
+        assert_eq!(market_quality_for_roll(1, 70), MarketQuality::White);
+        assert_eq!(
+            market_quality_for_fortune_roll(1, 70, 0.15),
+            MarketQuality::Blue
+        );
         let mut first = MarketState::default();
         let mut second = MarketState::default();
         reroll_all(&mut first, &effects, &fortune, &mut RunRng::default(), 3);
@@ -2181,7 +2193,7 @@ mod tests {
             let level = index as u8 + 1;
             let mut actual = [0_u8; 5];
             for roll in 0..100 {
-                let rarity = rarity_for_roll(level, roll);
+                let rarity = market_quality_for_roll(level, roll);
                 actual[rarity.index()] += 1;
             }
             assert_eq!(actual, expected, "market level {level}");

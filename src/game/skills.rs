@@ -545,15 +545,18 @@ fn intercept_ember_rebirth(
     };
     if had_settled_death {
         vitals.deaths = vitals.deaths.saturating_sub(1);
-        session.core_hp = (session.core_hp + 80.0).min(session.core_max_hp);
+        session.core_hp =
+            (session.core_hp + 80.0 * skill_utility_multiplier(25)).min(session.core_max_hp);
     }
     vitals.alive = true;
-    vitals.health = vitals.max_health * 0.35;
+    vitals.health = vitals.max_health * (0.35 * skill_utility_multiplier(25)).min(0.9);
     vitals.revive_remaining = 0.0;
-    vitals.invulnerable_remaining = vitals.invulnerable_remaining.max(0.8);
+    vitals.invulnerable_remaining = vitals
+        .invulnerable_remaining
+        .max(0.8 * skill_utility_multiplier(25));
     transform.translation = position;
     *visibility = Visibility::Visible;
-    runtime.cooldowns[25] = 90.0;
+    runtime.cooldowns[25] = skill_cooldown(25);
     let damage = scaled_skill_damage(25, rank, &build, &vitals, &runtime);
     schedule_typed_fixed_strike(
         &mut commands,
@@ -978,7 +981,8 @@ fn update_oath_banners(
         banner.remaining -= delta;
         banner.repair_remaining -= delta;
         while banner.repair_remaining <= 0.0 && banner.remaining >= -0.001 {
-            session.core_hp = (session.core_hp + 1.0).min(session.core_max_hp);
+            session.core_hp =
+                (session.core_hp + skill_utility_multiplier(21)).min(session.core_max_hp);
             banner.repair_remaining += 1.0;
         }
         if banner.remaining <= 0.0 {
@@ -1754,7 +1758,7 @@ fn cast_arc_chain(
     if rank == 0 || runtime.cooldowns[0] > 0.0 {
         return;
     }
-    runtime.cooldowns[0] = SKILLS[0].cooldown_secs;
+    runtime.cooldowns[0] = skill_cooldown(0);
     let damage = scaled_skill_damage(0, rank, build, vitals, runtime);
     let extra_chain = u8::from(build.bond(BondId::Thunder) >= 4);
     let chain = chain_target_sequence(
@@ -1809,7 +1813,7 @@ fn cast_frost_lance(
     if rank == 0 || runtime.cooldowns[2] > 0.0 {
         return;
     }
-    runtime.cooldowns[2] = SKILLS[2].cooldown_secs;
+    runtime.cooldowns[2] = skill_cooldown(2);
     let damage = scaled_skill_damage(2, rank, build, vitals, runtime);
     let base_direction = (first.position - origin).normalize_or_zero();
     let shots = frost_lance_count(rank);
@@ -1886,7 +1890,7 @@ fn cast_tidal_fan(
     if rank == 0 || runtime.cooldowns[3] > 0.0 {
         return;
     }
-    runtime.cooldowns[3] = SKILLS[3].cooldown_secs;
+    runtime.cooldowns[3] = skill_cooldown(3);
     let damage = scaled_skill_damage(3, rank, build, vitals, runtime);
     let base_direction = (first.position - origin).normalize_or_zero();
     let mut ordered_per_blade = Vec::with_capacity(5);
@@ -1966,7 +1970,7 @@ fn cast_bone_sentry(
     if rank == 0 || runtime.cooldowns[4] > 0.0 {
         return;
     }
-    runtime.cooldowns[4] = SKILLS[4].cooldown_secs;
+    runtime.cooldowns[4] = skill_cooldown(4);
     if existing_sentries >= bone_sentry_cap(rank) as usize || !summon_budget.take() {
         return;
     }
@@ -2003,7 +2007,7 @@ fn cast_spirit_hounds(
     if rank == 0 || runtime.cooldowns[5] > 0.0 {
         return;
     }
-    runtime.cooldowns[5] = SKILLS[5].cooldown_secs;
+    runtime.cooldowns[5] = skill_cooldown(5);
     let count = spirit_hound_count(rank) as usize;
     let damage = scaled_skill_damage(5, rank, build, vitals, runtime);
     for index in 0..count {
@@ -2107,7 +2111,7 @@ fn cast_arcane_star(
     if rank == 0 || runtime.cooldowns[8] > 0.0 {
         return;
     }
-    runtime.cooldowns[8] = SKILLS[8].cooldown_secs;
+    runtime.cooldowns[8] = skill_cooldown(8);
     let damage = scaled_skill_damage(8, rank, build, vitals, runtime);
     schedule_typed_strike(
         commands,
@@ -2157,7 +2161,7 @@ fn cast_ground_pulse(
     if rank == 0 || runtime.cooldowns[9] > 0.0 {
         return;
     }
-    runtime.cooldowns[9] = SKILLS[9].cooldown_secs;
+    runtime.cooldowns[9] = skill_cooldown(9);
     let damage = scaled_skill_damage(9, rank, build, vitals, runtime);
     let forward = (first.position - origin).normalize_or_zero();
     let hit: Vec<TargetInfo> = targets
@@ -2280,7 +2284,7 @@ fn cast_rare_skills(
 ) {
     let storm_rank = build.skills[12];
     if storm_rank > 0 && runtime.cooldowns[12] <= 0.0 {
-        runtime.cooldowns[12] = SKILLS[12].cooldown_secs;
+        runtime.cooldowns[12] = skill_cooldown(12);
         let damage = scaled_skill_damage(12, storm_rank, build, vitals, runtime);
         spawn_skill_zone(
             commands,
@@ -2313,7 +2317,7 @@ fn cast_rare_skills(
 
     let meteor_rank = build.skills[13];
     if meteor_rank > 0 && runtime.cooldowns[13] <= 0.0 {
-        runtime.cooldowns[13] = SKILLS[13].cooldown_secs;
+        runtime.cooldowns[13] = skill_cooldown(13);
         let damage = scaled_skill_damage(13, meteor_rank, build, vitals, runtime);
         schedule_typed_fixed_strike(
             commands,
@@ -2359,7 +2363,7 @@ fn cast_rare_skills(
 
     let glacier_rank = build.skills[14];
     if glacier_rank > 0 && runtime.cooldowns[14] <= 0.0 {
-        runtime.cooldowns[14] = SKILLS[14].cooldown_secs;
+        runtime.cooldowns[14] = skill_cooldown(14);
         let damage = scaled_skill_damage(14, glacier_rank, build, vitals, runtime);
         spawn_skill_zone(
             commands,
@@ -2388,7 +2392,7 @@ fn cast_rare_skills(
 
     let vortex_rank = build.skills[15];
     if vortex_rank > 0 && runtime.cooldowns[15] <= 0.0 {
-        runtime.cooldowns[15] = SKILLS[15].cooldown_secs;
+        runtime.cooldowns[15] = skill_cooldown(15);
         let total_damage = scaled_skill_damage(15, vortex_rank, build, vitals, runtime);
         spawn_skill_zone(
             commands,
@@ -2421,7 +2425,7 @@ fn cast_rare_skills(
 
     let tide_rank = build.skills[16];
     if tide_rank > 0 && runtime.cooldowns[16] <= 0.0 {
-        runtime.cooldowns[16] = SKILLS[16].cooldown_secs;
+        runtime.cooldowns[16] = skill_cooldown(16);
         if summon_budget.take()
             && let Some(entity) = pools.rent_scene_summon(
                 commands,
@@ -2439,15 +2443,16 @@ fn cast_rare_skills(
                     damage: scaled_skill_damage(16, tide_rank, build, vitals, runtime),
                 },
             ));
-            runtime
-                .tide_repairs
-                .insert(entity, tide_elemental_repair(tide_rank));
+            runtime.tide_repairs.insert(
+                entity,
+                tide_elemental_repair(tide_rank) * skill_utility_multiplier(16),
+            );
         }
     }
 
     let turret_rank = build.skills[17];
     if turret_rank > 0 && runtime.cooldowns[17] <= 0.0 {
-        runtime.cooldowns[17] = SKILLS[17].cooldown_secs;
+        runtime.cooldowns[17] = skill_cooldown(17);
         if summon_budget.take()
             && let Some(entity) = pools.rent_scene_summon(
                 commands,
@@ -2469,7 +2474,7 @@ fn cast_rare_skills(
 
     let brand_rank = build.skills[18];
     if brand_rank > 0 && runtime.cooldowns[18] <= 0.0 {
-        runtime.cooldowns[18] = SKILLS[18].cooldown_secs;
+        runtime.cooldowns[18] = skill_cooldown(18);
         if let Some(target) = targets
             .iter()
             .copied()
@@ -2497,7 +2502,7 @@ fn cast_rare_skills(
 
     let swords_rank = build.skills[19];
     if swords_rank > 0 && runtime.cooldowns[19] <= 0.0 {
-        runtime.cooldowns[19] = SKILLS[19].cooldown_secs;
+        runtime.cooldowns[19] = skill_cooldown(19);
         let count = flying_sword_count(swords_rank);
         let damage = scaled_skill_damage(19, swords_rank, build, vitals, runtime);
         let mut marked = Vec::new();
@@ -2538,7 +2543,7 @@ fn cast_rare_skills(
 
     let banner_rank = build.skills[21];
     if banner_rank > 0 && runtime.cooldowns[21] <= 0.0 {
-        runtime.cooldowns[21] = SKILLS[21].cooldown_secs;
+        runtime.cooldowns[21] = skill_cooldown(21);
         if summon_budget.take()
             && let Some(entity) = pools.rent_mesh_summon(
                 commands,
@@ -2553,7 +2558,9 @@ fn cast_rare_skills(
                 OathBanner {
                     remaining: 10.0,
                     repair_remaining: 1.0,
-                    damage_reduction: oath_banner_reduction(banner_rank),
+                    damage_reduction: (oath_banner_reduction(banner_rank)
+                        * skill_utility_multiplier(21))
+                    .min(0.75),
                     applied: false,
                     armor_bonus: 0.0,
                     attack_speed_bonus: 0.0,
@@ -2564,7 +2571,7 @@ fn cast_rare_skills(
 
     let transmute_rank = build.skills[22];
     if transmute_rank > 0 && runtime.cooldowns[22] <= 0.0 {
-        runtime.cooldowns[22] = SKILLS[22].cooldown_secs;
+        runtime.cooldowns[22] = skill_cooldown(22);
         let damage = scaled_skill_damage(22, transmute_rank, build, vitals, runtime);
         let radius = 2.8;
         let affected: Vec<TargetInfo> = targets
@@ -2577,7 +2584,8 @@ fn cast_rare_skills(
             .map(|target| TransmuteReward {
                 target: target.entity,
                 expected_lethal: target.hp <= damage,
-                chance: transmute_gold_chance(transmute_rank),
+                chance: (transmute_gold_chance(transmute_rank) * skill_utility_multiplier(22))
+                    .min(1.0),
                 reward: target.gold,
             })
             .collect();
@@ -2607,7 +2615,7 @@ fn cast_rare_skills(
 
     let wheel_rank = build.skills[23];
     if wheel_rank > 0 && runtime.cooldowns[23] <= 0.0 {
-        runtime.cooldowns[23] = SKILLS[23].cooldown_secs;
+        runtime.cooldowns[23] = skill_cooldown(23);
         commands.spawn((
             Mesh3d(assets.fx_mesh.clone()),
             MeshMaterial3d(assets.storm_material.clone()),
@@ -2619,7 +2627,7 @@ fn cast_rare_skills(
                 max_distance: (build.attack_range + 2.0).clamp(7.0, 16.0),
                 traveled: 0.0,
                 returning: false,
-                damage: build.attack_damage * 0.9,
+                damage: build.attack_damage * 0.9 * skill_utility_multiplier(23),
                 burn_cap: if build.bond(BondId::Ember) >= 2 { 5 } else { 3 },
                 outbound_hits: HashSet::new(),
                 return_hits: HashSet::new(),
@@ -2647,7 +2655,7 @@ fn cast_epic_skills(
 ) {
     let judgment_rank = build.skills[24];
     if judgment_rank > 0 && runtime.cooldowns[24] <= 0.0 {
-        runtime.cooldowns[24] = SKILLS[24].cooldown_secs;
+        runtime.cooldowns[24] = skill_cooldown(24);
         let damage = scaled_skill_damage(24, judgment_rank, build, vitals, runtime);
         let count = sky_judgment_target_count(judgment_rank);
         let mut struck = Vec::with_capacity(count as usize);
@@ -2690,7 +2698,7 @@ fn cast_epic_skills(
 
     let wyrm_rank = build.skills[26];
     if wyrm_rank > 0 && runtime.cooldowns[26] <= 0.0 {
-        runtime.cooldowns[26] = SKILLS[26].cooldown_secs;
+        runtime.cooldowns[26] = skill_cooldown(26);
         if summon_budget.take()
             && let Some(entity) = pools.rent_scene_summon(
                 commands,
@@ -2714,7 +2722,7 @@ fn cast_epic_skills(
 
     let colossus_rank = build.skills[27];
     if colossus_rank > 0 && runtime.cooldowns[27] <= 0.0 {
-        runtime.cooldowns[27] = SKILLS[27].cooldown_secs;
+        runtime.cooldowns[27] = skill_cooldown(27);
         if summon_budget.take()
             && let Some(entity) = pools.rent_scene_summon(
                 commands,
@@ -2736,7 +2744,7 @@ fn cast_epic_skills(
 
     let fate_rank = build.skills[29];
     if fate_rank > 0 && runtime.cooldowns[29] <= 0.0 {
-        runtime.cooldowns[29] = SKILLS[29].cooldown_secs;
+        runtime.cooldowns[29] = skill_cooldown(29);
         let first_outcome = roll_fate_cube(fate_rank, rng.next_u32());
         let outcome = if build.bond(BondId::Fortune) >= 6 {
             choose_luckier_fate(first_outcome, roll_fate_cube(fate_rank, rng.next_u32()))
@@ -2751,7 +2759,8 @@ fn cast_epic_skills(
         match outcome {
             FateOutcome::Lightning => {
                 let damage =
-                    80.0 + 40.0 * rank_value + 0.7 * effective_spell_power(vitals, runtime);
+                    (80.0 + 40.0 * rank_value + 0.7 * effective_spell_power(vitals, runtime))
+                        * skill_utility_multiplier(29);
                 for strike in 0..6 {
                     let target = targets[strike % targets.len()];
                     schedule_typed_strike(
@@ -2767,7 +2776,8 @@ fn cast_epic_skills(
                 }
             }
             FateOutcome::FireRain => {
-                let damage = 130.0 + 65.0 * rank_value + effective_spell_power(vitals, runtime);
+                let damage = (130.0 + 65.0 * rank_value + effective_spell_power(vitals, runtime))
+                    * skill_utility_multiplier(29);
                 schedule_typed_fixed_strike(
                     commands,
                     primary.position,
@@ -2780,12 +2790,16 @@ fn cast_epic_skills(
                 );
             }
             FateOutcome::Heal => {
-                vitals.heal(vitals.max_health * (0.12 + 0.03 * rank_value));
+                vitals.heal(
+                    vitals.max_health
+                        * ((0.12 + 0.03 * rank_value) * skill_utility_multiplier(29)).min(0.8),
+                );
             }
             FateOutcome::Gold => {
-                session.gold = session
-                    .gold
-                    .saturating_add(40 + 20 * u32::from(fate_rank.saturating_sub(1)));
+                let base_reward = 40 + 20 * u32::from(fate_rank.saturating_sub(1));
+                session.gold = session.gold.saturating_add(
+                    (base_reward as f32 * skill_utility_multiplier(29)).round() as u32,
+                );
             }
             FateOutcome::Summon => {
                 let count = 2 + usize::from(fate_rank >= 4);
@@ -2810,9 +2824,10 @@ fn cast_epic_skills(
                         SpiritHound {
                             remaining: 8.0,
                             attack_remaining: summon as f32 * 0.1,
-                            damage: 45.0
+                            damage: (45.0
                                 + 18.0 * rank_value
-                                + 0.35 * effective_summon_power(vitals, runtime),
+                                + 0.35 * effective_summon_power(vitals, runtime))
+                                * skill_utility_multiplier(29),
                         },
                     ));
                 }
@@ -2896,7 +2911,7 @@ fn record_spell_and_echo(
     }
     let prism_rank = build.skills[20];
     let prism_scale = if prism_rank > 0 {
-        prism_echo_scale(prism_rank)
+        (prism_echo_scale(prism_rank) * skill_utility_multiplier(20)).min(1.0)
     } else {
         0.0
     };
@@ -3037,7 +3052,7 @@ fn apply_banner_bonuses(banner: &mut OathBanner, build: &mut PlayerBuild, vitals
         return;
     }
     banner.armor_bonus = armor_bonus_for_reduction(vitals.armor, banner.damage_reduction);
-    banner.attack_speed_bonus = build.attacks_per_second * 0.15;
+    banner.attack_speed_bonus = build.attacks_per_second * 0.15 * skill_utility_multiplier(21);
     vitals.armor += banner.armor_bonus;
     build.attacks_per_second += banner.attack_speed_bonus;
     banner.applied = true;
@@ -3089,13 +3104,23 @@ fn scaled_skill_damage(
     let power = SKILLS[index].effect.power;
     let rank_value = rank.saturating_sub(1) as f32;
     let base_attack_damage = (build.attack_damage - runtime.triune.attack_bonus).max(1.0);
-    (power.base
+    ((power.base
         + power.per_rank * rank_value
         + power.attack_ratio * base_attack_damage
         + power.spell_ratio * effective_spell_power(vitals, runtime)
         + power.summon_ratio * effective_summon_power(vitals, runtime))
     .max(1.0)
+        * SKILLS[index].rarity.skill_power_multiplier())
         * triune_skill_multiplier(index, &runtime.triune)
+}
+
+fn skill_cooldown(index: usize) -> f32 {
+    let skill = SKILLS[index];
+    skill.cooldown_secs * skill.rarity.skill_cooldown_multiplier()
+}
+
+const fn skill_utility_multiplier(index: usize) -> f32 {
+    SKILLS[index].rarity.skill_power_multiplier()
 }
 
 fn effective_spell_power(vitals: &HeroVitals, runtime: &SkillRuntime) -> f32 {
@@ -3488,7 +3513,8 @@ const fn zone_pulse_interval(kind: ZoneKind) -> f32 {
 }
 
 const fn execution_threshold(special: bool) -> f32 {
-    if special { 0.04 } else { 0.12 }
+    let base = if special { 0.04 } else { 0.12 };
+    base * skill_utility_multiplier(18)
 }
 
 fn execution_ready(health: f32, max_health: f32, threshold: f32) -> bool {
@@ -3512,7 +3538,7 @@ fn ember_rebirth_ready(rank: u8, cooldown: f32, health: f32) -> bool {
 }
 
 const fn triune_boost(rank: u8) -> f32 {
-    0.20 + 0.05 * rank.saturating_sub(1) as f32
+    (0.20 + 0.05 * rank.saturating_sub(1) as f32) * skill_utility_multiplier(28)
 }
 
 fn triune_attack_active(state: &TriuneState) -> bool {
@@ -3751,13 +3777,21 @@ mod tests {
     }
 
     #[test]
-    fn execution_uses_twelve_percent_for_mobs_and_four_for_specials() {
-        assert_eq!(execution_threshold(false), 0.12);
-        assert_eq!(execution_threshold(true), 0.04);
-        assert!(execution_ready(120.0, 1_000.0, execution_threshold(false)));
-        assert!(!execution_ready(121.0, 1_000.0, execution_threshold(false)));
-        assert!(execution_ready(40.0, 1_000.0, execution_threshold(true)));
-        assert!(!execution_ready(41.0, 1_000.0, execution_threshold(true)));
+    fn execution_threshold_consumes_its_sr_power_multiplier() {
+        let mob_threshold = 0.12 * skill_utility_multiplier(18);
+        let special_threshold = 0.04 * skill_utility_multiplier(18);
+        assert!((execution_threshold(false) - mob_threshold).abs() < 0.0001);
+        assert!((execution_threshold(true) - special_threshold).abs() < 0.0001);
+        assert!(execution_ready(
+            mob_threshold * 1_000.0,
+            1_000.0,
+            execution_threshold(false)
+        ));
+        assert!(!execution_ready(
+            mob_threshold * 1_000.0 + 1.0,
+            1_000.0,
+            execution_threshold(false)
+        ));
     }
 
     #[test]
@@ -3996,8 +4030,10 @@ mod tests {
         assert_eq!(session.core_hp, 1_000.0);
         assert!(vitals.alive);
         assert_eq!(vitals.deaths, 0);
-        assert!((vitals.health - vitals.max_health * 0.35).abs() < 0.001);
-        assert_eq!(runtime.cooldowns[25], 90.0);
+        assert!(
+            (vitals.health - vitals.max_health * 0.35 * skill_utility_multiplier(25)).abs() < 0.001
+        );
+        assert!((runtime.cooldowns[25] - skill_cooldown(25)).abs() < 0.001);
         assert_eq!(
             app.world()
                 .entity(hero)
@@ -4040,21 +4076,21 @@ mod tests {
         };
         for _ in 0..100 {
             apply_triune_attack_bonus(&mut state, &mut build);
-            assert!((build.attack_damage - 130.0).abs() < 0.0001);
+            assert!((build.attack_damage - 155.5).abs() < 0.0001);
             remove_triune_attack_bonus(&mut state, &mut build);
             assert!((build.attack_damage - 100.0).abs() < 0.0001);
         }
         state.phase = 1;
-        assert!((triune_skill_multiplier(0, &state) - 1.3).abs() < 0.0001);
+        assert!((triune_skill_multiplier(0, &state) - 1.555).abs() < 0.0001);
         assert_eq!(triune_skill_multiplier(1, &state), 1.0);
         state.phase = 2;
-        assert!((triune_skill_multiplier(4, &state) - 1.3).abs() < 0.0001);
+        assert!((triune_skill_multiplier(4, &state) - 1.555).abs() < 0.0001);
 
         state.rank = 5;
         state.phase = 0;
-        assert!((triune_skill_multiplier(1, &state) - 1.4).abs() < 0.0001);
-        assert!((triune_skill_multiplier(0, &state) - 1.4).abs() < 0.0001);
-        assert!((triune_skill_multiplier(4, &state) - 1.4).abs() < 0.0001);
+        assert!((triune_skill_multiplier(1, &state) - 1.74).abs() < 0.0001);
+        assert!((triune_skill_multiplier(0, &state) - 1.74).abs() < 0.0001);
+        assert!((triune_skill_multiplier(4, &state) - 1.74).abs() < 0.0001);
     }
 
     #[test]

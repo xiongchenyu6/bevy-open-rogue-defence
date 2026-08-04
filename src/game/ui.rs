@@ -2,6 +2,7 @@ use bevy::{prelude::*, window::PrimaryWindow};
 
 use super::archive::{ArchiveEcho, ArchiveOutcome, ArchiveState};
 use super::combat::BOSS_NAMES;
+use super::content::HEROES;
 use super::hero_abilities::ultimate_profile;
 use super::mobile_layout::hud_metrics;
 use super::progression::{SkillEconomy, bond_cost, skill_cost};
@@ -1188,14 +1189,15 @@ fn update_hud(
 
 fn ultimate_button_text(kind: super::HeroKind, remaining: f32, compact: bool) -> String {
     let ultimate = ultimate_profile(kind);
+    let rarity = HEROES[kind.index()].rarity.label();
     if remaining <= 0.0 {
         if compact {
-            format!("{}\nREADY", ultimate.name)
+            format!("[{rarity}] {}\nREADY", ultimate.name)
         } else {
-            format!("{} READY\nSPACE / TAP", ultimate.name)
+            format!("[{rarity}] {} READY\nSPACE / TAP", ultimate.name)
         }
     } else {
-        format!("{}\n{remaining:.1}s", ultimate.name)
+        format!("[{rarity}] {}\n{remaining:.1}s", ultimate.name)
     }
 }
 
@@ -1336,11 +1338,11 @@ mod tests {
     fn ultimate_button_uses_the_selected_hero_profile() {
         assert_eq!(
             ultimate_button_text(super::super::HeroKind::SolarVanguard, 0.0, true),
-            "DAWN BASTION\nREADY"
+            "[UR] DAWN BASTION\nREADY"
         );
         assert_eq!(
             ultimate_button_text(super::super::HeroKind::VoidReaper, 12.34, false),
-            "EVENT HORIZON\n12.3s"
+            "[UR] EVENT HORIZON\n12.3s"
         );
     }
 

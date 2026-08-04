@@ -2389,7 +2389,7 @@ fn cast_active_skill(
         &mut pools,
         &assets,
         hero.translation,
-        75.0 + thunder as f32 * 18.0,
+        (75.0 + thunder as f32 * 18.0) * selected.rarity().hero_ability_multiplier(),
         radius,
         u8::MAX,
         DamageProfile::new(DamageElement::Storm, DamageClass::Spell),

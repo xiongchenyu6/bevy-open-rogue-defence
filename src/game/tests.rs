@@ -28,6 +28,7 @@ fn content_catalog_has_expected_unique_counts() {
 #[test]
 fn every_hero_has_three_valid_theme_starts_and_attributes_are_balanced() {
     let mut attribute_counts = [0_usize; 3];
+    let mut rarity_attribute_counts = [[0_usize; 3]; 4];
     for hero in HEROES {
         let primary_index = match hero.primary {
             Attribute::Strength => 0,
@@ -35,6 +36,7 @@ fn every_hero_has_three_valid_theme_starts_and_attributes_are_balanced() {
             Attribute::Intelligence => 2,
         };
         attribute_counts[primary_index] += 1;
+        rarity_attribute_counts[hero.rarity.index()][primary_index] += 1;
 
         assert_eq!(hero.starting_skill, hero.starting_skill_pool[0]);
         let unique: HashSet<_> = hero.starting_skill_pool.into_iter().collect();
@@ -48,6 +50,7 @@ fn every_hero_has_three_valid_theme_starts_and_attributes_are_balanced() {
         }
     }
     assert_eq!(attribute_counts, [4, 4, 4]);
+    assert_eq!(rarity_attribute_counts, [[1, 1, 1]; 4]);
 }
 
 #[test]
@@ -100,7 +103,7 @@ fn every_skill_supports_runtime_ranks() {
 }
 
 #[test]
-fn skill_catalog_uses_twelve_common_twelve_rare_and_six_epic_cards() {
+fn skill_catalog_uses_all_four_build_rarities() {
     let counts = SKILLS.iter().fold([0_u8; 4], |mut counts, skill| {
         let index = match skill.rarity {
             Rarity::R => 0,
@@ -111,5 +114,35 @@ fn skill_catalog_uses_twelve_common_twelve_rare_and_six_epic_cards() {
         counts[index] += 1;
         counts
     });
-    assert_eq!(counts, [12, 12, 0, 6]);
+    assert_eq!(counts, [12, 8, 6, 4]);
+}
+
+#[test]
+fn bond_catalog_uses_all_four_build_rarities() {
+    let mut counts = [0_u8; 4];
+    for bond in BONDS {
+        counts[bond.rarity.index()] += 1;
+    }
+    assert_eq!(counts, [3, 3, 2, 2]);
+}
+
+#[test]
+fn rarity_is_strictly_rarer_and_stronger_at_every_tier() {
+    for pair in Rarity::ALL.windows(2) {
+        let lower = pair[0];
+        let higher = pair[1];
+        assert!(higher.draw_weight() < lower.draw_weight());
+        assert!(higher.hero_stat_multiplier() > lower.hero_stat_multiplier());
+        assert!(higher.hero_ability_multiplier() > lower.hero_ability_multiplier());
+        assert!(higher.hero_cooldown_multiplier() < lower.hero_cooldown_multiplier());
+        assert!(higher.starting_skill_rank() > lower.starting_skill_rank());
+        assert!(higher.skill_power_multiplier() > lower.skill_power_multiplier());
+        assert!(higher.skill_cooldown_multiplier() < lower.skill_cooldown_multiplier());
+        assert!(higher.bond_points_per_pick() > lower.bond_points_per_pick());
+    }
+
+    assert_eq!(Rarity::R.color_name(), "WHITE");
+    assert_eq!(Rarity::Sr.color_name(), "BLUE");
+    assert_eq!(Rarity::Ssr.color_name(), "ORANGE");
+    assert_eq!(Rarity::Ur.color_name(), "RED");
 }

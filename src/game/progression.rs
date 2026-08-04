@@ -2,6 +2,7 @@ use bevy::prelude::*;
 
 use super::content::{BONDS, HEROES, Rarity, SKILLS, SkillEffectKind, Tag};
 use super::market::MarketEffects;
+use super::rarity::rarity_color;
 use super::{
     Autoplay, BondDrawButton, BondId, DraftAction, DraftActionButton, DraftButton, DraftChoice,
     DraftKind, DraftRoot, DraftState, GameSession, PlayerBuild, RunRng, SelectedHero,
@@ -354,7 +355,7 @@ fn pick_skill_choices(
     let guaranteed = if build.skill_rank(pool[0]) > 0 {
         pool[0]
     } else {
-        pool[rng.next_u32() as usize % pool.len().min(12)]
+        choose_weighted_skill(&pool, rng).expect("the skill pool is not empty")
     };
     let mut choices = vec![guaranteed];
     let mut remaining: Vec<SkillId> = pool
@@ -363,16 +364,13 @@ fn pick_skill_choices(
         .filter(|candidate| *candidate != guaranteed)
         .collect();
     while choices.len() < 3 && !remaining.is_empty() {
-        let index = rng.next_u32() as usize % remaining.len();
-        let candidate = remaining.swap_remove(index);
-        if rarity_fits_skill_draw(
-            choices
-                .iter()
-                .any(|skill| skill.definition().rarity == Rarity::Ur),
-            candidate.definition().rarity,
-        ) {
-            choices.push(candidate);
-        }
+        let has_ur = choices
+            .iter()
+            .any(|skill| skill.definition().rarity == Rarity::Ur);
+        let Some(candidate) = take_weighted_skill(&mut remaining, rng, has_ur) else {
+            break;
+        };
+        choices.push(candidate);
     }
 
     let has_preferred = choices
@@ -391,7 +389,8 @@ fn pick_skill_choices(
             .collect();
         if !preferred.is_empty() {
             let replacement = choices.len().saturating_sub(1);
-            choices[replacement] = preferred[rng.next_u32() as usize % preferred.len()];
+            choices[replacement] =
+                choose_weighted_skill(&preferred, rng).expect("preferred pool is not empty");
         } else if has_ur {
             // A preferred UR can still replace the existing UR without violating
             // the one-UR-per-hand cap.
@@ -430,6 +429,46 @@ fn rarity_fits_skill_draw(has_ur: bool, rarity: Rarity) -> bool {
     rarity != Rarity::Ur || !has_ur
 }
 
+fn choose_weighted_skill(pool: &[SkillId], rng: &mut RunRng) -> Option<SkillId> {
+    let total_weight: u32 = pool
+        .iter()
+        .map(|skill| skill.definition().rarity.draw_weight())
+        .sum();
+    if total_weight == 0 {
+        return None;
+    }
+    choose_weighted_skill_for_roll(pool, rng.next_u32() % total_weight)
+}
+
+fn choose_weighted_skill_for_roll(pool: &[SkillId], mut roll: u32) -> Option<SkillId> {
+    pool.iter().copied().find(|skill| {
+        let weight = skill.definition().rarity.draw_weight();
+        if roll < weight {
+            true
+        } else {
+            roll -= weight;
+            false
+        }
+    })
+}
+
+fn take_weighted_skill(pool: &mut Vec<SkillId>, rng: &mut RunRng, has_ur: bool) -> Option<SkillId> {
+    let eligible: Vec<(usize, SkillId)> = pool
+        .iter()
+        .copied()
+        .enumerate()
+        .filter(|(_, skill)| rarity_fits_skill_draw(has_ur, skill.definition().rarity))
+        .collect();
+    let choice = choose_weighted_skill(
+        &eligible.iter().map(|(_, skill)| *skill).collect::<Vec<_>>(),
+        rng,
+    )?;
+    let index = eligible
+        .into_iter()
+        .find_map(|(index, skill)| (skill == choice).then_some(index))?;
+    Some(pool.swap_remove(index))
+}
+
 fn active_skill_slots(build: &PlayerBuild) -> usize {
     build.skills.iter().filter(|rank| **rank > 0).count()
 }
@@ -465,7 +504,9 @@ fn pick_bond_choices(
             .filter(|bond| bond_matches_preference(*bond, selected, build))
             .collect();
         if choices.len() < 3 && !preferred.is_empty() {
-            choices.push(preferred[rng.next_u32() as usize % preferred.len()]);
+            choices.push(
+                choose_weighted_bond(&preferred, rng).expect("preferred bond pool is not empty"),
+            );
         }
     }
 
@@ -505,13 +546,35 @@ fn pick_bond_choices(
             BondChoiceBucket::Preferred => &preferred,
             BondChoiceBucket::Other => &other,
         };
-        choices.push(candidates[rng.next_u32() as usize % candidates.len()]);
+        choices.push(
+            choose_weighted_bond(candidates, rng).expect("selected bond bucket is not empty"),
+        );
     }
 
     drought.bond_missed_preference = !choices
         .iter()
         .any(|bond| bond_matches_preference(*bond, selected, build));
     choices.into_iter().map(DraftChoice::Bond).collect()
+}
+
+fn choose_weighted_bond(pool: &[BondId], rng: &mut RunRng) -> Option<BondId> {
+    let total_weight: u32 = pool.iter().map(|bond| bond.rarity().draw_weight()).sum();
+    if total_weight == 0 {
+        return None;
+    }
+    choose_weighted_bond_for_roll(pool, rng.next_u32() % total_weight)
+}
+
+fn choose_weighted_bond_for_roll(pool: &[BondId], mut roll: u32) -> Option<BondId> {
+    pool.iter().copied().find(|bond| {
+        let weight = bond.rarity().draw_weight();
+        if roll < weight {
+            true
+        } else {
+            roll -= weight;
+            false
+        }
+    })
 }
 
 fn available_bonds(build: &PlayerBuild) -> Vec<BondId> {
@@ -666,14 +729,20 @@ fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKi
                             ) => (
                                 format!("{}  REPLACE {}", index + 1, old_bond.title()),
                                 format!(
-                                    "Remove all {} progress\n-> Add {} 1/{}",
+                                    "Remove all {} progress\n-> Add {} {}/{}",
                                     old_bond.title(),
                                     new_bond.title(),
+                                    new_bond.rarity().bond_points_per_pick(),
                                     new_bond.required()
                                 ),
                             ),
                             _ => (
-                                format!("{}  {}", index + 1, choice.title()),
+                                format!(
+                                    "{}  [{}] {}",
+                                    index + 1,
+                                    choice.rarity().label(),
+                                    choice.title()
+                                ),
                                 choice.description(),
                             ),
                         };
@@ -792,15 +861,7 @@ fn spawn_draft_action(parent: &mut ChildSpawnerCommands, action: DraftAction, la
 }
 
 fn choice_color(choice: DraftChoice) -> Color {
-    match choice {
-        DraftChoice::Bond(_) => Color::srgb(0.95, 0.72, 0.2),
-        DraftChoice::Skill(skill) => match skill.definition().rarity {
-            Rarity::R => Color::srgb(0.18, 0.72, 1.0),
-            Rarity::Sr => Color::srgb(0.34, 0.95, 0.58),
-            Rarity::Ssr => Color::srgb(0.98, 0.66, 0.12),
-            Rarity::Ur => Color::srgb(1.0, 0.25, 0.35),
-        },
-    }
+    rarity_color(choice.rarity())
 }
 
 fn handle_draft_buttons(
@@ -1106,19 +1167,20 @@ fn remove_bond(bond: BondId, session: &mut GameSession, build: &mut PlayerBuild)
 
 fn apply_skill(skill: SkillId, session: &mut GameSession, build: &mut PlayerBuild) {
     let def = skill.definition();
+    let rarity_power = def.rarity.skill_power_multiplier();
     let rank = (build.skills[skill.0 as usize] + 1).min(def.max_rank);
     build.skills[skill.0 as usize] = rank;
 
     match def.effect.kind {
         SkillEffectKind::Projectile | SkillEffectKind::AttackProc => {
-            build.attack_damage += 2.5;
-            build.projectile_speed *= 1.025;
+            build.attack_damage += 2.5 * rarity_power;
+            build.projectile_speed *= 1.0 + 0.025 * rarity_power;
         }
         SkillEffectKind::Nova | SkillEffectKind::GroundZone => {
-            build.attack_damage += 3.5;
+            build.attack_damage += 3.5 * rarity_power;
         }
         SkillEffectKind::Orbit | SkillEffectKind::Echo => {
-            build.attacks_per_second *= 1.025;
+            build.attacks_per_second *= 1.0 + 0.025 * rarity_power;
         }
         SkillEffectKind::Summon => {
             if rank == 1 || rank == 4 {
@@ -1127,36 +1189,29 @@ fn apply_skill(skill: SkillId, session: &mut GameSession, build: &mut PlayerBuil
         }
         SkillEffectKind::Mark => build.pierce = build.pierce.saturating_add(1).min(12),
         SkillEffectKind::Revive => {
-            session.core_max_hp += 80.0;
-            session.core_hp = (session.core_hp + 180.0).min(session.core_max_hp);
+            session.core_max_hp += 80.0 * rarity_power;
+            session.core_hp = (session.core_hp + 180.0 * rarity_power).min(session.core_max_hp);
         }
     }
     if def.tags.contains(&Tag::Storm) {
-        build.attacks_per_second *= 1.018;
+        build.attacks_per_second *= 1.0 + 0.018 * rarity_power;
     }
     if def.tags.contains(&Tag::Flame) {
-        build.attack_damage += 2.0;
+        build.attack_damage += 2.0 * rarity_power;
     }
     if def.tags.contains(&Tag::Guard) {
-        session.core_hp = (session.core_hp + 35.0).min(session.core_max_hp);
+        session.core_hp = (session.core_hp + 35.0 * rarity_power).min(session.core_max_hp);
     }
 }
 
 fn apply_bond(bond: BondId, session: &mut GameSession, build: &mut PlayerBuild) {
     let required = bond.required();
-    let rank = (build.bonds[bond.index()] + 1).min(required);
+    let old_rank = build.bonds[bond.index()];
+    let rank = old_rank
+        .saturating_add(bond.rarity().bond_points_per_pick())
+        .min(required);
     build.bonds[bond.index()] = rank;
-    let thresholds = [2, 4, 6];
-    let tier = if rank == thresholds[0] {
-        2
-    } else if rank == thresholds[1] {
-        4
-    } else if rank == thresholds[2] {
-        6
-    } else {
-        rank
-    };
-    if let (BondId::Bastion, 2) = (bond, tier) {
+    if bond == BondId::Bastion && old_rank < 2 && rank >= 2 {
         session.core_max_hp += 250.0;
         session.core_hp += 250.0;
     }
@@ -1182,6 +1237,53 @@ mod tests {
             .add_plugins(ProgressionPlugin);
         app.update();
         app
+    }
+
+    #[test]
+    fn rarity_weight_boundaries_drive_skill_and_bond_candidates() {
+        let skills = [SkillId(0), SkillId(12), SkillId(20), SkillId(26)];
+        let bonds = [
+            BondId::Thunder,
+            BondId::Elements,
+            BondId::Ascension,
+            BondId::Fortune,
+        ];
+        let boundaries = [
+            (0, 0),
+            (51, 0),
+            (52, 1),
+            (79, 1),
+            (80, 2),
+            (94, 2),
+            (95, 3),
+            (99, 3),
+        ];
+        for (roll, index) in boundaries {
+            assert_eq!(
+                choose_weighted_skill_for_roll(&skills, roll),
+                Some(skills[index])
+            );
+            assert_eq!(
+                choose_weighted_bond_for_roll(&bonds, roll),
+                Some(bonds[index])
+            );
+        }
+    }
+
+    #[test]
+    fn ur_bond_crosses_two_tiers_once_and_never_duplicates_direct_rewards() {
+        let mut session = GameSession::default();
+        let mut build = PlayerBuild::default();
+        let base_hp = session.core_max_hp;
+
+        apply_bond(BondId::Bastion, &mut session, &mut build);
+        assert_eq!(build.bond(BondId::Bastion), 4);
+        assert_eq!(session.core_max_hp, base_hp + 250.0);
+
+        apply_bond(BondId::Bastion, &mut session, &mut build);
+        assert_eq!(build.bond(BondId::Bastion), 6);
+        assert!(build.bond_complete(BondId::Bastion));
+        assert_eq!(session.core_max_hp, base_hp + 250.0);
     }
 
     #[test]
@@ -1652,7 +1754,7 @@ mod tests {
     }
 
     #[test]
-    fn replacement_clears_exactly_one_family_then_adds_the_new_family_at_one() {
+    fn replacement_clears_one_family_then_adds_the_new_rarity_progress() {
         let mut app = test_app();
         {
             let mut build = app.world_mut().resource_mut::<PlayerBuild>();
@@ -1685,7 +1787,10 @@ mod tests {
         let build = app.world().resource::<PlayerBuild>();
         assert_eq!(build.bond(BondId::Ember), 0);
         assert!(!build.bond_complete(BondId::Ember));
-        assert_eq!(build.bond(BondId::Blood), 1);
+        assert_eq!(
+            build.bond(BondId::Blood),
+            BondId::Blood.rarity().bond_points_per_pick()
+        );
         for bond in BondId::ALL {
             if !matches!(bond, BondId::Ember | BondId::Blood) {
                 assert_eq!(build.bond(bond), before[bond.index()], "changed {bond:?}");
@@ -1774,7 +1879,10 @@ mod tests {
         let build = app.world().resource::<PlayerBuild>();
         assert_eq!(build.bond(BondId::Thunder), 0);
         assert_eq!(build.bond(BondId::Ember), 1);
-        assert_eq!(build.bond(BondId::Blood), 1);
+        assert_eq!(
+            build.bond(BondId::Blood),
+            BondId::Blood.rarity().bond_points_per_pick()
+        );
         assert!(app.world().resource::<DraftState>().kind.is_none());
         assert!(!app.world().resource::<GameSession>().paused);
     }
@@ -1803,7 +1911,10 @@ mod tests {
         press_choice(&mut app, 0);
 
         let build = app.world().resource::<PlayerBuild>();
-        assert_eq!(build.bond(BondId::Blood), 1);
+        assert_eq!(
+            build.bond(BondId::Blood),
+            BondId::Blood.rarity().bond_points_per_pick()
+        );
         assert_eq!(build.active_bond_count(), 7);
         assert!(build.bond_complete(BondId::Thunder));
         let draft = app.world().resource::<DraftState>();
@@ -1941,7 +2052,10 @@ mod tests {
         press_choice(&mut app, 0);
         assert_eq!(app.world().resource::<GameSession>().wood, 90);
         assert_eq!(app.world().resource::<GameSession>().bond_draws, 1);
-        assert_eq!(app.world().resource::<PlayerBuild>().bond(BondId::Blood), 1);
+        assert_eq!(
+            app.world().resource::<PlayerBuild>().bond(BondId::Blood),
+            BondId::Blood.rarity().bond_points_per_pick()
+        );
     }
 
     #[test]

@@ -4,6 +4,7 @@ use bevy::prelude::*;
 
 use super::bonds::{DamageClass, DamageElement, DamageProfile, summon_cap};
 use super::combat::CombatSet;
+use super::content::HEROES;
 use super::market::MarketEffects;
 use super::pooling::{CombatPools, SummonVisual};
 use super::{
@@ -105,6 +106,10 @@ pub(crate) const fn ultimate_profile(kind: HeroKind) -> UltimateProfile {
             cooldown_secs: 50.0,
         },
     }
+}
+
+pub(crate) fn effective_ultimate_cooldown(kind: HeroKind) -> f32 {
+    ultimate_profile(kind).cooldown_secs * HEROES[kind.index()].rarity.hero_cooldown_multiplier()
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -220,7 +225,7 @@ fn synchronize_identity(
 }
 
 fn configure_ultimate(selected: Res<SelectedHero>, mut active: ResMut<ActiveSkill>) {
-    active.cooldown = ultimate_profile(selected.kind).cooldown_secs;
+    active.cooldown = effective_ultimate_cooldown(selected.kind);
 }
 
 fn tick_speed_effects(
@@ -472,6 +477,8 @@ fn maintain_passive_state(
         return;
     }
 
+    let ability_scale = selected.rarity().hero_ability_multiplier();
+
     match selected.kind {
         HeroKind::EmberRanger => {
             if intent.0.length_squared() > 0.04 && runtime.ember_stacks > 0 {
@@ -492,8 +499,8 @@ fn maintain_passive_state(
                 .zip(core.single().ok())
                 .is_some_and(|(hero, core)| hero.translation.distance(core.translation) <= 8.0);
             if in_guard_range && loss > 0.0 {
-                session.core_hp =
-                    (session.core_hp + stone_guard_refund(loss)).min(session.core_max_hp);
+                session.core_hp = (session.core_hp + stone_guard_refund(loss) * ability_scale)
+                    .min(session.core_max_hp);
             }
             if in_guard_range && runtime.passive_timer <= 0.0 {
                 if let (Some(assets), Ok(core)) = (assets.as_deref(), core.single()) {
@@ -538,8 +545,10 @@ fn maintain_passive_state(
         HeroKind::StarWagerer => {
             while runtime.star_kill_progress >= 12 {
                 runtime.star_kill_progress -= 12;
-                session.gold = session.gold.saturating_add(18);
-                session.wood = session.wood.saturating_add(1);
+                session.gold = session
+                    .gold
+                    .saturating_add((18.0 * ability_scale).round() as u32);
+                session.wood = session.wood.saturating_add((ability_scale).ceil() as u32);
                 if let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) {
                     spawn_ability_fx(
                         &mut commands,
@@ -556,7 +565,8 @@ fn maintain_passive_state(
         HeroKind::IronBerserker => {
             while runtime.hero_kill_progress >= 8 {
                 runtime.hero_kill_progress -= 8;
-                vitals.health = (vitals.health + iron_berserker_kill_heal(vitals.max_health))
+                vitals.health = (vitals.health
+                    + iron_berserker_kill_heal(vitals.max_health) * ability_scale)
                     .min(vitals.max_health);
                 if let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) {
                     spawn_ability_fx(
@@ -586,7 +596,7 @@ fn maintain_passive_state(
                 runtime.passive_timer = 0.0;
             }
             if runtime.passive_timer >= 6.0 {
-                session.core_hp = (session.core_hp + 12.0).min(session.core_max_hp);
+                session.core_hp = (session.core_hp + 12.0 * ability_scale).min(session.core_max_hp);
                 runtime.passive_timer -= 6.0;
                 if let (Some(assets), Ok(core)) = (assets.as_deref(), core.single()) {
                     spawn_ability_fx(
@@ -604,7 +614,7 @@ fn maintain_passive_state(
         HeroKind::SolarVanguard => {
             while runtime.hero_kill_progress >= 10 {
                 runtime.hero_kill_progress -= 10;
-                session.core_hp = (session.core_hp + 24.0).min(session.core_max_hp);
+                session.core_hp = (session.core_hp + 24.0 * ability_scale).min(session.core_max_hp);
                 if let (Some(assets), Ok(core)) = (assets.as_deref(), core.single()) {
                     spawn_ability_fx(
                         &mut commands,
@@ -753,6 +763,8 @@ fn observe_ultimate_cast(
     let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) else {
         return;
     };
+    let ability_scale = selected.rarity().hero_ability_multiplier();
+    let control_scale = selected.rarity().hero_stat_multiplier();
 
     spawn_ability_fx(
         &mut commands,
@@ -786,11 +798,13 @@ fn observe_ultimate_cast(
                 if hero.translation.distance(transform.translation) > 7.5 {
                     continue;
                 }
-                commands
-                    .entity(entity)
-                    .insert(merged_speed_effect(speed_effect, 0.28, 6.0));
+                commands.entity(entity).insert(merged_speed_effect(
+                    speed_effect,
+                    0.28,
+                    6.0 * control_scale,
+                ));
             }
-            session.core_hp = (session.core_hp + 90.0).min(session.core_max_hp);
+            session.core_hp = (session.core_hp + 90.0 * ability_scale).min(session.core_max_hp);
             runtime.sequence = Some(UltimateSequence {
                 kind: selected.kind,
                 pulses_left: 6,
@@ -832,7 +846,7 @@ fn observe_ultimate_cast(
                 commands.entity(entity).insert(merged_speed_effect(
                     speed_effect,
                     multiplier,
-                    remaining,
+                    remaining * control_scale,
                 ));
             }
         }
@@ -868,7 +882,8 @@ fn observe_ultimate_cast(
                     );
                 }
                 FateOutcome::Healing => {
-                    session.core_hp = (session.core_hp + 240.0 + session.level as f32 * 10.0)
+                    session.core_hp = (session.core_hp
+                        + (240.0 + session.level as f32 * 10.0) * ability_scale)
                         .min(session.core_max_hp);
                     spawn_ability_fx(
                         &mut commands,
@@ -881,9 +896,15 @@ fn observe_ultimate_cast(
                     );
                 }
                 FateOutcome::Resources => {
-                    session.gold = session.gold.saturating_add(180);
-                    session.wood = session.wood.saturating_add(15);
-                    session.kills = session.kills.saturating_add(30);
+                    session.gold = session
+                        .gold
+                        .saturating_add((180.0 * ability_scale).round() as u32);
+                    session.wood = session
+                        .wood
+                        .saturating_add((15.0 * ability_scale).round() as u32);
+                    session.kills = session
+                        .kills
+                        .saturating_add((30.0 * ability_scale).round() as u32);
                     spawn_ability_fx(
                         &mut commands,
                         &mut pools,
@@ -906,7 +927,7 @@ fn observe_ultimate_cast(
                 commands.entity(entity).insert(merged_speed_effect(
                     speed_effect,
                     multiplier,
-                    remaining,
+                    remaining * control_scale,
                 ));
             }
             runtime.sequence = Some(UltimateSequence {
@@ -918,7 +939,8 @@ fn observe_ultimate_cast(
         }
         HeroKind::IronBerserker => {
             let missing_health = (vitals.max_health - vitals.health).max(0.0);
-            vitals.health = (vitals.health + missing_health * 0.25).min(vitals.max_health);
+            vitals.health =
+                (vitals.health + missing_health * 0.25 * ability_scale).min(vitals.max_health);
             runtime.sequence = Some(UltimateSequence {
                 kind: selected.kind,
                 pulses_left: 6,
@@ -935,7 +957,7 @@ fn observe_ultimate_cast(
             });
         }
         HeroKind::GroveArtificer => {
-            session.core_hp = (session.core_hp + 160.0).min(session.core_max_hp);
+            session.core_hp = (session.core_hp + 160.0 * ability_scale).min(session.core_max_hp);
             runtime.sequence = Some(UltimateSequence {
                 kind: selected.kind,
                 pulses_left: 6,
@@ -944,12 +966,15 @@ fn observe_ultimate_cast(
             });
         }
         HeroKind::SolarVanguard => {
-            session.core_hp = (session.core_hp + 120.0).min(session.core_max_hp);
-            vitals.health = (vitals.health + vitals.max_health * 0.25).min(vitals.max_health);
+            session.core_hp = (session.core_hp + 120.0 * ability_scale).min(session.core_max_hp);
+            vitals.health =
+                (vitals.health + vitals.max_health * 0.25 * ability_scale).min(vitals.max_health);
             for (entity, _enemy, _, _, speed_effect) in &mut enemies {
-                commands
-                    .entity(entity)
-                    .insert(merged_speed_effect(speed_effect, 0.75, 2.0));
+                commands.entity(entity).insert(merged_speed_effect(
+                    speed_effect,
+                    0.75,
+                    2.0 * control_scale,
+                ));
             }
             runtime.sequence = Some(UltimateSequence {
                 kind: selected.kind,
@@ -960,9 +985,11 @@ fn observe_ultimate_cast(
         }
         HeroKind::VoidReaper => {
             for (entity, _enemy, _, _, speed_effect) in &mut enemies {
-                commands
-                    .entity(entity)
-                    .insert(merged_speed_effect(speed_effect, 0.55, 4.0));
+                commands.entity(entity).insert(merged_speed_effect(
+                    speed_effect,
+                    0.55,
+                    4.0 * control_scale,
+                ));
             }
             runtime.sequence = Some(UltimateSequence {
                 kind: selected.kind,
@@ -1252,6 +1279,7 @@ fn spawn_projectile_fan(
     damage: f32,
     build: &PlayerBuild,
 ) {
+    let damage = scaled_hero_ability_damage(kind, damage);
     let direction = (target - origin).normalize_or_zero();
     for shot in 0..count.max(1) {
         let offset = shot as f32 - (count.max(1) as f32 - 1.0) * 0.5;
@@ -1287,6 +1315,7 @@ fn spawn_damage_zone(
     damage: f32,
     radius: f32,
 ) {
+    let damage = scaled_hero_ability_damage(kind, damage);
     let Some(entity) = pools.rent_projectile(
         commands,
         assets.projectile_mesh.clone(),
@@ -1306,6 +1335,10 @@ fn spawn_damage_zone(
         .entity(entity)
         .insert((AbilityGenerated, ability_damage_profile(kind)));
     spawn_ability_fx(commands, pools, assets, kind, center, radius, 0.38);
+}
+
+fn scaled_hero_ability_damage(kind: HeroKind, damage: f32) -> f32 {
+    damage * HEROES[kind.index()].rarity.hero_ability_multiplier()
 }
 
 fn spawn_ability_fx(
@@ -1482,6 +1515,26 @@ mod tests {
             [
                 50.0, 45.0, 50.0, 55.0, 52.0, 48.0, 54.0, 48.0, 46.0, 58.0, 52.0, 50.0,
             ]
+        );
+    }
+
+    #[test]
+    fn hero_rarity_scales_the_production_damage_and_ultimate_cooldown_paths() {
+        for kind in HeroKind::ALL {
+            let rarity = HEROES[kind.index()].rarity;
+            let expected_cooldown =
+                ultimate_profile(kind).cooldown_secs * rarity.hero_cooldown_multiplier();
+            assert!((effective_ultimate_cooldown(kind) - expected_cooldown).abs() < 0.0001);
+            assert!(
+                (scaled_hero_ability_damage(kind, 100.0)
+                    - 100.0 * rarity.hero_ability_multiplier())
+                .abs()
+                    < 0.0001
+            );
+        }
+        assert!(
+            effective_ultimate_cooldown(HeroKind::SpiritKeeper)
+                < ultimate_profile(HeroKind::SpiritKeeper).cooldown_secs
         );
     }
 

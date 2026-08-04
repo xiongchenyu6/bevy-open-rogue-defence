@@ -3,6 +3,7 @@ use bevy::{prelude::*, window::PrimaryWindow};
 use super::combat::SurvivalSet;
 use super::content::{Attribute, ContentId, HEROES, SKILLS};
 use super::mobile_layout::hud_metrics;
+use super::rarity::rarity_color;
 use super::{
     Autoplay, GameAssets, GameSession, Hero, HeroIdentity, HeroKind, HeroProgressionDelta,
     HeroVisual, HeroVitals, PlayerBuild, RunRng, RunSeed, SelectedHero,
@@ -128,7 +129,7 @@ fn setup_hero_ui(mut commands: Commands) {
         .with_children(|panel| {
             panel.spawn((
                 HeroStatusText,
-                Text::new("STORM SAVANT  [R]"),
+                Text::new("[R] STORM SAVANT · ASC 0/3"),
                 TextFont {
                     font_size: FontSize::Px(13.0),
                     ..default()
@@ -321,6 +322,14 @@ fn spawn_hero_selector(
                 },
                 TextColor(Color::srgb(0.76, 0.94, 1.0)),
             ));
+            root.spawn((
+                Text::new("R WHITE · SR BLUE · SSR ORANGE · UR RED"),
+                TextFont {
+                    font_size: FontSize::Px(10.0),
+                    ..default()
+                },
+                TextColor(Color::srgb(0.72, 0.78, 0.86)),
+            ));
             root.spawn(Node {
                 width: percent(HERO_GRID_WIDTH_PERCENT),
                 max_width: px(HERO_GRID_MAX_WIDTH),
@@ -336,10 +345,14 @@ fn spawn_hero_selector(
             .with_children(|grid| {
                 for offer in offers.iter().copied() {
                     let hero = HEROES[offer.kind.index()];
+                    let skill = SKILLS
+                        .iter()
+                        .find(|skill| skill.id == offer.starting_skill)
+                        .expect("hero starting skills are validated by content tests");
                     let primary = match hero.primary {
-                        Attribute::Strength => "STRENGTH",
-                        Attribute::Agility => "AGILITY",
-                        Attribute::Intelligence => "INTELLIGENCE",
+                        Attribute::Strength => "STR",
+                        Attribute::Agility => "AGI",
+                        Attribute::Intelligence => "INT",
                     };
                     grid.spawn((
                         Button,
@@ -359,21 +372,25 @@ fn spawn_hero_selector(
                             ..default()
                         },
                         BackgroundColor(Color::srgb(0.055, 0.11, 0.18)),
-                        BorderColor::all(hero_color(offer.kind.index())),
+                        BorderColor::all(rarity_color(hero.rarity)),
                     ))
                     .with_children(|card| {
                         card.spawn((
-                            Text::new(display_id(hero.id)),
+                            Text::new(format!("[{}] {}", hero.rarity.label(), display_id(hero.id))),
                             TextFont {
                                 font_size: FontSize::Px(17.0),
                                 ..default()
                             },
-                            TextColor(Color::WHITE),
+                            TextColor(rarity_color(hero.rarity)),
                             TextLayout::justify(Justify::Center),
                         ));
                         card.spawn((
                             Text::new(format!(
-                                "{primary}\nSTART: {}",
+                                "{primary} · PWR x{:.2} · CD -{:.0}%\nSTART Lv{} [{}] {}",
+                                hero.rarity.hero_ability_multiplier(),
+                                (1.0 - hero.rarity.hero_cooldown_multiplier()) * 100.0,
+                                hero.rarity.starting_skill_rank(),
+                                skill.rarity.label(),
                                 display_id(offer.starting_skill)
                             )),
                             TextFont {
@@ -646,7 +663,10 @@ fn apply_hero_stats(
     build.attack_range = 8.5 + vitals.intelligence * 0.025;
     build.skills.fill(0);
     if let Some(skill_index) = SKILLS.iter().position(|skill| skill.id == starting_skill) {
-        build.skills[skill_index] = 1;
+        build.skills[skill_index] = HEROES[kind.index()]
+            .rarity
+            .starting_skill_rank()
+            .min(SKILLS[skill_index].max_rank);
     }
 }
 
@@ -665,11 +685,12 @@ fn apply_evolution(branch: u8, build: &mut PlayerBuild, session: &mut GameSessio
 
 fn update_hero_status(state: Res<HeroState>, mut text: Query<&mut Text, With<HeroStatusText>>) {
     if let Ok(mut text) = text.single_mut() {
-        let rarity = ["R", "SR", "SSR", "UR"][state.evolution_stage as usize];
+        let hero = HEROES[state.selected.index()];
         **text = format!(
-            "{}  [{}]",
-            display_id(HEROES[state.selected.index()].id),
-            rarity
+            "[{}] {} · ASC {}/3",
+            hero.rarity.label(),
+            display_id(hero.id),
+            state.evolution_stage,
         );
     }
 }
@@ -697,7 +718,7 @@ fn roll_hero_offers(seed: u64, generation: u32) -> [HeroOffer; HERO_OFFER_COUNT]
             .into_iter()
             .filter(|kind| HEROES[kind.index()].primary == primary)
             .collect();
-        selected.push(take_random_hero(&mut candidates, &mut rng));
+        selected.push(take_weighted_hero(&mut candidates, &mut rng));
     }
 
     let mut remaining: Vec<HeroKind> = HeroKind::ALL
@@ -705,7 +726,7 @@ fn roll_hero_offers(seed: u64, generation: u32) -> [HeroOffer; HERO_OFFER_COUNT]
         .filter(|kind| !selected.contains(kind))
         .collect();
     while selected.len() < HERO_OFFER_COUNT {
-        selected.push(take_random_hero(&mut remaining, &mut rng));
+        selected.push(take_weighted_hero(&mut remaining, &mut rng));
     }
     for upper in (1..selected.len()).rev() {
         let swap_with = rng.next_u32() as usize % (upper + 1);
@@ -729,30 +750,31 @@ fn hero_selector_safe_x(windows: &Query<&Window, With<PrimaryWindow>>) -> f32 {
         .unwrap_or(OVERLAY_PADDING)
 }
 
-fn take_random_hero(pool: &mut Vec<HeroKind>, rng: &mut RunRng) -> HeroKind {
-    let index = rng.next_u32() as usize % pool.len();
+fn take_weighted_hero(pool: &mut Vec<HeroKind>, rng: &mut RunRng) -> HeroKind {
+    let total_weight: u32 = pool
+        .iter()
+        .map(|kind| HEROES[kind.index()].rarity.draw_weight())
+        .sum();
+    let index = weighted_hero_index(pool, rng.next_u32() % total_weight.max(1));
     pool.swap_remove(index)
+}
+
+fn weighted_hero_index(pool: &[HeroKind], mut roll: u32) -> usize {
+    pool.iter()
+        .position(|kind| {
+            let weight = HEROES[kind.index()].rarity.draw_weight();
+            if roll < weight {
+                true
+            } else {
+                roll -= weight;
+                false
+            }
+        })
+        .unwrap_or(pool.len().saturating_sub(1))
 }
 
 fn display_id(id: &str) -> String {
     id.replace('_', " ").to_ascii_uppercase()
-}
-
-fn hero_color(index: usize) -> Color {
-    [
-        Color::srgb(0.18, 0.75, 1.0),
-        Color::srgb(1.0, 0.35, 0.12),
-        Color::srgb(0.72, 0.76, 0.82),
-        Color::srgb(0.62, 0.32, 1.0),
-        Color::srgb(0.12, 0.82, 0.68),
-        Color::srgb(1.0, 0.75, 0.18),
-        Color::srgb(0.48, 0.82, 0.94),
-        Color::srgb(0.72, 0.18, 0.10),
-        Color::srgb(0.78, 0.24, 0.94),
-        Color::srgb(0.28, 0.76, 0.32),
-        Color::srgb(1.0, 0.68, 0.14),
-        Color::srgb(0.48, 0.16, 0.72),
-    ][index]
 }
 
 #[cfg(test)]
@@ -778,8 +800,11 @@ mod tests {
                 hero_grid_width * HERO_CARD_WIDTH_PERCENT / 100.0 * 3.0 + HERO_GRID_GAP * 2.0;
             let hero_grid_rows =
                 HERO_GRID_HEIGHT * HERO_CARD_HEIGHT_PERCENT / 100.0 * 2.0 + HERO_GRID_GAP;
-            let hero_vertical =
-                OVERLAY_PADDING * 2.0 + HERO_HEADING_SIZE * 1.2 + HERO_GRID_GAP + HERO_GRID_HEIGHT;
+            let hero_vertical = OVERLAY_PADDING * 2.0
+                + HERO_HEADING_SIZE * 1.2
+                + 10.0 * 1.2
+                + HERO_GRID_GAP * 2.0
+                + HERO_GRID_HEIGHT;
             assert!(
                 hero_row_width <= hero_grid_width,
                 "hero row at {width}x{height}"
@@ -853,6 +878,29 @@ mod tests {
     }
 
     #[test]
+    fn hero_rarity_weight_boundaries_are_exact() {
+        let intelligence_tiers = [
+            HeroKind::StormSavant,
+            HeroKind::TideWalker,
+            HeroKind::FrostOracle,
+            HeroKind::SpiritKeeper,
+        ];
+        let expected = [
+            (0, 0),
+            (51, 0),
+            (52, 1),
+            (79, 1),
+            (80, 2),
+            (94, 2),
+            (95, 3),
+            (99, 3),
+        ];
+        for (roll, index) in expected {
+            assert_eq!(weighted_hero_index(&intelligence_tiers, roll), index);
+        }
+    }
+
+    #[test]
     fn hero_offers_are_unique_cover_all_attributes_and_use_valid_theme_skills() {
         for seed in [1, 2, 0xA11CE, 0xDEAD_BEEF] {
             let offers = roll_hero_offers(seed, 0);
@@ -894,7 +942,10 @@ mod tests {
                 .collect();
             assert_eq!(granted.len(), 1);
             assert_eq!(SKILLS[granted[0]].id, offer.starting_skill);
-            assert_eq!(build.skills[granted[0]], 1);
+            assert_eq!(
+                build.skills[granted[0]],
+                HEROES[offer.kind.index()].rarity.starting_skill_rank()
+            );
         }
     }
 

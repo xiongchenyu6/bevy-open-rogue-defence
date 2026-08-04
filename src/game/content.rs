@@ -13,6 +13,111 @@ pub enum Rarity {
     Ur,
 }
 
+impl Rarity {
+    pub const ALL: [Self; 4] = [Self::R, Self::Sr, Self::Ssr, Self::Ur];
+
+    pub const fn label(self) -> &'static str {
+        match self {
+            Self::R => "R",
+            Self::Sr => "SR",
+            Self::Ssr => "SSR",
+            Self::Ur => "UR",
+        }
+    }
+
+    pub const fn color_name(self) -> &'static str {
+        match self {
+            Self::R => "WHITE",
+            Self::Sr => "BLUE",
+            Self::Ssr => "ORANGE",
+            Self::Ur => "RED",
+        }
+    }
+
+    pub const fn index(self) -> usize {
+        match self {
+            Self::R => 0,
+            Self::Sr => 1,
+            Self::Ssr => 2,
+            Self::Ur => 3,
+        }
+    }
+
+    /// Per-candidate weight used by seeded hero, skill and bond draws.
+    pub const fn draw_weight(self) -> u32 {
+        match self {
+            Self::R => 52,
+            Self::Sr => 28,
+            Self::Ssr => 15,
+            Self::Ur => 5,
+        }
+    }
+
+    pub const fn hero_stat_multiplier(self) -> f32 {
+        match self {
+            Self::R => 1.0,
+            Self::Sr => 1.12,
+            Self::Ssr => 1.28,
+            Self::Ur => 1.50,
+        }
+    }
+
+    pub const fn hero_ability_multiplier(self) -> f32 {
+        match self {
+            Self::R => 1.0,
+            Self::Sr => 1.18,
+            Self::Ssr => 1.45,
+            Self::Ur => 1.85,
+        }
+    }
+
+    pub const fn hero_cooldown_multiplier(self) -> f32 {
+        match self {
+            Self::R => 1.0,
+            Self::Sr => 0.92,
+            Self::Ssr => 0.82,
+            Self::Ur => 0.70,
+        }
+    }
+
+    pub const fn starting_skill_rank(self) -> u8 {
+        match self {
+            Self::R => 1,
+            Self::Sr => 2,
+            Self::Ssr => 3,
+            Self::Ur => 4,
+        }
+    }
+
+    pub const fn skill_power_multiplier(self) -> f32 {
+        match self {
+            Self::R => 1.0,
+            Self::Sr => 1.18,
+            Self::Ssr => 1.45,
+            Self::Ur => 1.85,
+        }
+    }
+
+    pub const fn skill_cooldown_multiplier(self) -> f32 {
+        match self {
+            Self::R => 1.0,
+            Self::Sr => 0.95,
+            Self::Ssr => 0.88,
+            Self::Ur => 0.78,
+        }
+    }
+
+    /// One bond card advances farther at higher rarity, crossing more 2/4/6 tiers.
+    pub const fn bond_points_per_pick(self) -> u8 {
+        match self {
+            Self::R => 1,
+            Self::Sr => 2,
+            Self::Ssr => 3,
+            Self::Ur => 4,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Tag {
     Attack,
@@ -314,7 +419,7 @@ pub const HEROES: [HeroDef; 12] = [
     HeroDef {
         id: "spirit_keeper",
         name: "灵契牧者",
-        rarity: Rarity::Sr,
+        rarity: Rarity::Ur,
         primary: Attribute::Intelligence,
         tags: &[Tag::Summon, Tag::Guard],
         base_stats: Stats {
@@ -407,7 +512,7 @@ pub const HEROES: [HeroDef; 12] = [
     HeroDef {
         id: "frost_oracle",
         name: "霜脉先知",
-        rarity: Rarity::Sr,
+        rarity: Rarity::Ssr,
         primary: Attribute::Intelligence,
         tags: &[Tag::Spell, Tag::Frost, Tag::Control, Tag::Arcane],
         base_stats: Stats {
@@ -438,7 +543,7 @@ pub const HEROES: [HeroDef; 12] = [
     HeroDef {
         id: "iron_berserker",
         name: "铁血狂战",
-        rarity: Rarity::R,
+        rarity: Rarity::Ssr,
         primary: Attribute::Strength,
         tags: &[Tag::Attack, Tag::Physical, Tag::Flame],
         base_stats: Stats {
@@ -469,7 +574,7 @@ pub const HEROES: [HeroDef; 12] = [
     HeroDef {
         id: "rift_dancer",
         name: "裂隙舞者",
-        rarity: Rarity::R,
+        rarity: Rarity::Ssr,
         primary: Attribute::Agility,
         tags: &[Tag::Attack, Tag::Qi, Tag::Arcane],
         base_stats: Stats {
@@ -531,7 +636,7 @@ pub const HEROES: [HeroDef; 12] = [
     HeroDef {
         id: "solar_vanguard",
         name: "曜光先锋",
-        rarity: Rarity::Sr,
+        rarity: Rarity::Ur,
         primary: Attribute::Strength,
         tags: &[Tag::Guard, Tag::Flame, Tag::Spell],
         base_stats: Stats {
@@ -562,7 +667,7 @@ pub const HEROES: [HeroDef; 12] = [
     HeroDef {
         id: "void_reaper",
         name: "虚空收割者",
-        rarity: Rarity::Sr,
+        rarity: Rarity::Ur,
         primary: Attribute::Agility,
         tags: &[Tag::Attack, Tag::Physical, Tag::Arcane],
         base_stats: Stats {
@@ -990,7 +1095,7 @@ pub const SKILLS: [SkillDef; 30] = [
     SkillDef {
         id: "prism_echo",
         name: "棱镜回响",
-        rarity: Rarity::Sr,
+        rarity: Rarity::Ssr,
         tags: &[Tag::Spell, Tag::Arcane],
         trigger: SkillTrigger::EveryNthSpell(5),
         cooldown_secs: 0.0,
@@ -1010,7 +1115,7 @@ pub const SKILLS: [SkillDef; 30] = [
     SkillDef {
         id: "oath_banner",
         name: "守誓旗",
-        rarity: Rarity::Sr,
+        rarity: Rarity::Ssr,
         tags: &[Tag::Summon, Tag::Guard],
         trigger: SkillTrigger::Cooldown,
         cooldown_secs: 16.0,
@@ -1024,7 +1129,7 @@ pub const SKILLS: [SkillDef; 30] = [
     SkillDef {
         id: "transmute_spark",
         name: "炼金火花",
-        rarity: Rarity::Sr,
+        rarity: Rarity::Ssr,
         tags: &[Tag::Spell, Tag::Fortune, Tag::Flame],
         trigger: SkillTrigger::Cooldown,
         cooldown_secs: 7.0,
@@ -1044,7 +1149,7 @@ pub const SKILLS: [SkillDef; 30] = [
     SkillDef {
         id: "blood_wheel",
         name: "血轮",
-        rarity: Rarity::Sr,
+        rarity: Rarity::Ssr,
         tags: &[Tag::Attack, Tag::Physical, Tag::Flame],
         trigger: SkillTrigger::Cooldown,
         cooldown_secs: 8.0,
@@ -1064,7 +1169,7 @@ pub const SKILLS: [SkillDef; 30] = [
     SkillDef {
         id: "sky_judgment",
         name: "天穹裁决",
-        rarity: Rarity::Ur,
+        rarity: Rarity::Ssr,
         tags: &[Tag::Spell, Tag::Storm],
         trigger: SkillTrigger::Cooldown,
         cooldown_secs: 14.0,
@@ -1084,7 +1189,7 @@ pub const SKILLS: [SkillDef; 30] = [
     SkillDef {
         id: "ember_rebirth",
         name: "余烬返生",
-        rarity: Rarity::Ur,
+        rarity: Rarity::Ssr,
         tags: &[Tag::Flame, Tag::Guard],
         trigger: SkillTrigger::Passive,
         cooldown_secs: 90.0,
@@ -1255,7 +1360,7 @@ pub const BONDS: [BondDef; 10] = [
     BondDef {
         id: "arcane_loop",
         name: "秘仪回路",
-        rarity: Rarity::R,
+        rarity: Rarity::Sr,
         favored_tags: &[Tag::Spell, Tag::Arcane],
         tiers: [
             BondTier {
@@ -1295,7 +1400,7 @@ pub const BONDS: [BondDef; 10] = [
     BondDef {
         id: "qi_ascension",
         name: "炼气登临",
-        rarity: Rarity::Sr,
+        rarity: Rarity::Ssr,
         favored_tags: &[Tag::Qi, Tag::Spell],
         tiers: [
             BondTier {
@@ -1315,7 +1420,7 @@ pub const BONDS: [BondDef; 10] = [
     BondDef {
         id: "blood_array",
         name: "血战杀阵",
-        rarity: Rarity::R,
+        rarity: Rarity::Ssr,
         favored_tags: &[Tag::Attack, Tag::Physical],
         tiers: [
             BondTier {
@@ -1335,7 +1440,7 @@ pub const BONDS: [BondDef; 10] = [
     BondDef {
         id: "raider_fortune",
         name: "荒市豪赌",
-        rarity: Rarity::Sr,
+        rarity: Rarity::Ur,
         favored_tags: &[Tag::Fortune],
         tiers: [
             BondTier {
@@ -1355,7 +1460,7 @@ pub const BONDS: [BondDef; 10] = [
     BondDef {
         id: "guardian_oath",
         name: "守誓壁垒",
-        rarity: Rarity::R,
+        rarity: Rarity::Ur,
         favored_tags: &[Tag::Guard],
         tiers: [
             BondTier {

@@ -1,7 +1,9 @@
 use bevy::prelude::*;
 
 use super::HeroKind;
-use super::content::{Attribute, HEROES, Rarity, SKILLS, SkillDef, SkillEffectKind};
+use super::content::{
+    Attribute, BONDS, BondDef, HEROES, Rarity, SKILLS, SkillDef, SkillEffectKind,
+};
 
 pub const HERO_REVIVE_BASE_SECONDS: f32 = 8.0;
 pub const HERO_REVIVE_STEP_SECONDS: f32 = 3.0;
@@ -165,12 +167,16 @@ impl HeroVitals {
     pub fn for_hero(kind: HeroKind, level: u32) -> Self {
         let level = level.clamp(1, 30);
         let hero = HEROES[kind.index()];
+        let rarity_multiplier = hero.rarity.hero_stat_multiplier();
         let level_index = level.saturating_sub(1) as f32;
-        let strength = hero.base_stats.strength + hero.growth.strength * level_index;
-        let agility = hero.base_stats.agility + hero.growth.agility * level_index;
-        let intelligence = hero.base_stats.intelligence + hero.growth.intelligence * level_index;
-        let max_health = hero.base_health + strength * 14.0;
-        let max_energy = hero.base_energy + intelligence * 8.0;
+        let strength =
+            (hero.base_stats.strength + hero.growth.strength * level_index) * rarity_multiplier;
+        let agility =
+            (hero.base_stats.agility + hero.growth.agility * level_index) * rarity_multiplier;
+        let intelligence = (hero.base_stats.intelligence + hero.growth.intelligence * level_index)
+            * rarity_multiplier;
+        let max_health = hero.base_health * rarity_multiplier + strength * 14.0;
+        let max_energy = hero.base_energy * rarity_multiplier + intelligence * 8.0;
         Self {
             kind,
             level,
@@ -514,6 +520,12 @@ pub struct SelectedHero {
     pub locked: bool,
 }
 
+impl SelectedHero {
+    pub fn rarity(&self) -> Rarity {
+        HEROES[self.kind.index()].rarity
+    }
+}
+
 impl Default for SelectedHero {
     fn default() -> Self {
         Self {
@@ -539,12 +551,9 @@ impl SkillId {
 
     pub fn description(self) -> String {
         let def = self.definition();
-        let rarity = match def.rarity {
-            Rarity::R => "R",
-            Rarity::Sr => "SR",
-            Rarity::Ssr => "SSR",
-            Rarity::Ur => "UR",
-        };
+        let rarity = def.rarity.label();
+        let multiplier = def.rarity.skill_power_multiplier();
+        let cooldown = def.cooldown_secs * def.rarity.skill_cooldown_multiplier();
         let kind = match def.effect.kind {
             SkillEffectKind::Projectile => "PROJECTILE",
             SkillEffectKind::Nova => "NOVA",
@@ -558,12 +567,12 @@ impl SkillId {
         };
         if def.cooldown_secs > 0.0 {
             format!(
-                "[{rarity}] {kind} - {:.1}s\nPower {:.0} + {:.0}/rank",
-                def.cooldown_secs, def.effect.power.base, def.effect.power.per_rank
+                "[{rarity}] {kind} - {cooldown:.1}s\nPower x{multiplier:.2} · {:.0} + {:.0}/rank",
+                def.effect.power.base, def.effect.power.per_rank
             )
         } else {
             format!(
-                "[{rarity}] {kind}\nPower {:.0} + {:.0}/rank",
+                "[{rarity}] {kind}\nPower x{multiplier:.2} · {:.0} + {:.0}/rank",
                 def.effect.power.base, def.effect.power.per_rank
             )
         }
@@ -601,6 +610,14 @@ impl BondId {
 
     pub const fn index(self) -> usize {
         self as usize
+    }
+
+    pub fn definition(self) -> &'static BondDef {
+        &BONDS[self.index()]
+    }
+
+    pub fn rarity(self) -> Rarity {
+        self.definition().rarity
     }
 
     pub fn title(self) -> &'static str {
@@ -666,6 +683,13 @@ pub enum DraftChoice {
 }
 
 impl DraftChoice {
+    pub fn rarity(self) -> Rarity {
+        match self {
+            Self::Skill(skill) => skill.definition().rarity,
+            Self::Bond(bond) => bond.rarity(),
+        }
+    }
+
     pub fn title(self) -> String {
         match self {
             Self::Skill(skill) => skill.title(),
@@ -676,7 +700,12 @@ impl DraftChoice {
     pub fn description(self) -> String {
         match self {
             Self::Skill(skill) => skill.description(),
-            Self::Bond(bond) => bond.description().to_string(),
+            Self::Bond(bond) => format!(
+                "[{}] +{} BOND POINTS\n{}",
+                bond.rarity().label(),
+                bond.rarity().bond_points_per_pick(),
+                bond.description()
+            ),
         }
     }
 }
@@ -843,6 +872,38 @@ mod survival_tests {
             HeroVitals::for_hero(HeroKind::StormSavant, 99).intelligence,
             level_30.intelligence,
         );
+    }
+
+    #[test]
+    fn every_hero_vitals_formula_consumes_its_catalog_rarity() {
+        let level = 7;
+        let level_index = 6.0;
+        for kind in HeroKind::ALL {
+            let def = HEROES[kind.index()];
+            let multiplier = def.rarity.hero_stat_multiplier();
+            let vitals = HeroVitals::for_hero(kind, level);
+            close(
+                vitals.strength,
+                (def.base_stats.strength + def.growth.strength * level_index) * multiplier,
+            );
+            close(
+                vitals.agility,
+                (def.base_stats.agility + def.growth.agility * level_index) * multiplier,
+            );
+            close(
+                vitals.intelligence,
+                (def.base_stats.intelligence + def.growth.intelligence * level_index) * multiplier,
+            );
+            close(
+                vitals.max_health,
+                def.base_health * multiplier + vitals.strength * 14.0,
+            );
+            close(
+                vitals.max_energy,
+                def.base_energy * multiplier + vitals.intelligence * 8.0,
+            );
+            assert_eq!(SelectedHero { kind, locked: true }.rarity(), def.rarity);
+        }
     }
 
     #[test]
