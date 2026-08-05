@@ -2,11 +2,13 @@ use bevy::{prelude::*, window::PrimaryWindow};
 
 use super::combat::SurvivalSet;
 use super::content::{Attribute, ContentId, HEROES, SKILLS};
+use super::localization::{attribute_name, hero_name, skill_name};
 use super::mobile_layout::hud_metrics;
 use super::rarity::rarity_color;
 use super::{
-    Autoplay, GameAssets, GameSession, Hero, HeroIdentity, HeroKind, HeroProgressionDelta,
-    HeroVisual, HeroVitals, PlayerBuild, RunRng, RunSeed, SelectedHero,
+    Autoplay, GameAssets, GameLanguage, GameSession, Hero, HeroIdentity, HeroKind,
+    HeroProgressionDelta, HeroVisual, HeroVitals, PlayerBuild, RunRng, RunSeed, SelectedHero,
+    SkillId,
 };
 
 pub struct HeroPlugin;
@@ -32,7 +34,8 @@ const _: () = assert!(MIN_TOUCH_TARGET >= 48.0);
 
 impl Plugin for HeroPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<HeroState>()
+        app.init_resource::<GameLanguage>()
+            .init_resource::<HeroState>()
             .add_systems(Startup, setup_hero_ui)
             .add_systems(
                 Update,
@@ -105,7 +108,13 @@ struct EvolutionChoiceButton(u8);
 #[derive(Component)]
 struct HeroStatusText;
 
-fn setup_hero_ui(mut commands: Commands) {
+fn setup_hero_ui(mut commands: Commands, language: Res<GameLanguage>) {
+    let status = format!(
+        "[R] {} · {} 0/3",
+        hero_name(*language, HeroKind::StormSavant),
+        language.pick("ASC", "升格")
+    );
+    let choose_hero = language.pick("CHOOSE HERO", "选择英雄");
     commands
         .spawn((
             HeroSelectorStatusPanel,
@@ -129,7 +138,7 @@ fn setup_hero_ui(mut commands: Commands) {
         .with_children(|panel| {
             panel.spawn((
                 HeroStatusText,
-                Text::new("[R] STORM SAVANT · ASC 0/3"),
+                Text::new(status),
                 TextFont {
                     font_size: FontSize::Px(13.0),
                     ..default()
@@ -152,7 +161,7 @@ fn setup_hero_ui(mut commands: Commands) {
                 ))
                 .with_children(|button| {
                     button.spawn((
-                        Text::new("CHOOSE HERO"),
+                        Text::new(choose_hero),
                         TextFont {
                             font_size: FontSize::Px(12.0),
                             ..default()
@@ -168,6 +177,7 @@ fn open_hero_selector(
     autoplay: Option<Res<Autoplay>>,
     windows: Query<&Window, With<PrimaryWindow>>,
     run_seed: Res<RunSeed>,
+    language: Res<GameLanguage>,
     selected_hero: Res<SelectedHero>,
     mut session: ResMut<GameSession>,
     mut state: ResMut<HeroState>,
@@ -188,6 +198,7 @@ fn open_hero_selector(
         &offers,
         state.rerolls_remaining > 0,
         hero_selector_safe_x(&windows),
+        *language,
     ));
 }
 
@@ -196,6 +207,7 @@ fn handle_hero_reroll(
     interactions: Query<&Interaction, (With<HeroRerollButton>, Changed<Interaction>)>,
     windows: Query<&Window, With<PrimaryWindow>>,
     run_seed: Res<RunSeed>,
+    language: Res<GameLanguage>,
     mut state: ResMut<HeroState>,
 ) {
     let requested = interactions
@@ -218,6 +230,7 @@ fn handle_hero_reroll(
         &offers,
         false,
         hero_selector_safe_x(&windows),
+        *language,
     ));
 }
 
@@ -260,6 +273,7 @@ fn spawn_hero_selector(
     offers: &[HeroOffer; HERO_OFFER_COUNT],
     can_reroll: bool,
     safe_x: f32,
+    language: GameLanguage,
 ) -> Entity {
     commands
         .spawn((
@@ -305,7 +319,7 @@ fn spawn_hero_selector(
                 ))
                 .with_children(|button| {
                     button.spawn((
-                        Text::new("REROLL FREE"),
+                        Text::new(language.pick("REROLL FREE", "免费重抽")),
                         TextFont {
                             font_size: FontSize::Px(11.0),
                             ..default()
@@ -315,7 +329,7 @@ fn spawn_hero_selector(
                 });
             }
             root.spawn((
-                Text::new("COMMANDER DRAFT  |  6 OF 12"),
+                Text::new(language.pick("COMMANDER DRAFT  |  6 OF 12", "指挥官征募｜12 选 6")),
                 TextFont {
                     font_size: FontSize::Px(HERO_HEADING_SIZE),
                     ..default()
@@ -323,7 +337,10 @@ fn spawn_hero_selector(
                 TextColor(Color::srgb(0.76, 0.94, 1.0)),
             ));
             root.spawn((
-                Text::new("R WHITE · SR BLUE · SSR ORANGE · UR RED"),
+                Text::new(language.pick(
+                    "R WHITE · SR BLUE · SSR ORANGE · UR RED",
+                    "R 白 · SR 蓝 · SSR 橙 · UR 红",
+                )),
                 TextFont {
                     font_size: FontSize::Px(10.0),
                     ..default()
@@ -349,11 +366,12 @@ fn spawn_hero_selector(
                         .iter()
                         .find(|skill| skill.id == offer.starting_skill)
                         .expect("hero starting skills are validated by content tests");
-                    let primary = match hero.primary {
-                        Attribute::Strength => "STR",
-                        Attribute::Agility => "AGI",
-                        Attribute::Intelligence => "INT",
-                    };
+                    let primary = attribute_name(language, hero.primary);
+                    let skill_id = SKILLS
+                        .iter()
+                        .position(|candidate| candidate.id == offer.starting_skill)
+                        .map(|index| SkillId(index as u8))
+                        .expect("hero starting skills are validated by content tests");
                     grid.spawn((
                         Button,
                         HeroChoiceButton(offer),
@@ -376,29 +394,46 @@ fn spawn_hero_selector(
                     ))
                     .with_children(|card| {
                         card.spawn((
-                            Text::new(format!("[{}] {}", hero.rarity.label(), display_id(hero.id))),
+                            Text::new(format!(
+                                "[{}] {}",
+                                hero.rarity.label(),
+                                hero_name(language, offer.kind)
+                            )),
                             TextFont {
                                 font_size: FontSize::Px(17.0),
                                 ..default()
                             },
                             TextColor(rarity_color(hero.rarity)),
-                            TextLayout::justify(Justify::Center),
+                            TextLayout::justify(Justify::Center)
+                                .with_linebreak(LineBreak::WordOrCharacter),
                         ));
                         card.spawn((
-                            Text::new(format!(
-                                "{primary} · PWR x{:.2} · CD -{:.0}%\nSTART Lv{} [{}] {}",
-                                hero.rarity.hero_ability_multiplier(),
-                                (1.0 - hero.rarity.hero_cooldown_multiplier()) * 100.0,
-                                hero.rarity.starting_skill_rank(),
-                                skill.rarity.label(),
-                                display_id(offer.starting_skill)
-                            )),
+                            Text::new(if language.is_chinese() {
+                                format!(
+                                    "{primary} · 威力 ×{:.2} · 冷却 -{:.0}%\n初始 Lv{} [{}] {}",
+                                    hero.rarity.hero_ability_multiplier(),
+                                    (1.0 - hero.rarity.hero_cooldown_multiplier()) * 100.0,
+                                    hero.rarity.starting_skill_rank(),
+                                    skill.rarity.label(),
+                                    skill_name(language, skill_id)
+                                )
+                            } else {
+                                format!(
+                                    "{primary} · PWR x{:.2} · CD -{:.0}%\nSTART Lv{} [{}] {}",
+                                    hero.rarity.hero_ability_multiplier(),
+                                    (1.0 - hero.rarity.hero_cooldown_multiplier()) * 100.0,
+                                    hero.rarity.starting_skill_rank(),
+                                    skill.rarity.label(),
+                                    skill_name(language, skill_id)
+                                )
+                            }),
                             TextFont {
                                 font_size: FontSize::Px(11.0),
                                 ..default()
                             },
                             TextColor(Color::srgb(0.68, 0.78, 0.88)),
-                            TextLayout::justify(Justify::Center),
+                            TextLayout::justify(Justify::Center)
+                                .with_linebreak(LineBreak::WordOrCharacter),
                         ));
                     });
                 }
@@ -457,6 +492,7 @@ fn trigger_evolution(
     mut build: ResMut<PlayerBuild>,
     mut state: ResMut<HeroState>,
     selected_hero: Res<SelectedHero>,
+    language: Res<GameLanguage>,
     vitals: Res<HeroVitals>,
     mut hero: Query<&mut Transform, With<Hero>>,
 ) {
@@ -486,10 +522,16 @@ fn trigger_evolution(
         &mut commands,
         state.selected,
         state.evolution_stage,
+        *language,
     ));
 }
 
-fn spawn_evolution(commands: &mut Commands, hero_kind: HeroKind, stage: u8) -> Entity {
+fn spawn_evolution(
+    commands: &mut Commands,
+    hero_kind: HeroKind,
+    stage: u8,
+    language: GameLanguage,
+) -> Entity {
     commands
         .spawn((
             Node {
@@ -508,11 +550,11 @@ fn spawn_evolution(commands: &mut Commands, hero_kind: HeroKind, stage: u8) -> E
         ))
         .with_children(|root| {
             root.spawn((
-                Text::new(format!(
-                    "{} ASCENSION {}",
-                    display_id(HEROES[hero_kind.index()].id),
-                    stage + 1
-                )),
+                Text::new(if language.is_chinese() {
+                    format!("{} · 升格 {}", hero_name(language, hero_kind), stage + 1)
+                } else {
+                    format!("{} ASCENSION {}", hero_name(language, hero_kind), stage + 1)
+                }),
                 TextFont {
                     font_size: FontSize::Px(HERO_HEADING_SIZE),
                     ..default()
@@ -532,14 +574,20 @@ fn spawn_evolution(commands: &mut Commands, hero_kind: HeroKind, stage: u8) -> E
                 spawn_evolution_card(
                     row,
                     0,
-                    "WAR PATH",
-                    "+28% damage\n+12% attack speed\nstronger projectiles",
+                    language.pick("WAR PATH", "战争之路"),
+                    language.pick(
+                        "+28% damage\n+12% attack speed\nstronger projectiles",
+                        "+28% 伤害\n+12% 攻击速度\n强化投射物",
+                    ),
                 );
                 spawn_evolution_card(
                     row,
                     1,
-                    "MYSTIC PATH",
-                    "+1 multishot\n+10% move speed\nrepair the gate",
+                    language.pick("MYSTIC PATH", "秘法之路"),
+                    language.pick(
+                        "+1 multishot\n+10% move speed\nrepair the gate",
+                        "+1 多重射击\n+10% 移动速度\n修复城门",
+                    ),
                 );
             });
         })
@@ -592,7 +640,7 @@ fn spawn_evolution_card(
                     ..default()
                 },
                 TextColor(Color::srgb(0.72, 0.8, 0.9)),
-                TextLayout::justify(Justify::Center),
+                TextLayout::justify(Justify::Center).with_linebreak(LineBreak::WordOrCharacter),
             ));
         });
 }
@@ -683,13 +731,18 @@ fn apply_evolution(branch: u8, build: &mut PlayerBuild, session: &mut GameSessio
     }
 }
 
-fn update_hero_status(state: Res<HeroState>, mut text: Query<&mut Text, With<HeroStatusText>>) {
+fn update_hero_status(
+    state: Res<HeroState>,
+    language: Res<GameLanguage>,
+    mut text: Query<&mut Text, With<HeroStatusText>>,
+) {
     if let Ok(mut text) = text.single_mut() {
         let hero = HEROES[state.selected.index()];
         **text = format!(
-            "[{}] {} · ASC {}/3",
+            "[{}] {} · {} {}/3",
             hero.rarity.label(),
-            display_id(hero.id),
+            hero_name(*language, state.selected),
+            language.pick("ASC", "升格"),
             state.evolution_stage,
         );
     }
@@ -771,10 +824,6 @@ fn weighted_hero_index(pool: &[HeroKind], mut roll: u32) -> usize {
             }
         })
         .unwrap_or(pool.len().saturating_sub(1))
-}
-
-fn display_id(id: &str) -> String {
-    id.replace('_', " ").to_ascii_uppercase()
 }
 
 #[cfg(test)]

@@ -5,13 +5,14 @@ use super::combat::SurvivalSet;
 use super::content::Rarity as BuildRarity;
 use super::mobile_layout::hud_metrics;
 use super::rarity::rarity_color;
-use super::{Autoplay, GameSession, HeroVitals, PlayerBuild, RunRng};
+use super::{Autoplay, GameLanguage, GameSession, HeroVitals, PlayerBuild, RunRng};
 
 pub struct MarketPlugin;
 
 impl Plugin for MarketPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<MarketState>()
+        app.init_resource::<GameLanguage>()
+            .init_resource::<MarketState>()
             .init_resource::<MarketEffects>()
             .init_resource::<FortuneMarketRules>()
             .add_systems(Startup, setup_market)
@@ -162,7 +163,7 @@ impl MarketQuality {
     }
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 enum MarketItem {
     CorePatch,
     SkillTuner,
@@ -191,33 +192,34 @@ enum MarketItem {
 }
 
 impl MarketItem {
-    fn name(self) -> &'static str {
-        match self {
-            Self::CorePatch => "Core Patch",
-            Self::SkillTuner => "Skill Tuner",
-            Self::BondCompass => "Bond Compass",
-            Self::SlowHourglass => "Slow Hourglass",
-            Self::RevivalSeed => "Revival Seed",
-            Self::SerratedDisc => "Serrated Disc",
-            Self::ArcLens => "Arc Lens",
-            Self::HardenedPlate => "Hardened Plate",
-            Self::SpiritDrum => "Spirit Drum",
-            Self::WindBoots => "Wind Boots",
-            Self::EchoCore => "Echo Core",
-            Self::EmberHeart => "Ember Heart",
-            Self::StormCoil => "Storm Coil",
-            Self::FrostMirror => "Frost Mirror",
-            Self::ThreefoldRelic => "Threefold Relic",
-            Self::BloodContract => "Blood Contract",
-            Self::MarketBadge => "Market Badge",
-            Self::GuardianSeed => "Guardian Seed",
-            Self::AscendantCrown => "Ascendant Crown",
-            Self::ChaosDie => "Chaos Die",
-            Self::WorldAnchor => "World Anchor",
-            Self::LegionStandard => "Legion Standard",
-            Self::PrismaticEngine => "Prismatic Engine",
-            Self::LastOath => "Last Oath",
-        }
+    fn name(self, language: GameLanguage) -> &'static str {
+        let (english, chinese) = match self {
+            Self::CorePatch => ("Core Patch", "核心修补包"),
+            Self::SkillTuner => ("Skill Tuner", "技能调谐器"),
+            Self::BondCompass => ("Bond Compass", "羁绊罗盘"),
+            Self::SlowHourglass => ("Slow Hourglass", "缓时沙漏"),
+            Self::RevivalSeed => ("Revival Seed", "复生种子"),
+            Self::SerratedDisc => ("Serrated Disc", "锯齿圆盘"),
+            Self::ArcLens => ("Arc Lens", "奥术透镜"),
+            Self::HardenedPlate => ("Hardened Plate", "淬硬甲片"),
+            Self::SpiritDrum => ("Spirit Drum", "灵鼓"),
+            Self::WindBoots => ("Wind Boots", "疾风靴"),
+            Self::EchoCore => ("Echo Core", "回响核心"),
+            Self::EmberHeart => ("Ember Heart", "余烬之心"),
+            Self::StormCoil => ("Storm Coil", "雷暴线圈"),
+            Self::FrostMirror => ("Frost Mirror", "霜镜"),
+            Self::ThreefoldRelic => ("Threefold Relic", "三元遗物"),
+            Self::BloodContract => ("Blood Contract", "血契"),
+            Self::MarketBadge => ("Market Badge", "黑市徽章"),
+            Self::GuardianSeed => ("Guardian Seed", "守护种子"),
+            Self::AscendantCrown => ("Ascendant Crown", "登临之冠"),
+            Self::ChaosDie => ("Chaos Die", "混沌骰"),
+            Self::WorldAnchor => ("World Anchor", "世界之锚"),
+            Self::LegionStandard => ("Legion Standard", "军团战旗"),
+            Self::PrismaticEngine => ("Prismatic Engine", "棱镜引擎"),
+            Self::LastOath => ("Last Oath", "最后誓约"),
+        };
+        language.pick(english, chinese)
     }
 
     fn price(self) -> u32 {
@@ -284,33 +286,67 @@ impl MarketItem {
         }
     }
 
-    fn effect_text(self) -> &'static str {
-        match self {
-            Self::CorePatch => "restore 200 core integrity",
-            Self::SkillTuner => "+1 skill refresh charge",
-            Self::BondCompass => "next bond draft favors strongest bond",
-            Self::SlowHourglass => "all enemies -50% speed for 15s",
-            Self::RevivalSeed => "prevent the next fatal defeat",
-            Self::SerratedDisc => "+22% attack; attacks gain splash",
-            Self::ArcLens => "+18% spell range, +10% spell power",
-            Self::HardenedPlate => "+6 armor, +20% maximum health",
-            Self::SpiritDrum => "+25% summon attack speed",
-            Self::WindBoots => "+15% move speed, -15% dodge cooldown",
-            Self::EchoCore => "20% chance to echo skills at 45%",
-            Self::EmberHeart => "burns can critically strike",
-            Self::StormCoil => "every 5th attack chains lightning",
-            Self::FrostMirror => "frozen deaths create an ice burst",
-            Self::ThreefoldRelic => "attack, spell and summon empower each other",
-            Self::BloodContract => "+40% low-health damage, +5% leech",
-            Self::MarketBadge => "-20% market prices",
-            Self::GuardianSeed => "+1 core/sec; intercept every 30s",
-            Self::AscendantCrown => "top skill gains rank 6 and +30% power",
-            Self::ChaosDie => "damage rolls 0.7x / 1.0x / 1.8x",
-            Self::WorldAnchor => "bosses move -15%; dodge grants control guard",
-            Self::LegionStandard => "+1 summon cap, +30% inherited stats",
-            Self::PrismaticEngine => "+80% reactions and +40% area",
-            Self::LastOath => "negate one fatal hit; empower for 8s",
-        }
+    fn effect_text(self, language: GameLanguage) -> &'static str {
+        let (english, chinese) = match self {
+            Self::CorePatch => ("restore 200 core integrity", "核心耐久+200"),
+            Self::SkillTuner => ("+1 skill refresh charge", "技能刷新次数+1"),
+            Self::BondCompass => (
+                "next bond draft favors strongest bond",
+                "下次羁绊偏向最高进度",
+            ),
+            Self::SlowHourglass => ("all enemies -50% speed for 15s", "敌人减速50%，持续15秒"),
+            Self::RevivalSeed => ("prevent the next fatal defeat", "抵消下一次致命失败"),
+            Self::SerratedDisc => ("+22% attack; attacks gain splash", "攻击+22%；普攻获得溅射"),
+            Self::ArcLens => (
+                "+18% spell range, +10% spell power",
+                "法术范围+18%，威力+10%",
+            ),
+            Self::HardenedPlate => ("+6 armor, +20% maximum health", "护甲+6，最大生命+20%"),
+            Self::SpiritDrum => ("+25% summon attack speed", "召唤物攻速+25%"),
+            Self::WindBoots => (
+                "+15% move speed, -15% dodge cooldown",
+                "移速+15%，闪避冷却-15%",
+            ),
+            Self::EchoCore => (
+                "20% chance to echo skills at 45%",
+                "技能20%概率以45%效果回响",
+            ),
+            Self::EmberHeart => ("burns can critically strike", "燃烧可以暴击"),
+            Self::StormCoil => ("every 5th attack chains lightning", "每5次攻击触发连锁闪电"),
+            Self::FrostMirror => (
+                "frozen deaths create an ice burst",
+                "冻结敌人死亡时触发冰爆",
+            ),
+            Self::ThreefoldRelic => (
+                "attack, spell and summon empower each other",
+                "攻击、法术、召唤互相强化",
+            ),
+            Self::BloodContract => (
+                "+40% low-health damage, +5% leech",
+                "低生命伤害+40%，吸血+5%",
+            ),
+            Self::MarketBadge => ("-20% market prices", "黑市价格-20%"),
+            Self::GuardianSeed => ("+1 core/sec; intercept every 30s", "核心每秒+1；每30秒拦截"),
+            Self::AscendantCrown => (
+                "top skill gains rank 6 and +30% power",
+                "最高技能升至6级，威力+30%",
+            ),
+            Self::ChaosDie => ("damage rolls 0.7x / 1.0x / 1.8x", "伤害随机为0.7/1.0/1.8倍"),
+            Self::WorldAnchor => (
+                "bosses move -15%; dodge grants control guard",
+                "首领移速-15%；闪避抗控制",
+            ),
+            Self::LegionStandard => (
+                "+1 summon cap, +30% inherited stats",
+                "召唤上限+1，继承属性+30%",
+            ),
+            Self::PrismaticEngine => ("+80% reactions and +40% area", "元素反应+80%，范围+40%"),
+            Self::LastOath => (
+                "negate one fatal hit; empower for 8s",
+                "抵消一次致命伤；强化8秒",
+            ),
+        };
+        language.pick(english, chinese)
     }
 
     fn apply(
@@ -899,6 +935,7 @@ fn market_layout(width: f32, height: f32) -> MarketLayout {
 
 fn setup_market(
     mut commands: Commands,
+    language: Res<GameLanguage>,
     mut state: ResMut<MarketState>,
     effects: Res<MarketEffects>,
     fortune: Res<FortuneMarketRules>,
@@ -930,7 +967,9 @@ fn setup_market(
         .with_children(|button| {
             button.spawn((
                 MarketToggleLabel,
-                Text::new("B  BLACK MARKET  [LOCKED 03:00]"),
+                Text::new(
+                    language.pick("B  BLACK MARKET  [LOCKED 03:00]", "B  黑市  [锁定 03:00]"),
+                ),
                 TextFont {
                     font_size: FontSize::Px(13.0),
                     ..default()
@@ -972,7 +1011,7 @@ fn setup_market(
                 ))
                 .with_children(|header| {
                     header.spawn((
-                        Text::new("BLACK MARKET"),
+                        Text::new(language.pick("BLACK MARKET", "黑市")),
                         TextFont {
                             font_size: FontSize::Px(15.0),
                             ..default()
@@ -981,7 +1020,7 @@ fn setup_market(
                     ));
                     header.spawn((
                         MarketWalletLabel,
-                        Text::new("KILLS 0000"),
+                        Text::new(language.pick("KILLS 0000", "击杀 0000")),
                         TextFont {
                             font_size: FontSize::Px(11.0),
                             ..default()
@@ -1041,6 +1080,7 @@ fn setup_market(
                                         ..default()
                                     },
                                     TextColor(Color::WHITE),
+                                    TextLayout::linebreak(LineBreak::WordOrCharacter),
                                 ));
                             });
                             row.spawn((
@@ -1059,7 +1099,7 @@ fn setup_market(
                             .with_children(|button| {
                                 button.spawn((
                                     MarketMarkLabel(index),
-                                    Text::new("AUTO"),
+                                    Text::new(language.pick("AUTO", "自动")),
                                     TextFont {
                                         font_size: FontSize::Px(11.0),
                                         ..default()
@@ -1088,7 +1128,7 @@ fn setup_market(
                 .with_children(|button| {
                     button.spawn((
                         MarketRefreshLabel,
-                        Text::new("REFRESH"),
+                        Text::new(language.pick("REFRESH", "刷新")),
                         TextFont {
                             font_size: FontSize::Px(12.0),
                             ..default()
@@ -1101,6 +1141,7 @@ fn setup_market(
 
 fn maintain_market_stock(
     session: Res<GameSession>,
+    language: Res<GameLanguage>,
     effects: Res<MarketEffects>,
     fortune: Res<FortuneMarketRules>,
     mut state: ResMut<MarketState>,
@@ -1116,7 +1157,10 @@ fn maintain_market_stock(
         state.next_stock_at += STOCK_INTERVAL;
         state.stock_generation = state.stock_generation.saturating_add(1);
         if state.open {
-            set_notice(&mut state, "Automatic restock".to_string());
+            set_notice(
+                &mut state,
+                language.pick("Automatic restock", "自动补货").to_string(),
+            );
         }
     }
 }
@@ -1125,6 +1169,7 @@ fn maintain_market_stock(
 fn handle_market_actions(
     keyboard: Res<ButtonInput<KeyCode>>,
     autoplay: Option<Res<Autoplay>>,
+    language: Res<GameLanguage>,
     mut state: ResMut<MarketState>,
     mut effects: ResMut<MarketEffects>,
     mut session: ResMut<GameSession>,
@@ -1137,6 +1182,7 @@ fn handle_market_actions(
     refresh_interactions: Query<&Interaction, (With<MarketRefreshButton>, Changed<Interaction>)>,
     toggle_interactions: Query<&Interaction, (With<MarketToggleButton>, Changed<Interaction>)>,
 ) {
+    let language = *language;
     let toggle_requested = keyboard.just_pressed(KeyCode::KeyB)
         || toggle_interactions
             .iter()
@@ -1148,12 +1194,26 @@ fn handle_market_actions(
             let remaining = (MARKET_UNLOCK_AT - session.elapsed).ceil() as u32;
             set_notice(
                 &mut state,
-                format!("Unlocks in {:02}:{:02}", remaining / 60, remaining % 60),
+                if language.is_chinese() {
+                    format!("{:02}:{:02} 后解锁", remaining / 60, remaining % 60)
+                } else {
+                    format!("Unlocks in {:02}:{:02}", remaining / 60, remaining % 60)
+                },
             );
         } else if session.finished {
-            set_notice(&mut state, "Market closed after the run".to_string());
+            set_notice(
+                &mut state,
+                language
+                    .pick("Market closed after the run", "对局结束后黑市已关闭")
+                    .to_string(),
+            );
         } else if session.paused {
-            set_notice(&mut state, "Close the current choice first".to_string());
+            set_notice(
+                &mut state,
+                language
+                    .pick("Close the current choice first", "请先关闭当前选择")
+                    .to_string(),
+            );
         } else {
             state.open = true;
             state.paused_by_market = true;
@@ -1169,13 +1229,32 @@ fn handle_market_actions(
             let item = state.offers[button.0].item;
             if effects.owns(item) {
                 state.marked[button.0] = None;
-                set_notice(&mut state, "Owned equipment cannot be marked".to_string());
+                set_notice(
+                    &mut state,
+                    language
+                        .pick("Owned equipment cannot be marked", "已拥有装备，无法标记")
+                        .to_string(),
+                );
             } else if state.marked[button.0] == Some(item) {
                 state.marked[button.0] = None;
-                set_notice(&mut state, format!("Auto-buy canceled: {}", item.name()));
+                set_notice(
+                    &mut state,
+                    if language.is_chinese() {
+                        format!("取消自动购买：{}", item.name(language))
+                    } else {
+                        format!("Auto-buy canceled: {}", item.name(language))
+                    },
+                );
             } else {
                 state.marked[button.0] = Some(item);
-                set_notice(&mut state, format!("Auto-buy marked: {}", item.name()));
+                set_notice(
+                    &mut state,
+                    if language.is_chinese() {
+                        format!("标记自动购买：{}", item.name(language))
+                    } else {
+                        format!("Auto-buy marked: {}", item.name(language))
+                    },
+                );
             }
         }
 
@@ -1195,14 +1274,33 @@ fn handle_market_actions(
             );
             match outcome {
                 PurchaseOutcome::Bought(item) => {
-                    set_notice(&mut state, format!("Bought {}", item.name()));
+                    set_notice(
+                        &mut state,
+                        if language.is_chinese() {
+                            format!("已购买 {}", item.name(language))
+                        } else {
+                            format!("Bought {}", item.name(language))
+                        },
+                    );
                 }
                 PurchaseOutcome::Unaffordable(shortfall) => {
-                    set_notice(&mut state, format!("Need {shortfall} more kills"));
+                    set_notice(
+                        &mut state,
+                        if language.is_chinese() {
+                            format!("还差 {shortfall} 击杀")
+                        } else {
+                            format!("Need {shortfall} more kills")
+                        },
+                    );
                 }
                 PurchaseOutcome::Owned => set_notice(
                     &mut state,
-                    "Equipment already owned; stock replaced".to_string(),
+                    language
+                        .pick(
+                            "Equipment already owned; stock replaced",
+                            "装备已拥有，货品已替换",
+                        )
+                        .to_string(),
                 ),
                 PurchaseOutcome::Hidden => {}
             }
@@ -1216,7 +1314,11 @@ fn handle_market_actions(
             if session.kills < price {
                 set_notice(
                     &mut state,
-                    format!("Refresh needs {} more kills", price - session.kills),
+                    if language.is_chinese() {
+                        format!("刷新还差 {} 击杀", price - session.kills)
+                    } else {
+                        format!("Refresh needs {} more kills", price - session.kills)
+                    },
                 );
                 continue;
             }
@@ -1230,9 +1332,11 @@ fn handle_market_actions(
             set_notice(
                 &mut state,
                 if price == 0 {
-                    "Fortune refresh used".to_string()
+                    language
+                        .pick("Fortune refresh used", "已使用幸运刷新")
+                        .to_string()
                 } else {
-                    "Stock refreshed".to_string()
+                    language.pick("Stock refreshed", "货品已刷新").to_string()
                 },
             );
         }
@@ -1249,6 +1353,7 @@ fn handle_market_actions(
                 &mut vitals,
                 &fortune,
                 &mut rng,
+                language,
             );
         }
         process_auto_purchases(
@@ -1259,6 +1364,7 @@ fn handle_market_actions(
             &mut vitals,
             &fortune,
             &mut rng,
+            language,
         );
     }
 }
@@ -1353,6 +1459,7 @@ fn process_autoplay_purchases(
     vitals: &mut HeroVitals,
     fortune: &FortuneMarketRules,
     rng: &mut RunRng,
+    language: GameLanguage,
 ) {
     let mut bought = Vec::new();
     for plan_index in 0..AUTOPLAY_MAX_PURCHASES_PER_GENERATION {
@@ -1378,7 +1485,7 @@ fn process_autoplay_purchases(
                 state.autoplay_plan[plan_index] = None;
                 state.autoplay_purchases_generation =
                     state.autoplay_purchases_generation.saturating_add(1);
-                bought.push(item.name());
+                bought.push(item.name(language));
             }
             PurchaseOutcome::Owned | PurchaseOutcome::Hidden => {
                 state.autoplay_plan[plan_index] = None;
@@ -1387,7 +1494,14 @@ fn process_autoplay_purchases(
         }
     }
     if !bought.is_empty() {
-        set_notice(state, format!("Commander bought {}", bought.join(", ")));
+        set_notice(
+            state,
+            if language.is_chinese() {
+                format!("指挥官购买：{}", bought.join("、"))
+            } else {
+                format!("Commander bought {}", bought.join(", "))
+            },
+        );
     }
 }
 
@@ -1433,6 +1547,7 @@ fn process_auto_purchases(
     vitals: &mut HeroVitals,
     fortune: &FortuneMarketRules,
     rng: &mut RunRng,
+    language: GameLanguage,
 ) {
     let mut bought = Vec::new();
     let visible = effects.visible_offer_count();
@@ -1445,13 +1560,20 @@ fn process_auto_purchases(
             continue;
         }
         match purchase_offer(index, state, effects, session, build, vitals, fortune, rng) {
-            PurchaseOutcome::Bought(item) => bought.push(item.name()),
+            PurchaseOutcome::Bought(item) => bought.push(item.name(language)),
             PurchaseOutcome::Owned => {}
             PurchaseOutcome::Unaffordable(_) | PurchaseOutcome::Hidden => continue,
         }
     }
     if !bought.is_empty() {
-        set_notice(state, format!("Auto-bought {}", bought.join(", ")));
+        set_notice(
+            state,
+            if language.is_chinese() {
+                format!("自动购买：{}", bought.join("、"))
+            } else {
+                format!("Auto-bought {}", bought.join(", "))
+            },
+        );
     }
 }
 
@@ -1617,6 +1739,7 @@ fn apply_market_layout(
 #[allow(clippy::type_complexity, clippy::too_many_arguments)]
 fn update_market_ui(
     windows: Query<&Window, With<PrimaryWindow>>,
+    language: Res<GameLanguage>,
     state: Res<MarketState>,
     effects: Res<MarketEffects>,
     fortune: Res<FortuneMarketRules>,
@@ -1696,6 +1819,7 @@ fn update_market_ui(
         ),
     >,
 ) {
+    let language = *language;
     let layout = windows
         .single()
         .map(|window| market_layout(window.width(), window.height()))
@@ -1709,7 +1833,13 @@ fn update_market_ui(
         };
     }
     if let Ok((mut label, mut font)) = toggle_labels.single_mut() {
-        **label = market_toggle_label(layout.compact, session.elapsed, state.open, state.level);
+        **label = market_toggle_label(
+            language,
+            layout.compact,
+            session.elapsed,
+            state.open,
+            state.level,
+        );
         font.font_size = FontSize::Px(if layout.compact { 14.0 } else { 13.0 });
     }
 
@@ -1718,24 +1848,46 @@ fn update_market_ui(
         if let Some(label) = offer_label {
             let item = state.offers[label.0].item;
             let price = discounted_cost(item.price(), &effects, &fortune);
-            let kind = if item.is_consumable() { "USE" } else { "GEAR" };
-            **text = if layout.compact {
+            let kind = if item.is_consumable() {
+                language.pick("USE", "使用")
+            } else {
+                language.pick("GEAR", "装备")
+            };
+            **text = if language.is_chinese() && layout.compact {
                 format!(
-                    "{}   {} K\n[{} / {}] {}",
-                    item.name(),
+                    "{}   {} 击杀\n[{} / {}] {}",
+                    item.name(language),
                     price,
                     item.tag(),
                     kind,
-                    item.effect_text()
+                    item.effect_text(language)
+                )
+            } else if language.is_chinese() {
+                format!(
+                    "[{} / {}] {}   {} 击杀\n{}",
+                    item.tag(),
+                    kind,
+                    item.name(language),
+                    price,
+                    item.effect_text(language)
+                )
+            } else if layout.compact {
+                format!(
+                    "{}   {} K\n[{} / {}] {}",
+                    item.name(language),
+                    price,
+                    item.tag(),
+                    kind,
+                    item.effect_text(language)
                 )
             } else {
                 format!(
                     "[{} / {}] {}   {} KILLS\n{}",
                     item.tag(),
                     kind,
-                    item.name(),
+                    item.name(language),
                     price,
-                    item.effect_text()
+                    item.effect_text(language)
                 )
             };
             color.0 = item.color();
@@ -1743,9 +1895,9 @@ fn update_market_ui(
             let item = state.offers[label.0].item;
             let marked = state.marked[label.0] == Some(item);
             **text = if marked {
-                "AUTO\nON".to_string()
+                language.pick("AUTO\nON", "自动\n开启").to_string()
             } else {
-                "AUTO".to_string()
+                language.pick("AUTO", "自动").to_string()
             };
             color.0 = if marked {
                 Color::srgb(0.30, 1.0, 0.68)
@@ -1759,11 +1911,31 @@ fn update_market_ui(
     for (mut text, mut font) in &mut wallet_labels {
         font.font_size = FontSize::Px(if layout.compact { 12.0 } else { 11.0 });
         **text = if state.notice_timer > 0.0 {
-            if layout.compact {
+            if language.is_chinese() && layout.compact {
+                format!("等级{}｜{}", state.level, state.notice)
+            } else if language.is_chinese() {
+                format!("等级{}  {}", state.level, state.notice)
+            } else if layout.compact {
                 format!("LV{} | {}", state.level, state.notice)
             } else {
                 format!("LV{}  {}", state.level, state.notice)
             }
+        } else if language.is_chinese() && layout.compact {
+            format!(
+                "等级{}｜击杀 {}｜补货 {:02}:{:02}",
+                state.level,
+                session.kills,
+                next_stock / 60,
+                next_stock % 60
+            )
+        } else if language.is_chinese() {
+            format!(
+                "等级{}  击杀 {:04}\n补货 {:02}:{:02}",
+                state.level,
+                session.kills,
+                next_stock / 60,
+                next_stock % 60
+            )
         } else if layout.compact {
             format!(
                 "LV{} | KILLS {} | STOCK {:02}:{:02}",
@@ -1786,7 +1958,19 @@ fn update_market_ui(
     for (mut text, mut font) in &mut refresh_labels {
         font.font_size = FontSize::Px(if layout.compact { 13.0 } else { 12.0 });
         let price = state.refresh_price(&effects, &fortune);
-        **text = if layout.compact && price == 0 {
+        **text = if language.is_chinese() && price == 0 {
+            if layout.compact {
+                "刷新｜免费".to_string()
+            } else {
+                "刷新货品   免费".to_string()
+            }
+        } else if language.is_chinese() {
+            if layout.compact {
+                format!("刷新｜{price} 击杀")
+            } else {
+                format!("刷新货品   {price} 击杀")
+            }
+        } else if layout.compact && price == 0 {
             "REFRESH | FREE".to_string()
         } else if layout.compact {
             format!("REFRESH | {price} K")
@@ -1829,10 +2013,24 @@ fn update_market_ui(
     }
 }
 
-fn market_toggle_label(compact: bool, elapsed: f32, open: bool, level: u8) -> String {
+fn market_toggle_label(
+    language: GameLanguage,
+    compact: bool,
+    elapsed: f32,
+    open: bool,
+    level: u8,
+) -> String {
     if elapsed < MARKET_UNLOCK_AT {
         let remaining = (MARKET_UNLOCK_AT - elapsed).ceil() as u32;
-        if compact {
+        if language.is_chinese() && compact {
+            format!("黑市锁定 {:02}:{:02}", remaining / 60, remaining % 60)
+        } else if language.is_chinese() {
+            format!(
+                "B  黑市  [锁定 {:02}:{:02}]",
+                remaining / 60,
+                remaining % 60
+            )
+        } else if compact {
             format!("MARKET LOCKED {:02}:{:02}", remaining / 60, remaining % 60)
         } else {
             format!(
@@ -1842,11 +2040,19 @@ fn market_toggle_label(compact: bool, elapsed: f32, open: bool, level: u8) -> St
             )
         }
     } else if open {
-        if compact {
+        if language.is_chinese() && compact {
+            format!("关闭黑市  等级{level}")
+        } else if language.is_chinese() {
+            format!("B  关闭黑市  等级{level}")
+        } else if compact {
             format!("CLOSE MARKET  LV{level}")
         } else {
             format!("B  CLOSE BLACK MARKET  LV{level}")
         }
+    } else if language.is_chinese() && compact {
+        format!("黑市  等级{level}")
+    } else if language.is_chinese() {
+        format!("B  打开黑市  等级{level}")
     } else if compact {
         format!("MARKET  LV{level}")
     } else {
@@ -1988,7 +2194,29 @@ fn market_quality_for_fortune_roll(level: u8, roll: u8, rarity_bonus: f32) -> Ma
 
 #[cfg(test)]
 mod tests {
+    use std::collections::HashSet;
+
     use super::*;
+
+    #[test]
+    fn every_market_item_has_distinct_complete_bilingual_copy() {
+        let items: Vec<_> = CONSUMABLES.into_iter().chain(ALL_EQUIPMENT).collect();
+        assert_eq!(items.len(), 24);
+        assert_eq!(items.iter().copied().collect::<HashSet<_>>().len(), 24);
+
+        for item in items {
+            let english_name = item.name(GameLanguage::English);
+            let chinese_name = item.name(GameLanguage::SimplifiedChinese);
+            let english_effect = item.effect_text(GameLanguage::English);
+            let chinese_effect = item.effect_text(GameLanguage::SimplifiedChinese);
+            assert!(!english_name.is_empty());
+            assert!(!chinese_name.is_empty());
+            assert!(!english_effect.is_empty());
+            assert!(!chinese_effect.is_empty());
+            assert_ne!(english_name, chinese_name);
+            assert_ne!(english_effect, chinese_effect);
+        }
+    }
 
     fn apply_item_for_test(
         item: MarketItem,
@@ -2077,11 +2305,18 @@ mod tests {
         assert_eq!(desktop.row_height, 52.0);
         assert_eq!(desktop.toggle_height, 48.0);
 
-        let mobile_locked = market_toggle_label(true, 0.0, false, 1);
-        let mobile_open = market_toggle_label(true, MARKET_UNLOCK_AT, true, 1);
+        let mobile_locked = market_toggle_label(GameLanguage::English, true, 0.0, false, 1);
+        let mobile_open =
+            market_toggle_label(GameLanguage::English, true, MARKET_UNLOCK_AT, true, 1);
         assert!(!mobile_locked.starts_with("B  "));
         assert!(!mobile_open.starts_with("B  "));
-        assert!(market_toggle_label(false, 0.0, false, 1).starts_with("B  "));
+        assert!(
+            market_toggle_label(GameLanguage::English, false, 0.0, false, 1).starts_with("B  ")
+        );
+        assert_eq!(
+            market_toggle_label(GameLanguage::SimplifiedChinese, true, 0.0, false, 1),
+            "黑市锁定 03:00"
+        );
     }
 
     #[test]

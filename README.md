@@ -2,7 +2,7 @@
 
 一款以 Bevy 製作、面向手機的原創俯視角生存塔防。敵人從右側裂隙沿橫向戰線進攻左側城門；英雄自動攻擊，玩家透過走位、雙挑戰與多條三選一構築線守住 25 分鐘。玩法節奏參考《刀塔指揮家》的公開資料，但名稱、美術、角色、公式與內容均為原創。
 
-**[▶ 在瀏覽器直接遊玩](https://xiongchenyu6.github.io/bevy-open-rogue-defence/)**（手機請使用橫屏；推薦最新版 Chrome／Edge。）
+**[▶ 在瀏覽器直接遊玩](https://xiongchenyu6.github.io/bevy-open-rogue-defence/)**（手機請使用橫屏；入口可切換 EN／簡中，推薦最新版 Chrome／Edge。）
 
 ## 核心體驗
 
@@ -41,6 +41,7 @@
 - 以 667×375 以上橫屏為基線，HUD 依安全區縮排；每局 6 名英雄的 3×2 選將、技能三選一、羈絆替換與黑市在小螢幕改用緊湊網格。
 - 左側為可見的固定觸控搖桿，會鎖定起手 touch ID、套用死區並在失焦／取消時清除；右側閃避與終極技可和移動真正多指同按。
 - 主要按鈕至少 48 dp，閃避至少 72 dp、終極技 112–128 dp；手機文案不顯示鍵盤快捷鍵。
+- 英文與簡體中文覆蓋入口、選將、HUD、技能／羈絆抽取、挑戰、黑市、暫停與結算；網址 `lang` 優先於本機偏好，切換語言會保留同一個 run seed。
 - 右上提供暫停／恢復，切出瀏覽器會自動暫停；挑戰面板在手機上收進可開關抽屜。
 - 公開影片中的選卡與黑市不會暫停戰鬥；本專案為手機可讀性暫停背景戰鬥，屬明確的易用性改編。
 - 第一版同時保留鍵盤／滑鼠操作，便於桌面開發與測試。
@@ -56,6 +57,7 @@
 - [x] **局次隨機：** 每次開局自動產生可分享 seed；選將、技能與羈絆按 52／28／15／5 基礎權重抽取，起手技能、波次與黑市也受 seed 驅動，選將免費重抽不消耗戰鬥 RNG。
 - [x] **手機基線：** 667×375 至 915×412 響應式 HUD、固定多指搖桿、獨立右手動作、觸控選卡／市場、暫停與 Android GameActivity 工程骨架。
 - [x] **Web 版本：** WebGL2/WASM、WAV／OGG 解碼、觸控安全 Canvas、約 11 MB gzip 串流載入、raw WASM 相容後備與 GitHub Pages 自動部署。
+- [x] **雙語與字庫：** EN／簡中入口與完整正式 UI；WASM／Android 共用 347 KB Noto Sans SC 子集，字形回歸測試會覆蓋所有目前玩家可見中英文字符。
 - [x] **運行驗證：** `0xA11CE` 正常構築連跑兩次，均擊敗五 Boss、完成 Archive 並在第 50,979 幀勝利；30 個 checkpoint、RNG 狀態與最終 PNG 完全一致。15.5 秒桌面、19.4 秒手機基線、18.0 秒選將／重抽與本輪 19.5 秒四檔品階影片均已回看。
 - [x] **效能工程：** 敵人、20 個共享上限召喚物、256 個可見投射物、彈性無 mesh 邏輯投射物、128 個短期特效與 64 個傷害數字均集中池化；視覺池滿不會丟失敵人壓力或傷害。
 - [x] **內容語義：** 30 個技能、10 套羈絆、四種反應與 19 件永久裝備均有運行語義；震動、完整教學和局外存檔仍屬後續手機功能。
@@ -71,6 +73,7 @@
 ```bash
 nix develop
 ROGUE_COMMANDER_SEED=0xA11CE cargo run
+ROGUE_COMMANDER_LANG=zh-CN ROGUE_COMMANDER_SEED=0x1 cargo run
 cargo run --bin capture -- still screenshots/showcase.png 300 showcase 0xA11CE
 cargo run --release --bin capture -- simulate screenshots/balance-25m.png 60000 balance 0xA11CE
 ```
@@ -89,7 +92,7 @@ bash scripts/build-wasm.sh
 python3 -m http.server 8000 --directory dist
 ```
 
-開啟 `http://127.0.0.1:8000/`，點擊「開始遊戲」以解鎖瀏覽器音訊並載入 Bevy。產物位於忽略追蹤的 `dist/`；35 個模型與 6 個音訊會一併複製。網址不帶 `seed` 時會自動產生新局；例如 `http://127.0.0.1:8000/?seed=0xA11CE` 可固定重播。
+開啟 `http://127.0.0.1:8000/`，點擊「開始遊戲」以解鎖瀏覽器音訊並載入 Bevy。產物位於忽略追蹤的 `dist/`；35 個模型、6 個音訊、中文字庫與 OFL 授權會一併複製。網址不帶 `seed` 時會自動產生新局；例如 `http://127.0.0.1:8000/?seed=0xA11CE&lang=zh-CN` 可固定以簡中重播。語言優先順序為網址、`localStorage`、瀏覽器偏好，切換只更新 `lang`，不會改動 `seed`。
 
 ## Android（GameActivity）
 
@@ -113,13 +116,13 @@ adb logcat | grep 'RustStdoutStderr\|bevy\|wgpu'
 
 ## 專案狀態
 
-目前桌面與瀏覽器版本可實際運行：右出怪左守門、資料化 25 波、12 種獨立敵人、5 名機制 Boss、30 個專屬技能、10 套完整羈絆、四種元素反應、12 英雄固定四檔品階與獨立三段 ASC 進化、Q/W 雙挑戰、固定五格黑市、原創 60 秒戰果刻印、鍵盤／觸控 HUD、F7 生成器及離屏捕捉工具均已接入。每個品階各有一名力量、敏捷與智力英雄；每局 6 選 1 使用品階權重，一次免費重抽與主題起手技都可由 URL seed 重播，技能、羈絆與黑市也使用同一套白／藍／橙／紅可見色制。Boss 的通用減傷、元素抗性、火抗與冰霜易傷統一在最終投射物傷害路徑結算。35 個原創 GLB（12 英雄＋12 敵人＋5 Boss＋6 召喚物）與 6 個原創合成音訊均由倉庫內腳本產生；模型腳本會逐一重匯入 35 檔並驗證靜態 mesh、落地樞軸與 PBR 材質。
+目前桌面與瀏覽器版本可實際運行：右出怪左守門、資料化 25 波、12 種獨立敵人、5 名機制 Boss、30 個專屬技能、10 套完整羈絆、四種元素反應、12 英雄固定四檔品階與獨立三段 ASC 進化、Q/W 雙挑戰、固定五格黑市、原創 60 秒戰果刻印、EN／簡中鍵盤／觸控 HUD、F7 生成器及離屏捕捉工具均已接入。每個品階各有一名力量、敏捷與智力英雄；每局 6 選 1 使用品階權重，一次免費重抽與主題起手技都可由 URL seed 重播，技能、羈絆與黑市也使用同一套白／藍／橙／紅可見色制。Boss 的通用減傷、元素抗性、火抗與冰霜易傷統一在最終投射物傷害路徑結算。35 個原創 GLB（12 英雄＋12 敵人＋5 Boss＋6 召喚物）與 6 個原創合成音訊均由倉庫內腳本產生；模型腳本會逐一重匯入 35 檔並驗證靜態 mesh、落地樞軸與 PBR 材質。
 
-驗收基線通過格式檢查、原生與 wasm32 `cargo check`、220/220 測試與 Clippy 零警告；音訊測試會逐一建立 1 個 OGG 與 5 個 WAV 的解碼器，避免 Web 版再次因未編入格式支援而崩潰。正常 `balance 0xA11CE` 從預設 48 攻擊、1.95 攻速與 1,000 城門開始，使用正常抽卡、Q/W 判定及每代最多兩件的黑市自購；兩次均在遊戲時間 1,572 秒後以 5/5 Boss、1,974 累計擊殺、Q14、W13、Archive `TimedOut`、城門 1/1,370 勝利。兩份 30-checkpoint 記錄及最終截圖 SHA-256 均一致。
+驗收基線通過格式檢查、原生與 wasm32 `cargo check`、225/225 測試與 Clippy 零警告；音訊測試會逐一建立 1 個 OGG 與 5 個 WAV 的解碼器，避免 Web 版再次因未編入格式支援而崩潰。字庫測試會解析實際 TTF cmap，缺少任何 UI 字符或子集意外膨脹都會直接失敗。正常 `balance 0xA11CE` 從預設 48 攻擊、1.95 攻速與 1,000 城門開始，使用正常抽卡、Q/W 判定及每代最多兩件的黑市自購；兩次均在遊戲時間 1,572 秒後以 5/5 Boss、1,974 累計擊殺、Q14、W13、Archive `TimedOut`、城門 1/1,370 勝利。兩份 30-checkpoint 記錄及最終截圖 SHA-256 均一致。
 
-本輪池峰值為敵人 24、投射物 161、傷害數字 63、召喚物 5；敵人、投射物及召喚物邏輯拒絕均為 0。128 格 FX 池拒絕 261 次純視覺命中特效，沒有改變傷害。桌面驗收見 [完整長局結果](screenshots/balance-25m.png)、[15.5 秒 Boss→Archive 實機影片](screenshots/rogue-commander-final.mp4)與[逐秒回看表](screenshots/rogue-commander-final-review.png)；手機基線見 [19.4 秒多指操作影片](screenshots/rogue-commander-mobile.mp4)與[回看表](screenshots/rogue-commander-mobile-review.png)。[18.0 秒 12 英雄選將影片](screenshots/rogue-commander-roster.mp4)及[回看表](screenshots/rogue-commander-roster-review.png)為 800×390、25 FPS，涵蓋 6 選 1、免費重抽與 Solar 實戰；本輪 [19.5 秒四檔品階實機影片](screenshots/rogue-commander-rarity.mp4)及[回看表](screenshots/rogue-commander-rarity-review.png)為 844×390、30 FPS、H.264/yuv420p，`0x1` 可見四檔英雄，並展示 UR 靈契牧者、持續品階 HUD 與 SR／UR／R 羈絆卡。影片已完整解碼及回看，JavaScript／WASM console 錯誤與例外均為 0。
+本輪池峰值為敵人 24、投射物 161、傷害數字 63、召喚物 5；敵人、投射物及召喚物邏輯拒絕均為 0。128 格 FX 池拒絕 261 次純視覺命中特效，沒有改變傷害。桌面驗收見 [完整長局結果](screenshots/balance-25m.png)、[15.5 秒 Boss→Archive 實機影片](screenshots/rogue-commander-final.mp4)與[逐秒回看表](screenshots/rogue-commander-final-review.png)；手機基線見 [19.4 秒多指操作影片](screenshots/rogue-commander-mobile.mp4)與[回看表](screenshots/rogue-commander-mobile-review.png)。[18.0 秒 12 英雄選將影片](screenshots/rogue-commander-roster.mp4)及[回看表](screenshots/rogue-commander-roster-review.png)為 800×390、25 FPS，涵蓋 6 選 1、免費重抽與 Solar 實戰；[19.5 秒四檔品階實機影片](screenshots/rogue-commander-rarity.mp4)及[回看表](screenshots/rogue-commander-rarity-review.png)為 844×390、30 FPS，`0x1` 可見四檔英雄。最新 [19.0 秒簡中實機影片](screenshots/rogue-commander-zh.mp4)及[回看表](screenshots/rogue-commander-zh-review.png)同為 844×390、H.264/yuv420p，展示簡中選將、UR 英雄 HUD、技能卡與 R／SSR／SR 羈絆卡；EN↔簡中切換前後 seed 均為 `0x0000000000000001`，中文沒有缺字方框。所有影片已完整解碼及回看，本輪 JavaScript／WASM console 錯誤與例外均為 0。
 
-尚未完成的是四檔倍率與 12 英雄逐一長局平衡、把全域 RNG 再拆成互不干擾的子流、中文／圖示資產、震動與局外存檔，以及 Android SDK 授權、APK 和真機 FPS；不得把桌面確定性驗收寫成 Android 效能證明。
+尚未完成的是四檔倍率與 12 英雄逐一長局平衡、把全域 RNG 再拆成互不干擾的子流、UI 圖示、震動與局外存檔，以及 Android SDK 授權、APK 和真機 FPS；不得把桌面確定性驗收寫成 Android 效能證明。
 
 ## 素材表
 
@@ -134,7 +137,8 @@ adb logcat | grep 'RustStdoutStderr\|bevy\|wgpu'
 | 品階 UI 配色 | 已接入 | 卡框／標籤 | Bevy 程式化白／藍／橙／紅 | 0 |
 | 低模重建腳本 | 已接入 | 35 個 GLB | `tools/generate_models.py`；35 檔均逐一重匯入驗證靜態 mesh／PBR／地面樞軸 | 0 |
 | 貼圖／骨骼動畫 | 未製作 | 1.8–5 m 高 | 首版採低模純材質美術；若改用付費生成會先確認費用 | 0 |
-| UI 圖示與中文字體 | 未選定 | 48–128 px | 優先採可商用開源素材 | 0 |
+| 簡中 UI 字體 | 已接入 | 347 KB／791 字符 | `assets/fonts/rogue_commander_ui.ttf`；Noto Sans SC 子集，SIL OFL 1.1 | 0 |
+| UI 圖示 | 未製作 | 48–128 px | 目前以文字與 Bevy 程式化形狀呈現 | 0 |
 | 音效與環境循環 | 已接入 | 0.16–24 秒 | `assets/audio/`；1 OGG＋5 WAV，含 Web 解碼回歸測試 | 0 |
 
 本輪沒有新增模型、音訊或付費生成，素材成本為 0。任何付費生成素材都會在首次產生前另行確認費用。

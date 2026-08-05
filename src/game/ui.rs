@@ -1,18 +1,18 @@
 use bevy::{prelude::*, window::PrimaryWindow};
 
 use super::archive::{ArchiveEcho, ArchiveOutcome, ArchiveState};
-use super::combat::BOSS_NAMES;
 use super::content::HEROES;
-use super::hero_abilities::ultimate_profile;
+use super::localization::{bond_name, boss_name, hero_ultimate_name};
 use super::mobile_layout::hud_metrics;
 use super::progression::{SkillEconomy, bond_cost, skill_cost};
 use super::trial::{GOLD_LEVEL_COUNT, GOLD_TARGET_COUNT, GOLD_UNLOCK_AT, TOWER_UNLOCK_AT};
 use super::{
     ActiveSkill, BondButtonLabel, BondDrawButton, BondId, BondStatusText, BossEnemy, CoreBar,
-    DamageMeter, DodgeButton, DodgeButtonLabel, DodgeState, Enemy, GameSession, GoldChallengeState,
-    GoldChallengeStatusText, HeroVitals, HeroVitalsText, LevelText, PlayerBuild, ResultRoot,
-    RunSeed, RunStatsText, SkillButtonLabel, SkillDrawButton, SkillDrawLabel, TimerText,
-    TrialAction, TrialButton, TrialState, TrialStatusText, UltimateButton, XpBar,
+    DamageMeter, DodgeButton, DodgeButtonLabel, DodgeState, Enemy, GameLanguage, GameSession,
+    GoldChallengeState, GoldChallengeStatusText, HeroVitals, HeroVitalsText, LevelText,
+    PlayerBuild, ResultRoot, RunSeed, RunStatsText, SkillButtonLabel, SkillDrawButton,
+    SkillDrawLabel, TimerText, TrialAction, TrialButton, TrialState, TrialStatusText,
+    UltimateButton, XpBar,
 };
 
 pub struct GameUiPlugin;
@@ -28,9 +28,11 @@ impl Plugin for GameUiPlugin {
                     apply_hud_layout,
                     handle_trial_drawer,
                     handle_manual_pause,
+                    update_static_ui_language,
                     update_joystick_visual,
                     update_hud,
                     show_result,
+                    update_result_text,
                 ),
             );
     }
@@ -43,6 +45,9 @@ struct HudRoot;
 struct HudLeft;
 
 #[derive(Component)]
+struct CoreIntegrityLabel;
+
+#[derive(Component)]
 struct CoreBarTrack;
 
 #[derive(Component)]
@@ -50,6 +55,9 @@ struct MovementPad;
 
 #[derive(Component)]
 struct MovementKnob;
+
+#[derive(Component)]
+struct MovementLabel;
 
 #[derive(Component)]
 struct XpPanel;
@@ -73,6 +81,9 @@ struct TrialToggleButton;
 struct TrialToggleLabel;
 
 #[derive(Component)]
+struct TrialActionLabel(TrialAction);
+
+#[derive(Component)]
 struct PauseButton;
 
 #[derive(Component)]
@@ -80,6 +91,20 @@ struct PauseResumeButton;
 
 #[derive(Component)]
 struct PauseRoot;
+
+#[derive(Component, Clone, Copy)]
+enum PauseCopyLabel {
+    Title,
+    Description,
+    Resume,
+}
+
+#[derive(Component, Clone, Copy)]
+enum ResultCopyLabel {
+    Title,
+    Summary,
+    Archive,
+}
 
 #[derive(Resource, Default)]
 struct ManualPauseState {
@@ -92,7 +117,8 @@ struct TrialDrawerState {
     open: bool,
 }
 
-fn setup_hud(mut commands: Commands) {
+fn setup_hud(mut commands: Commands, language: Res<GameLanguage>) {
+    let language = *language;
     commands
         .spawn((
             HudRoot,
@@ -127,7 +153,8 @@ fn setup_hud(mut commands: Commands) {
                 ))
                 .with_children(|left| {
                     left.spawn((
-                        Text::new("CORE INTEGRITY"),
+                        CoreIntegrityLabel,
+                        Text::new(language.pick("CORE INTEGRITY", "城门耐久")),
                         TextFont {
                             font_size: FontSize::Px(11.0),
                             ..default()
@@ -159,7 +186,7 @@ fn setup_hud(mut commands: Commands) {
                     });
                     left.spawn((
                         HeroVitalsText,
-                        Text::new("HERO HP"),
+                        Text::new(language.pick("HERO HP", "英雄生命")),
                         TextFont {
                             font_size: FontSize::Px(13.0),
                             ..default()
@@ -177,7 +204,7 @@ fn setup_hud(mut commands: Commands) {
                     ));
                     left.spawn((
                         BondStatusText,
-                        Text::new("BONDS 0/7"),
+                        Text::new(language.pick("BONDS 0/7", "羁绊 0/7")),
                         TextFont {
                             font_size: FontSize::Px(11.0),
                             ..default()
@@ -200,7 +227,7 @@ fn setup_hud(mut commands: Commands) {
                     .with_children(|button| {
                         button.spawn((
                             BondButtonLabel,
-                            Text::new("BOND | 10 WOOD"),
+                            Text::new(language.pick("BOND | 10 WOOD", "羁绊 | 10 木材")),
                             TextFont {
                                 font_size: FontSize::Px(12.0),
                                 ..default()
@@ -210,7 +237,7 @@ fn setup_hud(mut commands: Commands) {
                     });
                 });
                 top.spawn((
-                    Text::new("25:00\nWAVE 1"),
+                    Text::new(language.pick("25:00\nWAVE 1", "25:00\n第 1 波")),
                     TimerText,
                     TextFont {
                         font_size: FontSize::Px(20.0),
@@ -261,7 +288,8 @@ fn setup_hud(mut commands: Commands) {
                             BorderColor::all(Color::srgba(0.55, 0.95, 1.0, 0.72)),
                         ));
                         joy.spawn((
-                            Text::new("MOVE"),
+                            MovementLabel,
+                            Text::new(language.pick("MOVE", "移动")),
                             TextFont {
                                 font_size: FontSize::Px(11.0),
                                 ..default()
@@ -284,7 +312,7 @@ fn setup_hud(mut commands: Commands) {
                     ))
                     .with_children(|xp| {
                         xp.spawn((
-                            Text::new("LEVEL 1"),
+                            Text::new(language.pick("LEVEL 1", "等级 1")),
                             LevelText,
                             TextFont {
                                 font_size: FontSize::Px(12.0),
@@ -331,7 +359,7 @@ fn setup_hud(mut commands: Commands) {
                         .with_children(|button| {
                             button.spawn((
                                 SkillDrawLabel,
-                                Text::new("SKILL | 80 GOLD"),
+                                Text::new(language.pick("SKILL | 80 GOLD", "技能 | 80 金币")),
                                 TextFont {
                                     font_size: FontSize::Px(13.0),
                                     ..default()
@@ -373,7 +401,7 @@ fn setup_hud(mut commands: Commands) {
                             .with_children(|button| {
                                 button.spawn((
                                     DodgeButtonLabel,
-                                    Text::new("DODGE\nREADY"),
+                                    Text::new(language.pick("DODGE\nREADY", "闪避\n就绪")),
                                     TextFont {
                                         font_size: FontSize::Px(12.0),
                                         ..default()
@@ -401,7 +429,7 @@ fn setup_hud(mut commands: Commands) {
                             .with_children(|button| {
                                 button.spawn((
                                     SkillButtonLabel,
-                                    Text::new("STORM\nREADY"),
+                                    Text::new(language.pick("STORM\nREADY", "雷域\n就绪")),
                                     TextFont {
                                         font_size: FontSize::Px(14.0),
                                         ..default()
@@ -436,7 +464,7 @@ fn setup_hud(mut commands: Commands) {
         .with_children(|panel| {
             panel.spawn((
                 TrialStatusText,
-                Text::new("TOWER 1 LOCKED  01:30"),
+                Text::new(language.pick("TOWER 1 LOCKED  01:30", "爬塔 1 未解锁 01:30")),
                 TextFont {
                     font_size: FontSize::Px(11.0),
                     ..default()
@@ -454,12 +482,12 @@ fn setup_hud(mut commands: Commands) {
                     },
                 ))
                 .with_children(|row| {
-                    spawn_trial_button(row, TrialAction::StartTower, "TOWER", 102.0);
-                    spawn_trial_button(row, TrialAction::ToggleTowerAuto, "AUTO", 82.0);
+                    spawn_trial_button(row, TrialAction::StartTower, language, 102.0);
+                    spawn_trial_button(row, TrialAction::ToggleTowerAuto, language, 82.0);
                 });
             panel.spawn((
                 GoldChallengeStatusText,
-                Text::new("GOLD 1 LOCKED  01:00"),
+                Text::new(language.pick("GOLD 1 LOCKED  01:00", "金币试炼 1 未解锁 01:00")),
                 TextFont {
                     font_size: FontSize::Px(11.0),
                     ..default()
@@ -477,10 +505,10 @@ fn setup_hud(mut commands: Commands) {
                     },
                 ))
                 .with_children(|row| {
-                    spawn_trial_button(row, TrialAction::StartGold, "GOLD", 102.0);
-                    spawn_trial_button(row, TrialAction::ToggleGoldAuto, "AUTO", 82.0);
+                    spawn_trial_button(row, TrialAction::StartGold, language, 102.0);
+                    spawn_trial_button(row, TrialAction::ToggleGoldAuto, language, 82.0);
                 });
-            spawn_trial_button(panel, TrialAction::CancelAll, "CLEAR", 196.0);
+            spawn_trial_button(panel, TrialAction::CancelAll, language, 196.0);
         });
 
     commands
@@ -507,7 +535,7 @@ fn setup_hud(mut commands: Commands) {
         .with_children(|button| {
             button.spawn((
                 TrialToggleLabel,
-                Text::new("CHALLENGES"),
+                Text::new(language.pick("CHALLENGES", "挑战")),
                 TextFont {
                     font_size: FontSize::Px(12.0),
                     ..default()
@@ -551,7 +579,7 @@ fn setup_hud(mut commands: Commands) {
 fn spawn_trial_button(
     parent: &mut ChildSpawnerCommands,
     action: TrialAction,
-    label: &'static str,
+    language: GameLanguage,
     width: f32,
 ) {
     parent
@@ -570,7 +598,8 @@ fn spawn_trial_button(
         ))
         .with_children(|button| {
             button.spawn((
-                Text::new(label),
+                TrialActionLabel(action),
+                Text::new(trial_action_label(language, action)),
                 TextFont {
                     font_size: FontSize::Px(12.0),
                     ..default()
@@ -578,6 +607,23 @@ fn spawn_trial_button(
                 TextColor(Color::WHITE),
             ));
         });
+}
+
+fn trial_action_label(language: GameLanguage, action: TrialAction) -> &'static str {
+    match action {
+        TrialAction::StartTower => language.pick("TOWER", "爬塔"),
+        TrialAction::StartGold => language.pick("GOLD", "金币"),
+        TrialAction::ToggleTowerAuto | TrialAction::ToggleGoldAuto => language.pick("AUTO", "自动"),
+        TrialAction::CancelAll => language.pick("CLEAR", "清除"),
+    }
+}
+
+fn command_growth_label(language: GameLanguage, growth: super::CommandGrowth) -> &'static str {
+    match growth {
+        super::CommandGrowth::Attack => language.pick("ATTACK", "攻击"),
+        super::CommandGrowth::Vitality => language.pick("MAX HP", "生命"),
+        super::CommandGrowth::Insight => language.pick("XP EFF", "悟性"),
+    }
 }
 
 #[allow(clippy::type_complexity)]
@@ -725,19 +771,81 @@ fn handle_trial_drawer(
     interactions: Query<&Interaction, (With<TrialToggleButton>, Changed<Interaction>)>,
     mut labels: Query<&mut Text, With<TrialToggleLabel>>,
     mut drawer: ResMut<TrialDrawerState>,
+    language: Res<GameLanguage>,
 ) {
     if interactions
         .iter()
         .any(|interaction| *interaction == Interaction::Pressed)
     {
         drawer.open = !drawer.open;
-        for mut label in &mut labels {
-            **label = if drawer.open {
-                "CLOSE CHALLENGES".to_string()
-            } else {
-                "CHALLENGES".to_string()
-            };
+    }
+    for mut label in &mut labels {
+        **label = if drawer.open {
+            language.pick("CLOSE CHALLENGES", "关闭挑战").to_string()
+        } else {
+            language.pick("CHALLENGES", "挑战").to_string()
+        };
+    }
+}
+
+fn update_static_ui_language(
+    language: Res<GameLanguage>,
+    mut core_labels: Query<
+        &mut Text,
+        (
+            With<CoreIntegrityLabel>,
+            Without<MovementLabel>,
+            Without<TrialActionLabel>,
+            Without<PauseCopyLabel>,
+        ),
+    >,
+    mut movement_labels: Query<
+        &mut Text,
+        (
+            With<MovementLabel>,
+            Without<CoreIntegrityLabel>,
+            Without<TrialActionLabel>,
+            Without<PauseCopyLabel>,
+        ),
+    >,
+    mut trial_labels: Query<
+        (&TrialActionLabel, &mut Text),
+        (
+            Without<CoreIntegrityLabel>,
+            Without<MovementLabel>,
+            Without<PauseCopyLabel>,
+        ),
+    >,
+    mut pause_labels: Query<
+        (&PauseCopyLabel, &mut Text),
+        (
+            Without<CoreIntegrityLabel>,
+            Without<MovementLabel>,
+            Without<TrialActionLabel>,
+        ),
+    >,
+) {
+    if !language.is_changed() {
+        return;
+    }
+    for mut text in &mut core_labels {
+        **text = language.pick("CORE INTEGRITY", "城门耐久").to_string();
+    }
+    for mut text in &mut movement_labels {
+        **text = language.pick("MOVE", "移动").to_string();
+    }
+    for (label, mut text) in &mut trial_labels {
+        **text = trial_action_label(*language, label.0).to_string();
+    }
+    for (label, mut text) in &mut pause_labels {
+        **text = match label {
+            PauseCopyLabel::Title => language.pick("PAUSED", "已暂停"),
+            PauseCopyLabel::Description => {
+                language.pick("The battlefield is frozen.", "战场已冻结。")
+            }
+            PauseCopyLabel::Resume => language.pick("RESUME", "继续战斗"),
         }
+        .to_string();
     }
 }
 
@@ -750,6 +858,7 @@ fn handle_manual_pause(
     mut session: ResMut<GameSession>,
     mut state: ResMut<ManualPauseState>,
     run_seed: Res<RunSeed>,
+    language: Res<GameLanguage>,
 ) {
     let focused = windows
         .single()
@@ -799,7 +908,8 @@ fn handle_manual_pause(
         ))
         .with_children(|overlay| {
             overlay.spawn((
-                Text::new("PAUSED"),
+                PauseCopyLabel::Title,
+                Text::new(language.pick("PAUSED", "已暂停")),
                 TextFont {
                     font_size: FontSize::Px(30.0),
                     ..default()
@@ -807,12 +917,14 @@ fn handle_manual_pause(
                 TextColor(Color::srgb(0.78, 0.94, 1.0)),
             ));
             overlay.spawn((
-                Text::new("The battlefield is frozen."),
+                PauseCopyLabel::Description,
+                Text::new(language.pick("The battlefield is frozen.", "战场已冻结。")),
                 TextFont {
                     font_size: FontSize::Px(14.0),
                     ..default()
                 },
                 TextColor(Color::srgb(0.68, 0.78, 0.86)),
+                TextLayout::new(Justify::Center, LineBreak::WordOrCharacter),
             ));
             overlay.spawn((
                 Text::new(format_run_seed(run_seed.0)),
@@ -840,7 +952,8 @@ fn handle_manual_pause(
                 ))
                 .with_children(|button| {
                     button.spawn((
-                        Text::new("RESUME"),
+                        PauseCopyLabel::Resume,
+                        Text::new(language.pick("RESUME", "继续战斗")),
                         TextFont {
                             font_size: FontSize::Px(16.0),
                             ..default()
@@ -875,6 +988,7 @@ fn update_joystick_visual(
 
 fn update_hud(
     windows: Query<&Window, With<PrimaryWindow>>,
+    language: Res<GameLanguage>,
     session: Res<GameSession>,
     damage_meter: Res<DamageMeter>,
     run_seed: Res<RunSeed>,
@@ -901,9 +1015,12 @@ fn update_hud(
         Option<&HeroVitalsText>,
         Option<&DodgeButtonLabel>,
     )>,
-    mut core_bar: Query<&mut Node, (With<CoreBar>, Without<XpBar>)>,
-    mut xp_bar: Query<&mut Node, (With<XpBar>, Without<CoreBar>)>,
+    mut bars: ParamSet<(
+        Query<&mut Node, (With<CoreBar>, Without<XpBar>)>,
+        Query<&mut Node, (With<XpBar>, Without<CoreBar>)>,
+    )>,
 ) {
+    let language = *language;
     let compact = windows
         .single()
         .map(|window| hud_metrics(window.width(), window.height()).compact)
@@ -912,7 +1029,7 @@ fn update_hud(
     let boss_status = bosses.iter().next().map(|(enemy, boss)| {
         format!(
             "{}  {:.0}%",
-            BOSS_NAMES[boss.index as usize],
+            boss_name(language, boss.index as usize),
             (enemy.hp / enemy.max_hp * 100.0).clamp(0.0, 100.0)
         )
     });
@@ -923,32 +1040,75 @@ fn update_hud(
         .unwrap_or(100.0);
     let hero_hp = (vitals.health / vitals.max_health.max(1.0) * 100.0).clamp(0.0, 100.0);
     let trial_base = if session.save_active {
-        "TOWER SEALED - ARCHIVE ACTIVE".to_string()
+        language
+            .pick("TOWER SEALED - ARCHIVE ACTIVE", "爬塔封印 · 战果刻印中")
+            .to_string()
     } else if trial.active {
-        format!("TOWER {}  {:.1}s", trial.level + 1, trial.remaining)
+        if language.is_chinese() {
+            format!("爬塔 {} · {:.1}秒", trial.level + 1, trial.remaining)
+        } else {
+            format!("TOWER {}  {:.1}s", trial.level + 1, trial.remaining)
+        }
     } else if usize::from(trial.level) >= TOWER_UNLOCK_AT.len() {
-        "TOWER COMPLETE".to_string()
+        language.pick("TOWER COMPLETE", "爬塔完成").to_string()
     } else if session.elapsed < TOWER_UNLOCK_AT[trial.level as usize] {
         let unlock = (TOWER_UNLOCK_AT[trial.level as usize] - session.elapsed).ceil() as u32;
-        format!(
-            "TOWER {} LOCKED  {:02}:{:02}",
-            trial.level + 1,
-            unlock / 60,
-            unlock % 60
-        )
+        if language.is_chinese() {
+            format!(
+                "爬塔 {} 未解锁 {:02}:{:02}",
+                trial.level + 1,
+                unlock / 60,
+                unlock % 60
+            )
+        } else {
+            format!(
+                "TOWER {} LOCKED  {:02}:{:02}",
+                trial.level + 1,
+                unlock / 60,
+                unlock % 60
+            )
+        }
     } else if trial.cooldown > 0.0 {
-        format!("TOWER {}  CD {:.0}s", trial.level + 1, trial.cooldown)
+        if language.is_chinese() {
+            format!("爬塔 {} · 冷却 {:.0}秒", trial.level + 1, trial.cooldown)
+        } else {
+            format!("TOWER {}  CD {:.0}s", trial.level + 1, trial.cooldown)
+        }
     } else {
-        format!(
-            "TOWER {} READY{}",
-            trial.level + 1,
-            if trial.auto { "  [AUTO]" } else { "" }
-        )
+        if language.is_chinese() {
+            format!(
+                "爬塔 {} 就绪{}",
+                trial.level + 1,
+                if trial.auto { " [自动]" } else { "" }
+            )
+        } else {
+            format!(
+                "TOWER {} READY{}",
+                trial.level + 1,
+                if trial.auto { "  [AUTO]" } else { "" }
+            )
+        }
     };
     let next_growth = super::CommandGrowth::from_point(trial.command_points);
-    let last_growth = trial.last_growth.map_or("-", |growth| growth.label());
+    let last_growth = trial
+        .last_growth
+        .map_or("-", |growth| command_growth_label(language, growth));
     let trial_status = if compact {
-        format!("{trial_base} | CMD {}", trial.command_points)
+        if language.is_chinese() {
+            format!("{trial_base} | 指挥 {}", trial.command_points)
+        } else {
+            format!("{trial_base} | CMD {}", trial.command_points)
+        }
+    } else if language.is_chinese() {
+        format!(
+            "{trial_base}\n指挥 {}  攻{} 体{} 悟{}  上次 {}  下次 {}",
+            trial.command_points,
+            trial.growth_ranks[0],
+            trial.growth_ranks[1],
+            trial.growth_ranks[2],
+            last_growth,
+            command_growth_label(language, next_growth),
+        )
     } else {
         format!(
             "{trial_base}\nCMD {}  A{} H{} X{}  LAST {}  NEXT {}",
@@ -957,51 +1117,101 @@ fn update_hud(
             trial.growth_ranks[1],
             trial.growth_ranks[2],
             last_growth,
-            next_growth.label(),
+            command_growth_label(language, next_growth),
         )
     };
     let gold_status = if session.save_active {
-        "GOLD SEALED - ARCHIVE ACTIVE".to_string()
+        language
+            .pick("GOLD SEALED - ARCHIVE ACTIVE", "金币试炼封印 · 战果刻印中")
+            .to_string()
     } else if gold_trial.active {
-        format!(
-            "GOLD {}  {:.1}s  TARGETS {}/{}",
-            gold_trial.level + 1,
-            gold_trial.remaining,
-            gold_trial.remaining_targets,
-            GOLD_TARGET_COUNT,
-        )
+        if language.is_chinese() {
+            format!(
+                "金币试炼 {} · {:.1}秒 · 目标 {}/{}",
+                gold_trial.level + 1,
+                gold_trial.remaining,
+                gold_trial.remaining_targets,
+                GOLD_TARGET_COUNT,
+            )
+        } else {
+            format!(
+                "GOLD {}  {:.1}s  TARGETS {}/{}",
+                gold_trial.level + 1,
+                gold_trial.remaining,
+                gold_trial.remaining_targets,
+                GOLD_TARGET_COUNT,
+            )
+        }
     } else if usize::from(gold_trial.level) >= GOLD_LEVEL_COUNT {
-        "GOLD COMPLETE".to_string()
+        language.pick("GOLD COMPLETE", "金币试炼完成").to_string()
     } else if session.elapsed < GOLD_UNLOCK_AT {
         let unlock = (GOLD_UNLOCK_AT - session.elapsed).ceil() as u32;
-        format!(
-            "GOLD {} LOCKED  {:02}:{:02}",
-            gold_trial.level + 1,
-            unlock / 60,
-            unlock % 60
-        )
+        if language.is_chinese() {
+            format!(
+                "金币试炼 {} 未解锁 {:02}:{:02}",
+                gold_trial.level + 1,
+                unlock / 60,
+                unlock % 60
+            )
+        } else {
+            format!(
+                "GOLD {} LOCKED  {:02}:{:02}",
+                gold_trial.level + 1,
+                unlock / 60,
+                unlock % 60
+            )
+        }
     } else if gold_trial.cooldown > 0.0 {
-        format!(
-            "GOLD {}  CD {:.0}s",
-            gold_trial.level + 1,
-            gold_trial.cooldown
-        )
+        if language.is_chinese() {
+            format!(
+                "金币试炼 {} · 冷却 {:.0}秒",
+                gold_trial.level + 1,
+                gold_trial.cooldown
+            )
+        } else {
+            format!(
+                "GOLD {}  CD {:.0}s",
+                gold_trial.level + 1,
+                gold_trial.cooldown
+            )
+        }
     } else {
-        format!(
-            "GOLD {} READY{}",
-            gold_trial.level + 1,
-            if gold_trial.auto { "  [AUTO]" } else { "" }
-        )
+        if language.is_chinese() {
+            format!(
+                "金币试炼 {} 就绪{}",
+                gold_trial.level + 1,
+                if gold_trial.auto { " [自动]" } else { "" }
+            )
+        } else {
+            format!(
+                "GOLD {} READY{}",
+                gold_trial.level + 1,
+                if gold_trial.auto { "  [AUTO]" } else { "" }
+            )
+        }
     };
-    let mut bond_lines = vec![format!("BONDS {}/7", build.active_bond_count())];
+    let mut bond_lines = vec![if language.is_chinese() {
+        format!("羁绊 {}/7", build.active_bond_count())
+    } else {
+        format!("BONDS {}/7", build.active_bond_count())
+    }];
     for id in BondId::ALL {
         let rank = build.bond(id);
         if rank > 0 && !build.bond_complete(id) {
-            bond_lines.push(format!("{}  {}/{}", id.title(), rank, id.required()));
+            bond_lines.push(format!(
+                "{}  {}/{}",
+                bond_name(language, id),
+                rank,
+                id.required()
+            ));
         }
     }
     if bond_lines.len() == 1 {
-        bond_lines.push("No active bond - press F".to_string());
+        bond_lines.push(
+            language
+                .pick("No active bond - press F", "暂无羁绊 · 按 F 抽取")
+                .to_string(),
+        );
     }
     let compact_bonds = build.bonds.iter().filter(|rank| **rank > 0).count();
 
@@ -1023,15 +1233,47 @@ fn update_hud(
         **text = if hero_vitals_marker.is_some() {
             if vitals.alive {
                 let condition = if vitals.stunned_remaining > 0.0 {
-                    format!("STUNNED {:.1}s", vitals.stunned_remaining)
+                    if language.is_chinese() {
+                        format!("眩晕 {:.1}秒", vitals.stunned_remaining)
+                    } else {
+                        format!("STUNNED {:.1}s", vitals.stunned_remaining)
+                    }
                 } else if vitals.invulnerable_remaining > 0.0 {
-                    format!("INVULNERABLE {:.1}s", vitals.invulnerable_remaining)
+                    if language.is_chinese() {
+                        format!("无敌 {:.1}秒", vitals.invulnerable_remaining)
+                    } else {
+                        format!("INVULNERABLE {:.1}s", vitals.invulnerable_remaining)
+                    }
+                } else if language.is_chinese() {
+                    "正常".to_string()
                 } else {
                     "ACTIVE".to_string()
                 };
-                if compact {
+                if compact && language.is_chinese() {
+                    format!(
+                        "血 {:.0}/{:.0} | 能 {:.0}/{:.0} | {condition}\n力 {:.0}  敏 {:.0}  智 {:.0}",
+                        vitals.health,
+                        vitals.max_health,
+                        vitals.energy,
+                        vitals.max_energy,
+                        vitals.strength,
+                        vitals.agility,
+                        vitals.intelligence,
+                    )
+                } else if compact {
                     format!(
                         "HP {:.0}/{:.0} | EN {:.0}/{:.0} | {condition}\nSTR {:.0}  AGI {:.0}  INT {:.0}",
+                        vitals.health,
+                        vitals.max_health,
+                        vitals.energy,
+                        vitals.max_energy,
+                        vitals.strength,
+                        vitals.agility,
+                        vitals.intelligence,
+                    )
+                } else if language.is_chinese() {
+                    format!(
+                        "英雄 {:04.0}/{:04.0} HP  {:03.0}/{:03.0} 能量  [{condition}]\n力量 {:.0}  敏捷 {:.0}  智力 {:.0}",
                         vitals.health,
                         vitals.max_health,
                         vitals.energy,
@@ -1052,6 +1294,11 @@ fn update_hud(
                         vitals.intelligence,
                     )
                 }
+            } else if language.is_chinese() {
+                format!(
+                    "英雄倒地 · {:.1}秒复活\n阵亡 {}  |  城门 -80",
+                    vitals.revive_remaining, vitals.deaths
+                )
             } else {
                 format!(
                     "HERO DOWN - REVIVE {:.1}s\nDEATH {}  |  CORE -80",
@@ -1060,26 +1307,50 @@ fn update_hud(
             }
         } else if dodge_label.is_some() {
             if !vitals.alive {
-                "DODGE\nLOCKED".to_string()
+                language.pick("DODGE\nLOCKED", "闪避\n锁定").to_string()
             } else if vitals.stunned_remaining > 0.0 {
-                "DODGE\nSTUNNED".to_string()
+                language.pick("DODGE\nSTUNNED", "闪避\n眩晕").to_string()
             } else if dodge.cooldown_remaining <= 0.0 {
                 if compact {
-                    "DODGE\nREADY".to_string()
+                    language.pick("DODGE\nREADY", "闪避\n就绪").to_string()
+                } else if language.is_chinese() {
+                    "闪避就绪\nSHIFT / 轻触".to_string()
                 } else {
                     "DODGE READY\nSHIFT / TAP".to_string()
                 }
+            } else if language.is_chinese() {
+                format!("闪避\n{:.1}秒", dodge.cooldown_remaining)
             } else {
                 format!("DODGE\n{:.1}s", dodge.cooldown_remaining)
             }
         } else if stats.is_some() {
-            if compact {
+            if compact && language.is_chinese() {
+                format!(
+                    "金 {:04}  杀 {:04}  木 {:03}\n秒伤 {:05.1}",
+                    session.gold,
+                    session.kills,
+                    session.wood,
+                    damage_meter.recent_dps(),
+                )
+            } else if compact {
                 format!(
                     "G {:04}  K {:04}  W {:03}\nDPS {:05.1}",
                     session.gold,
                     session.kills,
                     session.wood,
                     damage_meter.recent_dps(),
+                )
+            } else if language.is_chinese() {
+                format!(
+                    "金币 {:04}   击杀 {:04}   木材 {:03}\n10秒伤害 {:06.1}   种子 {:08X}\n雷 {}  火 {}  灵 {}",
+                    session.gold,
+                    session.kills,
+                    session.wood,
+                    damage_meter.recent_dps(),
+                    run_seed.0 as u32,
+                    build.bond(BondId::Thunder),
+                    build.bond(BondId::Ember),
+                    build.bond(BondId::Spirits)
                 )
             } else {
                 format!(
@@ -1096,19 +1367,45 @@ fn update_hud(
             }
         } else if timer.is_some() {
             if session.save_active {
-                format!(
-                    "ARCHIVE {:02}s\nECHO {:03.0}%  HERO {:03.0}%",
-                    session.save_remaining.ceil() as u32,
-                    archive_hp,
-                    hero_hp
-                )
+                if language.is_chinese() {
+                    format!(
+                        "刻印 {:02}秒\n回响 {:03.0}%  英雄 {:03.0}%",
+                        session.save_remaining.ceil() as u32,
+                        archive_hp,
+                        hero_hp
+                    )
+                } else {
+                    format!(
+                        "ARCHIVE {:02}s\nECHO {:03.0}%  HERO {:03.0}%",
+                        session.save_remaining.ceil() as u32,
+                        archive_hp,
+                        hero_hp
+                    )
+                }
             } else if let Some(boss) = &boss_status {
+                if language.is_chinese() {
+                    format!(
+                        "{:02}:{:02}\n首领 {}/5\n{}",
+                        remaining / 60,
+                        remaining % 60,
+                        session.bosses_defeated,
+                        boss
+                    )
+                } else {
+                    format!(
+                        "{:02}:{:02}\nROUND {}/5\n{}",
+                        remaining / 60,
+                        remaining % 60,
+                        session.bosses_defeated,
+                        boss
+                    )
+                }
+            } else if language.is_chinese() {
                 format!(
-                    "{:02}:{:02}\nROUND {}/5\n{}",
+                    "{:02}:{:02}\n首领 {}/5",
                     remaining / 60,
                     remaining % 60,
-                    session.bosses_defeated,
-                    boss
+                    session.bosses_defeated
                 )
             } else {
                 format!(
@@ -1120,7 +1417,16 @@ fn update_hud(
             }
         } else if level.is_some() {
             if session.xp_next == u32::MAX {
-                format!("LEVEL {}   MAX", session.level)
+                if language.is_chinese() {
+                    format!("等级 {}   已满", session.level)
+                } else {
+                    format!("LEVEL {}   MAX", session.level)
+                }
+            } else if language.is_chinese() {
+                format!(
+                    "等级 {}   {}/{} 经验",
+                    session.level, session.xp, session.xp_next
+                )
             } else {
                 format!(
                     "LEVEL {}   {}/{} XP",
@@ -1128,48 +1434,72 @@ fn update_hud(
                 )
             }
         } else if skill.is_some() {
-            ultimate_button_text(vitals.kind, active.remaining, compact)
+            ultimate_button_text(language, vitals.kind, active.remaining, compact)
         } else if trial_marker.is_some() {
             trial_status.clone()
         } else if gold_marker.is_some() {
             gold_status.clone()
         } else if bonds.is_some() {
             if compact {
-                format!(
-                    "BONDS {}/7 | {} ACTIVE",
-                    build.active_bond_count(),
-                    compact_bonds
-                )
+                if language.is_chinese() {
+                    format!(
+                        "羁绊 {}/7 | {} 套",
+                        build.active_bond_count(),
+                        compact_bonds
+                    )
+                } else {
+                    format!(
+                        "BONDS {}/7 | {} ACTIVE",
+                        build.active_bond_count(),
+                        compact_bonds
+                    )
+                }
             } else {
                 bond_lines.join("\n")
             }
         } else if bond_button.is_some() {
             if session.save_active {
                 if compact {
-                    "BOND SEALED".to_string()
+                    language.pick("BOND SEALED", "羁绊封印").to_string()
+                } else if language.is_chinese() {
+                    "F  羁绊封印".to_string()
                 } else {
                     "F  BOND SEALED".to_string()
                 }
+            } else if compact && language.is_chinese() {
+                format!("羁绊 | {} 木材", bond_cost(&session))
             } else if compact {
                 format!("BOND | {} WOOD", bond_cost(&session))
+            } else if language.is_chinese() {
+                format!("F  抽取羁绊  [{} 木材]", bond_cost(&session))
             } else {
                 format!("F  DRAW BOND  [{} WOOD]", bond_cost(&session))
             }
         } else if skill_draw.is_some() {
             if session.save_active {
                 if compact {
-                    "SKILL SEALED".to_string()
+                    language.pick("SKILL SEALED", "技能封印").to_string()
+                } else if language.is_chinese() {
+                    "G  技能封印".to_string()
                 } else {
                     "G  SKILL SEALED".to_string()
                 }
             } else if session.skill_points > 0 {
-                if compact {
+                if compact && language.is_chinese() {
+                    format!("技能 | 免费 {}", session.skill_points)
+                } else if compact {
                     format!("SKILL | FREE {}", session.skill_points)
+                } else if language.is_chinese() {
+                    format!("G  技能  [免费 {}]", session.skill_points)
                 } else {
                     format!("G  SKILL  [FREE {}]", session.skill_points)
                 }
+            } else if compact && language.is_chinese() {
+                format!("技能 | {} 金币", skill_cost(&skill_economy))
             } else if compact {
                 format!("SKILL | {} GOLD", skill_cost(&skill_economy))
+            } else if language.is_chinese() {
+                format!("G  技能  [{} 金币]", skill_cost(&skill_economy))
             } else {
                 format!("G  SKILL  [{} GOLD]", skill_cost(&skill_economy))
             }
@@ -1178,31 +1508,41 @@ fn update_hud(
         };
     }
 
-    if let Ok(mut node) = core_bar.single_mut() {
+    if let Ok(mut node) = bars.p0().single_mut() {
         node.width = percent((session.core_hp / session.core_max_hp * 100.0).clamp(0.0, 100.0));
     }
-    if let Ok(mut node) = xp_bar.single_mut() {
+    if let Ok(mut node) = bars.p1().single_mut() {
         node.width =
             percent((session.xp as f32 / session.xp_next as f32 * 100.0).clamp(0.0, 100.0));
     }
 }
 
-fn ultimate_button_text(kind: super::HeroKind, remaining: f32, compact: bool) -> String {
-    let ultimate = ultimate_profile(kind);
+fn ultimate_button_text(
+    language: GameLanguage,
+    kind: super::HeroKind,
+    remaining: f32,
+    compact: bool,
+) -> String {
+    let ultimate = hero_ultimate_name(language, kind);
     let rarity = HEROES[kind.index()].rarity.label();
     if remaining <= 0.0 {
         if compact {
-            format!("[{rarity}] {}\nREADY", ultimate.name)
+            format!("[{rarity}] {ultimate}\n{}", language.pick("READY", "就绪"))
+        } else if language.is_chinese() {
+            format!("[{rarity}] {ultimate} 就绪\n空格 / 轻触")
         } else {
-            format!("[{rarity}] {} READY\nSPACE / TAP", ultimate.name)
+            format!("[{rarity}] {ultimate} READY\nSPACE / TAP")
         }
+    } else if language.is_chinese() {
+        format!("[{rarity}] {ultimate}\n{remaining:.1}秒")
     } else {
-        format!("[{rarity}] {}\n{remaining:.1}s", ultimate.name)
+        format!("[{rarity}] {ultimate}\n{remaining:.1}s")
     }
 }
 
 fn show_result(
     mut commands: Commands,
+    language: Res<GameLanguage>,
     session: Res<GameSession>,
     archive: Res<ArchiveState>,
     run_seed: Res<RunSeed>,
@@ -1228,14 +1568,13 @@ fn show_result(
             GlobalZIndex(100),
         ))
         .with_children(|root| {
-            let title = match archive.outcome {
-                ArchiveOutcome::Captured => "ARCHIVE ECHO CAPTURED",
-                ArchiveOutcome::TimedOut | ArchiveOutcome::HeroFelled => "ARCHIVE RUN COMPLETE",
-                ArchiveOutcome::Pending if session.victory => "THE CORE ENDURES",
-                ArchiveOutcome::Pending => "THE CORE HAS FALLEN",
-            };
             root.spawn((
-                Text::new(title),
+                ResultCopyLabel::Title,
+                Text::new(result_title(*language, archive.outcome, session.victory)),
+                Node {
+                    max_width: percent(94),
+                    ..default()
+                },
                 TextFont {
                     font_size: FontSize::Px(46.0),
                     ..default()
@@ -1245,17 +1584,21 @@ fn show_result(
                 } else {
                     Color::srgb(1.0, 0.24, 0.3)
                 }),
+                TextLayout::new(Justify::Center, LineBreak::WordOrCharacter),
             ));
             root.spawn((
-                Text::new(format!(
-                    "Level {}  |  {} total kills  |  {} wood",
-                    session.level, session.total_kills, session.wood
-                )),
+                ResultCopyLabel::Summary,
+                Text::new(result_summary(*language, &session)),
+                Node {
+                    max_width: percent(94),
+                    ..default()
+                },
                 TextFont {
                     font_size: FontSize::Px(21.0),
                     ..default()
                 },
                 TextColor(Color::srgb(0.78, 0.85, 0.92)),
+                TextLayout::new(Justify::Center, LineBreak::WordOrCharacter),
             ));
             root.spawn((
                 Text::new(format_run_seed(run_seed.0)),
@@ -1267,20 +1610,91 @@ fn show_result(
             ));
             if archive.outcome != ArchiveOutcome::Pending {
                 root.spawn((
-                    Text::new(format!(
-                        "{}  |  +{} ARCHIVE SHARD{}",
-                        archive.outcome.label(),
-                        archive.shards(),
-                        if archive.shards() == 1 { "" } else { "S" }
-                    )),
+                    ResultCopyLabel::Archive,
+                    Text::new(result_archive(*language, &archive)),
+                    Node {
+                        max_width: percent(94),
+                        ..default()
+                    },
                     TextFont {
                         font_size: FontSize::Px(19.0),
                         ..default()
                     },
                     TextColor(Color::srgb(0.38, 0.9, 1.0)),
+                    TextLayout::new(Justify::Center, LineBreak::WordOrCharacter),
                 ));
             }
         });
+}
+
+fn update_result_text(
+    language: Res<GameLanguage>,
+    session: Res<GameSession>,
+    archive: Res<ArchiveState>,
+    mut labels: Query<(&ResultCopyLabel, &mut Text)>,
+) {
+    for (label, mut text) in &mut labels {
+        **text = match label {
+            ResultCopyLabel::Title => result_title(*language, archive.outcome, session.victory),
+            ResultCopyLabel::Summary => result_summary(*language, &session),
+            ResultCopyLabel::Archive => result_archive(*language, &archive),
+        };
+    }
+}
+
+fn result_title(language: GameLanguage, outcome: ArchiveOutcome, victory: bool) -> String {
+    match outcome {
+        ArchiveOutcome::Captured => language
+            .pick("ARCHIVE ECHO CAPTURED", "战果回响已捕获")
+            .to_string(),
+        ArchiveOutcome::TimedOut | ArchiveOutcome::HeroFelled => language
+            .pick("ARCHIVE RUN COMPLETE", "战果刻印完成")
+            .to_string(),
+        ArchiveOutcome::Pending if victory => {
+            language.pick("THE CORE ENDURES", "城门屹立").to_string()
+        }
+        ArchiveOutcome::Pending => language.pick("THE CORE HAS FALLEN", "城门陷落").to_string(),
+    }
+}
+
+fn result_summary(language: GameLanguage, session: &GameSession) -> String {
+    if language.is_chinese() {
+        format!(
+            "等级 {}  |  总击杀 {}  |  木材 {}",
+            session.level, session.total_kills, session.wood
+        )
+    } else {
+        format!(
+            "Level {}  |  {} total kills  |  {} wood",
+            session.level, session.total_kills, session.wood
+        )
+    }
+}
+
+fn archive_outcome_label(language: GameLanguage, outcome: ArchiveOutcome) -> &'static str {
+    match outcome {
+        ArchiveOutcome::Pending => language.pick("NOT REACHED", "未到达"),
+        ArchiveOutcome::Captured => language.pick("ECHO CAPTURED", "回响已捕获"),
+        ArchiveOutcome::TimedOut => language.pick("TIME EXPIRED", "时间耗尽"),
+        ArchiveOutcome::HeroFelled => language.pick("HERO FELLED", "英雄倒地"),
+    }
+}
+
+fn result_archive(language: GameLanguage, archive: &ArchiveState) -> String {
+    if language.is_chinese() {
+        format!(
+            "{}  |  +{} 战果碎片",
+            archive_outcome_label(language, archive.outcome),
+            archive.shards(),
+        )
+    } else {
+        format!(
+            "{}  |  +{} ARCHIVE SHARD{}",
+            archive_outcome_label(language, archive.outcome),
+            archive.shards(),
+            if archive.shards() == 1 { "" } else { "S" }
+        )
+    }
 }
 
 fn format_run_seed(seed: u64) -> String {
@@ -1337,12 +1751,31 @@ mod tests {
     #[test]
     fn ultimate_button_uses_the_selected_hero_profile() {
         assert_eq!(
-            ultimate_button_text(super::super::HeroKind::SolarVanguard, 0.0, true),
+            ultimate_button_text(
+                GameLanguage::English,
+                super::super::HeroKind::SolarVanguard,
+                0.0,
+                true,
+            ),
             "[UR] DAWN BASTION\nREADY"
         );
         assert_eq!(
-            ultimate_button_text(super::super::HeroKind::VoidReaper, 12.34, false),
+            ultimate_button_text(
+                GameLanguage::English,
+                super::super::HeroKind::VoidReaper,
+                12.34,
+                false,
+            ),
             "[UR] EVENT HORIZON\n12.3s"
+        );
+        assert_eq!(
+            ultimate_button_text(
+                GameLanguage::SimplifiedChinese,
+                super::super::HeroKind::SolarVanguard,
+                0.0,
+                true,
+            ),
+            "[UR] 曙光壁垒\n就绪"
         );
     }
 
@@ -1354,6 +1787,7 @@ mod tests {
             finished: true,
             ..default()
         })
+        .insert_resource(GameLanguage::English)
         .insert_resource(ArchiveState::default())
         .insert_resource(RunSeed(seed))
         .add_systems(Update, show_result);
@@ -1376,6 +1810,7 @@ mod tests {
         app.init_resource::<ButtonInput<KeyCode>>()
             .init_resource::<GameSession>()
             .init_resource::<ManualPauseState>()
+            .insert_resource(GameLanguage::English)
             .insert_resource(RunSeed(seed))
             .add_systems(Update, handle_manual_pause);
         app.world_mut().spawn((Window::default(), PrimaryWindow));

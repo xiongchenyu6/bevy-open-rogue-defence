@@ -4,6 +4,18 @@ set -euo pipefail
 project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$project_root"
 
+required_web_assets=(
+  "assets/fonts/rogue_commander_ui.ttf"
+  "assets/fonts/OFL.txt"
+)
+
+for required_asset in "${required_web_assets[@]}"; do
+  if [ ! -s "$required_asset" ]; then
+    echo "Required web asset is missing or empty: ${required_asset}" >&2
+    exit 1
+  fi
+done
+
 required_bindgen_version="$(
   awk '/^name = "wasm-bindgen"$/ { getline; print; exit }' Cargo.lock |
     sed -E 's/.*"([0-9.]+)".*/\1/'
@@ -43,6 +55,15 @@ gzip -9 -kf dist/rogue_commander_bg.wasm
 
 cp web/index.html dist/index.html
 cp -R assets dist/assets
+
+for required_asset in "${required_web_assets[@]}"; do
+  copied_asset="dist/${required_asset}"
+  if [ ! -s "$copied_asset" ] || ! cmp -s "$required_asset" "$copied_asset"; then
+    echo "Required web asset was not copied intact: ${required_asset}" >&2
+    exit 1
+  fi
+done
+
 touch dist/.nojekyll
 
 echo "WASM site built at ${project_root}/dist"

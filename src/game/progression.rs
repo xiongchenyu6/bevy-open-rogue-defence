@@ -1,11 +1,12 @@
 use bevy::prelude::*;
 
 use super::content::{BONDS, HEROES, Rarity, SKILLS, SkillEffectKind, Tag};
+use super::localization::{bond_card_description, bond_name, skill_card_description, skill_name};
 use super::market::MarketEffects;
 use super::rarity::rarity_color;
 use super::{
     Autoplay, BondDrawButton, BondId, DraftAction, DraftActionButton, DraftButton, DraftChoice,
-    DraftKind, DraftRoot, DraftState, GameSession, PlayerBuild, RunRng, SelectedHero,
+    DraftKind, DraftRoot, DraftState, GameLanguage, GameSession, PlayerBuild, RunRng, SelectedHero,
     SkillDrawButton, SkillId,
 };
 
@@ -13,7 +14,8 @@ pub struct ProgressionPlugin;
 
 impl Plugin for ProgressionPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<SkillEconomy>()
+        app.init_resource::<GameLanguage>()
+            .init_resource::<SkillEconomy>()
             .init_resource::<BondEconomy>()
             .init_resource::<DraftAntiDrought>()
             .add_systems(Startup, initialize_skill_economy)
@@ -162,6 +164,7 @@ fn request_skill_draft(
     mut rng: ResMut<RunRng>,
     selected: Res<SelectedHero>,
     mut drought: ResMut<DraftAntiDrought>,
+    language: Res<GameLanguage>,
 ) {
     if session.finished || session.paused || session.save_active || draft.root.is_some() {
         return;
@@ -186,6 +189,7 @@ fn request_skill_draft(
             &mut draft,
             DraftKind::Skill,
             session.skill_rerolls,
+            *language,
         );
         return;
     }
@@ -222,6 +226,7 @@ fn request_skill_draft(
         &mut draft,
         DraftKind::Skill,
         choices,
+        *language,
     );
 }
 
@@ -238,6 +243,7 @@ fn request_bond_draft(
     mut economy: ResMut<BondEconomy>,
     mut drought: ResMut<DraftAntiDrought>,
     mut market_effects: ResMut<MarketEffects>,
+    language: Res<GameLanguage>,
 ) {
     if session.finished || session.paused || session.save_active || draft.root.is_some() {
         return;
@@ -270,7 +276,13 @@ fn request_bond_draft(
         }
         session.paused = true;
         let kind = draft.kind.expect("matched an open bond draft");
-        spawn_draft_ui(&mut commands, &mut draft, kind, session.skill_rerolls);
+        spawn_draft_ui(
+            &mut commands,
+            &mut draft,
+            kind,
+            session.skill_rerolls,
+            *language,
+        );
         return;
     }
     if draft.kind.is_some() {
@@ -308,6 +320,7 @@ fn request_bond_draft(
         &mut draft,
         DraftKind::Bond,
         choices,
+        *language,
     );
 }
 
@@ -321,13 +334,14 @@ fn open_draft(
     draft: &mut DraftState,
     kind: DraftKind,
     choices: Vec<DraftChoice>,
+    language: GameLanguage,
 ) {
     session.paused = true;
     draft.choices = choices;
     draft.kind = Some(kind);
     draft.pending_bond_replacement = None;
     draft.opened_for = 0.0;
-    spawn_draft_ui(commands, draft, kind, session.skill_rerolls);
+    spawn_draft_ui(commands, draft, kind, session.skill_rerolls, language);
 }
 
 fn pick_skill_choices(
@@ -629,16 +643,28 @@ fn tags_match_preference(tags: &[Tag], selected: &SelectedHero, build: &PlayerBu
     })
 }
 
-fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKind, rerolls: u32) {
+fn spawn_draft_ui(
+    commands: &mut Commands,
+    draft: &mut DraftState,
+    kind: DraftKind,
+    rerolls: u32,
+    language: GameLanguage,
+) {
     let replacing = kind == DraftKind::BondReplacement;
     let replacement = draft.pending_bond_replacement;
     let heading = match (kind, replacement) {
-        (DraftKind::Skill, _) => "CHOOSE A SKILL".to_string(),
-        (DraftKind::Bond, _) => "CHOOSE A BOND".to_string(),
+        (DraftKind::Skill, _) => language.pick("CHOOSE A SKILL", "选择技能").to_string(),
+        (DraftKind::Bond, _) => language.pick("CHOOSE A BOND", "选择羁绊").to_string(),
         (DraftKind::BondReplacement, Some(new_bond)) => {
-            format!("REPLACE A BOND WITH {}", new_bond.title())
+            if language.is_chinese() {
+                format!("替换羁绊：加入 {}", bond_name(language, new_bond))
+            } else {
+                format!("REPLACE A BOND WITH {}", bond_name(language, new_bond))
+            }
         }
-        (DraftKind::BondReplacement, None) => "REPLACE A BOND".to_string(),
+        (DraftKind::BondReplacement, None) => {
+            language.pick("REPLACE A BOND", "替换羁绊").to_string()
+        }
     };
     let root = commands
         .spawn((
@@ -676,7 +702,10 @@ fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKi
             ));
             if replacing {
                 parent.spawn((
-                    Text::new("The draw is already paid. Choose one current family to remove."),
+                    Text::new(language.pick(
+                        "The draw is already paid. Choose one current family to remove.",
+                        "本次抽取已付费，请选择一个当前羁绊移除。",
+                    )),
                     TextFont {
                         font_size: FontSize::Px(REPLACEMENT_HELPER_SIZE),
                         ..default()
@@ -726,25 +755,51 @@ fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKi
                                 DraftKind::BondReplacement,
                                 DraftChoice::Bond(old_bond),
                                 Some(new_bond),
-                            ) => (
-                                format!("{}  REPLACE {}", index + 1, old_bond.title()),
-                                format!(
-                                    "Remove all {} progress\n-> Add {} {}/{}",
-                                    old_bond.title(),
-                                    new_bond.title(),
-                                    new_bond.rarity().bond_points_per_pick(),
-                                    new_bond.required()
-                                ),
-                            ),
-                            _ => (
-                                format!(
-                                    "{}  [{}] {}",
-                                    index + 1,
-                                    choice.rarity().label(),
-                                    choice.title()
-                                ),
-                                choice.description(),
-                            ),
+                            ) => {
+                                let old_name = bond_name(language, old_bond);
+                                let new_name = bond_name(language, new_bond);
+                                if language.is_chinese() {
+                                    (
+                                        format!("{}  替换 {}", index + 1, old_name),
+                                        format!(
+                                            "移除 {old_name} 全部进度\n→ 加入 {new_name} {}/{}",
+                                            new_bond.rarity().bond_points_per_pick(),
+                                            new_bond.required()
+                                        ),
+                                    )
+                                } else {
+                                    (
+                                        format!("{}  REPLACE {old_name}", index + 1),
+                                        format!(
+                                            "Remove all {old_name} progress\n-> Add {new_name} {}/{}",
+                                            new_bond.rarity().bond_points_per_pick(),
+                                            new_bond.required()
+                                        ),
+                                    )
+                                }
+                            }
+                            _ => {
+                                let title = match choice {
+                                    DraftChoice::Skill(skill) => skill_name(language, skill),
+                                    DraftChoice::Bond(bond) => bond_name(language, bond),
+                                };
+                                let description = match choice {
+                                    DraftChoice::Skill(skill) => {
+                                        skill_card_description(language, skill)
+                                    }
+                                    DraftChoice::Bond(bond) => {
+                                        bond_card_description(language, bond)
+                                    }
+                                };
+                                (
+                                    format!(
+                                        "{}  [{}] {title}",
+                                        index + 1,
+                                        choice.rarity().label()
+                                    ),
+                                    description,
+                                )
+                            }
                         };
                         cards
                             .spawn((
@@ -787,7 +842,8 @@ fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKi
                                         ..default()
                                     },
                                     TextColor(Color::WHITE),
-                                    TextLayout::justify(Justify::Center),
+                                    TextLayout::justify(Justify::Center)
+                                        .with_linebreak(LineBreak::WordOrCharacter),
                                 ));
                                 card.spawn((
                                     Text::new(description),
@@ -800,7 +856,8 @@ fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKi
                                         ..default()
                                     },
                                     TextColor(Color::srgb(0.72, 0.8, 0.88)),
-                                    TextLayout::justify(Justify::Center),
+                                    TextLayout::justify(Justify::Center)
+                                        .with_linebreak(LineBreak::WordOrCharacter),
                                 ));
                             });
                     }
@@ -820,11 +877,23 @@ fn spawn_draft_ui(commands: &mut Commands, draft: &mut DraftState, kind: DraftKi
                         spawn_draft_action(
                             actions,
                             DraftAction::Refresh,
-                            format!("REFRESH ({rerolls})"),
+                            if language.is_chinese() {
+                                format!("刷新 ({rerolls})")
+                            } else {
+                                format!("REFRESH ({rerolls})")
+                            },
                         );
                     }
-                    spawn_draft_action(actions, DraftAction::Abandon, "ABANDON (+1)".to_string());
-                    spawn_draft_action(actions, DraftAction::Later, "CHOOSE LATER".to_string());
+                    spawn_draft_action(
+                        actions,
+                        DraftAction::Abandon,
+                        language.pick("ABANDON (+1)", "放弃 (+1)").to_string(),
+                    );
+                    spawn_draft_action(
+                        actions,
+                        DraftAction::Later,
+                        language.pick("CHOOSE LATER", "稍后选择").to_string(),
+                    );
                 });
         })
         .id();
@@ -872,6 +941,7 @@ fn handle_draft_buttons(
     mut draft: ResMut<DraftState>,
     mut skill_economy: ResMut<SkillEconomy>,
     mut bond_economy: ResMut<BondEconomy>,
+    language: Res<GameLanguage>,
 ) {
     for (interaction, button) in &interactions {
         if *interaction == Interaction::Pressed {
@@ -883,6 +953,7 @@ fn handle_draft_buttons(
                 &mut draft,
                 &mut skill_economy,
                 &mut bond_economy,
+                *language,
             );
             break;
         }
@@ -900,6 +971,7 @@ fn handle_draft_actions(
     mut rng: ResMut<RunRng>,
     selected: Res<SelectedHero>,
     mut drought: ResMut<DraftAntiDrought>,
+    language: Res<GameLanguage>,
 ) {
     for (interaction, button) in &interactions {
         if *interaction != Interaction::Pressed {
@@ -931,7 +1003,13 @@ fn handle_draft_actions(
                 if let Some(root) = draft.root.take() {
                     commands.entity(root).despawn();
                 }
-                spawn_draft_ui(&mut commands, &mut draft, kind, session.skill_rerolls);
+                spawn_draft_ui(
+                    &mut commands,
+                    &mut draft,
+                    kind,
+                    session.skill_rerolls,
+                    *language,
+                );
             }
             DraftAction::Abandon => {
                 session.skill_rerolls = session.skill_rerolls.saturating_add(1);
@@ -963,6 +1041,7 @@ fn handle_draft_keys(
     mut draft: ResMut<DraftState>,
     mut skill_economy: ResMut<SkillEconomy>,
     mut bond_economy: ResMut<BondEconomy>,
+    language: Res<GameLanguage>,
 ) {
     if draft.root.is_none() {
         return;
@@ -993,6 +1072,7 @@ fn handle_draft_keys(
             &mut draft,
             &mut skill_economy,
             &mut bond_economy,
+            *language,
         );
     }
 }
@@ -1006,6 +1086,7 @@ fn autoplay_draft(
     mut draft: ResMut<DraftState>,
     mut skill_economy: ResMut<SkillEconomy>,
     mut bond_economy: ResMut<BondEconomy>,
+    language: Res<GameLanguage>,
 ) {
     if autoplay.is_none() || draft.root.is_none() {
         return;
@@ -1035,6 +1116,7 @@ fn autoplay_draft(
             &mut draft,
             &mut skill_economy,
             &mut bond_economy,
+            *language,
         );
     }
 }
@@ -1047,6 +1129,7 @@ fn choose(
     draft: &mut DraftState,
     skill_economy: &mut SkillEconomy,
     bond_economy: &mut BondEconomy,
+    language: GameLanguage,
 ) {
     let Some(choice) = draft.choices.get(index).copied() else {
         return;
@@ -1084,7 +1167,7 @@ fn choose(
             }
             if build.bond(bond) == 0 && build.active_bond_count() >= BOND_SLOT_LIMIT {
                 let rerolls = session.skill_rerolls;
-                begin_bond_replacement(bond, commands, session, build, draft, rerolls);
+                begin_bond_replacement(bond, commands, session, build, draft, rerolls, language);
                 return;
             }
             apply_bond(bond, session, build);
@@ -1119,6 +1202,7 @@ fn begin_bond_replacement(
     build: &PlayerBuild,
     draft: &mut DraftState,
     rerolls: u32,
+    language: GameLanguage,
 ) {
     let choices: Vec<DraftChoice> = BondId::ALL
         .into_iter()
@@ -1137,7 +1221,13 @@ fn begin_bond_replacement(
     draft.kind = Some(DraftKind::BondReplacement);
     draft.pending_bond_replacement = Some(new_bond);
     draft.opened_for = 0.0;
-    spawn_draft_ui(commands, draft, DraftKind::BondReplacement, rerolls);
+    spawn_draft_ui(
+        commands,
+        draft,
+        DraftKind::BondReplacement,
+        rerolls,
+        language,
+    );
 }
 
 fn replace_bond(

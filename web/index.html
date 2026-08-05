@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta
@@ -9,14 +9,29 @@
     <meta name="theme-color" content="#07111c" />
     <meta
       name="description"
-      content="Rogue Commander — 以 Bevy 製作的原創俯視角生存塔防。"
+      content="Rogue Commander — an original mobile-first survival defense game built with Bevy."
     />
     <title>Rogue Commander</title>
     <link rel="icon" href="data:," />
+    <link
+      rel="preload"
+      href="./assets/fonts/rogue_commander_ui.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
     <style>
+      @font-face {
+        font-family: "Rogue Commander Sans";
+        src: url("./assets/fonts/rogue_commander_ui.ttf") format("truetype");
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: swap;
+      }
+
       :root {
         color-scheme: dark;
-        font-family: Inter, "Noto Sans TC", system-ui, sans-serif;
+        font-family: "Rogue Commander Sans", Inter, system-ui, sans-serif;
         background: #07111c;
       }
 
@@ -71,6 +86,51 @@
       #loading.hidden {
         pointer-events: none;
         opacity: 0;
+      }
+
+      .language-switch {
+        position: fixed;
+        top: max(0.75rem, env(safe-area-inset-top));
+        right: max(0.75rem, env(safe-area-inset-right));
+        z-index: 30;
+        display: flex;
+        gap: 2px;
+        padding: 3px;
+        border: 1px solid #8db8c666;
+        border-radius: 999px;
+        background: #07111cdd;
+        box-shadow: 0 6px 24px #0008;
+        transition: opacity 200ms ease;
+      }
+
+      .language-switch.hidden {
+        pointer-events: none;
+        opacity: 0;
+      }
+
+      .language-switch button {
+        min-width: 54px;
+        min-height: 48px;
+        padding: 0 0.8rem;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: #9eb5bf;
+        font: inherit;
+        font-weight: 800;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .language-switch button[aria-pressed="true"] {
+        background: #285262;
+        color: #fff4d6;
+      }
+
+      .language-switch button:focus-visible,
+      #start:focus-visible {
+        outline: 2px solid #ffcf70;
+        outline-offset: 2px;
       }
 
       .panel {
@@ -172,26 +232,173 @@
   </head>
   <body>
     <canvas id="bevy-canvas" tabindex="0"></canvas>
+    <nav id="language-switch" class="language-switch" aria-label="Language">
+      <button type="button" data-language="en" aria-label="English" aria-pressed="true">
+        EN
+      </button>
+      <button
+        type="button"
+        data-language="zh-CN"
+        aria-label="简体中文"
+        aria-pressed="false"
+      >
+        简中
+      </button>
+    </nav>
     <main id="loading">
       <div class="panel">
         <div class="sigil" aria-hidden="true"></div>
         <h1>ROGUE COMMANDER</h1>
-        <p class="subtitle">守住裂隙 · 構築軍勢 · 擊破五王</p>
-        <p id="status">點擊後載入遊戲，首次啟動需要一點時間。</p>
-        <button id="start" type="button">開始遊戲</button>
+        <p id="subtitle" class="subtitle">
+          HOLD THE RIFT · BUILD YOUR ARMY · DEFEAT FIVE LORDS
+        </p>
+        <p id="status">Tap to load the game. The first launch may take a moment.</p>
+        <button id="start" type="button">START GAME</button>
         <div class="progress" aria-hidden="true"><span id="progress-fill"></span></div>
-        <p class="hint">推薦使用 Chrome／Edge；手機請橫向遊玩。</p>
+        <p id="hint" class="hint">
+          Chrome or Edge recommended · Rotate phones to landscape.
+        </p>
       </div>
     </main>
     <aside id="rotate">
-      <p><strong>請旋轉裝置</strong>Rogue Commander 使用 16:9 橫向戰場。</p>
+      <p>
+        <strong id="rotate-title">ROTATE YOUR DEVICE</strong>
+        <span id="rotate-copy">Rogue Commander uses a 16:9 landscape battlefield.</span>
+      </p>
     </aside>
     <script type="module">
       const loading = document.querySelector("#loading");
       const progress = document.querySelector("#progress-fill");
       const start = document.querySelector("#start");
       const status = document.querySelector("#status");
+      const subtitle = document.querySelector("#subtitle");
+      const hint = document.querySelector("#hint");
+      const rotateTitle = document.querySelector("#rotate-title");
+      const rotateCopy = document.querySelector("#rotate-copy");
+      const languageSwitch = document.querySelector("#language-switch");
+      const languageButtons = [...document.querySelectorAll("[data-language]")];
+      const description = document.querySelector('meta[name="description"]');
+      const LANGUAGE_STORAGE_KEY = "rogue-commander-language";
+      const translations = {
+        en: {
+          description:
+            "Rogue Commander — an original mobile-first survival defense game built with Bevy.",
+          languageLabel: "Language",
+          subtitle: "HOLD THE RIFT · BUILD YOUR ARMY · DEFEAT FIVE LORDS",
+          idle: "Tap to load the game. The first launch may take a moment.",
+          start: "START GAME",
+          hint: "Chrome or Edge recommended · Rotate phones to landscape.",
+          rotateTitle: "ROTATE YOUR DEVICE",
+          rotateCopy: "Rogue Commander uses a 16:9 landscape battlefield.",
+          loading: "LOADING",
+          deploying: "Deploying heroes, enemies, and battlefield resources…",
+          downloadKnown: (received, total) =>
+            `Downloading battlefield ${received} / ${total} MB`,
+          downloadUnknown: (received) => `Downloading battlefield ${received} MB`,
+          initializing: "Initializing Bevy…",
+          ready: "DEFENSE ESTABLISHED",
+          loadError: "Loading failed. Update your browser and try again.",
+          retry: "RETRY",
+        },
+        "zh-CN": {
+          description:
+            "Rogue Commander——一款使用 Bevy 制作、移动端优先的原创俯视角生存塔防。",
+          languageLabel: "语言",
+          subtitle: "守住裂隙 · 构筑军势 · 击破五王",
+          idle: "点击后加载游戏，首次启动需要一点时间。",
+          start: "开始游戏",
+          hint: "推荐使用 Chrome／Edge；手机请横向游玩。",
+          rotateTitle: "请旋转设备",
+          rotateCopy: "Rogue Commander 使用 16:9 横向战场。",
+          loading: "加载中",
+          deploying: "正在部署英雄、敌军与战场资源…",
+          downloadKnown: (received, total) =>
+            `正在下载战场 ${received} / ${total} MB`,
+          downloadUnknown: (received) => `正在下载战场 ${received} MB`,
+          initializing: "正在初始化 Bevy…",
+          ready: "防线已建立",
+          loadError: "加载失败，请更新浏览器后重试。",
+          retry: "重新加载",
+        },
+      };
+      let currentLanguage = "en";
       let wakeLock;
+
+      function normalizeLanguage(value) {
+        const normalized = value?.trim().toLowerCase().replaceAll("_", "-");
+        if (!normalized) return null;
+        if (normalized === "en" || normalized.startsWith("en-")) return "en";
+        if (normalized === "cn" || normalized.startsWith("zh")) return "zh-CN";
+        return null;
+      }
+
+      function resolveInitialLanguage() {
+        try {
+          const fromUrl = normalizeLanguage(
+            new URL(window.location.href).searchParams.get("lang"),
+          );
+          if (fromUrl) return fromUrl;
+        } catch (_) {
+          // Continue through the remaining language signals.
+        }
+
+        try {
+          const stored = normalizeLanguage(localStorage.getItem(LANGUAGE_STORAGE_KEY));
+          if (stored) return stored;
+        } catch (_) {
+          // Storage may be unavailable in private or embedded contexts.
+        }
+
+        const browserLanguages = navigator.languages?.length
+          ? navigator.languages
+          : [navigator.language];
+        for (const language of browserLanguages) {
+          const supported = normalizeLanguage(language);
+          if (supported) return supported;
+        }
+        return "en";
+      }
+
+      function copy(key, ...args) {
+        const value = translations[currentLanguage][key];
+        return typeof value === "function" ? value(...args) : value;
+      }
+
+      function setLanguage(value, { persist = false, updateUrl = true } = {}) {
+        currentLanguage = normalizeLanguage(value) ?? "en";
+        document.documentElement.lang = currentLanguage === "zh-CN" ? "zh-Hans" : "en";
+        description.content = copy("description");
+        languageSwitch.setAttribute("aria-label", copy("languageLabel"));
+        subtitle.textContent = copy("subtitle");
+        if (!start.disabled) status.textContent = copy("idle");
+        start.textContent = copy("start");
+        hint.textContent = copy("hint");
+        rotateTitle.textContent = copy("rotateTitle");
+        rotateCopy.textContent = copy("rotateCopy");
+        for (const button of languageButtons) {
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.language === currentLanguage),
+          );
+        }
+
+        if (persist) {
+          try {
+            localStorage.setItem(LANGUAGE_STORAGE_KEY, currentLanguage);
+          } catch (_) {
+            // The URL remains the durable fallback when storage is unavailable.
+          }
+        }
+        if (updateUrl) {
+          try {
+            const url = new URL(window.location.href);
+            url.searchParams.set("lang", currentLanguage);
+            history.replaceState(history.state, "", url);
+          } catch (_) {
+            // Language still applies to the current document.
+          }
+        }
+      }
 
       function normalizeRunSeed(value) {
         const raw = value?.trim() ?? "";
@@ -239,7 +446,14 @@
         }
       }
 
+      setLanguage(resolveInitialLanguage());
       ensureRunSeedInUrl();
+
+      for (const button of languageButtons) {
+        button.addEventListener("click", () => {
+          setLanguage(button.dataset.language, { persist: true });
+        });
+      }
 
       async function enterMobilePlayMode() {
         if (!window.matchMedia("(pointer: coarse)").matches) return;
@@ -282,9 +496,16 @@
             if (total) {
               const percent = Math.min(92, 8 + (received / total) * 84);
               progress.style.width = `${percent}%`;
-              status.textContent = `正在下載戰場 ${(received / 1048576).toFixed(1)} / ${(total / 1048576).toFixed(1)} MB`;
+              status.textContent = copy(
+                "downloadKnown",
+                (received / 1048576).toFixed(1),
+                (total / 1048576).toFixed(1),
+              );
             } else {
-              status.textContent = `正在下載戰場 ${(received / 1048576).toFixed(1)} MB`;
+              status.textContent = copy(
+                "downloadUnknown",
+                (received / 1048576).toFixed(1),
+              );
             }
             controller.enqueue(chunk);
           },
@@ -297,32 +518,38 @@
 
       start.addEventListener("click", async () => {
         start.disabled = true;
-        start.textContent = "載入中";
-        status.textContent = "正在部署英雄、敵軍與戰場資源…";
+        for (const button of languageButtons) button.disabled = true;
+        start.textContent = copy("loading");
+        status.textContent = copy("deploying");
         progress.style.width = "8%";
         await enterMobilePlayMode();
 
         try {
           const { default: init } = await import("./rogue_commander.js");
           const wasm = await downloadCompressedWasm();
-          status.textContent = "正在初始化 Bevy…";
+          status.textContent = copy("initializing");
           progress.style.width = "96%";
           await init(wasm ? { module_or_path: wasm } : undefined);
-          status.textContent = "防線已建立";
+          status.textContent = copy("ready");
           progress.style.width = "100%";
           document.querySelector("#bevy-canvas")?.focus();
           void keepScreenAwake();
-          window.setTimeout(() => loading.classList.add("hidden"), 250);
+          window.setTimeout(() => {
+            loading.classList.add("hidden");
+            languageSwitch.classList.add("hidden");
+          }, 250);
         } catch (error) {
           console.error(error);
           const message = String(error);
           if (message.includes("Using exceptions for control flow")) {
             loading.classList.add("hidden");
+            languageSwitch.classList.add("hidden");
           } else {
-            status.textContent = "載入失敗，請更新瀏覽器後重試。";
+            status.textContent = copy("loadError");
             progress.style.width = "0";
             start.disabled = false;
-            start.textContent = "重新載入";
+            start.textContent = copy("retry");
+            for (const button of languageButtons) button.disabled = false;
           }
         }
       });

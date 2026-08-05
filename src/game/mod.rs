@@ -13,6 +13,7 @@ pub mod content;
 mod debug_menu;
 mod hero;
 mod hero_abilities;
+mod localization;
 mod market;
 mod mobile_input;
 mod mobile_layout;
@@ -30,6 +31,7 @@ mod tests;
 
 pub use archive::{ArchiveOutcome, ArchiveState};
 pub use components::*;
+pub use localization::{GameLanguage, LocalizationPlugin};
 pub use pooling::{CombatPoolSnapshot, CombatPools, DamageNumberPoolMetrics, PoolMetrics};
 pub use resources::*;
 
@@ -51,6 +53,7 @@ impl Plugin for GamePlugin {
             .init_resource::<DraftState>()
             .init_resource::<RunSeed>()
             .init_resource::<RunRng>()
+            .add_plugins(localization::LocalizationPlugin)
             .add_plugins(pooling::PoolPlugin)
             .add_plugins((
                 arena::ArenaPlugin,

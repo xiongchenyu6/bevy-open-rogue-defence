@@ -6,6 +6,7 @@ pub mod game;
 
 pub fn build_app() -> App {
     let run_seed = initial_run_seed();
+    let language = initial_game_language();
     let primary_window = Window {
         title: "Rogue Commander".into(),
         resolution: (1280, 720).into(),
@@ -38,6 +39,7 @@ pub fn build_app() -> App {
     app.insert_resource(ClearColor(Color::srgb(0.015, 0.025, 0.045)))
         .insert_resource(game::RunSeed::new(run_seed))
         .insert_resource(game::RunRng::from_seed(run_seed))
+        .insert_resource(language)
         .add_plugins(default_plugins)
         .add_plugins(game::GamePlugin);
 
@@ -45,6 +47,30 @@ pub fn build_app() -> App {
     app.insert_resource(bevy::winit::WinitSettings::mobile());
 
     app
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+fn initial_game_language() -> game::GameLanguage {
+    if let Ok(value) = std::env::var("ROGUE_COMMANDER_LANG") {
+        if let Some(language) = game::GameLanguage::parse(&value) {
+            return language;
+        }
+        warn!("Ignoring invalid ROGUE_COMMANDER_LANG={value:?}");
+    }
+
+    #[cfg(target_os = "android")]
+    return game::GameLanguage::SimplifiedChinese;
+
+    #[cfg(not(target_os = "android"))]
+    game::GameLanguage::English
+}
+
+#[cfg(target_arch = "wasm32")]
+fn initial_game_language() -> game::GameLanguage {
+    let search = web_sys::window()
+        .and_then(|window| window.location().search().ok())
+        .unwrap_or_default();
+    language_from_search(&search).unwrap_or_default()
 }
 
 #[cfg(not(target_arch = "wasm32"))]
@@ -98,6 +124,19 @@ fn seed_from_search(search: &str) -> Option<u64> {
         })
 }
 
+#[cfg(any(target_arch = "wasm32", test))]
+fn language_from_search(search: &str) -> Option<game::GameLanguage> {
+    search
+        .trim_start_matches('?')
+        .split('&')
+        .filter_map(|pair| pair.split_once('='))
+        .find_map(|(key, value)| {
+            (key == "lang")
+                .then(|| game::GameLanguage::parse(value))
+                .flatten()
+        })
+}
+
 pub fn run() {
     build_app().run();
 }
@@ -126,5 +165,18 @@ mod tests {
         assert_eq!(mix_seed(42), mix_seed(42));
         assert_ne!(mix_seed(42), mix_seed(43));
         assert_ne!(mix_seed(0), 0);
+    }
+
+    #[test]
+    fn language_query_accepts_supported_values_and_ignores_other_parameters() {
+        assert_eq!(
+            language_from_search("?seed=7&lang=zh-CN"),
+            Some(game::GameLanguage::SimplifiedChinese)
+        );
+        assert_eq!(
+            language_from_search("?lang=en&seed=7"),
+            Some(game::GameLanguage::English)
+        );
+        assert_eq!(language_from_search("?lang=fr"), None);
     }
 }
