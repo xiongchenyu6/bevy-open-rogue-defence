@@ -7,13 +7,13 @@ use super::bonds::{
     BondRuntime, BondSet, DamageClass, DamageElement, DamageProfile, arcane_echo_scale,
     ascension_ready, queue_bond_strike, skill_cooldown_recovery, summon_cap,
 };
-use super::combat::{CombatSet, SurvivalSet};
+use super::combat::{AttackVolleyRuntime, CombatSet, SurvivalSet};
 use super::content::{SKILLS, Tag};
 use super::market::MarketEffects;
 use super::pooling::{CombatPools, SummonVisual};
 use super::{
-    AttackClock, BondId, BossEnemy, Enemy, GameAssets, GameSession, Hero, HeroVitals, ImpactFx,
-    PlayerBuild, PlayerSummon, Projectile, RunRng, SelectedHero, SkillId, TrialEnemy,
+    BondId, BossEnemy, Enemy, GameAssets, GameSession, Hero, HeroVitals, ImpactFx, PlayerBuild,
+    PlayerSummon, Projectile, RunRng, SelectedHero, SkillId, TrialEnemy,
 };
 
 const BURN_TICK_SECONDS: f32 = 0.5;
@@ -1481,7 +1481,7 @@ fn cast_learned_skills(
     mut vitals: ResMut<HeroVitals>,
     mut rng: ResMut<RunRng>,
     assets: Option<Res<GameAssets>>,
-    attack_clock: Res<AttackClock>,
+    attack_volleys: Res<AttackVolleyRuntime>,
     hero_query: Query<&Transform, With<Hero>>,
     enemy_query: Query<(
         Entity,
@@ -1532,21 +1532,24 @@ fn cast_learned_skills(
         market_effects.summon_cap_bonus(),
     );
 
-    for _ in 0..attack_clock.0.times_finished_this_tick().min(4) {
-        runtime.attack_count = runtime.attack_count.wrapping_add(1);
-        if let Some(target) = primary {
-            cast_attack_procs(
-                &mut commands,
-                &assets,
-                &mut pools,
-                &build,
-                &vitals,
-                origin,
-                target,
-                &mut runtime,
-            );
-        }
-    }
+    apply_resolved_attack_volleys(
+        &mut runtime,
+        attack_volleys.resolved_this_frame,
+        |runtime| {
+            if let Some(target) = primary {
+                cast_attack_procs(
+                    &mut commands,
+                    &assets,
+                    &mut pools,
+                    &build,
+                    &vitals,
+                    origin,
+                    target,
+                    runtime,
+                );
+            }
+        },
+    );
 
     if let Some(target) = primary {
         cast_arc_chain(
@@ -1676,6 +1679,17 @@ fn cast_learned_skills(
             &mut summon_budget,
             &mut runtime,
         );
+    }
+}
+
+fn apply_resolved_attack_volleys(
+    runtime: &mut SkillRuntime,
+    resolved: u32,
+    mut on_attack: impl FnMut(&mut SkillRuntime),
+) {
+    for _ in 0..resolved {
+        runtime.attack_count = runtime.attack_count.wrapping_add(1);
+        on_attack(runtime);
     }
 }
 
@@ -3659,6 +3673,24 @@ mod tests {
     use bevy::ecs::system::RunSystemOnce;
 
     use super::*;
+
+    #[test]
+    fn skill_attack_procs_consume_exactly_the_combat_resolved_volley_count() {
+        let combat = AttackVolleyRuntime {
+            pending: 13,
+            resolved_this_frame: 8,
+        };
+        let mut runtime = SkillRuntime::default();
+        let mut observed = Vec::new();
+
+        apply_resolved_attack_volleys(&mut runtime, combat.resolved_this_frame, |runtime| {
+            observed.push(runtime.attack_count)
+        });
+
+        assert_eq!(runtime.attack_count, 8);
+        assert_eq!(observed, (1..=8).collect::<Vec<_>>());
+        assert_eq!(combat.pending, 13, "skills only observe combat state");
+    }
 
     #[test]
     fn common_skill_rank_boundaries_match_the_spec() {

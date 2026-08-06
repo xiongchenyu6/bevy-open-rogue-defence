@@ -6,7 +6,8 @@ use super::archive::ArchiveEcho;
 use super::bonds::{DamageElement, DamageProfile};
 use super::bosses::BossSummon;
 use super::combat::{
-    CommanderAuraState, EliteAffix, EnemyArmor, EnemyBreachDamage, ProjectileHitMemory,
+    CommanderAuraState, EliteAffix, EnemyArmor, EnemyBreachDamage, ProjectileFirstFrameTravel,
+    ProjectileHitMemory,
 };
 use super::hero_abilities::{
     AbilityGenerated, PassiveSpirit, SpiritOrbit, TimedSpeedEffect, WetMark,
@@ -1066,7 +1067,12 @@ impl CombatPools {
         let entity = lease.entity;
         let mut entity_commands = commands.entity(entity);
         entity_commands
-            .remove::<(ProjectileHitMemory, AbilityGenerated, DamageProfile)>()
+            .remove::<(
+                ProjectileHitMemory,
+                ProjectileFirstFrameTravel,
+                AbilityGenerated,
+                DamageProfile,
+            )>()
             .insert((
                 PooledProjectile,
                 ActivePooledProjectile,
@@ -1160,6 +1166,7 @@ impl CombatPools {
                 Projectile,
                 ActivePooledProjectile,
                 ProjectileHitMemory,
+                ProjectileFirstFrameTravel,
                 AbilityGenerated,
                 DamageProfile,
             )>()
@@ -2397,6 +2404,7 @@ mod tests {
         let entity = rent_one_projectile(app.world_mut(), 4.0);
         app.world_mut().entity_mut(entity).insert((
             ProjectileHitMemory::default(),
+            ProjectileFirstFrameTravel(0.25),
             AbilityGenerated,
             DamageProfile::PHYSICAL_ATTACK,
         ));
@@ -2407,6 +2415,7 @@ mod tests {
         assert!(world.get::<Projectile>(entity).is_none());
         assert!(world.get::<ActivePooledProjectile>(entity).is_none());
         assert!(world.get::<ProjectileHitMemory>(entity).is_none());
+        assert!(world.get::<ProjectileFirstFrameTravel>(entity).is_none());
         assert!(world.get::<AbilityGenerated>(entity).is_none());
         assert!(world.get::<DamageProfile>(entity).is_none());
         assert!(world.get::<Mesh3d>(entity).is_some());
@@ -2458,6 +2467,38 @@ mod tests {
         assert_eq!(
             app.world().get::<Visibility>(entity),
             Some(&Visibility::Visible)
+        );
+    }
+
+    #[test]
+    fn projectile_first_frame_marker_cannot_leak_across_last_finalized_reuse() {
+        let mut app = test_app();
+        let entity = rent_one_projectile(app.world_mut(), 7.0);
+        app.world_mut()
+            .entity_mut(entity)
+            .insert(ProjectileFirstFrameTravel(0.37));
+
+        retire_one_projectile(app.world_mut(), entity);
+        assert!(
+            app.world()
+                .get::<ProjectileFirstFrameTravel>(entity)
+                .is_none(),
+            "retirement clears the transient travel allowance"
+        );
+        app.update();
+
+        // Simulate stale external metadata on the free shell so the rent-side
+        // invariant is exercised independently of retire-side cleanup.
+        app.world_mut()
+            .entity_mut(entity)
+            .insert(ProjectileFirstFrameTravel(0.91));
+        let reused = rent_one_projectile(app.world_mut(), 8.0);
+        assert_eq!(reused, entity);
+        assert!(
+            app.world()
+                .get::<ProjectileFirstFrameTravel>(reused)
+                .is_none(),
+            "a new lease must never inherit first-frame travel metadata"
         );
     }
 

@@ -2,6 +2,7 @@ use std::collections::{HashSet, VecDeque};
 
 use bevy::{
     camera::{ClearColorConfig, RenderTarget, visibility::RenderLayers},
+    ecs::system::SystemParam,
     prelude::*,
 };
 
@@ -206,6 +207,38 @@ pub(crate) struct ProjectileHitMemory {
     enemies: HashSet<Entity>,
 }
 
+/// Per-frame work budget. Excess completions are retained by
+/// [`AttackVolleyRuntime`] and resolved on later active frames.
+pub(crate) const MAX_ATTACK_CATCH_UP_VOLLEYS: u32 = 8;
+
+#[derive(Component, Debug, Clone, Copy)]
+pub(crate) struct ProjectileFirstFrameTravel(pub(crate) f32);
+
+#[derive(Resource, Default, Debug, Clone, Copy)]
+pub(crate) struct AttackVolleyRuntime {
+    pub(crate) pending: u64,
+    pub(crate) resolved_this_frame: u32,
+}
+
+#[derive(SystemParam)]
+struct ProjectileHitFrame<'w> {
+    time: Res<'w, Time>,
+    session: ResMut<'w, GameSession>,
+}
+
+fn catch_up_volley_travel_seconds(
+    clock: &AttackClock,
+    raw_volley_count: u32,
+    volley_index: u32,
+    delta: f32,
+) -> f32 {
+    let older_completions = raw_volley_count
+        .saturating_sub(1)
+        .saturating_sub(volley_index);
+    (clock.0.elapsed_secs() + clock.0.duration().as_secs_f32() * older_completions as f32)
+        .clamp(0.0, delta.max(0.0))
+}
+
 pub struct CombatPlugin;
 
 #[derive(SystemSet, Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -221,6 +254,7 @@ impl Plugin for CombatPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<WaveSpawnRuntime>()
             .init_resource::<DamageMeter>()
+            .init_resource::<AttackVolleyRuntime>()
             .add_systems(PostStartup, setup_damage_number_camera)
             .add_systems(Update, tick_hero_survival.in_set(SurvivalSet))
             .add_systems(
@@ -399,8 +433,14 @@ fn cleanup_finished_enemies(
     mut commands: Commands,
     session: Res<GameSession>,
     mut pools: ResMut<CombatPools>,
+    projectile_markers: Query<Entity, With<ProjectileFirstFrameTravel>>,
 ) {
     if session.finished {
+        for entity in &projectile_markers {
+            commands
+                .entity(entity)
+                .remove::<ProjectileFirstFrameTravel>();
+        }
         pools.retire_all_enemies(&mut commands);
         pools.retire_all_projectiles(&mut commands);
         pools.retire_all_effects(&mut commands);
@@ -879,6 +919,38 @@ const fn elite_affix_from_index(index: usize) -> EliteAffixKind {
     }
 }
 
+fn move_towards_radius(
+    position: Vec3,
+    target: Vec3,
+    speed: f32,
+    delta: f32,
+    radius: f32,
+) -> (Vec3, f32, bool) {
+    let offset = Vec3::new(target.x - position.x, 0.0, target.z - position.z);
+    let distance = offset.length();
+    let radius = radius.max(0.0);
+    let delta = delta.max(0.0);
+    if distance <= radius {
+        return (position, delta, true);
+    }
+    let speed = speed.max(0.0);
+    if speed <= f32::EPSILON || delta <= 0.0 {
+        return (position, 0.0, false);
+    }
+    let distance_to_radius = distance - radius;
+    let max_travel = speed * delta;
+    if max_travel + f32::EPSILON >= distance_to_radius {
+        let travel_seconds = (distance_to_radius / speed).min(delta);
+        (
+            position + offset / distance * distance_to_radius,
+            (delta - travel_seconds).max(0.0),
+            true,
+        )
+    } else {
+        (position + offset / distance * max_travel, 0.0, false)
+    }
+}
+
 fn move_enemies(
     mut commands: Commands,
     mut pools: ResMut<CombatPools>,
@@ -919,6 +991,7 @@ fn move_enemies(
     if session.paused || session.finished {
         return;
     }
+    let delta = time.delta_secs().max(0.0);
     let Ok(core) = core_query.single() else {
         return;
     };
@@ -969,25 +1042,22 @@ fn move_enemies(
             )
             && let Some(threat) = threat.as_deref_mut()
         {
-            let to_hero = Vec3::new(
-                hero_position.x - transform.translation.x,
-                0.0,
-                hero_position.z - transform.translation.z,
-            );
-            let distance = to_hero.length();
             let hastened = chanters.iter().any(|(chanter, position)| {
                 *chanter != entity && position.distance_squared(transform.translation) <= 12.25
             });
             let speed_multiplier = chanter_speed_multiplier(hastened);
             match behavior {
                 Some(EnemyBehavior::HuntHero) => {
-                    if distance > ACID_ARCHER_RANGE {
-                        transform.translation += to_hero.normalize_or_zero()
-                            * movement_speed
-                            * speed_multiplier
-                            * time.delta_secs();
-                    } else {
-                        threat.attack_remaining -= time.delta_secs() * action_speed;
+                    let (next, attack_seconds, reached) = move_towards_radius(
+                        transform.translation,
+                        hero_position,
+                        movement_speed * speed_multiplier,
+                        delta,
+                        ACID_ARCHER_RANGE,
+                    );
+                    transform.translation = next;
+                    if reached {
+                        threat.attack_remaining -= attack_seconds * action_speed;
                         while threat.attack_remaining <= 0.0 && vitals.alive {
                             threat.attack_remaining += ACID_ARCHER_ATTACK_INTERVAL;
                             let guard =
@@ -1010,12 +1080,15 @@ fn move_enemies(
                 }
                 Some(EnemyBehavior::BurrowAmbush) if !threat.emerged => {
                     transform.translation.y = -0.32;
-                    transform.translation += to_hero.normalize_or_zero()
-                        * movement_speed
-                        * 1.55
-                        * speed_multiplier
-                        * time.delta_secs();
-                    if distance <= BURROW_REVEAL_RANGE {
+                    let (next, _, reached) = move_towards_radius(
+                        transform.translation,
+                        hero_position,
+                        movement_speed * 1.55 * speed_multiplier,
+                        delta,
+                        BURROW_REVEAL_RANGE,
+                    );
+                    transform.translation = next;
+                    if reached {
                         threat.emerged = true;
                         transform.translation.y = 0.0;
                         if !threat.stun_applied {
@@ -1042,13 +1115,16 @@ fn move_enemies(
                 }
                 Some(EnemyBehavior::BurrowAmbush) => {
                     transform.translation.y = 0.0;
-                    if distance > BURROW_ATTACK_RANGE {
-                        transform.translation += to_hero.normalize_or_zero()
-                            * movement_speed
-                            * speed_multiplier
-                            * time.delta_secs();
-                    } else {
-                        threat.attack_remaining -= time.delta_secs() * action_speed;
+                    let (next, attack_seconds, reached) = move_towards_radius(
+                        transform.translation,
+                        hero_position,
+                        movement_speed * speed_multiplier,
+                        delta,
+                        BURROW_ATTACK_RANGE,
+                    );
+                    transform.translation = next;
+                    if reached {
+                        threat.attack_remaining -= attack_seconds * action_speed;
                         while threat.attack_remaining <= 0.0 && vitals.alive {
                             threat.attack_remaining += BURROW_ATTACK_INTERVAL;
                             let guard =
@@ -1071,24 +1147,50 @@ fn move_enemies(
                 }
                 _ => {}
             }
-            transform.rotate_y(time.delta_secs() * if enemy.elite { 0.8 } else { 2.2 });
+            transform.rotate_y(delta * if enemy.elite { 0.8 } else { 2.2 });
             continue;
         }
 
         if matches!(behavior, Some(EnemyBehavior::BurrowAmbush)) {
             transform.translation.y = 0.0;
         }
-        let to_core = target - transform.translation;
-        let distance = to_core.length();
-        if archetype.is_some_and(|kind| kind.0 == 11) && distance < 8.5 {
-            session.core_hp = (session.core_hp
-                - attack_damage * action_speed * 0.35 * time.delta_secs())
-            .max(0.0);
-            transform.rotate_y(time.delta_secs() * 0.7);
-        } else if distance < if enemy.elite { 1.9 } else { 1.25 } {
+        let hastened = chanters.iter().any(|(chanter, position)| {
+            *chanter != entity && position.distance_squared(transform.translation) <= 12.25
+        });
+        let speed_multiplier = chanter_speed_multiplier(hastened);
+        if archetype.is_some_and(|kind| kind.0 == 11) {
+            let (next, attack_seconds, reached) = move_towards_radius(
+                transform.translation,
+                target,
+                movement_speed * speed_multiplier,
+                delta,
+                8.5,
+            );
+            transform.translation = next;
+            if reached {
+                session.core_hp = (session.core_hp
+                    - attack_damage * action_speed * 0.35 * attack_seconds)
+                    .max(0.0);
+                transform.rotate_y(delta * 0.7);
+            } else {
+                transform.rotate_y(delta * if enemy.elite { 0.8 } else { 2.2 });
+            }
+            continue;
+        }
+
+        let breach_radius = if enemy.elite { 1.9 } else { 1.25 };
+        let (next, attack_seconds, reached) = move_towards_radius(
+            transform.translation,
+            target,
+            movement_speed * speed_multiplier,
+            delta,
+            breach_radius,
+        );
+        transform.translation = next;
+        if reached {
             if boss.is_some() {
                 session.core_hp =
-                    (session.core_hp - attack_damage * action_speed * time.delta_secs()).max(0.0);
+                    (session.core_hp - attack_damage * action_speed * attack_seconds).max(0.0);
             } else {
                 if !market_effects.try_intercept_ordinary_breach() {
                     session.core_hp = (session.core_hp
@@ -1099,13 +1201,7 @@ fn move_enemies(
                 pools.retire_enemy(&mut commands, entity);
             }
         } else {
-            let hastened = chanters.iter().any(|(chanter, position)| {
-                *chanter != entity && position.distance_squared(transform.translation) <= 12.25
-            });
-            let speed_multiplier = chanter_speed_multiplier(hastened);
-            transform.translation +=
-                to_core.normalize_or_zero() * movement_speed * speed_multiplier * time.delta_secs();
-            transform.rotate_y(time.delta_secs() * if enemy.elite { 0.8 } else { 2.2 });
+            transform.rotate_y(delta * if enemy.elite { 0.8 } else { 2.2 });
         }
     }
 }
@@ -1407,6 +1503,7 @@ fn auto_attack(
     assets: Option<Res<GameAssets>>,
     mut pools: ResMut<CombatPools>,
     mut clock: ResMut<AttackClock>,
+    mut volley_runtime: ResMut<AttackVolleyRuntime>,
     hero_query: Query<&Transform, With<Hero>>,
     enemies: Query<
         (
@@ -1422,13 +1519,20 @@ fn auto_attack(
         With<Enemy>,
     >,
 ) {
-    if session.paused || session.finished || !vitals.can_act() {
+    volley_runtime.resolved_this_frame = 0;
+    if session.finished || !vitals.can_act() {
+        volley_runtime.pending = 0;
+        return;
+    }
+    if session.paused {
         return;
     }
     let Some(assets) = assets else {
+        volley_runtime.pending = 0;
         return;
     };
     let Ok(hero) = hero_query.single() else {
+        volley_runtime.pending = 0;
         return;
     };
     let attacks_per_second = build.attacks_per_second
@@ -1439,7 +1543,11 @@ fn auto_attack(
         1.0 / attacks_per_second.max(0.2),
     ));
     clock.0.tick(time.delta());
-    if !clock.0.just_finished() {
+    let raw_volley_count = clock.0.times_finished_this_tick();
+    let previous_pending = volley_runtime.pending;
+    let available = previous_pending.saturating_add(u64::from(raw_volley_count));
+    let planned_volley_count = available.min(u64::from(MAX_ATTACK_CATCH_UP_VOLLEYS)) as u32;
+    if planned_volley_count == 0 {
         return;
     }
 
@@ -1480,63 +1588,90 @@ fn auto_attack(
         }
     }
     let Some((_, _, target_entity, target)) = target else {
+        volley_runtime.pending = 0;
         return;
     };
 
-    if market_effects.record_basic_attack() {
-        for (entity, position) in storm_coil_targets(target_entity, target, &target_positions) {
-            if let Some(projectile_entity) = rent_market_projectile(
-                &mut commands,
-                &mut pools,
-                &assets,
-                position,
-                build.attack_damage * 0.60,
-                0.30,
-                0,
-                DamageProfile::new(DamageElement::Storm, DamageClass::Attack).as_market_proc(),
-            ) {
-                restrict_projectile_to_target(
+    let backlog_volley_count = previous_pending.min(u64::from(planned_volley_count)) as u32;
+    let new_volley_count = planned_volley_count - backlog_volley_count;
+    volley_runtime.pending = available - u64::from(planned_volley_count);
+
+    for volley_index in 0..planned_volley_count {
+        if market_effects.record_basic_attack() {
+            for (entity, position) in storm_coil_targets(target_entity, target, &target_positions) {
+                if let Some(projectile_entity) = rent_market_projectile(
                     &mut commands,
-                    projectile_entity,
-                    entity,
-                    &target_positions,
-                );
+                    &mut pools,
+                    &assets,
+                    position,
+                    build.attack_damage * 0.60,
+                    0.30,
+                    0,
+                    DamageProfile::new(DamageElement::Storm, DamageClass::Attack).as_market_proc(),
+                ) {
+                    restrict_projectile_to_target(
+                        &mut commands,
+                        projectile_entity,
+                        entity,
+                        &target_positions,
+                    );
+                }
             }
+        }
+
+        let base_direction = (target - hero.translation).normalize_or_zero();
+        let shot_count = build.multishot.max(1);
+        let mut fired = false;
+        for i in 0..shot_count {
+            let spread_index = i as f32 - (shot_count as f32 - 1.0) * 0.5;
+            let spread = spread_index * 0.14;
+            let direction = Quat::from_rotation_y(spread) * base_direction;
+            let thunder = build.bond(BondId::Thunder);
+            let Some(entity) = pools.rent_projectile(
+                &mut commands,
+                assets.projectile_mesh.clone(),
+                assets.projectile_material.clone(),
+                Transform::from_translation(hero.translation + Vec3::Y * 0.25)
+                    .with_scale(Vec3::splat(1.0 + thunder as f32 * 0.04)),
+                Projectile {
+                    velocity: direction * build.projectile_speed,
+                    damage: build.attack_damage,
+                    radius: 0.48,
+                    remaining_hits: build.pierce,
+                    lifetime: 1.4,
+                },
+            ) else {
+                break;
+            };
+            commands
+                .entity(entity)
+                .insert(DamageProfile::PHYSICAL_ATTACK);
+            let is_new_completion = volley_index >= backlog_volley_count;
+            if is_new_completion && (raw_volley_count > 1 || backlog_volley_count > 0) {
+                let new_volley_index = volley_index - backlog_volley_count;
+                commands.entity(entity).insert(ProjectileFirstFrameTravel(
+                    catch_up_volley_travel_seconds(
+                        &clock,
+                        raw_volley_count,
+                        new_volley_index,
+                        time.delta_secs(),
+                    ),
+                ));
+            }
+            fired = true;
+        }
+        if fired && let Some(attacks) = basic_attacks.as_deref_mut() {
+            attacks.0 = attacks.0.wrapping_add(1);
+        }
+        if fired {
+            volley_runtime.resolved_this_frame =
+                volley_runtime.resolved_this_frame.saturating_add(1);
+        } else {
+            volley_runtime.pending = volley_runtime.pending.saturating_add(1);
         }
     }
 
-    let base_direction = (target - hero.translation).normalize_or_zero();
-    let shot_count = build.multishot.max(1);
-    let mut fired = false;
-    for i in 0..shot_count {
-        let spread_index = i as f32 - (shot_count as f32 - 1.0) * 0.5;
-        let spread = spread_index * 0.14;
-        let direction = Quat::from_rotation_y(spread) * base_direction;
-        let thunder = build.bond(BondId::Thunder);
-        let Some(entity) = pools.rent_projectile(
-            &mut commands,
-            assets.projectile_mesh.clone(),
-            assets.projectile_material.clone(),
-            Transform::from_translation(hero.translation + Vec3::Y * 0.25)
-                .with_scale(Vec3::splat(1.0 + thunder as f32 * 0.04)),
-            Projectile {
-                velocity: direction * build.projectile_speed,
-                damage: build.attack_damage,
-                radius: 0.48,
-                remaining_hits: build.pierce,
-                lifetime: 1.4,
-            },
-        ) else {
-            break;
-        };
-        commands
-            .entity(entity)
-            .insert(DamageProfile::PHYSICAL_ATTACK);
-        fired = true;
-    }
-    if fired && let Some(attacks) = basic_attacks.as_deref_mut() {
-        attacks.0 = attacks.0.wrapping_add(1);
-    }
+    debug_assert!(new_volley_count <= raw_volley_count);
 }
 
 fn storm_coil_targets(
@@ -1625,22 +1760,47 @@ const fn target_priority(archive: bool, boss: bool, trial: bool, archetype: Opti
 }
 
 fn move_projectiles(
-    mut commands: Commands,
     time: Res<Time>,
     session: Res<GameSession>,
-    mut pools: ResMut<CombatPools>,
-    mut projectiles: Query<(Entity, &mut Projectile, &mut Transform)>,
+    mut projectiles: Query<(
+        &mut Projectile,
+        &mut Transform,
+        Option<&ProjectileFirstFrameTravel>,
+    )>,
 ) {
     if session.paused || session.finished {
         return;
     }
-    for (entity, mut projectile, mut transform) in &mut projectiles {
-        transform.translation += projectile.velocity * time.delta_secs();
-        projectile.lifetime -= time.delta_secs();
-        if projectile.lifetime <= 0.0 {
-            pools.retire_projectile(&mut commands, entity);
-        }
+    let delta = time.delta_secs().max(0.0);
+    for (mut projectile, mut transform, first_frame) in &mut projectiles {
+        let simulation_seconds = first_frame.map_or(delta, |travel| travel.0.clamp(0.0, delta));
+        let travel_seconds = simulation_seconds.min(projectile.lifetime.max(0.0));
+        transform.translation += projectile.velocity * travel_seconds;
+        projectile.lifetime -= simulation_seconds;
     }
+}
+
+fn segment_sphere_hit_progress(start: Vec3, end: Vec3, center: Vec3, radius: f32) -> Option<f32> {
+    let segment = end - start;
+    let length_squared = segment.length_squared();
+    if length_squared <= f32::EPSILON {
+        return (end.distance_squared(center) <= radius.max(0.0).powi(2)).then_some(0.0);
+    }
+    let offset = start - center;
+    let radius_squared = radius.max(0.0).powi(2);
+    let offset_from_surface = offset.length_squared() - radius_squared;
+    if offset_from_surface <= 0.0 {
+        return Some(0.0);
+    }
+    let projected = offset.dot(segment);
+    let discriminant = projected * projected - length_squared * offset_from_surface;
+    if discriminant < 0.0 {
+        return None;
+    }
+    let root = discriminant.sqrt();
+    let entry = (-projected - root) / length_squared;
+    let exit = (-projected + root) / length_squared;
+    (exit >= 0.0 && entry <= 1.0).then_some(entry.clamp(0.0, 1.0))
 }
 
 fn apply_enemy_damage(
@@ -1833,7 +1993,7 @@ fn spawn_affix_trigger_fx(
 
 fn projectile_hits(
     mut commands: Commands,
-    mut session: ResMut<GameSession>,
+    frame: ProjectileHitFrame,
     mut damage_meter: ResMut<DamageMeter>,
     mut archive: ResMut<ArchiveState>,
     assets: Option<Res<GameAssets>>,
@@ -1852,6 +2012,7 @@ fn projectile_hits(
         &Transform,
         Option<&DamageProfile>,
         Option<&mut ProjectileHitMemory>,
+        Option<&ProjectileFirstFrameTravel>,
     )>,
     mut enemies: Query<
         (
@@ -1868,35 +2029,87 @@ fn projectile_hits(
         Without<Projectile>,
     >,
 ) {
+    let delta = frame.time.delta_secs().max(0.0);
+    let mut session = frame.session;
     if session.paused || session.finished {
         return;
     }
     let Some(assets) = assets else {
         return;
     };
-    let target_positions: Vec<(Entity, Vec3)> = enemies
+    let collision_targets: Vec<(Entity, Vec3, bool)> = enemies
         .iter()
         .filter(|(_, enemy, _, _, _, _, _, _, _)| enemy.hp > 0.0)
-        .map(|(entity, _, transform, _, _, _, _, _, _)| (entity, transform.translation))
+        .map(|(entity, enemy, transform, _, _, _, _, _, _)| {
+            (entity, transform.translation, enemy.elite)
+        })
         .collect();
-    for (projectile_entity, mut projectile, projectile_transform, profile, mut hit_memory) in
-        &mut projectiles
+    let target_positions: Vec<(Entity, Vec3)> = collision_targets
+        .iter()
+        .map(|(entity, position, _)| (*entity, *position))
+        .collect();
+    for (
+        projectile_entity,
+        mut projectile,
+        projectile_transform,
+        profile,
+        mut hit_memory,
+        first_frame,
+    ) in &mut projectiles
     {
         let profile = profile.copied().unwrap_or(DamageProfile::PHYSICAL_ATTACK);
+        let simulation_seconds = first_frame.map_or(delta, |travel| travel.0.clamp(0.0, delta));
+        let travel_seconds =
+            (projectile.lifetime + simulation_seconds).clamp(0.0, simulation_seconds);
+        let sweep_start = projectile_transform.translation - projectile.velocity * travel_seconds;
+        let projectile_radius = if profile.class == DamageClass::Spell {
+            projectile.radius * market_effects.spell_area_multiplier()
+        } else {
+            projectile.radius
+        };
+        let mut collision_order: Vec<(f32, Entity)> = collision_targets
+            .iter()
+            .filter_map(|(entity, position, elite)| {
+                let already_hit = hit_memory
+                    .as_deref()
+                    .is_some_and(|memory| memory.enemies.contains(entity));
+                if already_hit {
+                    return None;
+                }
+                let hit_radius = projectile_radius + if *elite { 0.95 } else { 0.48 };
+                segment_sphere_hit_progress(
+                    sweep_start,
+                    projectile_transform.translation,
+                    *position,
+                    hit_radius,
+                )
+                .map(|progress| (progress, *entity))
+            })
+            .collect();
+        if sweep_start.distance_squared(projectile_transform.translation) > f32::EPSILON {
+            collision_order.sort_by(|left, right| {
+                left.0
+                    .total_cmp(&right.0)
+                    .then_with(|| left.1.to_bits().cmp(&right.1.to_bits()))
+            });
+        }
         let mut consumed = false;
         let mut first_frame_hits = HashSet::new();
-        for (
-            enemy_entity,
-            mut enemy,
-            enemy_transform,
-            trial_enemy,
-            boss_enemy,
-            archetype,
-            archive_echo,
-            armor,
-            mut affix,
-        ) in &mut enemies
-        {
+        for (_, ordered_enemy) in collision_order {
+            let Ok((
+                enemy_entity,
+                mut enemy,
+                enemy_transform,
+                trial_enemy,
+                boss_enemy,
+                archetype,
+                archive_echo,
+                armor,
+                mut affix,
+            )) = enemies.get_mut(ordered_enemy)
+            else {
+                continue;
+            };
             let already_hit = hit_memory
                 .as_deref()
                 .is_some_and(|memory| memory.enemies.contains(&enemy_entity))
@@ -1909,16 +2122,14 @@ fn projectile_hits(
             {
                 continue;
             }
-            let projectile_radius = if profile.class == DamageClass::Spell {
-                projectile.radius * market_effects.spell_area_multiplier()
-            } else {
-                projectile.radius
-            };
             let hit_radius = projectile_radius + if enemy.elite { 0.95 } else { 0.48 };
-            if projectile_transform
-                .translation
-                .distance_squared(enemy_transform.translation)
-                <= hit_radius * hit_radius
+            if segment_sphere_hit_progress(
+                sweep_start,
+                projectile_transform.translation,
+                enemy_transform.translation,
+                hit_radius,
+            )
+            .is_some()
             {
                 if let Some(memory) = hit_memory.as_deref_mut() {
                     memory.enemies.insert(enemy_entity);
@@ -2127,6 +2338,11 @@ fn projectile_hits(
                 projectile.remaining_hits -= 1;
             }
         }
+        if first_frame.is_some() {
+            commands
+                .entity(projectile_entity)
+                .remove::<ProjectileFirstFrameTravel>();
+        }
         if !consumed && hit_memory.is_none() && !first_frame_hits.is_empty() {
             commands
                 .entity(projectile_entity)
@@ -2134,7 +2350,7 @@ fn projectile_hits(
                     enemies: first_frame_hits,
                 });
         }
-        if consumed {
+        if consumed || projectile.lifetime <= 0.0 {
             pools.retire_projectile(&mut commands, projectile_entity);
         }
     }
@@ -2636,6 +2852,175 @@ mod tests {
         app
     }
 
+    fn projectile_test_app() -> App {
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<GameSession>()
+            .init_resource::<DamageMeter>()
+            .init_resource::<ArchiveState>()
+            .init_resource::<TrialState>()
+            .init_resource::<GoldChallengeState>()
+            .init_resource::<PlayerBuild>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<RunRng>()
+            .init_resource::<BondRuntime>()
+            .init_resource::<SkillRuntime>()
+            .init_resource::<MarketEffects>()
+            .init_resource::<CombatPools>()
+            .insert_resource(test_game_assets());
+        app
+    }
+
+    fn enemy_movement_test_app() -> App {
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<MarketEffects>()
+            .init_resource::<DodgeState>()
+            .init_resource::<ActiveSkill>()
+            .init_resource::<MoveIntent>()
+            .init_resource::<CombatPools>();
+        app.world_mut().spawn((Core, Transform::default()));
+        app.world_mut()
+            .spawn((Hero, Transform::default(), Visibility::Visible));
+        app
+    }
+
+    #[test]
+    fn move_towards_radius_clamps_at_threshold_and_reports_leftover_time() {
+        let (position, remaining, arrived) =
+            move_towards_radius(Vec3::new(3.0, 0.0, 0.0), Vec3::ZERO, 2.0, 1.0, 1.25);
+        assert!(arrived);
+        assert!((position.x - 1.25).abs() < 0.000_001);
+        assert!((remaining - 0.125).abs() < 0.000_001);
+
+        let (position, remaining, arrived) =
+            move_towards_radius(Vec3::new(3.0, 0.0, 0.0), Vec3::ZERO, 2.0, 0.75, 1.25);
+        assert!(!arrived);
+        assert!((position.x - 1.5).abs() < 0.000_001);
+        assert_eq!(remaining, 0.0);
+    }
+
+    #[test]
+    fn ordinary_enemy_crossing_gate_radius_breaches_in_the_same_frame() {
+        let mut app = enemy_movement_test_app();
+        let initial_core_hp = app.world().resource::<GameSession>().core_hp;
+        let mut enemy = test_enemy(100.0);
+        enemy.elite = false;
+        let entity = app
+            .world_mut()
+            .spawn((
+                enemy,
+                EnemyArchetype(0),
+                EnemyBreachDamage(17.0),
+                Transform::from_xyz(2.0, 0.0, 0.0),
+            ))
+            .id();
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(750));
+
+        app.world_mut()
+            .run_system_once(move_enemies)
+            .expect("gate crossing should run");
+
+        assert_eq!(
+            app.world().resource::<GameSession>().core_hp,
+            initial_core_hp - 17.0
+        );
+        assert!(
+            (app.world().get::<Transform>(entity).unwrap().translation.x - 1.25).abs() < 0.000_001,
+            "the enemy must stop at the breach radius instead of overshooting"
+        );
+    }
+
+    #[test]
+    fn hunter_crossing_attack_radius_uses_leftover_frame_time() {
+        let mut app = enemy_movement_test_app();
+        let initial_health = app.world().resource::<HeroVitals>().health;
+        let mut enemy = test_enemy(100.0);
+        enemy.elite = false;
+        enemy.damage = 10.0;
+        let entity = app
+            .world_mut()
+            .spawn((
+                enemy,
+                EnemyArchetype(3),
+                EnemyHeroThreat {
+                    attack_remaining: 0.1,
+                    ..EnemyHeroThreat::ranged()
+                },
+                Transform::from_xyz(7.0, 0.0, 0.0),
+            ))
+            .id();
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(750));
+
+        app.world_mut()
+            .run_system_once(move_enemies)
+            .expect("hunter crossing should run");
+
+        assert_eq!(
+            app.world().resource::<HeroVitals>().health,
+            initial_health - 10.0
+        );
+        assert!(
+            (app.world().get::<Transform>(entity).unwrap().translation.x - ACID_ARCHER_RANGE).abs()
+                < 0.000_001
+        );
+        assert!(
+            (app.world()
+                .get::<EnemyHeroThreat>(entity)
+                .unwrap()
+                .attack_remaining
+                - 0.85)
+                .abs()
+                < 0.000_001
+        );
+    }
+
+    #[test]
+    fn burrower_crossing_reveal_radius_emerges_and_strikes_in_the_same_frame() {
+        let mut app = enemy_movement_test_app();
+        let initial_health = app.world().resource::<HeroVitals>().health;
+        let mut enemy = test_enemy(100.0);
+        enemy.elite = false;
+        enemy.damage = 10.0;
+        let entity = app
+            .world_mut()
+            .spawn((
+                enemy,
+                EnemyArchetype(7),
+                EnemyHeroThreat::burrowed(),
+                Transform::from_xyz(3.0, 0.0, 0.0),
+            ))
+            .id();
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(750));
+
+        app.world_mut()
+            .run_system_once(move_enemies)
+            .expect("burrow crossing should run");
+
+        let threat = app.world().get::<EnemyHeroThreat>(entity).unwrap();
+        let transform = app.world().get::<Transform>(entity).unwrap();
+        assert!(threat.emerged && threat.stun_applied);
+        assert_eq!(threat.attack_remaining, BURROW_ATTACK_INTERVAL);
+        assert!((transform.translation.x - BURROW_REVEAL_RANGE).abs() < 0.000_001);
+        assert_eq!(transform.translation.y, 0.0);
+        assert_eq!(
+            app.world().resource::<HeroVitals>().health,
+            initial_health - 10.0
+        );
+        assert_eq!(
+            app.world().resource::<HeroVitals>().stunned_remaining,
+            BURROW_STUN_SECONDS
+        );
+    }
+
     #[test]
     fn basic_attack_counter_advances_once_per_successful_volley() {
         let mut app = App::new();
@@ -2646,6 +3031,7 @@ mod tests {
             .init_resource::<MarketEffects>()
             .init_resource::<CombatPools>()
             .init_resource::<AttackClock>()
+            .init_resource::<AttackVolleyRuntime>()
             .init_resource::<BasicAttackCounter>()
             .insert_resource(test_game_assets());
         app.world_mut().resource_mut::<PlayerBuild>().multishot = 3;
@@ -2669,6 +3055,401 @@ mod tests {
             3,
             "multishot projectiles still represent one basic-attack volley"
         );
+    }
+
+    #[test]
+    fn auto_attack_catches_up_every_elapsed_volley_and_preserves_timer_remainder() {
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<PlayerBuild>()
+            .init_resource::<MarketEffects>()
+            .init_resource::<CombatPools>()
+            .init_resource::<AttackClock>()
+            .init_resource::<AttackVolleyRuntime>()
+            .init_resource::<BasicAttackCounter>()
+            .insert_resource(test_game_assets());
+        {
+            let mut build = app.world_mut().resource_mut::<PlayerBuild>();
+            build.attacks_per_second = 2.0;
+            build.multishot = 2;
+        }
+        app.world_mut().spawn((Hero, Transform::default()));
+        app.world_mut()
+            .spawn((test_enemy(100.0), Transform::from_xyz(2.0, 0.0, 0.0)));
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(1_750));
+
+        app.world_mut()
+            .run_system_once(auto_attack)
+            .expect("large-delta auto attack should run");
+
+        assert_eq!(app.world().resource::<BasicAttackCounter>().0, 3);
+        assert_eq!(
+            app.world_mut()
+                .query_filtered::<Entity, With<Projectile>>()
+                .iter(app.world())
+                .count(),
+            6,
+            "three elapsed volleys with two shots each must all be emitted"
+        );
+        assert!(
+            (app.world().resource::<AttackClock>().0.elapsed_secs() - 0.25).abs() < 0.000_001,
+            "the repeating timer must retain the quarter-second remainder"
+        );
+    }
+
+    #[test]
+    fn accelerated_catch_up_volleys_receive_distinct_first_frame_travel_ages() {
+        let mut app = projectile_test_app();
+        app.init_resource::<AttackClock>()
+            .init_resource::<AttackVolleyRuntime>()
+            .init_resource::<BasicAttackCounter>();
+        {
+            let mut build = app.world_mut().resource_mut::<PlayerBuild>();
+            build.attacks_per_second = 5.0;
+            build.projectile_speed = 10.0;
+        }
+        app.world_mut()
+            .resource_mut::<AttackClock>()
+            .0
+            .set_elapsed(std::time::Duration::from_millis(190));
+        app.world_mut().spawn((Hero, Transform::default()));
+        app.world_mut()
+            .spawn((test_enemy(100.0), Transform::from_xyz(2.0, 0.0, 0.0)));
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(750));
+
+        app.world_mut()
+            .run_system_once(auto_attack)
+            .expect("accelerated catch-up attack should run");
+        assert_eq!(app.world().resource::<BasicAttackCounter>().0, 4);
+        let volley_runtime = app.world().resource::<AttackVolleyRuntime>();
+        assert_eq!(volley_runtime.resolved_this_frame, 4);
+        assert_eq!(volley_runtime.pending, 0);
+        assert_eq!(
+            app.world_mut()
+                .query_filtered::<Entity, With<ProjectileFirstFrameTravel>>()
+                .iter(app.world())
+                .count(),
+            4
+        );
+
+        app.world_mut()
+            .run_system_once(move_projectiles)
+            .expect("catch-up projectile movement should run");
+        let mut positions: Vec<f32> = app
+            .world_mut()
+            .query_filtered::<&Transform, With<Projectile>>()
+            .iter(app.world())
+            .map(|transform| transform.translation.x)
+            .collect();
+        positions.sort_by(f32::total_cmp);
+        let expected = [1.4, 3.4, 5.4, 7.4];
+        assert_eq!(positions.len(), expected.len());
+        for (actual, expected) in positions.into_iter().zip(expected) {
+            assert!((actual - expected).abs() < 0.000_01);
+        }
+        assert_eq!(
+            app.world_mut()
+                .query_filtered::<Entity, With<ProjectileFirstFrameTravel>>()
+                .iter(app.world())
+                .count(),
+            4,
+            "the allowance remains available to swept hit resolution"
+        );
+        app.world_mut()
+            .run_system_once(projectile_hits)
+            .expect("catch-up swept hits should run");
+        assert_eq!(
+            app.world_mut()
+                .query_filtered::<Entity, With<ProjectileFirstFrameTravel>>()
+                .iter(app.world())
+                .count(),
+            0,
+            "hit resolution removes allowance state only from catch-up shells"
+        );
+    }
+
+    #[test]
+    fn single_volley_keeps_legacy_full_frame_projectile_travel() {
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<PlayerBuild>()
+            .init_resource::<MarketEffects>()
+            .init_resource::<CombatPools>()
+            .init_resource::<AttackClock>()
+            .init_resource::<AttackVolleyRuntime>()
+            .init_resource::<BasicAttackCounter>()
+            .insert_resource(test_game_assets());
+        {
+            let mut build = app.world_mut().resource_mut::<PlayerBuild>();
+            build.attacks_per_second = 2.0;
+            build.projectile_speed = 10.0;
+        }
+        app.world_mut().spawn((Hero, Transform::default()));
+        app.world_mut()
+            .spawn((test_enemy(100.0), Transform::from_xyz(2.0, 0.0, 0.0)));
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(500));
+
+        app.world_mut()
+            .run_system_once(auto_attack)
+            .expect("single attack should run");
+        assert_eq!(
+            app.world_mut()
+                .query_filtered::<Entity, With<ProjectileFirstFrameTravel>>()
+                .iter(app.world())
+                .count(),
+            0
+        );
+        app.world_mut()
+            .run_system_once(move_projectiles)
+            .expect("legacy projectile movement should run");
+        let transform = app
+            .world_mut()
+            .query_filtered::<&Transform, With<Projectile>>()
+            .single(app.world())
+            .expect("one projectile should exist");
+        assert!((transform.translation.x - 5.0).abs() < 0.000_001);
+    }
+
+    #[test]
+    fn attack_catch_up_backlog_carries_every_volley_without_dropping_over_cap_work() {
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<PlayerBuild>()
+            .init_resource::<MarketEffects>()
+            .init_resource::<CombatPools>()
+            .init_resource::<AttackClock>()
+            .init_resource::<AttackVolleyRuntime>()
+            .init_resource::<BasicAttackCounter>()
+            .insert_resource(test_game_assets());
+        app.world_mut()
+            .resource_mut::<PlayerBuild>()
+            .attacks_per_second = 20.0;
+        app.world_mut()
+            .resource_mut::<AttackClock>()
+            .0
+            .set_elapsed(std::time::Duration::from_millis(49));
+        app.world_mut().spawn((Hero, Transform::default()));
+        app.world_mut()
+            .spawn((test_enemy(100.0), Transform::from_xyz(2.0, 0.0, 0.0)));
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs(1));
+
+        app.world_mut()
+            .run_system_once(auto_attack)
+            .expect("first capped attack frame should run");
+        {
+            let runtime = app.world().resource::<AttackVolleyRuntime>();
+            assert_eq!(runtime.resolved_this_frame, MAX_ATTACK_CATCH_UP_VOLLEYS);
+            assert_eq!(runtime.pending, 12);
+        }
+
+        app.world_mut()
+            .resource_mut::<PlayerBuild>()
+            .attacks_per_second = 0.2;
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(10));
+        app.world_mut()
+            .run_system_once(auto_attack)
+            .expect("second backlog frame should run");
+        {
+            let runtime = app.world().resource::<AttackVolleyRuntime>();
+            assert_eq!(runtime.resolved_this_frame, MAX_ATTACK_CATCH_UP_VOLLEYS);
+            assert_eq!(runtime.pending, 4);
+        }
+
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(10));
+        app.world_mut()
+            .run_system_once(auto_attack)
+            .expect("final backlog frame should run");
+        let runtime = app.world().resource::<AttackVolleyRuntime>();
+        assert_eq!(runtime.resolved_this_frame, 4);
+        assert_eq!(runtime.pending, 0);
+        assert_eq!(app.world().resource::<BasicAttackCounter>().0, 20);
+        assert_eq!(
+            app.world_mut()
+                .query_filtered::<Entity, With<Projectile>>()
+                .iter(app.world())
+                .count(),
+            20
+        );
+    }
+
+    #[test]
+    fn attack_backlog_is_discarded_when_no_valid_target_exists() {
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<PlayerBuild>()
+            .init_resource::<MarketEffects>()
+            .init_resource::<CombatPools>()
+            .init_resource::<AttackClock>()
+            .insert_resource(AttackVolleyRuntime {
+                pending: 7,
+                resolved_this_frame: 3,
+            })
+            .init_resource::<BasicAttackCounter>()
+            .insert_resource(test_game_assets());
+        app.world_mut().spawn((Hero, Transform::default()));
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(10));
+
+        app.world_mut()
+            .run_system_once(auto_attack)
+            .expect("targetless attack frame should run");
+
+        let runtime = app.world().resource::<AttackVolleyRuntime>();
+        assert_eq!(runtime.resolved_this_frame, 0);
+        assert_eq!(runtime.pending, 0);
+        assert_eq!(app.world().resource::<BasicAttackCounter>().0, 0);
+    }
+
+    #[test]
+    fn swept_segment_reports_entry_progress_and_handles_stationary_projectiles() {
+        let start = Vec3::ZERO;
+        let end = Vec3::new(10.0, 0.0, 0.0);
+        let entry = segment_sphere_hit_progress(start, end, Vec3::new(5.0, 0.0, 0.0), 0.5)
+            .expect("centered segment should cross the sphere");
+        assert!((entry - 0.45).abs() < 0.000_001);
+        assert_eq!(
+            segment_sphere_hit_progress(start, end, Vec3::new(5.0, 1.0, 0.0), 0.5,),
+            None
+        );
+        assert_eq!(
+            segment_sphere_hit_progress(Vec3::ZERO, Vec3::ZERO, Vec3::ZERO, 0.1),
+            Some(0.0)
+        );
+        assert_eq!(
+            segment_sphere_hit_progress(Vec3::ZERO, Vec3::ZERO, Vec3::new(1.0, 0.0, 0.0), 0.1,),
+            None
+        );
+    }
+
+    #[test]
+    fn expired_projectile_resolves_its_final_sweep_before_pool_retirement() {
+        let mut app = projectile_test_app();
+        let mut enemy_data = test_enemy(100.0);
+        enemy_data.elite = false;
+        let enemy = app
+            .world_mut()
+            .spawn((enemy_data, Transform::from_xyz(4.0, 0.0, 0.0)))
+            .id();
+        let projectile = app
+            .world_mut()
+            .run_system_once(|mut commands: Commands, mut pools: ResMut<CombatPools>| {
+                pools
+                    .rent_projectile(
+                        &mut commands,
+                        Handle::default(),
+                        Handle::default(),
+                        Transform::default(),
+                        Projectile {
+                            velocity: Vec3::X * 20.0,
+                            damage: 37.0,
+                            radius: 0.1,
+                            remaining_hits: 0,
+                            lifetime: 0.4,
+                        },
+                    )
+                    .expect("test projectile should rent")
+            })
+            .expect("projectile fixture should run");
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(500));
+
+        app.world_mut()
+            .run_system_once(move_projectiles)
+            .expect("large projectile step should run");
+        assert_eq!(
+            app.world()
+                .get::<Transform>(projectile)
+                .unwrap()
+                .translation
+                .x,
+            8.0,
+            "travel is clamped to the remaining 0.4-second lifetime"
+        );
+        assert!(app.world().get::<Projectile>(projectile).is_some());
+
+        app.world_mut()
+            .run_system_once(projectile_hits)
+            .expect("expired projectile final sweep should resolve");
+        assert_eq!(app.world().get::<Enemy>(enemy).unwrap().hp, 63.0);
+        assert!(app.world().get::<Projectile>(projectile).is_none());
+        assert_eq!(
+            app.world()
+                .resource::<CombatPools>()
+                .projectile_metrics()
+                .active(),
+            0
+        );
+    }
+
+    #[test]
+    fn swept_projectile_hits_nearest_enemy_first_even_when_spawned_last() {
+        let mut app = projectile_test_app();
+        let mut far_data = test_enemy(100.0);
+        far_data.elite = false;
+        let far = app
+            .world_mut()
+            .spawn((far_data, Transform::from_xyz(7.0, 0.0, 0.0)))
+            .id();
+        let mut near_data = test_enemy(100.0);
+        near_data.elite = false;
+        let near = app
+            .world_mut()
+            .spawn((near_data, Transform::from_xyz(3.0, 0.0, 0.0)))
+            .id();
+        app.world_mut()
+            .run_system_once(|mut commands: Commands, mut pools: ResMut<CombatPools>| {
+                pools
+                    .rent_projectile(
+                        &mut commands,
+                        Handle::default(),
+                        Handle::default(),
+                        Transform::default(),
+                        Projectile {
+                            velocity: Vec3::X * 20.0,
+                            damage: 25.0,
+                            radius: 0.1,
+                            remaining_hits: 0,
+                            lifetime: 2.0,
+                        },
+                    )
+                    .expect("test projectile should rent");
+            })
+            .expect("projectile fixture should run");
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(500));
+
+        app.world_mut()
+            .run_system_once(move_projectiles)
+            .expect("projectile movement should run");
+        app.world_mut()
+            .run_system_once(projectile_hits)
+            .expect("ordered swept collision should run");
+
+        assert_eq!(app.world().get::<Enemy>(near).unwrap().hp, 75.0);
+        assert_eq!(app.world().get::<Enemy>(far).unwrap().hp, 100.0);
     }
 
     #[test]

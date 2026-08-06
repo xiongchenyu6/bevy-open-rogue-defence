@@ -11,6 +11,7 @@ mod combat;
 mod components;
 pub mod content;
 mod debug_menu;
+mod environment;
 mod hero;
 mod hero_abilities;
 mod localization;
@@ -55,6 +56,7 @@ impl Plugin for GamePlugin {
             .init_resource::<RunRng>()
             .add_plugins(localization::LocalizationPlugin)
             .add_plugins(pooling::PoolPlugin)
+            .add_plugins(environment::EnvironmentArtPlugin)
             .add_plugins((
                 arena::ArenaPlugin,
                 hero::HeroPlugin,

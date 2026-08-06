@@ -1,5 +1,6 @@
 use bevy::{camera::ScalingMode, prelude::*};
 
+use super::environment::{ArtBob, ArtPulse, ArtSpin};
 use super::{ArenaEntity, CaptureTarget, Core, GameAssets, Hero, HeroVisual};
 
 pub struct ArenaPlugin;
@@ -231,6 +232,12 @@ fn setup_arena(
         unlit: true,
         ..default()
     });
+    let contact_shadow = materials.add(StandardMaterial {
+        base_color: Color::srgba(0.0, 0.0, 0.0, 0.34),
+        alpha_mode: AlphaMode::Blend,
+        unlit: true,
+        ..default()
+    });
 
     let enemy_mesh = meshes.add(Capsule3d::new(0.36, 0.7));
     let enemy_meshes = [
@@ -250,6 +257,8 @@ fn setup_arena(
     });
     let projectile_mesh = meshes.add(Sphere::new(0.16).mesh().ico(2).unwrap());
     let fx_mesh = meshes.add(Torus::new(0.86, 1.0));
+    let hero_shadow_mesh = meshes.add(Circle::new(0.92));
+    let core_shadow_mesh = meshes.add(Circle::new(1.65));
 
     commands.insert_resource(GameAssets {
         hero_scenes: hero_scenes.clone(),
@@ -327,6 +336,13 @@ fn setup_arena(
         ))
         .with_children(|parent| {
             parent.spawn((
+                Mesh3d(core_shadow_mesh),
+                MeshMaterial3d(contact_shadow.clone()),
+                Transform::from_xyz(0.0, -0.95, 0.0)
+                    .with_rotation(Quat::from_rotation_x(-std::f32::consts::FRAC_PI_2))
+                    .with_scale(Vec3::new(1.0, 0.62, 1.0)),
+            ));
+            parent.spawn((
                 Mesh3d(meshes.add(Cylinder::new(1.4, 0.35))),
                 MeshMaterial3d(path.clone()),
                 Transform::from_xyz(0.0, -0.8, 0.0),
@@ -340,6 +356,16 @@ fn setup_arena(
                 ))),
                 MeshMaterial3d(core_material.clone()),
                 Transform::from_rotation(Quat::from_rotation_z(0.45)),
+                ArtSpin {
+                    axis: Vec3::Y,
+                    speed: 0.52,
+                },
+                ArtPulse {
+                    base_scale: Vec3::ONE,
+                    amplitude: 0.07,
+                    speed: 1.8,
+                    phase: 0.0,
+                },
             ));
         });
 
@@ -352,9 +378,22 @@ fn setup_arena(
         ))
         .with_children(|parent| {
             parent.spawn((
+                Mesh3d(hero_shadow_mesh),
+                MeshMaterial3d(contact_shadow),
+                Transform::from_xyz(0.0, 0.025, 0.0)
+                    .with_rotation(Quat::from_rotation_x(-std::f32::consts::FRAC_PI_2))
+                    .with_scale(Vec3::new(1.0, 0.68, 1.0)),
+            ));
+            parent.spawn((
                 HeroVisual,
                 WorldAssetRoot(hero_scenes[0].clone()),
                 Transform::from_rotation(Quat::from_rotation_y(-std::f32::consts::FRAC_PI_2)),
+                ArtBob {
+                    base_y: 0.0,
+                    amplitude: 0.055,
+                    speed: 2.2,
+                    phase: 0.0,
+                },
             ));
         });
 

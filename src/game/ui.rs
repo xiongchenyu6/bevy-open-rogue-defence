@@ -1,4 +1,4 @@
-use bevy::{prelude::*, window::PrimaryWindow};
+use bevy::{prelude::*, time::Virtual, window::PrimaryWindow};
 
 use super::archive::{ArchiveEcho, ArchiveOutcome, ArchiveState};
 use super::content::HEROES;
@@ -21,12 +21,15 @@ impl Plugin for GameUiPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<ManualPauseState>()
             .init_resource::<TrialDrawerState>()
+            .init_resource::<BattleSpeed>()
             .add_systems(Startup, setup_hud)
             .add_systems(
                 Update,
                 (
                     apply_hud_layout,
                     handle_trial_drawer,
+                    handle_battle_speed,
+                    update_battle_speed_ui.after(handle_battle_speed),
                     handle_manual_pause,
                     update_static_ui_language,
                     update_joystick_visual,
@@ -87,6 +90,12 @@ struct TrialActionLabel(TrialAction);
 struct PauseButton;
 
 #[derive(Component)]
+struct SpeedControl;
+
+#[derive(Component, Clone, Copy)]
+struct SpeedButton(u8);
+
+#[derive(Component)]
 struct PauseResumeButton;
 
 #[derive(Component)]
@@ -117,7 +126,28 @@ struct TrialDrawerState {
     open: bool,
 }
 
-fn setup_hud(mut commands: Commands, language: Res<GameLanguage>) {
+const BATTLE_SPEEDS: [f32; 3] = [1.0, 2.0, 3.0];
+
+#[derive(Resource, Debug, Clone, Copy, PartialEq, Eq, Default)]
+struct BattleSpeed {
+    selected: u8,
+}
+
+impl BattleSpeed {
+    fn multiplier(self) -> f32 {
+        BATTLE_SPEEDS[usize::from(self.selected.min(2))]
+    }
+
+    fn select(&mut self, selected: u8) {
+        self.selected = selected.min(2);
+    }
+
+    fn cycle(&mut self) {
+        self.selected = (self.selected + 1) % BATTLE_SPEEDS.len() as u8;
+    }
+}
+
+fn setup_hud(mut commands: Commands, language: Res<GameLanguage>, battle_speed: Res<BattleSpeed>) {
     let language = *language;
     commands
         .spawn((
@@ -574,6 +604,75 @@ fn setup_hud(mut commands: Commands, language: Res<GameLanguage>) {
                 TextColor(Color::WHITE),
             ));
         });
+
+    commands
+        .spawn((
+            SpeedControl,
+            Node {
+                position_type: PositionType::Absolute,
+                right: px(208),
+                top: px(12),
+                width: px(152),
+                height: px(48),
+                column_gap: px(4),
+                ..default()
+            },
+            // MarketPanel uses z=20; keep speed below it so the compact market
+            // overlay cannot leave live battle controls over its header.
+            GlobalZIndex(19),
+        ))
+        .with_children(|control| {
+            for (index, label) in ["1×", "2×", "3×"].into_iter().enumerate() {
+                spawn_speed_button(
+                    control,
+                    index as u8,
+                    label,
+                    battle_speed.selected == index as u8,
+                );
+            }
+        });
+}
+
+fn spawn_speed_button(
+    parent: &mut ChildSpawnerCommands,
+    index: u8,
+    label: &'static str,
+    selected: bool,
+) {
+    parent
+        .spawn((
+            Button,
+            SpeedButton(index),
+            Node {
+                width: px(48),
+                height: px(48),
+                align_items: AlignItems::Center,
+                justify_content: JustifyContent::Center,
+                border: UiRect::all(px(1)),
+                border_radius: BorderRadius::all(px(9)),
+                ..default()
+            },
+            BackgroundColor(if selected {
+                Color::srgba(0.06, 0.46, 0.58, 0.96)
+            } else {
+                Color::srgba(0.055, 0.11, 0.17, 0.9)
+            }),
+            BorderColor::all(if selected {
+                Color::srgb(0.38, 0.92, 1.0)
+            } else {
+                Color::srgba(0.35, 0.58, 0.68, 0.58)
+            }),
+        ))
+        .with_children(|button| {
+            button.spawn((
+                Text::new(label),
+                TextFont {
+                    font_size: FontSize::Px(14.0),
+                    ..default()
+                },
+                TextColor(Color::WHITE),
+            ));
+        });
 }
 
 fn spawn_trial_button(
@@ -630,23 +729,27 @@ fn command_growth_label(language: GameLanguage, growth: super::CommandGrowth) ->
 fn apply_hud_layout(
     windows: Query<&Window, With<PrimaryWindow>>,
     drawer: Res<TrialDrawerState>,
-    mut nodes: Query<(
-        &mut Node,
-        Option<&HudRoot>,
-        Option<&HudLeft>,
-        Option<&CoreBarTrack>,
-        Option<&MovementPad>,
-        Option<&XpPanel>,
-        Option<&XpBarTrack>,
-        Option<&ActionPanel>,
-        Option<&DodgeButton>,
-        Option<&UltimateButton>,
-        Option<&TrialPanel>,
-        Option<&TrialButtonRow>,
-        Option<&TrialButton>,
-        Option<&TrialToggleButton>,
-        Option<&PauseButton>,
-    )>,
+    mut nodes: Query<
+        (
+            &mut Node,
+            Option<&HudRoot>,
+            Option<&HudLeft>,
+            Option<&CoreBarTrack>,
+            Option<&MovementPad>,
+            Option<&XpPanel>,
+            Option<&XpBarTrack>,
+            Option<&ActionPanel>,
+            Option<&DodgeButton>,
+            Option<&UltimateButton>,
+            Option<&TrialPanel>,
+            Option<&TrialButtonRow>,
+            Option<&TrialButton>,
+            Option<&TrialToggleButton>,
+            Option<&PauseButton>,
+        ),
+        Without<SpeedControl>,
+    >,
+    mut speed_controls: Query<&mut Node, With<SpeedControl>>,
 ) {
     let Ok(window) = windows.single() else {
         return;
@@ -749,6 +852,10 @@ fn apply_hud_layout(
             node.top = px(layout.safe_y);
         }
     }
+    for mut node in &mut speed_controls {
+        node.right = px(speed_control_right(layout.safe_x, compact));
+        node.top = px(speed_control_top(layout.safe_y, compact));
+    }
 }
 
 fn compact_xp_width(window_width: f32) -> f32 {
@@ -765,6 +872,14 @@ fn compact_action_width(joystick_size: f32) -> f32 {
 
 fn action_panel_margin_right(compact: bool) -> f32 {
     if compact { 0.0 } else { 230.0 }
+}
+
+fn speed_control_right(safe_x: f32, compact: bool) -> f32 {
+    if compact { safe_x + 162.0 } else { 208.0 }
+}
+
+fn speed_control_top(safe_y: f32, compact: bool) -> f32 {
+    if compact { 64.0 } else { safe_y }
 }
 
 fn handle_trial_drawer(
@@ -785,6 +900,44 @@ fn handle_trial_drawer(
         } else {
             language.pick("CHALLENGES", "挑战").to_string()
         };
+    }
+}
+
+fn handle_battle_speed(
+    keyboard: Res<ButtonInput<KeyCode>>,
+    interactions: Query<(&Interaction, &SpeedButton), Changed<Interaction>>,
+    mut battle_speed: ResMut<BattleSpeed>,
+    mut virtual_time: ResMut<Time<Virtual>>,
+) {
+    let selected = interactions.iter().find_map(|(interaction, button)| {
+        (*interaction == Interaction::Pressed).then_some(button.0)
+    });
+    if let Some(selected) = selected {
+        battle_speed.select(selected);
+    } else if keyboard.just_pressed(KeyCode::KeyT) {
+        battle_speed.cycle();
+    } else {
+        return;
+    }
+    virtual_time.set_relative_speed(battle_speed.multiplier());
+}
+
+fn update_battle_speed_ui(
+    battle_speed: Res<BattleSpeed>,
+    mut buttons: Query<(&SpeedButton, &mut BackgroundColor, &mut BorderColor)>,
+) {
+    for (button, mut background, mut border) in &mut buttons {
+        let selected = button.0 == battle_speed.selected;
+        background.0 = if selected {
+            Color::srgba(0.06, 0.46, 0.58, 0.96)
+        } else {
+            Color::srgba(0.055, 0.11, 0.17, 0.9)
+        };
+        *border = BorderColor::all(if selected {
+            Color::srgb(0.38, 0.92, 1.0)
+        } else {
+            Color::srgba(0.35, 0.58, 0.68, 0.58)
+        });
     }
 }
 
@@ -1727,6 +1880,68 @@ mod tests {
             assert!(compact_dodge_size(layout.joystick_size) >= 72.0);
             assert!(layout.joystick_size >= 112.0);
         }
+    }
+
+    #[test]
+    fn compact_speed_control_fits_beside_challenges_below_market() {
+        for (width, height) in [
+            (667.0, 375.0),
+            (740.0, 360.0),
+            (844.0, 390.0),
+            (915.0, 412.0),
+        ] {
+            let layout = hud_metrics(width, height);
+            let speed_right = speed_control_right(layout.safe_x, true);
+            let speed_left = width - speed_right - 152.0;
+            let speed_right_edge = width - speed_right;
+            let challenge_left = width - layout.safe_x - 154.0;
+            let market_bottom = layout.safe_y + 52.0;
+            let speed_top = speed_control_top(layout.safe_y, true);
+
+            assert!(
+                speed_left >= layout.safe_x,
+                "speed left at {width}x{height}"
+            );
+            assert!(
+                speed_right_edge + 8.0 <= challenge_left,
+                "speed/challenge gap at {width}x{height}"
+            );
+            assert!(speed_top >= market_bottom, "speed below market");
+            assert_eq!((152.0 - 8.0) / 3.0, 48.0);
+        }
+    }
+
+    #[test]
+    fn battle_speed_levels_are_exact_and_cycle_without_rng() {
+        let mut speed = BattleSpeed::default();
+        assert_eq!(speed.multiplier(), 1.0);
+        speed.cycle();
+        assert_eq!(speed.multiplier(), 2.0);
+        speed.cycle();
+        assert_eq!(speed.multiplier(), 3.0);
+        speed.cycle();
+        assert_eq!(speed.multiplier(), 1.0);
+        speed.select(99);
+        assert_eq!(speed.multiplier(), 3.0);
+    }
+
+    #[test]
+    fn speed_button_updates_bevy_virtual_time() {
+        let mut app = App::new();
+        app.init_resource::<ButtonInput<KeyCode>>()
+            .init_resource::<BattleSpeed>()
+            .insert_resource(Time::<Virtual>::default())
+            .add_systems(Update, handle_battle_speed);
+        app.world_mut()
+            .spawn((SpeedButton(2), Interaction::Pressed));
+
+        app.update();
+
+        assert_eq!(app.world().resource::<BattleSpeed>().selected, 2);
+        assert_eq!(
+            app.world().resource::<Time<Virtual>>().relative_speed(),
+            3.0
+        );
     }
 
     #[test]

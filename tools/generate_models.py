@@ -68,6 +68,44 @@ MODEL_NAME_GROUPS = (
     SUMMON_MODEL_NAMES,
 )
 
+EMISSIVE_MATERIAL_TAGS = (
+    "acid",
+    "bolt",
+    "chant",
+    "core",
+    "crystal",
+    "dancer_teal",
+    "eye",
+    "foam",
+    "frost",
+    "furnace",
+    "glow",
+    "iris",
+    "payload",
+    "rune",
+    "serum",
+    "singularity",
+    "star_gold",
+    "tide_pearl",
+    "toxin",
+    "vanguard_gold",
+)
+
+EMISSIVE_MATERIAL_NAMES = {
+    "ember_gold",
+    "hound_spirit",
+    "rusher_ember",
+    "sentry_spirit",
+    "spirit_glow",
+}
+
+
+def is_emissive_material(name):
+    normalized = name.lower()
+    return normalized in EMISSIVE_MATERIAL_NAMES or any(
+        tag in normalized for tag in EMISSIVE_MATERIAL_TAGS
+    )
+
 
 def reset():
     bpy.ops.object.select_all(action="SELECT")
@@ -84,6 +122,14 @@ def material(name, color, metallic=0.0, roughness=0.72):
     shader.inputs["Base Color"].default_value = (*color, 1.0)
     shader.inputs["Metallic"].default_value = metallic
     shader.inputs["Roughness"].default_value = roughness
+    if is_emissive_material(name):
+        shader.inputs["Emission Color"].default_value = (
+            min(1.0, color[0] * 1.20 + 0.04),
+            min(1.0, color[1] * 1.20 + 0.04),
+            min(1.0, color[2] * 1.20 + 0.04),
+            1.0,
+        )
+        shader.inputs["Emission Strength"].default_value = 2.2
     return value
 
 
@@ -797,6 +843,7 @@ def validate_models(names, label):
         world_min_z = min((obj.matrix_world @ vertex.co).z for vertex in obj.data.vertices)
         materials = [slot.material for slot in obj.material_slots if slot.material is not None]
         material_count = len(materials)
+        emissive_count = 0
         if abs(world_min_z) > 1e-5:
             raise RuntimeError(f"{name}: world min-Z is {world_min_z:.8f}, expected 0")
         if abs(obj.matrix_world.translation.z) > 1e-5:
@@ -813,9 +860,20 @@ def validate_models(names, label):
             )
             if principled is None:
                 raise RuntimeError(f"{name}: material {pbr_material.name} is not PBR")
+            emission_strength = principled.inputs["Emission Strength"].default_value
+            if emission_strength > 0.0:
+                emissive_count += 1
+            if (
+                is_emissive_material(pbr_material.name)
+                and emission_strength <= 0.0
+            ):
+                raise RuntimeError(
+                    f"{name}: tagged material {pbr_material.name} is not emissive"
+                )
         print(
             f"  {path.name}: vertices={len(obj.data.vertices)} "
-            f"materials={material_count} min_z={world_min_z:.6f}"
+            f"materials={material_count} emissive={emissive_count} "
+            f"min_z={world_min_z:.6f}"
         )
 
 
