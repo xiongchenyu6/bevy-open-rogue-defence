@@ -1988,7 +1988,7 @@ fn auto_attack(
                 };
                 let (mesh, material) = attack_art
                     .as_deref()
-                    .map(|art| art.projectile(vitals.kind))
+                    .map(|art| art.projectile_at_level(vitals.kind, vitals.level))
                     .unwrap_or_else(|| {
                         (
                             assets.projectile_mesh.clone(),
@@ -2001,7 +2001,9 @@ fn auto_attack(
                     material,
                     Transform::from_translation(hero.translation + Vec3::Y * 0.25)
                         .looking_to(direction, Vec3::Y)
-                        .with_scale(Vec3::ONE),
+                        .with_scale(Vec3::splat(
+                            basic_attacks::basic_attack_visual_tier(vitals.level).projectile_scale,
+                        )),
                     Projectile {
                         velocity: direction * build.projectile_speed,
                         damage: build.attack_damage,

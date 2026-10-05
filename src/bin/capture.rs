@@ -551,7 +551,7 @@ fn main() {
         settings_capture::install(&mut apps, scenario);
     }
 
-    if scenario.starts_with("attack-") {
+    if scenario.starts_with("attack-") || scenario.starts_with("weapon-growth-") {
         attack_capture::install(&mut apps.main, scenario);
     }
 
@@ -945,6 +945,10 @@ fn configure_scenario(world: &mut World, scenario: &str) {
 
     println!("[capture] scenario={scenario}");
     println!("[capture] seed={:#018X}", world.resource::<RunSeed>().0);
+    if scenario.starts_with("weapon-growth-") {
+        attack_capture::configure_growth(world, scenario);
+        return;
+    }
     if let Some(weapon) = scenario.strip_prefix("attack-") {
         let weapon = weapon.strip_suffix("-fragile").unwrap_or(weapon);
         use rogue_commander::game::HeroKind;

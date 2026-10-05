@@ -1,6 +1,7 @@
 //! Bounded, cosmetic-only weapon trails. Damage and collision stay in combat.rs.
+use super::basic_attacks::basic_attack_visual_tier;
 use super::basic_attacks::{BasicAttackArt, BasicWeapon, weapon};
-use super::{GameSession, HeroKind, Projectile};
+use super::{GameSession, HeroKind, HeroVitals, Projectile};
 use bevy::prelude::*;
 
 const MAX_MOTES: usize = 320;
@@ -122,6 +123,7 @@ struct Painter<'a, 'w, 's> {
     commands: &'a mut Commands<'w, 's>,
     available: usize,
     label: Option<&'static str>,
+    intensity: f32,
 }
 impl Painter<'_, '_, '_> {
     fn beam(
@@ -138,7 +140,11 @@ impl Painter<'_, '_, '_> {
             color.clone(),
             Transform::from_translation((a + b) * 0.5)
                 .looking_to(b - a, Vec3::Y)
-                .with_scale(Vec3::new(width / 0.055, width / 0.055, a.distance(b))),
+                .with_scale(Vec3::new(
+                    width * self.intensity / 0.055,
+                    width * self.intensity / 0.055,
+                    a.distance(b),
+                )),
             Vec3::ZERO,
             life,
             false,
@@ -385,6 +391,7 @@ pub(crate) fn animate(
     mut commands: Commands,
     time: Res<Time>,
     session: Res<GameSession>,
+    vitals: Option<Res<HeroVitals>>,
     art: Option<Res<TrailArt>>,
     weapons: Option<Res<BasicAttackArt>>,
     mut cues: ResMut<WeaponCues>,
@@ -405,6 +412,8 @@ pub(crate) fn animate(
         cues.0.clear();
         return;
     };
+    let level = vitals.as_ref().map_or(1, |vitals| vitals.level);
+    let tier = basic_attack_visual_tier(level);
     let dt = time.delta_secs();
     let mut active = 0;
     for (entity, mut mote, mut transform) in &mut motes {
@@ -428,10 +437,11 @@ pub(crate) fn animate(
         commands: &mut commands,
         available: MAX_MOTES.saturating_sub(active),
         label: None,
+        intensity: tier.intensity,
     };
     for cue in cues.0.drain(..) {
         let profile = weapon(cue.kind);
-        let color = weapons.materials[cue.kind.index()].clone();
+        let color = weapons.material_at_level(cue.kind, level);
         painter.label = None;
         if let Some(special) = cue.special {
             match special {
@@ -441,7 +451,12 @@ pub(crate) fn animate(
                     let to = target + Vec3::Y * 0.35;
                     if from.distance_squared(to) > 0.001 {
                         painter.beam(&art, &color, from, to, 0.12, 0.22);
-                        painter.beam(&art, &art.core, from, to, 0.035, 0.13);
+                        if tier.index >= 2 {
+                            painter.beam(&art, &art.core, from, to, 0.035, 0.13);
+                        }
+                        if tier.index == 0 {
+                            continue;
+                        }
                         // A fork at the real turn separates a bounce from a straight shot.
                         let side = (to - from).normalize().cross(Vec3::Y);
                         for sign in [-1.0, 1.0] {
@@ -471,13 +486,17 @@ pub(crate) fn animate(
                     let forward = cue.direction.with_y(0.0).normalize_or(Vec3::X);
                     let side = forward.cross(Vec3::Y);
                     let origin = cue.position.with_y(0.12);
-                    for i in 0..16 {
-                        let a = -half_angle + 2.0 * half_angle * i as f32 / 16.0;
-                        let b = -half_angle + 2.0 * half_angle * (i + 1) as f32 / 16.0;
+                    let segments = [8, 10, 13, 16][tier.index];
+                    for i in 0..segments {
+                        let a = -half_angle + 2.0 * half_angle * i as f32 / segments as f32;
+                        let b = -half_angle + 2.0 * half_angle * (i + 1) as f32 / segments as f32;
                         let point = |angle: f32| {
                             origin + (forward * angle.cos() + side * angle.sin()) * range
                         };
                         painter.beam(&art, &color, point(a), point(b), 0.16, 0.28);
+                    }
+                    if tier.index == 0 {
+                        continue;
                     }
                     for angle in [-half_angle, 0.0, half_angle] {
                         let end = origin + (forward * angle.cos() + side * angle.sin()) * range;
@@ -499,6 +518,23 @@ pub(crate) fn animate(
         }
         let center = cue.position + Vec3::Y * 0.45;
         let direction = cue.direction.with_y(0.0).normalize_or_zero();
+        if tier.index <= 1 {
+            if cue.impact {
+                for sign in [-1.0, 1.0] {
+                    painter.emit(
+                        art.chunk.clone(),
+                        color.clone(),
+                        Transform::from_translation(center)
+                            .with_scale(Vec3::splat(0.055 + 0.025 * tier.index as f32)),
+                        Vec3::new(sign * 0.4, 0.3, 0.0),
+                        0.10,
+                        false,
+                        1.0,
+                    );
+                }
+            }
+            continue;
+        }
         if !cue.impact {
             // Preserve the magical release silhouette even for point-blank shots
             // which can collide before a single rendered flight frame.
@@ -626,7 +662,7 @@ pub(crate) fn animate(
             continue;
         }
         let profile = weapon(flight.kind);
-        let color = weapons.materials[flight.kind.index()].clone();
+        let color = weapons.material_at_level(flight.kind, level);
         // Spin the star around its normal; other projectiles retain their collision direction.
         if profile == BasicWeapon::Star {
             transform.rotation = Transform::IDENTITY.looking_to(direction, Vec3::Y).rotation
@@ -636,7 +672,10 @@ pub(crate) fn animate(
         if flight.next_trail > 0.0 {
             continue;
         }
-        flight.next_trail = 0.035;
+        flight.next_trail = [0.12, 0.10, 0.065, 0.035][tier.index];
+        if tier.index == 0 {
+            continue;
+        }
         // Preserve room for contact feedback when multishot fills the scene.
         if painter.available <= 64 {
             continue;
@@ -651,13 +690,16 @@ pub(crate) fn animate(
             BasicWeapon::Frost => (0.9, 0.30),
             _ => continue,
         };
+        let length = length * tier.intensity;
         // Layer a bright seed over the colored body, with a moving orbital shell.
         // These travel at projectile velocity and expire quickly, so pooled reuse
         // never leaves attached children or a glow on the next rented projectile.
-        if matches!(
-            profile,
-            BasicWeapon::Storm | BasicWeapon::Spirit | BasicWeapon::Star | BasicWeapon::Frost
-        ) {
+        if tier.index >= 2
+            && matches!(
+                profile,
+                BasicWeapon::Storm | BasicWeapon::Spirit | BasicWeapon::Star | BasicWeapon::Frost
+            )
+        {
             painter.emit(
                 art.mote.clone(),
                 art.core.clone(),
@@ -691,7 +733,7 @@ pub(crate) fn animate(
                     let to = position - direction * length * i as f32 + side * offset;
                     painter.emit(
                         art.streak.clone(),
-                        if i == 1 {
+                        if i == 1 && tier.index >= 2 {
                             art.core.clone()
                         } else {
                             color.clone()
@@ -744,7 +786,7 @@ pub(crate) fn animate(
                             &art,
                             &color,
                             position + offset,
-                            position - direction * 1.15 + offset * 1.8,
+                            position - direction * (1.15 * tier.intensity) + offset * 1.8,
                             0.12,
                             0.20,
                         );
@@ -828,6 +870,7 @@ mod tests {
     fn trails_freeze_on_pause_expire_and_clear_at_finish_without_asset_growth() {
         use bevy::ecs::system::RunSystemOnce;
         let mut app = App::new();
+        app.insert_resource(HeroVitals::for_hero(HeroKind::StormSavant, 40));
         app.init_resource::<Time>()
             .init_resource::<GameSession>()
             .init_resource::<WeaponCues>()
@@ -917,6 +960,7 @@ mod tests {
     fn special_trails_follow_real_cue_geometry_without_creating_damage_carriers() {
         use bevy::ecs::system::RunSystemOnce;
         let mut app = App::new();
+        app.insert_resource(HeroVitals::for_hero(HeroKind::StormSavant, 40));
         app.init_resource::<Time>()
             .init_resource::<GameSession>()
             .init_resource::<WeaponCues>()
@@ -972,6 +1016,49 @@ mod tests {
                 .iter(app.world())
                 .count(),
             0
+        );
+    }
+    #[test]
+    fn starter_release_is_plain_and_contact_is_small() {
+        use bevy::ecs::system::RunSystemOnce;
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<GameSession>()
+            .init_resource::<WeaponCues>()
+            .init_resource::<Assets<Mesh>>()
+            .init_resource::<Assets<StandardMaterial>>();
+        app.world_mut().run_system_once(setup).unwrap();
+        app.world_mut()
+            .run_system_once(super::super::basic_attacks::setup_attack_art)
+            .unwrap();
+        app.world_mut().resource_mut::<WeaponCues>().push(
+            HeroKind::EmberRanger,
+            Vec3::ZERO,
+            Vec3::X,
+            false,
+        );
+        app.world_mut().run_system_once(animate).unwrap();
+        assert_eq!(
+            app.world_mut()
+                .query::<&WeaponMote>()
+                .iter(app.world())
+                .count(),
+            0
+        );
+        app.world_mut().resource_mut::<WeaponCues>().push(
+            HeroKind::EmberRanger,
+            Vec3::ZERO,
+            Vec3::X,
+            true,
+        );
+        app.world_mut().run_system_once(animate).unwrap();
+        let mut query = app.world_mut().query::<(&WeaponMote, &Transform)>();
+        let contacts: Vec<_> = query.iter(app.world()).collect();
+        assert_eq!(contacts.len(), 2);
+        assert!(
+            contacts
+                .iter()
+                .all(|(m, t)| !m.expand && t.scale.max_element() <= 0.06)
         );
     }
     #[test]

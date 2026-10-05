@@ -1,0 +1,25 @@
+Basic weapon visual growth verification — 2026-10-05
+
+Starter level1: actual weapon mesh retained atcompact .65scale, emission .15, no ordinary release glow / flight trails / impact rings / white core. Short twochip contact feedback. Melee one layer, true damage/reach unchanged.
+Levels10/20/40: material emission1.2/3.5/7; projectile scales.8/.95/1.1; progressively shorter trailinterval .10/.065/.035. Inherited rangedweapons use actualhero level; ricochet/cleave retain light readable starterfeedback.
+
+Strict cargo clippy --all-targets -- -D warnings: PASS34.16s.
+Cargo test --lib: 533passed,0failed,1ignored.
+Cargo build --bins: PASS8m53s.
+
+PASS 1/12 weapon-growth-sword-starter-final-en-1280x720
+PASS 2/12 weapon-growth-sword-starter-final-zh-667x375
+PASS 3/12 weapon-growth-sword-upgraded-final-en-1280x720
+PASS 4/12 weapon-growth-sword-upgraded-final-zh-667x375
+PASS 5/12 weapon-growth-archer-starter-final-en-1280x720
+PASS 6/12 weapon-growth-archer-starter-final-zh-667x375
+PASS 7/12 weapon-growth-archer-upgraded-final-en-1280x720
+PASS 8/12 weapon-growth-archer-upgraded-final-zh-667x375
+PASS 9/12 weapon-growth-mage-starter-final-en-1280x720
+PASS 10/12 weapon-growth-mage-starter-final-zh-667x375
+PASS 11/12 weapon-growth-mage-upgraded-final-en-1280x720
+PASS 12/12 weapon-growth-mage-upgraded-final-zh-667x375
+ALL_WEAPON_GROWTH_CAPTURES_PASS 12 scenes 2880 full frames
+
+Eachnativecapture usesproductionworldcamera, realordinaryattackmesh/material and EnemyHP damage; skills/ultimateremoved. Starterpeakmaterialemission<=.2; upgradedobserved>=3.5. All240renderedframesrecordedpercase. Logs12 checked no panic/renderERROR.
+Reviewed desktopstarterarcher actualflight, upgradedarcher80, startermageflight and mobilestarterswordimpact.

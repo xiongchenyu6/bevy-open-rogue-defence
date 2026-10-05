@@ -61,6 +61,33 @@ impl BasicWeapon {
     }
 }
 
+/// Visual growth follows the same level milestones as class basic attacks.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub(crate) struct BasicAttackVisualTier {
+    pub(crate) index: usize,
+    pub(crate) emissive: f32,
+    pub(crate) projectile_scale: f32,
+    pub(crate) intensity: f32,
+}
+
+pub(crate) const fn basic_attack_visual_tier(level: u32) -> BasicAttackVisualTier {
+    let index = if level >= 40 {
+        3
+    } else if level >= 20 {
+        2
+    } else if level >= 10 {
+        1
+    } else {
+        0
+    };
+    BasicAttackVisualTier {
+        index,
+        emissive: [0.15, 1.2, 3.5, 7.0][index],
+        projectile_scale: [0.65, 0.8, 0.95, 1.1][index],
+        intensity: [0.2, 0.45, 0.7, 1.0][index],
+    }
+}
+
 #[derive(Resource, Default)]
 pub(crate) struct BasicAttackAim(pub(crate) Option<Vec3>);
 
@@ -74,9 +101,14 @@ pub(crate) struct BasicAttackArt {
     frost: Handle<Mesh>,
     melee_shapes: [Handle<Mesh>; 6],
     pub(crate) materials: [Handle<StandardMaterial>; HeroKind::COUNT],
+    tier_materials: [[Handle<StandardMaterial>; HeroKind::COUNT]; 4],
 }
 
 impl BasicAttackArt {
+    pub(crate) fn material_at_level(&self, kind: HeroKind, level: u32) -> Handle<StandardMaterial> {
+        self.tier_materials[basic_attack_visual_tier(level).index][kind.index()].clone()
+    }
+
     pub(crate) fn arrow(&self) -> (Handle<Mesh>, Handle<StandardMaterial>) {
         (
             self.arrow.clone(),
@@ -84,6 +116,13 @@ impl BasicAttackArt {
         )
     }
     pub(crate) fn projectile(&self, kind: HeroKind) -> (Handle<Mesh>, Handle<StandardMaterial>) {
+        self.projectile_at_level(kind, 1)
+    }
+    pub(crate) fn projectile_at_level(
+        &self,
+        kind: HeroKind,
+        level: u32,
+    ) -> (Handle<Mesh>, Handle<StandardMaterial>) {
         let mesh = match weapon(kind) {
             BasicWeapon::Crossbow if kind == HeroKind::GroveArtificer => &self.mechanical_bolt,
             BasicWeapon::Crossbow => &self.arrow,
@@ -93,7 +132,10 @@ impl BasicAttackArt {
             BasicWeapon::Frost => &self.frost,
             _ => unreachable!("melee weapons do not emit visible projectiles"),
         };
-        (mesh.clone(), self.materials[kind.index()].clone())
+        (
+            mesh.clone(),
+            self.tier_materials[basic_attack_visual_tier(level).index][kind.index()].clone(),
+        )
     }
 }
 
@@ -203,16 +245,25 @@ pub(crate) fn setup_attack_art(
         [1.0, 0.83, 0.36],
         [0.65, 0.38, 0.95],
     ];
-    let palette = colors.map(|[r, g, b]| {
-        materials.add(StandardMaterial {
-            base_color: Color::srgb(r, g, b),
-            emissive: LinearRgba::new(r * 7.0, g * 7.0, b * 7.0, 1.0),
-            unlit: false,
-            alpha_mode: AlphaMode::Opaque,
-            cull_mode: None,
-            ..default()
+    let tier_materials = [1, 10, 20, 40].map(|level| {
+        let tier = basic_attack_visual_tier(level);
+        colors.map(|[r, g, b]| {
+            materials.add(StandardMaterial {
+                base_color: Color::srgb(r, g, b),
+                emissive: LinearRgba::new(
+                    r * tier.emissive,
+                    g * tier.emissive,
+                    b * tier.emissive,
+                    1.0,
+                ),
+                unlit: false,
+                alpha_mode: AlphaMode::Opaque,
+                cull_mode: None,
+                ..default()
+            })
         })
     });
+    let palette = tier_materials[0].clone();
     commands.insert_resource(BasicAttackArt {
         arrow: meshes.add(arrow),
         mechanical_bolt: meshes.add(mechanical_bolt),
@@ -222,6 +273,7 @@ pub(crate) fn setup_attack_art(
         frost: meshes.add(frost.scaled_by(Vec3::splat(1.65))),
         melee_shapes: melee_meshes().map(|mesh| meshes.add(mesh)),
         materials: palette,
+        tier_materials,
     });
 }
 
@@ -541,7 +593,10 @@ pub(crate) fn resolve_swings(
             let style = swing_style(swing.kind);
             let mesh = &art.melee_shapes[melee_shape_index(swing.kind)];
             let duration = style.duration;
-            for layer in 0..style.layers {
+            for layer in 0..style
+                .layers
+                .min(basic_attack_visual_tier(vitals.level).index as u8 + 1)
+            {
                 let delay = layer as f32 * 0.045;
                 let transform =
                     Transform::from_translation(origin + Vec3::Y * (0.65 + layer as f32 * 0.16))
@@ -549,7 +604,11 @@ pub(crate) fn resolve_swings(
                 commands.spawn((
                     Name::new("Weapon swing trail"),
                     Mesh3d(mesh.clone()),
-                    MeshMaterial3d(art.materials[swing.kind.index()].clone()),
+                    MeshMaterial3d(
+                        art.tier_materials[basic_attack_visual_tier(vitals.level).index]
+                            [swing.kind.index()]
+                        .clone(),
+                    ),
                     transform.with_scale(Vec3::splat(range * style.start)),
                     if delay > 0.0 {
                         Visibility::Hidden
@@ -644,6 +703,33 @@ pub(crate) fn animate_swings(
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn visual_tiers_grow_at_class_milestones_and_materials_are_not_shared() {
+        for (level, expected) in [(1, 0), (9, 0), (10, 1), (19, 1), (20, 2), (39, 2), (40, 3)] {
+            assert_eq!(super::basic_attack_visual_tier(level).index, expected);
+        }
+        let mut app = bevy::prelude::App::new();
+        app.init_resource::<bevy::prelude::Assets<bevy::prelude::Mesh>>()
+            .init_resource::<bevy::prelude::Assets<bevy::prelude::StandardMaterial>>()
+            .add_systems(bevy::prelude::Startup, super::setup_attack_art);
+        app.update();
+        let art = app.world().resource::<super::BasicAttackArt>();
+        let materials = app
+            .world()
+            .resource::<bevy::prelude::Assets<bevy::prelude::StandardMaterial>>();
+        let mut previous = 0.0;
+        for level in [1, 10, 20, 40] {
+            let (_, handle) = art.projectile_at_level(super::HeroKind::StormSavant, level);
+            let emission = materials.get(&handle).unwrap().emissive.blue;
+            assert!(emission > previous);
+            assert_eq!(emission, super::basic_attack_visual_tier(level).emissive);
+            previous = emission;
+        }
+        assert_ne!(
+            art.projectile_at_level(super::HeroKind::StormSavant, 1).1,
+            art.projectile_at_level(super::HeroKind::StormSavant, 40).1
+        );
+    }
     use super::*;
     #[test]
     fn attack_meshes_build_with_valid_merge_attributes() {
@@ -672,7 +758,7 @@ mod tests {
             assert!(mesh.count_vertices() >= 13);
             assert!(mesh.indices().is_some());
         }
-        // Naked mage attacks must retain a readable silhouette and real HDR glow.
+        // Starter mage attacks retain a readable silhouette without advanced HDR glow.
         // Unlit materials silently ignore emissive, which previously reduced the
         // effect to a tiny flat cyan mark even with Bloom enabled.
         for kind in [
@@ -712,7 +798,7 @@ mod tests {
                     .red
                     .max(material.emissive.green)
                     .max(material.emissive.blue)
-                    > 4.0
+                    < 0.2
             );
         }
         let (ember, _) = art.projectile(HeroKind::EmberRanger);
@@ -725,7 +811,7 @@ mod tests {
         assert_eq!(mesh_assets.len(), 12);
         assert_eq!(
             app.world().resource::<Assets<StandardMaterial>>().len(),
-            HeroKind::COUNT
+            HeroKind::COUNT * 4
         );
     }
 

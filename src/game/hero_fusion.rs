@@ -177,7 +177,7 @@ fn emit(
             let Some(assets) = &assets else { continue };
             let (mesh, material) = art
                 .as_deref()
-                .map(|art| art.projectile(request.kind))
+                .map(|art| art.projectile_at_level(request.kind, vitals.level))
                 .unwrap_or_else(|| {
                     (
                         assets.projectile_mesh.clone(),
@@ -215,7 +215,10 @@ fn emit(
                     mesh.clone(),
                     material.clone(),
                     Transform::from_translation(hero.translation + Vec3::Y * 0.25)
-                        .looking_to(direction, Vec3::Y),
+                        .looking_to(direction, Vec3::Y)
+                        .with_scale(Vec3::splat(
+                            basic_attacks::basic_attack_visual_tier(vitals.level).projectile_scale,
+                        )),
                     super::Projectile {
                         velocity: direction * request.speed,
                         damage: request.damage * 0.45,
