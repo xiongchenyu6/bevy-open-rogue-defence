@@ -1,5 +1,6 @@
 //! Persistent rank readability and brief, non-interactive upgrade confirmation.
 use super::attack_vfx::WeaponCues;
+use super::audio_mix::{AudioChannel, AudioVoice};
 use super::bonds::DamageProfile;
 use super::content::SKILLS;
 use super::localization::{UI_FONT_PATH, skill_name};
@@ -280,6 +281,7 @@ fn show_next_notice(
     if autoplay.is_none() {
         commands.spawn((
             AudioPlayer::new(server.load("audio/draft.wav")),
+            AudioVoice::new(AudioChannel::Effects, 0.45),
             PlaybackSettings::DESPAWN.with_volume(Volume::Linear(0.45)),
         ));
     }

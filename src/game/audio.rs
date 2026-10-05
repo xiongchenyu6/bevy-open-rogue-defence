@@ -1,3 +1,4 @@
+use super::audio_mix::{AudioChannel, AudioVoice};
 use bevy::{audio::Volume, prelude::*};
 
 use super::bonds::DamageElement;
@@ -132,6 +133,7 @@ fn start_ambient(mut commands: Commands, audio: Res<GameAudio>, autoplay: Option
     }
     commands.spawn((
         AudioPlayer::new(audio.ambient.clone()),
+        AudioVoice::new(AudioChannel::Music, 0.36),
         PlaybackSettings::LOOP.with_volume(Volume::Linear(0.36)),
     ));
 }
@@ -252,6 +254,7 @@ fn play_once(commands: &mut Commands, source: &Handle<AudioSource>, volume: f32)
 fn play_pitched(commands: &mut Commands, source: &Handle<AudioSource>, volume: f32, speed: f32) {
     commands.spawn((
         AudioPlayer::new(source.clone()),
+        AudioVoice::new(AudioChannel::Effects, volume),
         PlaybackSettings::DESPAWN
             .with_volume(Volume::Linear(volume))
             .with_speed(speed),
@@ -293,6 +296,11 @@ mod tests {
         };
         let mut app = App::new();
         app.insert_resource(sources)
+            .insert_resource(crate::game::AudioPreferences {
+                music: 100,
+                effects: 100,
+                muted: false,
+            })
             .insert_resource(audio)
             .init_resource::<Time>()
             .init_resource::<Time<Real>>()

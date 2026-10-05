@@ -1,4 +1,5 @@
-//! Settings owns only its temporary pause and language preference.
+//! Settings restores the prior pause and edits persisted player preferences.
+mod audio_controls;
 use bevy::{prelude::*, ui::UiSystems, window::PrimaryWindow};
 
 use super::{CaptureTarget, GameLanguage, GameSession};
@@ -16,6 +17,7 @@ pub struct SettingsInputSet;
 
 impl Plugin for SettingsPlugin {
     fn build(&self, app: &mut App) {
+        audio_controls::install(app);
         app.init_resource::<SettingsState>()
             .add_systems(Startup, setup_entry)
             .add_systems(
@@ -65,8 +67,6 @@ struct SettingsLanguageButton(GameLanguage);
 #[derive(Component)]
 struct SettingsSelected(GameLanguage);
 #[derive(Component)]
-struct SettingsLauncherLabel;
-#[derive(Component)]
 struct SettingsHeading;
 #[derive(Component)]
 struct SettingsCopy(CopyKind);
@@ -102,8 +102,8 @@ fn setup_entry(mut commands: Commands) {
                 position_type: PositionType::Absolute,
                 left: percent(50),
                 top: px(8),
-                margin: UiRect::left(px(-26)),
-                width: px(52),
+                margin: UiRect::left(px(-40)),
+                width: px(80),
                 height: px(44),
                 align_items: AlignItems::Center,
                 justify_content: JustifyContent::Center,
@@ -115,7 +115,7 @@ fn setup_entry(mut commands: Commands) {
             BorderColor::all(GOLD),
         ))
         .with_children(|button| {
-            button.spawn((SettingsLauncherLabel, label("EN / 中", 13.0, IVORY)));
+            button.spawn((SettingsCopy(CopyKind::Title), label("", 13.0, IVORY)));
         });
 }
 
@@ -217,6 +217,7 @@ fn spawn_settings(commands: &mut Commands) -> Entity {
                         }
                     });
                 super::selection_detail::spawn_toggle(panel);
+                audio_controls::spawn(panel);
                 panel.spawn((
                     SettingsCopy(CopyKind::SaveNotice),
                     label("", 12.0, MUTED),
@@ -313,14 +314,16 @@ fn copy(kind: CopyKind, language: GameLanguage, failed: bool) -> &'static str {
     match kind {
         CopyKind::Title => language.pick("Settings", "设置"),
         CopyKind::Section => language.pick("INTERFACE LANGUAGE", "界面语言"),
-        CopyKind::Intro => language.pick(
-            "Choose your language and selection detail.",
-            "选择语言与选卡详情模式。",
-        ),
+        CopyKind::Intro => {
+            language.pick("Language, card detail and audio.", "语言、选卡详情与声音。")
+        }
         CopyKind::Selected => language.pick("Selected", "已选择"),
         CopyKind::SaveNotice => {
             if failed {
-                language.pick("Language changed for this session. Your preference could not be saved on this device.", "本次游戏的语言已更改，但无法在此设备上保存偏好。")
+                language.pick(
+                    "Your changes apply now, but could not be saved on this device.",
+                    "更改已生效，但无法在此设备上保存偏好。",
+                )
             } else {
                 language.pick("Your choice is saved immediately. Your expedition stays paused while settings are open.", "选择后立即保存。设置页面打开期间，远征将保持暂停。")
             }
@@ -332,6 +335,7 @@ fn copy(kind: CopyKind, language: GameLanguage, failed: bool) -> &'static str {
 fn update_settings_copy(
     language: Res<GameLanguage>,
     state: Res<SettingsState>,
+    audio_save: Option<Res<super::AudioSaveStatus>>,
     mut labels: Query<(&mut Text, &SettingsCopy)>,
     mut selected: Query<(&SettingsSelected, &mut Visibility)>,
     mut launcher: Query<
@@ -362,7 +366,12 @@ fn update_settings_copy(
     >,
 ) {
     for (mut text, key) in &mut labels {
-        **text = copy(key.0, *language, state.save_failed).into();
+        **text = copy(
+            key.0,
+            *language,
+            state.save_failed || audio_save.as_ref().is_some_and(|save| save.failed),
+        )
+        .into();
     }
     for (choice, mut visibility) in &mut selected {
         *visibility = if choice.0 == *language {
@@ -419,9 +428,9 @@ fn layout(width: f32, height: f32) -> Layout {
     let compact = height < 540.0;
     Layout {
         width: (width - 40.0).min(720.0),
-        height: (height - 24.0).min(520.0),
-        padding: if compact { 18.0 } else { 30.0 },
-        gap: if compact { 5.0 } else { 18.0 },
+        height: (height - 24.0).min(640.0),
+        padding: if compact { 12.0 } else { 24.0 },
+        gap: if compact { 3.0 } else { 12.0 },
         compact,
     }
 }
@@ -436,7 +445,9 @@ fn update_settings_layout(
         Has<SettingsPanel>,
         Has<SettingsHeader>,
         Has<SettingsLanguageRow>,
+        Option<&SettingsCopy>,
     )>,
+    audio_save: Option<Res<super::AudioSaveStatus>>,
     mut headings: Query<&mut TextFont, With<SettingsHeading>>,
 ) {
     if !state.open {
@@ -453,22 +464,30 @@ fn update_settings_layout(
                 .unwrap_or((1280.0, 720.0))
         });
     let m = layout(width, height);
-    for (mut node, panel, header, row) in &mut nodes {
+    for (mut node, panel, header, row, copy) in &mut nodes {
         if panel {
             node.width = px(m.width);
-            node.height = px(m.height);
+            node.height = Val::Auto;
+            node.max_height = px(m.height);
             node.padding = UiRect::all(px(m.padding));
             node.row_gap = px(m.gap);
         }
         if header {
-            node.height = px(if m.compact { 38 } else { 72 });
+            node.height = px(if m.compact { 28 } else { 60 });
+        }
+        if let Some(copy) = copy
+            && matches!(copy.0, CopyKind::Intro | CopyKind::SaveNotice)
+        {
+            let failed = state.save_failed || audio_save.as_ref().is_some_and(|save| save.failed);
+            let hide = m.compact && (matches!(copy.0, CopyKind::Intro) || !failed);
+            node.display = if hide { Display::None } else { Display::Flex };
         }
         if row {
-            node.height = px(if m.compact { 80 } else { 132 });
+            node.height = px(if m.compact { 72 } else { 90 });
         }
     }
     for mut heading in &mut headings {
-        heading.font_size = FontSize::Px(if m.compact { 27.0 } else { 34.0 });
+        heading.font_size = FontSize::Px(if m.compact { 24.0 } else { 34.0 });
     }
 }
 
@@ -552,9 +571,9 @@ mod tests {
             assert!(m.width < width && m.height < height);
             let content = m.height - m.padding * 2.0;
             let required = if m.compact {
-                38.0 + 18.0 + 80.0 + 36.0 + 28.0 + 48.0 + m.gap * 5.0
+                28.0 + 18.0 + 72.0 + 36.0 + 76.0 + 28.0 + 48.0 + m.gap * 6.0
             } else {
-                72.0 + 18.0 + 132.0 + 36.0 + 28.0 + 48.0 + m.gap * 5.0
+                60.0 + 18.0 + 90.0 + 36.0 + 76.0 + 28.0 + 48.0 + m.gap * 6.0
             };
             assert!(
                 required <= content,

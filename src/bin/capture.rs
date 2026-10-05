@@ -86,6 +86,9 @@ mod ultimate_capture;
 #[path = "capture/skill_spectacle.rs"]
 mod skill_spectacle_capture;
 
+#[path = "capture/audio_settings.rs"]
+mod audio_settings_capture;
+
 #[path = "capture/settings.rs"]
 mod settings_capture;
 
@@ -448,6 +451,10 @@ fn main() {
     app.finish();
     app.cleanup();
     configure_scenario(app.world_mut(), scenario);
+    if scenario.starts_with("settings-audio") {
+        // Exercise the real Startup ambient path, normally silent in automated captures.
+        app.world_mut().remove_resource::<Autoplay>();
+    }
     let mut apps = std::mem::take(app.sub_apps_mut());
 
     // Publish the render-target asset to the render world before a long
@@ -549,7 +556,13 @@ fn main() {
     if scenario.starts_with("trials-") {
         trial_capture::install(&mut apps.main);
     }
-    if scenario.starts_with("settings-") {
+    if scenario.starts_with("settings-audio") {
+        audio_settings_capture::install(
+            &mut apps.main,
+            scenario == "settings-audio-reload",
+            scenario == "settings-audio-failure",
+        );
+    } else if scenario.starts_with("settings-") {
         settings_capture::install(&mut apps, scenario);
     }
 

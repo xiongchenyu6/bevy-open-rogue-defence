@@ -195,3 +195,124 @@ mod detail_tests {
         std::fs::remove_dir_all(dir).unwrap();
     }
 }
+
+// Versioned, tiny audio preference; malformed saves never partly overwrite defaults.
+fn parse_audio(value: &str) -> Option<crate::game::AudioPreferences> {
+    let mut fields = value.split_whitespace();
+    if fields.next()? != "1" {
+        return None;
+    }
+    let music = fields.next()?.parse::<u8>().ok()?;
+    let effects = fields.next()?.parse::<u8>().ok()?;
+    let muted = match fields.next()? {
+        "0" => false,
+        "1" => true,
+        _ => return None,
+    };
+    if music > 100 || effects > 100 || fields.next().is_some() {
+        return None;
+    }
+    Some(crate::game::AudioPreferences {
+        music,
+        effects,
+        muted,
+    })
+}
+fn encode_audio(value: &crate::game::AudioPreferences) -> Result<String, String> {
+    if value.music > 100 || value.effects > 100 {
+        return Err("Audio volume must be 0–100".into());
+    }
+    Ok(format!(
+        "1 {} {} {}\n",
+        value.music,
+        value.effects,
+        u8::from(value.muted)
+    ))
+}
+#[cfg(not(target_arch = "wasm32"))]
+fn audio_path() -> Option<std::path::PathBuf> {
+    std::env::var_os("ROGUE_AUDIO_SAVE")
+        .filter(|v| !v.is_empty())
+        .map(std::path::PathBuf::from)
+        .or_else(|| preference_path("audio"))
+}
+#[cfg(not(target_arch = "wasm32"))]
+pub(crate) fn load_audio() -> Option<crate::game::AudioPreferences> {
+    read_audio(&audio_path()?)
+}
+#[cfg(not(target_arch = "wasm32"))]
+fn read_audio(path: &std::path::Path) -> Option<crate::game::AudioPreferences> {
+    parse_audio(&std::fs::read_to_string(path).ok()?)
+}
+#[cfg(not(target_arch = "wasm32"))]
+pub(crate) fn save_audio(value: &crate::game::AudioPreferences) -> Result<(), String> {
+    write_audio(
+        &audio_path().ok_or("No user configuration directory")?,
+        value,
+    )
+}
+#[cfg(not(target_arch = "wasm32"))]
+fn write_audio(
+    path: &std::path::Path,
+    value: &crate::game::AudioPreferences,
+) -> Result<(), String> {
+    let data = encode_audio(value)?;
+    if let Some(parent) = path.parent()
+        && !parent.as_os_str().is_empty()
+    {
+        std::fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+    }
+    let temporary = path.with_extension("audio.tmp");
+    std::fs::write(&temporary, data).map_err(|e| e.to_string())?;
+    if let Err(error) = std::fs::rename(&temporary, path) {
+        let _ = std::fs::remove_file(temporary);
+        return Err(error.to_string());
+    }
+    Ok(())
+}
+#[cfg(target_arch = "wasm32")]
+pub(crate) fn load_audio() -> Option<crate::game::AudioPreferences> {
+    let storage = web_sys::window()?.local_storage().ok()??;
+    parse_audio(&storage.get_item("rogue-commander-audio").ok()??)
+}
+#[cfg(target_arch = "wasm32")]
+pub(crate) fn save_audio(value: &crate::game::AudioPreferences) -> Result<(), String> {
+    let data = encode_audio(value)?;
+    let storage = web_sys::window()
+        .ok_or("Browser window unavailable")?
+        .local_storage()
+        .map_err(|_| "Browser storage unavailable")?
+        .ok_or("Browser storage unavailable")?;
+    storage
+        .set_item("rogue-commander-audio", &data)
+        .map_err(|_| "Could not save audio preferences".into())
+}
+#[cfg(all(test, not(target_arch = "wasm32")))]
+mod audio_tests {
+    use super::*;
+    #[test]
+    fn audio_persistence_roundtrip_rejects_corruption_and_reports_write_failure() {
+        let dir = std::env::temp_dir().join(format!("rogue-audio-test-{}", std::process::id()));
+        let path = dir.join("nested/audio");
+        let value = crate::game::AudioPreferences {
+            music: 23,
+            effects: 67,
+            muted: true,
+        };
+        assert_eq!(read_audio(&path), None);
+        write_audio(&path, &value).unwrap();
+        assert_eq!(read_audio(&path), Some(value));
+        for bad in [
+            "",
+            "1 101 50 0",
+            "1 50 50 yes",
+            "2 50 50 0",
+            "1 50 50 0 extra",
+        ] {
+            std::fs::write(&path, bad).unwrap();
+            assert_eq!(read_audio(&path), None);
+        }
+        assert!(write_audio(&dir, &value).is_err());
+        std::fs::remove_dir_all(dir).unwrap();
+    }
+}

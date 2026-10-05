@@ -1,5 +1,6 @@
 //! Celebrates newly completed collections without repeating gameplay rewards.
 use super::attack_vfx::WeaponCues;
+use super::audio_mix::{AudioChannel, AudioVoice};
 use super::bond_catalog::BondEffect;
 use super::localization::{UI_FONT_PATH, bond_name};
 use super::{Autoplay, BondId, GameLanguage, GameSession, Hero, HeroKind, PlayerBuild};
@@ -402,6 +403,7 @@ fn show_next(
     if autoplay.is_none() {
         commands.spawn((
             AudioPlayer::new(server.load("audio/bond_complete.wav")),
+            AudioVoice::new(AudioChannel::Effects, 0.55),
             PlaybackSettings::DESPAWN.with_volume(Volume::Linear(0.55)),
         ));
     }

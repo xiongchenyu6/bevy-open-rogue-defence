@@ -259,6 +259,7 @@ mod tests {
         include_str!("skill_feedback.rs"),
         include_str!("bond_feedback.rs"),
         include_str!("settings.rs"),
+        include_str!("settings/audio_controls.rs"),
         include_str!("selection_detail.rs"),
         include_str!("skill_details.rs"),
         include_str!("debug_menu.rs"),

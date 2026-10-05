@@ -7,6 +7,7 @@ mod archive;
 mod arena;
 mod attack_vfx;
 mod audio;
+mod audio_mix;
 mod basic_attack_details;
 mod basic_attacks;
 mod basic_relics;
@@ -78,6 +79,7 @@ mod waves;
 mod tests;
 
 pub use archive::{ArchiveOutcome, ArchiveState};
+pub use audio_mix::{AudioChannel, AudioPreferences, AudioSaveStatus, AudioVoice};
 pub use bosses::{BossDangerShape, BossPhaseCue, BossTelegraph};
 pub use campaign::{CHAPTER_COUNT, CampaignRun, RunRequest, chapter};
 pub use campaign_progress::{
@@ -128,6 +130,7 @@ impl Plugin for GamePlugin {
             .add_plugins(campaign_progress::CampaignProgressPlugin)
             .add_plugins(campaign_ui::CampaignUiPlugin)
             .add_plugins(localization::LocalizationPlugin)
+            .add_plugins(audio_mix::AudioMixPlugin)
             .add_plugins(settings::SettingsPlugin)
             .add_plugins(pooling::PoolPlugin)
             .add_plugins(model_animation::ModelAnimationPlugin)
