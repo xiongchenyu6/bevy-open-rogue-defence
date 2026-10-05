@@ -23,6 +23,8 @@ use super::trial::{complete_gold_target, complete_tower_challenge};
 use super::waves::{
     WAVES, WaveDef, choose_archetype, rush_champion, rush_warning, scheduled_spawn_count,
 };
+mod enemy_pressure;
+pub use enemy_pressure::{EnemyPressure, EnemyPressureSettings};
 mod elite_pressure;
 pub use elite_pressure::{BLOODRITE_RADIUS, ElitePressure, YELLOW_SIGN_RADIUS};
 #[derive(Resource, Default)]
@@ -239,7 +241,8 @@ struct DamageNumberCamera;
 
 impl Plugin for CombatPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<WaveSpawnRuntime>()
+        app.init_resource::<EnemyPressureSettings>()
+            .init_resource::<WaveSpawnRuntime>()
             .init_resource::<RaidWarning>()
             .init_resource::<ElitePressure>()
             .init_resource::<DamageMeter>()
@@ -513,6 +516,15 @@ fn update_damage_numbers(
     pools.tick_damage_numbers(&mut commands, time.delta_secs(), cameras.single().ok());
 }
 
+fn pressure_wave(
+    mut wave: WaveDef,
+    number: u32,
+    settings: Option<&EnemyPressureSettings>,
+) -> WaveDef {
+    wave.hp_multiplier *= settings.map_or(1.0, |settings| settings.at_wave(number).health);
+    wave
+}
+
 fn spawn_wave(
     mut commands: Commands,
     time: Res<Time>,
@@ -524,6 +536,7 @@ fn spawn_wave(
     mut encounters: ResMut<EncounterState>,
     mut pools: ResMut<CombatPools>,
     assets: Option<Res<GameAssets>>,
+    pressure: Option<Res<EnemyPressureSettings>>,
     living_enemies: Query<
         (),
         (
@@ -560,7 +573,7 @@ fn spawn_wave(
 
     let delta = time.delta_secs();
     let wave_index = session.wave.saturating_sub(1).min(24) as usize;
-    let wave = WAVES[wave_index];
+    let wave = pressure_wave(WAVES[wave_index], session.wave, pressure.as_deref());
     let interval = wave_spawn_interval(wave);
     let minute = session.elapsed.rem_euclid(60.0);
     if let Some(raid) = raid.as_deref_mut() {
@@ -572,7 +585,11 @@ fn spawn_wave(
     }
     if wave_runtime.wave != session.wave {
         if wave_runtime.wave > 0 {
-            let previous = WAVES[wave_runtime.wave.saturating_sub(1).min(24) as usize];
+            let previous = pressure_wave(
+                WAVES[wave_runtime.wave.saturating_sub(1).min(24) as usize],
+                wave_runtime.wave,
+                pressure.as_deref(),
+            );
             while wave_runtime.spawned < previous.count {
                 let mut budget = next_spawn_budget(
                     previous,
@@ -591,7 +608,11 @@ fn spawn_wave(
                 wave_runtime.spawned += 1;
             }
             for skipped_wave in wave_runtime.wave + 1..session.wave {
-                let skipped = WAVES[skipped_wave.saturating_sub(1).min(24) as usize];
+                let skipped = pressure_wave(
+                    WAVES[skipped_wave.saturating_sub(1).min(24) as usize],
+                    skipped_wave,
+                    pressure.as_deref(),
+                );
                 for spawned in 0..skipped.count {
                     let mut budget = next_spawn_budget(
                         skipped,
@@ -1015,7 +1036,10 @@ pub(crate) fn move_towards_radius(
 }
 
 fn move_enemies(
-    fusion: Option<Res<super::hero_fusion::HeroFusion>>,
+    pressure_and_fusion: (
+        Option<Res<EnemyPressureSettings>>,
+        Option<Res<super::hero_fusion::HeroFusion>>,
+    ),
     mut commands: Commands,
     mut attack_cues: MessageWriter<EnemyAttackCue>,
     mut cue_clocks: Local<HashMap<Entity, f32>>,
@@ -1056,6 +1080,7 @@ fn move_enemies(
         >,
     )>,
 ) {
+    let (pressure_settings, fusion) = pressure_and_fusion;
     let HeroDamageGuards {
         mut market_effects,
         mut bond_runtime,
@@ -1112,10 +1137,21 @@ fn move_enemies(
             continue;
         }
         let is_boss = boss.is_some() || adventure_bosses.contains(entity);
-        let action_speed = elite_action_speed_multiplier(affix.map(|affix| affix.kind));
+        let pressure = if !is_boss && camp.is_none() {
+            pressure_settings
+                .as_deref()
+                .map_or(EnemyPressure::BASELINE, |settings| {
+                    settings.at_wave(session.wave)
+                })
+        } else {
+            EnemyPressure::BASELINE
+        };
+        let action_speed =
+            elite_action_speed_multiplier(affix.map(|affix| affix.kind)) * pressure.attack;
         let commander_multiplier = commander_aura_multiplier(commander_aura);
         let movement_speed = enemy.speed
-            * action_speed
+            * elite_action_speed_multiplier(affix.map(|affix| affix.kind))
+            * pressure.movement
             * commander_multiplier
             * speed_effect.map_or(1.0, |effect| effect.multiplier)
             * market_effects.enemy_movement_multiplier(is_boss);
@@ -1127,6 +1163,7 @@ fn move_enemies(
             archetype.map(|kind| ENEMIES[usize::from(kind.0).min(ENEMIES.len() - 1)].behavior)
         };
         if (camp.is_some() && hero_position.x >= core_position.x)
+            || transform.translation.x < core_position.x
             || session.core_hp <= 0.0
             || session.gate_revive_remaining > 0.0
         {
@@ -1182,9 +1219,8 @@ fn move_enemies(
             continue;
         }
 
-        // Rebuilding closes the road again, including enemies which passed
-        // through the opening while the gate was down.
-        transform.translation.x = transform.translation.x.max(core.translation.x + 1.25);
+        // A rebuilt wall blocks new arrivals; enemies already through its
+        // opening keep pursuing the hero instead of being teleported outside.
         // A live wall spans the road: keep each attacker's lane instead of
         // funneling it into the center, and protect heroes on its rear side.
         let target = Vec3::new(core.translation.x, 0.0, transform.translation.z);
@@ -3330,6 +3366,76 @@ mod tests {
     }
 
     #[test]
+    fn pressure_scales_actual_wave_spawns_once_but_not_campaign_bosses() {
+        let mut baseline = wave_test_app(540.0, 10);
+        let mut tuned = wave_test_app(540.0, 10);
+        tuned.init_resource::<EnemyPressureSettings>();
+        baseline
+            .world_mut()
+            .insert_resource(RunRng::from_seed(1234));
+        tuned.world_mut().insert_resource(RunRng::from_seed(1234));
+        baseline.world_mut().run_system_once(spawn_wave).unwrap();
+        tuned.world_mut().run_system_once(spawn_wave).unwrap();
+        let collect = |app: &mut App| {
+            let mut entries = app
+                .world_mut()
+                .query::<(Option<&Name>, &Transform, &Enemy, Option<&BossEnemy>)>()
+                .iter(app.world())
+                .map(|(name, transform, enemy, boss)| {
+                    // Entity reservation numbers belong to each world. Pair the
+                    // same seeded spawn by its actual identity and position.
+                    (
+                        (
+                            name.map_or("boss", Name::as_str).to_owned(),
+                            transform.translation.x.to_bits(),
+                            transform.translation.z.to_bits(),
+                            boss.map(|boss| boss.index),
+                        ),
+                        enemy.hp,
+                        enemy.damage,
+                    )
+                })
+                .collect::<Vec<_>>();
+            entries.sort_by(|a, b| a.0.cmp(&b.0));
+            entries
+        };
+        let before = collect(&mut tuned);
+        let original = collect(&mut baseline);
+        assert_eq!(before.len(), original.len());
+        assert!(before.iter().any(|entry| entry.0.3.is_some()));
+        assert!(before.iter().any(|entry| entry.0.3.is_none()));
+        for (actual, old) in before.iter().zip(&original) {
+            assert_eq!(actual.0, old.0, "paired worlds must match seeded spawns");
+            let multiplier = if actual.0.3.is_some() { 1.0 } else { 1.84 };
+            assert!(
+                (actual.1 - old.1 * multiplier).abs() < 0.01,
+                "actual={actual:?}, baseline={old:?}; ordinary HP must scale once, bosses remain unchanged"
+            );
+            assert_eq!(actual.2, old.2);
+        }
+        tuned.world_mut().run_system_once(spawn_wave).unwrap();
+        let after = collect(&mut tuned);
+        assert_eq!(
+            after, before,
+            "existing HP must not multiply on subsequent frames"
+        );
+        for number in [4, 9, 25] {
+            let old = WAVES[number - 1];
+            let scaled = pressure_wave(old, number as u32, Some(&EnemyPressureSettings::default()));
+            assert_eq!(scaled.count, old.count);
+            assert_eq!(scaled.damage_multiplier, old.damage_multiplier);
+            assert!(
+                (scaled.hp_multiplier / old.hp_multiplier
+                    - EnemyPressureSettings::default()
+                        .at_wave(number as u32)
+                        .health)
+                    .abs()
+                    < 0.001
+            );
+        }
+    }
+
+    #[test]
     fn disabled_director_blocks_ordinary_elites_and_due_bosses_without_advancing_state() {
         let mut app = wave_test_app(300.0, 6);
         app.world_mut().resource_mut::<SpawnDirector>().enabled = false;
@@ -3441,6 +3547,42 @@ mod tests {
         app.world_mut().run_system(system).unwrap();
         assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 1);
         assert_eq!(app.world().resource::<HeroVitals>().health, health - 10.0);
+    }
+
+    #[test]
+    fn road_pressure_increases_real_gate_damage_but_not_camp_damage() {
+        for camp in [false, true] {
+            let mut app = enemy_movement_test_app();
+            app.init_resource::<EnemyPressureSettings>();
+            let mut heroes = app
+                .world_mut()
+                .query_filtered::<&mut Transform, With<Hero>>();
+            heroes.single_mut(app.world_mut()).unwrap().translation.x = -3.0;
+            app.world_mut().resource_mut::<GameSession>().wave = 25;
+            let mut enemy = test_enemy(100.0);
+            enemy.speed = 0.0;
+            enemy.damage = 10.0;
+            let entity = app
+                .world_mut()
+                .spawn((
+                    enemy,
+                    EnemyArchetype(11),
+                    Transform::from_xyz(2.0, 0.0, 0.0),
+                ))
+                .id();
+            if camp {
+                app.world_mut()
+                    .entity_mut(entity)
+                    .insert(super::super::encounter_bosses::CampCombatant { center: Vec3::ZERO });
+            }
+            let initial = app.world().resource::<GameSession>().core_hp;
+            app.world_mut()
+                .resource_mut::<Time>()
+                .advance_by(std::time::Duration::from_secs_f32(1.0));
+            app.world_mut().run_system_once(move_enemies).unwrap();
+            let dealt = initial - app.world().resource::<GameSession>().core_hp;
+            assert!((dealt - if camp { 3.5 } else { 7.35 }).abs() < 0.001);
+        }
     }
 
     #[test]
@@ -3779,16 +3921,64 @@ mod tests {
     }
 
     #[test]
-    fn rebuilt_gate_returns_passed_enemies_to_the_enemy_side() {
+    fn rebuilt_gate_keeps_breached_enemies_behind_it_and_front_arrivals_blocked() {
         let mut app = enemy_movement_test_app();
-        let entity = app
+        let mut heroes = app
             .world_mut()
-            .spawn((test_enemy(100.0), Transform::from_xyz(-2.0, 0.0, 4.0)))
+            .query_filtered::<&mut Transform, With<Hero>>();
+        heroes.single_mut(app.world_mut()).unwrap().translation.x = -3.0;
+        let mut enemy = test_enemy(100.0);
+        enemy.speed = 4.0;
+        enemy.damage = 10.0;
+        let breached = app
+            .world_mut()
+            .spawn((enemy, Transform::from_xyz(2.0, 0.0, 0.0)))
             .id();
+        {
+            let mut session = app.world_mut().resource_mut::<GameSession>();
+            session.core_hp = 0.0;
+            session.gate_revive_remaining = 4.0;
+        }
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs(1));
         app.world_mut().run_system_once(move_enemies).unwrap();
-        let position = app.world().get::<Transform>(entity).unwrap().translation;
-        assert_eq!(position.x, 1.25);
-        assert_eq!(position.z, 4.0);
+        assert!(
+            app.world()
+                .get::<Transform>(breached)
+                .unwrap()
+                .translation
+                .x
+                < 0.0
+        );
+        {
+            let mut session = app.world_mut().resource_mut::<GameSession>();
+            session.core_hp = session.core_max_hp;
+            session.gate_revive_remaining = 0.0;
+        }
+        let mut enemy = test_enemy(100.0);
+        enemy.speed = 4.0;
+        enemy.damage = 10.0;
+        let front = app
+            .world_mut()
+            .spawn((enemy, Transform::from_xyz(4.0, 0.0, 2.0)))
+            .id();
+        let health = app.world().resource::<HeroVitals>().health;
+        app.world_mut().run_system_once(move_enemies).unwrap();
+        assert!(
+            app.world()
+                .get::<Transform>(breached)
+                .unwrap()
+                .translation
+                .x
+                < 0.0
+        );
+        assert!(app.world().resource::<HeroVitals>().health < health);
+        assert!(app.world().get::<Transform>(front).unwrap().translation.x >= 1.25);
+        assert_eq!(
+            app.world().resource::<GameSession>().gate_revive_remaining,
+            0.0
+        );
     }
 
     #[test]

@@ -1,0 +1,3 @@
+batch,policy,position,starter_class,cases,wins,losses,censored,finished_only_win_fraction,observed_wins_per_all_cases,mean_observed_game_seconds
+probes,greedy-card-zero,forward,archer,1,0,0,1,,0.0,815.706
+probes,passive,forward,archer,3,0,1,2,0.0,0.0,672.2363333333334

@@ -1,0 +1,41 @@
+{
+  "baseline_commit": "492ebaa",
+  "baseline_binary_sha256": "d0fdf77cf47e433fcc93b6d7d15214f7956216d24dc0e6cbc5b118de26f67df5",
+  "after_binary_sha256": "c3c3b99e6ae316fac3700cf5e30763470069654fb779290e6d48113bc7ab04be",
+  "fixed_real_step_seconds": 0.016666666666666666,
+  "chapter": 0,
+  "difficulty": "Normal",
+  "fresh_save_per_case": true,
+  "recorded_executor": "production default",
+  "after_pressure_override": [
+    0.03,
+    0.05,
+    1.8,
+    2.2,
+    0.12,
+    3.7
+  ],
+  "case_counts": {
+    "before": 20,
+    "after": 20,
+    "probes": 4
+  },
+  "notes": [
+    "These complete matrices use the production default scheduler, not the subsequently added stable single-threaded replay driver.",
+    "One active replay checkpoint showed a one-frame hit-stop sampling difference; retain raw receipts and report actual game seconds.",
+    "Passive handles mandatory initial and level 10/20/40 recruitment only; active uses actual optional card and market purchases.",
+    "Censored probe runs are not wins; incomplete interrupted probe cases are excluded.",
+    "Baseline has no skill-cast telemetry; null does not mean zero."
+  ],
+  "final_replay_binary_sha256": "524dc8211d883a3826c992cf9dd543ab7c51b992e78a236c86179f22edd722a8",
+  "stable_replays": {
+    "executor": "single-threaded",
+    "runs": 2,
+    "frames_per_run": 50000,
+    "game_seconds": 815.769,
+    "common_checkpoints": 29,
+    "identical": true,
+    "outcome": "frame_cap (not a win)",
+    "pressure": "baked production defaults; no CLI override"
+  }
+}

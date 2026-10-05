@@ -127,13 +127,13 @@ fn cast(
     for index in [RAY, MINE] {
         let rank = build.skills[index];
         if rank == 0
-            || runtime.cooldowns[index] > 0.0
+            || !runtime.cast_ready(index)
             || (index == MINE && mines.iter().count() >= MAX_MINES)
             || (index == RAY && !rays.is_empty())
         {
             continue;
         }
-        runtime.cooldowns[index] = skill_cooldown(index);
+        runtime.begin_cast(index);
         let damage = scaled_skill_damage(index, rank, &build, &vitals, &runtime);
         if index == RAY {
             let width = 0.24 + rank as f32 * 0.06;

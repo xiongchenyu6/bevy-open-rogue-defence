@@ -67,11 +67,19 @@ fn trigger(language: GameLanguage, skill: SkillId, rank: u8) -> String {
         );
     }
     match skill.definition().trigger {
-        SkillTrigger::Cooldown => format!(
-            "{} {:.1}s",
-            language.pick("Cooldown", "冷却"),
-            skills::skill_cooldown(i)
-        ),
+        SkillTrigger::Cooldown => {
+            let cooldown = skills::rank_cooldown(i, rank);
+            let charge = skills::attack_charge_requirement(i, rank);
+            let base = format!("{} {cooldown:.1}s", language.pick("Cooldown", "冷却"));
+            if charge == 0 {
+                base
+            } else {
+                format!(
+                    "{base} · {charge} {}",
+                    language.pick("basic attacks required", "次普攻蓄力")
+                )
+            }
+        }
         SkillTrigger::EveryNthAttack(n) => format!(
             "{} {} {}",
             language.pick("Every", "每"),
@@ -406,7 +414,7 @@ mod tests {
         let a = skills::skill_preview_damage(13, 2, &build, &vitals, &runtime).unwrap();
         let b = skills::skill_preview_damage(13, 3, &build, &vitals, &runtime).unwrap();
         assert!(detail.contains(&format!("{a:.1} → {b:.1}")));
-        assert!(detail.contains(&format!("Cooldown {:.1}s", skills::skill_cooldown(13))));
+        assert!(detail.contains(&format!("Cooldown {:.1}s", skills::rank_cooldown(13, 2))));
         assert!(detail.contains("Effect radius 4.00 → 4.80 m"));
         assert!(detail.contains("spell power"));
         assert!(!simple(GameLanguage::English, SkillId(13), 2).contains("Formula:"));

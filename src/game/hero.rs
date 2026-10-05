@@ -501,6 +501,10 @@ fn apply_growth_delta(build: &mut PlayerBuild, delta: HeroProgressionDelta) {
     build.attack_range += delta.intelligence * 0.025;
 }
 
+pub fn starting_basic_attack_rate(agility: f32) -> f32 {
+    2.1 + agility * 0.028
+}
+
 fn apply_hero_stats(
     kind: HeroKind,
     starting_skill: ContentId,
@@ -510,7 +514,7 @@ fn apply_hero_stats(
 ) {
     vitals.reset_for_hero(kind, level);
     build.attack_damage = vitals.attack_damage();
-    build.attacks_per_second = 1.45 + vitals.agility * 0.028;
+    build.attacks_per_second = starting_basic_attack_rate(vitals.agility);
     build.move_speed = 5.4 + vitals.agility * 0.035;
     build.projectile_speed = 17.0 + vitals.intelligence * 0.08;
     build.attack_range = 8.5 + vitals.intelligence * 0.025;

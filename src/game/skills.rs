@@ -1,3 +1,7 @@
+#[path = "skills/cadence.rs"]
+mod cadence;
+pub use cadence::SkillCastTelemetry;
+pub(crate) use cadence::{attack_charge_requirement, rank_cooldown};
 use std::collections::{HashMap, HashSet};
 
 use bevy::prelude::*;
@@ -52,6 +56,7 @@ impl Plugin for SkillsPlugin {
         ur_evolutions::install(app);
         reference_skills::install(app);
         app.init_resource::<SkillRuntime>()
+            .init_resource::<SkillCastTelemetry>()
             .add_systems(
                 Update,
                 (
@@ -98,6 +103,7 @@ impl Plugin for SkillsPlugin {
 #[derive(Resource)]
 pub(crate) struct SkillRuntime {
     cooldowns: [f32; SkillId::COUNT],
+    cadence: cadence::Cadence,
     evolution_tiers: [u8; SkillId::COUNT],
     attack_count: u64,
     burns: HashMap<Entity, BurnState>,
@@ -119,6 +125,7 @@ impl Default for SkillRuntime {
     fn default() -> Self {
         Self {
             cooldowns: [0.0; SkillId::COUNT],
+            cadence: cadence::Cadence::default(),
             evolution_tiers: [0; SkillId::COUNT],
             attack_count: 0,
             burns: HashMap::new(),
@@ -414,6 +421,8 @@ impl SummonBudget {
 }
 
 fn tick_skill_runtime(
+    build: Res<PlayerBuild>,
+    telemetry: Option<ResMut<SkillCastTelemetry>>,
     mut commands: Commands,
     time: Res<Time>,
     mut session: ResMut<GameSession>,
@@ -432,7 +441,13 @@ fn tick_skill_runtime(
     if session.paused || session.finished {
         return;
     }
+    runtime.prepare_cadence(&build.skills);
+    if let Some(mut telemetry) = telemetry {
+        telemetry.casts = runtime.cadence.casts;
+        telemetry.total = telemetry.casts.iter().sum();
+    }
     let delta = time.delta_secs();
+    runtime.advance_cast_gap(delta);
     // Armory Donation shortens every skill cooldown by recovering it faster.
     let recovery = delta
         * encounters.cooldown_recovery_multiplier()
@@ -1492,10 +1507,10 @@ fn cast_arc_chain(
     runtime: &mut SkillRuntime,
 ) {
     let rank = build.skills[0];
-    if rank == 0 || runtime.cooldowns[0] > 0.0 {
+    if rank == 0 || !runtime.cast_ready(0) {
         return;
     }
-    runtime.cooldowns[0] = skill_cooldown(0);
+    runtime.begin_cast(0);
     let damage = scaled_skill_damage(0, rank, build, vitals, runtime);
     let chain = chain_target_sequence(
         targets,
@@ -1554,10 +1569,10 @@ fn cast_frost_lance(
     runtime: &mut SkillRuntime,
 ) {
     let rank = build.skills[2];
-    if rank == 0 || runtime.cooldowns[2] > 0.0 {
+    if rank == 0 || !runtime.cast_ready(2) {
         return;
     }
-    runtime.cooldowns[2] = skill_cooldown(2);
+    runtime.begin_cast(2);
     let damage = scaled_skill_damage(2, rank, build, vitals, runtime);
     let base_direction = (first.position - origin).normalize_or_zero();
     let shots = frost_lance_count(rank);
@@ -1631,10 +1646,10 @@ fn cast_tidal_fan(
     runtime: &mut SkillRuntime,
 ) {
     let rank = build.skills[3];
-    if rank == 0 || runtime.cooldowns[3] > 0.0 {
+    if rank == 0 || !runtime.cast_ready(3) {
         return;
     }
-    runtime.cooldowns[3] = skill_cooldown(3);
+    runtime.begin_cast(3);
     let damage = scaled_skill_damage(3, rank, build, vitals, runtime) * 2.0;
     tidal_wave::spawn(
         commands,
@@ -1763,10 +1778,10 @@ fn cast_arcane_star(
     runtime: &mut SkillRuntime,
 ) {
     let rank = build.skills[8];
-    if rank == 0 || runtime.cooldowns[8] > 0.0 {
+    if rank == 0 || !runtime.cast_ready(8) {
         return;
     }
-    runtime.cooldowns[8] = skill_cooldown(8);
+    runtime.begin_cast(8);
     let damage = scaled_skill_damage(8, rank, build, vitals, runtime);
     schedule_typed_strike(
         commands,
@@ -1816,10 +1831,10 @@ fn cast_ground_pulse(
     runtime: &mut SkillRuntime,
 ) {
     let rank = build.skills[9];
-    if rank == 0 || runtime.cooldowns[9] > 0.0 {
+    if rank == 0 || !runtime.cast_ready(9) {
         return;
     }
-    runtime.cooldowns[9] = skill_cooldown(9);
+    runtime.begin_cast(9);
     let damage = scaled_skill_damage(9, rank, build, vitals, runtime);
     let forward = (first.position - origin).normalize_or_zero();
     let hit: Vec<TargetInfo> = targets
@@ -1958,8 +1973,8 @@ fn cast_rare_skills(
     runtime: &mut SkillRuntime,
 ) {
     let storm_rank = build.skills[12];
-    if storm_rank > 0 && runtime.cooldowns[12] <= 0.0 {
-        runtime.cooldowns[12] = skill_cooldown(12);
+    if storm_rank > 0 && runtime.cast_ready(12) {
+        runtime.begin_cast(12);
         let damage = scaled_skill_damage(12, storm_rank, build, vitals, runtime);
         spawn_skill_zone(
             commands,
@@ -1987,8 +2002,8 @@ fn cast_rare_skills(
     }
 
     let meteor_rank = build.skills[13];
-    if meteor_rank > 0 && runtime.cooldowns[13] <= 0.0 {
-        runtime.cooldowns[13] = skill_cooldown(13);
+    if meteor_rank > 0 && runtime.cast_ready(13) {
+        runtime.begin_cast(13);
         let radius = skill_effect_radius(13, meteor_rank).unwrap();
         let damage = scaled_skill_damage(13, meteor_rank, build, vitals, runtime);
         schedule_typed_fixed_strike(
@@ -2040,8 +2055,8 @@ fn cast_rare_skills(
     }
 
     let glacier_rank = build.skills[14];
-    if glacier_rank > 0 && runtime.cooldowns[14] <= 0.0 {
-        runtime.cooldowns[14] = skill_cooldown(14);
+    if glacier_rank > 0 && runtime.cast_ready(14) {
+        runtime.begin_cast(14);
         let damage = scaled_skill_damage(14, glacier_rank, build, vitals, runtime);
         spawn_skill_zone(
             commands,
@@ -2069,8 +2084,8 @@ fn cast_rare_skills(
     }
 
     let vortex_rank = build.skills[15];
-    if vortex_rank > 0 && runtime.cooldowns[15] <= 0.0 {
-        runtime.cooldowns[15] = skill_cooldown(15);
+    if vortex_rank > 0 && runtime.cast_ready(15) {
+        runtime.begin_cast(15);
         let total_damage = scaled_skill_damage(15, vortex_rank, build, vitals, runtime);
         spawn_skill_zone(
             commands,
@@ -2153,8 +2168,8 @@ fn cast_rare_skills(
     }
 
     let brand_rank = build.skills[18];
-    if brand_rank > 0 && runtime.cooldowns[18] <= 0.0 {
-        runtime.cooldowns[18] = skill_cooldown(18);
+    if brand_rank > 0 && runtime.cast_ready(18) {
+        runtime.begin_cast(18);
         if let Some(target) = targets
             .iter()
             .copied()
@@ -2189,8 +2204,8 @@ fn cast_rare_skills(
     }
 
     let swords_rank = build.skills[19];
-    if swords_rank > 0 && runtime.cooldowns[19] <= 0.0 {
-        runtime.cooldowns[19] = skill_cooldown(19);
+    if swords_rank > 0 && runtime.cast_ready(19) {
+        runtime.begin_cast(19);
         let count = flying_sword_count(swords_rank);
         let damage = scaled_skill_damage(19, swords_rank, build, vitals, runtime);
         let mut marked = Vec::new();
@@ -2259,8 +2274,8 @@ fn cast_rare_skills(
     }
 
     let transmute_rank = build.skills[22];
-    if transmute_rank > 0 && runtime.cooldowns[22] <= 0.0 {
-        runtime.cooldowns[22] = skill_cooldown(22);
+    if transmute_rank > 0 && runtime.cast_ready(22) {
+        runtime.begin_cast(22);
         let damage = scaled_skill_damage(22, transmute_rank, build, vitals, runtime);
         let radius = skill_effect_radius(22, transmute_rank).unwrap();
         let affected: Vec<TargetInfo> = targets
@@ -2303,8 +2318,8 @@ fn cast_rare_skills(
     }
 
     let wheel_rank = build.skills[23];
-    if wheel_rank > 0 && runtime.cooldowns[23] <= 0.0 {
-        runtime.cooldowns[23] = skill_cooldown(23);
+    if wheel_rank > 0 && runtime.cast_ready(23) {
+        runtime.begin_cast(23);
         commands.spawn((
             Mesh3d(assets.fx_mesh.clone()),
             MeshMaterial3d(assets.storm_material.clone()),
@@ -2344,8 +2359,8 @@ fn cast_epic_skills(
     runtime: &mut SkillRuntime,
 ) {
     let judgment_rank = build.skills[24];
-    if judgment_rank > 0 && runtime.cooldowns[24] <= 0.0 {
-        runtime.cooldowns[24] = skill_cooldown(24);
+    if judgment_rank > 0 && runtime.cast_ready(24) {
+        runtime.begin_cast(24);
         let damage = scaled_skill_damage(24, judgment_rank, build, vitals, runtime);
         let count = sky_judgment_target_count(judgment_rank);
         let mut struck = Vec::with_capacity(count as usize);
@@ -3372,6 +3387,7 @@ fn advance_static_seal(stacks: &mut u8) -> bool {
 
 pub(crate) fn reset_run(world: &mut World) {
     world.insert_resource(SkillRuntime::default());
+    world.insert_resource(SkillCastTelemetry::default());
     evolution_mechanics::reset_run(world);
     ur_evolutions::reset_run(world);
     presentation::reset_run(world);
@@ -3387,6 +3403,7 @@ mod tests {
     fn yellow_sign_halves_real_skill_cooldown_recovery_and_releases_on_exit() {
         let mut app = App::new();
         app.init_resource::<Time>()
+            .init_resource::<PlayerBuild>()
             .init_resource::<GameSession>()
             .init_resource::<MarketEffects>()
             .init_resource::<super::super::encounters::EncounterState>()
@@ -3484,6 +3501,10 @@ mod tests {
                         max_hp: 500.0,
                         gold: 1,
                     };
+                    let mut runtime = SkillRuntime::default();
+                    runtime.prepare_cadence(&build.skills);
+                    apply_resolved_attack_volleys(&mut runtime, 8, |_| {});
+                    runtime.cooldowns.fill(0.0);
                     cast_rare_skills(
                         &mut commands,
                         &assets,
@@ -3494,7 +3515,7 @@ mod tests {
                         target,
                         &[target],
                         &mut SummonBudget(20),
-                        &mut SkillRuntime::default(),
+                        &mut runtime,
                     );
                     spawn_echo_replay(
                         &mut commands,

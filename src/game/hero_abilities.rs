@@ -194,7 +194,13 @@ pub(crate) struct AbilityGenerated;
 /// independent of projectile lifetime, so point-blank hits cannot lose a
 /// passive trigger when the projectile is recycled in the same frame.
 #[derive(Resource, Default, Debug, Clone, Copy)]
-pub(crate) struct BasicAttackCounter(pub(crate) u64);
+pub struct BasicAttackCounter(pub(crate) u64);
+
+impl BasicAttackCounter {
+    pub fn count(&self) -> u64 {
+        self.0
+    }
+}
 
 #[derive(Resource, Debug, Clone, Copy)]
 pub(crate) struct HeroAttackSpeedModifier(pub(crate) f32);
@@ -286,6 +292,14 @@ fn configure_ultimate(
     fusion: Option<Res<super::HeroFusion>>,
     mut runtime: ResMut<HeroAbilityRuntime>,
 ) {
+    if !selected.locked {
+        return;
+    }
+    if runtime.observed_kind.is_none() {
+        active.remaining = active
+            .remaining
+            .max(effective_ultimate_cooldown(selected.kind));
+    }
     if let Some(previous) = runtime
         .observed_kind
         .filter(|previous| *previous != selected.kind)
@@ -1357,6 +1371,43 @@ mod tests {
         );
     }
 
+    #[test]
+    fn first_selected_ultimate_waits_full_actual_hero_cooldown_only_once() {
+        use bevy::ecs::system::RunSystemOnce;
+        for kind in HeroKind::ALL {
+            let mut app = auto_test_app(kind);
+            app.world_mut().run_system_once(configure_ultimate).unwrap();
+            assert_eq!(
+                app.world().resource::<ActiveSkill>().remaining,
+                effective_ultimate_cooldown(kind)
+            );
+            app.world_mut().resource_mut::<ActiveSkill>().remaining = 0.0;
+            app.world_mut().run_system_once(configure_ultimate).unwrap();
+            assert_eq!(app.world().resource::<ActiveSkill>().remaining, 0.0);
+        }
+    }
+    #[test]
+    fn unselected_preview_does_not_seed_wrong_initial_ultimate() {
+        use bevy::ecs::system::RunSystemOnce;
+        let mut app = auto_test_app(HeroKind::StormSavant);
+        app.world_mut().resource_mut::<SelectedHero>().locked = false;
+        app.world_mut().run_system_once(configure_ultimate).unwrap();
+        assert!(
+            app.world()
+                .resource::<HeroAbilityRuntime>()
+                .observed_kind
+                .is_none()
+        );
+        *app.world_mut().resource_mut::<SelectedHero>() = SelectedHero {
+            kind: HeroKind::EmberRanger,
+            locked: true,
+        };
+        app.world_mut().run_system_once(configure_ultimate).unwrap();
+        assert_eq!(
+            app.world().resource::<ActiveSkill>().remaining,
+            effective_ultimate_cooldown(HeroKind::EmberRanger)
+        );
+    }
     #[test]
     fn recruitment_preserves_old_cooldown_and_passive_progress() {
         let mut app = auto_test_app(HeroKind::EmberRanger);

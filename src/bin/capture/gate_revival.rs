@@ -9,10 +9,14 @@ struct BarrierProbe {
     lane: f32,
 }
 
+#[derive(Component)]
+struct BreachedPressureProbe;
+
 #[derive(Resource, Default)]
 struct RevivalCapture {
     frame: u32,
     paused_countdown: f32,
+    pressure_health: f32,
     countdown_seen: [bool; 4],
 }
 pub fn configure(world: &mut World) {
@@ -200,7 +204,33 @@ fn exercise(world: &mut World) {
                 "[capture] PASS full-road barrier: 12 archetypes blocked, all lane positions preserved, finite gate HP, hero protected"
             );
         }
-        20 | 80 => world.resource_mut::<GameSession>().core_hp = 0.,
+        20 => {
+            world.resource_mut::<GameSession>().core_hp = 0.;
+            let health = world.resource::<HeroVitals>().health;
+            world.resource_mut::<RevivalCapture>().pressure_health = health;
+            let gate = world
+                .query_filtered::<&Transform, With<Core>>()
+                .single(world)
+                .unwrap()
+                .translation;
+            world.spawn((
+                Name::new("Persistent breached enemy pressure"),
+                BreachedPressureProbe,
+                Enemy {
+                    hp: 100_000.,
+                    max_hp: 100_000.,
+                    speed: 6.,
+                    damage: 1.,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+                Transform::from_translation(gate + Vec3::X * 2.),
+            ));
+        }
+        80 => world.resource_mut::<GameSession>().core_hp = 0.,
         25 | 85 => {
             let session = world.resource::<GameSession>();
             assert!(!session.finished && session.gate_revive_remaining > 0.);
@@ -248,6 +278,30 @@ fn exercise(world: &mut World) {
                 );
                 println!(
                     "[capture] PASS visible rebuild countdown: 4 / 3 / 2 / 1, hidden on restored full-health wall"
+                );
+            }
+            if frame == 70 {
+                let gate_x = world
+                    .query_filtered::<&Transform, With<Core>>()
+                    .single(world)
+                    .unwrap()
+                    .translation
+                    .x;
+                let mut probes =
+                    world.query_filtered::<(Entity, &Transform), With<BreachedPressureProbe>>();
+                let (entity, transform) = probes.single(world).unwrap();
+                assert!(
+                    transform.translation.x < gate_x,
+                    "rebuilt wall must not teleport breached enemies outside"
+                );
+                assert!(
+                    world.resource::<HeroVitals>().health
+                        < world.resource::<RevivalCapture>().pressure_health,
+                    "breached enemy must deal actual hero damage"
+                );
+                world.despawn(entity);
+                println!(
+                    "[capture] PASS persistent rear pressure: crossed opening, survived rebuild on hero side, actual hero damage"
                 );
             }
             println!("[capture] full-health gate rebuild frame={frame} PASS");

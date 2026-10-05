@@ -84,10 +84,14 @@ pub use campaign_progress::{
     CampaignProgress, CampaignReward, MAX_UPGRADE_LEVEL, RunReward, UPGRADE_PER_LEVEL,
 };
 pub use campaign_ui::CampaignMenu;
-pub use combat::{EliteAffix, EliteAffixKind, ElitePressure, RaidWarning, YELLOW_SIGN_RADIUS};
+pub use combat::{
+    EliteAffix, EliteAffixKind, ElitePressure, EnemyPressure, EnemyPressureSettings, RaidWarning,
+    YELLOW_SIGN_RADIUS,
+};
 pub use components::*;
 pub use crafting::{CraftingState, RecipeId, craft_recipe};
 pub use encounters::{EncounterId, EncounterState};
+pub use hero_abilities::BasicAttackCounter;
 pub use hero_fusion::HeroFusion;
 pub use hero_stats::HeroStatsSnapshot;
 pub use localization::{GameLanguage, LocalizationPlugin};
@@ -97,6 +101,7 @@ pub use pooling::{CombatPoolSnapshot, CombatPools, DamageNumberPoolMetrics, Pool
 pub use progression::{SkillEconomy, available_bond_cards, available_bond_cards_at};
 pub use resources::*;
 pub use settings::SettingsInputSet;
+pub use skills::SkillCastTelemetry;
 pub use skills::tidal_wave::TidalWave;
 
 pub struct GamePlugin;

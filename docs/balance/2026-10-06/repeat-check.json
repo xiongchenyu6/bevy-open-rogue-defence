@@ -1,0 +1,9 @@
+{
+  "left": "replays/active-a11ce-a.jsonl",
+  "right": "replays/active-a11ce-b.jsonl",
+  "checkpoints": [
+    29,
+    29
+  ],
+  "identical": true
+}

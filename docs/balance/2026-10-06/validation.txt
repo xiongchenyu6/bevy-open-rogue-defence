@@ -1,0 +1,36 @@
+Combat balance validation — 2026-10-06
+Baseline: 492ebaa; before/after full-run matrices: 20 + 20 completed cases.
+Single-threaded baked-default replay: 2 x 50000 frames, 29 identical checkpoints, frame caps are not wins.
+Native captures: 600 + 600 + 400 updates; selected screenshots archived.
+
+library_tests:
+    Finished `test` profile [optimized + debuginfo] target(s) in 9m 05s
+test result: ok. 544 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.50s
+
+native_build:
+    Finished `dev` profile [optimized + debuginfo] target(s) in 46.61s
+
+strict_clippy:
+    Finished `dev` profile [optimized + debuginfo] target(s) in 30.46s
+
+format:
+PASS: exit 0, no output
+
+desktop_cadence:
+BALANCE_CADENCE_PASS early_casts=4 late_casts=7 early_volleys=18 late_volleys=41 spacing>=0.16s initial_ultimate_wait=true pause_frozen=true damage=true
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+
+mobile_cadence:
+BALANCE_CADENCE_PASS early_casts=4 late_casts=7 early_volleys=18 late_volleys=41 spacing>=0.16s initial_ultimate_wait=true pause_frozen=true damage=true
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+
+gate_revival:
+[capture] PASS full-road barrier: 12 archetypes blocked, all lane positions preserved, finite gate HP, hero protected
+[capture] PASS persistent rear pressure: crossed opening, survived rebuild on hero side, actual hero damage
+[capture] full-health gate rebuild frame=70 PASS
+[capture] PASS visible rebuild countdown: 4 / 3 / 2 / 1, hidden on restored full-health wall
+[capture] full-health gate rebuild frame=120 PASS
+[capture] hero respawn after death 1 PASS
+[capture] hero respawn after death 2 PASS
+[capture] PASS gate-revival: two nonterminal rebuilds, frozen pause, two hero respawns, third death settles defeat
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance

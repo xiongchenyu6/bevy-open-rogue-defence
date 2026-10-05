@@ -25,6 +25,8 @@ use rogue_commander::game::{
 #[path = "capture/immediate_choice.rs"]
 mod immediate_choice_capture;
 
+#[path = "capture/balance_cadence.rs"]
+mod balance_cadence;
 #[path = "capture/class_attacks.rs"]
 mod class_attacks_capture;
 
@@ -587,6 +589,9 @@ fn main() {
         );
     }
 
+    if scenario == "balance-cadence" {
+        balance_cadence::install(&mut apps.main);
+    }
     if scenario.starts_with("class-") {
         class_attacks_capture::install(&mut apps.main);
     }
@@ -817,6 +822,10 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     if !scenario.starts_with("campaign") {
         world.resource_mut::<CampaignMenu>().0 = false;
         world.resource_mut::<GameSession>().paused = false;
+    }
+    if scenario == "balance-cadence" {
+        balance_cadence::configure(world);
+        return;
     }
     if scenario.starts_with("class-") {
         class_attacks_capture::configure(world, scenario);
