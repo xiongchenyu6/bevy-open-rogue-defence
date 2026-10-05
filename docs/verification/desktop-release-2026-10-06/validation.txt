@@ -1,0 +1,15 @@
+Linux desktop release candidate validation — 2026-10-06
+Game source commit: 437b675. No Rust source changes in this turn; attempted low-driver fallback was removed after it did not solve minimum rendering requirements.
+Steam Runtime 3 sniper SDK digest: sha256:1c33c507bc75d012e77df5727f93b0d5b8c3f7c8d4142ba5f7a16882cc92e014
+Rust 1.98.0; cargo build --locked --release --bin rogue_commander -j2.
+    Finished `release` profile [optimized] target(s) in 14m 43s
+{"output": "/out/rogue-commander-linux", "profile": "release", "files": 875, "missing_license_files": [], "legal_review": "Not performed."}
+Package manifest verified: 875 files; 383 normal/build dependency license records, no missing text records.
+Linux ELF interpreter /lib64/ld-linux-x86-64.so.2; no Nix dependencies or RPATH.
+Package tool: 5 integration tests passed; Python compile and shell syntax checks passed.
+DESKTOP_RUNTIME_PASS {"package_hashes_verified": true, "no_source": true, "no_rust": true, "no_nix": true, "working_directory": "/tmp", "chapter_recruit_battle": true, "fullscreen_restored": true, "language_saved_and_reloaded": true, "normal_quit_twice": true, "scope": "Ubuntu 24.04 / X11 / software Vulkan; no Steam client or hardware performance claim"}
+Scope: isolated Ubuntu 24.04 runtime, Mesa 25.2.8 software Vulkan, X11. No source checkout, Nix, Rust, Cargo or network mounted; game directory read-only; cwd /tmp.
+Observed negative test: SteamRuntime3 platform with nonconformant Mesa20.3.5 lavapipe cannot meet binding/presentation limits and fails. Not a supported-driver or Steam-client pass.
+No real Steam client, Steam Deck, Windows/macOS, physical GPU performance, whole campaign or legal approval claim.
+
+Project-owned staged files pass whitespace checks; verbatim upstream license/declaration evidence retains original whitespace and passes SHA256 checks.

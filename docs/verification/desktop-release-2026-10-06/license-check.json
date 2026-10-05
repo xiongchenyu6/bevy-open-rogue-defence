@@ -1,0 +1,5 @@
+{
+  "dependency_count": 383,
+  "missing": [],
+  "scope": "Normal/build dependencies reachable in the supplied Cargo resolve graph; dev-only edges excluded. Target filtering follows supplied metadata."
+}

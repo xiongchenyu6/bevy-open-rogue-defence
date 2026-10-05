@@ -1,0 +1,6 @@
+# Ordinary Linux runtime test; no compiler, Rust, Nix or source checkout.
+FROM ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    xvfb openbox xdotool imagemagick mesa-vulkan-drivers libvulkan1 python3 \
+    libasound2t64 libudev1 libwayland-client0 libxkbcommon0 libxkbcommon-x11-0 libx11-6 libxcursor1 libxi6 libxrandr2 \
+    && rm -rf /var/lib/apt/lists/*

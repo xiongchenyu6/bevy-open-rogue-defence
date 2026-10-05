@@ -1,0 +1,12 @@
+{
+  "package_hashes_verified": true,
+  "no_source": true,
+  "no_rust": true,
+  "no_nix": true,
+  "working_directory": "/tmp",
+  "chapter_recruit_battle": true,
+  "fullscreen_restored": true,
+  "language_saved_and_reloaded": true,
+  "normal_quit_twice": true,
+  "scope": "Ubuntu 24.04 / X11 / software Vulkan; no Steam client or hardware performance claim"
+}

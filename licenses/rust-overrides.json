@@ -1,0 +1,450 @@
+{
+  "schema_version": 1,
+  "source": "cargo package .cargo_vcs_info.json pinned commits; original upstream license text",
+  "packages": [
+    {
+      "name": "accesskit",
+      "version": "0.24.1",
+      "spdx": "MIT OR Apache-2.0",
+      "repository": "https://github.com/AccessKit/accesskit",
+      "commit": "a55d3e1a18bb9ef0e4bccc9083fb13c3e0ad8969",
+      "path_in_vcs": "common",
+      "files": [
+        {
+          "path": "licenses/rust/accesskit-0.24.1/LICENSE-MIT",
+          "source_url": "https://raw.githubusercontent.com/AccessKit/accesskit/a55d3e1a18bb9ef0e4bccc9083fb13c3e0ad8969/LICENSE-MIT",
+          "resolved_url": "https://raw.githubusercontent.com/AccessKit/accesskit/a55d3e1a18bb9ef0e4bccc9083fb13c3e0ad8969/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+          "bytes": 1023
+        },
+        {
+          "path": "licenses/rust/accesskit-0.24.1/LICENSE-APACHE",
+          "source_url": "https://raw.githubusercontent.com/AccessKit/accesskit/a55d3e1a18bb9ef0e4bccc9083fb13c3e0ad8969/LICENSE-APACHE",
+          "resolved_url": "https://raw.githubusercontent.com/AccessKit/accesskit/a55d3e1a18bb9ef0e4bccc9083fb13c3e0ad8969/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+          "bytes": 9723
+        }
+      ],
+      "status": "downloaded"
+    },
+    {
+      "name": "accesskit_winit",
+      "version": "0.32.2",
+      "spdx": "Apache-2.0",
+      "repository": "https://github.com/AccessKit/accesskit",
+      "commit": "1bbcf100942bac96c2c3a4a91cb67b0b20201a24",
+      "path_in_vcs": "platforms/winit",
+      "files": [
+        {
+          "path": "licenses/rust/accesskit_winit-0.32.2/LICENSE-MIT",
+          "source_url": "https://raw.githubusercontent.com/AccessKit/accesskit/1bbcf100942bac96c2c3a4a91cb67b0b20201a24/LICENSE-MIT",
+          "resolved_url": "https://raw.githubusercontent.com/AccessKit/accesskit/1bbcf100942bac96c2c3a4a91cb67b0b20201a24/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+          "bytes": 1023
+        },
+        {
+          "path": "licenses/rust/accesskit_winit-0.32.2/LICENSE-APACHE",
+          "source_url": "https://raw.githubusercontent.com/AccessKit/accesskit/1bbcf100942bac96c2c3a4a91cb67b0b20201a24/LICENSE-APACHE",
+          "resolved_url": "https://raw.githubusercontent.com/AccessKit/accesskit/1bbcf100942bac96c2c3a4a91cb67b0b20201a24/LICENSE-APACHE",
+          "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+          "bytes": 9723
+        }
+      ],
+      "status": "downloaded"
+    },
+    {
+      "name": "bevy_scene_macros",
+      "version": "0.19.0",
+      "spdx": "MIT OR Apache-2.0",
+      "repository": "https://github.com/bevyengine/bevy",
+      "commit": "c6f634ca9f406d68ba5109d921247b654cb42c10",
+      "path_in_vcs": "crates/bevy_scene/macros",
+      "files": [
+        {
+          "path": "licenses/rust/bevy_scene_macros-0.19.0/LICENSE-MIT",
+          "source_url": "https://raw.githubusercontent.com/bevyengine/bevy/c6f634ca9f406d68ba5109d921247b654cb42c10/LICENSE-MIT",
+          "resolved_url": "https://raw.githubusercontent.com/bevyengine/bevy/c6f634ca9f406d68ba5109d921247b654cb42c10/LICENSE-MIT",
+          "sha256": "508a77d2e7b51d98adeed32648ad124b7b30241a8e70b2e72c99f92d8e5874d1",
+          "bytes": 1036
+        },
+        {
+          "path": "licenses/rust/bevy_scene_macros-0.19.0/LICENSE-APACHE",
+          "source_url": "https://raw.githubusercontent.com/bevyengine/bevy/c6f634ca9f406d68ba5109d921247b654cb42c10/LICENSE-APACHE",
+          "resolved_url": "https://raw.githubusercontent.com/bevyengine/bevy/c6f634ca9f406d68ba5109d921247b654cb42c10/LICENSE-APACHE",
+          "sha256": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9",
+          "bytes": 10173
+        }
+      ],
+      "status": "downloaded"
+    },
+    {
+      "name": "constgebra",
+      "version": "0.1.4",
+      "spdx": "MIT OR Apache-2.0",
+      "repository": "https://github.com/knickish/constgebra",
+      "commit": "eae8e094e5779f42f1db2a7adf9036aa33744bc8",
+      "path_in_vcs": "",
+      "files": [
+        {
+          "path": "licenses/rust/constgebra-0.1.4/README.md",
+          "source_url": "https://raw.githubusercontent.com/knickish/constgebra/eae8e094e5779f42f1db2a7adf9036aa33744bc8/README.md",
+          "sha256": "ca7fd771ad7ead0110483a8d3ff1afe74c9243b76cfd2d29ba3c538a86fc1ad6",
+          "bytes": 960,
+          "role": "upstream_attribution"
+        },
+        {
+          "path": "licenses/rust/constgebra-0.1.4/Cargo.toml",
+          "source_url": "https://raw.githubusercontent.com/knickish/constgebra/eae8e094e5779f42f1db2a7adf9036aa33744bc8/Cargo.toml",
+          "sha256": "dd3370ff7a11ee8ac10e8f96f9ba599c1fb2cd73379a301f43ea056fa2e7b87c",
+          "bytes": 493,
+          "role": "pinned_upstream_license_declaration"
+        },
+        {
+          "path": "licenses/rust/constgebra-0.1.4/LICENSE-APACHE-2.0-OFFICIAL.txt",
+          "source_url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+          "resolved_url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "bytes": 11358,
+          "role": "official_standard_license_text"
+        }
+      ],
+      "status": "downloaded",
+      "tree_url": "https://api.github.com/repos/knickish/constgebra/git/trees/eae8e094e5779f42f1db2a7adf9036aa33744bc8?recursive=1",
+      "evidence_files": [
+        {
+          "path": "licenses/rust/constgebra-0.1.4/upstream-tree.json",
+          "source_url": "https://api.github.com/repos/knickish/constgebra/git/trees/eae8e094e5779f42f1db2a7adf9036aa33744bc8?recursive=1",
+          "sha256": "0e414d87eba95caa514d02f70589f5b3929cfacb86a70dbe96a21e2f06e241ca",
+          "bytes": 2377
+        },
+        {
+          "path": "licenses/rust/constgebra-0.1.4/README.md",
+          "source_url": "https://raw.githubusercontent.com/knickish/constgebra/eae8e094e5779f42f1db2a7adf9036aa33744bc8/README.md",
+          "sha256": "ca7fd771ad7ead0110483a8d3ff1afe74c9243b76cfd2d29ba3c538a86fc1ad6",
+          "bytes": 960
+        },
+        {
+          "path": "licenses/rust/constgebra-0.1.4/Cargo.toml",
+          "source_url": "https://raw.githubusercontent.com/knickish/constgebra/eae8e094e5779f42f1db2a7adf9036aa33744bc8/Cargo.toml",
+          "sha256": "dd3370ff7a11ee8ac10e8f96f9ba599c1fb2cd73379a301f43ea056fa2e7b87c",
+          "bytes": 493
+        }
+      ],
+      "selected_spdx": "Apache-2.0",
+      "license_text_origin": "official_standard_text_with_pinned_upstream_declaration",
+      "upstream_text_note": "Pinned upstream repository tree contains no license text; README contains no full license. SPDX declaration alone is not a license-text override. Resolved by retaining the pinned upstream Cargo.toml declared license and the official complete standard license text; the standard text is not an upstream-authored missing file."
+    },
+    {
+      "name": "dasp_sample",
+      "version": "0.11.0",
+      "spdx": "MIT OR Apache-2.0",
+      "repository": "https://github.com/rustaudio/sample",
+      "commit": "97c3bb9b2363c0b46ac1633858bf1054fd02a980",
+      "path_in_vcs": "",
+      "files": [
+        {
+          "path": "licenses/rust/dasp_sample-0.11.0/LICENSE-MIT",
+          "source_url": "https://raw.githubusercontent.com/rustaudio/sample/97c3bb9b2363c0b46ac1633858bf1054fd02a980/LICENSE-MIT",
+          "resolved_url": "https://raw.githubusercontent.com/rustaudio/sample/97c3bb9b2363c0b46ac1633858bf1054fd02a980/LICENSE-MIT",
+          "sha256": "b1d6df41ed3aa96806e74c729444d7c121d90e6660a6aed01d298e03fde475a0",
+          "bytes": 1087
+        },
+        {
+          "path": "licenses/rust/dasp_sample-0.11.0/LICENSE-APACHE",
+          "source_url": "https://raw.githubusercontent.com/rustaudio/sample/97c3bb9b2363c0b46ac1633858bf1054fd02a980/LICENSE-APACHE",
+          "resolved_url": "https://raw.githubusercontent.com/rustaudio/sample/97c3bb9b2363c0b46ac1633858bf1054fd02a980/LICENSE-APACHE",
+          "sha256": "756c8d2ab2dc24f256e1455b5f03937f4933d83d7bc9f2d55009fc962377d512",
+          "bytes": 561
+        }
+      ],
+      "status": "downloaded"
+    },
+    {
+      "name": "encase_derive",
+      "version": "0.12.0",
+      "spdx": "MIT-0",
+      "repository": "https://github.com/teoxoy/encase",
+      "commit": "ffba833409487e8958f327215e2c0a09f0c470df",
+      "path_in_vcs": "derive",
+      "files": [
+        {
+          "path": "licenses/rust/encase_derive-0.12.0/LICENSE",
+          "source_url": "https://raw.githubusercontent.com/teoxoy/encase/ffba833409487e8958f327215e2c0a09f0c470df/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/teoxoy/encase/ffba833409487e8958f327215e2c0a09f0c470df/LICENSE",
+          "sha256": "8876cdca96eb380d16d5ea32bf4529d85e87dedc7765ae2861a9bec7f34acbed",
+          "bytes": 878
+        }
+      ],
+      "status": "downloaded"
+    },
+    {
+      "name": "encase_derive_impl",
+      "version": "0.12.0",
+      "spdx": "MIT-0",
+      "repository": "https://github.com/teoxoy/encase",
+      "commit": "ffba833409487e8958f327215e2c0a09f0c470df",
+      "path_in_vcs": "derive/impl",
+      "files": [
+        {
+          "path": "licenses/rust/encase_derive_impl-0.12.0/LICENSE",
+          "source_url": "https://raw.githubusercontent.com/teoxoy/encase/ffba833409487e8958f327215e2c0a09f0c470df/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/teoxoy/encase/ffba833409487e8958f327215e2c0a09f0c470df/LICENSE",
+          "sha256": "8876cdca96eb380d16d5ea32bf4529d85e87dedc7765ae2861a9bec7f34acbed",
+          "bytes": 878
+        }
+      ],
+      "status": "downloaded"
+    },
+    {
+      "repository": "https://gitlab.com/gilrs-project/gilrs",
+      "commit": "07e286e24b046cf39e5c367daa2770b805a64692",
+      "status": "downloaded",
+      "name": "gilrs",
+      "version": "0.11.2",
+      "spdx": "Apache-2.0/MIT",
+      "path_in_vcs": "gilrs",
+      "files": [
+        {
+          "path": "licenses/rust/gilrs-0.11.2/LICENSE-MIT",
+          "source_url": "https://gitlab.com/gilrs-project/gilrs/-/raw/07e286e24b046cf39e5c367daa2770b805a64692/LICENSE-MIT",
+          "resolved_url": "https://gitlab.com/gilrs-project/gilrs/-/raw/07e286e24b046cf39e5c367daa2770b805a64692/LICENSE-MIT",
+          "sha256": "74497fa3c93ebb5ec32d85de117469cb3fab3276f7c02426f14c0f19f31f4424",
+          "bytes": 1091
+        },
+        {
+          "path": "licenses/rust/gilrs-0.11.2/LICENSE-APACHE",
+          "source_url": "https://gitlab.com/gilrs-project/gilrs/-/raw/07e286e24b046cf39e5c367daa2770b805a64692/LICENSE-APACHE",
+          "resolved_url": "https://gitlab.com/gilrs-project/gilrs/-/raw/07e286e24b046cf39e5c367daa2770b805a64692/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+          "bytes": 10847
+        }
+      ],
+      "upstream_text_note": "Repository-root original licenses at the identical pinned gilrs commit apply to the gilrs crate, path_in_vcs=gilrs; source is shared with gilrs-core at this exact commit."
+    },
+    {
+      "name": "gilrs-core",
+      "version": "0.6.8",
+      "spdx": "Apache-2.0/MIT",
+      "repository": "https://gitlab.com/gilrs-project/gilrs",
+      "commit": "07e286e24b046cf39e5c367daa2770b805a64692",
+      "path_in_vcs": "gilrs-core",
+      "files": [
+        {
+          "path": "licenses/rust/gilrs-core-0.6.8/LICENSE-MIT",
+          "source_url": "https://gitlab.com/gilrs-project/gilrs/-/raw/07e286e24b046cf39e5c367daa2770b805a64692/LICENSE-MIT",
+          "resolved_url": "https://gitlab.com/gilrs-project/gilrs/-/raw/07e286e24b046cf39e5c367daa2770b805a64692/LICENSE-MIT",
+          "sha256": "74497fa3c93ebb5ec32d85de117469cb3fab3276f7c02426f14c0f19f31f4424",
+          "bytes": 1091
+        },
+        {
+          "path": "licenses/rust/gilrs-core-0.6.8/LICENSE-APACHE",
+          "source_url": "https://gitlab.com/gilrs-project/gilrs/-/raw/07e286e24b046cf39e5c367daa2770b805a64692/LICENSE-APACHE",
+          "resolved_url": "https://gitlab.com/gilrs-project/gilrs/-/raw/07e286e24b046cf39e5c367daa2770b805a64692/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+          "bytes": 10847
+        }
+      ],
+      "status": "downloaded"
+    },
+    {
+      "name": "gpu-descriptor",
+      "version": "0.3.2",
+      "spdx": "MIT OR Apache-2.0",
+      "repository": "https://github.com/zakarumych/gpu-descriptor",
+      "commit": "bb28b4e55b742e0ea3e7a0968e7ee6287ba0e06a",
+      "path_in_vcs": "gpu-descriptor",
+      "files": [
+        {
+          "path": "licenses/rust/gpu-descriptor-0.3.2/COPYING",
+          "source_url": "https://raw.githubusercontent.com/zakarumych/gpu-descriptor/bb28b4e55b742e0ea3e7a0968e7ee6287ba0e06a/COPYING",
+          "resolved_url": "https://raw.githubusercontent.com/zakarumych/gpu-descriptor/bb28b4e55b742e0ea3e7a0968e7ee6287ba0e06a/COPYING",
+          "sha256": "f72143f7e9d9fb8bd336b139fa22f825a299591c29f2f7338c5566347b137613",
+          "bytes": 352
+        },
+        {
+          "path": "licenses/rust/gpu-descriptor-0.3.2/LICENSE-APACHE",
+          "source_url": "https://raw.githubusercontent.com/zakarumych/gpu-descriptor/bb28b4e55b742e0ea3e7a0968e7ee6287ba0e06a/license/APACHE",
+          "resolved_url": "https://raw.githubusercontent.com/zakarumych/gpu-descriptor/bb28b4e55b742e0ea3e7a0968e7ee6287ba0e06a/license/APACHE",
+          "sha256": "6bec8c944a6d4251be50ac86bb4ca360bcce5aea472505dee2800e160bf1cdbf",
+          "bytes": 574
+        },
+        {
+          "path": "licenses/rust/gpu-descriptor-0.3.2/LICENSE-MIT",
+          "source_url": "https://raw.githubusercontent.com/zakarumych/gpu-descriptor/bb28b4e55b742e0ea3e7a0968e7ee6287ba0e06a/license/MIT",
+          "resolved_url": "https://raw.githubusercontent.com/zakarumych/gpu-descriptor/bb28b4e55b742e0ea3e7a0968e7ee6287ba0e06a/license/MIT",
+          "sha256": "5226e27d5fbc683db56c52853cdb9d15b69abadb525a60f95c862c2dbd77cdc8",
+          "bytes": 1080
+        }
+      ],
+      "status": "downloaded"
+    },
+    {
+      "name": "gpu-descriptor-types",
+      "version": "0.2.0",
+      "spdx": "MIT OR Apache-2.0",
+      "repository": "https://github.com/zakarumych/gpu-descriptor",
+      "commit": "9f2fb9546591322e7b77ee1e79385e01effd85e4",
+      "path_in_vcs": "types",
+      "files": [
+        {
+          "path": "licenses/rust/gpu-descriptor-types-0.2.0/COPYING",
+          "source_url": "https://raw.githubusercontent.com/zakarumych/gpu-descriptor/9f2fb9546591322e7b77ee1e79385e01effd85e4/COPYING",
+          "resolved_url": "https://raw.githubusercontent.com/zakarumych/gpu-descriptor/9f2fb9546591322e7b77ee1e79385e01effd85e4/COPYING",
+          "sha256": "f72143f7e9d9fb8bd336b139fa22f825a299591c29f2f7338c5566347b137613",
+          "bytes": 352
+        },
+        {
+          "path": "licenses/rust/gpu-descriptor-types-0.2.0/LICENSE-APACHE",
+          "source_url": "https://raw.githubusercontent.com/zakarumych/gpu-descriptor/9f2fb9546591322e7b77ee1e79385e01effd85e4/license/APACHE",
+          "resolved_url": "https://raw.githubusercontent.com/zakarumych/gpu-descriptor/9f2fb9546591322e7b77ee1e79385e01effd85e4/license/APACHE",
+          "sha256": "6bec8c944a6d4251be50ac86bb4ca360bcce5aea472505dee2800e160bf1cdbf",
+          "bytes": 574
+        },
+        {
+          "path": "licenses/rust/gpu-descriptor-types-0.2.0/LICENSE-MIT",
+          "source_url": "https://raw.githubusercontent.com/zakarumych/gpu-descriptor/9f2fb9546591322e7b77ee1e79385e01effd85e4/license/MIT",
+          "resolved_url": "https://raw.githubusercontent.com/zakarumych/gpu-descriptor/9f2fb9546591322e7b77ee1e79385e01effd85e4/license/MIT",
+          "sha256": "5226e27d5fbc683db56c52853cdb9d15b69abadb525a60f95c862c2dbd77cdc8",
+          "bytes": 1080
+        }
+      ],
+      "status": "downloaded"
+    },
+    {
+      "name": "hexf-parse",
+      "version": "0.2.1",
+      "spdx": "CC0-1.0",
+      "repository": "https://github.com/lifthrasiir/hexf",
+      "commit": "4225763d744183d720f575ae96d04161b4d08ea0",
+      "path_in_vcs": "",
+      "files": [
+        {
+          "path": "licenses/rust/hexf-parse-0.2.1/README.md",
+          "source_url": "https://raw.githubusercontent.com/lifthrasiir/hexf/4225763d744183d720f575ae96d04161b4d08ea0/README.md",
+          "sha256": "425cb6fae64b193ab5342094774bc66b7d7b9276c7c43d9ac7ccca7063f4ed5b",
+          "bytes": 4386,
+          "role": "upstream_attribution"
+        },
+        {
+          "path": "licenses/rust/hexf-parse-0.2.1/Cargo.toml",
+          "source_url": "https://raw.githubusercontent.com/lifthrasiir/hexf/4225763d744183d720f575ae96d04161b4d08ea0/Cargo.toml",
+          "sha256": "9b75a01608d103275c0eb41a0e1c1284dbc326dd90a9d79e2039b8c69e7c3c08",
+          "bytes": 567,
+          "role": "pinned_upstream_license_declaration"
+        },
+        {
+          "path": "licenses/rust/hexf-parse-0.2.1/CC0-1.0-OFFICIAL-LEGALCODE.txt",
+          "source_url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+          "resolved_url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt",
+          "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+          "bytes": 7048,
+          "role": "official_standard_license_text"
+        }
+      ],
+      "status": "downloaded",
+      "tree_url": "https://api.github.com/repos/lifthrasiir/hexf/git/trees/4225763d744183d720f575ae96d04161b4d08ea0?recursive=1",
+      "evidence_files": [
+        {
+          "path": "licenses/rust/hexf-parse-0.2.1/upstream-tree.json",
+          "source_url": "https://api.github.com/repos/lifthrasiir/hexf/git/trees/4225763d744183d720f575ae96d04161b4d08ea0?recursive=1",
+          "sha256": "715e85656900b66a048cf2dd4f9063d1f383c3002c6bc1a6d362c6e987f84980",
+          "bytes": 3394
+        },
+        {
+          "path": "licenses/rust/hexf-parse-0.2.1/README.md",
+          "source_url": "https://raw.githubusercontent.com/lifthrasiir/hexf/4225763d744183d720f575ae96d04161b4d08ea0/README.md",
+          "sha256": "425cb6fae64b193ab5342094774bc66b7d7b9276c7c43d9ac7ccca7063f4ed5b",
+          "bytes": 4386
+        },
+        {
+          "path": "licenses/rust/hexf-parse-0.2.1/Cargo.toml",
+          "source_url": "https://raw.githubusercontent.com/lifthrasiir/hexf/4225763d744183d720f575ae96d04161b4d08ea0/Cargo.toml",
+          "sha256": "9b75a01608d103275c0eb41a0e1c1284dbc326dd90a9d79e2039b8c69e7c3c08",
+          "bytes": 567
+        }
+      ],
+      "selected_spdx": "CC0-1.0",
+      "license_text_origin": "official_standard_text_with_pinned_upstream_declaration",
+      "upstream_text_note": "Pinned upstream repository tree contains no license text; README contains no full license. SPDX declaration alone is not a license-text override. Resolved by retaining the pinned upstream Cargo.toml declared license and the official complete standard license text; the standard text is not an upstream-authored missing file."
+    },
+    {
+      "name": "profiling",
+      "version": "1.0.18",
+      "spdx": "MIT OR Apache-2.0",
+      "repository": "https://github.com/aclysma/profiling",
+      "commit": "8271551172eb6fa4cba47369aedd93790c623df9",
+      "path_in_vcs": "profiling",
+      "files": [
+        {
+          "path": "licenses/rust/profiling-1.0.18/LICENSE-MIT",
+          "source_url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/LICENSE-MIT",
+          "resolved_url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/LICENSE-MIT",
+          "sha256": "c8167fdeeed46d3f244d3f85c5bf998ce889343691c32be2c61a8bc4b5c08333",
+          "bytes": 1093
+        },
+        {
+          "path": "licenses/rust/profiling-1.0.18/LICENSE-APACHE",
+          "source_url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/LICENSE-APACHE",
+          "resolved_url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/LICENSE-APACHE",
+          "sha256": "10d30a673cd5e9349bdc02aeb48f14b3386d27d0da32df8f0a555d4aa16aa551",
+          "bytes": 10818
+        }
+      ],
+      "status": "downloaded"
+    },
+    {
+      "name": "spirv",
+      "version": "0.4.0+sdk-1.4.341.0",
+      "spdx": "Apache-2.0",
+      "repository": "https://github.com/gfx-rs/rspirv",
+      "commit": "8afc3d0ac8e158128cd1410bb2e4b4c26ab11bb4",
+      "path_in_vcs": "spirv",
+      "files": [
+        {
+          "path": "licenses/rust/spirv-0.4.0+sdk-1.4.341.0/LICENSE",
+          "source_url": "https://raw.githubusercontent.com/gfx-rs/rspirv/8afc3d0ac8e158128cd1410bb2e4b4c26ab11bb4/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/gfx-rs/rspirv/8afc3d0ac8e158128cd1410bb2e4b4c26ab11bb4/LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "bytes": 11358
+        }
+      ],
+      "status": "downloaded"
+    },
+    {
+      "name": "svg_fmt",
+      "version": "0.4.5",
+      "spdx": "MIT/Apache-2.0",
+      "repository": "https://github.com/nical/rust_debug",
+      "commit": "93f414cd572b5c2781df93dbdc068ed13443d05a",
+      "path_in_vcs": "svg_fmt",
+      "files": [
+        {
+          "path": "licenses/rust/svg_fmt-0.4.5/LICENSE",
+          "source_url": "https://raw.githubusercontent.com/nical/rust_debug/93f414cd572b5c2781df93dbdc068ed13443d05a/LICENSE",
+          "resolved_url": "https://raw.githubusercontent.com/nical/rust_debug/93f414cd572b5c2781df93dbdc068ed13443d05a/LICENSE",
+          "sha256": "7e98bed7f100747aaae7d82ab94fbe6b76fd6b84b09a3aaa413bff8196d0fbb1",
+          "bytes": 1070
+        }
+      ],
+      "status": "downloaded"
+    },
+    {
+      "name": "taffy",
+      "version": "0.10.1",
+      "spdx": "MIT",
+      "repository": "https://github.com/DioxusLabs/taffy",
+      "commit": "639f0acdd20f914f847abffbeaa903d66cae4882",
+      "path_in_vcs": "",
+      "files": [
+        {
+          "path": "licenses/rust/taffy-0.10.1/LICENSE.md",
+          "source_url": "https://raw.githubusercontent.com/DioxusLabs/taffy/639f0acdd20f914f847abffbeaa903d66cae4882/LICENSE.md",
+          "resolved_url": "https://raw.githubusercontent.com/DioxusLabs/taffy/639f0acdd20f914f847abffbeaa903d66cae4882/LICENSE.md",
+          "sha256": "a7083ef3dd41a65eeb2162c2c091b0082e2724fb4c6ed029b363c7840d244ecd",
+          "bytes": 1420
+        }
+      ],
+      "status": "downloaded"
+    }
+  ]
+}

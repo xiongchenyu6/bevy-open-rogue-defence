@@ -150,6 +150,8 @@ adb logcat | grep 'RustStdoutStderr\|bevy\|wgpu'
 
 中文分词刷屏与静止界面重复排版已修正：两种视口的三段静止界面均无额外文字／字体／排版更新，真实音量和语言操作仍正常；563项测试及1,540帧运行验收通过。数据与范围见[文字排版验收](docs/text-layout-performance.md)。
 
+Linux release候选包已在Steam Runtime 3 SDK中构建，并在无Nix／Rust／源码的独立运行时完成章节、征募、战斗、设置和重启验收。构建、包路径和限制见[桌面发行候选包](docs/desktop-release.md)。
+
 上架品质的剩余验收按[发售体验清单](docs/release-readiness.md)推进；当前仍处于开发阶段。素材来源见[模型来源](assets/models/SOURCES.md)，素材验证工具为 `tools/verify_models.py` 和 `tools/verify_ui_assets.py`。此前截图与影片用于历史回看，不作为当前版本的平衡、帧率或确定性证明。
 
 ## 素材表
