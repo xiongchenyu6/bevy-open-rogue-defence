@@ -1,0 +1,128 @@
+{
+  "generator": "tools/build_adventure_models.py",
+  "assets": [
+    {
+      "file": "adventure_embermaw.glb",
+      "origin": "Original procedural Blender geometry; no imported geometry or external artwork",
+      "license": "CC0-1.0",
+      "author": "Project contributors",
+      "height_m": 1,
+      "forward": "-Z",
+      "up": "+Y",
+      "meshes": 1,
+      "skins": 1,
+      "bones": 12,
+      "vertices": 601,
+      "triangles": 990,
+      "animations": [
+        {
+          "index": 0,
+          "name": "Idle",
+          "authored_poses": 13,
+          "sampled_frames": 25
+        },
+        {
+          "index": 1,
+          "name": "Walk",
+          "authored_poses": 13,
+          "sampled_frames": 25
+        },
+        {
+          "index": 2,
+          "name": "Attack",
+          "authored_poses": 13,
+          "sampled_frames": 25
+        },
+        {
+          "index": 3,
+          "name": "Hit",
+          "authored_poses": 13,
+          "sampled_frames": 25
+        }
+      ],
+      "sha256": "45148b9561c43126c37ae0e056bdd02f672bbadb336ae79223069abd450891e9"
+    },
+    {
+      "file": "adventure_tidehorn.glb",
+      "origin": "Original procedural Blender geometry; no imported geometry or external artwork",
+      "license": "CC0-1.0",
+      "author": "Project contributors",
+      "height_m": 1,
+      "forward": "-Z",
+      "up": "+Y",
+      "meshes": 1,
+      "skins": 1,
+      "bones": 12,
+      "vertices": 706,
+      "triangles": 1180,
+      "animations": [
+        {
+          "index": 0,
+          "name": "Idle",
+          "authored_poses": 13,
+          "sampled_frames": 25
+        },
+        {
+          "index": 1,
+          "name": "Walk",
+          "authored_poses": 13,
+          "sampled_frames": 25
+        },
+        {
+          "index": 2,
+          "name": "Attack",
+          "authored_poses": 13,
+          "sampled_frames": 25
+        },
+        {
+          "index": 3,
+          "name": "Hit",
+          "authored_poses": 13,
+          "sampled_frames": 25
+        }
+      ],
+      "sha256": "226d0a31f8de4f0c8c6d088c2c2b474179f998be2da896342c422ff3694a5b30"
+    },
+    {
+      "file": "adventure_plaguejaw.glb",
+      "origin": "Original procedural Blender geometry; no imported geometry or external artwork",
+      "license": "CC0-1.0",
+      "author": "Project contributors",
+      "height_m": 1,
+      "forward": "-Z",
+      "up": "+Y",
+      "meshes": 1,
+      "skins": 1,
+      "bones": 16,
+      "vertices": 1014,
+      "triangles": 1700,
+      "animations": [
+        {
+          "index": 0,
+          "name": "Idle",
+          "authored_poses": 13,
+          "sampled_frames": 25
+        },
+        {
+          "index": 1,
+          "name": "Walk",
+          "authored_poses": 13,
+          "sampled_frames": 25
+        },
+        {
+          "index": 2,
+          "name": "Attack",
+          "authored_poses": 13,
+          "sampled_frames": 25
+        },
+        {
+          "index": 3,
+          "name": "Hit",
+          "authored_poses": 13,
+          "sampled_frames": 25
+        }
+      ],
+      "sha256": "603d8ce299fc237fcec52ed9b0ba55ef825e8a6a4949d6f3601d38a980b35c14"
+    }
+  ]
+}

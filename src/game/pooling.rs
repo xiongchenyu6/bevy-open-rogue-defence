@@ -53,6 +53,7 @@ pub(crate) enum EnemySceneKey {
     Regular(u8),
     Boss(u8),
     BossSummon(u8),
+    Adventure(u8),
     Tower,
     Gold,
     Archive,
@@ -1338,6 +1339,7 @@ fn clear_enemy_gameplay_components(entity: &mut EntityCommands<'_>) {
             super::encounter_bosses::EncounterGuard,
             super::encounter_bosses::CampCombatant,
             super::encounter_bosses::CampArrival,
+            super::encounter_bosses::AdventureSkillClock,
         )>()
         .remove::<(
             Enemy,

@@ -1,0 +1,34 @@
+Independent giant wild bosses — native validation
+
+Cause: campsite previews and battle leaders previously loaded ordinary enemy GLBs.
+Fixed: both now load adventure_embermaw / adventure_tidehorn / adventure_plaguejaw.
+Unique pool keys prevent an ordinary scene being reused as a wild boss.
+All three leaders are 2.7 units tall; ordinary guards keep their own smaller models.
+
+PASS 52 self-contained GLBs, including three ORIGINAL animated adventure models.
+PASS each primitive has JOINTS_0+WEIGHTS_0; four ordered clips Idle/Walk/Attack/Hit;
+leg rotation channels have at least 10 sampled frames (25 in shipped files).
+PASS original file hashes differ from all normal-enemy and campaign-boss models.
+PASS final strict all-target Clippy (-D warnings) and formatting check.
+PASS 528 library tests / 0 failed / 1 ignored.
+PASS native game and capture binaries built.
+PASS 12 fresh native scenes / 12,000 full simulation frames:
+three leaders, safe reward, last-life failure/retry, concurrent campaign boss;
+all English desktop 1280x720 and Chinese mobile 667x375.
+PASS real pointer clicks, all three preview-handle checks, airborne untargetability,
+landing activation with the exact independent scene and NO campaign BossEnemy,
+actual unique skill HP damage, paused warning timers, permanent half-health
+phase, secondary cast, one-time reward, cleanup and awarded relics.
+PASS live world material audit in all capture scenes.
+No ERROR, panic or GPU error in the 12 capture logs.
+
+Root viewed original Blender contact, native three-camp overview, tidehorn landing
+and real water-hit frame, and plaguejaw mobile landing. Native fixture deliberately
+isolates wild skills by suppressing random lane spawns/guard damage and raises
+hero health; this does not validate natural progression balance or all-wave difficulty.
+
+Source AI: no campaign boss profile/skill reuse.
+Embermaw: flame claw and three meteors.
+Tidehorn: traveling wave and freezing nova.
+Plaguejaw: three poison pods and targeted spore explosion.
+All have separate attack timers and permanent half-health phase changes.

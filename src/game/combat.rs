@@ -1027,6 +1027,7 @@ fn move_enemies(
     mut rng: ResMut<RunRng>,
     mut dodge: ResMut<DodgeState>,
     mut intent: ResMut<MoveIntent>,
+    adventure_bosses: Query<(), With<super::encounter_bosses::EncounterBoss>>,
     core_query: Query<&Transform, (With<Core>, Without<Enemy>)>,
     mut hero_query: Query<
         (&mut Transform, &mut Visibility),
@@ -1110,13 +1111,14 @@ fn move_enemies(
         if camp.is_some_and(|camp| hero_position.xz().distance(camp.center.xz()) > 6.0) {
             continue;
         }
+        let is_boss = boss.is_some() || adventure_bosses.contains(entity);
         let action_speed = elite_action_speed_multiplier(affix.map(|affix| affix.kind));
         let commander_multiplier = commander_aura_multiplier(commander_aura);
         let movement_speed = enemy.speed
             * action_speed
             * commander_multiplier
             * speed_effect.map_or(1.0, |effect| effect.multiplier)
-            * market_effects.enemy_movement_multiplier(boss.is_some());
+            * market_effects.enemy_movement_multiplier(is_boss);
         let attack_damage = enemy.damage * commander_multiplier * bounty;
         let siege = affix.is_some_and(|affix| affix.kind == EliteAffixKind::Siege);
         let behavior = if siege {
@@ -1141,7 +1143,7 @@ fn move_enemies(
                     hero_position,
                     movement_speed,
                     delta,
-                    if boss.is_some() { 2.0 } else { 1.35 },
+                    if is_boss { 2.0 } else { 1.35 },
                 );
                 transform.translation = next;
                 if reached && attack_seconds > 0.0 && hero_damage > 0.0 {
@@ -1150,7 +1152,7 @@ fn move_enemies(
                             source: entity,
                             origin: next,
                             target: hero_position,
-                            kind: if boss.is_some() {
+                            kind: if is_boss {
                                 EnemyAttackKind::Slam
                             } else {
                                 EnemyAttackKind::Slash
@@ -1396,7 +1398,7 @@ fn move_enemies(
         );
         transform.translation = next;
         if reached {
-            if boss.is_some() {
+            if is_boss {
                 if attack_seconds > 0.0
                     && attack_damage > 0.0
                     && continuous_enemy_cue_due(&mut cue_clocks, entity)
@@ -1811,6 +1813,7 @@ fn auto_attack(
             &Enemy,
             &Transform,
             Option<&BossEnemy>,
+            Option<&super::encounter_bosses::EncounterBoss>,
             Option<&ArchiveEcho>,
             Option<&TrialEnemy>,
             Option<&EnemyArchetype>,
@@ -1870,7 +1873,9 @@ fn auto_attack(
     let class_stats = basic_attacks::class_basic_stats(vitals.kind, vitals.level, &build);
     let attack_range = class_stats.range;
     let range_squared = attack_range * attack_range;
-    for (entity, enemy, enemy_transform, boss, archive, trial, archetype, affix) in &enemies {
+    for (entity, enemy, enemy_transform, boss, adventure, archive, trial, archetype, affix) in
+        &enemies
+    {
         if enemy.hp <= 0.0 || affix.is_some_and(|affix| affix.is_volatile_pending()) {
             continue;
         }
@@ -1883,7 +1888,7 @@ fn auto_attack(
         }
         let tier = target_priority(
             archive.is_some(),
-            boss.is_some(),
+            boss.is_some() || adventure.is_some(),
             trial.is_some(),
             archetype.map(|archetype| archetype.0),
         );
@@ -2697,7 +2702,7 @@ fn projectile_hits(
                 let critical = crit_multiplier > 1.0;
                 raw_damage *= crit_multiplier;
                 raw_damage *= bond_runtime.target_damage_multiplier(
-                    boss_enemy.is_some(),
+                    boss_enemy.is_some() || adventure_boss.is_some(),
                     trial_enemy.is_some_and(|trial| trial.kind == ChallengeKind::Tower),
                 );
                 if let Some(origin) = hero_position {
@@ -2746,7 +2751,7 @@ fn projectile_hits(
                             &mut commands,
                             enemy_entity,
                             fusion.kind,
-                            boss_enemy.is_some(),
+                            boss_enemy.is_some() || adventure_boss.is_some(),
                             speed_effect,
                         );
                     }
@@ -2842,7 +2847,7 @@ fn projectile_hits(
                         target: enemy_entity,
                         position: enemy_transform.translation,
                         element: profile.element,
-                        weight: if boss_enemy.is_some() {
+                        weight: if boss_enemy.is_some() || adventure_boss.is_some() {
                             HitWeight::Boss
                         } else if enemy.elite {
                             HitWeight::Elite
@@ -3270,6 +3275,7 @@ mod tests {
             hero_scenes: std::array::from_fn(|_| Handle::default()),
             enemy_scenes: std::array::from_fn(|_| Handle::default()),
             boss_scenes: std::array::from_fn(|_| Handle::default()),
+            adventure_scenes: default(),
             summon_scenes: std::array::from_fn(|_| Handle::default()),
             projectile_mesh: Handle::default(),
             fx_mesh: Handle::default(),

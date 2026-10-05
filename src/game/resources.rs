@@ -884,6 +884,7 @@ pub struct GameAssets {
     pub hero_scenes: [Handle<WorldAsset>; HeroKind::COUNT],
     pub enemy_scenes: [Handle<WorldAsset>; 12],
     pub boss_scenes: [Handle<WorldAsset>; 5],
+    pub adventure_scenes: [Handle<WorldAsset>; 3],
     pub summon_scenes: [Handle<WorldAsset>; 6],
     pub projectile_mesh: Handle<Mesh>,
     pub fx_mesh: Handle<Mesh>,

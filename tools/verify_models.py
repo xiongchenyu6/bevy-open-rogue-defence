@@ -30,6 +30,9 @@ def validate(path, animated):
     assert doc.get("images") or path.name in {
         "enemy_burrow_stalker.glb",
         "summon_spirit_hound.glb",
+        "adventure_embermaw.glb",
+        "adventure_tidehorn.glb",
+        "adventure_plaguejaw.glb",
     }, f"{path}: missing texture"
     # Quaternius Wolf intentionally uses four colored PBR materials without UVs.
     for image in doc.get("images", []):
@@ -42,6 +45,8 @@ def validate(path, animated):
                 assert "TEXCOORD_0" in primitive["attributes"]
             for index in primitive["attributes"].values():
                 assert 0 <= index < len(doc["accessors"])
+            if path.name.startswith("adventure_"):
+                assert {"JOINTS_0", "WEIGHTS_0"} <= primitive["attributes"].keys()
     if animated:
         assert [a["name"] for a in doc["animations"]] == [
             "Idle",
@@ -54,6 +59,11 @@ def validate(path, animated):
             assert animation["channels"] and animation["samplers"]
             for channel in animation["channels"]:
                 assert channel["target"]["node"] < len(doc["nodes"])
+                if (path.name.startswith("adventure_")
+                        and doc["nodes"][channel["target"]["node"]].get("name", "").startswith("leg")
+                        and channel["target"]["path"] == "rotation"):
+                    sampler = animation["samplers"][channel["sampler"]]
+                    assert doc["accessors"][sampler["input"]]["count"] >= 10
             for sampler in animation["samplers"]:
                 time = doc["accessors"][sampler["input"]]
                 assert time["count"] >= 2 and time["max"][0] > 0
@@ -71,13 +81,21 @@ def validate(path, animated):
 def main():
     manifest = json.loads((MODELS / "cast-manifest.json").read_text())
     cast = {m["file"] for m in manifest}
+    adventures = {
+        m["file"]
+        for m in json.loads((MODELS / "adventure-manifest.json").read_text())["assets"]
+    }
     arena = (ROOT / "src/game/arena.rs").read_text()
+    for asset in json.loads((MODELS / "adventure-manifest.json").read_text())["assets"]:
+        assert hashlib.sha256((MODELS / asset["file"]).read_bytes()).hexdigest() == asset["sha256"]
     runtime_cast = set(
         re.findall(r'models/((?:hero|enemy|boss|summon)_[^"#]+\.glb)', arena)
     )
     assert cast == runtime_cast, (
         f"Cast manifest/runtime mismatch: {cast ^ runtime_cast}"
     )
+    runtime_adventures = set(re.findall(r'models/(adventure_[^"#]+\.glb)', arena))
+    assert adventures == runtime_adventures
     runtime_models = set(re.findall(
         r'"models/([^"#{}]+\.glb)',
         "\n".join(p.read_text() for p in (ROOT / "src").rglob("*.rs")),
@@ -96,11 +114,12 @@ def main():
     for filename in runtime_models:
         assert (MODELS / filename).is_file(), f"Missing runtime model: {filename}"
     reports = [
-        validate(path, path.name in cast) for path in sorted(MODELS.glob("*.glb"))
+        validate(path, path.name in cast | adventures) for path in sorted(MODELS.glob("*.glb"))
     ]
     report = {
         "models": len(reports),
         "animated_cast": len(cast),
+        "animated_adventures": len(adventures),
         "bytes": sum(m["bytes"] for m in reports),
         "results": reports,
     }
@@ -108,7 +127,7 @@ def main():
     target.parent.mkdir(exist_ok=True)
     target.write_text(json.dumps(report, indent=2) + "\n")
     print(
-        f"PASS: {len(reports)} self-contained authored GLBs; {len(cast)} cast models with Idle/Walk/Attack/Hit; {report['bytes']:,} bytes"
+        f"PASS: {len(reports)} self-contained authored GLBs; {len(cast)} cast + {len(adventures)} original adventure models with Idle/Walk/Attack/Hit; {report['bytes']:,} bytes"
     )
     print(f"Report: {target}")
 

@@ -10,9 +10,9 @@ UI so Chinese text does not depend on fonts installed on the player's device.
 - Source SHA-256: `a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da`
 - License source SHA-256: `babcfe66c8a098b2fa279bc724a3a342f8124f77ce18941fbcc1bbb39823cded`
 - Subsetter: fontTools `4.63.0`
-- Glyph corpus SHA-256: `fa7776a626e65acb4d2240914026e55a65def60844ea9493f72e851f578f5cdf`
-- Subset SHA-256: `a2ede7ea4c30177f5fd1ffd9f17edef28c5fade2027373a18a29b5ca63bdd141`
-- Subset size: 476,228 bytes
+- Glyph corpus SHA-256: `bc0a11f1f783dc339b75445817895c0c363292721531f42fb3e0842f57f1ffcc`
+- Subset SHA-256: `6d2007308c5d690e88918d35d465627529506a007d284a246bf791909e2c51d2`
+- Subset size: 471,172 bytes
 - License: SIL Open Font License 1.1; see `OFL.txt`
 
 `glyphs.txt` contains the non-ASCII characters currently present in the Rust

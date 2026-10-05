@@ -1,8 +1,48 @@
 {
-  "models": 49,
+  "models": 52,
   "animated_cast": 35,
-  "bytes": 13457540,
+  "animated_adventures": 3,
+  "bytes": 14240308,
   "results": [
+    {
+      "file": "adventure_embermaw.glb",
+      "bytes": 205484,
+      "mesh_count": 1,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "45148b9561c43126c37ae0e056bdd02f672bbadb336ae79223069abd450891e9"
+    },
+    {
+      "file": "adventure_plaguejaw.glb",
+      "bytes": 338436,
+      "mesh_count": 1,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "603d8ce299fc237fcec52ed9b0ba55ef825e8a6a4949d6f3601d38a980b35c14"
+    },
+    {
+      "file": "adventure_tidehorn.glb",
+      "bytes": 238848,
+      "mesh_count": 1,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "226d0a31f8de4f0c8c6d088c2c2b474179f998be2da896342c422ff3694a5b30"
+    },
     {
       "file": "boss_abyssal_leviathan.glb",
       "bytes": 313592,

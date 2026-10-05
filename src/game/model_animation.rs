@@ -84,7 +84,15 @@ fn attach_cast_players(
     players: Query<Entity, (With<AnimationPlayer>, Without<CastPlayer>)>,
     parents: Query<&ChildOf>,
     scenes: Query<&WorldAssetRoot>,
-    actors: Query<(), Or<(With<Enemy>, With<Hero>, With<PlayerSummon>)>>,
+    actors: Query<
+        (),
+        Or<(
+            With<Enemy>,
+            With<Hero>,
+            With<PlayerSummon>,
+            With<super::environment::CampPreview>,
+        )>,
+    >,
 ) {
     for player in &players {
         let mut cursor = player;
@@ -201,6 +209,7 @@ fn animate_cast(
         Option<&FrostWyrm>,
         Option<&AncestorColossus>,
     )>,
+    previews: Query<(), With<super::environment::CampPreview>>,
     mut players: Query<(&mut AnimationPlayer, &mut CastPlayer)>,
 ) {
     let targets: Vec<Vec3> = actors
@@ -217,7 +226,10 @@ fn animate_cast(
             continue;
         };
         // Pooled scene hierarchies persist after their gameplay markers are removed.
-        if (enemy.is_none() && hero.is_none() && summon.is_none())
+        if (enemy.is_none()
+            && hero.is_none()
+            && summon.is_none()
+            && !previews.contains(state.actor))
             || visibility == Some(&Visibility::Hidden)
             || (hero.is_some() && !vitals.alive)
         {

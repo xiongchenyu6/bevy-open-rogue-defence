@@ -68,6 +68,11 @@ fn setup_arena(
         asset_server.load("models/summon_frost_wyrm.glb#Scene0"),
         asset_server.load("models/summon_ancestor_colossus.glb#Scene0"),
     ];
+    let adventure_scenes = [
+        asset_server.load("models/adventure_embermaw.glb#Scene0"),
+        asset_server.load("models/adventure_tidehorn.glb#Scene0"),
+        asset_server.load("models/adventure_plaguejaw.glb#Scene0"),
+    ];
     commands.insert_resource(GlobalAmbientLight {
         color: Color::srgb(0.48, 0.58, 0.68),
         brightness: 220.0,
@@ -240,6 +245,7 @@ fn setup_arena(
         hero_scenes: hero_scenes.clone(),
         enemy_scenes,
         boss_scenes,
+        adventure_scenes,
         summon_scenes,
         projectile_mesh,
         fx_mesh,

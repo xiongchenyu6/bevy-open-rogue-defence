@@ -579,6 +579,7 @@ mod tests {
             hero_scenes: default(),
             enemy_scenes: default(),
             boss_scenes: default(),
+            adventure_scenes: default(),
             summon_scenes: default(),
             projectile_mesh: default(),
             fx_mesh: default(),

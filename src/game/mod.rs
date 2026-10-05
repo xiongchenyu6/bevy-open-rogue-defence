@@ -2,6 +2,7 @@
 
 use bevy::prelude::*;
 
+mod adventure_vfx;
 mod archive;
 mod arena;
 mod attack_vfx;
@@ -15,10 +16,10 @@ mod energy_art;
 pub use basic_attacks::{ClassBasicStats, Ricochet, class_basic_stats};
 pub use basic_relics::{BasicRelics, RelicCast};
 pub use encounter_bosses::{
-    ADVENTURE_BATTLE_SECONDS, ADVENTURE_BOSSES, ADVENTURE_LANDING_SITES, ADVENTURE_LEADER_VISUALS,
-    ADVENTURE_OFFER_TIMES, ADVENTURE_SITES, AdventureAbility, AdventureBossChoice,
-    AdventureBossDef, AdventureBossState, AdventureCampRequest, CampArrival, EncounterBoss,
-    EncounterGuard,
+    ADVENTURE_BATTLE_SECONDS, ADVENTURE_BOSSES, ADVENTURE_LANDING_SITES, ADVENTURE_OFFER_TIMES,
+    ADVENTURE_SITES, AdventureAbility, AdventureBossChoice, AdventureBossDef, AdventureBossState,
+    AdventureCampRequest, AdventureDanger, AdventureDangerShape, AdventureImpactCue,
+    AdventurePhaseCue, AdventureSkillClock, CampArrival, EncounterBoss, EncounterGuard,
 };
 mod bond_catalog;
 mod bond_feedback;
@@ -125,6 +126,7 @@ impl Plugin for GamePlugin {
             .add_plugins(settings::SettingsPlugin)
             .add_plugins(pooling::PoolPlugin)
             .add_plugins(model_animation::ModelAnimationPlugin)
+            .add_plugins(adventure_vfx::AdventureVfxPlugin)
             .add_plugins(material_finish::MaterialFinishPlugin)
             .add_plugins(environment::EnvironmentArtPlugin)
             .add_plugins(basic_relics::BasicRelicsPlugin)

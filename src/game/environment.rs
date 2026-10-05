@@ -17,7 +17,7 @@ struct ArtClock {
     elapsed: f32,
 }
 #[derive(Component)]
-struct CampPreview(u8);
+pub(super) struct CampPreview(pub(super) u8);
 fn update_camp_previews(
     state: Res<super::AdventureBossState>,
     mut previews: Query<(&CampPreview, &mut Visibility)>,
@@ -254,16 +254,16 @@ fn spawn_side_camps(
     {
         let boss = assets.load(
             [
-                "models/enemy_gnawling.glb#Scene0",
-                "models/enemy_core_rusher.glb#Scene0",
-                "models/enemy_null_eye.glb#Scene0",
+                "models/adventure_embermaw.glb#Scene0",
+                "models/adventure_tidehorn.glb#Scene0",
+                "models/adventure_plaguejaw.glb#Scene0",
             ][index],
         );
         commands.spawn((
             Name::new(format!("Resting side camp leader {index}")),
             WorldAssetRoot(boss),
             Transform::from_translation(center)
-                .with_scale(Vec3::splat(1.15))
+                .with_scale(Vec3::splat(2.7))
                 .with_rotation(Quat::from_rotation_y(1.0)),
             CampPreview(index as u8),
             ArenaEntity,

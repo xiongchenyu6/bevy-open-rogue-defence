@@ -3420,6 +3420,7 @@ mod tests {
                 hero_scenes: std::array::from_fn(|_| Handle::default()),
                 enemy_scenes: std::array::from_fn(|_| Handle::default()),
                 boss_scenes: std::array::from_fn(|_| Handle::default()),
+                adventure_scenes: default(),
                 summon_scenes: std::array::from_fn(|_| Handle::default()),
                 projectile_mesh: Handle::default(),
                 fx_mesh: Handle::default(),

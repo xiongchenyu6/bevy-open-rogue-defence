@@ -1,9 +1,10 @@
-//! Optional battles use the real boss AI without advancing campaign checkpoints.
-use super::bosses::{BossSummon, BossTelegraph};
+//! Optional wild leaders own distinct skills and never advance campaign checkpoints.
 use super::combat::{CombatSet, EnemyArmor, EnemyBreachDamage};
-use super::content::BOSSES;
 use super::pooling::{CombatPools, EnemySceneKey};
-use super::{BossEnemy, DraftState, Enemy, GameAssets, GameSession, RecruitmentProgress};
+use super::{
+    Core, DraftState, Enemy, EnemyAttackCue, EnemyAttackKind, GameAssets, GameSession, Hero,
+    HeroVitals, RecruitmentProgress,
+};
 use bevy::prelude::*;
 
 pub const ADVENTURE_OFFER_TIMES: [f32; 3] = [180.0, 480.0, 780.0];
@@ -12,7 +13,7 @@ pub const ADVENTURE_SITES: [Vec3; 3] = [
     Vec3::new(5.0, 0.0, 9.0),
     Vec3::new(8.0, 0.0, -9.0),
 ];
-pub const ADVENTURE_LEADER_VISUALS: [usize; 3] = [1, 4, 10];
+pub const ADVENTURE_LEADER_HEIGHT: f32 = 2.7;
 pub const ADVENTURE_LANDING_SITES: [Vec3; 3] = [
     Vec3::new(-3.0, 0.0, -3.5),
     Vec3::new(5.0, 0.0, 3.5),
@@ -33,7 +34,7 @@ pub struct AdventureBossDef {
     pub name_en: &'static str,
     pub name_zh: &'static str,
     pub icon_path: &'static str,
-    pub boss_index: u8,
+    pub move_speed: f32,
     pub hp: f32,
     pub damage: f32,
     pub reward_xp: u32,
@@ -46,15 +47,15 @@ pub struct AdventureBossDef {
 const PHASE: AdventureAbility = AdventureAbility {
     name_en: "Desperate fury",
     name_zh: "半血狂暴",
-    description_en: "Below 50% HP: casts 30% faster, areas 25% wider, hazard damage rises from 120% to 160% of attack.",
-    description_zh: "生命低于50%：施法频率提高30%，范围扩大25%，危险区域伤害由攻击力120%提高至160%。",
+    description_en: "Below 50% HP: cooldowns ×0.75, areas ×1.20, damage ×1.35.",
+    description_zh: "生命低于50%：冷却乘0.75、范围乘1.20、伤害乘1.35。",
 };
 pub const ADVENTURE_BOSSES: [AdventureBossDef; 3] = [
     AdventureBossDef {
         name_en: "Embermaw Alpha",
         name_zh: "炎牙兽王",
         icon_path: "icons/cinder_aura.png",
-        boss_index: 0,
+        move_speed: 0.9,
         hp: 5000.0,
         damage: 18.0,
         reward_xp: 400,
@@ -64,16 +65,16 @@ pub const ADVENTURE_BOSSES: [AdventureBossDef; 3] = [
         small_wood: 15,
         abilities: [
             AdventureAbility {
-                name_en: "Cinder charge",
-                name_zh: "炽烬冲锋",
-                description_en: "Alternates every 8s; 0.9s warning. Physical lane: 7m long, 2.5m wide; 120% attack. A standing gate blocks the charge.",
-                description_zh: "每8秒交替施放，预警0.9秒。物理冲锋长7米、宽2.5米，造成攻击力120%伤害。完整城门能挡住冲锋。",
+                name_en: "Rending fan",
+                name_zh: "裂焰扇爪",
+                description_en: "Every 4s: 0.7s warning, 5m forward cone (92 degrees), physical 200% attack.",
+                description_zh: "每4秒：预警0.7秒，正面5米、92度扇爪，造成攻击力200%物理伤害。",
             },
             AdventureAbility {
-                name_en: "Lava scar",
-                name_zh: "熔岩裂痕",
-                description_en: "Alternating cast: 2.6m radius lava for 3s; magical 120% attack every 0.5s.",
-                description_zh: "交替施放：半径2.6米熔岩持续3秒，每0.5秒造成攻击力120%法术伤害。",
+                name_en: "Meteor triad",
+                name_zh: "三重陨火",
+                description_en: "Every 7s: three locked meteors, 1.1s warning, 1.6m radius each, magical 160% attack.",
+                description_zh: "每7秒：三枚锁定陨石，预警1.1秒，每枚半径1.6米，造成攻击力160%法术伤害。",
             },
             PHASE,
         ],
@@ -82,7 +83,7 @@ pub const ADVENTURE_BOSSES: [AdventureBossDef; 3] = [
         name_en: "Tidehorn Matriarch",
         name_zh: "潮角巨兽",
         icon_path: "icons/tide_elemental.png",
-        boss_index: 1,
+        move_speed: 0.75,
         hp: 18000.0,
         damage: 30.0,
         reward_xp: 700,
@@ -92,16 +93,16 @@ pub const ADVENTURE_BOSSES: [AdventureBossDef; 3] = [
         small_wood: 25,
         abilities: [
             AdventureAbility {
-                name_en: "Tidal crush",
-                name_zh: "怒潮冲击",
-                description_en: "Alternates every 10s; 1.1s warning. Magical wave: 16m long, 4.4m wide; 120% attack. Heals 8% maximum HP per cast.",
-                description_zh: "每10秒交替施放，预警1.1秒。水波长16米、宽4.4米，造成攻击力120%法术伤害；每次施法恢复8%最大生命。",
+                name_en: "Glacial surge",
+                name_zh: "冰海奔涌",
+                description_en: "Every 6s: 0.9s warning, a 3m wide wave travels 14m at 9m/s, magical 150% attack and 0.6s freeze.",
+                description_zh: "每6秒：预警0.9秒，宽3米水波以每秒9米推进14米，造成攻击力150%法术伤害并冻结0.6秒。",
             },
             AdventureAbility {
-                name_en: "Undertow",
-                name_zh: "深海暗流",
-                description_en: "Alternating cast: 3.4m radius for 2s; magical 120% attack every 0.5s, stun 0.45s on damage.",
-                description_zh: "交替施放：半径3.4米暗流持续2秒，每0.5秒造成攻击力120%法术伤害；造成伤害时眩晕0.45秒。",
+                name_en: "Frost crown",
+                name_zh: "霜冠爆裂",
+                description_en: "Every 9s: 1.2s warning, 4m radius nova, magical 180% attack and 1s freeze.",
+                description_zh: "每9秒：预警1.2秒，半径4米冰爆，造成攻击力180%法术伤害并冻结1秒。",
             },
             PHASE,
         ],
@@ -110,7 +111,7 @@ pub const ADVENTURE_BOSSES: [AdventureBossDef; 3] = [
         name_en: "Plaguejaw Elder",
         name_zh: "疫颚长老",
         icon_path: "icons/forbidden_arts.png",
-        boss_index: 4,
+        move_speed: 0.8,
         hp: 45000.0,
         damage: 45.0,
         reward_xp: 1000,
@@ -120,16 +121,16 @@ pub const ADVENTURE_BOSSES: [AdventureBossDef; 3] = [
         small_wood: 40,
         abilities: [
             AdventureAbility {
-                name_en: "Thorn host",
-                name_zh: "荆棘军团",
-                description_en: "Every 7s; 1s warning. Summons 5 attackers, 10 in phase II; at most 12 living minions. Minions grant no loot.",
-                description_zh: "每7秒施放，预警1秒。召唤5只进攻仆从，二阶段10只；最多12只存活。仆从没有掉落。",
+                name_en: "Venom pods",
+                name_zh: "疫毒孢囊",
+                description_en: "Every 5s: 0.8s warning, three 2m poison pools lasting 5s, magical 35% attack every 0.5s.",
+                description_zh: "每5秒：预警0.8秒，三处半径2米毒池持续5秒，每0.5秒造成攻击力35%法术伤害。",
             },
             AdventureAbility {
-                name_en: "Venom garden",
-                name_zh: "剧毒花园",
-                description_en: "Every cast leaves a 2.8m radius poison field for 4s; magical 120% attack every 0.5s.",
-                description_zh: "每次施法留下半径2.8米毒地，持续4秒，每0.5秒造成攻击力120%法术伤害。",
+                name_en: "Plague burst",
+                name_zh: "疫颚爆种",
+                description_en: "Every 8s: target-locked spore, 1.3s warning, 2.8m radius explosion, magical 220% attack.",
+                description_zh: "每8秒：目标锁定爆种，预警1.3秒，半径2.8米爆炸，造成攻击力220%法术伤害。",
             },
             PHASE,
         ],
@@ -147,6 +148,427 @@ pub struct EncounterGuard {
 pub(crate) struct CampCombatant {
     pub center: Vec3,
 }
+#[derive(Component)]
+pub struct AdventureSkillClock {
+    pub enraged: bool,
+    cooldowns: [f32; 2],
+}
+impl Default for AdventureSkillClock {
+    fn default() -> Self {
+        Self {
+            enraged: false,
+            cooldowns: [2.0, 4.0],
+        }
+    }
+}
+#[derive(Message, Clone, Copy)]
+pub struct AdventurePhaseCue {
+    pub owner: Entity,
+    pub index: u8,
+    pub origin: Vec3,
+}
+#[derive(Message, Clone, Copy)]
+pub struct AdventureImpactCue {
+    pub owner: Entity,
+    pub index: u8,
+    pub kind: u8,
+    pub origin: Vec3,
+    pub target: Vec3,
+    pub shape: AdventureDangerShape,
+}
+#[derive(Clone, Copy, Debug)]
+pub enum AdventureDangerShape {
+    Circle { radius: f32 },
+    Cone { range: f32, half_angle: f32 },
+    Wave { half_width: f32, length: f32 },
+}
+#[derive(Component)]
+pub struct AdventureDanger {
+    pub owner: Entity,
+    pub index: u8,
+    pub kind: u8,
+    pub origin: Vec3,
+    pub target: Vec3,
+    pub remaining_secs: f32,
+    pub warning_secs: f32,
+    pub active: bool,
+    pub shape: AdventureDangerShape,
+    damage: f32,
+    physical: bool,
+    freeze_secs: f32,
+    active_secs: f32,
+    tick_remaining: f32,
+    distance: f32,
+    wave_origin: Vec3,
+    direction: Vec3,
+    hit_hero: bool,
+    hit_gate: bool,
+}
+const ADVENTURE_COOLDOWNS: [[f32; 2]; 3] = [[4.0, 7.0], [6.0, 9.0], [5.0, 8.0]];
+fn tick_adventure_skills(
+    mut commands: Commands,
+    time: Res<Time>,
+    session: Res<GameSession>,
+    hero: Query<&Transform, With<Hero>>,
+    gate: Query<&Transform, With<Core>>,
+    mut leaders: Query<(
+        Entity,
+        &EncounterBoss,
+        &Enemy,
+        &Transform,
+        &mut AdventureSkillClock,
+    )>,
+    mut phase: MessageWriter<AdventurePhaseCue>,
+    mut attack_cues: MessageWriter<EnemyAttackCue>,
+) {
+    if session.paused || session.finished || session.save_active {
+        return;
+    }
+    let Some(hero) = hero.iter().next() else {
+        return;
+    };
+    for (owner, boss, enemy, transform, mut clock) in &mut leaders {
+        if enemy.hp <= 0.0 {
+            continue;
+        }
+        if !clock.enraged && enemy.hp <= enemy.max_hp * 0.5 {
+            clock.enraged = true;
+            phase.write(AdventurePhaseCue {
+                owner,
+                index: boss.index,
+                origin: transform.translation,
+            });
+        }
+        let mut target = hero.translation;
+        if let Some(gate) = gate.iter().next()
+            && session.core_hp > 0.0
+            && session.gate_revive_remaining <= 0.0
+            && target.x < gate.translation.x
+            && transform.translation.x >= gate.translation.x
+        {
+            target.x = gate.translation.x + 1.9;
+        }
+        for (kind, interval) in ADVENTURE_COOLDOWNS[usize::from(boss.index)]
+            .iter()
+            .enumerate()
+        {
+            clock.cooldowns[kind] -= time.delta_secs();
+            if clock.cooldowns[kind] > 0.0 {
+                continue;
+            }
+            // At most one cast of each type per frame, including 32× speed.
+            clock.cooldowns[kind] = *interval * if clock.enraged { 0.75 } else { 1.0 };
+            attack_cues.write(EnemyAttackCue {
+                source: owner,
+                origin: transform.translation,
+                target,
+                kind: if boss.index == 0 && kind == 0 {
+                    EnemyAttackKind::Slash
+                } else {
+                    EnemyAttackKind::Burst
+                },
+            });
+            spawn_adventure_dangers(
+                &mut commands,
+                owner,
+                boss.index,
+                kind as u8,
+                transform.translation,
+                target,
+                enemy.damage,
+                clock.enraged,
+            );
+        }
+    }
+}
+fn spawn_adventure_dangers(
+    commands: &mut Commands,
+    owner: Entity,
+    index: u8,
+    kind: u8,
+    origin: Vec3,
+    target: Vec3,
+    attack: f32,
+    enraged: bool,
+) {
+    let size = if enraged { 1.2 } else { 1.0 };
+    let power = if enraged { 1.35 } else { 1.0 };
+    let (shape, warning, active, ratio, physical, freeze, count) = match (index, kind) {
+        (0, 0) => (
+            AdventureDangerShape::Cone {
+                range: 5.0 * size,
+                half_angle: 0.8,
+            },
+            0.7,
+            0.05,
+            2.0,
+            true,
+            0.0,
+            1,
+        ),
+        (0, 1) => (
+            AdventureDangerShape::Circle { radius: 1.6 * size },
+            1.1,
+            0.05,
+            1.6,
+            false,
+            0.0,
+            3,
+        ),
+        (1, 0) => (
+            AdventureDangerShape::Wave {
+                half_width: 1.5 * size,
+                length: 14.0,
+            },
+            0.9,
+            14.0 / 9.0,
+            1.5,
+            false,
+            0.6,
+            1,
+        ),
+        (1, 1) => (
+            AdventureDangerShape::Circle { radius: 4.0 * size },
+            1.2,
+            0.05,
+            1.8,
+            false,
+            1.0,
+            1,
+        ),
+        (2, 0) => (
+            AdventureDangerShape::Circle { radius: 2.0 * size },
+            0.8,
+            5.0,
+            0.35,
+            false,
+            0.0,
+            3,
+        ),
+        (2, 1) => (
+            AdventureDangerShape::Circle { radius: 2.8 * size },
+            1.3,
+            0.05,
+            2.2,
+            false,
+            0.0,
+            1,
+        ),
+        _ => return,
+    };
+    for n in 0..count {
+        let offset = if count == 3 {
+            Vec3::new((n as f32 - 1.0) * 2.0, 0.0, (n % 2) as f32 * 1.4)
+        } else {
+            Vec3::ZERO
+        };
+        let center = if index == 1 && kind == 1 {
+            origin
+        } else {
+            target + offset
+        };
+        commands.spawn((
+            Name::new("Adventure skill danger"),
+            Transform::default(),
+            Visibility::default(),
+            AdventureDanger {
+                owner,
+                index,
+                kind,
+                origin,
+                target: center,
+                remaining_secs: warning,
+                warning_secs: warning,
+                active: false,
+                shape,
+                damage: attack * ratio * power,
+                physical,
+                freeze_secs: freeze,
+                active_secs: active,
+                tick_remaining: 0.0,
+                distance: 0.0,
+                wave_origin: origin,
+                direction: (target - origin).with_y(0.0).normalize_or(Vec3::NEG_X),
+                hit_hero: false,
+                hit_gate: false,
+            },
+        ));
+    }
+}
+fn adventure_contains(danger: &AdventureDanger, point: Vec3) -> bool {
+    match danger.shape {
+        AdventureDangerShape::Circle { radius } => {
+            point.xz().distance_squared(danger.target.xz()) <= radius * radius
+        }
+        AdventureDangerShape::Cone { range, half_angle } => {
+            let offset = point.xz() - danger.origin.xz();
+            offset.length_squared() <= range * range
+                && (offset.length_squared() < 0.001
+                    || offset
+                        .normalize()
+                        .dot((danger.target.xz() - danger.origin.xz()).normalize_or(Vec2::NEG_X))
+                        >= half_angle.cos())
+        }
+        AdventureDangerShape::Wave { half_width, length } => {
+            let direction = (danger.target.xz() - danger.origin.xz()).normalize_or(Vec2::NEG_X);
+            let offset = point.xz() - danger.origin.xz();
+            let forward = offset.dot(direction);
+            forward >= 0.0 && forward <= length && offset.perp_dot(direction).abs() <= half_width
+        }
+    }
+}
+fn tick_adventure_dangers(
+    mut commands: Commands,
+    time: Res<Time>,
+    mut session: ResMut<GameSession>,
+    mut vitals: ResMut<HeroVitals>,
+    hero: Query<&Transform, With<Hero>>,
+    gate: Query<&Transform, With<Core>>,
+    leaders: Query<&Enemy, With<EncounterBoss>>,
+    mut dangers: Query<(Entity, &mut AdventureDanger)>,
+    mut impacts: MessageWriter<AdventureImpactCue>,
+) {
+    for (entity, mut danger) in &mut dangers {
+        if session.finished
+            || leaders.get(danger.owner).is_err()
+            || leaders.get(danger.owner).is_ok_and(|enemy| enemy.hp <= 0.0)
+        {
+            commands.entity(entity).try_despawn();
+            continue;
+        }
+        if session.paused || session.save_active {
+            continue;
+        }
+        let delta = time.delta_secs();
+        danger.remaining_secs -= delta;
+        if !danger.active {
+            if danger.remaining_secs > 0.0 {
+                continue;
+            }
+            danger.active = true;
+            danger.remaining_secs = danger.active_secs;
+            impacts.write(AdventureImpactCue {
+                owner: danger.owner,
+                index: danger.index,
+                kind: danger.kind,
+                origin: danger.origin,
+                target: danger.target,
+                shape: danger.shape,
+            });
+        }
+        if let AdventureDangerShape::Wave { half_width, .. } = danger.shape {
+            let direction = danger.direction;
+            danger.origin = danger.wave_origin + direction * danger.distance;
+            danger.target = danger.origin + direction * 14.0;
+            let step = (delta * 9.0).min((14.0 - danger.distance).max(0.0));
+            danger.shape = AdventureDangerShape::Wave {
+                half_width,
+                length: (step + 3.0).min(14.0 - danger.distance),
+            };
+            danger.distance += step;
+            // Bounds cover the entire swept front, so high speed cannot tunnel past the hero.
+            danger.tick_remaining = 0.0;
+            danger.remaining_secs = if danger.distance >= 14.0 {
+                0.0
+            } else {
+                danger.remaining_secs
+            };
+            // Apply damage below before moving the visible front for the next tick.
+            if !danger.hit_hero
+                && let Some(hero) = hero.iter().next()
+                && adventure_contains(&danger, hero.translation)
+                && !gate_protects_adventure_hero(
+                    &session,
+                    gate.iter().next(),
+                    danger.origin,
+                    hero.translation,
+                )
+            {
+                let dealt = vitals.take_magical_damage(danger.damage);
+                if dealt > 0.0 {
+                    vitals.stunned_remaining = vitals.stunned_remaining.max(danger.freeze_secs);
+                    danger.hit_hero = true;
+                }
+            }
+            if !danger.hit_gate
+                && let Some(gate) = gate.iter().next()
+                && session.core_hp > 0.0
+            {
+                let distance = (gate.translation.x - danger.origin.x) / direction.x;
+                if direction.x.abs() > 0.001 && distance >= 0.0 {
+                    let point = danger.origin + direction * distance;
+                    if point.z.abs() <= 5.65 && adventure_contains(&danger, point) {
+                        session.core_hp = (session.core_hp - danger.damage).max(0.0);
+                        danger.hit_gate = true;
+                    }
+                }
+            }
+        } else {
+            danger.tick_remaining -= delta;
+            if danger.tick_remaining <= 0.0 {
+                danger.tick_remaining = 0.5;
+                if let Some(gate) = gate.iter().next()
+                    && session.core_hp > 0.0
+                    && !danger.hit_gate
+                {
+                    let center = match danger.shape {
+                        AdventureDangerShape::Circle { .. } => danger.target,
+                        _ => danger.origin,
+                    };
+                    let point = Vec3::new(gate.translation.x, 0.0, center.z.clamp(-5.65, 5.65));
+                    if adventure_contains(&danger, point) {
+                        session.core_hp = (session.core_hp - danger.damage).max(0.0);
+                        if danger.active_secs < 0.5 {
+                            danger.hit_gate = true;
+                        }
+                    }
+                }
+                if let Some(hero) = hero.iter().next()
+                    && vitals.alive
+                    && !danger.hit_hero
+                    && adventure_contains(&danger, hero.translation)
+                    && !gate_protects_adventure_hero(
+                        &session,
+                        gate.iter().next(),
+                        danger.origin,
+                        hero.translation,
+                    )
+                {
+                    let dealt = if danger.physical {
+                        vitals.take_physical_damage(danger.damage)
+                    } else {
+                        vitals.take_magical_damage(danger.damage)
+                    };
+                    if dealt > 0.0 {
+                        vitals.stunned_remaining = vitals.stunned_remaining.max(danger.freeze_secs);
+                        if danger.active_secs < 0.5 {
+                            danger.hit_hero = true;
+                        }
+                    }
+                }
+            }
+        }
+        if danger.active_secs < 0.5 || danger.remaining_secs <= 0.0 {
+            commands.entity(entity).try_despawn();
+        }
+    }
+}
+fn gate_protects_adventure_hero(
+    session: &GameSession,
+    gate: Option<&Transform>,
+    origin: Vec3,
+    hero: Vec3,
+) -> bool {
+    session.core_hp > 0.0
+        && session.gate_revive_remaining <= 0.0
+        && gate.is_some_and(|gate| {
+            origin.x >= gate.translation.x
+                && hero.x < gate.translation.x
+                && hero.z.abs() <= 5.65
+                && origin.z.abs() <= 5.65
+        })
+}
+
 /// No Enemy component exists in flight, so all real damage/targeting ignores arrivals.
 #[derive(Component)]
 pub struct CampArrival {
@@ -154,7 +576,7 @@ pub struct CampArrival {
     pub end: Vec3,
     pub remaining_secs: f32,
     enemy: Option<Enemy>,
-    boss_index: Option<u8>,
+    leader: bool,
 }
 fn arrival_position(start: Vec3, end: Vec3, progress: f32) -> Vec3 {
     let progress = progress.clamp(0.0, 1.0);
@@ -180,8 +602,10 @@ fn advance_arrivals(
             if let Some(enemy) = arrival.enemy.take() {
                 commands.entity(entity).insert(enemy);
             }
-            if let Some(index) = arrival.boss_index {
-                commands.entity(entity).insert(BossEnemy { index });
+            if arrival.leader {
+                commands
+                    .entity(entity)
+                    .insert(AdventureSkillClock::default());
             }
             commands.entity(entity).remove::<CampArrival>();
         }
@@ -212,10 +636,20 @@ impl Plugin for EncounterBossesPlugin {
         app.init_resource::<AdventureBossState>()
             .add_message::<AdventureBossChoice>()
             .add_message::<AdventureCampRequest>()
+            .add_message::<AdventurePhaseCue>()
+            .add_message::<AdventureImpactCue>()
+            .add_message::<EnemyAttackCue>()
             .add_systems(Update, advance_arrivals.before(CombatSet))
             .add_systems(
                 Update,
-                (tick_adventure, choose_adventure).chain().after(CombatSet),
+                (
+                    tick_adventure,
+                    choose_adventure,
+                    tick_adventure_skills,
+                    tick_adventure_dangers,
+                )
+                    .chain()
+                    .after(CombatSet),
             );
     }
 }
@@ -229,9 +663,8 @@ fn tick_adventure(
     mut state: ResMut<AdventureBossState>,
     draft: Option<Res<DraftState>>,
     recruitment: Option<Res<RecruitmentProgress>>,
-    bosses: Query<&Enemy, With<BossEnemy>>,
-    dangers: Query<(Entity, &BossTelegraph)>,
-    summons: Query<(Entity, &BossSummon)>,
+    bosses: Query<&Enemy, With<EncounterBoss>>,
+    dangers: Query<(Entity, &AdventureDanger)>,
     guards: Query<(Entity, &EncounterGuard, Option<&Enemy>)>,
     arrivals: Query<(), With<CampArrival>>,
     mut requests: MessageReader<AdventureCampRequest>,
@@ -250,13 +683,13 @@ fn tick_adventure(
             })
             && !session.finished
         {
-            cleanup_battle(&mut commands, &mut pools, active, &dangers, &summons);
+            cleanup_battle(&mut commands, active, &dangers);
             commands.queue(move |world: &mut World| award_victory(world, active));
         } else if session.finished
             || (!state.boss_defeated && bosses.get(active).is_err() && !arrivals.contains(active))
         {
             pools.retire_enemy(&mut commands, active);
-            cleanup_battle(&mut commands, &mut pools, active, &dangers, &summons);
+            cleanup_battle(&mut commands, active, &dangers);
             for (entity, guard, _) in &guards {
                 if guard.owner == active {
                     pools.retire_enemy(&mut commands, entity);
@@ -267,7 +700,7 @@ fn tick_adventure(
         } else if !session.paused && !session.save_active {
             state.remaining_secs = (state.remaining_secs - time.delta_secs()).max(0.0);
             if state.remaining_secs <= 0.0 {
-                cleanup_battle(&mut commands, &mut pools, active, &dangers, &summons);
+                cleanup_battle(&mut commands, active, &dangers);
                 for (entity, guard, _) in &guards {
                     if guard.owner == active {
                         pools.retire_enemy(&mut commands, entity);
@@ -322,12 +755,12 @@ fn choose_adventure(
                 let Some(assets) = assets.as_deref() else {
                     continue;
                 };
-                let boss = &BOSSES[usize::from(def.boss_index)];
                 let site = ADVENTURE_SITES[usize::from(index)];
                 let landing = ADVENTURE_LANDING_SITES[usize::from(index)];
                 // Rent all four roots together: exhausted pools leave the offer intact.
                 let transforms = [
-                    Transform::from_translation(site).with_scale(Vec3::splat(1.15)),
+                    Transform::from_translation(site)
+                        .with_scale(Vec3::splat(ADVENTURE_LEADER_HEIGHT)),
                     Transform::from_translation(site + Vec3::new(1.8, 0.0, -1.3))
                         .with_scale(Vec3::splat(0.55)),
                     Transform::from_translation(site + Vec3::new(1.8, 0.0, 0.0))
@@ -341,11 +774,8 @@ fn choose_adventure(
                     .map(|(unit, transform)| {
                         if unit == 0 {
                             (
-                                EnemySceneKey::BossSummon(
-                                    ADVENTURE_LEADER_VISUALS[usize::from(index)] as u8,
-                                ),
-                                assets.enemy_scenes[ADVENTURE_LEADER_VISUALS[usize::from(index)]]
-                                    .clone(),
+                                EnemySceneKey::Adventure(index),
+                                assets.adventure_scenes[usize::from(index)].clone(),
                                 *transform,
                             )
                         } else {
@@ -367,7 +797,7 @@ fn choose_adventure(
                             start: transforms[unit].translation,
                             end: landing + transforms[unit].translation - site,
                             remaining_secs: CAMP_ARRIVAL_SECONDS,
-                            boss_index: None,
+                            leader: false,
                             enemy: Some(Enemy {
                                 hp: def.hp * 0.06,
                                 max_hp: def.hp * 0.06,
@@ -391,11 +821,11 @@ fn choose_adventure(
                         start: site,
                         end: landing,
                         remaining_secs: CAMP_ARRIVAL_SECONDS,
-                        boss_index: Some(def.boss_index),
+                        leader: true,
                         enemy: Some(Enemy {
-                            hp: def.hp / boss.modifiers.max_hp_multiplier,
-                            max_hp: def.hp / boss.modifiers.max_hp_multiplier,
-                            speed: boss.speed,
+                            hp: def.hp,
+                            max_hp: def.hp,
+                            speed: def.move_speed,
                             damage: def.damage,
                             xp: 0,
                             wood: 0,
@@ -424,19 +854,12 @@ fn choose_adventure(
 }
 fn cleanup_battle(
     commands: &mut Commands,
-    pools: &mut CombatPools,
     boss: Entity,
-    dangers: &Query<(Entity, &BossTelegraph)>,
-    summons: &Query<(Entity, &BossSummon)>,
+    dangers: &Query<(Entity, &AdventureDanger)>,
 ) {
     for (entity, danger) in dangers {
-        if danger.boss == boss {
+        if danger.owner == boss {
             commands.entity(entity).try_despawn();
-        }
-    }
-    for (entity, summon) in summons {
-        if summon.0 == boss {
-            pools.retire_enemy(commands, entity);
         }
     }
 }
@@ -482,6 +905,11 @@ pub(crate) fn award_victory(world: &mut World, entity: Entity) {
     }
 }
 pub(crate) fn reset_run(world: &mut World) {
+    let mut query = world.query_filtered::<Entity, With<AdventureDanger>>();
+    let hazards: Vec<_> = query.iter(world).collect();
+    for entity in hazards {
+        world.despawn(entity);
+    }
     world.insert_resource(AdventureBossState::default());
     if let Some(mut messages) = world.get_resource_mut::<Messages<AdventureBossChoice>>() {
         messages.clear();
@@ -493,6 +921,7 @@ pub(crate) fn reset_run(world: &mut World) {
 
 #[cfg(test)]
 mod tests {
+    use super::super::BossEnemy;
     use super::*;
     fn test_app() -> App {
         let mut app = App::new();
@@ -503,7 +932,10 @@ mod tests {
             .init_resource::<CombatPools>()
             .init_resource::<AdventureBossState>()
             .add_message::<AdventureCampRequest>()
-            .add_message::<AdventureBossChoice>();
+            .add_message::<AdventureBossChoice>()
+            .add_message::<AdventurePhaseCue>()
+            .add_message::<AdventureImpactCue>()
+            .add_message::<EnemyAttackCue>();
         app
     }
     #[test]
@@ -638,7 +1070,7 @@ mod tests {
                     start,
                     end,
                     remaining_secs: CAMP_ARRIVAL_SECONDS,
-                    boss_index: Some(0),
+                    leader: true,
                     enemy: Some(Enemy {
                         hp: 100.0,
                         max_hp: 100.0,
@@ -677,19 +1109,227 @@ mod tests {
         );
         assert!(app.world().get::<CampArrival>(actor).is_none());
         assert_eq!(app.world().get::<Enemy>(actor).unwrap().hp, 100.0);
-        assert_eq!(app.world().get::<BossEnemy>(actor).unwrap().index, 0);
+        assert!(app.world().get::<BossEnemy>(actor).is_none());
+        assert!(app.world().get::<AdventureSkillClock>(actor).is_some());
     }
     #[test]
     fn all_camps_have_three_different_wild_guards_and_a_separate_leader_model() {
-        for leader in ADVENTURE_LEADER_VISUALS {
-            let mut models = std::collections::BTreeSet::from(ADVENTURE_GUARD_VISUALS);
-            models.insert(leader);
-            assert_eq!(models.len(), 4);
-        }
+        assert_eq!(
+            std::collections::BTreeSet::from(ADVENTURE_GUARD_VISUALS).len(),
+            3
+        );
+        assert_eq!(ADVENTURE_LEADER_HEIGHT, 2.7);
         for (site, landing) in ADVENTURE_SITES.iter().zip(ADVENTURE_LANDING_SITES) {
             assert!(site.z.abs() > 5.65);
             assert!(landing.z.abs() < 5.65);
             assert_eq!(site.x, landing.x);
         }
+    }
+    fn skill_test_enemy(hp: f32) -> Enemy {
+        Enemy {
+            hp,
+            max_hp: 100.0,
+            speed: 1.0,
+            damage: 20.0,
+            xp: 0,
+            gold: 0,
+            wood: 0,
+            kill_credit: 0,
+            elite: true,
+        }
+    }
+    #[test]
+    fn independent_leaders_cast_distinct_loadouts_and_phase_once_without_campaign_components() {
+        use bevy::ecs::system::RunSystemOnce;
+        use std::time::Duration;
+        for index in 0..3 {
+            let mut app = test_app();
+            app.add_message::<AdventurePhaseCue>();
+            app.world_mut()
+                .spawn((Hero, Transform::from_xyz(-2.0, 0.0, 0.0)));
+            let leader = app
+                .world_mut()
+                .spawn((
+                    EncounterBoss { index },
+                    skill_test_enemy(49.0),
+                    Transform::default(),
+                    AdventureSkillClock::default(),
+                ))
+                .id();
+            app.world_mut()
+                .resource_mut::<Time>()
+                .advance_by(Duration::from_secs(2));
+            app.world_mut()
+                .run_system_once(tick_adventure_skills)
+                .unwrap();
+            assert!(app.world().get::<BossEnemy>(leader).is_none());
+            assert!(
+                app.world()
+                    .get::<AdventureSkillClock>(leader)
+                    .unwrap()
+                    .enraged
+            );
+            let mut query = app.world_mut().query::<&AdventureDanger>();
+            let hazards: Vec<_> = query.iter(app.world()).collect();
+            assert_eq!(hazards.len(), if index == 2 { 3 } else { 1 });
+            match (index, hazards[0].shape) {
+                (0, AdventureDangerShape::Cone { range, .. }) => {
+                    assert!((range - 6.0).abs() < 0.001)
+                }
+                (1, AdventureDangerShape::Wave { half_width, .. }) => {
+                    assert!((half_width - 1.8).abs() < 0.001)
+                }
+                (2, AdventureDangerShape::Circle { radius }) => {
+                    assert!((radius - 2.4).abs() < 0.001)
+                }
+                _ => panic!("wrong leader-specific skill geometry"),
+            }
+            app.world_mut().get_mut::<Enemy>(leader).unwrap().hp = 100.0;
+            app.world_mut()
+                .run_system_once(tick_adventure_skills)
+                .unwrap();
+            assert_eq!(
+                app.world().resource::<Messages<AdventurePhaseCue>>().len(),
+                1
+            );
+            let mut query = app.world_mut().query::<&AdventureDanger>();
+            assert!(query.iter(app.world()).any(|hazard| hazard.kind == 1));
+        }
+    }
+    #[test]
+    fn real_wave_sweep_hits_at_high_speed_freezes_after_damage_and_cleans_on_owner_death() {
+        use bevy::ecs::system::RunSystemOnce;
+        use std::time::Duration;
+        let mut app = test_app();
+        app.init_resource::<HeroVitals>();
+        app.world_mut().resource_mut::<GameSession>().core_hp = 0.0;
+        app.world_mut()
+            .resource_mut::<HeroVitals>()
+            .magic_resistance = 0.0;
+        let leader = app
+            .world_mut()
+            .spawn((EncounterBoss { index: 1 }, skill_test_enemy(100.0)))
+            .id();
+        app.world_mut()
+            .spawn((Hero, Transform::from_xyz(-6.0, 0.0, 0.0)));
+        app.world_mut()
+            .run_system_once(move |mut commands: Commands| {
+                spawn_adventure_dangers(
+                    &mut commands,
+                    leader,
+                    1,
+                    0,
+                    Vec3::ZERO,
+                    Vec3::NEG_X * 12.0,
+                    20.0,
+                    false,
+                );
+            })
+            .unwrap();
+        let health = app.world().resource::<HeroVitals>().health;
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(Duration::from_secs_f32(0.8));
+        app.world_mut()
+            .run_system_once(tick_adventure_dangers)
+            .unwrap();
+        assert_eq!(app.world().resource::<HeroVitals>().health, health);
+        app.world_mut()
+            .run_system_once(tick_adventure_dangers)
+            .unwrap();
+        assert!((app.world().resource::<HeroVitals>().health - (health - 30.0)).abs() < 0.001);
+        assert!((app.world().resource::<HeroVitals>().stunned_remaining - 0.6).abs() < 0.001);
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        app.world_mut().entity_mut(leader).remove::<Enemy>();
+        app.world_mut()
+            .run_system_once(tick_adventure_dangers)
+            .unwrap();
+        assert_eq!(
+            app.world_mut()
+                .query::<&AdventureDanger>()
+                .iter(app.world())
+                .count(),
+            0
+        );
+    }
+    #[test]
+    fn independent_claw_warning_dodge_and_armor_are_real() {
+        use bevy::ecs::system::RunSystemOnce;
+        use std::time::Duration;
+        let mut app = test_app();
+        app.init_resource::<HeroVitals>();
+        app.world_mut().resource_mut::<GameSession>().core_hp = 0.0;
+        app.world_mut().resource_mut::<HeroVitals>().armor = 20.0;
+        let leader = app
+            .world_mut()
+            .spawn((EncounterBoss { index: 0 }, skill_test_enemy(100.0)))
+            .id();
+        let hero = app
+            .world_mut()
+            .spawn((Hero, Transform::from_xyz(-2.0, 0.0, 0.0)))
+            .id();
+        app.world_mut()
+            .run_system_once(move |mut commands: Commands| {
+                spawn_adventure_dangers(
+                    &mut commands,
+                    leader,
+                    0,
+                    0,
+                    Vec3::ZERO,
+                    Vec3::NEG_X * 2.0,
+                    20.0,
+                    false,
+                )
+            })
+            .unwrap();
+        let health = app.world().resource::<HeroVitals>().health;
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(Duration::from_secs_f32(0.4));
+        app.world_mut()
+            .run_system_once(tick_adventure_dangers)
+            .unwrap();
+        assert_eq!(app.world().resource::<HeroVitals>().health, health);
+        app.world_mut()
+            .get_mut::<Transform>(hero)
+            .unwrap()
+            .translation = Vec3::Z * 5.0;
+        app.world_mut()
+            .run_system_once(tick_adventure_dangers)
+            .unwrap();
+        assert_eq!(app.world().resource::<HeroVitals>().health, health);
+        app.world_mut()
+            .run_system_once(move |mut commands: Commands| {
+                spawn_adventure_dangers(
+                    &mut commands,
+                    leader,
+                    0,
+                    0,
+                    Vec3::ZERO,
+                    Vec3::NEG_X * 2.0,
+                    20.0,
+                    false,
+                )
+            })
+            .unwrap();
+        app.world_mut()
+            .get_mut::<Transform>(hero)
+            .unwrap()
+            .translation = Vec3::NEG_X * 2.0;
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(Duration::from_secs_f32(0.8));
+        app.world_mut()
+            .run_system_once(tick_adventure_dangers)
+            .unwrap();
+        assert!((app.world().resource::<HeroVitals>().health - (health - 20.0)).abs() < 0.001);
+        reset_run(app.world_mut());
+        assert_eq!(
+            app.world_mut()
+                .query::<&AdventureDanger>()
+                .iter(app.world())
+                .count(),
+            0
+        );
     }
 }

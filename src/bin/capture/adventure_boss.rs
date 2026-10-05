@@ -6,10 +6,11 @@ use bevy::{
     window::{CursorMoved, WindowRef},
 };
 use rogue_commander::game::{
-    ADVENTURE_BOSSES, ADVENTURE_LANDING_SITES, ADVENTURE_LEADER_VISUALS, ADVENTURE_OFFER_TIMES,
-    ActiveSkill, AdventureBossChoice, AdventureBossState, AttackClock, Autoplay, BasicRelics,
-    BossEnemy, BossTelegraph, CampArrival, EncounterGuard, Enemy, GameAssets, GameSession, Hero,
-    HeroVitals, PlayerBuild, RecruitmentProgress, RelicCast, SelectedHero, SpawnDirector,
+    ADVENTURE_BOSSES, ADVENTURE_LANDING_SITES, ADVENTURE_OFFER_TIMES, ActiveSkill,
+    AdventureBossChoice, AdventureBossState, AdventureDanger, AdventureImpactCue,
+    AdventureSkillClock, AttackClock, Autoplay, BasicRelics, BossEnemy, CampArrival,
+    EncounterGuard, Enemy, GameAssets, GameSession, Hero, HeroVitals, PlayerBuild,
+    RecruitmentProgress, RelicCast, SelectedHero, SpawnDirector,
 };
 
 #[derive(Component)]
@@ -22,6 +23,13 @@ struct Pointer {
     down: bool,
 }
 
+#[derive(Clone, Copy)]
+struct DangerProbe {
+    kind: u8,
+    target: Vec3,
+    remaining_secs: f32,
+    active: bool,
+}
 #[derive(Resource)]
 struct Probe {
     scenario: String,
@@ -39,6 +47,7 @@ struct Probe {
     hit: bool,
     secondary: bool,
     phase: bool,
+    impacts: Vec<(u8, u32)>,
     killing: bool,
     baseline: (u32, u32, u32),
     reward_at: Option<u32>,
@@ -79,6 +88,7 @@ pub fn configure(world: &mut World, scenario: &str) {
         hit: false,
         secondary: false,
         phase: false,
+        impacts: Vec::new(),
         killing: false,
         baseline: (0, 0, 0),
         reward_at: None,
@@ -138,7 +148,7 @@ pub fn install(app: &mut bevy::app::SubApp) {
         world.resource_mut::<Probe>().main_boss = Some(main);
     }
     app.add_systems(PreUpdate, exercise.after(bevy::ui::UiSystems::Focus));
-    app.add_systems(Last, observe);
+    app.add_systems(Last, (record_impacts, observe).chain());
     app.init_resource::<Pointer>()
         .add_systems(First, pointer_input);
 }
@@ -246,6 +256,36 @@ fn exercise(world: &mut World) {
     let p = world.resource::<Probe>();
     let (frame, index, small) = (p.frame, p.index, p.scenario == "adventure-small");
     if frame == 10 {
+        let scenes = world.resource::<GameAssets>().adventure_scenes.clone();
+        for (index, scene) in scenes.iter().enumerate() {
+            assert!(
+                scenes
+                    .iter()
+                    .enumerate()
+                    .all(|(other, handle)| other == index || handle != scene),
+                "each camp has an independent model asset"
+            );
+            let assets = world.resource::<GameAssets>();
+            assert!(
+                assets
+                    .enemy_scenes
+                    .iter()
+                    .chain(assets.boss_scenes.iter())
+                    .all(|ordinary| ordinary != scene),
+                "wild leader does not reuse an ordinary soldier or main boss"
+            );
+            let expected_name = format!("Resting side camp leader {index}");
+            let preview = world
+                .query::<(&Name, &WorldAssetRoot)>()
+                .iter(world)
+                .find(|(name, _)| name.as_str() == expected_name)
+                .expect("all three real world camp leaders exist");
+            assert_eq!(
+                &preview.1.0, scene,
+                "camp preview must use the independent live leader model"
+            );
+        }
+        stage("three-independent-camp-models", frame);
         for index in 0..3 {
             assert!(
                 world
@@ -289,7 +329,7 @@ fn exercise(world: &mut World) {
         let assets = world.resource::<GameAssets>();
         assert_eq!(
             world.get::<WorldAssetRoot>(boss).unwrap().0,
-            assets.enemy_scenes[ADVENTURE_LEADER_VISUALS[index]]
+            assets.adventure_scenes[index]
         );
         assert!(
             assets
@@ -339,7 +379,13 @@ fn exercise(world: &mut World) {
     if frame == 90 && !small {
         let boss = world.resource::<Probe>().boss.unwrap();
         assert!(world.get::<CampArrival>(boss).is_none());
-        assert!(world.get::<Enemy>(boss).is_some() && world.get::<BossEnemy>(boss).is_some());
+        assert_eq!(
+            world.get::<WorldAssetRoot>(boss).unwrap().0,
+            world.resource::<GameAssets>().adventure_scenes[index],
+            "landing retains the independent wild leader model"
+        );
+        assert!(world.get::<Enemy>(boss).is_some() && world.get::<BossEnemy>(boss).is_none());
+        assert!(world.get::<AdventureSkillClock>(boss).is_some());
         assert_eq!(
             world
                 .query::<(&EncounterGuard, &Enemy)>()
@@ -360,7 +406,19 @@ fn exercise(world: &mut World) {
         let landing = ADVENTURE_LANDING_SITES[index];
         let position = world.get::<Transform>(boss).unwrap().translation;
         assert!(position.y.abs() < 0.01 && (position.z - landing.z).abs() < 1.);
-        place(world, landing - Vec3::X * 2.);
+        world.get_mut::<Enemy>(boss).unwrap().speed = 0.;
+        let guards: Vec<_> = world
+            .query::<(Entity, &EncounterGuard)>()
+            .iter(world)
+            .filter(|(_, guard)| guard.owner == boss)
+            .map(|(entity, _)| entity)
+            .collect();
+        for guard in guards {
+            let mut enemy = world.get_mut::<Enemy>(guard).unwrap();
+            enemy.damage = 0.;
+            enemy.speed = 0.;
+        }
+        place(world, landing - Vec3::X * 3.);
         world.resource_mut::<Probe>().landed = true;
         let mut session = world.resource_mut::<GameSession>();
         session.core_hp = 0.;
@@ -429,6 +487,18 @@ fn start_relic_targets(world: &mut World) {
     world.resource_mut::<Probe>().relic_started = true;
 }
 
+fn record_impacts(mut messages: MessageReader<AdventureImpactCue>, mut probe: ResMut<Probe>) {
+    for impact in messages.read() {
+        if Some(impact.owner) == probe.boss && usize::from(impact.index) == probe.index {
+            let frame = probe.frame;
+            probe.impacts.push((impact.kind, frame));
+            println!(
+                "[capture] native adventure impact kind={} frame={frame}",
+                impact.kind
+            );
+        }
+    }
+}
 fn observe(world: &mut World) {
     let p = world.resource::<Probe>();
     let (frame, index, small, loss, boss) = (
@@ -469,14 +539,29 @@ fn observe(world: &mut World) {
         }
     } else if let Some(boss) = boss {
         let hazards: Vec<_> = world
-            .query::<(Entity, &BossTelegraph)>()
+            .query::<(Entity, &AdventureDanger)>()
             .iter(world)
-            .filter(|(_, hazard)| hazard.boss == boss)
-            .map(|(entity, hazard)| (entity, *hazard))
+            .filter(|(_, hazard)| hazard.owner == boss)
+            .map(|(entity, hazard)| {
+                (
+                    entity,
+                    DangerProbe {
+                        kind: hazard.kind,
+                        target: hazard.target,
+                        remaining_secs: hazard.remaining_secs,
+                        active: hazard.active,
+                    },
+                )
+            })
             .collect();
         if world.resource::<Probe>().warning.is_none()
             && let Some((_, hazard)) = hazards.iter().find(|(_, hazard)| !hazard.active)
         {
+            assert_eq!(
+                world.get::<WorldAssetRoot>(boss).unwrap().0,
+                world.resource::<GameAssets>().adventure_scenes[index],
+                "real combat never falls back to an ordinary soldier model"
+            );
             world.resource_mut::<Probe>().warning = Some(frame);
             world.resource_mut::<Probe>().before_hp = world.resource::<HeroVitals>().health;
             place(world, hazard.target);
@@ -487,7 +572,7 @@ fn observe(world: &mut World) {
                 world.resource_mut::<GameSession>().paused = true;
                 let frozen = hazards
                     .iter()
-                    .map(|(entity, h)| (*entity, h.remaining, h.active))
+                    .map(|(entity, h)| (*entity, h.remaining_secs, h.active))
                     .collect();
                 world.resource_mut::<Probe>().frozen = frozen;
                 world.resource_mut::<Probe>().frozen_timer =
@@ -497,7 +582,7 @@ fn observe(world: &mut World) {
             if frame == warning + 20 {
                 let current: Vec<_> = hazards
                     .iter()
-                    .map(|(entity, h)| (*entity, h.remaining, h.active))
+                    .map(|(entity, h)| (*entity, h.remaining_secs, h.active))
                     .collect();
                 assert_eq!(current, world.resource::<Probe>().frozen);
                 assert_eq!(
@@ -512,8 +597,12 @@ fn observe(world: &mut World) {
                 }
             }
         }
-        if !loss && !world.resource::<Probe>().hit && hazards.iter().any(|(_, h)| h.active) {
-            assert!(world.resource::<HeroVitals>().health < world.resource::<Probe>().before_hp);
+        if !loss
+            && !world.resource::<Probe>().hit
+            && world.resource::<HeroVitals>().health < world.resource::<Probe>().before_hp
+            && (hazards.iter().any(|(_, h)| h.active)
+                || !world.resource::<Probe>().impacts.is_empty())
+        {
             world.resource_mut::<Probe>().hit = true;
             let mut enemy = world.get_mut::<Enemy>(boss).unwrap();
             enemy.hp = enemy.max_hp * 0.49;
@@ -523,11 +612,8 @@ fn observe(world: &mut World) {
             && !world.resource::<Probe>().phase
             && world.resource::<Probe>().hit
             && world
-                .query::<(&Name, &Visibility)>()
-                .iter(world)
-                .any(|(name, visibility)| {
-                    name.as_str() == "Boss phase crest" && *visibility == Visibility::Visible
-                })
+                .get::<AdventureSkillClock>(boss)
+                .is_some_and(|clock| clock.enraged)
         {
             world.resource_mut::<Probe>().phase = true;
             stage("phase-two", frame);
@@ -535,9 +621,12 @@ fn observe(world: &mut World) {
         if !loss
             && world.resource::<Probe>().phase
             && !world.resource::<Probe>().secondary
-            && hazards
-                .iter()
-                .any(|(_, h)| h.enraged && h.kind == 1 && h.active)
+            && (hazards.iter().any(|(_, h)| h.kind == 1 && h.active)
+                || world
+                    .resource::<Probe>()
+                    .impacts
+                    .iter()
+                    .any(|(kind, _)| *kind == 1))
         {
             world.resource_mut::<Probe>().secondary = true;
             stage("secondary-active", frame);
