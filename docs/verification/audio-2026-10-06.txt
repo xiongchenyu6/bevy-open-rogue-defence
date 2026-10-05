@@ -1,0 +1,37 @@
+Audio feedback and current asset audit — 2026-10-06
+Scope: real production play_feedback ECS system; no audio output device or manual listening evaluation.
+Each speed 1/2/4/8/16/32: 600 updates at 60Hz, 100 actual shot AudioPlayer entities.
+Suppressed ultimate cues are consumed immediately; no delayed replay after virtual time freezes.
+No visual UI changes in this pass; prior balance screenshots are historical evidence for their own revision.
+
+audio-real-time-tests.log:
+    Finished `test` profile [optimized + debuginfo] target(s) in 5m 31s
+test game::audio::tests::crowd_volume_grows_but_is_capped ... ok
+test game::audio::tests::pitch_variation_stays_within_spread_and_changes_between_hits ... ok
+test game::audio::tests::every_shipped_audio_asset_has_an_enabled_decoder ... ok
+test game::audio::tests::accelerated_boss_arrivals_remain_audible_without_stacking_every_frame ... ok
+test game::audio::tests::rapid_ultimate_cues_do_not_stack_or_replay_after_activity_stops ... ok
+test game::audio::tests::actual_shot_voices_are_bounded_by_real_time_at_every_battle_speed ... ok
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 542 filtered out; finished in 0.14s
+
+audio-full-regression.log:
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.25s
+test game::audio::tests::crowd_volume_grows_but_is_capped ... ok
+test game::audio::tests::pitch_variation_stays_within_spread_and_changes_between_hits ... ok
+test game::audio::tests::every_shipped_audio_asset_has_an_enabled_decoder ... ok
+test game::audio::tests::accelerated_boss_arrivals_remain_audible_without_stacking_every_frame ... ok
+test game::audio::tests::rapid_ultimate_cues_do_not_stack_or_replay_after_activity_stops ... ok
+test game::audio::tests::actual_shot_voices_are_bounded_by_real_time_at_every_battle_speed ... ok
+test result: ok. 547 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+audio-strict-clippy.log:
+    Finished `dev` profile [optimized + debuginfo] target(s) in 32.37s
+
+audio-fmt.log:
+PASS: cargo fmt --all --check, exit 0
+
+release-model-audit.log:
+PASS: 52 self-contained authored GLBs; 35 cast + 3 original adventure models with Idle/Walk/Attack/Hit; 14,240,308 bytes
+
+release-ui-assets-audit.log:
+PASS: 32 skill icons, 26 bond icons, 16 action icons, 12 portraits; 101 cards / 26 families mapped; PNG checksums and payloads valid

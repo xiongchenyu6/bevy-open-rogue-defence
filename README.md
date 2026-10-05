@@ -11,7 +11,7 @@
 - `F` 用木材抽羈絆，`G` 優先消耗免費技能點，沒有技能點時改用金幣；公開實戰的首次引導 `F` 約在 00:12，本專案也在 12 秒存入首次免費羈絆抽取。
 - 金幣、可消費的殺敵點與木材彼此獨立；黑市以殺敵點購買永久局內裝備。
 - 黑市於 03:00 開放，固定顯示 5 格商品、每 180 秒自動換貨；Lv1 首次手動刷新為 60 殺敵。
-- 城門耐久歸零即失敗；普通攻擊、32 種技能與各英雄終結技自動清場，終結技不再佔用手動按鈕。
+- 城門有有限耐久，倒塌后4秒重建，可无限重建；英雄共有3条生命，耗尽才失败。普通攻击、32种技能与各英雄终结技自动施放，终结技不占用手动按钮。
 
 ## 構築系統
 
@@ -35,7 +35,7 @@
 
 开局提供力量、敏捷、智力各一名基础角色。后续招募从英雄池抽取6名，排除当前角色；转职不额外授予起始技能。浏览器首次开启会建立新的64-bit seed并写入网址；分享或重开含 `?seed=0x...` 的网址即可重播同一局。
 
-征募介面使用遊戲角色的離線渲染立繪與遺跡背景，點選卡牌先預覽，再按出戰確認。开局显示3张基础角色卡，后续等级/果实招募显示6张，窄直屏自动换行；最新捕捉见[基础开局](screenshots/career-base.png)、[40级转职](screenshots/career-level40.png)与[手机](screenshots/career-level40-mobile.png)。
+征募介面使用遊戲角色的離線渲染立繪與遺跡背景，三选一技能与羁绊点选即确认，并继续消耗待选次数；英雄征募先预览，再按出战确认。开局显示3张基础角色卡，后续等级/果实招募显示6张，窄直屏自动换行；最新捕捉见[基础开局](screenshots/career-base.png)、[40级转职](screenshots/career-level40.png)与[手机](screenshots/career-level40-mobile.png)。
 
 ### 四檔品階
 
@@ -77,7 +77,7 @@
 ## 已完成與待完成
 
 - [x] **主循環：** 橫向怪道、自動戰鬥、移動、城門勝敗、25 分鐘與五 Boss 時間軸。
-- [x] **構築：** 30个原型技能、10个家族与30张独立羁绊卡、雙挑戰、基础R三选一开局、10/20/40级及果实转职、技能／羈絆／黑市四檔品階、固定五格黑市與三資源。
+- [x] **構築：** 32种技能、26个家族与101张独立羁绊卡、雙挑戰、基础R三选一开局、10/20/40级及果实转职、技能／羈絆／黑市四檔品階、固定五格黑市與三資源。
 - [x] **局次隨機：** 每次開局自動產生可分享 seed；選將、技能與羈絆按 52／28／15／5 基礎權重抽取，起手技能、波次與黑市也受 seed 驅動，選將不消耗戰鬥 RNG。
 - [x] **手機基線：** 667×375 至 915×412 響應式 HUD、固定多指搖桿、獨立右手動作、觸控選卡／市場、暫停與 Android GameActivity 工程骨架。
 - [x] **戰鬥加速：** 右上三個按鈕減速、加速及還原，倍速為 1×／2×／4×／8×／16×／32×，桌面按 `T` 加速；普攻會補齊跨幀週期，超出單幀預算的攻擊順延但不丟失，敵人抵達半徑會當幀結算，投射物採 swept collision，避免高倍速或低 FPS 時漏射、折返與穿怪。
@@ -118,7 +118,7 @@ bash scripts/build-wasm.sh
 python3 -m http.server 8000 --directory dist
 ```
 
-開啟 `http://127.0.0.1:8000/`，點擊「開始遊戲」以解鎖瀏覽器音訊並載入 Bevy。產物位於忽略追蹤的 `dist/`；47 個模型、6 個音訊、中文字庫與 OFL 授權會一併複製。網址不帶 `seed` 時會自動產生新局；例如 `http://127.0.0.1:8000/?seed=0xA11CE&lang=zh-CN` 可固定以簡中重播。語言優先順序為網址、`localStorage`、瀏覽器偏好，切換只更新 `lang`，不會改動 `seed`。
+開啟 `http://127.0.0.1:8000/`，點擊「開始遊戲」以解鎖瀏覽器音訊並載入 Bevy。產物位於忽略追蹤的 `dist/`；模型、音讯、中文字库及授权文件会一并复制。網址不帶 `seed` 時會自動產生新局；例如 `http://127.0.0.1:8000/?seed=0xA11CE&lang=zh-CN` 可固定以簡中重播。語言優先順序為網址、`localStorage`、瀏覽器偏好，切換只更新 `lang`，不會改動 `seed`。
 
 ## Android（GameActivity）
 
@@ -140,16 +140,13 @@ adb logcat | grep 'RustStdoutStderr\|bevy\|wgpu'
 
 目前 Nix shell 使用 Nix 提供的 Rust，沒有 `rustup`；若繼續沿用它，需在 shell 中另行加入 Android target standard library。專案不提交 Gradle wrapper binary，可直接使用 Gradle 8.6，或在工具鏈就緒後執行 `gradle -p android wrapper --gradle-version 8.6` 產生 wrapper。也可用 Android Studio 開啟 `android/`。每次修改 Rust 程式後，必須先重跑 `cargo ndk` 再組裝 APK。Release APK 尚未設定簽章。
 
-## 專案狀態
+## 当前验证状态
 
-目前桌面與瀏覽器版本可實際運行：右出怪左守門、資料化 25 波、12 種獨立敵人、5 名機制 Boss、30个原型技能、10个家族与30张独立羁绊卡、12英雄、10/20/40级招募与吞噬转职、Q/W 雙挑戰、固定五格黑市、原創 60 秒戰果刻印、EN／簡中鍵盤／觸控 HUD、1×／2×／4×／8×／16×／32× 戰鬥加速、F7 生成器及離屏捕捉工具均已接入。每個品階各有一名力量、敏捷與智力英雄；开局3名基础R角色，后续6选1招募使用品阶权重，均可由URL seed重播，技能、羈絆與黑市也使用同一套白／藍／橙／紅可見色制。Boss 的通用減傷、元素抗性、火抗與冰霜易傷統一在最終投射物傷害路徑結算。35 個角色 GLB（12 英雄＋12 敵人＋5 Boss＋6 召喚物）已改用 KayKit／Quaternius 的 CC0 造型素材，保留骨骼動畫；投石塔使用機械臂動作。英雄以武器、配色區分，場景使用 12 個 KayKit 城牆、火炬、碎石與聖物資產。來源與授權見 [`assets/models/SOURCES.md`](assets/models/SOURCES.md)；`tools/import_cast.py` 保留 Idle／Walk／Attack／Hit 四組動作並移除未使用資料，`tools/verify_models.py` 驗證實際載入清單、動畫、紋理與 buffer。6 個合成音訊仍由倉庫腳本產生。
+目前有32种技能、12名英雄、26个羁绊家族和101张独立卡，支持六章战役、局外战果强化、装备栏与合成、可选营地战斗、英雄吞噬、无限重建城墙及三条英雄生命。内容数量不能代表全部机制都已达到发售品质。
 
+最新平衡验证使用完整生产系统：普通第一章、两种种子、五种职业／站位组合、两种成长策略，修改前后40局均实际结束。新版不选可选成长的10局在第5–13波失败，持续选卡的10局通过25波。544项库测试通过（1项忽略），桌面及窄屏技能节奏、城墙重建原生场景共1,600帧通过。实际数据、截图、重放边界及复现命令见[战斗平衡报告](docs/combat-balance.md)。这些证据不代表其余章节、全部英雄或真实手机性能已经验收。
 
-替換美術前的玩法驗收基線通過格式檢查、原生與 wasm32 `cargo check`、246/246 測試與 Clippy 零警告；音訊測試會逐一建立 1 個 OGG 與 5 個 WAV 的解碼器，避免 Web 版再次因未編入格式支援而崩潰。字庫測試會解析實際 TTF cmap，缺少任何 UI 字符或子集意外膨脹都會直接失敗。正常 `balance 0xA11CE` 從預設 48 攻擊、1.95 攻速與 1,000 城門開始，使用正常抽卡、Q/W 判定及每代最多兩件的黑市自購；兩次均在遊戲時間 1,572 秒後以 5/5 Boss、1,974 累計擊殺、Q14、W13、Archive `TimedOut`、城門 1/1,370 勝利。兩份 30-checkpoint 記錄及最終截圖 SHA-256 均一致。
-
-以下为此前原型版本的历史验证，未覆盖本次基础开局与转职变更。上述長局池峰值為敵人 24、投射物 161、傷害數字 63、召喚物 5；敵人、投射物及召喚物邏輯拒絕均為 0。128 格 FX 池拒絕 261 次純視覺命中特效，沒有改變傷害。桌面驗收見 [完整長局結果](screenshots/balance-25m.png)、[15.5 秒 Boss→Archive 實機影片](screenshots/rogue-commander-final.mp4)與[逐秒回看表](screenshots/rogue-commander-final-review.png)；手機基線見 [19.4 秒多指操作影片](screenshots/rogue-commander-mobile.mp4)與[回看表](screenshots/rogue-commander-mobile-review.png)。[18.0 秒 12 英雄選將影片](screenshots/rogue-commander-roster.mp4)及[回看表](screenshots/rogue-commander-roster-review.png)為 800×390、25 FPS，涵蓋 6 選 1、免費重抽與 Solar 實戰；[19.5 秒四檔品階實機影片](screenshots/rogue-commander-rarity.mp4)及[回看表](screenshots/rogue-commander-rarity-review.png)為 844×390、30 FPS，`0x1` 可見四檔英雄。最新 [19.0 秒簡中實機影片](screenshots/rogue-commander-zh.mp4)及[回看表](screenshots/rogue-commander-zh-review.png)同為 844×390、H.264/yuv420p，展示簡中選將、UR 英雄 HUD、技能卡與 R／SSR／SR 羈絆卡；EN↔簡中切換前後 seed 均為 `0x0000000000000001`，中文沒有缺字方框。本輪新增的 [18.0 秒戰鬥加速實機影片](screenshots/rogue-commander-speed.mp4)及[回看表](screenshots/rogue-commander-speed-review.png)為 844×390、H.264/yuv420p，連續展示當時的 1×／2×／3× 高亮、戰鬥推進與無遮擋的手機 HUD。所有影片已完整解碼及回看，本輪 JavaScript／WASM console 錯誤與例外均為 0。
-
-尚未完成的是四檔倍率與 12 英雄逐一長局平衡、把全域 RNG 再拆成互不干擾的子流、震動與局外存檔，以及 Android SDK 授權、APK 和真機 FPS；不得把桌面確定性驗收寫成 Android 效能證明。
+上架品质的剩余验收按[发售体验清单](docs/release-readiness.md)推进；当前仍处于开发阶段。素材来源见[模型来源](assets/models/SOURCES.md)，素材验证工具为 `tools/verify_models.py` 和 `tools/verify_ui_assets.py`。此前截图与影片用于历史回看，不作为当前版本的平衡、帧率或确定性证明。
 
 ## 素材表
 

@@ -62,8 +62,18 @@ impl FromWorld for GameAudio {
 #[derive(Resource, Default)]
 struct AudioThrottle {
     shot: f32,
+    ultimate: f32,
+    boss: f32,
     previous_ultimate_serial: u64,
     previous_crafting_revision: u32,
+}
+
+impl AudioThrottle {
+    fn tick(&mut self, delta: f32) {
+        for timer in [&mut self.shot, &mut self.ultimate, &mut self.boss] {
+            *timer = (*timer - delta).max(0.0);
+        }
+    }
 }
 
 /// Real-time cooldowns so fast-forwarded battles do not stack hundreds of voices.
@@ -128,7 +138,7 @@ fn start_ambient(mut commands: Commands, audio: Res<GameAudio>, autoplay: Option
 
 fn play_feedback(
     mut commands: Commands,
-    time: Res<Time>,
+    time: Res<Time<Real>>,
     audio: Res<GameAudio>,
     cues: Res<UltimateCues>,
     crafting: Option<Res<super::crafting::CraftingState>>,
@@ -141,9 +151,10 @@ fn play_feedback(
     if autoplay.is_some() {
         return;
     }
-    throttle.shot = (throttle.shot - time.delta_secs()).max(0.0);
+    let delta = time.delta_secs();
+    throttle.tick(delta);
 
-    if !bosses.is_empty() {
+    if !bosses.is_empty() && ready(&mut throttle.boss, 0.35) {
         play_once(&mut commands, &audio.boss_spawn, 0.72);
     }
     let crafting_revision = crafting.as_ref().map_or(0, |state| state.revision);
@@ -154,13 +165,13 @@ fn play_feedback(
     if !drafts.is_empty() {
         play_once(&mut commands, &audio.draft, 0.50);
     }
-    if !projectiles.is_empty() && throttle.shot <= 0.0 {
+    if !projectiles.is_empty() && ready(&mut throttle.shot, 0.085) {
         play_once(&mut commands, &audio.shot, 0.22);
-        throttle.shot = 0.085;
     }
-    if cues.serial != throttle.previous_ultimate_serial {
+    if cues.serial != throttle.previous_ultimate_serial && ready(&mut throttle.ultimate, 0.5) {
         play_once(&mut commands, &audio.ultimate, 0.58);
     }
+    // Consume suppressed cues now: they must not replay after the battle pauses.
     throttle.previous_ultimate_serial = cues.serial;
 }
 
@@ -257,6 +268,113 @@ mod tests {
     use bevy::audio::Decodable;
 
     use super::*;
+
+    fn feedback_app() -> App {
+        let mut sources = Assets::<AudioSource>::default();
+        let mut source = || {
+            sources.add(AudioSource {
+                bytes: Vec::<u8>::new().into(),
+            })
+        };
+        let audio = GameAudio {
+            ambient: source(),
+            shot: source(),
+            impact: source(),
+            draft: source(),
+            ultimate: source(),
+            boss_spawn: source(),
+            hit_physical: source(),
+            hit_magic: source(),
+            crit: source(),
+            kill: source(),
+            kill_heavy: source(),
+            hero_hurt: source(),
+            gate_hit: source(),
+        };
+        let mut app = App::new();
+        app.insert_resource(sources)
+            .insert_resource(audio)
+            .init_resource::<Time>()
+            .init_resource::<Time<Real>>()
+            .init_resource::<UltimateCues>()
+            .init_resource::<AudioThrottle>()
+            .add_systems(Update, play_feedback);
+        app
+    }
+
+    fn advance_feedback(app: &mut App, speed: f32) {
+        let real = std::time::Duration::from_secs_f64(1.0 / 60.0);
+        app.world_mut()
+            .resource_mut::<Time<Real>>()
+            .advance_by(real);
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(real.mul_f32(speed));
+        app.update();
+    }
+
+    fn voice_count(app: &mut App, source: Handle<AudioSource>) -> usize {
+        app.world_mut()
+            .query::<&AudioPlayer>()
+            .iter(app.world())
+            .filter(|player| player.0 == source)
+            .count()
+    }
+
+    #[test]
+    fn actual_shot_voices_are_bounded_by_real_time_at_every_battle_speed() {
+        for speed in [1.0, 2.0, 4.0, 8.0, 16.0, 32.0] {
+            let mut app = feedback_app();
+            for _ in 0..600 {
+                let projectile = app
+                    .world_mut()
+                    .spawn(Projectile {
+                        velocity: Vec3::X,
+                        damage: 1.0,
+                        radius: 0.1,
+                        remaining_hits: 1,
+                        lifetime: 1.0,
+                    })
+                    .id();
+                advance_feedback(&mut app, speed);
+                app.world_mut().despawn(projectile);
+            }
+            let shot = app.world().resource::<GameAudio>().shot.clone();
+            assert_eq!(voice_count(&mut app, shot), 100, "speed={speed}");
+        }
+    }
+
+    #[test]
+    fn rapid_ultimate_cues_do_not_stack_or_replay_after_activity_stops() {
+        let mut app = feedback_app();
+        for _ in 0..12 {
+            app.world_mut().resource_mut::<UltimateCues>().serial += 1;
+            advance_feedback(&mut app, 32.0);
+        }
+        let ultimate = app.world().resource::<GameAudio>().ultimate.clone();
+        assert_eq!(voice_count(&mut app, ultimate.clone()), 1);
+        // Game time freezes; elapsed real time must not release suppressed old cues.
+        for _ in 0..60 {
+            advance_feedback(&mut app, 0.0);
+        }
+        assert_eq!(voice_count(&mut app, ultimate.clone()), 1);
+        app.world_mut().resource_mut::<UltimateCues>().serial += 1;
+        advance_feedback(&mut app, 1.0);
+        assert_eq!(voice_count(&mut app, ultimate), 2);
+    }
+
+    #[test]
+    fn accelerated_boss_arrivals_remain_audible_without_stacking_every_frame() {
+        let mut app = feedback_app();
+        for _ in 0..60 {
+            let boss = app.world_mut().spawn(BossEnemy { index: 0 }).id();
+            advance_feedback(&mut app, 32.0);
+            app.world_mut().despawn(boss);
+        }
+        let boss = app.world().resource::<GameAudio>().boss_spawn.clone();
+        let count = voice_count(&mut app, boss);
+        assert!((2..=3).contains(&count), "actual boss voices={count}");
+    }
 
     fn assert_audio_decodes(bytes: &[u8]) {
         let source = AudioSource {
