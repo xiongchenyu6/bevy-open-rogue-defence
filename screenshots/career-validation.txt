@@ -1,0 +1,76 @@
+Career recruitment and automatic trials validation — 2026-09-29
+
+Final source tests: cargo test --lib -j1
+test result: ok. 277 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+UI assets: python3 tools/verify_ui_assets.py PASS.
+Whitespace: git diff --check PASS.
+
+Native build: cargo build --bins -j1 PASS (4m38s).
+WASM: cargo check --target wasm32-unknown-unknown --lib PASS (7.31s).
+Clippy: cargo clippy --all-targets -j1 -- -D warnings PASS.
+Formatting: cargo fmt --check PASS.
+Commands run inside nix develop.
+Native screenshots were captured before the final equivalent min/max-to-clamp
+cleanup and moving a function above the test module; Clippy checks final source.
+
+Capture invocation (inside nix develop):
+ROGUE_COMMANDER_LANG=<en|zh> target/debug/capture still   screenshots/career-<name>.png 160 <scenario> 0xA11CE <width>x<height>
+
+Each capture completed with its scenario assertions. No ERROR/panic/FAILED
+matches in the 17 capture logs. Desktop and mobile-size images inspected.
+
+START base
+PASS base
+START base-mobile
+PASS base-mobile
+START level10
+PASS level10
+START level20
+PASS level20
+START level40
+PASS level40
+START level40-mobile
+PASS level40-mobile
+START fruit
+PASS fruit
+START fruit-mobile
+PASS fruit-mobile
+START level10-confirm
+PASS level10-confirm
+START level20-confirm
+PASS level20-confirm
+START level40-confirm
+PASS level40-confirm
+START fruit-confirm
+PASS fruit-confirm
+START trials-auto
+PASS trials-auto
+START trials-mobile
+PASS trials-mobile
+START trials-retry
+PASS trials-retry
+START trials-clear
+PASS trials-clear
+START settings-base
+PASS settings-base
+
+Scenarios: base=recruit-base; level10/20/40=recruit-10/20/40;
+fruit=recruit-fruit; confirmation variants append -confirm;
+trials-auto, trials-retry, trials-clear; settings-base=settings-recruit.
+Desktop 1280x720; mobile 844x390, fruit-mobile 667x375.
+
+Coverage:
+- Opening draft: 3 basic R commanders.
+- Level 10/20/40: six offers; preview does not consume recruitment.
+- Confirmation: claim once, absorb old intrinsic stats, preserve build.
+- Fruit: HUD opens recruitment, only confirmation spends fruit.
+- Automatic trials: real UI toggles, zero-DPS start at unlock, timeout retry.
+- Clear: cancel both trials and disable both automatic switches.
+- Settings available during basic draft; Chinese/English layouts.
+
+Limits:
+Harness grants levels/fruit and advances trial timers to reach scenarios;
+it exercises real UI and ECS logic, not a natural full run to level 40.
+Mobile evidence uses offscreen native window sizes, not physical-device performance.
+Absorption retains old intrinsic attributes and replaces passive/ultimate/weapon;
+this is the project's defined implementation, not a verified original-map formula.

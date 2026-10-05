@@ -5,24 +5,36 @@ use bevy::prelude::*;
 use super::combat::CombatSet;
 use super::content::BOSSES;
 use super::pooling::{CombatPools, EnemySceneKey};
-use super::{BossEnemy, Core, Enemy, EnemyArchetype, GameAssets, GameSession, Hero, ImpactFx};
+use super::{
+    BossEnemy, Core, Enemy, EnemyArchetype, EnemyAttackCue, EnemyAttackKind, GameAssets,
+    GameSession, Hero, ImpactFx,
+};
+
+mod dangers;
+pub use dangers::{BossDangerShape, BossPhaseCue, BossTelegraph};
 
 pub struct BossesPlugin;
 
 impl Plugin for BossesPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<BossRuntime>().add_systems(
-            Update,
-            (register_bosses, remove_defeated_bosses, run_boss_mechanics)
-                .chain()
-                .after(CombatSet),
-        );
+        app.init_resource::<BossRuntime>()
+            .add_message::<BossPhaseCue>()
+            .add_systems(
+                Update,
+                (
+                    register_bosses,
+                    remove_defeated_bosses,
+                    run_boss_mechanics,
+                    dangers::tick_dangers,
+                )
+                    .chain()
+                    .after(CombatSet),
+            );
     }
 }
 
 #[derive(Debug, Clone, Copy)]
 struct BossProfile {
-    name: &'static str,
     first_cast_secs: f32,
     period_secs: f32,
     warning_secs: f32,
@@ -30,31 +42,26 @@ struct BossProfile {
 
 const BOSS_PROFILES: [BossProfile; 5] = [
     BossProfile {
-        name: "CINDER COLOSSUS",
         first_cast_secs: 3.0,
         period_secs: 8.0,
         warning_secs: 0.9,
     },
     BossProfile {
-        name: "ABYSSAL LEVIATHAN",
         first_cast_secs: 4.0,
         period_secs: 10.0,
         warning_secs: 1.1,
     },
     BossProfile {
-        name: "DREAD VEIL",
         first_cast_secs: 4.0,
         period_secs: 9.0,
         warning_secs: 0.8,
     },
     BossProfile {
-        name: "SUN CROWN MAGUS",
         first_cast_secs: 3.0,
         period_secs: 6.0,
         warning_secs: 1.0,
     },
     BossProfile {
-        name: "GREEN REGENT",
         first_cast_secs: 3.0,
         period_secs: 7.0,
         warning_secs: 1.0,
@@ -62,11 +69,17 @@ const BOSS_PROFILES: [BossProfile; 5] = [
 ];
 
 #[derive(Resource, Default)]
-struct BossRuntime {
+pub(crate) struct BossRuntime {
     // Multiple bosses may overlap when a previous timed boss is still alive.
     // Entity order keeps their state updates deterministic across processes;
     // HashMap iteration would otherwise depend on a randomized hasher.
     states: BTreeMap<Entity, BossState>,
+}
+
+impl BossRuntime {
+    pub(crate) fn is_enraged(&self, boss: Entity) -> bool {
+        self.states.get(&boss).is_some_and(|state| state.enraged)
+    }
 }
 
 #[derive(Debug)]
@@ -79,6 +92,9 @@ struct BossState {
     base_damage: f32,
     action_speed_multiplier: f32,
     enrage_stacks: u8,
+    entity: Entity,
+    summon_count: usize,
+    enraged: bool,
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -91,16 +107,25 @@ struct PendingAbility {
 /// Marks enemies created by boss mechanics so they do not consume one of the
 /// 130 ordinary wave slots.
 #[derive(Component, Debug, Clone, Copy)]
-pub(crate) struct BossSummon;
+pub(crate) struct BossSummon(pub(crate) Entity);
 
-fn register_bosses(
+pub(crate) fn register_bosses(
     mut commands: Commands,
     assets: Option<Res<GameAssets>>,
-    mut new_bosses: Query<(Entity, &BossEnemy, &mut Enemy, &Transform), Added<BossEnemy>>,
+    mut new_bosses: Query<
+        (
+            Entity,
+            &BossEnemy,
+            &mut Enemy,
+            &Transform,
+            Option<&super::encounter_bosses::EncounterBoss>,
+        ),
+        Added<BossEnemy>,
+    >,
     mut runtime: ResMut<BossRuntime>,
     mut pools: ResMut<CombatPools>,
 ) {
-    for (entity, boss, mut enemy, transform) in &mut new_bosses {
+    for (entity, boss, mut enemy, transform, adventure) in &mut new_bosses {
         let index = usize::from(boss.index.min(4));
         let modifiers = BOSSES[index].modifiers;
         let health_ratio = if enemy.max_hp > 0.0 {
@@ -111,9 +136,12 @@ fn register_bosses(
         enemy.max_hp *= modifiers.max_hp_multiplier;
         enemy.hp = enemy.max_hp * health_ratio;
         enemy.speed *= modifiers.move_speed_multiplier;
-        commands
-            .entity(entity)
-            .insert(Name::new(BOSS_PROFILES[index].name));
+        commands.entity(entity).insert(Name::new(adventure.map_or(
+            BOSSES[index].name_en,
+            |adventure| {
+                super::encounter_bosses::ADVENTURE_BOSSES[usize::from(adventure.index)].name_en
+            },
+        )));
         runtime.states.insert(
             entity,
             BossState {
@@ -125,6 +153,9 @@ fn register_bosses(
                 base_damage: enemy.damage,
                 action_speed_multiplier: modifiers.attack_speed_multiplier,
                 enrage_stacks: 0,
+                entity,
+                summon_count: 0,
+                enraged: false,
             },
         );
         if let Some(assets) = assets.as_deref() {
@@ -148,15 +179,26 @@ fn remove_defeated_bosses(living: Query<(), With<BossEnemy>>, mut runtime: ResMu
 }
 
 fn run_boss_mechanics(
+    mut cues: MessageWriter<EnemyAttackCue>,
+    mut phases: MessageWriter<BossPhaseCue>,
     mut commands: Commands,
     time: Res<Time>,
     mut session: ResMut<GameSession>,
     assets: Option<Res<GameAssets>>,
     hero: Query<&Transform, (With<Hero>, Without<BossEnemy>)>,
     core: Query<&Transform, (With<Core>, Without<BossEnemy>)>,
-    mut bosses: Query<(&BossEnemy, &mut Enemy, &mut Transform)>,
+    mut bosses: Query<
+        (
+            &BossEnemy,
+            &mut Enemy,
+            &mut Transform,
+            Option<&super::encounter_bosses::CampCombatant>,
+        ),
+        With<BossEnemy>,
+    >,
     mut runtime: ResMut<BossRuntime>,
     mut pools: ResMut<CombatPools>,
+    summons: Query<(&BossSummon, &Enemy), Without<BossEnemy>>,
 ) {
     if session.paused || session.finished || session.save_active {
         return;
@@ -169,13 +211,33 @@ fn run_boss_mechanics(
     let delta = time.delta_secs();
 
     for (entity, state) in &mut runtime.states {
-        let Ok((boss, mut enemy, mut transform)) = bosses.get_mut(*entity) else {
+        let Ok((boss, mut enemy, mut transform, camp)) = bosses.get_mut(*entity) else {
             continue;
         };
+        let hero_position = hero_position.filter(|position| {
+            camp.is_none_or(|camp| position.xz().distance(camp.center.xz()) <= 6.0)
+        });
+        if camp.is_some() && hero_position.is_none() {
+            continue;
+        }
         let index = usize::from(boss.index.min(4));
         if index != usize::from(state.index) {
             continue;
         }
+        if enemy.hp <= 0.0 {
+            continue;
+        }
+        if enter_second_phase(state, &enemy) {
+            phases.write(BossPhaseCue {
+                boss: *entity,
+                index: index as u8,
+                origin: transform.translation,
+            });
+        }
+        state.summon_count = summons
+            .iter()
+            .filter(|(summon, enemy)| summon.0 == *entity && enemy.hp > 0.0)
+            .count();
         let profile = BOSS_PROFILES[index];
         state.age_secs += delta;
 
@@ -214,8 +276,20 @@ fn run_boss_mechanics(
                 core_position,
                 pending,
             ) {
-                pending.remaining_secs = 0.0;
-                state.pending = Some(pending);
+                if pending.remaining_secs > -2.0 {
+                    state.pending = Some(pending);
+                }
+            } else {
+                cues.write(EnemyAttackCue {
+                    source: *entity,
+                    origin: transform.translation,
+                    target: pending.target,
+                    kind: match index {
+                        0 => EnemyAttackKind::Slam,
+                        3 => EnemyAttackKind::Beam,
+                        _ => EnemyAttackKind::Burst,
+                    },
+                });
             }
             continue;
         }
@@ -238,6 +312,19 @@ fn run_boss_mechanics(
             core_position,
             variant,
         );
+        dangers::spawn_dangers(
+            &mut commands,
+            *entity,
+            index,
+            transform.translation,
+            hero_position,
+            core_position,
+            &session,
+            variant,
+            state.enraged,
+            enemy.damage,
+            profile.warning_secs,
+        );
         state.pending = Some(PendingAbility {
             remaining_secs: profile.warning_secs,
             target,
@@ -246,27 +333,6 @@ fn run_boss_mechanics(
 
         if index == 1 {
             enemy.speed = state.base_speed * 0.22;
-        }
-        let radius = warning_radius(index, variant);
-        spawn_ring_fx(
-            &mut commands,
-            &mut pools,
-            assets,
-            index,
-            target,
-            radius,
-            profile.warning_secs,
-        );
-        if index == 0 || index == 3 {
-            spawn_ring_fx(
-                &mut commands,
-                &mut pools,
-                assets,
-                index,
-                transform.translation,
-                radius * 0.62,
-                profile.warning_secs,
-            );
         }
     }
 }
@@ -286,7 +352,12 @@ fn resolve_ability(
     let index = usize::from(state.index);
     match index {
         0 => {
-            transform.translation = pending.target;
+            transform.translation = super::combat::stop_at_live_gate(
+                session,
+                core_position,
+                transform.translation,
+                pending.target,
+            );
             transform.translation.y = 0.0;
             let hits_gate =
                 core_position.is_some_and(|core| core.distance(transform.translation) <= 6.0);
@@ -318,14 +389,19 @@ fn resolve_ability(
             );
         }
         2 => {
-            transform.translation = pending.target;
+            transform.translation = super::combat::stop_at_live_gate(
+                session,
+                core_position,
+                transform.translation,
+                pending.target,
+            );
             transform.translation.y = 0.0;
             if !spawn_pressure_wave(
                 commands,
                 pools,
                 assets,
-                transform.translation,
-                3,
+                (state.entity, transform.translation),
+                boss_summon_count(index, state.enraged, state.summon_count),
                 3,
                 session.elapsed,
             ) {
@@ -369,8 +445,8 @@ fn resolve_ability(
                 commands,
                 pools,
                 assets,
-                transform.translation,
-                5,
+                (state.entity, transform.translation),
+                boss_summon_count(index, state.enraged, state.summon_count),
                 1,
                 session.elapsed,
             ) {
@@ -391,6 +467,15 @@ fn resolve_ability(
     true
 }
 
+fn enter_second_phase(state: &mut BossState, enemy: &Enemy) -> bool {
+    if state.enraged || enemy.hp <= 0.0 || enemy.hp > enemy.max_hp * 0.5 {
+        return false;
+    }
+    state.enraged = true;
+    state.action_speed_multiplier *= 1.3;
+    true
+}
+
 fn warning_target(
     index: usize,
     boss: Vec3,
@@ -400,7 +485,8 @@ fn warning_target(
 ) -> Vec3 {
     match index {
         0 => {
-            let gate_x = core.map_or(-14.8, |position| position.x) + 2.4;
+            let gate_x =
+                core.map_or(super::resources::GATE_POSITION.x, |position| position.x) + 2.4;
             Vec3::new(
                 (boss.x - 5.6).max(gate_x),
                 0.0,
@@ -412,23 +498,6 @@ fn warning_target(
             Vec3::new((boss.x + 2.4).min(13.4), 0.0, side * 3.15)
         }
         _ => Vec3::new(boss.x, 0.0, boss.z),
-    }
-}
-
-const fn warning_radius(index: usize, variant: u8) -> f32 {
-    match index {
-        0 => 3.6,
-        1 => 4.8,
-        2 => 3.2,
-        3 => {
-            if variant.is_multiple_of(2) {
-                7.0
-            } else {
-                3.1
-            }
-        }
-        4 => 5.6,
-        _ => 3.0,
     }
 }
 
@@ -454,15 +523,40 @@ fn spawn_ring_fx(
     );
 }
 
+fn boss_summon_count(index: usize, enraged: bool, active: usize) -> usize {
+    let desired = match index {
+        2 => {
+            if enraged {
+                6
+            } else {
+                3
+            }
+        }
+        4 => {
+            if enraged {
+                10
+            } else {
+                5
+            }
+        }
+        _ => 0,
+    };
+    desired.min(12_usize.saturating_sub(active))
+}
+
 fn spawn_pressure_wave(
     commands: &mut Commands,
     pools: &mut CombatPools,
     assets: &GameAssets,
-    origin: Vec3,
+    owner_origin: (Entity, Vec3),
     count: usize,
     scene_index: usize,
     elapsed: f32,
 ) -> bool {
+    if count == 0 {
+        return true;
+    }
+    let (owner, origin) = owner_origin;
     let growth = 1.0 + elapsed / 600.0;
     let hp = 115.0 * growth.powf(1.12);
     let scene_index = scene_index.min(3);
@@ -472,7 +566,11 @@ fn spawn_pressure_wave(
             Transform::from_xyz(
                 (origin.x + 1.1 + unit as f32 * 0.18).min(15.6),
                 0.0,
-                (origin.z + centered * 1.35).clamp(-4.3, 4.3),
+                if origin.z.abs() > 5.65 {
+                    origin.z + centered * 0.4
+                } else {
+                    (origin.z + centered * 1.35).clamp(-4.3, 4.3)
+                },
             )
             .with_scale(Vec3::splat(0.76))
         })
@@ -486,6 +584,11 @@ fn spawn_pressure_wave(
         return false;
     };
     for entity in entities {
+        if origin.z.abs() > 5.65 {
+            commands
+                .entity(entity)
+                .insert(super::encounter_bosses::CampCombatant { center: origin });
+        }
         commands.entity(entity).insert((
             Enemy {
                 hp,
@@ -499,7 +602,7 @@ fn spawn_pressure_wave(
                 elite: false,
             },
             EnemyArchetype(if scene_index == 1 { 1 } else { 0 }),
-            BossSummon,
+            BossSummon(owner),
         ));
     }
     true
@@ -525,6 +628,17 @@ fn green_regent_damage_multiplier(stacks: u8) -> f32 {
     1.25_f32.powi(i32::from(stacks))
 }
 
+pub(crate) fn reset_run(world: &mut World) {
+    let dangers: Vec<Entity> = world
+        .query_filtered::<Entity, With<BossTelegraph>>()
+        .iter(world)
+        .collect();
+    for entity in dangers {
+        world.despawn(entity);
+    }
+    world.insert_resource(BossRuntime::default());
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -536,9 +650,6 @@ mod tests {
             enemy_scenes: std::array::from_fn(|_| Handle::default()),
             boss_scenes: std::array::from_fn(|_| Handle::default()),
             summon_scenes: std::array::from_fn(|_| Handle::default()),
-            enemy_mesh: Handle::default(),
-            enemy_meshes: std::array::from_fn(|_| Handle::default()),
-            elite_mesh: Handle::default(),
             projectile_mesh: Handle::default(),
             fx_mesh: Handle::default(),
             enemy_material: Handle::default(),
@@ -570,7 +681,7 @@ mod tests {
                 &mut commands,
                 &mut pools,
                 &assets,
-                Vec3::ZERO,
+                (Entity::PLACEHOLDER, Vec3::ZERO),
                 5,
                 1,
                 1_500.0,
@@ -588,18 +699,114 @@ mod tests {
     }
 
     #[test]
-    fn profiles_are_distinct_and_match_existing_boss_order() {
-        let names: Vec<&str> = BOSS_PROFILES.iter().map(|profile| profile.name).collect();
-        assert_eq!(
-            names,
-            [
-                "CINDER COLOSSUS",
-                "ABYSSAL LEVIATHAN",
-                "DREAD VEIL",
-                "SUN CROWN MAGUS",
-                "GREEN REGENT",
-            ]
-        );
+    fn half_health_phase_is_permanent_and_triggers_once_for_all_five_bosses() {
+        for index in 0..5 {
+            let mut state = BossState {
+                index,
+                age_secs: 0.0,
+                casts_started: 0,
+                pending: None,
+                base_speed: 1.0,
+                base_damage: 10.0,
+                action_speed_multiplier: 1.0,
+                enrage_stacks: 0,
+                entity: Entity::PLACEHOLDER,
+                summon_count: 0,
+                enraged: false,
+            };
+            let mut enemy = Enemy {
+                hp: 51.0,
+                max_hp: 100.0,
+                speed: 1.0,
+                damage: 10.0,
+                xp: 0,
+                wood: 0,
+                gold: 0,
+                kill_credit: 0,
+                elite: false,
+            };
+            assert!(!enter_second_phase(&mut state, &enemy));
+            enemy.hp = 50.0;
+            assert!(enter_second_phase(&mut state, &enemy));
+            enemy.hp = 80.0;
+            assert!(!enter_second_phase(&mut state, &enemy));
+            assert_eq!(state.action_speed_multiplier, 1.3);
+            assert!(state.enraged);
+        }
+    }
+
+    #[test]
+    fn exposed_phase_survives_healing_but_not_death_reset_or_entity_reuse() {
+        let mut app = App::new();
+        app.init_resource::<BossRuntime>()
+            .init_resource::<CombatPools>()
+            .add_systems(Update, (register_bosses, remove_defeated_bosses).chain());
+        let entity = app
+            .world_mut()
+            .spawn((
+                BossEnemy { index: 0 },
+                Transform::default(),
+                Enemy {
+                    hp: 100.0,
+                    max_hp: 100.0,
+                    speed: 1.0,
+                    damage: 10.0,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+            ))
+            .id();
+        app.update();
+        assert!(!app.world().resource::<BossRuntime>().is_enraged(entity));
+        let enemy = Enemy {
+            hp: 49.0,
+            max_hp: 100.0,
+            speed: 1.0,
+            damage: 10.0,
+            xp: 0,
+            wood: 0,
+            gold: 0,
+            kill_credit: 0,
+            elite: false,
+        };
+        {
+            let mut runtime = app.world_mut().resource_mut::<BossRuntime>();
+            assert!(enter_second_phase(
+                runtime.states.get_mut(&entity).unwrap(),
+                &enemy
+            ));
+        }
+        app.world_mut().get_mut::<Enemy>(entity).unwrap().hp = 80.0;
+        app.update();
+        assert!(app.world().resource::<BossRuntime>().is_enraged(entity));
+        app.world_mut().entity_mut(entity).remove::<BossEnemy>();
+        app.update();
+        assert!(!app.world().resource::<BossRuntime>().is_enraged(entity));
+        app.world_mut()
+            .entity_mut(entity)
+            .insert(BossEnemy { index: 1 });
+        app.update();
+        assert!(!app.world().resource::<BossRuntime>().is_enraged(entity));
+        app.world_mut().insert_resource(BossRuntime::default());
+        assert!(!app.world().resource::<BossRuntime>().is_enraged(entity));
+    }
+
+    #[test]
+    fn boss_summon_pressure_grows_in_phase_two_but_is_bounded_per_boss() {
+        assert_eq!(boss_summon_count(2, false, 0), 3);
+        assert_eq!(boss_summon_count(2, true, 0), 6);
+        assert_eq!(boss_summon_count(4, false, 0), 5);
+        assert_eq!(boss_summon_count(4, true, 0), 10);
+        assert_eq!(boss_summon_count(4, true, 10), 2);
+        assert_eq!(boss_summon_count(4, true, 12), 0);
+        assert_eq!(boss_summon_count(4, true, 100), 0);
+    }
+
+    #[test]
+    fn ability_periods_match_existing_boss_order() {
         let periods: Vec<f32> = BOSS_PROFILES
             .iter()
             .map(|profile| profile.period_secs)

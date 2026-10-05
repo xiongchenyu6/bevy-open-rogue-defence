@@ -4,14 +4,18 @@ use bevy::{camera::visibility::RenderLayers, prelude::*};
 
 use super::archive::ArchiveEcho;
 use super::bonds::{DamageElement, DamageProfile};
+use super::boss_vfx::BossPhaseBurstOwner;
 use super::bosses::BossSummon;
 use super::combat::{
     CommanderAuraState, EliteAffix, EnemyArmor, EnemyBreachDamage, ProjectileFirstFrameTravel,
     ProjectileHitMemory,
 };
 use super::hero_abilities::{
-    AbilityGenerated, PassiveSpirit, SpiritOrbit, TimedSpeedEffect, WetMark,
+    AbilityGenerated, PassiveSpirit, SpiritOrbit, TimedSpeedEffect, VoidPull, WetMark,
 };
+use super::hit_feedback::HitPunch;
+use super::skill_lighting::GroundLightProfile;
+use super::skills::infection::Infection;
 use super::skills::{
     AncestorColossus, BoltTurret, BoneSentry, FrostWyrm, OathBanner, SkillSummon, SpiritHound,
     TideElemental,
@@ -487,6 +491,7 @@ struct DamageNumberEntry {
     target: Entity,
     amount: f32,
     element: DamageElement,
+    critical: bool,
     age: f32,
     origin: Vec3,
     serial: u64,
@@ -521,6 +526,7 @@ impl DamageNumberPool {
         position: Vec3,
         amount: f32,
         element: DamageElement,
+        critical: bool,
     ) -> Option<Entity> {
         if !amount.is_finite() || amount <= 0.0 {
             return None;
@@ -532,6 +538,7 @@ impl DamageNumberPool {
         }) {
             entry.amount += amount;
             entry.element = element;
+            entry.critical |= critical;
             entry.age = 0.0;
             entry.origin = position;
             entry.serial = self.serial;
@@ -564,6 +571,7 @@ impl DamageNumberPool {
             target,
             amount,
             element,
+            critical,
             age: 0.0,
             origin: position,
             serial: self.serial,
@@ -572,10 +580,6 @@ impl DamageNumberPool {
         if lease.newly_created {
             commands.entity(lease.entity).insert((
                 PooledDamageNumber,
-                TextFont {
-                    font_size: FontSize::Px(34.0),
-                    ..default()
-                },
                 TextLayout::justify(Justify::Center),
                 RenderLayers::layer(DAMAGE_NUMBER_RENDER_LAYER),
             ));
@@ -691,9 +695,14 @@ fn write_damage_number(
             element: entry.element,
             age: entry.age,
         },
-        Text2d::new(format_damage_number(entry.amount)),
-        TextColor(damage_element_color(entry.element).with_alpha(alpha)),
-        Transform::from_translation(screen_position.unwrap_or_default().extend(0.0)),
+        Text2d::new(format_damage_number(entry.amount, entry.critical)),
+        TextFont {
+            font_size: FontSize::Px(if entry.critical { 48.0 } else { 34.0 }),
+            ..default()
+        },
+        TextColor(damage_number_color(entry).with_alpha(alpha)),
+        Transform::from_translation(screen_position.unwrap_or_default().extend(0.0))
+            .with_scale(Vec3::splat(damage_number_pop_scale(entry))),
         if screen_position.is_some() {
             Visibility::Visible
         } else {
@@ -739,8 +748,30 @@ fn damage_number_screen_position(
     ))
 }
 
-fn format_damage_number(amount: f32) -> String {
-    format!("{:.0}", amount.max(0.0))
+fn format_damage_number(amount: f32, critical: bool) -> String {
+    if critical {
+        format!("{:.0}!", amount.max(0.0))
+    } else {
+        format!("{:.0}", amount.max(0.0))
+    }
+}
+
+/// Fresh numbers overshoot then settle; crits punch harder so they read at a glance.
+fn damage_number_pop_scale(entry: DamageNumberEntry) -> f32 {
+    let (overshoot, duration) = if entry.critical {
+        (0.75, 0.16)
+    } else {
+        (0.28, 0.10)
+    };
+    1.0 + overshoot * (1.0 - entry.age / duration).clamp(0.0, 1.0)
+}
+
+fn damage_number_color(entry: DamageNumberEntry) -> Color {
+    if entry.critical {
+        Color::srgb(1.0, 0.82, 0.18)
+    } else {
+        damage_element_color(entry.element)
+    }
 }
 
 pub(crate) const fn damage_element_color(element: DamageElement) -> Color {
@@ -857,6 +888,45 @@ impl CombatPools {
             .and_then(|entities| entities.into_iter().next())
     }
 
+    /// Preflight all model groups together before renting any adventure actors.
+    pub(crate) fn rent_enemy_scene_batch(
+        &mut self,
+        commands: &mut Commands,
+        actors: &[(EnemySceneKey, Handle<WorldAsset>, Transform)],
+    ) -> Option<Vec<Entity>> {
+        let mut groups = BTreeMap::<EnemySceneKey, usize>::new();
+        for (key, _, _) in actors {
+            *groups.entry(*key).or_default() += 1;
+        }
+        let mut needed = 0usize;
+        let mut regular_needed = 0usize;
+        for (key, count) in groups {
+            let free = self.enemies.free.get(&key).map_or(0, Vec::len);
+            let create = count.saturating_sub(free);
+            needed += create;
+            if key.is_regular() {
+                regular_needed += create;
+            }
+        }
+        if self.enemies.active.len().saturating_add(actors.len()) > ENEMY_POOL_ACTIVE_CAP
+            || self.enemies.created.saturating_add(needed) > ENEMY_POOL_CREATED_CAP
+            || self.enemies.regular_created.saturating_add(regular_needed)
+                > REGULAR_ENEMY_CREATED_CAP
+        {
+            self.enemies.rejected = self.enemies.rejected.saturating_add(actors.len());
+            return None;
+        }
+        Some(
+            actors
+                .iter()
+                .map(|(key, scene, transform)| {
+                    self.rent_enemy_scene(commands, *key, scene.clone(), *transform)
+                        .expect("all actor keys and capacities were preflighted")
+                })
+                .collect(),
+        )
+    }
+
     /// Atomically rents every shell or none. This is used by W and boss summon
     /// groups so gameplay state can only advance after the whole group exists.
     pub(crate) fn rent_enemy_scene_group(
@@ -944,7 +1014,6 @@ impl CombatPools {
         self.projectile_visual_fallbacks
     }
 
-    #[allow(dead_code)]
     pub(crate) fn impact_fx_metrics(&self) -> PoolMetrics {
         self.impact_fx.metrics()
     }
@@ -1069,7 +1138,11 @@ impl CombatPools {
         entity_commands
             .remove::<(
                 ProjectileHitMemory,
+                super::basic_attacks::Ricochet,
                 ProjectileFirstFrameTravel,
+                super::attack_vfx::WeaponFlight,
+                super::hero_fusion::FusionAttack,
+                Name,
                 AbilityGenerated,
                 DamageProfile,
             )>()
@@ -1101,9 +1174,10 @@ impl CombatPools {
         position: Vec3,
         amount: f32,
         element: DamageElement,
+        critical: bool,
     ) -> Option<Entity> {
         self.damage_numbers
-            .show(commands, target, position, amount, element)
+            .show(commands, target, position, amount, element, critical)
     }
 
     pub(crate) fn tick_damage_numbers(
@@ -1141,15 +1215,17 @@ impl CombatPools {
     ) -> Option<Entity> {
         let entity = self.impact_fx.rent(commands)?;
         let mut entity_commands = commands.entity(entity);
-        entity_commands.remove::<Name>().insert((
-            PooledImpactFx,
-            ActivePooledImpactFx,
-            Mesh3d(mesh),
-            MeshMaterial3d(material),
-            transform,
-            Visibility::Visible,
-            impact_fx,
-        ));
+        entity_commands
+            .remove::<(Name, GroundLightProfile, BossPhaseBurstOwner)>()
+            .insert((
+                PooledImpactFx,
+                ActivePooledImpactFx,
+                Mesh3d(mesh),
+                MeshMaterial3d(material),
+                transform,
+                Visibility::Visible,
+                impact_fx,
+            ));
         if let Some(name) = name {
             entity_commands.insert(name);
         }
@@ -1166,7 +1242,11 @@ impl CombatPools {
                 Projectile,
                 ActivePooledProjectile,
                 ProjectileHitMemory,
+                super::basic_attacks::Ricochet,
                 ProjectileFirstFrameTravel,
+                super::attack_vfx::WeaponFlight,
+                super::hero_fusion::FusionAttack,
+                Name,
                 AbilityGenerated,
                 DamageProfile,
             )>()
@@ -1179,7 +1259,13 @@ impl CombatPools {
         }
         commands
             .entity(entity)
-            .remove::<(ImpactFx, ActivePooledImpactFx, Name)>()
+            .remove::<(
+                ImpactFx,
+                ActivePooledImpactFx,
+                Name,
+                GroundLightProfile,
+                BossPhaseBurstOwner,
+            )>()
             .insert(Visibility::Hidden);
     }
 
@@ -1248,6 +1334,12 @@ fn clear_summon_gameplay_components(entity: &mut EntityCommands<'_>) {
 fn clear_enemy_gameplay_components(entity: &mut EntityCommands<'_>) {
     entity
         .remove::<(
+            super::encounter_bosses::EncounterBoss,
+            super::encounter_bosses::EncounterGuard,
+            super::encounter_bosses::CampCombatant,
+            super::encounter_bosses::CampArrival,
+        )>()
+        .remove::<(
             Enemy,
             EnemyArchetype,
             EnemyHeroThreat,
@@ -1261,7 +1353,15 @@ fn clear_enemy_gameplay_components(entity: &mut EntityCommands<'_>) {
             CommanderAuraState,
             ChallengeFighter,
         )>()
-        .remove::<(TimedSpeedEffect, WetMark, Name, DamageProfile)>();
+        .remove::<(
+            TimedSpeedEffect,
+            WetMark,
+            VoidPull,
+            Infection,
+            Name,
+            DamageProfile,
+            HitPunch,
+        )>();
 }
 
 pub(crate) struct PoolPlugin;
@@ -1361,6 +1461,7 @@ mod tests {
                         Vec3::new(2.0, 0.0, -1.0),
                         amount,
                         element,
+                        false,
                     )
                 },
             )
@@ -1628,6 +1729,12 @@ mod tests {
                 remaining: 7.0,
             },
             WetMark { remaining: 6.0 },
+            Infection::new(3, 1, 50.0),
+            VoidPull {
+                center: Vec3::X,
+                remaining: 0.5,
+                speed: 3.0,
+            },
         ));
 
         retire_one_enemy(app.world_mut(), first);
@@ -1640,6 +1747,8 @@ mod tests {
         assert!(app.world().get::<EnemyArmor>(first).is_none());
         assert!(app.world().get::<TimedSpeedEffect>(first).is_none());
         assert!(app.world().get::<WetMark>(first).is_none());
+        assert!(app.world().get::<VoidPull>(first).is_none());
+        assert!(app.world().get::<Infection>(first).is_none());
         assert!(app.world().get::<Name>(first).is_none());
         assert!(app.world().entities().contains(render_child));
         assert!(!app.world().entities().contains(decoration));
@@ -2627,11 +2736,13 @@ mod tests {
 
     #[test]
     fn combat_sources_construct_pooled_components_only_inside_rent_calls() {
-        const SOURCES: [(&str, &str); 6] = [
+        const SOURCES: [(&str, &str); 8] = [
             ("combat.rs", include_str!("combat.rs")),
             ("skills.rs", include_str!("skills.rs")),
+            ("skills/summons.rs", include_str!("skills/summons.rs")),
             ("bonds.rs", include_str!("bonds.rs")),
             ("hero_abilities.rs", include_str!("hero_abilities.rs")),
+            ("hero_fusion.rs", include_str!("hero_fusion.rs")),
             ("bosses.rs", include_str!("bosses.rs")),
             ("archive.rs", include_str!("archive.rs")),
         ];
@@ -2685,7 +2796,11 @@ mod tests {
 
         let mut projectiles = 0;
         let mut effects = 0;
-        for (file, source) in SOURCES {
+        for (file, full_source) in SOURCES {
+            let source = full_source
+                .split("#[cfg(test)]")
+                .next()
+                .expect("production source precedes tests");
             projectiles += assert_rented(file, source, "Projectile {", &[".rent_projectile("]);
             effects += assert_rented(
                 file,
@@ -2763,18 +2878,22 @@ mod tests {
             let marker = format!("fn {name}(");
             let start = source.find(&marker).expect("audited function exists");
             let rest = &source[start + marker.len()..];
-            let end = rest.find("\nfn ").unwrap_or(rest.len());
+            let end = ["\nfn ", "\npub(super) fn ", "\n#[cfg(test)]"]
+                .into_iter()
+                .filter_map(|marker| rest.find(marker))
+                .min()
+                .unwrap_or(rest.len());
             &rest[..end]
         }
 
-        for function in [
-            "update_skill_summons",
-            "update_rare_summons",
-            "update_epic_summons",
-            "update_oath_banners",
+        for (source, function) in [
+            (include_str!("skills/summons.rs"), "update_skill_summons"),
+            (include_str!("skills/summons.rs"), "update_rare_summons"),
+            (include_str!("skills/summons.rs"), "update_epic_summons"),
+            (skills, "update_oath_banners"),
         ] {
             assert!(
-                !function_body(skills, function).contains(".despawn()"),
+                !function_body(source, function).contains(".despawn()"),
                 "{function} must retire player summons through CombatPools"
             );
         }
@@ -2813,5 +2932,84 @@ mod tests {
         assert!(projectile_rent.contains("projectile_overflow.rent(commands)"));
         assert!(projectile_rent.contains("LogicOnlyPooledProjectile"));
         assert!(projectile_rent.contains("remove::<(Mesh3d, MeshMaterial3d<StandardMaterial>)>"));
+    }
+    #[test]
+    fn mixed_adventure_group_preflights_all_keys_without_partial_rental() {
+        let mut app = test_app();
+        // Only three new shells remain, while the four-actor camp needs four.
+        app.world_mut()
+            .resource_mut::<CombatPools>()
+            .enemies
+            .created = ENEMY_POOL_CREATED_CAP - 3;
+        let result = app
+            .world_mut()
+            .run_system_once(|mut commands: Commands, mut pools: ResMut<CombatPools>| {
+                let actors = [
+                    (
+                        EnemySceneKey::Boss(0),
+                        Handle::default(),
+                        Transform::default(),
+                    ),
+                    (
+                        EnemySceneKey::BossSummon(9),
+                        Handle::default(),
+                        Transform::default(),
+                    ),
+                    (
+                        EnemySceneKey::BossSummon(9),
+                        Handle::default(),
+                        Transform::default(),
+                    ),
+                    (
+                        EnemySceneKey::BossSummon(9),
+                        Handle::default(),
+                        Transform::default(),
+                    ),
+                ];
+                pools.rent_enemy_scene_batch(&mut commands, &actors)
+            })
+            .unwrap();
+        assert!(result.is_none());
+        let pools = app.world().resource::<CombatPools>();
+        assert!(pools.enemies.active.is_empty());
+        assert_eq!(pools.enemies.created, ENEMY_POOL_CREATED_CAP - 3);
+        app.world_mut()
+            .resource_mut::<CombatPools>()
+            .enemies
+            .created = ENEMY_POOL_CREATED_CAP - 4;
+        let result = app
+            .world_mut()
+            .run_system_once(|mut commands: Commands, mut pools: ResMut<CombatPools>| {
+                let actors = [
+                    (
+                        EnemySceneKey::Boss(0),
+                        Handle::default(),
+                        Transform::default(),
+                    ),
+                    (
+                        EnemySceneKey::BossSummon(9),
+                        Handle::default(),
+                        Transform::default(),
+                    ),
+                    (
+                        EnemySceneKey::BossSummon(9),
+                        Handle::default(),
+                        Transform::default(),
+                    ),
+                    (
+                        EnemySceneKey::BossSummon(9),
+                        Handle::default(),
+                        Transform::default(),
+                    ),
+                ];
+                pools.rent_enemy_scene_batch(&mut commands, &actors)
+            })
+            .unwrap()
+            .unwrap();
+        assert_eq!(result.len(), 4);
+        assert_eq!(
+            app.world().resource::<CombatPools>().enemies.active.len(),
+            4
+        );
     }
 }

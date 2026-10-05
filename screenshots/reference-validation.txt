@@ -1,0 +1,35 @@
+2026-09-29 — independent-card build system and weapon attacks
+
+Scope: 10 families / 30 unique cards. Reference-backed cards plus documented original extensions; not a complete reproduction of the Warcraft map.
+See docs/dota-commander-reference.md and docs/build-expansion.md.
+
+PASS cargo test --lib -j1: 271 passed, 0 failed (0.08s test execution).
+Log: /tmp/rogue-expansion-tests.log
+PASS cargo check --target wasm32-unknown-unknown --lib -j1.
+Log: /tmp/rogue-expansion-wasm.log
+PASS tools/verify_ui_assets.py: 30 skill icons, 30 card / 10 family mappings, 16 action icons, 12 portraits; PNG payloads/checksums valid.
+
+Coverage:
+- Real ECS draw / refresh / later / confirmation through all 30 unique cards.
+- Locked and duplicate cards cannot be acquired or rewarded.
+- Strength, Intelligence and Ranger unlock downstream pools only on completion.
+- Empty pool does not charge or open an empty modal.
+- Permanent growth, low-health level changes, fatal-hit immunity and revival budgets.
+- Weapon-specific melee contact, windup, range/angle recheck, pause and pooled projectile visibility.
+- Optional quiver reload, independent volley-count attribute bonuses, nonrecursive spell procs.
+
+Presentation fixtures preassign prerequisites to isolate each pool; they do not claim a complete natural playthrough.
+Weapon capture disables unrelated skills and zooms the camera to inspect contact/animation. Arcanum capture additionally equips Arc Chain.
+Desktop GPU offscreen rendering at 1280x720, 844x390 and 667x375 is not Android device performance evidence.
+New-card full-run balancing across all 12 heroes remains unverified; older prototype win-rate results do not apply.
+
+PASS cargo build --bins -j1 (4m38s); both rogue_commander and capture built.
+PASS cargo clippy --all-targets -j1 -- -D warnings (17.78s), zero code warnings.
+PASS git diff --check.
+PASS 15 offscreen interface cases: journey/agility/ranger/strength/intelligence/archery/warpath/arcanum pools, complete collection, mobile, compact, confirm, refresh, later and settings language switch.
+Logs: /tmp/rogue-expansion-suite.log and /tmp/rogue-reference-*.log; no panic/ERROR found.
+PASS 11 H.264 videos decoded fully by ffmpeg; all 1280x720 at 30 FPS.
+6 seconds: sword, axe, bolt, storm, spirit, star, frost.
+12 seconds: daggers, warpath, archery, arcanum (extended to observe later contact).
+Visual review: correct weapon models, sword/axe/dagger melee animation and damage, native ranged attacks, auxiliary Archery arrow volleys. Spell proc recursion/cooldown is verified by runtime tests; sparse opening-wave footage is not proof of every possible chain interaction.
+Representative stills: attack-sword-contact.png, attack-archery-volley.png.

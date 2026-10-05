@@ -1,4 +1,4 @@
-use std::{env, fs, path::PathBuf, time::Duration};
+use std::{collections::BTreeSet, env, fs, path::PathBuf, time::Duration};
 
 use bevy::{
     app::SubApps,
@@ -16,14 +16,305 @@ use bevy::{
     winit::WinitPlugin,
 };
 use rogue_commander::game::{
-    ArchiveState, Autoplay, BondId, CaptureTarget, CombatPools, DraftRoot, DraftState, Enemy,
-    GamePlugin, GameSession, GoldChallengeState, PlayerBuild, Projectile, RunRng, RunSeed,
-    SelectedHero, SpawnDirector, TrialState, parse_run_seed,
+    ArchiveState, Autoplay, BondDrawButton, BondId, CampaignMenu, CaptureTarget, CombatPools,
+    DraftRoot, DraftState, Enemy, GameAssets, GameLanguage, GamePlugin, GameSession,
+    GoldChallengeState, PlayerBuild, Projectile, RunRng, RunSeed, SelectedHero, SkillDrawButton,
+    SpawnDirector, TrialState, parse_run_seed,
 };
+
+#[path = "capture/immediate_choice.rs"]
+mod immediate_choice_capture;
+
+#[path = "capture/class_attacks.rs"]
+mod class_attacks_capture;
+
+#[path = "capture/adventure_boss.rs"]
+mod adventure_boss_capture;
+
+#[path = "capture/selection_detail.rs"]
+mod selection_detail_capture;
+
+#[path = "capture/gate_revival.rs"]
+mod gate_revival_capture;
+
+#[path = "capture/skill_identity.rs"]
+mod skill_identity_capture;
+
+#[path = "capture/ur_evolution.rs"]
+mod ur_evolution_capture;
+
+#[path = "capture/campaign.rs"]
+mod campaign_capture;
+
+#[path = "capture/tidal_wave.rs"]
+mod tidal_wave_capture;
+
+#[path = "capture/cultivation_combat.rs"]
+mod cultivation_combat_capture;
+
+#[path = "capture/bond_collection.rs"]
+mod bond_collection_capture;
+#[path = "capture/summon_assault.rs"]
+mod summon_assault_capture;
+
+#[path = "capture/fusion.rs"]
+mod fusion_capture;
+
+#[path = "capture/growth.rs"]
+mod growth_capture;
+
+#[path = "capture/hud_input.rs"]
+mod hud_input_capture;
+
+#[path = "capture/enemy_attacks.rs"]
+mod enemy_attacks_capture;
+
+#[path = "capture/orbit_blade.rs"]
+mod orbit_blade_capture;
+
+#[path = "capture/skill_growth.rs"]
+mod skill_growth_capture;
+
+#[path = "capture/attacks.rs"]
+mod attack_capture;
+
+#[path = "capture/ultimates.rs"]
+mod ultimate_capture;
+
+#[path = "capture/skill_spectacle.rs"]
+mod skill_spectacle_capture;
+
+#[path = "capture/settings.rs"]
+mod settings_capture;
+
+#[path = "capture/trials.rs"]
+mod trial_capture;
+
+#[path = "capture/recruitment.rs"]
+mod recruitment_capture;
+
+#[path = "capture/bonds.rs"]
+mod bond_capture;
+
+#[path = "capture/bond_completion.rs"]
+mod bond_completion_capture;
+
+#[path = "capture/demon_cave.rs"]
+mod demon_cave_capture;
+
+#[path = "capture/elite_pressure.rs"]
+mod elite_pressure_capture;
+#[path = "capture/raid_pressure.rs"]
+mod raid_pressure_capture;
+
+#[path = "capture/boss_battle.rs"]
+mod boss_battle_capture;
+
+#[path = "capture/crafting.rs"]
+mod crafting_capture;
+
+#[path = "capture/equipment.rs"]
+mod equipment_capture;
+
+#[path = "capture/attribute_growth.rs"]
+mod attribute_growth_capture;
+
+#[path = "capture/hero_attributes.rs"]
+mod hero_attributes_capture;
+
+#[path = "capture/bond_opening.rs"]
+mod bond_opening_capture;
 
 #[derive(Resource, Default)]
 struct CaptureControls {
     suppress_drafts: bool,
+}
+
+#[derive(Resource)]
+struct DraftCapture {
+    scenario: String,
+    frame: u32,
+}
+
+fn exercise_commander_draft(
+    mut capture: ResMut<DraftCapture>,
+    mut buttons: Query<(&Name, &mut Interaction), With<Button>>,
+    selected: Res<SelectedHero>,
+    session: Res<GameSession>,
+    layout: Query<(&Name, &ComputedNode, &UiGlobalTransform), With<Button>>,
+    windows: Query<&Window>,
+) {
+    capture.frame += 1;
+    let target = match (capture.scenario.as_str(), capture.frame) {
+        ("draft-preview" | "draft-confirm", 30) => Some("Commander card 2"),
+        _ => None,
+    };
+    if let Some(target) = target {
+        let mut found = false;
+        for (name, mut interaction) in &mut buttons {
+            if name.as_str() == target {
+                *interaction = if capture.scenario == "draft-preview" {
+                    Interaction::Hovered
+                } else {
+                    Interaction::Pressed
+                };
+                found = true;
+            }
+        }
+        assert!(found, "missing capture control: {target}");
+        println!("[capture] pressed {target}");
+    }
+    if capture.frame == 50 && capture.scenario == "draft-preview" {
+        assert!(
+            !selected.locked && session.paused,
+            "preview must not start battle"
+        );
+        let window = windows.single().expect("capture window");
+        let viewport = Vec2::new(
+            window.physical_width() as f32,
+            window.physical_height() as f32,
+        );
+        let mut cards = 0;
+        for (name, node, transform) in &layout {
+            if !name.as_str().starts_with("Commander ") {
+                continue;
+            }
+            let half = node.size() * 0.5;
+            let min = transform.translation - half;
+            let max = transform.translation + half;
+            assert!(
+                min.cmpge(Vec2::splat(-1.0)).all() && max.cmple(viewport + Vec2::ONE).all(),
+                "{name} outside viewport: {min:?}..{max:?}"
+            );
+            assert!(
+                node.size().min_element() >= 44.0,
+                "{name} too small for touch"
+            );
+            cards += usize::from(name.as_str().starts_with("Commander card "));
+        }
+        assert_eq!(cards, 3, "all basic commanders must be visible");
+        println!("[capture] draft preview keeps battle paused and hero uncommitted");
+        println!("[capture] all three cards and actions fit viewport with touch targets >=44px");
+    }
+    if capture.frame == 90 && capture.scenario == "draft-confirm" {
+        assert!(
+            selected.locked && !session.paused,
+            "confirmation must start battle"
+        );
+        println!("[capture] confirmation committed hero and resumed battle");
+    }
+}
+
+fn show_bond_hint(mut bonds: Query<&mut Interaction, With<BondDrawButton>>) {
+    for mut interaction in &mut bonds {
+        *interaction = Interaction::Hovered;
+    }
+}
+
+#[derive(Resource)]
+struct BuildCapture {
+    scenario: String,
+    frame: u32,
+}
+
+#[allow(clippy::type_complexity)] // Bevy query combines capture names and draw-button markers.
+fn exercise_build_draft(
+    mut capture: ResMut<BuildCapture>,
+    mut buttons: Query<
+        (
+            Option<&Name>,
+            &mut Interaction,
+            Has<BondDrawButton>,
+            Has<SkillDrawButton>,
+        ),
+        With<Button>,
+    >,
+    draft: Res<DraftState>,
+    session: Res<GameSession>,
+    layout: Query<(&Name, &ComputedNode, &UiGlobalTransform), With<Button>>,
+    windows: Query<&Window>,
+) {
+    capture.frame += 1;
+    let target = match (capture.scenario.as_str(), capture.frame) {
+        ("build-confirm", 65) => Some("Build card 1"),
+        ("build-refresh", 65) => Some("Build refresh"),
+        ("build-later", 65) => Some("Build later"),
+        ("build-abandon", 65) => Some("Build abandon"),
+        _ => None,
+    };
+    let mut pressed = false;
+    for (name, mut interaction, bond, skill) in &mut buttons {
+        if capture.frame >= 100 && capture.scenario.starts_with("build-hover-") {
+            let target = if capture.scenario == "build-hover-action" {
+                "Build abandon"
+            } else {
+                "Build card 0"
+            };
+            *interaction = if name.is_some_and(|name| name.as_str() == target) {
+                Interaction::Hovered
+            } else {
+                Interaction::None
+            };
+        }
+        let request = capture.frame == 5
+            && if capture.scenario == "build-skill" {
+                skill
+            } else {
+                bond
+            };
+        if request || target.is_some_and(|target| name.is_some_and(|name| name.as_str() == target))
+        {
+            *interaction = Interaction::Pressed;
+            pressed = true;
+        }
+    }
+    if let Some(target) = target {
+        assert!(pressed, "missing build control: {target}");
+        println!("[capture] pressed {target}");
+    }
+    if capture.frame == 50 {
+        assert!(
+            session.paused && draft.root.is_some(),
+            "hover keeps draft open"
+        );
+        let window = windows.single().unwrap();
+        let viewport = Vec2::new(
+            window.physical_width() as f32,
+            window.physical_height() as f32,
+        );
+        let mut count = 0;
+        for (name, node, transform) in &layout {
+            if !name.as_str().starts_with("Build ") || node.size().min_element() == 0.0 {
+                continue;
+            }
+            let half = node.size() * 0.5;
+            let min = transform.translation - half;
+            let max = transform.translation + half;
+            assert!(
+                min.cmpge(Vec2::splat(-1.0)).all() && max.cmple(viewport + Vec2::ONE).all(),
+                "{name} outside viewport: {min:?}..{max:?}"
+            );
+            assert!(
+                node.size().min_element() >= 44.0,
+                "{name} too small for touch"
+            );
+            count += usize::from(name.as_str().starts_with("Build card "));
+        }
+        assert_eq!(count, draft.choices.len());
+        println!("[capture] build preview paused; all cards/actions fit viewport");
+    }
+    if capture.frame == 90
+        && matches!(
+            capture.scenario.as_str(),
+            "build-confirm" | "build-later" | "build-abandon"
+        )
+    {
+        assert!(
+            !session.paused && draft.root.is_none(),
+            "build action must close overlay"
+        );
+        println!("[capture] build action closed overlay and resumed battle");
+    }
 }
 
 #[derive(Resource, Default)]
@@ -39,6 +330,15 @@ const SIMULATE_BOOTSTRAP_RENDER_FRAMES: u32 = 8;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
+    if args
+        .get(1)
+        .is_some_and(|arg| matches!(arg.as_str(), "--help" | "-h"))
+    {
+        println!(
+            "capture [still|frames|simulate] OUTPUT FRAMES SCENARIO [SEED] [WIDTHxHEIGHT]\n\nROGUE_CAPTURE_SAVE_FRAMES=0,25,99 selects zero-based PNG frames in frames mode only.\nMissing or empty saves every frame. All simulation/render updates still run."
+        );
+        return;
+    }
     let mode = args.get(1).map(String::as_str).unwrap_or("still");
     let output = args
         .get(2)
@@ -48,6 +348,21 @@ fn main() {
         .get(3)
         .and_then(|value| value.parse::<u32>().ok())
         .unwrap_or(180);
+    let selected_frames = if mode == "frames" {
+        env::var("ROGUE_CAPTURE_SAVE_FRAMES").ok().filter(|value| !value.trim().is_empty()).map(|value| {
+            let frames: BTreeSet<u32> = value.split(',').map(|entry| {
+                let frame = entry.trim().parse::<u32>().unwrap_or_else(|_| {
+                    panic!("ROGUE_CAPTURE_SAVE_FRAMES: invalid frame {entry:?}; expected comma-separated nonnegative integers")
+                });
+                assert!(frame < frame_count, "ROGUE_CAPTURE_SAVE_FRAMES: frame {frame} out of range; expected 0..{frame_count} (end exclusive)");
+                frame
+            }).collect();
+            println!("[capture] selective PNG frames: {frames:?}; all {frame_count} simulation/render updates retained");
+            frames
+        })
+    } else {
+        None
+    };
     let scenario = args.get(4).map(String::as_str).unwrap_or("standard");
     let requested_seed = args
         .get(5)
@@ -59,6 +374,16 @@ fn main() {
     } else if let Some(parent) = output.parent() {
         fs::create_dir_all(parent).expect("create screenshot directory");
     }
+
+    let (width, height) = args.get(6).map_or((1280, 720), |size| {
+        let (width, height) = size
+            .split_once('x')
+            .expect("capture size must be WIDTHxHEIGHT");
+        let width = width.parse::<u32>().expect("invalid capture width");
+        let height = height.parse::<u32>().expect("invalid capture height");
+        assert!((320..=3840).contains(&width) && (240..=2160).contains(&height));
+        (width, height)
+    });
 
     let mut app = App::new();
     app.insert_resource(ClearColor(Color::srgb(0.015, 0.025, 0.045)))
@@ -75,7 +400,12 @@ fn main() {
                     ..default()
                 })
                 .set(WindowPlugin {
-                    primary_window: None,
+                    // A logical window supplies the same responsive HUD measurements
+                    // as native/Web play. Winit stays disabled: rendering is offscreen.
+                    primary_window: Some(Window {
+                        resolution: (width, height).into(),
+                        ..default()
+                    }),
                     exit_condition: ExitCondition::DontExit,
                     ..default()
                 })
@@ -92,11 +422,14 @@ fn main() {
         app.insert_resource(RunSeed(seed));
         app.insert_resource(RunRng::from_seed(seed));
     }
+    if let Ok(language) = env::var("ROGUE_COMMANDER_LANG") {
+        app.insert_resource(GameLanguage::parse(&language).expect("invalid capture language"));
+    }
 
     let mut image = Image::new_uninit(
         Extent3d {
-            width: 1280,
-            height: 720,
+            width,
+            height,
             depth_or_array_layers: 1,
         },
         TextureDimension::D2,
@@ -121,6 +454,147 @@ fn main() {
     warm_render_target(&mut apps);
     println!("[capture] render target warmed");
 
+    if matches!(scenario, "campaign" | "campaign-reload") {
+        campaign_capture::install(&mut apps.main);
+    }
+    if scenario.starts_with("immediate-") {
+        immediate_choice_capture::install(&mut apps.main);
+    }
+    if scenario == "selection-details" {
+        selection_detail_capture::install(&mut apps.main);
+    }
+    if scenario == "gate-revival" {
+        gate_revival_capture::install(&mut apps.main);
+    }
+    if scenario.starts_with("skill-identity-") {
+        skill_identity_capture::install(&mut apps.main);
+    }
+    if ur_evolution_capture::accepts(scenario) {
+        ur_evolution_capture::install(&mut apps.main);
+    }
+    if scenario == "tidal-wave" {
+        tidal_wave_capture::install(&mut apps.main);
+    }
+    if scenario == "cultivation-combat" {
+        cultivation_combat_capture::install(&mut apps.main);
+    }
+    if scenario == "bond-collection" {
+        bond_collection_capture::install(&mut apps.main);
+    }
+    if scenario == "summon-assault" {
+        summon_assault_capture::install(&mut apps.main);
+    }
+    if scenario == "hero-fusion" {
+        fusion_capture::install(&mut apps.main);
+    }
+    if scenario.starts_with("growth-") {
+        growth_capture::install(&mut apps.main);
+    }
+    if scenario == "bond-opening" {
+        bond_opening_capture::install(&mut apps.main);
+    }
+
+    if scenario.starts_with("skill-spectacle-") {
+        skill_spectacle_capture::install(&mut apps.main);
+    }
+
+    if scenario.starts_with("ultimate-") {
+        ultimate_capture::install(&mut apps.main);
+    }
+
+    if scenario.starts_with("bond-completion") {
+        bond_completion_capture::install(&mut apps.main);
+    }
+    if scenario == "skill-growth" {
+        skill_growth_capture::install(&mut apps.main);
+    }
+    if scenario == "hud-input" {
+        hud_input_capture::install(&mut apps.main);
+    }
+    if scenario == "demon-cave" {
+        demon_cave_capture::install(&mut apps.main);
+    }
+    if scenario.starts_with("raid-pressure-") {
+        raid_pressure_capture::install(&mut apps.main);
+    }
+    if scenario.starts_with("elite-pressure-") {
+        elite_pressure_capture::install(&mut apps.main);
+    }
+    if scenario.starts_with("boss-battle-") {
+        boss_battle_capture::install(&mut apps.main);
+    }
+    if scenario.starts_with("crafting-") {
+        crafting_capture::install(&mut apps.main);
+    }
+    if scenario == "equipment" {
+        equipment_capture::install(&mut apps.main);
+    }
+    if scenario == "attribute-growth" {
+        attribute_growth_capture::install(&mut apps.main);
+    }
+    if scenario == "hero-attributes" {
+        hero_attributes_capture::install(&mut apps.main);
+    }
+    if scenario == "orbit-blade" {
+        orbit_blade_capture::install(&mut apps.main);
+    }
+    if scenario == "enemy-attacks" {
+        enemy_attacks_capture::install(&mut apps.main);
+    }
+    if scenario.starts_with("recruit-") {
+        recruitment_capture::install(&mut apps.main);
+    }
+    if scenario.starts_with("trials-") {
+        trial_capture::install(&mut apps.main);
+    }
+    if scenario.starts_with("settings-") {
+        settings_capture::install(&mut apps, scenario);
+    }
+
+    if scenario.starts_with("attack-") {
+        attack_capture::install(&mut apps.main, scenario);
+    }
+
+    if scenario == "hud-hint" {
+        apps.main
+            .add_systems(PreUpdate, show_bond_hint.after(bevy::ui::UiSystems::Focus));
+    }
+
+    if scenario.starts_with("build-chain-") {
+        apps.main.world_mut().remove_resource::<Autoplay>();
+        bond_capture::install(&mut apps.main);
+    } else if scenario.starts_with("build-") {
+        apps.main.world_mut().remove_resource::<Autoplay>();
+        apps.main.world_mut().insert_resource(BuildCapture {
+            scenario: scenario.to_owned(),
+            frame: 0,
+        });
+        apps.main.add_systems(
+            PreUpdate,
+            exercise_build_draft.after(bevy::ui::UiSystems::Focus),
+        );
+    }
+
+    if scenario.starts_with("draft") {
+        apps.main.world_mut().remove_resource::<Autoplay>();
+        apps.main.world_mut().insert_resource(DraftCapture {
+            scenario: scenario.to_owned(),
+            frame: 0,
+        });
+        apps.main.add_systems(
+            PreUpdate,
+            exercise_commander_draft.after(bevy::ui::UiSystems::Focus),
+        );
+    }
+
+    if scenario.starts_with("class-") {
+        class_attacks_capture::install(&mut apps.main);
+    }
+
+    if scenario.starts_with("adventure-") {
+        adventure_boss_capture::install(&mut apps.main);
+    }
+
     if mode == "simulate" {
         let simulate_time_receiver = run_simulation(&mut apps, frame_count);
         if let Some(time_receiver) = simulate_time_receiver {
@@ -139,7 +613,13 @@ fn main() {
         wait_for_screenshots(&mut apps);
     } else {
         for frame in 0..frame_count {
-            let should_save = mode == "frames" || frame + 1 == frame_count;
+            let should_save = if mode == "frames" {
+                selected_frames
+                    .as_ref()
+                    .is_none_or(|selected| selected.contains(&frame))
+            } else {
+                frame + 1 == frame_count
+            };
             if should_save {
                 let path = if mode == "frames" {
                     output.join(format!("frame{frame:05}.png"))
@@ -152,10 +632,39 @@ fn main() {
         }
         wait_for_screenshots(&mut apps);
     }
+    audit_world_material_finish(apps.main.world());
     println!(
         "[capture] wrote {} simulation frames to {}",
         frame_count,
         output.display()
+    );
+}
+
+fn audit_world_material_finish(world: &World) {
+    let server = world.resource::<AssetServer>();
+    let materials = world.resource::<Assets<StandardMaterial>>();
+    let mut count = 0;
+    for (id, material) in materials.iter() {
+        let Some(path) = server.get_path(id) else {
+            continue;
+        };
+        let path = path.path().to_string_lossy();
+        if !path.starts_with("models/") || !path.ends_with(".glb") || material.unlit {
+            continue;
+        }
+        let (roughness, reflectance) = if material.metallic > 0.5 {
+            (0.58, 0.36)
+        } else {
+            (0.88, 0.24)
+        };
+        assert!(material.perceptual_roughness >= roughness);
+        assert!(material.reflectance <= reflectance + f32::EPSILON);
+        assert_eq!(material.clearcoat, 0.0);
+        count += 1;
+    }
+    assert!(count > 0, "capture must load real world model materials");
+    println!(
+        "[capture] PASS material finish: {count} live imported materials, matte roughness and reduced reflectance"
     );
 }
 
@@ -182,6 +691,39 @@ fn warm_render_target(apps: &mut SubApps) {
     };
     apps.main.world_mut().resource_mut::<GameSession>().paused = true;
     update_and_wait(apps);
+    // Forced capture scenarios bypass the hero picker that normally gives assets
+    // time to load. Wait for actual scene dependencies before recording frame 0.
+    let mut settled = 0;
+    for _ in 0..600 {
+        let world = apps.main.world_mut();
+        let scene_ids: Vec<_> = world
+            .query::<&WorldAssetRoot>()
+            .iter(world)
+            .map(|root| root.0.id())
+            .collect();
+        let server = world.resource::<AssetServer>();
+        let cast = world.resource::<GameAssets>();
+        let ready = cast
+            .hero_scenes
+            .iter()
+            .chain(&cast.enemy_scenes)
+            .chain(&cast.boss_scenes)
+            .chain(&cast.summon_scenes)
+            .all(|scene| server.is_loaded_with_dependencies(scene.id()))
+            && scene_ids
+                .iter()
+                .all(|id| server.is_loaded_with_dependencies(*id));
+        settled = if ready { settled + 1 } else { 0 };
+        update_and_wait(apps);
+        if settled == SIMULATE_BOOTSTRAP_RENDER_FRAMES {
+            break;
+        }
+    }
+    assert_eq!(
+        settled, SIMULATE_BOOTSTRAP_RENDER_FRAMES,
+        "capture scene assets failed to load"
+    );
+    println!("[capture] authored scene dependencies loaded and renderer settled");
     let mut session = apps.main.world_mut().resource_mut::<GameSession>();
     let elapsed_after = session.elapsed;
     session.paused = was_paused;
@@ -268,11 +810,212 @@ fn wait_for_screenshots(apps: &mut SubApps) {
 }
 
 fn configure_scenario(world: &mut World, scenario: &str) {
+    if matches!(scenario, "campaign" | "campaign-reload") {
+        campaign_capture::configure(world, scenario == "campaign-reload");
+        return;
+    }
+    if !scenario.starts_with("campaign") {
+        world.resource_mut::<CampaignMenu>().0 = false;
+        world.resource_mut::<GameSession>().paused = false;
+    }
+    if scenario.starts_with("class-") {
+        class_attacks_capture::configure(world, scenario);
+        return;
+    }
+    if scenario.starts_with("adventure-") {
+        adventure_boss_capture::configure(world, scenario);
+        return;
+    }
+    if scenario.starts_with("immediate-") {
+        immediate_choice_capture::configure(world, scenario);
+        return;
+    }
+    if scenario == "selection-details" {
+        selection_detail_capture::configure(world);
+        return;
+    }
+    if scenario == "gate-revival" {
+        gate_revival_capture::configure(world);
+        return;
+    }
+    if scenario.starts_with("skill-identity-") {
+        skill_identity_capture::configure(world, scenario);
+        return;
+    }
+    if ur_evolution_capture::accepts(scenario) {
+        ur_evolution_capture::configure(world, scenario);
+        return;
+    }
+    if scenario == "tidal-wave" {
+        tidal_wave_capture::configure(world);
+        return;
+    }
+    if scenario == "summon-assault" {
+        summon_assault_capture::configure(world);
+        return;
+    }
+    if scenario == "hero-fusion" {
+        fusion_capture::configure(world);
+        return;
+    }
+    if scenario == "cultivation-combat" {
+        cultivation_combat_capture::configure(world);
+        return;
+    }
+    if scenario == "bond-collection" {
+        bond_collection_capture::configure(world);
+        return;
+    }
+    if scenario.starts_with("growth-") {
+        growth_capture::configure(world, scenario);
+        return;
+    }
+    if scenario == "enemy-attacks" {
+        enemy_attacks_capture::configure(world);
+        return;
+    }
+    if scenario == "hud-input" {
+        hero_attributes_capture::configure(world);
+        return;
+    }
+    if scenario == "demon-cave" {
+        demon_cave_capture::configure(world);
+        return;
+    }
+    if scenario.starts_with("raid-pressure-") {
+        raid_pressure_capture::configure(world, scenario);
+        return;
+    }
+    if scenario.starts_with("elite-pressure-") {
+        elite_pressure_capture::configure(world, scenario);
+        return;
+    }
+    if scenario.starts_with("boss-battle-") {
+        boss_battle_capture::configure(world, scenario);
+        return;
+    }
+    if scenario.starts_with("crafting-") {
+        crafting_capture::configure(world, scenario);
+        return;
+    }
+    if scenario == "equipment" {
+        equipment_capture::configure(world);
+        return;
+    }
+    if scenario == "attribute-growth" {
+        attribute_growth_capture::configure(world);
+        return;
+    }
+    if scenario == "hero-attributes" {
+        hero_attributes_capture::configure(world);
+        return;
+    }
+    if scenario == "orbit-blade" {
+        orbit_blade_capture::configure(world);
+        return;
+    }
+    if scenario == "bond-opening" {
+        bond_opening_capture::configure(world);
+        return;
+    }
+    if scenario.starts_with("skill-spectacle-") {
+        skill_spectacle_capture::configure(world, scenario);
+        return;
+    }
+    if scenario.starts_with("ultimate-") {
+        ultimate_capture::configure(world, scenario);
+        return;
+    }
+    if scenario.starts_with("bond-completion") {
+        bond_completion_capture::configure(world, scenario);
+        return;
+    }
+    if scenario == "skill-growth" {
+        skill_growth_capture::configure(world);
+        return;
+    }
+    if scenario.starts_with("recruit-") {
+        recruitment_capture::configure(world, scenario);
+        return;
+    }
+    if scenario.starts_with("trials-") {
+        trial_capture::configure(world, scenario);
+        return;
+    }
+
     println!("[capture] scenario={scenario}");
     println!("[capture] seed={:#018X}", world.resource::<RunSeed>().0);
-    if matches!(scenario, "balance" | "showcase" | "final" | "summons") {
+    if let Some(weapon) = scenario.strip_prefix("attack-") {
+        let weapon = weapon.strip_suffix("-fragile").unwrap_or(weapon);
+        use rogue_commander::game::HeroKind;
+        let kind = match weapon {
+            "stone" | "sword" | "warpath" => HeroKind::StoneWarden,
+            "iron" | "axe" => HeroKind::IronBerserker,
+            "rift" | "daggers" => HeroKind::RiftDancer,
+            "ember" | "bolt" | "archery" => HeroKind::EmberRanger,
+            "storm" | "arcanum" => HeroKind::StormSavant,
+            "spirit" => HeroKind::SpiritKeeper,
+            "star" => HeroKind::StarWagerer,
+            "frost" => HeroKind::FrostOracle,
+            "solar" => HeroKind::SolarVanguard,
+            "tide" => HeroKind::TideWalker,
+            "void" => HeroKind::VoidReaper,
+            "grove" => HeroKind::GroveArtificer,
+            _ => panic!("unknown attack capture: {weapon}"),
+        };
+        let mut selected = world.resource_mut::<SelectedHero>();
+        selected.kind = kind;
+        selected.locked = true;
+        let mut family = match weapon {
+            "warpath" => Some(BondId::Warpath),
+            "archery" => Some(BondId::Archery),
+            "arcanum" => Some(BondId::Arcanum),
+            _ => None,
+        };
+        while let Some(current) = family {
+            for card in current.definition().members {
+                world.resource_mut::<PlayerBuild>().owned_bond_cards[card.index()] = true;
+            }
+            family = current.definition().prerequisite;
+        }
+        world.resource_mut::<CaptureControls>().suppress_drafts = true;
+        world.resource_mut::<GameSession>().auto_bond_draws = false;
+        world.resource_mut::<SpawnDirector>().enabled = false;
+        return;
+    }
+    if (scenario.starts_with("settings-") && !scenario.starts_with("settings-recruit"))
+        || scenario.starts_with("build-")
+        || scenario.starts_with("hud")
+        || matches!(scenario, "balance" | "showcase" | "final" | "summons")
+    {
         world.resource_mut::<SelectedHero>().locked = true;
         println!("[capture] selected hero locked for configured scenario");
+    }
+    if (scenario.starts_with("settings-") && !scenario.starts_with("settings-recruit"))
+        || scenario.starts_with("build-")
+        || scenario.starts_with("hud")
+    {
+        let mut session = world.resource_mut::<GameSession>();
+        session.elapsed = 20.0;
+        session.wood = 60;
+        session.gold = 120;
+        session.auto_bond_draws = false;
+        if scenario.starts_with("hud") {
+            world.resource_mut::<CaptureControls>().suppress_drafts = true;
+        }
+        if scenario.starts_with("build-chain-") {
+            bond_capture::configure(world, scenario);
+        }
+        if scenario == "hud-build" {
+            let mut build = world.resource_mut::<PlayerBuild>();
+            for family in [BondId::Journey, BondId::Agility] {
+                for card in family.definition().members {
+                    build.owned_bond_cards[card.index()] = true;
+                }
+            }
+            build.owned_bond_cards[BondId::Ranger.definition().members[0].index()] = true;
+        }
+        return;
     }
     if scenario == "balance" {
         let mut build = world.resource_mut::<PlayerBuild>();
@@ -335,7 +1078,7 @@ fn configure_scenario(world: &mut World, scenario: &str) {
             60 + 18 * (session.level - 1)
         };
         session.skill_points = 0;
-        session.next_auto_bond_at = session.elapsed + 90.0;
+        session.auto_bond_draws = false;
         session.gold = 2_400;
         session.wood = 180;
         session.kills = 1_600;
@@ -358,11 +1101,12 @@ fn configure_scenario(world: &mut World, scenario: &str) {
         for index in [0, 3, 4, 5, 6, 12, 16, 17, 18, 24, 26, 27] {
             build.skills[index] = if scenario == "final" { 2 } else { 3 };
         }
-        build.bonds[BondId::Thunder.index()] = BondId::Thunder.required();
-        build.completed_bonds[BondId::Thunder.index()] = true;
-        build.bonds[BondId::Ember.index()] = 3;
-        build.bonds[BondId::Spirits.index()] = 2;
-        build.bonds[BondId::Elements.index()] = 4;
+        // Harness state control: completed prerequisites, not a simulated draw sequence.
+        for family in [BondId::Journey, BondId::Agility, BondId::Ranger] {
+            for card in family.definition().members {
+                build.owned_bond_cards[card.index()] = true;
+            }
+        }
     }
     let mut director = world.resource_mut::<SpawnDirector>();
     director.next_elite_at = if scenario == "final" { 1_520.0 } else { 360.0 };
@@ -449,7 +1193,7 @@ fn print_simulation_checkpoint(world: &mut World, frame: u32) {
     };
     let seed = world.resource::<RunSeed>().0;
     let rng_state = world.resource::<RunRng>().state();
-    let (skill_slots, skill_ranks, bond_families, bond_points, completed_bonds) = {
+    let (skill_slots, skill_ranks, bond_families, bond_cards, completed_bonds) = {
         let build = world.resource::<PlayerBuild>();
         (
             build.skills.iter().filter(|rank| **rank > 0).count(),
@@ -458,16 +1202,15 @@ fn print_simulation_checkpoint(world: &mut World, frame: u32) {
                 .iter()
                 .map(|rank| usize::from(*rank))
                 .sum::<usize>(),
-            build.bonds.iter().filter(|points| **points > 0).count(),
+            build.active_bond_count(),
             build
-                .bonds
+                .owned_bond_cards
                 .iter()
-                .map(|points| usize::from(*points))
-                .sum::<usize>(),
-            build
-                .completed_bonds
+                .filter(|owned| **owned)
+                .count(),
+            BondId::ALL
                 .iter()
-                .filter(|completed| **completed)
+                .filter(|family| build.bond_complete(**family))
                 .count(),
         )
     };
@@ -501,7 +1244,7 @@ fn print_simulation_checkpoint(world: &mut World, frame: u32) {
         .map(|camera| (camera.is_active, camera.physical_target_size()))
         .collect();
     println!(
-        "[capture] checkpoint seed={seed:#018X} rng={rng_state:#018X} frame={frame} elapsed={elapsed:.1}s wave={wave} core={core_hp:.0}/{core_max_hp:.0} level={level} xp={xp}/{xp_next} gold={gold} kill_credit={kill_credit} total_kills={total_kills} wood={wood} bosses={bosses} skills={skill_slots}/{skill_ranks} bonds={bond_families}/{bond_points}/{completed_bonds} tower={tower_level}/{tower_active} gold_trial={gold_level}/{gold_active}/{gold_targets} enemies={enemies} projectiles={projectiles} pool_enemy={}/{}/{}/{}/{} pool_projectile_total={}/{}/{}/{}/{} pool_projectile_visible={}/{}/{}/{}/{} projectile_visual_fallbacks={} pool_fx={}/{}/{}/{}/{} pool_summon={}/{}/{}/{}/{} pool_damage_text={}/{}/{}/{}/{}/{} cameras={cameras:?} save={save}/{save_remaining:.1} archive={archive_active}/{archive_outcome:?} finished={finished} victory={victory}",
+        "[capture] checkpoint seed={seed:#018X} rng={rng_state:#018X} frame={frame} elapsed={elapsed:.1}s wave={wave} core={core_hp:.0}/{core_max_hp:.0} level={level} xp={xp}/{xp_next} gold={gold} kill_credit={kill_credit} total_kills={total_kills} wood={wood} bosses={bosses} skills={skill_slots}/{skill_ranks} bonds={bond_families}/{bond_cards}/{completed_bonds} tower={tower_level}/{tower_active} gold_trial={gold_level}/{gold_active}/{gold_targets} enemies={enemies} projectiles={projectiles} pool_enemy={}/{}/{}/{}/{} pool_projectile_total={}/{}/{}/{}/{} pool_projectile_visible={}/{}/{}/{}/{} projectile_visual_fallbacks={} pool_fx={}/{}/{}/{}/{} pool_summon={}/{}/{}/{}/{} pool_damage_text={}/{}/{}/{}/{}/{} cameras={cameras:?} save={save}/{save_remaining:.1} archive={archive_active}/{archive_outcome:?} finished={finished} victory={victory}",
         pool_snapshot.enemies.created(),
         pool_snapshot.enemies.reused(),
         pool_snapshot.enemies.active(),

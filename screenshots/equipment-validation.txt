@@ -1,0 +1,35 @@
+Native equipment inventory validation — fresh R3, 2026-10-01
+
+Strict all-target Clippy PASS (25.27s).
+Library tests: 412 passed, 0 failed (0.21s).
+Native binaries build PASS (7m30s).
+Native capture: 5 scenarios, 1420 full simulation/render frames, all PASS.
+Logs: target/verification/equipment-{pipeline,clippy,tests,build,captures}.log
+
+Equipment scenarios: EN and Chinese, desktop1280x720/mobile667x375, 300 frames each.
+Actual empty HUD count0 opens empty inventory and pauses gameplay.
+Five actual native Black Market offer buttons acquire equipment through the real handler;
+kill wallet measured immediately before each purchase and debited, gold unchanged while paused.
+No inventory or hero stat injection. Authoritative bonuses prove five real acquisitions:
+armor +6, evasion +8%, leech +5%, armor penetration +3 points, magic penetration +10%.
+HUD actual Text count5 and exactly five owned item buttons asserted.
+Acquisition popup appears after actual market close.
+Actual selection of item4 changes detail name/effect from the original selected item.
+Selected Blood Contract preview: +40% low-health damage, +5% leech.
+Real wheel input sent; all five mobile cards fit and remain reachable without overflow.
+Actual close and Escape remove the inventory and resume gameplay.
+
+Hero attributes regression: Chinese desktop220 frames; actual +/-/reset bounds1..32,
+hero sheet actual opening/closing/Escape, pause and numerical rows still PASS.
+Equipment reset headless-world behavior covered by successful 412-library-test suite.
+R1 Clippy and R2 reset failure were repaired before final R3; neither counted as evidence.
+Native only; browser/WASM not verified this pass.
+
+Evidence:
+screenshots/equipment-en-1280x720-35.png (empty)
+screenshots/equipment-en-1280x720-190.png (acquisition feedback and HUD5)
+screenshots/equipment-en-1280x720-230.png (selected actual acquired equipment)
+screenshots/equipment-zh-667x375-35.png (mobile empty)
+screenshots/equipment-zh-667x375-190.png (mobile feedback)
+screenshots/equipment-zh-667x375-230.png (mobile selected equipment)
+screenshots/equipment-hero-attributes-zh-1280x720-140.png (controls/sheet regression)

@@ -1,0 +1,574 @@
+{
+  "models": 49,
+  "animated_cast": 35,
+  "bytes": 13457540,
+  "results": [
+    {
+      "file": "boss_abyssal_leviathan.glb",
+      "bytes": 313592,
+      "mesh_count": 1,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "31b62a11605f08ee28962108709ce5da446544298a1be9fb856a29c96d5a057f"
+    },
+    {
+      "file": "boss_cinder_colossus.glb",
+      "bytes": 389332,
+      "mesh_count": 2,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "1e114f80de62ac2b51aba32256f2294ba79d2677753f2398a4e31bc968688629"
+    },
+    {
+      "file": "boss_dread_veil.glb",
+      "bytes": 258256,
+      "mesh_count": 1,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "cb8f89cf35a420322df167a95ab76305ebba1b72bcd715afb369161726df861c"
+    },
+    {
+      "file": "boss_green_regent.glb",
+      "bytes": 345388,
+      "mesh_count": 2,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "e83434294e0c774a074b71dbc8ec04a1e6893bcd04d4ef1169c09b92e812386d"
+    },
+    {
+      "file": "boss_sun_crown_magus.glb",
+      "bytes": 83556,
+      "mesh_count": 2,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "e5e9ac666e5112381d39a6e1d25da92512a863d538b9e74be3ff9ed87bcf1a3c"
+    },
+    {
+      "file": "enemy_burrow_stalker.glb",
+      "bytes": 744816,
+      "mesh_count": 1,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "7d67b117990ccfe73f307218f6cdd23fc4b167f4864c2c56f4a7aa089058bdf8"
+    },
+    {
+      "file": "enemy_chanting_acolyte.glb",
+      "bytes": 433712,
+      "mesh_count": 9,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "535871ee942f0b32ec1d501085fa1c6681a85d1680b6321fc8b81e60505e9a57"
+    },
+    {
+      "file": "enemy_core_rusher.glb",
+      "bytes": 334312,
+      "mesh_count": 1,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "97470fa8e184de9bed36b6d8c7bde9ecf78ff6aea7b889d58deb78a0c36c2651"
+    },
+    {
+      "file": "enemy_field_mender.glb",
+      "bytes": 61828,
+      "mesh_count": 1,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "f3be8c013e42a57069bce36226299d7766c877caa08f6b5e5ce6a3e2ef3dd13b"
+    },
+    {
+      "file": "enemy_gnawling.glb",
+      "bytes": 334124,
+      "mesh_count": 1,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "7f332313dc041f5e5e774ea93a29e2c1d4a1e7a701ce1c97c3b4de476db3c8cb"
+    },
+    {
+      "file": "enemy_iron_colossus.glb",
+      "bytes": 274828,
+      "mesh_count": 1,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "aa22df802df4c5856dfe07c21378609934783f7db7c984fedd2db73c03c629ab"
+    },
+    {
+      "file": "enemy_null_eye.glb",
+      "bytes": 110828,
+      "mesh_count": 2,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "f445886b85a52f4051736dfd4605a63e8ec248ed8ce791dba66b213774d9e898"
+    },
+    {
+      "file": "enemy_rift_sapper.glb",
+      "bytes": 499228,
+      "mesh_count": 10,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "c313125215eb1095322f7f6445dc16a1ebcc31e1120f1dee9386066f6aa02c15"
+    },
+    {
+      "file": "enemy_shell_guard.glb",
+      "bytes": 172236,
+      "mesh_count": 1,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "91a41d1932c63f98244c0f5b2207d85d6686d9ff876d34f51f44323d4500df2a"
+    },
+    {
+      "file": "enemy_siege_lobber.glb",
+      "bytes": 401256,
+      "mesh_count": 2,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "09fbaac5fe445f8d49e50085cb1bd41cb9982a83fb4f8088ebdf7bfd84ddd3b6"
+    },
+    {
+      "file": "enemy_split_spore.glb",
+      "bytes": 195916,
+      "mesh_count": 2,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "a936cdd48c3091d8561072a5d38fbb357a91325d170620d5c4f0c270ee8101b6"
+    },
+    {
+      "file": "enemy_void_caster.glb",
+      "bytes": 83560,
+      "mesh_count": 2,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "b76198b185285de8751e4fe329d0eb751bb3eecf0cc2d31a0f88af9a110d0d97"
+    },
+    {
+      "file": "environment_banner_blue.glb",
+      "bytes": 24412,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "animations": [],
+      "sha256": "1c930ace50132d497fc0b19b0ac4f32607cddeb213d922f56f040dea24150bf1"
+    },
+    {
+      "file": "environment_border.glb",
+      "bytes": 23436,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "animations": [],
+      "sha256": "61df555ce972c94564e258e80c44564b89dac3759a70ae0bd0cf1c43a18c8799"
+    },
+    {
+      "file": "environment_catapult.glb",
+      "bytes": 164312,
+      "mesh_count": 3,
+      "skin_count": 0,
+      "animations": [],
+      "sha256": "6c999ef0ccae6e0464ca040cf2c823c486d6dabad3c5c6700cad019aab64bbde"
+    },
+    {
+      "file": "environment_core.glb",
+      "bytes": 48000,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "animations": [],
+      "sha256": "7926b81aa3f8e14e81a957a06bdc6546f168dab45bec693fe0c8a0838331c969"
+    },
+    {
+      "file": "environment_floor.glb",
+      "bytes": 20900,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "animations": [],
+      "sha256": "194e1737202a2dd37246bb18fb58a765ef9754a385fc25c2c601f261a8228690"
+    },
+    {
+      "file": "environment_pillar.glb",
+      "bytes": 25692,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "animations": [],
+      "sha256": "4449a9bd696d0d69fbd8d917cb16e18a789906d0252cf9b354166c8f196d5d9b"
+    },
+    {
+      "file": "environment_pillar_decorated.glb",
+      "bytes": 62596,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "animations": [],
+      "sha256": "6843bffca04b689fe6bb25fec15bf848bf58c8b16a4e690276dc56c8a8fd0364"
+    },
+    {
+      "file": "environment_rubble_half.glb",
+      "bytes": 39032,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "animations": [],
+      "sha256": "5f72dd19c24145bded66929f4e15ce38c4d30bafec43a556440aeec1382f9cd7"
+    },
+    {
+      "file": "environment_rubble_large.glb",
+      "bytes": 60380,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "animations": [],
+      "sha256": "d9175a7d34efe6e139d6d4e29566ca522733f3c5a8d4de2809d5d90bfbfe842a"
+    },
+    {
+      "file": "environment_torch_lit.glb",
+      "bytes": 31440,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "animations": [],
+      "sha256": "8fcb5a9966698958d1bc819643e8748c1bf96fd83782c5e06ec07dcf6948b060"
+    },
+    {
+      "file": "environment_wall.glb",
+      "bytes": 53236,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "animations": [],
+      "sha256": "587e702791a5bd9a372421ab4101900c5871f0086c73b01c0996cea82a81d213"
+    },
+    {
+      "file": "environment_wall_broken.glb",
+      "bytes": 69380,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "animations": [],
+      "sha256": "c23061dfe5050c4a44bbf14a6ea0100d5b5dcd3be3b3433fcbe6d0bbc19c4d4e"
+    },
+    {
+      "file": "environment_wall_gated.glb",
+      "bytes": 46468,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "animations": [],
+      "sha256": "f8c31a3decfc713af5f479e3e3d8c824d1d8fd5d4752c2dba99eb8a4f86aed86"
+    },
+    {
+      "file": "environment_wall_window_closed.glb",
+      "bytes": 61564,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "animations": [],
+      "sha256": "f7b04902a3f75749b65a5a02d88fcde034758e2ea379f0f63431e27b2e442352"
+    },
+    {
+      "file": "hero_ember_ranger.glb",
+      "bytes": 430352,
+      "mesh_count": 8,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "72b57aca948ca319fc4cd1ec7e73d03b876961d541bae4fbc9ea276cd1ae2811"
+    },
+    {
+      "file": "hero_frost_oracle.glb",
+      "bytes": 448652,
+      "mesh_count": 10,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "2e1c8163f1bf438de93b62ddc4207137304f15238c3090ac9f96d1a0a698a17a"
+    },
+    {
+      "file": "hero_grove_artificer.glb",
+      "bytes": 446256,
+      "mesh_count": 9,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "6f2050ec3e71fedec7bc978c78c2adf6e00f413b465daaaf04871240574366e7"
+    },
+    {
+      "file": "hero_iron_berserker.glb",
+      "bytes": 447156,
+      "mesh_count": 9,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "229f22f40cffe51a879cfc8ea374702ff456e1ca2fee34697ad8e2739d3a20f4"
+    },
+    {
+      "file": "hero_rift_dancer.glb",
+      "bytes": 403856,
+      "mesh_count": 9,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "e48c26c814b88c29b50142c569b6a9db7d5d81f5d7001458671822ed541d0588"
+    },
+    {
+      "file": "hero_solar_vanguard.glb",
+      "bytes": 461192,
+      "mesh_count": 10,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "196312426fea75a7197d5102f0957bb578311c76fd466682f302a51881cb7dcd"
+    },
+    {
+      "file": "hero_spirit_keeper.glb",
+      "bytes": 436028,
+      "mesh_count": 10,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "eaf361258db5e6bee518b4592e7affa433e0c876e707e0ef0bd9b3fbe6bd3d09"
+    },
+    {
+      "file": "hero_star_wagerer.glb",
+      "bytes": 436632,
+      "mesh_count": 10,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "2f61e9301d537ed573f7ea3dce7379ace67c768dc2e13be4fb7e7baa1f5ceb1e"
+    },
+    {
+      "file": "hero_stone_warden.glb",
+      "bytes": 461224,
+      "mesh_count": 10,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "5f68ad845b610a708fdb0b2b495c83c94413c59f327cf3bb36177b49ca93214a"
+    },
+    {
+      "file": "hero_storm_savant.glb",
+      "bytes": 433388,
+      "mesh_count": 9,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "e69441a01346b6cf0cb358c8470927db2635f976c9d6d53f58ac17440fe09474"
+    },
+    {
+      "file": "hero_tide_walker.glb",
+      "bytes": 422284,
+      "mesh_count": 9,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "45cd0aeccf23307e01b0d0679d76d001d97630f89443faed5b916e76ca7b7311"
+    },
+    {
+      "file": "hero_void_reaper.glb",
+      "bytes": 447156,
+      "mesh_count": 9,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "f157cbebdb669cfbc72146292d078f8392f3a20b8309ea8000dfecfdb534db7a"
+    },
+    {
+      "file": "summon_ancestor_colossus.glb",
+      "bytes": 346336,
+      "mesh_count": 1,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "1260533773a0ea4ad8fd822aa91309ec2c649e6aef1b4552d65d480c42810965"
+    },
+    {
+      "file": "summon_bolt_turret.glb",
+      "bytes": 166216,
+      "mesh_count": 3,
+      "skin_count": 0,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "134c9493f00f34f76abade04e99d496476ead7ee56854abd8e2379e210d7f18e"
+    },
+    {
+      "file": "summon_bone_sentry.glb",
+      "bytes": 535536,
+      "mesh_count": 10,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "9288659ae6e75a8f2d1cd4dc914f3ecfece98ef38e8bb573cf326f6175e13ba1"
+    },
+    {
+      "file": "summon_frost_wyrm.glb",
+      "bytes": 426928,
+      "mesh_count": 1,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "dceb2af2ea22633a1f07e07972392041ba3a92a3c61b41144438257ee7fed873"
+    },
+    {
+      "file": "summon_spirit_hound.glb",
+      "bytes": 744816,
+      "mesh_count": 1,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "87358a51514203da8021cef4d4bd6f11bdbd394c788d6944f27ad09007e438ff"
+    },
+    {
+      "file": "summon_tide_elemental.glb",
+      "bytes": 195916,
+      "mesh_count": 2,
+      "skin_count": 1,
+      "animations": [
+        "Idle",
+        "Walk",
+        "Attack",
+        "Hit"
+      ],
+      "sha256": "9de8b7e548995aeaf9e70043127f1392b4309654d53e5d7a16ab6ac27dc14b55"
+    }
+  ]
+}

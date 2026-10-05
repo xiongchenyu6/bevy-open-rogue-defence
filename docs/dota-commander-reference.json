@@ -1,0 +1,516 @@
+{
+  "purpose": "Reference evidence, NOT an executable reproduction catalog. null means unknown; ids are deliberately omitted.",
+  "checked_date": "2026-09-29",
+  "unfinished_family_slot_count": 7,
+  "cards": [
+    {
+      "name": "力量启程",
+      "family": "启程",
+      "rarity": "R",
+      "family_required_count": 3,
+      "effects": [
+        {
+          "stat": "wood",
+          "add": 20
+        },
+        {
+          "stat": "strength",
+          "add": 20
+        }
+      ],
+      "evidence": "https://up5.nosdn.127.net/topic/fdc6c9179a474d3aa4ec7274d838fc9c.jpg"
+    },
+    {
+      "name": "力量强化",
+      "family": "我要玩力量",
+      "rarity": "R",
+      "family_required_count": 2,
+      "effects": [
+        {
+          "stat": "strength",
+          "add": 50
+        }
+      ],
+      "evidence": "https://up5.nosdn.127.net/topic/3b99f6b4fb8e4296984e885cb92ea6d1.jpg"
+    },
+    {
+      "name": "敏捷启程",
+      "family": "启程",
+      "rarity": "R",
+      "family_required_count": 3,
+      "effects": [
+        {
+          "stat": "wood",
+          "add": 20
+        },
+        {
+          "stat": "agility",
+          "add": 20
+        }
+      ],
+      "evidence": "https://up5.nosdn.127.net/topic/fdc6c9179a474d3aa4ec7274d838fc9c.jpg"
+    },
+    {
+      "name": "敏捷强化",
+      "family": "我要玩敏捷",
+      "rarity": "R",
+      "family_required_count": 2,
+      "effects": [
+        {
+          "stat": "agility",
+          "add": 50
+        }
+      ],
+      "evidence": "https://up5.nosdn.127.net/topic/3b99f6b4fb8e4296984e885cb92ea6d1.jpg"
+    },
+    {
+      "name": "智力启程",
+      "family": "启程",
+      "rarity": "R",
+      "family_required_count": 3,
+      "effects": [
+        {
+          "stat": "wood",
+          "add": 20
+        },
+        {
+          "stat": "intelligence",
+          "add": 20
+        }
+      ],
+      "evidence": "https://up5.nosdn.127.net/topic/fdc6c9179a474d3aa4ec7274d838fc9c.jpg"
+    },
+    {
+      "name": "智力强化",
+      "family": "我要玩智力",
+      "rarity": "R",
+      "family_required_count": 2,
+      "effects": [
+        {
+          "stat": "intelligence",
+          "add": 50
+        }
+      ],
+      "evidence": "https://up5.nosdn.127.net/topic/3b99f6b4fb8e4296984e885cb92ea6d1.jpg"
+    },
+    {
+      "name": "梭哈防御",
+      "family": "赌狗",
+      "rarity": "SR",
+      "family_required_count": 6,
+      "effects": [
+        {
+          "stat": "current_base_defense",
+          "outcomes": [
+            {
+              "probability": 0.55,
+              "multiply": 2
+            },
+            {
+              "probability": 0.45,
+              "multiply": 0.5
+            }
+          ]
+        }
+      ],
+      "evidence": "https://up5.nosdn.127.net/topic/23ce8294ffd142bdaa1470efd8bf4c45.jpg"
+    },
+    {
+      "name": "巴雷特",
+      "family": "未来武器",
+      "rarity": "SSR",
+      "family_required_count": 4,
+      "effects": [
+        {
+          "item": "巴雷特",
+          "add": 1
+        }
+      ],
+      "evidence": "https://up5.nosdn.127.net/topic/d9de70e108b84340bc93a1395792f11f.jpg"
+    },
+    {
+      "name": "传说中的宝藏",
+      "family": "探险家",
+      "rarity": "SSR",
+      "family_required_count": 6,
+      "effects": [
+        {
+          "item": "藏宝图",
+          "add": 1,
+          "stackable": true
+        }
+      ],
+      "evidence": "https://up5.nosdn.127.net/topic/692c960f19a24c528f51cd3c4ba22ca6.png"
+    },
+    {
+      "name": "海盗帕奇斯",
+      "family": "海盗",
+      "rarity": "SSR",
+      "family_required_count": 9,
+      "effects": [
+        {
+          "action": "掠夺",
+          "count": 3
+        },
+        {
+          "stat": "gold",
+          "formula": "current_owned_pirate_series_card_count * 5000"
+        },
+        {
+          "stat": "wood",
+          "formula": "current_owned_pirate_series_card_count * 100"
+        }
+      ],
+      "evidence": "https://up5.nosdn.127.net/topic/72a6370d72b24ad3a0cc88926d911754.jpg"
+    },
+    {
+      "name": "钩牙船长",
+      "family": "海盗",
+      "rarity": "SSR",
+      "family_required_count": 9,
+      "effects": [
+        {
+          "trigger": "每拥有一张海盗卡",
+          "action": "掠夺",
+          "count": 1
+        },
+        {
+          "trigger": "每使用一张藏宝图",
+          "action": "掠夺",
+          "count": 1
+        }
+      ],
+      "evidence": "https://up5.nosdn.127.net/topic/783d5b3c42d64591a932705dfad7de5a.jpg"
+    },
+    {
+      "name": "敏捷成长",
+      "family": "我要玩敏捷",
+      "rarity": "SSR",
+      "family_required_count": 2,
+      "effects": [
+        {
+          "stat": "agility_amplification",
+          "add_percentage_points": 10
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=53",
+      "evidence_type": "direct_gameplay_frame",
+      "video_seconds": 53
+    },
+    {
+      "name": "疾风连射",
+      "family": "游侠",
+      "rarity": "R",
+      "family_required_count": 4,
+      "effects": [
+        {
+          "stat": "agility",
+          "add": 30
+        },
+        {
+          "stat": "attack_speed",
+          "add_percentage_points": 15
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=65",
+      "evidence_type": "direct_gameplay_frame",
+      "video_seconds": 65
+    },
+    {
+      "name": "致命准星",
+      "family": "游侠",
+      "rarity": "R",
+      "family_required_count": 4,
+      "effects": [
+        {
+          "stat": "agility",
+          "add": 30
+        },
+        {
+          "stat": "attack_damage",
+          "add_percentage_points": 10
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=65",
+      "evidence_type": "direct_gameplay_frame",
+      "video_seconds": 65
+    },
+    {
+      "name": "天穹射者",
+      "family": "游侠",
+      "rarity": "SR",
+      "family_required_count": 4,
+      "effects": [
+        {
+          "stat": "agility",
+          "add": 30
+        },
+        {
+          "stat": "attack_range",
+          "add": 50
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=83",
+      "evidence_type": "direct_gameplay_frame",
+      "video_seconds": 83
+    },
+    {
+      "name": "整备",
+      "family": "神箭术",
+      "rarity": "R",
+      "family_required_count": 4,
+      "effects": [
+        {
+          "stat": "quiver_capacity",
+          "add": 10
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=65",
+      "evidence_type": "direct_gameplay_frame",
+      "video_seconds": 65
+    },
+    {
+      "name": "穿杨",
+      "family": "神箭术",
+      "rarity": "R",
+      "family_required_count": 4,
+      "effects": [
+        {
+          "stat": "arrow_damage",
+          "add_percentage_points": 15
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=323",
+      "evidence_type": "direct_gameplay_frame",
+      "video_seconds": 323
+    },
+    {
+      "name": "连珠",
+      "family": "神箭术",
+      "rarity": "SR",
+      "family_required_count": 4,
+      "effects": [
+        {
+          "stat": "arrow_count",
+          "add": 1
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=513",
+      "evidence_type": "direct_gameplay_frame",
+      "video_seconds": 513
+    },
+    {
+      "name": "神威",
+      "family": "登神长阶",
+      "rarity": "R",
+      "family_required_count": 5,
+      "effects": [
+        {
+          "stat": "attack",
+          "add": 20
+        },
+        {
+          "trigger": "hero_level_up",
+          "stat": "attack",
+          "permanent_add": 10
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=133",
+      "evidence_type": "direct_gameplay_frame",
+      "video_seconds": 133
+    },
+    {
+      "name": "神力",
+      "family": "登神长阶",
+      "rarity": "R",
+      "family_required_count": 5,
+      "effects": [
+        {
+          "stat": "strength",
+          "add": 20
+        },
+        {
+          "trigger": "hero_level_up",
+          "stat": "strength",
+          "permanent_add": 5
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=323",
+      "evidence_type": "direct_gameplay_frame",
+      "video_seconds": 323
+    },
+    {
+      "name": "追风逐电",
+      "family": "游侠",
+      "rarity": "R",
+      "family_required_count": 4,
+      "effects": [
+        {
+          "stat": "agility",
+          "add": 30
+        },
+        {
+          "stat": "evasion",
+          "add": 5,
+          "unit": "原卡未标百分号"
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=783",
+      "evidence_type": "direct_gameplay_frame",
+      "video_seconds": 783
+    }
+  ],
+  "image_sources": {
+    "journey": "https://up5.nosdn.127.net/topic/fdc6c9179a474d3aa4ec7274d838fc9c.jpg",
+    "attributes": "https://up5.nosdn.127.net/topic/3b99f6b4fb8e4296984e885cb92ea6d1.jpg",
+    "gamble": "https://up5.nosdn.127.net/topic/23ce8294ffd142bdaa1470efd8bf4c45.jpg",
+    "weapons": "https://up5.nosdn.127.net/topic/d9de70e108b84340bc93a1395792f11f.jpg",
+    "explorer": "https://up5.nosdn.127.net/topic/692c960f19a24c528f51cd3c4ba22ca6.png",
+    "pirate_oracle": "https://up5.nosdn.127.net/topic/72a6370d72b24ad3a0cc88926d911754.jpg",
+    "pirate_captain": "https://up5.nosdn.127.net/topic/783d5b3c42d64591a932705dfad7de5a.jpg",
+    "element_god": "https://up5.nosdn.127.net/topic/3067f1ca8b954227bee01899b75306a4.png",
+    "scientist": "https://up5.nosdn.127.net/topic/1b2479df77a942d0845904032310f5b4.png",
+    "ascension": "https://up5.nosdn.127.net/topic/49bba4bef06b44e3b2ab856f201b2713.png",
+    "cultivation": "https://up5.nosdn.127.net/topic/f06e3f2dafbd470fac461fc89fc5b0d0.png",
+    "qi": "https://up5.nosdn.127.net/topic/296ba3be82894cdc91e777cd202b68c9.png"
+  },
+  "uncertainties": [
+    "Strength/Intelligence second distinct cards remain unknown.",
+    "Element master/god individual card names and effects are unknown.",
+    "Acquisition versus equipped-state persistence and exact swallowing semantics require runtime evidence."
+  ],
+  "slot_unit": "unfinished_bond_family",
+  "user_constraint": "No duplicate card acquisition; do not infer repeats from icon counts.",
+  "family_milestones": [
+    {
+      "family": "启程",
+      "count": 3,
+      "effects": [
+        {
+          "stat": "gold",
+          "add": 100
+        },
+        {
+          "stat": "wood",
+          "add": 100
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=17"
+    },
+    {
+      "family": "我要玩敏捷",
+      "count": 2,
+      "effects": [
+        {
+          "trigger": "kill",
+          "stat": "agility",
+          "add": 0.1
+        },
+        {
+          "trigger": "second",
+          "stat": "agility",
+          "add": 0.2
+        },
+        {
+          "action": "unlock_agility_related_cards"
+        },
+        {
+          "action": "increase_agility_oriented_weight",
+          "original_text": "提高2倍",
+          "exact_multiplier": null
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=55"
+    },
+    {
+      "family": "游侠",
+      "count": 2,
+      "effects": [
+        {
+          "stat": "arrow_count",
+          "add": 1
+        },
+        {
+          "stat": "arrow_piercing",
+          "add": 1
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=133"
+    },
+    {
+      "family": "游侠",
+      "count": 4,
+      "effects": [
+        {
+          "stat": "arrow_count",
+          "add": 1
+        },
+        {
+          "stat": "arrow_piercing",
+          "add": 1
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=133"
+    },
+    {
+      "family": "神箭术",
+      "count": 2,
+      "effects": [
+        {
+          "stat": "agility",
+          "dynamic_formula": "current_arrow_count * 40"
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=65"
+    },
+    {
+      "family": "神箭术",
+      "count": 4,
+      "effects": [
+        {
+          "stat": "agility_amplification",
+          "dynamic_percentage_points_formula": "current_arrow_count * 5"
+        },
+        {
+          "action": "unlock_family",
+          "family": "神射手"
+        }
+      ],
+      "evidence": "https://www.bilibili.com/video/BV11sTq6KEZK/?t=65"
+    }
+  ],
+  "verified_recipes": [
+    {
+      "family": "启程",
+      "members": [
+        "力量启程",
+        "敏捷启程",
+        "智力启程"
+      ],
+      "unlocks": [
+        "我要玩力量",
+        "我要玩敏捷",
+        "我要玩智力"
+      ]
+    },
+    {
+      "family": "我要玩敏捷",
+      "members": [
+        "敏捷强化",
+        "敏捷成长"
+      ],
+      "unlocks": "敏捷相关卡牌（完整名单未公开）"
+    },
+    {
+      "family": "游侠",
+      "members": [
+        "疾风连射",
+        "致命准星",
+        "天穹射者",
+        "追风逐电"
+      ],
+      "pool": "敏捷方向：完成敏捷家族后实录出现",
+      "completion_unlock": null
+    }
+  ]
+}

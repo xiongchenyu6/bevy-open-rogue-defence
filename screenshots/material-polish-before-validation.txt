@@ -1,0 +1,6 @@
+Material polish BEFORE baseline
+2 native production-camera scenes, 1360 full frames: summon-assault / seed0xA11CE / EN1280x720 and ZH667x375. Saved frames70,165,210,340,510,540,650,679. Existing authoritative summon/gate/pause assertions passed. Character groups, camp previews, gate, road, rocks and cave appear in the same view.
+The current native capture binary was copied before execution, preventing a later build from changing the baseline executable. Binary SHA256 and all on-disk GLB material factors are stored in target/verification/material-polish-before-materials.json.
+49 GLB files contain58 material entries. Roughness:43 entries0.72,13 entries0.45,2 entries0.50; all58 metallicFactor0. These are asset JSON values, not a live ECS material dump; runtime shader/material overrides may differ. No src/assets files changed by the capture work.
+Reproducible AFTER command: python3 target/verification/capture_material_polish.py after. This runner does not start automatically, and uses the same scene, seed, production camera, dimensions and saved frames.
+Evidence: screenshots/material-polish-before-{en-1280x720,zh-667x375}-*.png; native logs target/verification/material-polish-before-*.log. Native only, no browser/performance conclusion.

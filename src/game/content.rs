@@ -1,7 +1,7 @@
 //! Static, engine-agnostic content definitions for the first playable ruleset.
 //!
 //! IDs are stable ASCII strings so this table can later move to RON without
-//! changing save data. Display names and fiction are original to this project.
+//! changing save data. Public-reference names and original additions share this table; mechanics are adapted.
 
 pub type ContentId = &'static str;
 
@@ -106,16 +106,6 @@ impl Rarity {
             Self::Ur => 0.78,
         }
     }
-
-    /// One bond card advances farther at higher rarity, crossing more 2/4/6 tiers.
-    pub const fn bond_points_per_pick(self) -> u8 {
-        match self {
-            Self::R => 1,
-            Self::Sr => 2,
-            Self::Ssr => 3,
-            Self::Ur => 4,
-        }
-    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -176,7 +166,8 @@ pub struct HeroDef {
     pub base_energy: f32,
     /// Canonical starting skill used by non-interactive simulations.
     pub starting_skill: ContentId,
-    /// Seeded hero offers choose exactly one of these thematic skills.
+    /// Seeded hero offers choose exactly one of these thematic skills. Each is
+    /// at most one rarity tier above the hero and skips the draft's level/time gates.
     pub starting_skill_pool: [ContentId; 3],
     pub passive: PassiveDef,
     pub ultimate: UltimateDef,
@@ -241,21 +232,6 @@ pub struct SkillDef {
     pub effect: SkillEffect,
 }
 
-#[derive(Debug, Clone, Copy)]
-pub struct BondTier {
-    pub threshold: u8,
-    pub description: &'static str,
-}
-
-#[derive(Debug, Clone, Copy)]
-pub struct BondDef {
-    pub id: ContentId,
-    pub name: &'static str,
-    pub rarity: Rarity,
-    pub favored_tags: &'static [Tag],
-    pub tiers: [BondTier; 3],
-}
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum EnemyBehavior {
     MarchToGate,
@@ -315,11 +291,14 @@ impl BossModifiers {
 pub struct BossDef {
     pub id: ContentId,
     pub name: &'static str,
-    pub spawn_seconds: u16,
+    pub name_en: &'static str,
+    pub spawn_seconds: f32,
+    /// Base health; `modifiers.max_hp_multiplier` applies on top when the boss registers.
     pub hp: f32,
-    pub gate_damage: u16,
+    pub speed: f32,
+    /// Contact damage per second against both the hero and the gate.
+    pub damage_per_second: f32,
     pub modifiers: BossModifiers,
-    pub mechanics: &'static [&'static str],
 }
 
 pub const HEROES: [HeroDef; 12] = [
@@ -404,7 +383,7 @@ pub const HEROES: [HeroDef; 12] = [
         base_health: 680.0,
         base_energy: 190.0,
         starting_skill: "ground_pulse",
-        starting_skill_pool: ["ground_pulse", "execution_brand", "oath_banner"],
+        starting_skill_pool: ["ground_pulse", "execution_brand", "bone_sentry"],
         passive: PassiveDef {
             name: "守门山势",
             description: "英雄位于城门8米内时，返还城门所受伤害的15%。",
@@ -475,7 +454,7 @@ pub const HEROES: [HeroDef; 12] = [
             name: "静海",
             cooldown_secs: 52.0,
             tags: &[Tag::Tide, Tag::Frost, Tag::Control],
-            description: "冻结普通敌人3秒；Boss减速60%持续5秒。",
+            description: "掀起三重推进巨浪，造成潮汐伤害并施加潮湿与减速。",
         },
     },
     HeroDef {
@@ -497,7 +476,7 @@ pub const HEROES: [HeroDef; 12] = [
         base_health: 520.0,
         base_energy: 240.0,
         starting_skill: "arcane_star",
-        starting_skill_pool: ["arcane_star", "transmute_spark", "fate_cube"],
+        starting_skill_pool: ["arcane_star", "transmute_spark", "prism_echo"],
         passive: PassiveDef {
             name: "有利筹码",
             description: "每累计12个有效击杀获得18金币和1木材。",
@@ -599,7 +578,7 @@ pub const HEROES: [HeroDef; 12] = [
             name: "相位剑暴",
             cooldown_secs: 46.0,
             tags: &[Tag::Attack, Tag::Qi, Tag::Arcane],
-            description: "在裂隙间穿梭，连续释放八轮自动索敌的剑雨。",
+            description: "在敌人位置连续发动八次裂隙斩击。",
         },
     },
     HeroDef {
@@ -630,7 +609,7 @@ pub const HEROES: [HeroDef; 12] = [
             name: "城垒超载",
             cooldown_secs: 58.0,
             tags: &[Tag::Summon, Tag::Guard, Tag::Storm],
-            description: "立即大幅修复城门，并从防线连续释放六次超载脉冲。",
+            description: "立即大幅修复城门，并从堡垒连续发动六轮索敌炮击。",
         },
     },
     HeroDef {
@@ -697,10 +676,10 @@ pub const HEROES: [HeroDef; 12] = [
     },
 ];
 
-pub const SKILLS: [SkillDef; 30] = [
+pub const SKILLS: [SkillDef; super::SkillId::COUNT] = [
     SkillDef {
         id: "arc_chain",
-        name: "弧光链",
+        name: "紫电链",
         rarity: Rarity::R,
         tags: &[Tag::Spell, Tag::Storm, Tag::Arcane],
         trigger: SkillTrigger::Cooldown,
@@ -720,7 +699,7 @@ pub const SKILLS: [SkillDef; 30] = [
     },
     SkillDef {
         id: "ember_arrow",
-        name: "烬矢",
+        name: "火焰箭",
         rarity: Rarity::R,
         tags: &[Tag::Attack, Tag::Flame, Tag::Physical],
         trigger: SkillTrigger::EveryNthAttack(3),
@@ -740,7 +719,7 @@ pub const SKILLS: [SkillDef; 30] = [
     },
     SkillDef {
         id: "frost_lance",
-        name: "霜棱",
+        name: "寒冰箭",
         rarity: Rarity::R,
         tags: &[Tag::Spell, Tag::Frost, Tag::Control],
         trigger: SkillTrigger::Cooldown,
@@ -760,7 +739,7 @@ pub const SKILLS: [SkillDef; 30] = [
     },
     SkillDef {
         id: "tidal_fan",
-        name: "潮刃扇",
+        name: "大海无量",
         rarity: Rarity::R,
         tags: &[Tag::Spell, Tag::Tide],
         trigger: SkillTrigger::Cooldown,
@@ -775,12 +754,12 @@ pub const SKILLS: [SkillDef; 30] = [
                 spell_ratio: 0.28,
                 summon_ratio: 0.0,
             },
-            description: "发射五枚水刃；单个目标最多被同一轮命中两次。",
+            description: "掀起宽阔水幕向前席卷；沿浪头命中敌人并施加潮湿与减速，等级提高浪宽。",
         },
     },
     SkillDef {
         id: "bone_sentry",
-        name: "骨卫",
+        name: "操纵死尸",
         rarity: Rarity::R,
         tags: &[Tag::Summon, Tag::Guard],
         trigger: SkillTrigger::Cooldown,
@@ -820,7 +799,7 @@ pub const SKILLS: [SkillDef; 30] = [
     },
     SkillDef {
         id: "orbit_blade",
-        name: "回旋刃",
+        name: "回旋风刃",
         rarity: Rarity::R,
         tags: &[Tag::Attack, Tag::Physical, Tag::Qi],
         trigger: SkillTrigger::Passive,
@@ -840,7 +819,7 @@ pub const SKILLS: [SkillDef; 30] = [
     },
     SkillDef {
         id: "piercing_volley",
-        name: "贯星连射",
+        name: "箭术",
         rarity: Rarity::R,
         tags: &[Tag::Attack, Tag::Physical],
         trigger: SkillTrigger::EveryNthAttack(4),
@@ -940,7 +919,7 @@ pub const SKILLS: [SkillDef; 30] = [
     },
     SkillDef {
         id: "storm_matrix",
-        name: "雷阵",
+        name: "雷霆万钧",
         rarity: Rarity::Sr,
         tags: &[Tag::Spell, Tag::Storm],
         trigger: SkillTrigger::Cooldown,
@@ -980,7 +959,7 @@ pub const SKILLS: [SkillDef; 30] = [
     },
     SkillDef {
         id: "glacier_core",
-        name: "冰核",
+        name: "冰锥天降",
         rarity: Rarity::Sr,
         tags: &[Tag::Spell, Tag::Frost, Tag::Arcane],
         trigger: SkillTrigger::Cooldown,
@@ -995,12 +974,12 @@ pub const SKILLS: [SkillDef; 30] = [
                 spell_ratio: 0.3,
                 summon_ratio: 0.0,
             },
-            description: "冰核持续5秒脉冲；同一目标累计三次后冻结。",
+            description: "冰锥从天而降击中落点，留下持续5秒的寒冰领域；同一目标累计三次脉冲后冻结。",
         },
     },
     SkillDef {
         id: "vortex_column",
-        name: "涡柱",
+        name: "龙卷风",
         rarity: Rarity::Sr,
         tags: &[Tag::Spell, Tag::Tide, Tag::Storm, Tag::Control],
         trigger: SkillTrigger::Cooldown,
@@ -1020,7 +999,7 @@ pub const SKILLS: [SkillDef; 30] = [
     },
     SkillDef {
         id: "tide_elemental",
-        name: "潮灵",
+        name: "水元素",
         rarity: Rarity::Sr,
         tags: &[Tag::Summon, Tag::Tide],
         trigger: SkillTrigger::Cooldown,
@@ -1055,7 +1034,7 @@ pub const SKILLS: [SkillDef; 30] = [
                 spell_ratio: 0.0,
                 summon_ratio: 0.4,
             },
-            description: "部署16秒固定炮塔，优先射击冲城单位。",
+            description: "在城墙上部署16秒固定雷弩塔，优先射击冲城单位；城门倒下时停止射击，重建后恢复。",
         },
     },
     SkillDef {
@@ -1069,7 +1048,7 @@ pub const SKILLS: [SkillDef; 30] = [
         effect: SkillEffect {
             kind: SkillEffectKind::Mark,
             power: ScaledValue::ZERO,
-            description: "标记最高生命敌人；杂兵12%、精英与Boss 4%生命以下处决。",
+            description: "标记最高生命敌人并附带疫蚀：持续伤害并向附近敌人传染两代；杂兵12%、精英与Boss 4%生命以下处决。",
         },
     },
     SkillDef {
@@ -1208,7 +1187,7 @@ pub const SKILLS: [SkillDef; 30] = [
     },
     SkillDef {
         id: "frost_wyrm",
-        name: "霜翼",
+        name: "冰霜骨龙",
         rarity: Rarity::Ur,
         tags: &[Tag::Summon, Tag::Frost, Tag::Tide],
         trigger: SkillTrigger::Cooldown,
@@ -1274,208 +1253,45 @@ pub const SKILLS: [SkillDef; 30] = [
             description: "随机触发雷暴、火雨、治疗、金币或召唤；等级提高高阶结果权重。",
         },
     },
-];
-
-pub const BONDS: [BondDef; 10] = [
-    BondDef {
-        id: "storm_conduit",
-        name: "天雷导体",
-        rarity: Rarity::R,
-        favored_tags: &[Tag::Storm, Tag::Spell],
-        tiers: [
-            BondTier {
-                threshold: 2,
-                description: "雷电伤害+15%，风暴命中附加感电。",
-            },
-            BondTier {
-                threshold: 4,
-                description: "风暴冷却-12%，弹射或脉冲次数+1。",
-            },
-            BondTier {
-                threshold: 6,
-                description: "每8次风暴命中追加一次高倍率落雷。",
-            },
-        ],
-    },
-    BondDef {
-        id: "ember_oath",
-        name: "炽痕誓约",
-        rarity: Rarity::R,
-        favored_tags: &[Tag::Flame, Tag::Attack],
-        tiers: [
-            BondTier {
-                threshold: 2,
-                description: "燃烧上限提高到5层，每层提高目标所受火焰伤害。",
-            },
-            BondTier {
-                threshold: 4,
-                description: "燃烧可暴击，并在目标死亡时向邻近敌人扩散。",
-            },
-            BondTier {
-                threshold: 6,
-                description: "满层燃烧每2秒触发一次爆燃。",
-            },
-        ],
-    },
-    BondDef {
-        id: "spirit_pact",
-        name: "万灵契约",
-        rarity: Rarity::R,
-        favored_tags: &[Tag::Summon, Tag::Guard],
-        tiers: [
-            BondTier {
-                threshold: 2,
-                description: "召唤上限+2，并提高属性继承。",
-            },
-            BondTier {
-                threshold: 4,
-                description: "召唤攻击标记目标；召唤死亡时爆炸。",
-            },
-            BondTier {
-                threshold: 6,
-                description: "每12秒生成一个持续8秒的召唤镜像。",
-            },
-        ],
-    },
-    BondDef {
-        id: "element_cycle",
-        name: "源素轮转",
+    SkillDef {
+        id: "flame_ray",
+        name: "焚焰射线",
         rarity: Rarity::Sr,
-        favored_tags: &[Tag::Storm, Tag::Flame, Tag::Frost, Tag::Tide],
-        tiers: [
-            BondTier {
-                threshold: 2,
-                description: "开启潮湿、风暴、燃烧、冰霜之间的四种反应。",
+        tags: &[Tag::Spell, Tag::Flame],
+        trigger: SkillTrigger::Cooldown,
+        cooldown_secs: 7.0,
+        max_rank: 5,
+        effect: SkillEffect {
+            kind: SkillEffectKind::Projectile,
+            power: ScaledValue {
+                base: 16.0,
+                per_rank: 8.0,
+                attack_ratio: 0.0,
+                spell_ratio: 0.18,
+                summon_ratio: 0.0,
             },
-            BondTier {
-                threshold: 4,
-                description: "元素反应伤害+60%，状态持续时间+35%。",
-            },
-            BondTier {
-                threshold: 6,
-                description: "单目标反应冷却降至1秒，并产生一次回响。",
-            },
-        ],
+            description: "持续两秒扫射贯穿火焰束，每0.25秒灼烧束内敌人；升级提高束宽与伤害。",
+        },
     },
-    BondDef {
-        id: "arcane_loop",
-        name: "秘仪回路",
+    SkillDef {
+        id: "goblin_mine",
+        name: "地精地雷",
         rarity: Rarity::Sr,
-        favored_tags: &[Tag::Spell, Tag::Arcane],
-        tiers: [
-            BondTier {
-                threshold: 2,
-                description: "法术冷却-10%。",
+        tags: &[Tag::Spell, Tag::Flame],
+        trigger: SkillTrigger::Cooldown,
+        cooldown_secs: 5.0,
+        max_rank: 5,
+        effect: SkillEffect {
+            kind: SkillEffectKind::Projectile,
+            power: ScaledValue {
+                base: 90.0,
+                per_rank: 40.0,
+                attack_ratio: 0.0,
+                spell_ratio: 0.8,
+                summon_ratio: 0.0,
             },
-            BondTier {
-                threshold: 4,
-                description: "每第5次法术以50%效果回响。",
-            },
-            BondTier {
-                threshold: 6,
-                description: "回响提高至100%，但不能递归触发。",
-            },
-        ],
-    },
-    BondDef {
-        id: "triune_union",
-        name: "三元合流",
-        rarity: Rarity::Sr,
-        favored_tags: &[Tag::Attack, Tag::Spell, Tag::Summon],
-        tiers: [
-            BondTier {
-                threshold: 2,
-                description: "三类命中分别提供8%对应增伤。",
-            },
-            BondTier {
-                threshold: 4,
-                description: "4秒内集齐三类命中时触发三元爆破。",
-            },
-            BondTier {
-                threshold: 6,
-                description: "三类增益常驻，爆破的25%转为真实伤害。",
-            },
-        ],
-    },
-    BondDef {
-        id: "qi_ascension",
-        name: "炼气登临",
-        rarity: Rarity::Ssr,
-        favored_tags: &[Tag::Qi, Tag::Spell],
-        tiers: [
-            BondTier {
-                threshold: 2,
-                description: "每10次施法放出一柄气剑。",
-            },
-            BondTier {
-                threshold: 4,
-                description: "4级及以上技能伤害+25%。",
-            },
-            BondTier {
-                threshold: 6,
-                description: "四个技能满级后登临：全冷却-20%，每6秒剑雨。",
-            },
-        ],
-    },
-    BondDef {
-        id: "blood_array",
-        name: "血战杀阵",
-        rarity: Rarity::Ssr,
-        favored_tags: &[Tag::Attack, Tag::Physical],
-        tiers: [
-            BondTier {
-                threshold: 2,
-                description: "暴击率+10%，击杀恢复1%生命。",
-            },
-            BondTier {
-                threshold: 4,
-                description: "处决低生命杂兵，目标死亡时爆炸。",
-            },
-            BondTier {
-                threshold: 6,
-                description: "每20次击杀进入10秒血战，攻速与施法速度+35%。",
-            },
-        ],
-    },
-    BondDef {
-        id: "raider_fortune",
-        name: "荒市豪赌",
-        rarity: Rarity::Ur,
-        favored_tags: &[Tag::Fortune],
-        tiers: [
-            BondTier {
-                threshold: 2,
-                description: "金币收益+20%，黑市杀敌价格-10%。",
-            },
-            BondTier {
-                threshold: 4,
-                description: "每轮黑市首次刷新免费，稀有率+15%。",
-            },
-            BondTier {
-                threshold: 6,
-                description: "幸运结果投两次取优，精英必掉消耗品。",
-            },
-        ],
-    },
-    BondDef {
-        id: "guardian_oath",
-        name: "守誓壁垒",
-        rarity: Rarity::Ur,
-        favored_tags: &[Tag::Guard],
-        tiers: [
-            BondTier {
-                threshold: 2,
-                description: "城门耐久+250，城门附近英雄减伤10%。",
-            },
-            BondTier {
-                threshold: 4,
-                description: "每12秒拦截一次突破。",
-            },
-            BondTier {
-                threshold: 6,
-                description: "城门高耐久时增伤；低耐久时触发一次6秒无敌。",
-            },
-        ],
+            description: "在前方布置地雷，0.6秒后武装；敌人靠近引发范围爆炸，最多六枚，15秒后失效。",
+        },
     },
 ];
 
@@ -1654,83 +1470,67 @@ pub const BOSSES: [BossDef; 5] = [
     BossDef {
         id: "cinder_colossus",
         name: "炽烬巨像",
-        spawn_seconds: 5 * 60,
+        name_en: "CINDER COLOSSUS",
+        spawn_seconds: 300.0,
         hp: 8_000.0,
-        gate_damage: 120,
+        speed: 0.85,
+        damage_per_second: 14.0,
         modifiers: BossModifiers {
             flame_resistance: 0.70,
             frost_damage_taken_multiplier: 1.35,
             ..BossModifiers::NEUTRAL
         },
-        mechanics: &[
-            "火焰抗性极高、额外承受冰霜伤害，首个检查点要求元素反制。",
-            "0.9秒直线冲锋预警后向英雄所在横线突进。",
-            "冲锋落点产生震地环；接近城门时造成额外耐久伤害。",
-        ],
     },
     BossDef {
         id: "abyssal_leviathan",
         name: "深渊潮兽",
-        spawn_seconds: 10 * 60,
+        name_en: "ABYSSAL LEVIATHAN",
+        spawn_seconds: 600.0,
         hp: 28_000.0,
-        gate_damage: 180,
+        speed: 0.62,
+        damage_per_second: 20.0,
         modifiers: BossModifiers {
             max_hp_multiplier: 1.70,
             move_speed_multiplier: 0.60,
             ..BossModifiers::NEUTRAL
         },
-        mechanics: &[
-            "生命上限提高70%、移动速度降低40%，形成耐久战。",
-            "施放前大幅减速并显示环形潮汐预警。",
-            "潮汐完成时恢复8%最大生命，要求稳定持续输出。",
-        ],
     },
     BossDef {
         id: "dread_veil",
         name: "恐幕行者",
-        spawn_seconds: 15 * 60,
+        name_en: "DREAD VEIL",
+        spawn_seconds: 900.0,
         hp: 70_000.0,
-        gate_damage: 240,
+        speed: 0.92,
+        damage_per_second: 28.0,
         modifiers: BossModifiers {
             damage_reduction: 0.15,
             elemental_resistance: 0.10,
             ..BossModifiers::NEUTRAL
         },
-        mechanics: &[
-            "常驻15%伤害减免与10%全元素抗性。",
-            "在左右侧预警点间穿梭，周期改变队形与瞄准方向。",
-            "每次位移后召来三名无奖励随从压迫城门。",
-        ],
     },
     BossDef {
         id: "sun_crown_magus",
         name: "日冕术王",
-        spawn_seconds: 20 * 60,
+        name_en: "SUN CROWN MAGUS",
+        spawn_seconds: 1_200.0,
         hp: 160_000.0,
-        gate_damage: 320,
+        speed: 1.18,
+        damage_per_second: 38.0,
         modifiers: BossModifiers {
             move_speed_multiplier: 1.30,
             attack_speed_multiplier: 1.50,
             ..BossModifiers::NEUTRAL
         },
-        mechanics: &[
-            "日冕相位提高移动和突破伤害，并向城门释放灼热脉冲。",
-            "暗冕相位降低行动速度与伤害，同时恢复3.5%最大生命。",
-            "每次相位切换均显示范围不同的环形预警。",
-        ],
     },
     BossDef {
         id: "green_regent",
         name: "翠绿摄政",
-        spawn_seconds: 25 * 60,
+        name_en: "THE GREEN REGENT",
+        spawn_seconds: 1_500.0,
         hp: 420_000.0,
-        gate_damage: 500,
+        speed: 0.78,
+        damage_per_second: 55.0,
         modifiers: BossModifiers::NEUTRAL,
-        mechanics: &[
-            "每7秒召来五名无奖励护从，让主战线持续承压。",
-            "入场90秒后开始狂暴，之后每10秒伤害提高25%。",
-            "每层狂暴同时提高6%移动速度，并以扩散环明确反馈。",
-            "击败后进入60秒战果刻印挑战，而非直接结算胜利。",
-        ],
     },
 ];

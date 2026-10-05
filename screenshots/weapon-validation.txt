@@ -1,0 +1,30 @@
+Weapon presentation validation — 2026-09-29
+
+PASS cargo test --lib -j1: 281 passed; 0 failed.
+PASS cargo clippy --all-targets -j1 -- -D warnings.
+PASS cargo build --bins -j1; final capture-only fixture rebuilt separately.
+PASS git diff --check.
+Commands executed through nix develop.
+
+Tests cover actual merged meshes, melee contact bounds, pause/death/hero-change
+cancellation, projectile pool lifecycle, cosmetic queue/mote limits, pause/final
+cleanup, and no mesh/material asset growth during effect animation.
+
+Desktop captures: sword, axe, daggers, bolt, storm, spirit, star, frost.
+Each: 180 frames, 1280x720, 30fps, seed 0xA11CE, H.264/yuv420p.
+All videos fully decoded via ffmpeg and frame sheets visually inspected.
+Outputs: weapon-<kind>.mp4, weapon-<kind>-review.png, weapon-<kind>-motion.png.
+Mobile: storm and frost, 844x390 stills plus 90-frame/30fps videos.
+Mobile motion sheets inspected; 10 total videos rendered.
+
+Reproduce:
+ROGUE_CAPTURE_WEAPON_TARGET=1 ROGUE_COMMANDER_LANG=zh nix develop --command   target/debug/capture frames <directory> 180 attack-<kind> 0xA11CE 1280x720
+
+The opt-in harness uses stationary 5000-HP targets with enemy damage disabled,
+turns off skills and moves the camera closer. This prevents passive summons from
+killing the target before the primary attack can be inspected. Formal gameplay
+balance/damage/collision is unchanged. Captures are native offscreen renders,
+not physical-mobile performance measurements. This round did not validate WASM.
+
+No Bevy ERROR/panic/failure markers in captures. The existing ICU4X Japanese
+segmentation-data diagnostic remains in native logs; Chinese labels render.

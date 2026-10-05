@@ -1,0 +1,13 @@
+# Class basic attacks
+
+Archers (Ember Ranger and Grove Artificer) use independent arrows that prioritize distinct nearby targets. At hero levels 1/10/20/40 their base volley contains 2/3/4/5 arrows, with 1/2/3/4 additional ricochets per arrow. Existing extra-arrow bonuses stack up to eight arrows. Each ricochet selects the nearest living, previously unhit target within five units and retains 75% of the previous hit's damage. Piercing continues along the current trajectory before ricocheting; it is a separate mechanic. Each arrow tracks its own hit history.
+
+Sword and axe warriors deal full damage to their primary target and cleave two additional targets within their forward weapon arc. Secondary damage grows from 60% to 70%/80%/90% at hero levels 10/20/40. Melee reach grows by 0.2 units at each milestone. Cleave and existing melee-target bonuses add targets without hitting enemies behind the hero. Daggers retain their existing damage rules.
+
+The primary melee target is selected at impact: the original target remains preferred while alive and inside the arc; otherwise the nearest valid target becomes primary. Ricochet arrows track their locked target with real flight rather than applying damage instantly; a dead, missing or pending-explosion target retires the arrow. Pause freezes movement and damage. Pool retirement clears both ricochet state and per-arrow hit history.
+
+Absorbed weapons retain the corresponding class profile, evaluated at the current hero's level, within the existing rotating legacy attack system. Legacy attacks retain their existing damage multiplier. Skills and other inherited effects remain separate.
+
+The Volley card adds an arrow; Rapid Recharge additionally adds a ricochet while retaining its recharge reduction. Sweeping Edge adds a forward melee target. The hero sheet and recruitment preview read the combat profile directly and explain counts, ranges and damage reductions in the selected language.
+
+Verification: [native receipts](../screenshots/class-attacks-validation.txt). Strict all-target Clippy, 507 library tests (one ignored), and native builds passed. Ten desktop/mobile scenarios completed 4,800 full frames, including real opening selection, two-arrow/five-arrow volleys, extra ricochet damage, three-target forward cleave with untouched rear/distant actors, paused effects/damage, two actual fruit recruitments and the hero attribute panel. Level 40 and fruit awards are controlled fixture inputs; these checks do not establish complete campaign balance, browser behavior or performance.

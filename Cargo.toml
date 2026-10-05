@@ -2,17 +2,22 @@
 name = "rogue_commander"
 version = "0.1.0"
 edition = "2024"
+default-run = "rogue_commander"
 
 [lib]
 name = "rogue_commander"
 crate-type = ["lib", "cdylib"]
+
+[features]
+# F7 spawn menu and F8 time skip in release builds; debug builds always have them.
+dev-tools = []
 
 [dependencies]
 bevy = { version = "=0.19.0", features = ["android-game-activity", "wav"] }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 js-sys = "=0.3.103"
-web-sys = { version = "=0.3.103", features = ["Location", "Window"] }
+web-sys = { version = "=0.3.103", features = ["Location", "Window", "Storage", "History", "Url", "UrlSearchParams", "MediaQueryList"] }
 
 [dev-dependencies]
 ttf-parser = "=0.25.1"

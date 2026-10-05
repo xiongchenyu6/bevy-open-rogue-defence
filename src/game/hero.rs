@@ -1,53 +1,47 @@
-use bevy::{prelude::*, window::PrimaryWindow};
+use super::skill_evolution::SkillEvolution;
+use super::{HeroFusion, SkillId};
+use bevy::ecs::system::SystemParam;
+use bevy::prelude::*;
 
 use super::combat::SurvivalSet;
-use super::content::{Attribute, ContentId, HEROES, SKILLS};
-use super::localization::{attribute_name, hero_name, skill_name};
-use super::mobile_layout::hud_metrics;
-use super::rarity::rarity_color;
+#[cfg(test)]
+use super::content::Attribute;
+use super::content::{ContentId, HEROES, Rarity, SKILLS};
+use super::localization::hero_name;
 use super::{
     Autoplay, GameAssets, GameLanguage, GameSession, Hero, HeroIdentity, HeroKind,
-    HeroProgressionDelta, HeroVisual, HeroVitals, PlayerBuild, RunRng, RunSeed, SelectedHero,
-    SkillId,
+    HeroProgressionDelta, HeroVisual, HeroVitals, PlayerBuild, RecruitmentProgress,
+    RecruitmentSource, RunRng, RunSeed, SelectedHero,
 };
+
+#[path = "hero_draft.rs"]
+mod draft;
+use draft::spawn_hero_selector;
 
 pub struct HeroPlugin;
 
-const OVERLAY_PADDING: f32 = 8.0;
-const HERO_HEADING_SIZE: f32 = 22.0;
-const HERO_GRID_WIDTH_PERCENT: f32 = 96.0;
-const HERO_GRID_MAX_WIDTH: f32 = 1_000.0;
-const HERO_GRID_HEIGHT: f32 = 292.0;
-const HERO_CARD_WIDTH_PERCENT: f32 = 31.0;
-const HERO_CARD_HEIGHT_PERCENT: f32 = 48.0;
-const HERO_GRID_GAP: f32 = 8.0;
-const EVOLUTION_GRID_WIDTH_PERCENT: f32 = 94.0;
-const EVOLUTION_GRID_MAX_WIDTH: f32 = 900.0;
-const EVOLUTION_GRID_HEIGHT: f32 = 260.0;
-const EVOLUTION_CARD_WIDTH_PERCENT: f32 = 48.0;
-const EVOLUTION_GRID_GAP: f32 = 10.0;
-const MIN_TOUCH_TARGET: f32 = 48.0;
 const HERO_OFFER_COUNT: usize = 6;
-const FREE_HERO_REROLLS: u8 = 1;
 const HERO_OFFER_SEED_SALT: u64 = 0x4845_524F_5F4F_4646;
-const _: () = assert!(MIN_TOUCH_TARGET >= 48.0);
 
 impl Plugin for HeroPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<GameLanguage>()
             .init_resource::<HeroState>()
-            .add_systems(Startup, setup_hero_ui)
+            .init_resource::<RecruitmentProgress>()
+            .init_resource::<HeroFusion>()
+            .add_systems(Startup, (setup_hero_ui, draft::load_art))
             .add_systems(
                 Update,
                 (
                     open_hero_selector,
-                    handle_hero_reroll,
-                    update_hero_selector_safe_area,
+                    draft::update_layout,
                     handle_hero_choice,
+                    draft::update_feedback,
+                    draft::refresh_language,
+                    refresh_hero_language,
                     update_hero_selector_panel_visibility,
                     synchronize_hero_growth,
-                    trigger_evolution,
-                    handle_evolution_choice,
+                    trigger_recruitment,
                     update_hero_status,
                 )
                     .chain()
@@ -59,24 +53,20 @@ impl Plugin for HeroPlugin {
 #[derive(Resource)]
 struct HeroState {
     selected: HeroKind,
+    preview: Option<HeroOffer>,
     locked: bool,
-    evolution_stage: u8,
     root: Option<Entity>,
     offer_generation: u32,
-    rerolls_remaining: u8,
-    ignore_choice_this_frame: bool,
 }
 
 impl Default for HeroState {
     fn default() -> Self {
         Self {
             selected: HeroKind::StormSavant,
+            preview: None,
             locked: false,
-            evolution_stage: 0,
             root: None,
             offer_generation: 0,
-            rerolls_remaining: FREE_HERO_REROLLS,
-            ignore_choice_this_frame: false,
         }
     }
 }
@@ -92,9 +82,8 @@ struct HeroSelectorRoot;
 
 #[derive(Component)]
 struct HeroChoiceButton(HeroOffer);
-
 #[derive(Component)]
-struct HeroRerollButton;
+struct HeroChoiceOrdinal(usize);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 struct HeroOffer {
@@ -103,16 +92,13 @@ struct HeroOffer {
 }
 
 #[derive(Component)]
-struct EvolutionChoiceButton(u8);
-
-#[derive(Component)]
 struct HeroStatusText;
 
 fn setup_hero_ui(mut commands: Commands, language: Res<GameLanguage>) {
     let status = format!(
         "[R] {} · {} 0/3",
         hero_name(*language, HeroKind::StormSavant),
-        language.pick("ASC", "升格")
+        language.pick("RECRUIT", "招募")
     );
     let choose_hero = language.pick("CHOOSE HERO", "选择英雄");
     commands
@@ -161,6 +147,7 @@ fn setup_hero_ui(mut commands: Commands, language: Res<GameLanguage>) {
                 ))
                 .with_children(|button| {
                     button.spawn((
+                        HeroStaticCopy::Choose,
                         Text::new(choose_hero),
                         TextFont {
                             font_size: FontSize::Px(12.0),
@@ -175,14 +162,16 @@ fn setup_hero_ui(mut commands: Commands, language: Res<GameLanguage>) {
 fn open_hero_selector(
     mut commands: Commands,
     autoplay: Option<Res<Autoplay>>,
-    windows: Query<&Window, With<PrimaryWindow>>,
+    campaign_menu: Option<Res<super::campaign_ui::CampaignMenu>>,
+    art: Res<draft::DraftArt>,
     run_seed: Res<RunSeed>,
     language: Res<GameLanguage>,
     selected_hero: Res<SelectedHero>,
     mut session: ResMut<GameSession>,
     mut state: ResMut<HeroState>,
 ) {
-    if autoplay.is_some()
+    if campaign_menu.is_some_and(|menu| menu.0)
+        || autoplay.is_some()
         || selected_hero.locked
         || state.locked
         || state.root.is_some()
@@ -193,45 +182,8 @@ fn open_hero_selector(
     }
     session.paused = true;
     let offers = roll_hero_offers(run_seed.0, state.offer_generation);
-    state.root = Some(spawn_hero_selector(
-        &mut commands,
-        &offers,
-        state.rerolls_remaining > 0,
-        hero_selector_safe_x(&windows),
-        *language,
-    ));
-}
-
-fn handle_hero_reroll(
-    mut commands: Commands,
-    interactions: Query<&Interaction, (With<HeroRerollButton>, Changed<Interaction>)>,
-    windows: Query<&Window, With<PrimaryWindow>>,
-    run_seed: Res<RunSeed>,
-    language: Res<GameLanguage>,
-    mut state: ResMut<HeroState>,
-) {
-    let requested = interactions
-        .iter()
-        .any(|interaction| *interaction == Interaction::Pressed);
-    if !requested || state.rerolls_remaining == 0 {
-        return;
-    }
-    let Some(root) = state.root.take() else {
-        return;
-    };
-
-    commands.entity(root).despawn();
-    state.offer_generation = state.offer_generation.saturating_add(1);
-    state.rerolls_remaining -= 1;
-    state.ignore_choice_this_frame = true;
-    let offers = roll_hero_offers(run_seed.0, state.offer_generation);
-    state.root = Some(spawn_hero_selector(
-        &mut commands,
-        &offers,
-        false,
-        hero_selector_safe_x(&windows),
-        *language,
-    ));
+    state.preview = Some(offers[0]);
+    state.root = Some(spawn_hero_selector(&mut commands, &offers, &art, *language));
 }
 
 fn update_hero_selector_panel_visibility(
@@ -248,203 +200,23 @@ fn update_hero_selector_panel_visibility(
     }
 }
 
-fn update_hero_selector_safe_area(
-    windows: Query<&Window, With<PrimaryWindow>>,
-    mut nodes: Query<(
-        &mut Node,
-        Option<&HeroSelectorRoot>,
-        Option<&HeroRerollButton>,
-    )>,
-) {
-    let safe_x = hero_selector_safe_x(&windows);
-    for (mut node, root, reroll) in &mut nodes {
-        if root.is_some() {
-            node.padding.left = px(safe_x);
-            node.padding.right = px(safe_x);
-        }
-        if reroll.is_some() {
-            node.right = px(safe_x);
-        }
-    }
+#[derive(SystemParam)]
+struct RecruitmentInheritance<'w> {
+    fusion: ResMut<'w, HeroFusion>,
+    evolution: Option<ResMut<'w, SkillEvolution>>,
 }
 
-fn spawn_hero_selector(
-    commands: &mut Commands,
-    offers: &[HeroOffer; HERO_OFFER_COUNT],
-    can_reroll: bool,
-    safe_x: f32,
-    language: GameLanguage,
-) -> Entity {
-    commands
-        .spawn((
-            HeroSelectorRoot,
-            Node {
-                position_type: PositionType::Absolute,
-                width: percent(100),
-                height: percent(100),
-                padding: UiRect {
-                    left: px(safe_x),
-                    right: px(safe_x),
-                    top: px(OVERLAY_PADDING),
-                    bottom: px(OVERLAY_PADDING),
-                },
-                flex_direction: FlexDirection::Column,
-                align_items: AlignItems::Center,
-                justify_content: JustifyContent::Center,
-                row_gap: px(HERO_GRID_GAP),
-                ..default()
-            },
-            BackgroundColor(Color::srgba(0.01, 0.02, 0.04, 0.985)),
-            GlobalZIndex(70),
-        ))
-        .with_children(|root| {
-            if can_reroll {
-                root.spawn((
-                    Button,
-                    HeroRerollButton,
-                    Node {
-                        position_type: PositionType::Absolute,
-                        right: px(safe_x),
-                        top: px(8),
-                        width: px(108),
-                        height: px(MIN_TOUCH_TARGET),
-                        align_items: AlignItems::Center,
-                        justify_content: JustifyContent::Center,
-                        border: UiRect::all(px(1)),
-                        border_radius: BorderRadius::all(px(8)),
-                        ..default()
-                    },
-                    BackgroundColor(Color::srgb(0.12, 0.26, 0.38)),
-                    BorderColor::all(Color::srgb(0.28, 0.72, 0.92)),
-                ))
-                .with_children(|button| {
-                    button.spawn((
-                        Text::new(language.pick("REROLL FREE", "免费重抽")),
-                        TextFont {
-                            font_size: FontSize::Px(11.0),
-                            ..default()
-                        },
-                        TextColor(Color::WHITE),
-                    ));
-                });
-            }
-            root.spawn((
-                Text::new(language.pick("COMMANDER DRAFT  |  6 OF 12", "指挥官征募｜12 选 6")),
-                TextFont {
-                    font_size: FontSize::Px(HERO_HEADING_SIZE),
-                    ..default()
-                },
-                TextColor(Color::srgb(0.76, 0.94, 1.0)),
-            ));
-            root.spawn((
-                Text::new(language.pick(
-                    "R WHITE · SR BLUE · SSR ORANGE · UR RED",
-                    "R 白 · SR 蓝 · SSR 橙 · UR 红",
-                )),
-                TextFont {
-                    font_size: FontSize::Px(10.0),
-                    ..default()
-                },
-                TextColor(Color::srgb(0.72, 0.78, 0.86)),
-            ));
-            root.spawn(Node {
-                width: percent(HERO_GRID_WIDTH_PERCENT),
-                max_width: px(HERO_GRID_MAX_WIDTH),
-                height: px(HERO_GRID_HEIGHT),
-                flex_direction: FlexDirection::Row,
-                flex_wrap: FlexWrap::Wrap,
-                justify_content: JustifyContent::Center,
-                align_content: AlignContent::Center,
-                row_gap: px(HERO_GRID_GAP),
-                column_gap: px(HERO_GRID_GAP),
-                ..default()
-            })
-            .with_children(|grid| {
-                for offer in offers.iter().copied() {
-                    let hero = HEROES[offer.kind.index()];
-                    let skill = SKILLS
-                        .iter()
-                        .find(|skill| skill.id == offer.starting_skill)
-                        .expect("hero starting skills are validated by content tests");
-                    let primary = attribute_name(language, hero.primary);
-                    let skill_id = SKILLS
-                        .iter()
-                        .position(|candidate| candidate.id == offer.starting_skill)
-                        .map(|index| SkillId(index as u8))
-                        .expect("hero starting skills are validated by content tests");
-                    grid.spawn((
-                        Button,
-                        HeroChoiceButton(offer),
-                        Node {
-                            width: percent(HERO_CARD_WIDTH_PERCENT),
-                            min_width: px(MIN_TOUCH_TARGET),
-                            height: percent(HERO_CARD_HEIGHT_PERCENT),
-                            min_height: px(MIN_TOUCH_TARGET),
-                            padding: UiRect::all(px(6)),
-                            flex_direction: FlexDirection::Column,
-                            align_items: AlignItems::Center,
-                            justify_content: JustifyContent::Center,
-                            row_gap: px(5),
-                            border: UiRect::all(px(2)),
-                            border_radius: BorderRadius::all(px(10)),
-                            ..default()
-                        },
-                        BackgroundColor(Color::srgb(0.055, 0.11, 0.18)),
-                        BorderColor::all(rarity_color(hero.rarity)),
-                    ))
-                    .with_children(|card| {
-                        card.spawn((
-                            Text::new(format!(
-                                "[{}] {}",
-                                hero.rarity.label(),
-                                hero_name(language, offer.kind)
-                            )),
-                            TextFont {
-                                font_size: FontSize::Px(17.0),
-                                ..default()
-                            },
-                            TextColor(rarity_color(hero.rarity)),
-                            TextLayout::justify(Justify::Center)
-                                .with_linebreak(LineBreak::WordOrCharacter),
-                        ));
-                        card.spawn((
-                            Text::new(if language.is_chinese() {
-                                format!(
-                                    "{primary} · 威力 ×{:.2} · 冷却 -{:.0}%\n初始 Lv{} [{}] {}",
-                                    hero.rarity.hero_ability_multiplier(),
-                                    (1.0 - hero.rarity.hero_cooldown_multiplier()) * 100.0,
-                                    hero.rarity.starting_skill_rank(),
-                                    skill.rarity.label(),
-                                    skill_name(language, skill_id)
-                                )
-                            } else {
-                                format!(
-                                    "{primary} · PWR x{:.2} · CD -{:.0}%\nSTART Lv{} [{}] {}",
-                                    hero.rarity.hero_ability_multiplier(),
-                                    (1.0 - hero.rarity.hero_cooldown_multiplier()) * 100.0,
-                                    hero.rarity.starting_skill_rank(),
-                                    skill.rarity.label(),
-                                    skill_name(language, skill_id)
-                                )
-                            }),
-                            TextFont {
-                                font_size: FontSize::Px(11.0),
-                                ..default()
-                            },
-                            TextColor(Color::srgb(0.68, 0.78, 0.88)),
-                            TextLayout::justify(Justify::Center)
-                                .with_linebreak(LineBreak::WordOrCharacter),
-                        ));
-                    });
-                }
-            });
-        })
-        .id()
+#[derive(SystemParam)]
+struct HeroChoiceInput<'w> {
+    keyboard: Option<ResMut<'w, ButtonInput<KeyCode>>>,
+    mouse: Option<Res<'w, ButtonInput<MouseButton>>>,
+    touches: Option<Res<'w, Touches>>,
 }
-
 fn handle_hero_choice(
     mut commands: Commands,
     interactions: Query<(&Interaction, &HeroChoiceButton), Changed<Interaction>>,
+    ordinals: Query<(&HeroChoiceButton, &HeroChoiceOrdinal)>,
+    mut input: HeroChoiceInput,
     assets: Option<Res<GameAssets>>,
     mut session: ResMut<GameSession>,
     mut build: ResMut<PlayerBuild>,
@@ -453,226 +225,237 @@ fn handle_hero_choice(
     mut selected_hero: ResMut<SelectedHero>,
     mut identities: Query<&mut HeroIdentity, With<Hero>>,
     mut visuals: Query<&mut WorldAssetRoot, With<HeroVisual>>,
+    mut progress: ResMut<RecruitmentProgress>,
+    mut runtime: Option<ResMut<super::bonds::BondRuntime>>,
+    autoplay: Option<Res<Autoplay>>,
+    mut inheritance: RecruitmentInheritance,
 ) {
-    if std::mem::take(&mut state.ignore_choice_this_frame) {
+    if state.root.is_none() {
         return;
     }
-    for (interaction, choice) in &interactions {
-        if *interaction != Interaction::Pressed {
-            continue;
+    let held = input
+        .mouse
+        .as_ref()
+        .is_some_and(|mouse| mouse.pressed(MouseButton::Left))
+        || input
+            .touches
+            .as_ref()
+            .is_some_and(|touches| touches.iter().next().is_some());
+    let fresh = input
+        .mouse
+        .as_ref()
+        .is_some_and(|mouse| mouse.just_pressed(MouseButton::Left))
+        || input
+            .touches
+            .as_ref()
+            .is_some_and(|touches| touches.iter_just_pressed().next().is_some());
+    let mut clicked = interactions.iter().find_map(|(interaction, choice)| {
+        if *interaction == Interaction::Hovered {
+            state.preview = Some(choice.0);
         }
-        state.selected = choice.0.kind;
-        state.locked = true;
-        selected_hero.kind = state.selected;
-        selected_hero.locked = true;
-        for mut identity in &mut identities {
-            identity.0 = selected_hero.kind;
+        (*interaction == Interaction::Pressed && (!held || fresh)).then_some(choice.0)
+    });
+    if let Some(keys) = input.keyboard.as_deref_mut()
+        && let Some(index) = [
+            KeyCode::Digit1,
+            KeyCode::Digit2,
+            KeyCode::Digit3,
+            KeyCode::Digit4,
+            KeyCode::Digit5,
+            KeyCode::Digit6,
+        ]
+        .iter()
+        .position(|key| keys.just_pressed(*key))
+    {
+        clicked = ordinals
+            .iter()
+            .find(|(_, ordinal)| ordinal.0 == index)
+            .map(|(choice, _)| choice.0);
+        keys.clear();
+    }
+    if let Some(offer) = clicked {
+        state.preview = Some(offer);
+    }
+    if clicked.is_none() && !(autoplay.is_some() && progress.pending.is_some()) {
+        return;
+    }
+    let Some(offer) = state.preview else {
+        return;
+    };
+    if let Some(source) = progress.pending {
+        if offer.kind == selected_hero.kind || !progress.claim(source) {
+            return;
+        }
+        inheritance.fusion.record_absorbed(vitals.kind);
+        let missing_health = vitals.max_health - vitals.health;
+        let missing_energy = vitals.max_energy - vitals.energy;
+        if let Some(runtime) = runtime.as_deref_mut() {
+            runtime.remove_applied(&mut build, &mut vitals);
+        }
+        absorb_and_recruit(
+            offer.kind,
+            session.level,
+            &mut progress,
+            &mut build,
+            &mut vitals,
+        );
+        if let Some(runtime) = runtime.as_deref_mut() {
+            runtime.apply_stats(&mut build, &mut vitals);
+        }
+        vitals.health = (vitals.max_health - missing_health).clamp(0., vitals.max_health);
+        vitals.energy = (vitals.max_energy - missing_energy).clamp(0., vitals.max_energy);
+    } else {
+        if selected_hero.locked || HEROES[offer.kind.index()].rarity != Rarity::R {
+            return;
         }
         apply_hero_stats(
-            state.selected,
-            choice.0.starting_skill,
+            offer.kind,
+            offer.starting_skill,
             session.level,
             &mut build,
             &mut vitals,
         );
-        if let Some(assets) = assets.as_deref() {
-            for mut scene in &mut visuals {
-                scene.0 = assets.hero_scenes[state.selected.index()].clone();
-            }
-        }
-        close_overlay(&mut commands, &mut session, &mut state);
-        break;
     }
+    let skill = inheritance
+        .fusion
+        .starting_skill(offer.kind)
+        .unwrap_or_else(|| {
+            SkillId(
+                SKILLS
+                    .iter()
+                    .position(|skill| skill.id == offer.starting_skill)
+                    .expect("valid starting skill") as u8,
+            )
+        });
+    inheritance
+        .fusion
+        .register_starting_skill(offer.kind, skill);
+    let index = usize::from(skill.0);
+    build.skills[index] = build.skills[index].max(
+        HEROES[offer.kind.index()]
+            .rarity
+            .starting_skill_rank()
+            .min(SKILLS[index].max_rank),
+    );
+    if let Some(evolution) = inheritance.evolution.as_deref_mut() {
+        evolution.rewarded_ranks[index] = evolution.rewarded_ranks[index].max(build.skills[index]);
+    }
+    state.selected = offer.kind;
+    state.locked = true;
+    selected_hero.kind = offer.kind;
+    selected_hero.locked = true;
+    for mut identity in &mut identities {
+        identity.0 = offer.kind;
+    }
+    if let Some(assets) = assets.as_deref() {
+        for mut scene in &mut visuals {
+            scene.0 = assets.hero_scenes[state.selected.index()].clone();
+        }
+    }
+    close_overlay(&mut commands, &mut session, &mut state);
 }
 
-fn trigger_evolution(
+fn trigger_recruitment(
     mut commands: Commands,
-    autoplay: Option<Res<Autoplay>>,
-    mut session: ResMut<GameSession>,
-    mut build: ResMut<PlayerBuild>,
-    mut state: ResMut<HeroState>,
-    selected_hero: Res<SelectedHero>,
+    art: Res<draft::DraftArt>,
+    run_seed: Res<RunSeed>,
     language: Res<GameLanguage>,
+    selected: Res<SelectedHero>,
+    fusion: Res<HeroFusion>,
+    mut session: ResMut<GameSession>,
+    mut state: ResMut<HeroState>,
+    mut progress: ResMut<RecruitmentProgress>,
     vitals: Res<HeroVitals>,
-    mut hero: Query<&mut Transform, With<Hero>>,
 ) {
-    const LEVELS: [u32; 3] = [3, 9, 15];
-    if !selected_hero.locked
-        || state.evolution_stage >= 3
+    if !selected.locked
         || state.root.is_some()
         || session.paused
         || session.finished
-        || !vitals.alive
-        || vitals.health <= 0.0
-        || session.level < LEVELS[state.evolution_stage as usize]
+        || !vitals.can_act()
+        || vitals.health <= 0.
     {
         return;
     }
-    if autoplay.is_some() {
-        let branch = state.evolution_stage % 2;
-        apply_evolution(branch, &mut build, &mut session);
-        state.evolution_stage += 1;
-        if let Ok(mut transform) = hero.single_mut() {
-            transform.scale = Vec3::splat(1.0 + state.evolution_stage as f32 * 0.07);
-        }
-        return;
-    }
-    session.paused = true;
-    state.root = Some(spawn_evolution(
-        &mut commands,
-        state.selected,
-        state.evolution_stage,
-        *language,
-    ));
-}
-
-fn spawn_evolution(
-    commands: &mut Commands,
-    hero_kind: HeroKind,
-    stage: u8,
-    language: GameLanguage,
-) -> Entity {
-    commands
-        .spawn((
-            Node {
-                position_type: PositionType::Absolute,
-                width: percent(100),
-                height: percent(100),
-                padding: UiRect::all(px(OVERLAY_PADDING)),
-                flex_direction: FlexDirection::Column,
-                align_items: AlignItems::Center,
-                justify_content: JustifyContent::Center,
-                row_gap: px(EVOLUTION_GRID_GAP),
-                ..default()
-            },
-            BackgroundColor(Color::srgba(0.015, 0.02, 0.035, 0.92)),
-            GlobalZIndex(75),
-        ))
-        .with_children(|root| {
-            root.spawn((
-                Text::new(if language.is_chinese() {
-                    format!("{} · 升格 {}", hero_name(language, hero_kind), stage + 1)
-                } else {
-                    format!("{} ASCENSION {}", hero_name(language, hero_kind), stage + 1)
-                }),
-                TextFont {
-                    font_size: FontSize::Px(HERO_HEADING_SIZE),
-                    ..default()
-                },
-                TextColor(Color::srgb(1.0, 0.78, 0.28)),
-            ));
-            root.spawn(Node {
-                width: percent(EVOLUTION_GRID_WIDTH_PERCENT),
-                max_width: px(EVOLUTION_GRID_MAX_WIDTH),
-                height: px(EVOLUTION_GRID_HEIGHT),
-                flex_direction: FlexDirection::Row,
-                column_gap: px(EVOLUTION_GRID_GAP),
-                justify_content: JustifyContent::Center,
-                ..default()
-            })
-            .with_children(|row| {
-                spawn_evolution_card(
-                    row,
-                    0,
-                    language.pick("WAR PATH", "战争之路"),
-                    language.pick(
-                        "+28% damage\n+12% attack speed\nstronger projectiles",
-                        "+28% 伤害\n+12% 攻击速度\n强化投射物",
-                    ),
-                );
-                spawn_evolution_card(
-                    row,
-                    1,
-                    language.pick("MYSTIC PATH", "秘法之路"),
-                    language.pick(
-                        "+1 multishot\n+10% move speed\nrepair the gate",
-                        "+1 多重射击\n+10% 移动速度\n修复城门",
-                    ),
-                );
-            });
-        })
-        .id()
-}
-
-fn spawn_evolution_card(
-    parent: &mut ChildSpawnerCommands,
-    branch: u8,
-    title: &'static str,
-    description: &'static str,
-) {
-    parent
-        .spawn((
-            Button,
-            EvolutionChoiceButton(branch),
-            Node {
-                width: percent(EVOLUTION_CARD_WIDTH_PERCENT),
-                min_width: px(MIN_TOUCH_TARGET),
-                min_height: px(MIN_TOUCH_TARGET),
-                padding: UiRect::all(px(8)),
-                flex_direction: FlexDirection::Column,
-                align_items: AlignItems::Center,
-                justify_content: JustifyContent::Center,
-                row_gap: px(10),
-                border: UiRect::all(px(3)),
-                border_radius: BorderRadius::all(px(12)),
-                ..default()
-            },
-            BackgroundColor(Color::srgb(0.075, 0.10, 0.17)),
-            BorderColor::all(if branch == 0 {
-                Color::srgb(1.0, 0.34, 0.16)
-            } else {
-                Color::srgb(0.25, 0.78, 1.0)
-            }),
-        ))
-        .with_children(|card| {
-            card.spawn((
-                Text::new(title),
-                TextFont {
-                    font_size: FontSize::Px(20.0),
-                    ..default()
-                },
-                TextColor(Color::WHITE),
-            ));
-            card.spawn((
-                Text::new(description),
-                TextFont {
-                    font_size: FontSize::Px(13.0),
-                    ..default()
-                },
-                TextColor(Color::srgb(0.72, 0.8, 0.9)),
-                TextLayout::justify(Justify::Center).with_linebreak(LineBreak::WordOrCharacter),
-            ));
+    let source = progress
+        .next_milestone(session.level)
+        .map(RecruitmentSource::Milestone)
+        .or_else(|| {
+            (progress.requested && progress.fruit_count > 0).then_some(RecruitmentSource::Fruit)
         });
+    progress.requested = false;
+    let Some(source) = source else {
+        return;
+    };
+    progress.pending = Some(source);
+    state.offer_generation = state.offer_generation.saturating_add(1);
+    let offers =
+        roll_recruitment_offers(run_seed.0, state.offer_generation, selected.kind, &fusion);
+    state.preview = Some(offers[0]);
+    session.paused = true;
+    state.root = Some(spawn_hero_selector(&mut commands, &offers, &art, *language));
 }
 
-fn handle_evolution_choice(
-    mut commands: Commands,
-    interactions: Query<(&Interaction, &EvolutionChoiceButton), Changed<Interaction>>,
-    mut session: ResMut<GameSession>,
-    mut build: ResMut<PlayerBuild>,
-    mut state: ResMut<HeroState>,
-    mut hero: Query<&mut Transform, With<Hero>>,
+fn absorb_and_recruit(
+    kind: HeroKind,
+    level: u32,
+    progress: &mut RecruitmentProgress,
+    build: &mut PlayerBuild,
+    vitals: &mut HeroVitals,
 ) {
-    for (interaction, choice) in &interactions {
-        if *interaction != Interaction::Pressed {
-            continue;
-        }
-        apply_evolution(choice.0, &mut build, &mut session);
-        state.evolution_stage += 1;
-        if let Ok(mut transform) = hero.single_mut() {
-            transform.scale = Vec3::splat(1.0 + state.evolution_stage as f32 * 0.07);
-        }
-        close_overlay(&mut commands, &mut session, &mut state);
-        break;
-    }
+    let old = HeroVitals::for_hero(vitals.kind, level);
+    progress.absorbed_strength += old.strength;
+    progress.absorbed_agility += old.agility;
+    progress.absorbed_intelligence += old.intelligence;
+    let next = HeroVitals::for_hero(kind, level);
+    let primary_before = vitals.primary_attribute();
+    let old_agility = vitals.agility;
+    let old_intelligence = vitals.intelligence;
+    // Replace intrinsic stats and retain all independently accumulated bonuses.
+    vitals.strength += next.strength;
+    vitals.agility += next.agility;
+    vitals.intelligence += next.intelligence;
+    let health_delta =
+        (next.max_health - old.max_health + old.strength * 14.) * vitals.command_health_multiplier;
+    let energy_delta = next.max_energy - old.max_energy + old.intelligence * 8.;
+    vitals.max_health += health_delta;
+    vitals.health = (vitals.health + health_delta).clamp(0., vitals.max_health);
+    vitals.max_energy += energy_delta;
+    vitals.energy = (vitals.energy + energy_delta).clamp(0., vitals.max_energy);
+    vitals.kind = kind;
+    vitals.level = level;
+    apply_growth_delta(
+        build,
+        HeroProgressionDelta {
+            primary: vitals.primary_attribute() - primary_before,
+            agility: vitals.agility - old_agility,
+            intelligence: vitals.intelligence - old_intelligence,
+            max_health: health_delta,
+            max_energy: energy_delta,
+        },
+    );
 }
 
-fn synchronize_hero_growth(
+pub(crate) fn synchronize_hero_growth(
     selected: Res<SelectedHero>,
     session: Res<GameSession>,
     mut build: ResMut<PlayerBuild>,
     mut vitals: ResMut<HeroVitals>,
+    mut runtime: Option<ResMut<super::bonds::BondRuntime>>,
 ) {
+    let before_health = vitals.health;
+    let before_max = vitals.max_health;
+    let before_energy = vitals.energy;
+    let before_max_energy = vitals.max_energy;
+    let survival = (
+        vitals.alive,
+        vitals.deaths,
+        vitals.revive_remaining,
+        vitals.invulnerable_remaining,
+        vitals.stunned_remaining,
+    );
+    if let Some(runtime) = runtime.as_deref_mut() {
+        runtime.remove_applied(&mut build, &mut vitals);
+    }
     if vitals.kind != selected.kind {
         let starting_skill = HEROES[selected.kind.index()].starting_skill;
         apply_hero_stats(
@@ -682,10 +465,32 @@ fn synchronize_hero_growth(
             &mut build,
             &mut vitals,
         );
-        return;
+    } else {
+        let delta = vitals.synchronize_level(selected.kind, session.level);
+        apply_growth_delta(&mut build, delta);
     }
-    let delta = vitals.synchronize_level(selected.kind, session.level);
-    apply_growth_delta(&mut build, delta);
+    (
+        vitals.alive,
+        vitals.deaths,
+        vitals.revive_remaining,
+        vitals.invulnerable_remaining,
+        vitals.stunned_remaining,
+    ) = survival;
+    if let Some(runtime) = runtime.as_deref_mut() {
+        runtime.apply_stats(&mut build, &mut vitals);
+    }
+    if vitals.alive {
+        vitals.health = if before_health <= 0.0 {
+            0.0
+        } else {
+            (before_health + vitals.max_health - before_max).clamp(0.0, vitals.max_health)
+        };
+        vitals.energy =
+            (before_energy + vitals.max_energy - before_max_energy).clamp(0.0, vitals.max_energy);
+        if let Some(runtime) = runtime.as_deref_mut() {
+            vitals.heal(runtime.take_kill_healing());
+        }
+    }
 }
 
 fn apply_growth_delta(build: &mut PlayerBuild, delta: HeroProgressionDelta) {
@@ -718,32 +523,19 @@ fn apply_hero_stats(
     }
 }
 
-fn apply_evolution(branch: u8, build: &mut PlayerBuild, session: &mut GameSession) {
-    if branch == 0 {
-        build.attack_damage *= 1.28;
-        build.attacks_per_second *= 1.12;
-        build.projectile_speed *= 1.08;
-    } else {
-        build.multishot = build.multishot.saturating_add(1).min(9);
-        build.move_speed *= 1.10;
-        session.core_max_hp += 120.0;
-        session.core_hp = (session.core_hp + 180.0).min(session.core_max_hp);
-    }
-}
-
 fn update_hero_status(
-    state: Res<HeroState>,
+    selected: Res<SelectedHero>,
+    progress: Res<RecruitmentProgress>,
     language: Res<GameLanguage>,
     mut text: Query<&mut Text, With<HeroStatusText>>,
 ) {
     if let Ok(mut text) = text.single_mut() {
-        let hero = HEROES[state.selected.index()];
         **text = format!(
             "[{}] {} · {} {}/3",
-            hero.rarity.label(),
-            hero_name(*language, state.selected),
-            language.pick("ASC", "升格"),
-            state.evolution_stage,
+            HEROES[selected.kind.index()].rarity.label(),
+            hero_name(*language, selected.kind),
+            language.pick("RECRUIT", "招募"),
+            progress.claimed_milestones.count_ones()
         );
     }
 }
@@ -755,52 +547,45 @@ fn close_overlay(commands: &mut Commands, session: &mut GameSession, state: &mut
     session.paused = false;
 }
 
-fn roll_hero_offers(seed: u64, generation: u32) -> [HeroOffer; HERO_OFFER_COUNT] {
-    let generation_seed = u64::from(generation)
-        .wrapping_add(1)
-        .wrapping_mul(0x9E37_79B9_7F4A_7C15);
-    let mut rng = RunRng::from_seed(seed ^ HERO_OFFER_SEED_SALT ^ generation_seed);
-    let mut selected = Vec::with_capacity(HERO_OFFER_COUNT);
-
-    for primary in [
-        Attribute::Strength,
-        Attribute::Agility,
-        Attribute::Intelligence,
-    ] {
-        let mut candidates: Vec<HeroKind> = HeroKind::ALL
-            .into_iter()
-            .filter(|kind| HEROES[kind.index()].primary == primary)
-            .collect();
-        selected.push(take_weighted_hero(&mut candidates, &mut rng));
-    }
-
-    let mut remaining: Vec<HeroKind> = HeroKind::ALL
-        .into_iter()
-        .filter(|kind| !selected.contains(kind))
-        .collect();
-    while selected.len() < HERO_OFFER_COUNT {
-        selected.push(take_weighted_hero(&mut remaining, &mut rng));
-    }
-    for upper in (1..selected.len()).rev() {
-        let swap_with = rng.next_u32() as usize % (upper + 1);
-        selected.swap(upper, swap_with);
-    }
-
-    std::array::from_fn(|index| {
-        let kind = selected[index];
-        let skill_pool = HEROES[kind.index()].starting_skill_pool;
-        HeroOffer {
-            kind,
-            starting_skill: skill_pool[rng.next_u32() as usize % skill_pool.len()],
-        }
-    })
+fn roll_hero_offers(seed: u64, generation: u32) -> Vec<HeroOffer> {
+    roll_offers(seed, generation, None)
 }
-
-fn hero_selector_safe_x(windows: &Query<&Window, With<PrimaryWindow>>) -> f32 {
-    windows
-        .single()
-        .map(|window| hud_metrics(window.width(), window.height()).safe_x)
-        .unwrap_or(OVERLAY_PADDING)
+fn roll_recruitment_offers(
+    seed: u64,
+    generation: u32,
+    current: HeroKind,
+    fusion: &HeroFusion,
+) -> Vec<HeroOffer> {
+    let mut offers = roll_offers(seed, generation, Some(current));
+    for offer in &mut offers {
+        if let Some(skill) = fusion.starting_skill(offer.kind) {
+            offer.starting_skill = SKILLS[usize::from(skill.0)].id;
+        }
+    }
+    offers
+}
+fn roll_offers(seed: u64, generation: u32, current: Option<HeroKind>) -> Vec<HeroOffer> {
+    let mut rng = RunRng::from_seed(
+        seed ^ HERO_OFFER_SEED_SALT
+            ^ (u64::from(generation) + 1).wrapping_mul(0x9E37_79B9_7F4A_7C15),
+    );
+    let mut pool: Vec<_> = HeroKind::ALL
+        .into_iter()
+        .filter(|kind| {
+            Some(*kind) != current
+                && (current.is_some() || HEROES[kind.index()].rarity == Rarity::R)
+        })
+        .collect();
+    let mut offers = Vec::new();
+    while !pool.is_empty() && offers.len() < HERO_OFFER_COUNT {
+        let kind = take_weighted_hero(&mut pool, &mut rng);
+        let skills = HEROES[kind.index()].starting_skill_pool;
+        offers.push(HeroOffer {
+            kind,
+            starting_skill: skills[rng.next_u32() as usize % skills.len()],
+        });
+    }
+    offers
 }
 
 fn take_weighted_hero(pool: &mut Vec<HeroKind>, rng: &mut RunRng) -> HeroKind {
@@ -826,67 +611,308 @@ fn weighted_hero_index(pool: &[HeroKind], mut roll: u32) -> usize {
         .unwrap_or(pool.len().saturating_sub(1))
 }
 
+pub(crate) fn reset_run(world: &mut World) {
+    world.insert_resource(HeroState::default());
+}
+
 #[cfg(test)]
 mod tests {
     use std::collections::HashSet;
 
     use super::*;
 
-    fn overlay_width(width: f32, percent: f32, max_width: f32) -> f32 {
-        ((width - OVERLAY_PADDING * 2.0) * percent / 100.0).min(max_width)
+    fn recruitment_app(level: u32) -> App {
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<HeroState>()
+            .init_resource::<RecruitmentProgress>()
+            .init_resource::<HeroFusion>()
+            .init_resource::<GameLanguage>()
+            .init_resource::<draft::DraftArt>()
+            .init_resource::<RunSeed>()
+            .init_resource::<SelectedHero>()
+            .init_resource::<GameSession>()
+            .init_resource::<PlayerBuild>()
+            .insert_resource(HeroVitals::for_hero(HeroKind::StormSavant, level))
+            .add_systems(Update, (handle_hero_choice, trigger_recruitment).chain());
+        app.world_mut().resource_mut::<SelectedHero>().locked = true;
+        app.world_mut().resource_mut::<GameSession>().level = level;
+        app
+    }
+
+    fn click_recruit(app: &mut App) {
+        let root = app.world().resource::<HeroState>().root.unwrap();
+        let offer = app.world().resource::<HeroState>().preview.unwrap();
+        let button = app
+            .world_mut()
+            .spawn((HeroChoiceButton(offer), Interaction::Pressed))
+            .id();
+        app.world_mut().entity_mut(root).add_child(button);
+        app.update();
     }
 
     #[test]
-    fn hero_and_evolution_overlays_fit_compact_landscape() {
-        for (width, height) in [(667.0, 375.0), (844.0, 390.0), (1280.0, 720.0)] {
-            let safe_x = hud_metrics(width, height).safe_x;
-            let hero_grid_width = overlay_width(
-                width - safe_x * 2.0 + OVERLAY_PADDING * 2.0,
-                HERO_GRID_WIDTH_PERCENT,
-                HERO_GRID_MAX_WIDTH,
+    fn milestone_recruitment_queues_ten_twenty_forty_once_each() {
+        let mut app = recruitment_app(40);
+        app.update();
+        for level in [10, 20, 40] {
+            assert_eq!(
+                app.world().resource::<RecruitmentProgress>().pending,
+                Some(RecruitmentSource::Milestone(level))
             );
-            let hero_row_width =
-                hero_grid_width * HERO_CARD_WIDTH_PERCENT / 100.0 * 3.0 + HERO_GRID_GAP * 2.0;
-            let hero_grid_rows =
-                HERO_GRID_HEIGHT * HERO_CARD_HEIGHT_PERCENT / 100.0 * 2.0 + HERO_GRID_GAP;
-            let hero_vertical = OVERLAY_PADDING * 2.0
-                + HERO_HEADING_SIZE * 1.2
-                + 10.0 * 1.2
-                + HERO_GRID_GAP * 2.0
-                + HERO_GRID_HEIGHT;
-            assert!(
-                hero_row_width <= hero_grid_width,
-                "hero row at {width}x{height}"
+            let old = app.world().resource::<SelectedHero>().kind;
+            assert_ne!(
+                app.world().resource::<HeroState>().preview.unwrap().kind,
+                old
             );
-            assert!(
-                hero_grid_rows <= HERO_GRID_HEIGHT,
-                "hero rows at {width}x{height}"
-            );
-            assert!(hero_vertical <= height, "hero overlay at {width}x{height}");
-            if width < 1_000.0 || height < 520.0 {
-                assert!(safe_x >= 28.0, "hero safe inset at {width}x{height}");
-            }
+            click_recruit(&mut app);
+        }
+        let progress = app.world().resource::<RecruitmentProgress>();
+        assert_eq!(progress.claimed_milestones, 0b111);
+        assert!(progress.pending.is_none());
+        app.update();
+        assert!(app.world().resource::<HeroState>().root.is_none());
+    }
 
-            let evolution_width = overlay_width(
-                width,
-                EVOLUTION_GRID_WIDTH_PERCENT,
-                EVOLUTION_GRID_MAX_WIDTH,
-            );
-            let evolution_row =
-                evolution_width * EVOLUTION_CARD_WIDTH_PERCENT / 100.0 * 2.0 + EVOLUTION_GRID_GAP;
-            let evolution_vertical = OVERLAY_PADDING * 2.0
-                + HERO_HEADING_SIZE * 1.2
-                + EVOLUTION_GRID_GAP
-                + EVOLUTION_GRID_HEIGHT;
+    #[test]
+    fn real_recruitment_inherits_skills_and_evolution_when_six_slots_are_full() {
+        let mut app = recruitment_app(10);
+        app.init_resource::<SkillEvolution>();
+        app.world_mut().resource_mut::<PlayerBuild>().skills.fill(0);
+        app.world_mut().resource_mut::<PlayerBuild>().skills[..6].fill(5);
+        app.world_mut().resource_mut::<SkillEvolution>().tiers[0] = 3;
+        app.update();
+        let offer = HeroOffer {
+            kind: HeroKind::GroveArtificer,
+            starting_skill: "bolt_turret",
+        };
+        let index = SKILLS
+            .iter()
+            .position(|skill| skill.id == offer.starting_skill)
+            .unwrap();
+        assert!(index >= 6);
+        app.world_mut().resource_mut::<HeroState>().preview = Some(offer);
+        click_recruit(&mut app);
+        let build = app.world().resource::<PlayerBuild>();
+        assert!(build.skills[..6].iter().all(|rank| *rank == 5));
+        assert!(build.skills[index] > 0);
+        assert_eq!(build.skills.iter().filter(|rank| **rank > 0).count(), 7);
+        assert_eq!(app.world().resource::<SkillEvolution>().tiers[0], 3);
+        assert!(
+            app.world()
+                .resource::<HeroFusion>()
+                .has(HeroKind::StormSavant)
+        );
+        assert_eq!(app.world().resource::<HeroFusion>().count(), 1);
+        assert_eq!(
+            app.world()
+                .resource::<HeroFusion>()
+                .starting_skill(offer.kind),
+            Some(SkillId(index as u8))
+        );
+        assert_eq!(
+            app.world().resource::<SkillEvolution>().rewarded_ranks[index],
+            build.skills[index]
+        );
+    }
+
+    #[test]
+    fn repeated_hero_offers_reuse_first_skill_instead_of_gifting_new_slots() {
+        let mut fusion = HeroFusion::default();
+        let kind = HeroKind::GroveArtificer;
+        let index = SKILLS
+            .iter()
+            .position(|skill| skill.id == "bolt_turret")
+            .unwrap();
+        fusion.register_starting_skill(kind, SkillId(index as u8));
+        let mut seen = 0;
+        for seed in 1..50 {
+            for offer in roll_recruitment_offers(seed, 1, HeroKind::StormSavant, &fusion) {
+                if offer.kind == kind {
+                    assert_eq!(offer.starting_skill, "bolt_turret");
+                    seen += 1;
+                }
+            }
+        }
+        assert!(seen > 0);
+    }
+
+    #[test]
+    fn fruit_is_spent_on_card_click_and_retains_build_and_missing_health() {
+        let mut app = recruitment_app(1);
+        {
+            let mut progress = app.world_mut().resource_mut::<RecruitmentProgress>();
+            progress.fruit_count = 1;
+            progress.requested = true;
+        }
+        {
+            let mut build = app.world_mut().resource_mut::<PlayerBuild>();
+            build.skills[7] = 3;
+            build.multishot = 4;
+            build.pierce = 2;
+            build.owned_bond_cards[0] = true;
+        }
+        let before_skills = app.world().resource::<PlayerBuild>().skills;
+        let before_cards = app.world().resource::<PlayerBuild>().owned_bond_cards;
+        app.world_mut().resource_mut::<HeroVitals>().health -= 123.;
+        app.update();
+        assert_eq!(app.world().resource::<RecruitmentProgress>().fruit_count, 1);
+        assert!(app.world().resource::<GameSession>().paused);
+        click_recruit(&mut app);
+        let progress = app.world().resource::<RecruitmentProgress>();
+        assert_eq!(progress.fruit_count, 0);
+        let original = HeroVitals::for_hero(HeroKind::StormSavant, 1);
+        assert_eq!(
+            (
+                progress.absorbed_strength,
+                progress.absorbed_agility,
+                progress.absorbed_intelligence
+            ),
+            (original.strength, original.agility, original.intelligence)
+        );
+        let vitals = app.world().resource::<HeroVitals>();
+        assert!((vitals.max_health - vitals.health - 123.).abs() < 0.001);
+        let build = app.world().resource::<PlayerBuild>();
+        assert!(
+            build
+                .skills
+                .iter()
+                .zip(before_skills)
+                .all(|(after, before)| *after >= before)
+        );
+        assert_eq!(build.owned_bond_cards, before_cards);
+        assert_eq!((build.multishot, build.pierce), (4, 2));
+    }
+
+    #[test]
+    fn swallowing_changes_identity_and_base_health_without_regranting_skill_slots() {
+        let mut progress = RecruitmentProgress::default();
+        let mut build = PlayerBuild::default();
+        let mut vitals = HeroVitals::for_hero(HeroKind::StormSavant, 20);
+        apply_hero_stats(
+            HeroKind::StormSavant,
+            HEROES[HeroKind::StormSavant.index()].starting_skill,
+            20,
+            &mut build,
+            &mut vitals,
+        );
+        build.skills.fill(0);
+        build.skills[..6].fill(2);
+        let skills = build.skills;
+        build.attack_damage += 73.5;
+        vitals.health -= 321.;
+        for kind in [HeroKind::StoneWarden, HeroKind::EmberRanger] {
+            absorb_and_recruit(kind, 20, &mut progress, &mut build, &mut vitals);
+            let intrinsic = HeroVitals::for_hero(kind, 20);
             assert!(
-                evolution_row <= evolution_width,
-                "evolution row at {width}x{height}"
+                (vitals.strength - intrinsic.strength - progress.absorbed_strength).abs() < 0.001
+            );
+            assert!((vitals.agility - intrinsic.agility - progress.absorbed_agility).abs() < 0.001);
+            assert!(
+                (vitals.intelligence - intrinsic.intelligence - progress.absorbed_intelligence)
+                    .abs()
+                    < 0.001
             );
             assert!(
-                evolution_vertical <= height,
-                "evolution overlay at {width}x{height}"
+                (vitals.max_health - intrinsic.max_health - progress.absorbed_strength * 14.).abs()
+                    < 0.01
+            );
+            assert!((vitals.max_health - vitals.health - 321.).abs() < 0.01);
+            assert!((build.attack_damage - vitals.attack_damage() - 73.5).abs() < 0.01);
+            assert_eq!(build.skills, skills);
+            assert_eq!(vitals.kind, kind);
+        }
+    }
+
+    #[test]
+    fn absorbed_intrinsic_attributes_survive_growth_without_copying_existing_buffs() {
+        let mut progress = RecruitmentProgress::default();
+        let mut build = PlayerBuild::default();
+        let mut vitals = HeroVitals::for_hero(HeroKind::StormSavant, 10);
+        vitals.strength += 50.; // Independent equipment bonus, not part of absorbed intrinsic stats.
+        let intrinsic = HeroVitals::for_hero(vitals.kind, 10);
+        absorb_and_recruit(
+            HeroKind::StoneWarden,
+            10,
+            &mut progress,
+            &mut build,
+            &mut vitals,
+        );
+        assert_eq!(progress.absorbed_strength, intrinsic.strength);
+        vitals.synchronize_level(HeroKind::StoneWarden, 11);
+        let next = HeroVitals::for_hero(HeroKind::StoneWarden, 11);
+        assert!((vitals.strength - next.strength - intrinsic.strength - 50.).abs() < 0.001);
+        let before = vitals.strength;
+        vitals.synchronize_level(HeroKind::StoneWarden, 11);
+        assert_eq!(vitals.strength, before);
+        for seed in 1..20 {
+            let offers =
+                roll_recruitment_offers(seed, 1, HeroKind::StormSavant, &HeroFusion::default());
+            assert_eq!(offers.len(), 6);
+            assert!(
+                offers
+                    .iter()
+                    .all(|offer| offer.kind != HeroKind::StormSavant)
+            );
+            assert_eq!(
+                offers
+                    .iter()
+                    .map(|offer| offer.kind)
+                    .collect::<HashSet<_>>()
+                    .len(),
+                6
             );
         }
+    }
+
+    #[test]
+    fn card_growth_survives_level_sync_without_healing_on_idle_frames() {
+        use super::super::bond_catalog::BondCardId;
+        use super::super::bonds::{BondRuntime, BondsPlugin};
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<SelectedHero>()
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<PlayerBuild>()
+            .add_plugins(BondsPlugin)
+            .add_systems(Update, synchronize_hero_growth);
+        app.world_mut()
+            .resource_mut::<PlayerBuild>()
+            .owned_bond_cards[BondCardId::JourneyStrength.index()] = true;
+        app.update();
+        let before = app.world().resource::<HeroVitals>().strength;
+        app.world_mut().resource_mut::<HeroVitals>().health = 7.;
+        for _ in 0..10 {
+            app.update();
+        }
+        assert!((app.world().resource::<HeroVitals>().health - 7.).abs() < 0.001);
+        let old_max = app.world().resource::<HeroVitals>().max_health;
+        app.world_mut().resource_mut::<GameSession>().level = 2;
+        app.update();
+        let vitals = app.world().resource::<HeroVitals>();
+        let base = HeroVitals::for_hero(vitals.kind, 2);
+        assert!((vitals.strength - base.strength - 20.).abs() < 0.001);
+        assert!(vitals.strength > before);
+        assert!(
+            (vitals.health - (7. + vitals.max_health - old_max)).abs() < 0.001,
+            "level growth must not restore the old card health bonus"
+        );
+        assert!(app.world().contains_resource::<BondRuntime>());
+        {
+            let mut vitals = app.world_mut().resource_mut::<HeroVitals>();
+            vitals.alive = false;
+            vitals.health = 0.;
+            vitals.deaths = 2;
+            vitals.revive_remaining = 6.;
+        }
+        app.world_mut().resource_mut::<SelectedHero>().kind = HeroKind::StoneWarden;
+        app.update();
+        let dead = app.world().resource::<HeroVitals>();
+        assert!(!dead.alive);
+        assert_eq!(dead.health, 0.);
+        assert_eq!(dead.deaths, 2);
+        assert_eq!(dead.revive_remaining, 6.);
     }
 
     #[test]
@@ -914,16 +940,74 @@ mod tests {
     }
 
     #[test]
-    fn hero_offers_are_seeded_replayable_and_reroll_once() {
+    fn hero_offers_are_seeded_and_replayable() {
         let first = roll_hero_offers(0xA11CE, 0);
         let replay = roll_hero_offers(0xA11CE, 0);
         let another_seed = roll_hero_offers(0xB0B, 0);
-        let rerolled = roll_hero_offers(0xA11CE, 1);
+        let next_generation = roll_hero_offers(0xA11CE, 1);
 
         assert_eq!(first, replay);
         assert_ne!(first, another_seed);
-        assert_ne!(first, rerolled);
-        assert_eq!(HeroState::default().rerolls_remaining, 1);
+        assert_ne!(first, next_generation);
+    }
+
+    #[test]
+    fn held_pointer_on_new_hero_card_does_not_commit() {
+        let mut app = recruitment_app(10);
+        app.update();
+        let root = app.world().resource::<HeroState>().root.unwrap();
+        let offer = app.world().resource::<HeroState>().preview.unwrap();
+        let mut mouse = ButtonInput::<MouseButton>::default();
+        mouse.press(MouseButton::Left);
+        mouse.clear();
+        app.insert_resource(mouse);
+        app.world_mut()
+            .spawn((HeroChoiceButton(offer), Interaction::Pressed));
+        app.update();
+        assert_eq!(app.world().resource::<HeroState>().root, Some(root));
+        assert_eq!(
+            app.world().resource::<SelectedHero>().kind,
+            HeroKind::StormSavant
+        );
+        assert!(
+            app.world()
+                .resource::<RecruitmentProgress>()
+                .pending
+                .is_some()
+        );
+    }
+    #[test]
+    fn card_click_immediately_commits_initial_hero() {
+        let mut app = App::new();
+        app.init_resource::<HeroState>()
+            .init_resource::<RecruitmentProgress>()
+            .init_resource::<HeroFusion>()
+            .init_resource::<SelectedHero>()
+            .init_resource::<GameSession>()
+            .init_resource::<PlayerBuild>()
+            .init_resource::<HeroVitals>()
+            .add_systems(Update, handle_hero_choice);
+        let root = app.world_mut().spawn_empty().id();
+        app.world_mut().resource_mut::<HeroState>().root = Some(root);
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        let offer = roll_hero_offers(0xA11CE, 0)[0];
+        app.world_mut()
+            .spawn((HeroChoiceButton(offer), Interaction::Pressed));
+        app.update();
+        let selected = app.world().resource::<SelectedHero>();
+        assert!(selected.locked);
+        assert_eq!(selected.kind, offer.kind);
+        assert_eq!(app.world().resource::<HeroVitals>().kind, offer.kind);
+        assert!(!app.world().resource::<GameSession>().paused);
+        assert!(app.world().get_entity(root).is_err());
+        let skill_index = SKILLS
+            .iter()
+            .position(|skill| skill.id == offer.starting_skill)
+            .unwrap();
+        assert_eq!(
+            app.world().resource::<PlayerBuild>().skills[skill_index],
+            HEROES[offer.kind.index()].rarity.starting_skill_rank()
+        );
     }
 
     #[test]
@@ -954,7 +1038,12 @@ mod tests {
         for seed in [1, 2, 0xA11CE, 0xDEAD_BEEF] {
             let offers = roll_hero_offers(seed, 0);
             let unique: HashSet<HeroKind> = offers.iter().map(|offer| offer.kind).collect();
-            assert_eq!(unique.len(), HERO_OFFER_COUNT);
+            assert_eq!(unique.len(), 3);
+            assert!(
+                offers
+                    .iter()
+                    .all(|offer| HEROES[offer.kind.index()].rarity == Rarity::R)
+            );
 
             for primary in [
                 Attribute::Strength,
@@ -997,21 +1086,99 @@ mod tests {
             );
         }
     }
+}
+
+#[derive(Component)]
+enum HeroStaticCopy {
+    Choose,
+}
+fn refresh_hero_language(
+    language: Res<GameLanguage>,
+    mut labels: Query<(&HeroStaticCopy, &mut Text)>,
+) {
+    if !language.is_changed() {
+        return;
+    }
+    for (_, mut text) in &mut labels {
+        **text = language.pick("CHOOSE HERO", "选择英雄").into();
+    }
+}
+
+#[cfg(test)]
+mod live_language_tests {
+    use super::*;
 
     #[test]
-    fn level_growth_preserves_existing_evolution_and_skills() {
-        let mut build = PlayerBuild::default();
-        let mut session = GameSession::default();
-        let mut vitals = HeroVitals::default();
-        build.skills[5] = 3;
-        apply_evolution(0, &mut build, &mut session);
-        let evolved_attack = build.attack_damage;
-
-        let delta = vitals.synchronize_level(HeroKind::StormSavant, 2);
-        apply_growth_delta(&mut build, delta);
-
-        assert!(build.attack_damage > evolved_attack);
-        assert_eq!(build.skills[5], 3);
-        assert!(build.projectile_speed > 19.24 * 1.08);
+    fn language_switch_keeps_existing_recruits_and_preview() {
+        let mut app = App::new();
+        app.init_resource::<GameLanguage>()
+            .init_resource::<PlayerBuild>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<HeroState>()
+            .init_resource::<SelectedHero>()
+            .init_resource::<draft::DraftArt>()
+            .init_resource::<RecruitmentProgress>()
+            .init_resource::<HeroFusion>()
+            .init_resource::<GameSession>()
+            .init_resource::<RunRng>()
+            .add_systems(Update, (draft::refresh_language, draft::update_feedback));
+        let offers = roll_hero_offers(0xA11CE, 2);
+        let root = {
+            let mut commands = app.world_mut().commands();
+            spawn_hero_selector(
+                &mut commands,
+                &offers,
+                &draft::DraftArt::default(),
+                GameLanguage::English,
+            )
+        };
+        app.world_mut().flush();
+        {
+            let mut state = app.world_mut().resource_mut::<HeroState>();
+            state.root = Some(root);
+            state.preview = Some(offers[1]);
+            state.offer_generation = 2;
+        }
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        let rng = app.world().resource::<RunRng>().0;
+        for language in [GameLanguage::SimplifiedChinese, GameLanguage::English] {
+            *app.world_mut().resource_mut::<GameLanguage>() = language;
+            app.update();
+            let state = app.world().resource::<HeroState>();
+            assert_eq!(state.root, Some(root));
+            assert_eq!(state.preview, Some(offers[1]));
+            assert_eq!(state.offer_generation, 2);
+            assert!(app.world().resource::<GameSession>().paused);
+            assert_eq!(app.world().resource::<RunRng>().0, rng);
+            let choices: Vec<_> = app
+                .world_mut()
+                .query::<&HeroChoiceButton>()
+                .iter(app.world())
+                .map(|button| button.0)
+                .collect();
+            assert_eq!(choices.len(), offers.len());
+            assert!(offers.iter().all(|offer| choices.contains(offer)));
+            let headings: Vec<_> = app
+                .world_mut()
+                .query_filtered::<&Text, With<draft::DraftHeading>>()
+                .iter(app.world())
+                .map(|text| text.0.clone())
+                .collect();
+            assert_eq!(
+                headings,
+                [language.pick("Click a basic commander to begin", "点击基础指挥官开始远征")]
+            );
+            let names: Vec<_> = app
+                .world_mut()
+                .query_filtered::<&Text, With<draft::DraftCardName>>()
+                .iter(app.world())
+                .map(|text| text.0.clone())
+                .collect();
+            assert!(
+                offers
+                    .iter()
+                    .all(|offer| names.contains(&hero_name(language, offer.kind)))
+            );
+        }
     }
 }

@@ -1,6 +1,12 @@
-use bevy::{camera::ScalingMode, prelude::*};
+use bevy::{
+    camera::ScalingMode,
+    core_pipeline::tonemapping::Tonemapping,
+    post_process::bloom::{Bloom, BloomPrefilter},
+    prelude::*,
+};
 
-use super::environment::{ArtBob, ArtPulse, ArtSpin};
+use super::environment::spawn_gate_art;
+use super::gate_feedback::GateArt;
 use super::{ArenaEntity, CaptureTarget, Core, GameAssets, Hero, HeroVisual};
 
 pub struct ArenaPlugin;
@@ -17,6 +23,7 @@ fn setup_arena(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
     capture_target: Option<Res<CaptureTarget>>,
+    selected: Res<super::SelectedHero>,
 ) {
     let hero_scenes = [
         asset_server.load("models/hero_storm_savant.glb#Scene0"),
@@ -62,23 +69,14 @@ fn setup_arena(
         asset_server.load("models/summon_ancestor_colossus.glb#Scene0"),
     ];
     commands.insert_resource(GlobalAmbientLight {
-        color: Color::srgb(0.26, 0.38, 0.48),
-        brightness: 90.0,
+        color: Color::srgb(0.48, 0.58, 0.68),
+        brightness: 220.0,
         ..default()
     });
     let ground = materials.add(StandardMaterial {
         base_color: Color::srgb(0.055, 0.12, 0.13),
-        perceptual_roughness: 0.95,
-        ..default()
-    });
-    let path = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.13, 0.19, 0.18),
-        perceptual_roughness: 0.9,
-        ..default()
-    });
-    let rune = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.05, 0.38, 0.44),
-        emissive: LinearRgba::new(0.0, 1.8, 2.4, 1.0),
+        perceptual_roughness: 1.0,
+        reflectance: 0.18,
         ..default()
     });
     let hero_material = materials.add(StandardMaterial {
@@ -156,12 +154,6 @@ fn setup_arena(
             ..default()
         }),
     ];
-    let core_material = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.18, 0.9, 0.78),
-        emissive: LinearRgba::new(0.0, 1.8, 1.2, 1.0),
-        metallic: 0.3,
-        ..default()
-    });
     let enemy_material = materials.add(StandardMaterial {
         base_color: Color::srgb(0.75, 0.12, 0.25),
         emissive: LinearRgba::new(0.3, 0.0, 0.03, 1.0),
@@ -239,24 +231,8 @@ fn setup_arena(
         ..default()
     });
 
-    let enemy_mesh = meshes.add(Capsule3d::new(0.36, 0.7));
-    let enemy_meshes = [
-        enemy_mesh.clone(),
-        meshes.add(Sphere::new(0.58).mesh().ico(1).unwrap()),
-        meshes.add(Cuboid::new(0.9, 1.05, 0.72)),
-        meshes.add(ConicalFrustum {
-            radius_top: 0.22,
-            radius_bottom: 0.64,
-            height: 1.25,
-        }),
-    ];
-    let elite_mesh = meshes.add(ConicalFrustum {
-        radius_top: 0.38,
-        radius_bottom: 0.72,
-        height: 1.6,
-    });
     let projectile_mesh = meshes.add(Sphere::new(0.16).mesh().ico(2).unwrap());
-    let fx_mesh = meshes.add(Torus::new(0.86, 1.0));
+    let fx_mesh = meshes.add(super::energy_art::halo_mesh());
     let hero_shadow_mesh = meshes.add(Circle::new(0.92));
     let core_shadow_mesh = meshes.add(Circle::new(1.65));
 
@@ -265,9 +241,6 @@ fn setup_arena(
         enemy_scenes,
         boss_scenes,
         summon_scenes,
-        enemy_mesh,
-        enemy_meshes,
-        elite_mesh,
         projectile_mesh,
         fx_mesh,
         enemy_material,
@@ -280,57 +253,45 @@ fn setup_arena(
     });
 
     commands.spawn((
-        Mesh3d(meshes.add(Plane3d::default().mesh().size(48.0, 30.0))),
+        Mesh3d(meshes.add(Plane3d::default().mesh().size(80.0, 80.0))),
         MeshMaterial3d(ground.clone()),
+        Transform::from_xyz(0.0, -0.16, 0.0),
         ArenaEntity,
     ));
 
-    commands.spawn((
-        Mesh3d(meshes.add(Cuboid::new(35.0, 0.12, 10.5))),
-        MeshMaterial3d(path.clone()),
-        Transform::from_xyz(0.5, 0.055, 0.0),
-        ArenaEntity,
-    ));
-
-    let tile_mesh = meshes.add(Cuboid::new(1.45, 0.06, 4.55));
-    for i in 0..23 {
-        let x = -15.5 + i as f32 * 1.43;
-        commands.spawn((
-            Mesh3d(tile_mesh.clone()),
-            MeshMaterial3d(if i % 2 == 0 {
-                path.clone()
-            } else {
-                ground.clone()
-            }),
-            Transform::from_xyz(x, 0.12, if i % 2 == 0 { -2.45 } else { 2.45 }),
-            ArenaEntity,
-        ));
-    }
-
-    for z in [-5.65, 5.65] {
-        for i in 0..12 {
+    let paving = asset_server.load("models/environment_floor.glb#Scene0");
+    for column in 0..18 {
+        for row in 0..5 {
             commands.spawn((
-                Mesh3d(meshes.add(Cuboid::new(2.35, 0.65, 0.42))),
-                MeshMaterial3d(path.clone()),
-                Transform::from_xyz(-12.5 + i as f32 * 2.55, 0.28, z),
+                WorldAssetRoot(paving.clone()),
+                Transform::from_xyz(-16.5 + column as f32 * 2.0, -0.15, -4.0 + row as f32 * 2.0)
+                    .with_scale(Vec3::splat(0.15)),
+                ArenaEntity,
+            ));
+        }
+    }
+    let border = asset_server.load("models/environment_border.glb#Scene0");
+    for z in [-5.65_f32, 5.65] {
+        for i in 0..12 {
+            let x: f32 = -12.5 + i as f32 * 2.55;
+            if super::encounter_bosses::ADVENTURE_SITES
+                .iter()
+                .any(|site| site.z.signum() == z.signum() && (site.x - x).abs() < 2.0)
+            {
+                continue;
+            }
+            commands.spawn((
+                WorldAssetRoot(border.clone()),
+                Transform::from_xyz(-12.5 + i as f32 * 2.55, 0.0, z).with_scale(Vec3::splat(0.64)),
                 ArenaEntity,
             ));
         }
     }
 
-    for z in [-3.2, 0.0, 3.2] {
-        commands.spawn((
-            Mesh3d(meshes.add(Cuboid::new(6.0, 0.035, 0.1))),
-            MeshMaterial3d(rune.clone()),
-            Transform::from_xyz(-8.8, 0.14, z),
-            ArenaEntity,
-        ));
-    }
-
     commands
         .spawn((
             Core,
-            Transform::from_xyz(-14.8, 1.0, 0.0),
+            Transform::from_translation(super::resources::GATE_POSITION),
             Visibility::default(),
             ArenaEntity,
         ))
@@ -340,33 +301,22 @@ fn setup_arena(
                 MeshMaterial3d(contact_shadow.clone()),
                 Transform::from_xyz(0.0, -0.95, 0.0)
                     .with_rotation(Quat::from_rotation_x(-std::f32::consts::FRAC_PI_2))
-                    .with_scale(Vec3::new(1.0, 0.62, 1.0)),
+                    .with_scale(Vec3::new(0.65, 1.45, 1.0)),
             ));
             parent.spawn((
-                Mesh3d(meshes.add(Cylinder::new(1.4, 0.35))),
-                MeshMaterial3d(path.clone()),
-                Transform::from_xyz(0.0, -0.8, 0.0),
+                WorldAssetRoot(paving.clone()),
+                Transform::from_xyz(0.0, -0.98, 0.0).with_scale(Vec3::splat(0.18)),
             ));
-            parent.spawn((
-                Mesh3d(meshes.add(Tetrahedron::new(
-                    Vec3::new(0.0, 1.15, 0.0),
-                    Vec3::new(-0.9, -0.75, 0.72),
-                    Vec3::new(0.9, -0.75, 0.72),
-                    Vec3::new(0.0, -0.75, -0.95),
-                ))),
-                MeshMaterial3d(core_material.clone()),
-                Transform::from_rotation(Quat::from_rotation_z(0.45)),
-                ArtSpin {
-                    axis: Vec3::Y,
-                    speed: 0.52,
-                },
-                ArtPulse {
-                    base_scale: Vec3::ONE,
-                    amplitude: 0.07,
-                    speed: 1.8,
-                    phase: 0.0,
-                },
-            ));
+            parent
+                .spawn((
+                    Name::new("Gate art"),
+                    GateArt,
+                    Transform::default(),
+                    Visibility::default(),
+                ))
+                .with_children(|art| {
+                    spawn_gate_art(art, &asset_server, &mut meshes, &mut materials);
+                });
         });
 
     commands
@@ -386,60 +336,39 @@ fn setup_arena(
             ));
             parent.spawn((
                 HeroVisual,
-                WorldAssetRoot(hero_scenes[0].clone()),
-                Transform::from_rotation(Quat::from_rotation_y(-std::f32::consts::FRAC_PI_2)),
-                ArtBob {
-                    base_y: 0.0,
-                    amplitude: 0.055,
-                    speed: 2.2,
-                    phase: 0.0,
-                },
+                WorldAssetRoot(hero_scenes[selected.kind.index()].clone()),
+                Transform::default(),
             ));
         });
-
-    let portal_material = materials.add(StandardMaterial {
-        base_color: Color::srgba(0.08, 0.82, 0.43, 0.72),
-        emissive: LinearRgba::new(0.05, 4.5, 1.2, 1.0),
-        alpha_mode: AlphaMode::Blend,
-        unlit: true,
-        ..default()
-    });
-    commands
-        .spawn((
-            Transform::from_xyz(14.6, 2.35, 0.0),
-            Visibility::default(),
-            ArenaEntity,
-        ))
-        .with_children(|portal| {
-            portal.spawn((
-                Mesh3d(meshes.add(Torus::new(1.65, 2.18))),
-                MeshMaterial3d(portal_material.clone()),
-                Transform::from_rotation(Quat::from_rotation_z(std::f32::consts::FRAC_PI_2)),
-            ));
-            portal.spawn((
-                Mesh3d(meshes.add(Cylinder::new(1.62, 0.08))),
-                MeshMaterial3d(portal_material.clone()),
-                Transform::from_rotation(Quat::from_rotation_z(std::f32::consts::FRAC_PI_2))
-                    .with_scale(Vec3::new(1.0, 1.0, 0.72)),
-            ));
-        });
-
-    for z in [-2.65, 2.65] {
-        commands.spawn((
-            Mesh3d(meshes.add(Cuboid::new(1.1, 4.8, 1.1))),
-            MeshMaterial3d(path.clone()),
-            Transform::from_xyz(14.6, 2.25, z),
-            ArenaEntity,
-        ));
-    }
 
     commands.spawn((
         DirectionalLight {
-            illuminance: 4_500.0,
+            color: Color::srgb(1.0, 0.91, 0.80),
+            illuminance: 4_000.0,
+            shadow_maps_enabled: true,
+            ..default()
+        },
+        bevy::light::CascadeShadowConfigBuilder {
+            num_cascades: 2,
+            maximum_distance: 65.0,
+            first_cascade_far_bound: 32.0,
+            ..default()
+        }
+        .build(),
+        Transform::from_rotation(Quat::from_euler(EulerRot::ZYX, -0.35, -0.7, -0.9)),
+    ));
+
+    // A dim, unshadowed sky fill keeps shaded model faces readable without
+    // adding another cascade map or flattening the warmer sunlit surfaces.
+    commands.spawn((
+        Name::new("Cool sky fill"),
+        DirectionalLight {
+            color: Color::srgb(0.66, 0.79, 1.0),
+            illuminance: 650.0,
             shadow_maps_enabled: false,
             ..default()
         },
-        Transform::from_rotation(Quat::from_euler(EulerRot::ZYX, -0.35, -0.7, -0.9)),
+        Transform::from_xyz(8.0, 15.0, 18.0).looking_at(Vec3::ZERO, Vec3::Y),
     ));
 
     let camera_projection = Projection::from(OrthographicProjection {
@@ -449,23 +378,38 @@ fn setup_arena(
         ..OrthographicProjection::default_3d()
     });
     let camera_transform =
-        Transform::from_xyz(0.0, 24.0, 21.0).looking_at(Vec3::new(0.0, 0.0, 0.0), Vec3::Y);
+        Transform::from_xyz(8.0, 24.0, 21.0).looking_at(Vec3::new(0.0, 0.0, 0.0), Vec3::Y);
     if let Some(target) = capture_target {
         commands.spawn((
             Camera3d::default(),
+            combat_bloom(),
+            Tonemapping::TonyMcMapface,
             bevy::camera::RenderTarget::Image(target.0.clone().into()),
             camera_projection,
             camera_transform,
             Msaa::Off,
-            IsDefaultUiCamera,
         ));
     } else {
         commands.spawn((
             Camera3d::default(),
+            combat_bloom(),
+            Tonemapping::TonyMcMapface,
             camera_projection,
             camera_transform,
             Msaa::Off,
-            IsDefaultUiCamera,
         ));
+    }
+}
+
+// Extract emissive spell light rather than blurring the ordinary battlefield.
+fn combat_bloom() -> Bloom {
+    Bloom {
+        intensity: 0.16,
+        low_frequency_boost: 0.35,
+        prefilter: BloomPrefilter {
+            threshold: 1.4,
+            threshold_softness: 0.4,
+        },
+        ..Bloom::OLD_SCHOOL
     }
 }

@@ -1,0 +1,65 @@
+Validation: hero attributes, speed controls, orbit blade
+Native build: PASS
+Library tests: 304 passed, 0 failed
+Clippy --all-targets -- -D warnings: PASS
+UI asset integrity: PASS
+
+hero-attributes-en-1280x720.log
+[capture] actual speed control -> 2x
+[capture] actual speed control -> 4x
+[capture] actual speed control -> 8x
+[capture] actual speed control -> 16x
+[capture] actual speed control -> 32x
+[capture] actual speed control -> 32x
+[capture] actual speed control -> 16x
+[capture] actual speed control -> 1x
+[capture] actual speed control -> 1x
+[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport
+[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport
+[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport
+[capture] PASS: 1→2→4→8→16→32, upper/lower clamps, halve/reset; live sheet open/close/Esc; no ultimate HUD
+hero-attributes-zh-1280x720.log
+[capture] actual speed control -> 2x
+[capture] actual speed control -> 4x
+[capture] actual speed control -> 8x
+[capture] actual speed control -> 16x
+[capture] actual speed control -> 32x
+[capture] actual speed control -> 32x
+[capture] actual speed control -> 16x
+[capture] actual speed control -> 1x
+[capture] actual speed control -> 1x
+[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport
+[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport
+[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport
+[capture] PASS: 1→2→4→8→16→32, upper/lower clamps, halve/reset; live sheet open/close/Esc; no ultimate HUD
+hero-attributes-zh-390x844.log
+[capture] actual speed control -> 2x
+[capture] actual speed control -> 4x
+[capture] actual speed control -> 8x
+[capture] actual speed control -> 16x
+[capture] actual speed control -> 32x
+[capture] actual speed control -> 32x
+[capture] actual speed control -> 16x
+[capture] actual speed control -> 1x
+[capture] actual speed control -> 1x
+[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport
+[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport
+[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport
+[capture] PASS: 1→2→4→8→16→32, upper/lower clamps, halve/reset; live sheet open/close/Esc; no ultimate HUD
+hero-attributes-zh-667x375.log
+[capture] actual speed control -> 2x
+[capture] actual speed control -> 4x
+[capture] actual speed control -> 8x
+[capture] actual speed control -> 16x
+[capture] actual speed control -> 32x
+[capture] actual speed control -> 32x
+[capture] actual speed control -> 16x
+[capture] actual speed control -> 1x
+[capture] actual speed control -> 1x
+[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport
+[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport
+[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport
+[capture] PASS: 1→2→4→8→16→32, upper/lower clamps, halve/reset; live sheet open/close/Esc; no ultimate HUD
+
+Orbit Blade: desktop 1280x720 and compact 667x375 captured and inspected before restart. Rank 1/3/5 authored blade count, scale, orbit radius, trails and real damage passed. Original /tmp logs were lost in restart; screenshots and videos remain.
+Portrait sheet contents scroll; viewport assertions apply to panel/close button, field dimensions, and all landscape labels. Physical-device touch scrolling was not tested.

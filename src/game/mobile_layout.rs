@@ -1,5 +1,42 @@
 use bevy::prelude::*;
 
+/// Input mode is independent of viewport size: small desktop windows still use keys.
+#[derive(Resource, Clone, Copy, Debug, PartialEq, Eq)]
+pub struct ControlScheme {
+    pub touch: bool,
+}
+impl Default for ControlScheme {
+    fn default() -> Self {
+        #[cfg(target_arch = "wasm32")]
+        let touch = web_sys::window()
+            .and_then(|window| window.match_media("(pointer: coarse)").ok().flatten())
+            .is_some_and(|query| query.matches());
+        #[cfg(not(target_arch = "wasm32"))]
+        let touch = cfg!(any(target_os = "android", target_os = "ios"));
+        Self { touch }
+    }
+}
+impl ControlScheme {
+    fn observe(&mut self, touch_pressed: bool, key_pressed: bool) {
+        if touch_pressed {
+            self.touch = true;
+        } else if key_pressed {
+            self.touch = false;
+        }
+    }
+}
+
+pub(super) fn update_control_scheme(
+    touches: Res<Touches>,
+    keyboard: Res<ButtonInput<KeyCode>>,
+    mut scheme: ResMut<ControlScheme>,
+) {
+    scheme.observe(
+        touches.iter_just_pressed().next().is_some(),
+        keyboard.get_just_pressed().next().is_some(),
+    );
+}
+
 /// Shared measurements for the compact landscape HUD and its touch controls.
 ///
 /// Coordinates use Bevy's logical window space with the origin at the top left.
@@ -47,6 +84,21 @@ pub fn hud_metrics(width: f32, height: f32) -> HudMetrics {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn input_scheme_follows_input_and_persists_without_input() {
+        let mut scheme = ControlScheme { touch: false };
+        scheme.observe(false, false);
+        assert!(!scheme.touch);
+        scheme.observe(true, false);
+        assert!(scheme.touch);
+        scheme.observe(false, false);
+        assert!(scheme.touch);
+        scheme.observe(false, true);
+        assert!(!scheme.touch);
+        scheme.observe(true, true);
+        assert!(scheme.touch);
+    }
 
     #[test]
     fn compact_phone_metrics_keep_the_joystick_inside_the_safe_viewport() {

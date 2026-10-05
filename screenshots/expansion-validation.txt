@@ -1,0 +1,86 @@
+Progression expansion and enemy attack verification — 2026-09-30
+Native binaries: PASS
+Library tests: 340 passed, 0 failed
+Clippy --all-targets -- -D warnings: PASS
+PASS: 32 skill icons, 26 bond icons, 16 action icons, 12 portraits; 101 cards / 26 families mapped; PNG checksums and payloads valid
+12 native render scenarios: desktop + compact + English UI
+Chinese glyph coverage: PASS (bundled font test)
+Catalog: 26 families / 101 unique cards / 32 skills
+Post-mastery: 3 ascension stages per equipped skill; six full slots still offer training and explicit UR replacement.
+Reference boundary: public evidence and original adaptations are distinguished in docs/bond-pool-expansion.md.
+
+enemy-attacks-1280x720
+[capture] PASS pause freezes 19 enemy/effect transforms
+[capture] PASS enemy-attacks: hero 1128.0->1012.4, core 1000.0->916.1, shot/slash/impact, stable facing, cap 240
+
+enemy-attacks-667x375
+[capture] PASS pause freezes 19 enemy/effect transforms
+[capture] PASS enemy-attacks: hero 1128.0->1012.4, core 1000.0->916.1, shot/slash/impact, stable facing, cap 240
+
+growth-mastery-1280x720
+[capture] PASS: late draw offers [Evolution { skill: SkillId(16), tier: 1 }, Evolution { skill: SkillId(18), tier: 1 }, ReplaceSkill { old: SkillId(6), new: SkillId(29) }]
+[capture] PASS: mastered skill SkillId(16) ascended to 1; six occupied slots retained
+[capture] PASS: explicit UR replacement SkillId(16) -> SkillId(27); six slots, old skill removed
+[capture] PASS: real flame beam and armed mine spawned, enemies damaged, ascension toast displayed
+
+growth-mastery-667x375
+[capture] PASS: late draw offers [Evolution { skill: SkillId(16), tier: 1 }, Evolution { skill: SkillId(18), tier: 1 }, ReplaceSkill { old: SkillId(6), new: SkillId(29) }]
+[capture] PASS: mastered skill SkillId(16) ascended to 1; six occupied slots retained
+[capture] PASS: explicit UR replacement SkillId(16) -> SkillId(27); six slots, old skill removed
+[capture] PASS: real flame beam and armed mine spawned, enemies damaged, ascension toast displayed
+
+growth-cultivation-1280x720
+[capture] PASS: late draw offers [Bond(SpiritVessel)]
+[capture] PASS: actual confirmation completed cultivation 8/8 and unlocked all 12 spirit-energy cards
+[capture] PASS: first spirit-energy card acquired through actual draw and confirmation
+
+growth-cultivation-667x375
+[capture] PASS: late draw offers [Bond(SpiritVessel)]
+[capture] PASS: actual confirmation completed cultivation 8/8 and unlocked all 12 spirit-energy cards
+[capture] PASS: first spirit-energy card acquired through actual draw and confirmation
+
+cultivation-combat-1280x720
+[capture] PASS cultivation-combat: hero 10000.0->9405.4, enemy 100000.0->82759.5, cauldron observed, native attacks 74 > scheduled 49
+
+cultivation-combat-667x375
+[capture] PASS cultivation-combat: hero 10000.0->9405.4, enemy 100000.0->82759.5, cauldron observed, native attacks 74 > scheduled 49
+
+bond-collection-1280x720
+[capture] PASS collection shows Mortal Cultivation card data
+[capture] PASS collection: 26 families, 12 Spirit Energy cards, paused, measured Vec2(1000.0, 660.0)
+[capture] PASS collection wheel reaches final spirit_unity card; offset 5200.0
+[capture] PASS Escape closes collection and restores combat
+[capture] PASS H opens collection and pauses combat
+[capture] PASS collection wheel reaches final spirit_unity card; offset 5200.0
+[capture] PASS H closes collection and restores combat
+[capture] PASS H opens collection and pauses combat
+
+bond-collection-667x375
+[capture] PASS collection shows Mortal Cultivation card data
+[capture] PASS collection: 26 families, 12 Spirit Energy cards, paused, measured Vec2(651.0, 359.0)
+[capture] PASS collection wheel reaches final spirit_unity card; offset 5200.0
+[capture] PASS Escape closes collection and restores combat
+[capture] PASS H opens collection and pauses combat
+[capture] PASS collection wheel reaches final spirit_unity card; offset 5200.0
+[capture] PASS H closes collection and restores combat
+[capture] PASS H opens collection and pauses combat
+
+bond-collection-en-1280x720
+[capture] PASS collection shows Mortal Cultivation card data
+[capture] PASS collection: 26 families, 12 Spirit Energy cards, paused, measured Vec2(1000.0, 660.0)
+[capture] PASS collection wheel reaches final spirit_unity card; offset 5200.0
+[capture] PASS Escape closes collection and restores combat
+[capture] PASS H opens collection and pauses combat
+[capture] PASS collection wheel reaches final spirit_unity card; offset 5200.0
+[capture] PASS H closes collection and restores combat
+[capture] PASS H opens collection and pauses combat
+
+growth-mastery-en-1280x720
+[capture] PASS: late draw offers [Evolution { skill: SkillId(16), tier: 1 }, Evolution { skill: SkillId(18), tier: 1 }, ReplaceSkill { old: SkillId(6), new: SkillId(29) }]
+[capture] PASS: mastered skill SkillId(16) ascended to 1; six occupied slots retained
+[capture] PASS: explicit UR replacement SkillId(16) -> SkillId(27); six slots, old skill removed
+[capture] PASS: real flame beam and armed mine spawned, enemies damaged, ascension toast displayed
+
+Visual inspection: desktop and compact draft, ascension toast, UR replacement, cultivation completion, cauldron combat, collection views.
+The collection wheel test measures the final Spirit Energy card inside the clipped viewport; H open/close/reopen and Escape resume are verified.
+Known preexisting engine log noise: ICU4X emits “No segmentation model for language: ja” for CJK text; font coverage and rendered Chinese labels pass.

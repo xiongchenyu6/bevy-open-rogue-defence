@@ -39,6 +39,11 @@ jobs:
       - name: Install wasm-bindgen CLI
         run: cargo install wasm-bindgen-cli --version 0.2.126 --locked
 
+      - name: Verify game artwork
+        run: |
+          python3 tools/verify_models.py
+          python3 tools/verify_ui_assets.py
+
       - name: Build web distribution
         run: bash scripts/build-wasm.sh
 

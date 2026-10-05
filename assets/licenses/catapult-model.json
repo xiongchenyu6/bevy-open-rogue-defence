@@ -1,0 +1,10 @@
+{
+  "source": "https://raw.githubusercontent.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0/84fa4e91af6a88989be7c99e0891cede11f2ca38/addons/kaykit_medieval_hexagon_pack/Assets/gltf/buildings/blue/building_tower_catapult_blue.gltf",
+  "commit": "84fa4e91af6a88989be7c99e0891cede11f2ca38",
+  "source_sha256": "cc23de622ab29c4850e0eb4343f35a2db2b3e54662d0dc4192e3febf327d2f42",
+  "output_sha256": "6c999ef0ccae6e0464ca040cf2c823c486d6dabad3c5c6700cad019aab64bbde",
+  "normalization": "Y-up unit-height; horizontal center and lowest Y at origin",
+  "arm_node": 0,
+  "turret_node": 1,
+  "original_height": 1.9640908241271973
+}

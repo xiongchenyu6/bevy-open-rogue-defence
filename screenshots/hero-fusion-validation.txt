@@ -1,0 +1,19 @@
+Hero absorption validation — 2026-09-30
+clippy: PASS
+test result: ok. 353 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+build: PASS
+hero-fusion-zh-1280x720
+[capture] PASS: recruitment 1, unique inherited heroes=1, capacity=7, retained every old rank/tier
+[capture] PASS: recruitment 2, unique inherited heroes=2, capacity=8, retained every old rank/tier
+[capture] PASS: both inherited weapons emitted real combat attacks [19, 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0]; enemies damaged
+[capture] PASS: both inherited hero portraits/weapon/ability rows available in bounded attribute sheet
+hero-fusion-zh-667x375
+[capture] PASS: recruitment 1, unique inherited heroes=1, capacity=7, retained every old rank/tier
+[capture] PASS: recruitment 2, unique inherited heroes=2, capacity=8, retained every old rank/tier
+[capture] PASS: both inherited weapons emitted real combat attacks [19, 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0]; enemies damaged
+[capture] PASS: both inherited hero portraits/weapon/ability rows available in bounded attribute sheet
+hero-fusion-en-1280x720
+[capture] PASS: recruitment 1, unique inherited heroes=1, capacity=7, retained every old rank/tier
+[capture] PASS: recruitment 2, unique inherited heroes=2, capacity=8, retained every old rank/tier
+[capture] PASS: both inherited weapons emitted real combat attacks [19, 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0]; enemies damaged
+[capture] PASS: both inherited hero portraits/weapon/ability rows available in bounded attribute sheet

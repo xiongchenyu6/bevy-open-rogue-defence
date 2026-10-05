@@ -1,12 +1,68 @@
 use bevy::prelude::*;
 
 use super::HeroKind;
-use super::content::{
-    Attribute, BONDS, BondDef, HEROES, Rarity, SKILLS, SkillDef, SkillEffectKind,
-};
+pub use super::bond_catalog::BondCardId;
+use super::bond_catalog::{BOND_FAMILIES, BondFamilyDef};
+use super::content::{Attribute, HEROES, Rarity, SKILLS, SkillDef};
+
+pub const MAX_HERO_LEVEL: u32 = 60;
+pub const RECRUITMENT_LEVELS: [u32; 3] = [10, 20, 40];
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum RecruitmentSource {
+    Milestone(u32),
+    Fruit,
+}
+#[derive(Resource, Debug, Default)]
+pub struct RecruitmentProgress {
+    pub fruit_count: u32,
+    pub claimed_milestones: u8,
+    pub absorbed_strength: f32,
+    pub absorbed_agility: f32,
+    pub absorbed_intelligence: f32,
+    pub pending: Option<RecruitmentSource>,
+    pub requested: bool,
+}
+impl RecruitmentProgress {
+    pub fn next_milestone(&self, level: u32) -> Option<u32> {
+        RECRUITMENT_LEVELS
+            .into_iter()
+            .enumerate()
+            .find_map(|(index, required)| {
+                (level >= required && self.claimed_milestones & (1 << index) == 0)
+                    .then_some(required)
+            })
+    }
+    pub fn claim(&mut self, source: RecruitmentSource) -> bool {
+        match source {
+            RecruitmentSource::Fruit => {
+                if self.fruit_count == 0 {
+                    return false;
+                }
+                self.fruit_count -= 1;
+            }
+            RecruitmentSource::Milestone(level) => {
+                let Some(index) = RECRUITMENT_LEVELS
+                    .iter()
+                    .position(|required| *required == level)
+                else {
+                    return false;
+                };
+                if self.claimed_milestones & (1 << index) != 0 {
+                    return false;
+                }
+                self.claimed_milestones |= 1 << index;
+            }
+        }
+        self.pending = None;
+        true
+    }
+}
 
 pub const HERO_REVIVE_BASE_SECONDS: f32 = 8.0;
 pub const HERO_REVIVE_STEP_SECONDS: f32 = 3.0;
+pub const HERO_TOTAL_LIVES: u32 = 3;
+pub const GATE_REBUILD_SECONDS: f32 = 4.0;
+pub const GATE_POSITION: Vec3 = Vec3::new(-5.2, 1.0, 0.0);
 pub const HERO_RESPAWN_INVULNERABILITY: f32 = 1.2;
 pub const HERO_RESPAWN_POSITION: Vec3 = Vec3::new(-8.2, 0.0, 0.0);
 pub const DODGE_COOLDOWN_SECONDS: f32 = 4.5;
@@ -20,6 +76,7 @@ pub struct GameSession {
     pub wave: u32,
     pub core_hp: f32,
     pub core_max_hp: f32,
+    pub gate_revive_remaining: f32,
     pub level: u32,
     pub xp: u32,
     pub xp_next: u32,
@@ -28,7 +85,9 @@ pub struct GameSession {
     pub gold_income_accum: f32,
     pub wood: u32,
     pub bond_draws: u32,
-    pub next_auto_bond_at: f32,
+    /// Lets autoplay open F drafts. Capture scenarios switch it off to keep
+    /// bond drafts out of frame; manual F is unaffected.
+    pub auto_bond_draws: bool,
     pub kills: u32,
     pub total_kills: u32,
     pub bosses_defeated: u8,
@@ -41,6 +100,18 @@ pub struct GameSession {
     pub victory: bool,
 }
 
+impl GameSession {
+    /// A collapsed gate must finish rebuilding; healing cannot skip its downtime.
+    pub fn heal_gate(&mut self, amount: f32) -> f32 {
+        if self.core_hp <= 0.0 || self.gate_revive_remaining > 0.0 {
+            return 0.0;
+        }
+        let before = self.core_hp;
+        self.core_hp = (self.core_hp + amount.max(0.0)).min(self.core_max_hp);
+        self.core_hp - before
+    }
+}
+
 impl Default for GameSession {
     fn default() -> Self {
         Self {
@@ -49,6 +120,7 @@ impl Default for GameSession {
             wave: 1,
             core_hp: 1_000.0,
             core_max_hp: 1_000.0,
+            gate_revive_remaining: 0.0,
             level: 1,
             xp: 0,
             xp_next: 60,
@@ -57,13 +129,13 @@ impl Default for GameSession {
             gold_income_accum: 0.0,
             wood: 60,
             bond_draws: 0,
-            next_auto_bond_at: 18.0,
+            auto_bond_draws: true,
             kills: 0,
             total_kills: 0,
             bosses_defeated: 0,
             save_active: false,
             save_remaining: 60.0,
-            skill_points: 1,
+            skill_points: 0,
             skill_rerolls: 1,
             paused: false,
             finished: false,
@@ -143,6 +215,7 @@ pub struct HeroVitals {
     pub health: f32,
     pub max_health: f32,
     pub command_health_multiplier: f32,
+    pub permanent_spell_power: f32,
     pub energy: f32,
     pub max_energy: f32,
     pub armor: f32,
@@ -165,7 +238,7 @@ pub struct HeroProgressionDelta {
 
 impl HeroVitals {
     pub fn for_hero(kind: HeroKind, level: u32) -> Self {
-        let level = level.clamp(1, 30);
+        let level = level.clamp(1, MAX_HERO_LEVEL);
         let hero = HEROES[kind.index()];
         let rarity_multiplier = hero.rarity.hero_stat_multiplier();
         let level_index = level.saturating_sub(1) as f32;
@@ -186,6 +259,7 @@ impl HeroVitals {
             health: max_health,
             max_health,
             command_health_multiplier: 1.0,
+            permanent_spell_power: 0.0,
             energy: max_energy,
             max_energy,
             // N1 heroes begin without innate armor; equipment may add it.
@@ -212,8 +286,14 @@ impl HeroVitals {
             let previous_max_health = self.max_health;
             let previous_max_energy = self.max_energy;
             let command_health_multiplier = self.command_health_multiplier;
+            let permanent_spell_power = self.permanent_spell_power;
+            let armor = self.armor;
+            let magic_resistance = self.magic_resistance;
             self.reset_for_hero(kind, level);
+            self.armor = armor;
+            self.magic_resistance = magic_resistance;
             self.command_health_multiplier = command_health_multiplier;
+            self.permanent_spell_power = permanent_spell_power;
             self.max_health *= command_health_multiplier;
             self.health = self.max_health;
             return HeroProgressionDelta {
@@ -229,20 +309,22 @@ impl HeroVitals {
             return HeroProgressionDelta::default();
         }
 
-        let next_max_health = next.max_health * self.command_health_multiplier;
+        let old = Self::for_hero(kind, self.level);
+        let next_max_health =
+            self.max_health + (next.max_health - old.max_health) * self.command_health_multiplier;
         let delta = HeroProgressionDelta {
-            primary: next.primary_attribute() - self.primary_attribute(),
-            agility: next.agility - self.agility,
-            intelligence: next.intelligence - self.intelligence,
+            primary: next.primary_attribute() - old.primary_attribute(),
+            agility: next.agility - old.agility,
+            intelligence: next.intelligence - old.intelligence,
             max_health: next_max_health - self.max_health,
-            max_energy: next.max_energy - self.max_energy,
+            max_energy: next.max_energy - old.max_energy,
         };
         self.level = next.level;
-        self.strength = next.strength;
-        self.agility = next.agility;
-        self.intelligence = next.intelligence;
+        self.strength += next.strength - old.strength;
+        self.agility += next.agility - old.agility;
+        self.intelligence += next.intelligence - old.intelligence;
         self.max_health = next_max_health;
-        self.max_energy = next.max_energy;
+        self.max_energy += delta.max_energy;
         if self.alive {
             self.health = (self.health + delta.max_health).clamp(0.0, self.max_health);
             self.energy = (self.energy + delta.max_energy).clamp(0.0, self.max_energy);
@@ -263,11 +345,15 @@ impl HeroVitals {
     }
 
     pub fn spell_power(&self) -> f32 {
-        20.0 + self.intelligence * 2.0
+        20.0 + self.intelligence * 2.0 + self.permanent_spell_power
     }
 
     pub fn summon_power(&self) -> f32 {
         self.spell_power() * 0.7 + self.attack_damage() * 0.5
+    }
+
+    pub fn lives_remaining(&self) -> u32 {
+        HERO_TOTAL_LIVES.saturating_sub(self.deaths)
     }
 
     pub fn can_act(&self) -> bool {
@@ -357,8 +443,9 @@ pub struct PlayerBuild {
     pub move_speed: f32,
     pub multishot: u8,
     pub pierce: u8,
-    pub bonds: [u8; BondId::COUNT],
-    pub completed_bonds: [bool; BondId::COUNT],
+    pub ricochet: u8,
+    pub cleave: u8,
+    pub owned_bond_cards: [bool; BondCardId::COUNT],
     pub skills: [u8; SkillId::COUNT],
 }
 
@@ -372,8 +459,9 @@ impl Default for PlayerBuild {
             move_speed: 6.03,
             multishot: 1,
             pierce: 0,
-            bonds: [0; BondId::COUNT],
-            completed_bonds: [false; BondId::COUNT],
+            ricochet: 0,
+            cleave: 0,
+            owned_bond_cards: [false; BondCardId::COUNT],
             skills: [0; SkillId::COUNT],
         }
     }
@@ -381,7 +469,7 @@ impl Default for PlayerBuild {
 
 #[derive(Resource)]
 pub struct SpawnDirector {
-    pub timer: Timer,
+    pub enabled: bool,
     pub next_elite_at: f32,
     pub boss_spawned: [bool; 5],
 }
@@ -389,7 +477,7 @@ pub struct SpawnDirector {
 impl Default for SpawnDirector {
     fn default() -> Self {
         Self {
-            timer: Timer::from_seconds(0.72, TimerMode::Repeating),
+            enabled: true,
             next_elite_at: 120.0,
             boss_spawned: [false; 5],
         }
@@ -412,7 +500,6 @@ pub struct MoveIntent(pub Vec2);
 pub struct ActiveSkill {
     pub cooldown: f32,
     pub remaining: f32,
-    pub requested: bool,
 }
 
 #[derive(Resource)]
@@ -509,7 +596,6 @@ impl Default for ActiveSkill {
         Self {
             cooldown: 8.0,
             remaining: 0.0,
-            requested: false,
         }
     }
 }
@@ -539,7 +625,7 @@ impl Default for SelectedHero {
 pub struct SkillId(pub u8);
 
 impl SkillId {
-    pub const COUNT: usize = 30;
+    pub const COUNT: usize = 32;
 
     pub fn definition(self) -> &'static SkillDef {
         &SKILLS[self.0 as usize]
@@ -548,120 +634,96 @@ impl SkillId {
     pub fn title(self) -> String {
         self.definition().id.replace('_', " ").to_ascii_uppercase()
     }
-
-    pub fn description(self) -> String {
-        let def = self.definition();
-        let rarity = def.rarity.label();
-        let multiplier = def.rarity.skill_power_multiplier();
-        let cooldown = def.cooldown_secs * def.rarity.skill_cooldown_multiplier();
-        let kind = match def.effect.kind {
-            SkillEffectKind::Projectile => "PROJECTILE",
-            SkillEffectKind::Nova => "NOVA",
-            SkillEffectKind::GroundZone => "GROUND ZONE",
-            SkillEffectKind::AttackProc => "ATTACK PROC",
-            SkillEffectKind::Orbit => "ORBIT",
-            SkillEffectKind::Summon => "SUMMON",
-            SkillEffectKind::Mark => "MARK",
-            SkillEffectKind::Echo => "ECHO",
-            SkillEffectKind::Revive => "REVIVE",
-        };
-        if def.cooldown_secs > 0.0 {
-            format!(
-                "[{rarity}] {kind} - {cooldown:.1}s\nPower x{multiplier:.2} · {:.0} + {:.0}/rank",
-                def.effect.power.base, def.effect.power.per_rank
-            )
-        } else {
-            format!(
-                "[{rarity}] {kind}\nPower x{multiplier:.2} · {:.0} + {:.0}/rank",
-                def.effect.power.base, def.effect.power.per_rank
-            )
-        }
-    }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum BondId {
-    Thunder,
-    Ember,
-    Spirits,
-    Elements,
-    Arcane,
-    Triune,
+    Journey,
+    Agility,
+    Ranger,
+    Underworld,
     Ascension,
-    Blood,
-    Fortune,
-    Bastion,
+    Strength,
+    Intelligence,
+    Archery,
+    Warpath,
+    Arcanum,
+    Cultivation,
+    SpiritEnergy,
+    ElementMaster,
+    ElementArchmage,
+    DemonHunter,
+    Barbarian,
+    MadScientist,
+    Windrunner,
+    ForbiddenArts,
+    RevivalWind,
+    Mountain,
+    KillingIntent,
+    Destruction,
+    Requiem,
+    Hunter,
+    Sharpshooter,
 }
-
 impl BondId {
-    pub const COUNT: usize = 10;
+    pub const COUNT: usize = 26;
     pub const ALL: [Self; Self::COUNT] = [
-        Self::Thunder,
-        Self::Ember,
-        Self::Spirits,
-        Self::Elements,
-        Self::Arcane,
-        Self::Triune,
+        Self::Journey,
+        Self::Agility,
+        Self::Ranger,
+        Self::Underworld,
         Self::Ascension,
-        Self::Blood,
-        Self::Fortune,
-        Self::Bastion,
+        Self::Strength,
+        Self::Intelligence,
+        Self::Archery,
+        Self::Warpath,
+        Self::Arcanum,
+        Self::Cultivation,
+        Self::SpiritEnergy,
+        Self::ElementMaster,
+        Self::ElementArchmage,
+        Self::DemonHunter,
+        Self::Barbarian,
+        Self::MadScientist,
+        Self::Windrunner,
+        Self::ForbiddenArts,
+        Self::RevivalWind,
+        Self::Mountain,
+        Self::KillingIntent,
+        Self::Destruction,
+        Self::Requiem,
+        Self::Hunter,
+        Self::Sharpshooter,
     ];
-
     pub const fn index(self) -> usize {
         self as usize
     }
-
-    pub fn definition(self) -> &'static BondDef {
-        &BONDS[self.index()]
+    pub fn definition(self) -> &'static BondFamilyDef {
+        &BOND_FAMILIES[self.index()]
     }
-
-    pub fn rarity(self) -> Rarity {
-        self.definition().rarity
-    }
-
     pub fn title(self) -> &'static str {
-        match self {
-            Self::Thunder => "THUNDER CONDUIT",
-            Self::Ember => "EMBER OATH",
-            Self::Spirits => "SPIRIT COVENANT",
-            Self::Elements => "ELEMENT CYCLE",
-            Self::Arcane => "ARCANE CIRCUIT",
-            Self::Triune => "TRIUNE FLOW",
-            Self::Ascension => "QI ASCENSION",
-            Self::Blood => "BLOOD ARRAY",
-            Self::Fortune => "FORTUNE MARKET",
-            Self::Bastion => "BASTION OATH",
-        }
+        self.definition().name_en
     }
-
-    pub fn description(self) -> &'static str {
-        match self {
-            Self::Thunder => "2/4/6: speed, chain, judgment",
-            Self::Ember => "2/4/6: burn, critical burn, detonate",
-            Self::Spirits => "2/4/6: summon cap, marks, echoes",
-            Self::Elements => "2/4/6: reactions, power, echo",
-            Self::Arcane => "2/4/6: cooldown and spell echoes",
-            Self::Triune => "2/4/6: attack/spell/summon fusion",
-            Self::Ascension => "2/4/6: flying swords and ascension",
-            Self::Blood => "2/4/6: critical, execute, frenzy",
-            Self::Fortune => "2/4/6: income, rarity, lucky rolls",
-            Self::Bastion => "2/4/6: core health, intercept, last stand",
-        }
-    }
-
-    pub const fn required(self) -> u8 {
-        6
+    pub fn required(self) -> u8 {
+        self.definition().members.len() as u8
     }
 }
 
 impl PlayerBuild {
+    pub fn owns_bond_card(&self, card: BondCardId) -> bool {
+        self.owned_bond_cards[card.index()]
+    }
+
     pub fn bond(&self, id: BondId) -> u8 {
-        self.bonds[id.index()]
+        id.definition()
+            .members
+            .iter()
+            .filter(|card| self.owns_bond_card(**card))
+            .count() as u8
     }
 
     pub fn bond_complete(&self, id: BondId) -> bool {
-        self.completed_bonds[id.index()]
+        self.bond(id) == id.required()
     }
 
     pub fn active_bond_count(&self) -> usize {
@@ -679,33 +741,45 @@ impl PlayerBuild {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum DraftChoice {
     Skill(SkillId),
-    Bond(BondId),
+    Evolution {
+        skill: SkillId,
+        tier: u8,
+    },
+    EvolveUr {
+        skill: SkillId,
+        path: super::skill_evolution::UrEvolutionPath,
+    },
+    ReplaceSkill {
+        old: SkillId,
+        new: SkillId,
+    },
+    Bond(BondCardId),
+    ReplaceBond(BondId),
+    Encounter(super::encounters::EncounterId),
 }
 
 impl DraftChoice {
+    /// Encounters and bond replacements use the neutral frame.
     pub fn rarity(self) -> Rarity {
         match self {
-            Self::Skill(skill) => skill.definition().rarity,
+            Self::Skill(skill) | Self::Evolution { skill, .. } | Self::EvolveUr { skill, .. } => {
+                skill.definition().rarity
+            }
+            Self::ReplaceSkill { new, .. } => new.definition().rarity,
             Self::Bond(bond) => bond.rarity(),
+            Self::ReplaceBond(_) | Self::Encounter(_) => Rarity::R,
         }
     }
 
     pub fn title(self) -> String {
         match self {
-            Self::Skill(skill) => skill.title(),
+            Self::Skill(skill) | Self::Evolution { skill, .. } | Self::EvolveUr { skill, .. } => {
+                skill.title()
+            }
+            Self::ReplaceSkill { new, .. } => new.title(),
             Self::Bond(bond) => bond.title().to_string(),
-        }
-    }
-
-    pub fn description(self) -> String {
-        match self {
-            Self::Skill(skill) => skill.description(),
-            Self::Bond(bond) => format!(
-                "[{}] +{} BOND POINTS\n{}",
-                bond.rarity().label(),
-                bond.rarity().bond_points_per_pick(),
-                bond.description()
-            ),
+            Self::ReplaceBond(bond) => bond.title().to_string(),
+            Self::Encounter(event) => event.name(super::GameLanguage::English).to_string(),
         }
     }
 }
@@ -715,6 +789,7 @@ pub enum DraftKind {
     Skill,
     Bond,
     BondReplacement,
+    Encounter,
 }
 
 #[derive(Resource, Default)]
@@ -725,7 +800,7 @@ pub struct DraftState {
     pub kind: Option<DraftKind>,
     /// The new family already selected from a full seven-slot bond hand.
     /// It is applied only after the player chooses an existing family to remove.
-    pub pending_bond_replacement: Option<BondId>,
+    pub pending_bond_replacement: Option<BondCardId>,
 }
 
 #[derive(Resource)]
@@ -810,9 +885,6 @@ pub struct GameAssets {
     pub enemy_scenes: [Handle<WorldAsset>; 12],
     pub boss_scenes: [Handle<WorldAsset>; 5],
     pub summon_scenes: [Handle<WorldAsset>; 6],
-    pub enemy_mesh: Handle<Mesh>,
-    pub enemy_meshes: [Handle<Mesh>; 4],
-    pub elite_mesh: Handle<Mesh>,
     pub projectile_mesh: Handle<Mesh>,
     pub fx_mesh: Handle<Mesh>,
     pub enemy_material: Handle<StandardMaterial>,
@@ -870,7 +942,7 @@ mod survival_tests {
         close(level_30.intelligence, 126.6);
         close(
             HeroVitals::for_hero(HeroKind::StormSavant, 99).intelligence,
-            level_30.intelligence,
+            HeroVitals::for_hero(HeroKind::StormSavant, MAX_HERO_LEVEL).intelligence,
         );
     }
 
@@ -934,6 +1006,28 @@ mod survival_tests {
         vitals.health = vitals.max_health - 10.0;
         close(vitals.heal(100.0), 10.0);
         close(vitals.health, vitals.max_health);
+    }
+
+    #[test]
+    fn gate_healing_cannot_skip_reconstruction_or_overheal() {
+        let mut session = GameSession {
+            core_hp: 0.0,
+            ..default()
+        };
+        assert_eq!(session.heal_gate(5000.0), 0.0);
+        assert_eq!(session.core_hp, 0.0);
+        session.core_hp = 20.0;
+        session.gate_revive_remaining = 2.0;
+        assert_eq!(session.heal_gate(5000.0), 0.0);
+        session.gate_revive_remaining = 0.0;
+        assert_eq!(session.heal_gate(5000.0), 980.0);
+        assert_eq!(session.core_hp, 1000.0);
+    }
+    #[test]
+    fn gate_stands_between_starting_hero_and_incoming_army() {
+        const {
+            assert!(GATE_POSITION.x > HERO_RESPAWN_POSITION.x);
+        }
     }
 
     #[test]

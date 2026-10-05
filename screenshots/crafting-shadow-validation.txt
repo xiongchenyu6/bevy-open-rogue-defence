@@ -1,0 +1,71 @@
+Native crafting and skill-lighting validation — 2026-10-01
+
+Final R4 strict all-target Clippy PASS (28.77s).
+Final full library suite: 421 passed, 0 failed (0.18s).
+Final native bins build PASS (6m35s).
+Final accepted evidence: 53 scenes, 17540 full simulation/render frames:
+- Fresh R4 visual batch: 46 scenes / 15520 frames, all PASS.
+  32 isolated rank5 skills on desktop; six critical skills (6,13,4,26,3,30)
+  on production camera desktop and mobile; two summon-assault regressions.
+- R3 crafting interaction batch: six scenes / 1800 frames, all PASS.
+  First advanced chain in EN/Chinese desktop/mobile; second chain ENdesktop/Chinesemobile.
+- R3 hero attributes/speed controls regression: one scene / 220 frames, PASS.
+R4 changed only effect presentation; R3 crafting/attributes source remained unchanged.
+R2/R3 visually rejected blue meteor ring is NOT accepted final color evidence.
+
+Actual crafting evidence:
+Five ingredients bought through genuine named native market buttons for each phase.
+No ownership/stat injection. Actual charges deducted kill currency, gold checked while paused.
+Missing-material preview displays ○; pressing confirm cannot create missing output.
+All real materials ✓; actual confirm crafts Bloodreaver -> Storm Bastion -> Night Crown,
+or Astral Prism -> Suncoil -> World Engine. HUD counts 5 -> 4 -> 3 -> 1.
+CraftingState active/acquired ownership and real HeroStatsSnapshot bonus deltas verified.
+Original material cards and consumed intermediary outputs disappear from active inventory;
+exactly one advanced product card remains. Already-crafted confirm cannot duplicate output.
+Real mobile detail hover plus MouseWheel scroll reveals inherited and extra effects;
+ScrollPosition.y > 0 verified and screenshot274 captures the bottom bonus text.
+Close resumes gameplay. Library tests cover genuine purchases, acquisition lockout,
+advanced recipe chains, inherited/extra damage against real target HP and pool behavior.
+
+Actual lighting evidence:
+Six production scenes per platform verify exactly80 bounded projection roots,
+visible real skill contact, all projection transforms/visibility frozen during real pause,
+and all pool slots Hidden on battle finish. Unit test verifies actual summon growth,
+pause and active marker removal/retirement without stranded projection.
+Transparent/emissive effects avoid dark light shadows; solid summons/blades have contacts.
+Final meteor earlyframe20 warning ring and ground light are orange/red; source warning,
+spell echo and resolved impact retain real elemental presentation metadata on pooled reuse.
+Focused blade6/meteor13 before and after use identical camera, seed0xA11CE and frames.
+Production scenes preserve the actual gameplay camera, separately from focused identity views.
+All32 isolated skill scenes render and retain genuine damage/outcome proof.
+
+Runtime audit:
+46 final R4 logs: zero ERROR or GPU Validation Error messages.
+Existing repeated ICU4X 'No segmentation model for language: ja' messages remain
+(829181 in R4 logs), plus one startup ShadowLodOrigin warning per scene (46 total).
+These warnings are disclosed; this pass does not claim full performance validation.
+Native only; browser/WASM not verified.
+
+Durable logs/scripts:
+target/verification/crafting-shadow-{pipeline,clippy,tests,build}.log
+target/verification/shadow-r4-captures.log (final visual46)
+target/verification/crafting-shadow-captures.log (R3 interaction53)
+target/verification/capture_shadow_r4.py
+target/verification/capture_crafting_shadow.py
+
+Screenshot evidence:
+screenshots/crafting-0-craft-shadow-r3-zh-667x375-35.png (missing materials)
+screenshots/crafting-0-craft-shadow-r3-zh-667x375-257.png (advanced ready preview)
+screenshots/crafting-0-craft-shadow-r3-zh-667x375-274.png (real scroll, final bonuses)
+screenshots/crafting-0-craft-shadow-r3-zh-667x375-283.png (single advanced inventory output)
+screenshots/crafting-1-craft-shadow-r3-en-1280x720-283.png (second advanced chain)
+screenshots/skill-identity-13-craft-shadow-r4-zh-1280x720-20.png (orange/red actual warning)
+screenshots/skill-identity-13-production-craft-shadow-r4-zh-667x375-20.png
+screenshots/skill-identity-6-production-craft-shadow-r4-zh-1280x720-160.png
+screenshots/skill-identity-4-production-craft-shadow-r4-zh-667x375-160.png
+screenshots/skill-identity-26-production-craft-shadow-r4-zh-1280x720-160.png
+screenshots/skill-identity-3-production-craft-shadow-r4-zh-667x375-20.png
+screenshots/skill-identity-30-production-craft-shadow-r4-zh-1280x720-20.png
+screenshots/crafting-shadow-skills-r4-contact-1.jpg
+screenshots/crafting-shadow-skills-r4-contact-2.jpg
+screenshots/crafting-shadow-before/ (fresh prechange blade/meteor/summon captures)

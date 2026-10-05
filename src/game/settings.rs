@@ -1,0 +1,565 @@
+//! Settings owns only its temporary pause and language preference.
+use bevy::{prelude::*, ui::UiSystems, window::PrimaryWindow};
+
+use super::{CaptureTarget, GameLanguage, GameSession};
+
+const GOLD: Color = Color::srgb(0.90, 0.72, 0.42);
+const IVORY: Color = Color::srgb(0.96, 0.93, 0.85);
+const MUTED: Color = Color::srgb(0.60, 0.68, 0.69);
+const PANEL: Color = Color::srgb(0.035, 0.058, 0.067);
+const EDGE: Color = Color::srgb(0.24, 0.31, 0.32);
+
+pub(super) struct SettingsPlugin;
+
+#[derive(SystemSet, Debug, Clone, PartialEq, Eq, Hash)]
+pub struct SettingsInputSet;
+
+impl Plugin for SettingsPlugin {
+    fn build(&self, app: &mut App) {
+        app.init_resource::<SettingsState>()
+            .add_systems(Startup, setup_entry)
+            .add_systems(
+                PreUpdate,
+                handle_settings_input
+                    .after(UiSystems::Focus)
+                    .in_set(SettingsInputSet),
+            )
+            .add_systems(Update, (update_settings_copy, update_settings_layout));
+    }
+}
+
+#[derive(Resource, Default)]
+pub(crate) struct SettingsState {
+    pub(crate) open: bool,
+    root: Option<Entity>,
+    prior_paused: bool,
+    save_failed: bool,
+}
+
+impl SettingsState {
+    fn begin(&mut self, session: &mut GameSession) {
+        self.prior_paused = session.paused;
+        self.open = true;
+        self.save_failed = false;
+        session.paused = true;
+    }
+
+    fn finish(&mut self, session: &mut GameSession) {
+        self.open = false;
+        session.paused = self.prior_paused;
+    }
+}
+
+#[derive(Component)]
+struct SettingsOpen;
+#[derive(Component)]
+struct SettingsClose;
+#[derive(Component)]
+struct SettingsPanel;
+#[derive(Component)]
+struct SettingsHeader;
+#[derive(Component)]
+struct SettingsLanguageRow;
+#[derive(Component)]
+struct SettingsLanguageButton(GameLanguage);
+#[derive(Component)]
+struct SettingsSelected(GameLanguage);
+#[derive(Component)]
+struct SettingsLauncherLabel;
+#[derive(Component)]
+struct SettingsHeading;
+#[derive(Component)]
+struct SettingsCopy(CopyKind);
+
+#[derive(Clone, Copy)]
+enum CopyKind {
+    Title,
+    Section,
+    Intro,
+    Selected,
+    SaveNotice,
+    Back,
+}
+
+fn label(value: impl Into<String>, size: f32, color: Color) -> impl Bundle {
+    (
+        Text::new(value),
+        TextFont {
+            font_size: FontSize::Px(size),
+            ..default()
+        },
+        TextColor(color),
+    )
+}
+
+fn setup_entry(mut commands: Commands) {
+    commands
+        .spawn((
+            Button,
+            SettingsOpen,
+            Name::new("Settings open"),
+            Node {
+                position_type: PositionType::Absolute,
+                left: percent(50),
+                top: px(8),
+                margin: UiRect::left(px(-26)),
+                width: px(52),
+                height: px(44),
+                align_items: AlignItems::Center,
+                justify_content: JustifyContent::Center,
+                border: UiRect::all(px(1)),
+                ..default()
+            },
+            GlobalZIndex(310),
+            BackgroundColor(Color::srgba(0.025, 0.045, 0.052, 0.98)),
+            BorderColor::all(GOLD),
+        ))
+        .with_children(|button| {
+            button.spawn((SettingsLauncherLabel, label("EN / 中", 13.0, IVORY)));
+        });
+}
+
+fn spawn_settings(commands: &mut Commands) -> Entity {
+    commands
+        .spawn((
+            Name::new("Settings page"),
+            Node {
+                position_type: PositionType::Absolute,
+                width: percent(100),
+                height: percent(100),
+                align_items: AlignItems::Center,
+                justify_content: JustifyContent::Center,
+                ..default()
+            },
+            bevy::ui::FocusPolicy::Block,
+            GlobalZIndex(300),
+            BackgroundColor(Color::srgb(0.014, 0.025, 0.032)),
+        ))
+        .with_children(|root| {
+            root.spawn((
+                SettingsPanel,
+                Node {
+                    flex_direction: FlexDirection::Column,
+                    border: UiRect::all(px(1)),
+                    ..default()
+                },
+                BackgroundColor(PANEL),
+                BorderColor::all(EDGE),
+            ))
+            .with_children(|panel| {
+                panel
+                    .spawn((
+                        SettingsHeader,
+                        Node {
+                            flex_direction: FlexDirection::Column,
+                            row_gap: px(6),
+                            flex_shrink: 0.0,
+                            ..default()
+                        },
+                    ))
+                    .with_children(|header| {
+                        header.spawn((
+                            SettingsHeading,
+                            SettingsCopy(CopyKind::Title),
+                            label("", 32.0, IVORY),
+                        ));
+                        header.spawn((SettingsCopy(CopyKind::Intro), label("", 13.0, MUTED)));
+                    });
+                panel.spawn((SettingsCopy(CopyKind::Section), label("", 14.0, GOLD)));
+                panel
+                    .spawn((
+                        SettingsLanguageRow,
+                        Node {
+                            width: percent(100),
+                            column_gap: px(14),
+                            flex_shrink: 0.0,
+                            ..default()
+                        },
+                    ))
+                    .with_children(|row| {
+                        for (language, native, hint, hook) in [
+                            (GameLanguage::English, "English", "EN", "Settings English"),
+                            (
+                                GameLanguage::SimplifiedChinese,
+                                "简体中文",
+                                "中",
+                                "Settings Chinese",
+                            ),
+                        ] {
+                            row.spawn((
+                                Button,
+                                SettingsLanguageButton(language),
+                                Name::new(hook),
+                                Node {
+                                    flex_basis: px(0),
+                                    flex_grow: 1.0,
+                                    min_width: px(0),
+                                    min_height: px(72),
+                                    padding: UiRect::all(px(10)),
+                                    flex_direction: FlexDirection::Column,
+                                    justify_content: JustifyContent::Center,
+                                    row_gap: px(5),
+                                    border: UiRect::all(px(2)),
+                                    ..default()
+                                },
+                                BackgroundColor(Color::srgb(0.06, 0.095, 0.105)),
+                                BorderColor::all(EDGE),
+                            ))
+                            .with_children(|button| {
+                                button.spawn(label(hint, 11.0, MUTED));
+                                button.spawn(label(native, 20.0, IVORY));
+                                button.spawn((
+                                    SettingsSelected(language),
+                                    SettingsCopy(CopyKind::Selected),
+                                    label("", 11.0, GOLD),
+                                ));
+                            });
+                        }
+                    });
+                super::selection_detail::spawn_toggle(panel);
+                panel.spawn((
+                    SettingsCopy(CopyKind::SaveNotice),
+                    label("", 12.0, MUTED),
+                    Node {
+                        flex_grow: 1.0,
+                        ..default()
+                    },
+                ));
+                panel
+                    .spawn((
+                        Button,
+                        SettingsClose,
+                        Name::new("Settings close"),
+                        Node {
+                            width: percent(100),
+                            height: px(48),
+                            min_height: px(48),
+                            flex_shrink: 0.0,
+                            align_items: AlignItems::Center,
+                            justify_content: JustifyContent::Center,
+                            ..default()
+                        },
+                        BackgroundColor(GOLD),
+                    ))
+                    .with_children(|button| {
+                        button.spawn((
+                            SettingsCopy(CopyKind::Back),
+                            label("", 16.0, Color::srgb(0.035, 0.055, 0.055)),
+                        ));
+                    });
+            });
+        })
+        .id()
+}
+
+fn handle_settings_input(
+    mut commands: Commands,
+    mut keyboard: ResMut<ButtonInput<KeyCode>>,
+    open_buttons: Query<&Interaction, (With<SettingsOpen>, Changed<Interaction>)>,
+    close_buttons: Query<&Interaction, (With<SettingsClose>, Changed<Interaction>)>,
+    language_buttons: Query<(&Interaction, &SettingsLanguageButton), Changed<Interaction>>,
+    mut state: ResMut<SettingsState>,
+    equipment: Option<Res<super::equipment_ui::EquipmentPanelState>>,
+    mut session: ResMut<GameSession>,
+    mut language: ResMut<GameLanguage>,
+) {
+    if !state.open {
+        if equipment.is_some_and(|panel| panel.open()) {
+            return;
+        }
+        if !open_buttons
+            .iter()
+            .any(|interaction| *interaction == Interaction::Pressed)
+        {
+            return;
+        }
+        state.begin(&mut session);
+        state.root = Some(spawn_settings(&mut commands));
+        keyboard.clear();
+        return;
+    }
+    // This runs after UI focus, before gameplay Update. A modal consumes hotkeys
+    // even when closing, so Escape cannot also unpause the underlying pause menu.
+    let close = keyboard.just_pressed(KeyCode::Escape)
+        || close_buttons
+            .iter()
+            .any(|interaction| *interaction == Interaction::Pressed);
+    keyboard.clear();
+    if close {
+        if let Some(root) = state.root.take() {
+            commands.entity(root).despawn();
+        }
+        state.finish(&mut session);
+        return;
+    }
+    session.paused = true;
+    for (interaction, choice) in &language_buttons {
+        if *interaction != Interaction::Pressed {
+            continue;
+        }
+        *language = choice.0;
+        state.save_failed = match crate::preferences::save_language(choice.0) {
+            Ok(()) => false,
+            Err(error) => {
+                warn!("Could not save language preference: {error}");
+                true
+            }
+        };
+        break;
+    }
+}
+
+fn copy(kind: CopyKind, language: GameLanguage, failed: bool) -> &'static str {
+    match kind {
+        CopyKind::Title => language.pick("Settings", "设置"),
+        CopyKind::Section => language.pick("INTERFACE LANGUAGE", "界面语言"),
+        CopyKind::Intro => language.pick(
+            "Choose your language and selection detail.",
+            "选择语言与选卡详情模式。",
+        ),
+        CopyKind::Selected => language.pick("Selected", "已选择"),
+        CopyKind::SaveNotice => {
+            if failed {
+                language.pick("Language changed for this session. Your preference could not be saved on this device.", "本次游戏的语言已更改，但无法在此设备上保存偏好。")
+            } else {
+                language.pick("Your choice is saved immediately. Your expedition stays paused while settings are open.", "选择后立即保存。设置页面打开期间，远征将保持暂停。")
+            }
+        }
+        CopyKind::Back => language.pick("Back to expedition", "返回远征"),
+    }
+}
+
+fn update_settings_copy(
+    language: Res<GameLanguage>,
+    state: Res<SettingsState>,
+    mut labels: Query<(&mut Text, &SettingsCopy)>,
+    mut selected: Query<(&SettingsSelected, &mut Visibility)>,
+    mut launcher: Query<
+        (&mut Visibility, &Interaction, &mut BackgroundColor),
+        (
+            With<SettingsOpen>,
+            Without<SettingsSelected>,
+            Without<SettingsLanguageButton>,
+            Without<SettingsClose>,
+        ),
+    >,
+    mut choices: Query<
+        (
+            &SettingsLanguageButton,
+            &Interaction,
+            &mut BackgroundColor,
+            &mut BorderColor,
+        ),
+        Without<SettingsOpen>,
+    >,
+    mut close: Query<
+        (&Interaction, &mut BackgroundColor),
+        (
+            With<SettingsClose>,
+            Without<SettingsOpen>,
+            Without<SettingsLanguageButton>,
+        ),
+    >,
+) {
+    for (mut text, key) in &mut labels {
+        **text = copy(key.0, *language, state.save_failed).into();
+    }
+    for (choice, mut visibility) in &mut selected {
+        *visibility = if choice.0 == *language {
+            Visibility::Inherited
+        } else {
+            Visibility::Hidden
+        };
+    }
+    for (mut visibility, interaction, mut background) in &mut launcher {
+        *visibility = if state.open {
+            Visibility::Hidden
+        } else {
+            Visibility::Inherited
+        };
+        background.0 = if *interaction == Interaction::None {
+            PANEL
+        } else {
+            Color::srgb(0.13, 0.18, 0.17)
+        };
+    }
+    for (choice, interaction, mut background, mut border) in &mut choices {
+        let selected = choice.0 == *language;
+        border.set_all(if selected {
+            GOLD
+        } else if *interaction != Interaction::None {
+            IVORY
+        } else {
+            EDGE
+        });
+        background.0 = if selected {
+            Color::srgb(0.11, 0.16, 0.15)
+        } else {
+            Color::srgb(0.055, 0.085, 0.095)
+        };
+    }
+    for (interaction, mut background) in &mut close {
+        background.0 = if *interaction == Interaction::None {
+            GOLD
+        } else {
+            Color::srgb(1.0, 0.85, 0.55)
+        };
+    }
+}
+
+#[derive(Clone, Copy)]
+struct Layout {
+    width: f32,
+    height: f32,
+    padding: f32,
+    gap: f32,
+    compact: bool,
+}
+fn layout(width: f32, height: f32) -> Layout {
+    let compact = height < 540.0;
+    Layout {
+        width: (width - 40.0).min(720.0),
+        height: (height - 24.0).min(520.0),
+        padding: if compact { 18.0 } else { 30.0 },
+        gap: if compact { 5.0 } else { 18.0 },
+        compact,
+    }
+}
+
+fn update_settings_layout(
+    state: Res<SettingsState>,
+    windows: Query<&Window, With<PrimaryWindow>>,
+    target: Option<Res<CaptureTarget>>,
+    images: Option<Res<Assets<Image>>>,
+    mut nodes: Query<(
+        &mut Node,
+        Has<SettingsPanel>,
+        Has<SettingsHeader>,
+        Has<SettingsLanguageRow>,
+    )>,
+    mut headings: Query<&mut TextFont, With<SettingsHeading>>,
+) {
+    if !state.open {
+        return;
+    }
+    let (width, height) = windows
+        .single()
+        .map(|window| (window.width(), window.height()))
+        .unwrap_or_else(|_| {
+            target
+                .as_ref()
+                .and_then(|target| images.as_ref()?.get(&target.0))
+                .map(|image| (image.width() as f32, image.height() as f32))
+                .unwrap_or((1280.0, 720.0))
+        });
+    let m = layout(width, height);
+    for (mut node, panel, header, row) in &mut nodes {
+        if panel {
+            node.width = px(m.width);
+            node.height = px(m.height);
+            node.padding = UiRect::all(px(m.padding));
+            node.row_gap = px(m.gap);
+        }
+        if header {
+            node.height = px(if m.compact { 38 } else { 72 });
+        }
+        if row {
+            node.height = px(if m.compact { 80 } else { 132 });
+        }
+    }
+    for mut heading in &mut headings {
+        heading.font_size = FontSize::Px(if m.compact { 27.0 } else { 34.0 });
+    }
+}
+
+pub(crate) fn reset_run(world: &mut World) {
+    world.insert_resource(SettingsState::default());
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn settings_restores_battle_and_existing_modal_pause_ownership() {
+        for already_paused in [false, true] {
+            let mut session = GameSession {
+                paused: already_paused,
+                gold: 357,
+                wood: 91,
+                ..default()
+            };
+            let mut state = SettingsState::default();
+            let seed = super::super::RunSeed(0x1234);
+            let mut language = GameLanguage::English;
+            state.begin(&mut session);
+            assert!(state.open && session.paused);
+            assert_eq!(language, GameLanguage::English);
+            language = GameLanguage::SimplifiedChinese;
+            state.finish(&mut session);
+            assert!(!state.open);
+            assert_eq!(session.paused, already_paused);
+            assert_eq!(language, GameLanguage::SimplifiedChinese);
+            assert_eq!((session.gold, session.wood, seed.0), (357, 91, 0x1234));
+        }
+    }
+
+    #[test]
+    fn escape_closes_settings_without_reaching_underlying_pause_hotkey() {
+        let mut app = App::new();
+        app.init_resource::<ButtonInput<KeyCode>>()
+            .init_resource::<GameLanguage>()
+            .insert_resource(GameSession {
+                paused: true,
+                ..default()
+            })
+            .insert_resource(SettingsState {
+                open: true,
+                prior_paused: true,
+                ..default()
+            })
+            .add_systems(PreUpdate, handle_settings_input);
+        app.world_mut()
+            .resource_mut::<ButtonInput<KeyCode>>()
+            .press(KeyCode::Escape);
+        app.world_mut()
+            .resource_mut::<ButtonInput<KeyCode>>()
+            .press(KeyCode::Enter);
+        app.update();
+        assert!(!app.world().resource::<SettingsState>().open);
+        assert!(app.world().resource::<GameSession>().paused);
+        assert!(
+            !app.world()
+                .resource::<ButtonInput<KeyCode>>()
+                .just_pressed(KeyCode::Escape)
+        );
+        assert!(
+            !app.world()
+                .resource::<ButtonInput<KeyCode>>()
+                .just_pressed(KeyCode::Enter)
+        );
+    }
+
+    #[test]
+    fn settings_fits_desktop_and_compact_landscape() {
+        for (width, height) in [
+            (1760.0, 1350.0),
+            (1280.0, 720.0),
+            (844.0, 390.0),
+            (667.0, 375.0),
+        ] {
+            let m = layout(width, height);
+            assert!(m.width < width && m.height < height);
+            let content = m.height - m.padding * 2.0;
+            let required = if m.compact {
+                38.0 + 18.0 + 80.0 + 36.0 + 28.0 + 48.0 + m.gap * 5.0
+            } else {
+                72.0 + 18.0 + 132.0 + 36.0 + 28.0 + 48.0 + m.gap * 5.0
+            };
+            assert!(
+                required <= content,
+                "settings content at {width}x{height}: {required}>{content}"
+            );
+        }
+    }
+}

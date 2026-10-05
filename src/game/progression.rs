@@ -1,24 +1,45 @@
 use bevy::prelude::*;
 
-use super::content::{BONDS, HEROES, Rarity, SKILLS, SkillEffectKind, Tag};
-use super::localization::{bond_card_description, bond_name, skill_card_description, skill_name};
+use super::content::{HEROES, Rarity, SKILLS, SkillEffectKind, Tag};
+use super::encounters::EncounterState;
 use super::market::MarketEffects;
-use super::rarity::rarity_color;
+use super::skill_evolution::SkillEvolution;
 use super::{
-    Autoplay, BondDrawButton, BondId, DraftAction, DraftActionButton, DraftButton, DraftChoice,
-    DraftKind, DraftRoot, DraftState, GameLanguage, GameSession, PlayerBuild, RunRng, SelectedHero,
-    SkillDrawButton, SkillId,
+    Autoplay, BondCardId, BondDrawButton, BondId, DraftAction, DraftActionButton, DraftButton,
+    DraftChoice, DraftKind, DraftState, EncounterButton, GameLanguage, GameSession, HeroVitals,
+    MAX_HERO_LEVEL, PlayerBuild, RecruitmentProgress, RunRng, SelectedHero, SkillDrawButton,
+    SkillId,
 };
+
+#[path = "progression_ui.rs"]
+mod presentation;
+use presentation::{BuildPreview, spawn_draft_ui};
 
 pub struct ProgressionPlugin;
 
 impl Plugin for ProgressionPlugin {
     fn build(&self, app: &mut App) {
+        app.init_resource::<super::selection_detail::SelectionDetail>()
+            .init_resource::<Messages<bevy::input::mouse::MouseWheel>>()
+            .init_resource::<Touches>()
+            .add_systems(
+                Update,
+                (
+                    super::selection_detail::toggle,
+                    super::selection_detail::update_labels,
+                )
+                    .chain()
+                    .before(presentation::update_feedback),
+            )
+            .init_resource::<SkillEvolution>()
+            .add_systems(PreUpdate, super::skill_evolution::refresh_access);
         app.init_resource::<GameLanguage>()
             .init_resource::<SkillEconomy>()
+            .init_resource::<RecruitmentProgress>()
             .init_resource::<BondEconomy>()
             .init_resource::<DraftAntiDrought>()
-            .add_systems(Startup, initialize_skill_economy)
+            .init_resource::<BuildPreview>()
+            .init_resource::<DraftContinuation>()
             .add_systems(
                 Update,
                 (
@@ -27,10 +48,17 @@ impl Plugin for ProgressionPlugin {
                     grant_first_free_bond_draw,
                     request_skill_draft,
                     request_bond_draft,
+                    request_encounter_draft,
+                    presentation::sync_preview,
                     handle_draft_buttons,
                     handle_draft_actions,
                     handle_draft_keys,
                     autoplay_draft,
+                    presentation::load_images,
+                    presentation::update_layout,
+                    presentation::scroll_details,
+                    presentation::update_feedback,
+                    presentation::refresh_language,
                 )
                     .chain(),
             );
@@ -41,34 +69,13 @@ impl Plugin for ProgressionPlugin {
 const FIRST_FREE_SKILL_AT: f32 = 4.0;
 // The current full-run footage opens its first guided F draft at ~00:12.
 const FIRST_FREE_BOND_AT: f32 = 12.0;
+// Autoplay opens its first F draft at 0:18, then draws whenever it can pay.
+const FIRST_AUTO_BOND_AT: f32 = 18.0;
 const EPIC_SKILL_UNLOCK_AT: f32 = 12.0 * 60.0;
 const FREE_SKILL_LEVELS: [u32; 5] = [5, 10, 15, 20, 25];
+#[cfg(test)]
 const SKILL_SLOT_LIMIT: usize = 6;
 const BOND_SLOT_LIMIT: usize = 7;
-const DRAFT_OVERLAY_PADDING: f32 = 8.0;
-const NORMAL_HEADING_SIZE: f32 = 22.0;
-const REPLACEMENT_HEADING_SIZE: f32 = 20.0;
-const REPLACEMENT_HELPER_SIZE: f32 = 11.0;
-const NORMAL_GRID_WIDTH_PERCENT: f32 = 96.0;
-const NORMAL_GRID_MAX_WIDTH: f32 = 1_000.0;
-const NORMAL_GRID_HEIGHT: f32 = 240.0;
-const NORMAL_CARD_WIDTH_PERCENT: f32 = 31.0;
-const NORMAL_COLUMN_GAP: f32 = 8.0;
-const REPLACEMENT_GRID_WIDTH_PERCENT: f32 = 96.0;
-const REPLACEMENT_GRID_MAX_WIDTH: f32 = 1080.0;
-const REPLACEMENT_GRID_HEIGHT: f32 = 230.0;
-const REPLACEMENT_CARD_WIDTH_PERCENT: f32 = 23.0;
-const REPLACEMENT_COLUMN_GAP: f32 = 8.0;
-const REPLACEMENT_ROW_GAP: f32 = 8.0;
-const NORMAL_OVERLAY_GAP: f32 = 8.0;
-const REPLACEMENT_OVERLAY_GAP: f32 = 5.0;
-const ACTION_ROW_WIDTH_PERCENT: f32 = 96.0;
-const ACTION_ROW_MAX_WIDTH: f32 = 560.0;
-const ACTION_BUTTON_WIDTH_PERCENT: f32 = 31.0;
-const ACTION_GAP: f32 = 8.0;
-const MIN_TOUCH_TARGET: f32 = 48.0;
-const _: () = assert!(MIN_TOUCH_TARGET >= 48.0);
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum SkillDrawPayment {
     Free,
@@ -83,13 +90,20 @@ pub struct SkillEconomy {
     pending_payment: Option<SkillDrawPayment>,
 }
 
+/// Continues only the draw category the player explicitly entered.
+#[derive(Resource, Default)]
+struct DraftContinuation {
+    queued: Option<DraftKind>,
+    enabled: bool,
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum BondDrawPayment {
     Free,
     Wood(u32),
 }
 
-/// Owns the banked 2:00 grant and the in-flight F payment. `GameSession::bond_draws`
+/// Owns the banked 0:12 grant and the in-flight F payment. `GameSession::bond_draws`
 /// remains the paid-draw counter because the existing HUD reads it for the next price.
 #[derive(Resource, Debug, Default)]
 struct BondEconomy {
@@ -110,17 +124,11 @@ pub fn skill_cost(economy: &SkillEconomy) -> u32 {
         .min(260)
 }
 
-fn initialize_skill_economy(mut session: ResMut<GameSession>) {
-    // GameSession keeps the legacy field for HUD compatibility. The economy owns
-    // all grants, so the old default point must not be spendable before 0:04.
-    session.skill_points = 0;
-}
-
 fn check_level_up(mut session: ResMut<GameSession>) {
     if session.finished
         || session.paused
         || session.save_active
-        || session.level >= 30
+        || session.level >= MAX_HERO_LEVEL
         || session.xp < session.xp_next
     {
         return;
@@ -165,11 +173,18 @@ fn request_skill_draft(
     selected: Res<SelectedHero>,
     mut drought: ResMut<DraftAntiDrought>,
     language: Res<GameLanguage>,
+    evolution: Res<SkillEvolution>,
+    mut continuation: ResMut<DraftContinuation>,
 ) {
     if session.finished || session.paused || session.save_active || draft.root.is_some() {
         return;
     }
-    let pressed = keyboard.just_pressed(KeyCode::KeyG)
+    let manual = keyboard.just_pressed(KeyCode::KeyG)
+        || interactions
+            .iter()
+            .any(|interaction| *interaction == Interaction::Pressed);
+    let pressed = continuation.queued == Some(DraftKind::Skill) && session.skill_points > 0
+        || keyboard.just_pressed(KeyCode::KeyG)
         || interactions
             .iter()
             .any(|interaction| *interaction == Interaction::Pressed)
@@ -182,6 +197,10 @@ fn request_skill_draft(
     if draft.kind == Some(DraftKind::Skill) && !draft.choices.is_empty() {
         if economy.pending_payment.is_none() {
             return;
+        }
+        continuation.queued = None;
+        if manual {
+            continuation.enabled = true;
         }
         session.paused = true;
         spawn_draft_ui(
@@ -196,6 +215,10 @@ fn request_skill_draft(
     if draft.kind.is_some() {
         return;
     }
+    continuation.queued = None;
+    if manual || autoplay.is_some() {
+        continuation.enabled = true;
+    }
     let paid_cost = skill_cost(&economy);
     if session.skill_points == 0 && session.gold < paid_cost {
         return;
@@ -207,7 +230,9 @@ fn request_skill_draft(
         &build,
         &selected,
         &mut drought,
+        evolution.skill_capacity(),
     );
+    let choices = late_skill_choices(choices, &build, &evolution, session.elapsed, &mut rng);
     if choices.is_empty() {
         return;
     }
@@ -243,24 +268,39 @@ fn request_bond_draft(
     mut economy: ResMut<BondEconomy>,
     mut drought: ResMut<DraftAntiDrought>,
     mut market_effects: ResMut<MarketEffects>,
+    mut encounters: ResMut<EncounterState>,
     language: Res<GameLanguage>,
+    mut continuation: ResMut<DraftContinuation>,
 ) {
     if session.finished || session.paused || session.save_active || draft.root.is_some() {
         return;
     }
     let can_pay = economy.pending_payment.is_some()
         || economy.free_draw_available
-        || session.wood >= bond_cost(&session);
+        || session.wood >= bond_cost(&session, &encounters);
     let automatic = autoplay.is_some()
-        && session.elapsed >= FIRST_FREE_BOND_AT
-        && session.elapsed >= session.next_auto_bond_at
+        && session.auto_bond_draws
+        && session.elapsed >= FIRST_AUTO_BOND_AT
         && can_pay;
-    let pressed = keyboard.just_pressed(KeyCode::KeyF)
+    let manual = keyboard.just_pressed(KeyCode::KeyF)
+        || interactions
+            .iter()
+            .any(|interaction| *interaction == Interaction::Pressed);
+    let pressed = continuation.queued == Some(DraftKind::Bond)
+        || keyboard.just_pressed(KeyCode::KeyF)
         || interactions
             .iter()
             .any(|interaction| *interaction == Interaction::Pressed)
         || automatic;
     if !pressed {
+        return;
+    }
+    continuation.queued = None;
+    if manual || automatic {
+        continuation.enabled = true;
+    }
+    if !can_pay {
+        continuation.enabled = false;
         return;
     }
     if session.elapsed < FIRST_FREE_BOND_AT {
@@ -288,19 +328,31 @@ fn request_bond_draft(
     if draft.kind.is_some() {
         return;
     }
-    let cost = bond_cost(&session);
+    let cost = bond_cost(&session, &encounters);
     if !economy.free_draw_available && session.wood < cost {
         return;
     }
-    let compass_target = market_effects
-        .bond_compass_available()
-        .then(|| highest_progress_unfinished_bond(&build))
-        .flatten();
-    let choices = pick_bond_choices(&mut rng, &build, &selected, &mut drought, compass_target);
+    let compass_target = (build.bond_complete(BondId::Journey)
+        && market_effects.bond_compass_available())
+    .then(|| highest_progress_unfinished_bond(&build))
+    .flatten();
+    let choices = pick_bond_choices_at(
+        &mut rng,
+        &build,
+        &selected,
+        &mut drought,
+        compass_target,
+        &session,
+    );
     if choices.is_empty() {
+        continuation.enabled = false;
         return;
     }
-    if compass_target.is_some_and(|target| choices.contains(&DraftChoice::Bond(target))) {
+    if compass_target.is_some_and(|target| {
+        choices
+            .iter()
+            .any(|choice| matches!(choice, DraftChoice::Bond(card) if card.family() == target))
+    }) {
         let _ = market_effects.consume_bond_compass();
     }
     economy.pending_payment = Some(if economy.free_draw_available {
@@ -309,11 +361,9 @@ fn request_bond_draft(
     } else {
         session.wood -= cost;
         session.bond_draws = session.bond_draws.saturating_add(1);
+        encounters.consume_bond_levy();
         BondDrawPayment::Wood(cost)
     });
-    if automatic {
-        session.next_auto_bond_at = session.elapsed + 60.0;
-    }
     open_draft(
         &mut commands,
         &mut session,
@@ -324,8 +374,79 @@ fn request_bond_draft(
     );
 }
 
-pub fn bond_cost(session: &GameSession) -> u32 {
-    (10 + (session.bond_draws / 2) * 2).min(20)
+/// Every paid draw costs 5 more wood with no cap. A full run's wood (~1,600 at
+/// tower floor 14, ~2,400 at floor 20) buys roughly 22-28 draws, so a run
+/// completes a handful of the 25 post-opening families instead of the pool.
+/// A Timber Levy encounter raises the next three paid draws by half.
+pub fn bond_cost(session: &GameSession, encounters: &EncounterState) -> u32 {
+    encounters.bond_price(10 + 5 * session.bond_draws)
+}
+
+/// Encounters are free; the bank is spent when a hand is opened and the hand
+/// stays open across "later" until an event is accepted. E or the HUD button
+/// opens it; autoplay opens it as soon as one is banked.
+fn request_encounter_draft(
+    mut commands: Commands,
+    keyboard: Res<ButtonInput<KeyCode>>,
+    autoplay: Option<Res<Autoplay>>,
+    interactions: Query<&Interaction, (With<EncounterButton>, Changed<Interaction>)>,
+    mut session: ResMut<GameSession>,
+    build: Res<PlayerBuild>,
+    mut draft: ResMut<DraftState>,
+    mut encounters: ResMut<EncounterState>,
+    mut rng: ResMut<RunRng>,
+    language: Res<GameLanguage>,
+    mut continuation: ResMut<DraftContinuation>,
+) {
+    if session.finished || session.paused || session.save_active || draft.root.is_some() {
+        return;
+    }
+    let manual = keyboard.just_pressed(KeyCode::KeyE)
+        || interactions
+            .iter()
+            .any(|interaction| *interaction == Interaction::Pressed);
+    let pressed = continuation.queued == Some(DraftKind::Encounter)
+        || keyboard.just_pressed(KeyCode::KeyE)
+        || interactions
+            .iter()
+            .any(|interaction| *interaction == Interaction::Pressed)
+        || (autoplay.is_some() && (encounters.banked > 0 || encounters.pending()));
+    if !pressed {
+        return;
+    }
+    continuation.queued = None;
+    if manual || autoplay.is_some() {
+        continuation.enabled = true;
+    }
+    if draft.kind == Some(DraftKind::Encounter) && !draft.choices.is_empty() {
+        if !encounters.pending() {
+            return;
+        }
+        session.paused = true;
+        spawn_draft_ui(
+            &mut commands,
+            &mut draft,
+            DraftKind::Encounter,
+            session.skill_rerolls,
+            *language,
+        );
+        return;
+    }
+    if draft.kind.is_some() {
+        return;
+    }
+    let Some(hand) = encounters.open_hand(&mut rng, &build) else {
+        continuation.enabled = false;
+        return;
+    };
+    open_draft(
+        &mut commands,
+        &mut session,
+        &mut draft,
+        DraftKind::Encounter,
+        hand.into_iter().map(DraftChoice::Encounter).collect(),
+        *language,
+    );
 }
 
 fn open_draft(
@@ -351,8 +472,9 @@ fn pick_skill_choices(
     build: &PlayerBuild,
     selected: &SelectedHero,
     drought: &mut DraftAntiDrought,
+    capacity: usize,
 ) -> Vec<DraftChoice> {
-    let slots_full = active_skill_slots(build) >= SKILL_SLOT_LIMIT;
+    let slots_full = active_skill_slots(build) >= capacity;
     let mut pool: Vec<SkillId> = (0..SKILLS.len())
         .map(|index| SkillId(index as u8))
         .filter(|id| {
@@ -430,6 +552,69 @@ fn pick_skill_choices(
     choices.into_iter().map(DraftChoice::Skill).collect()
 }
 
+fn late_skill_choices(
+    mut choices: Vec<DraftChoice>,
+    build: &PlayerBuild,
+    evolution: &SkillEvolution,
+    elapsed: f32,
+    rng: &mut RunRng,
+) -> Vec<DraftChoice> {
+    if let Some(skill) = (0..SKILLS.len())
+        .map(|index| SkillId(index as u8))
+        .find(|skill| evolution.branch_ready(*skill, build))
+    {
+        return super::skill_evolution::UrEvolutionPath::ALL
+            .into_iter()
+            .map(|path| DraftChoice::EvolveUr { skill, path })
+            .collect();
+    }
+    let mut upgrades: Vec<_> = (0..SKILLS.len())
+        .map(|index| SkillId(index as u8))
+        .filter(|skill| evolution.eligible(*skill, build))
+        .collect();
+    upgrades.sort_by_key(|skill| (evolution.tiers[usize::from(skill.0)], skill.0));
+    for skill in upgrades.into_iter().take(3).rev() {
+        choices.insert(
+            0,
+            DraftChoice::Evolution {
+                skill,
+                tier: evolution.tiers[usize::from(skill.0)] + 1,
+            },
+        );
+    }
+    choices.truncate(3);
+    if active_skill_slots(build) >= evolution.skill_capacity() && elapsed >= EPIC_SKILL_UNLOCK_AT {
+        let candidates: Vec<_> = (0..SKILLS.len())
+            .map(|index| SkillId(index as u8))
+            .filter(|skill| {
+                skill.definition().rarity == Rarity::Ur && build.skill_rank(*skill) == 0
+            })
+            .collect();
+        if !candidates.is_empty() {
+            let new =
+                candidates[(rng.unit() * candidates.len() as f32) as usize % candidates.len()];
+            let old: Vec<_> = (0..SKILLS.len())
+                .map(|index| SkillId(index as u8))
+                .filter(|skill| build.skill_rank(*skill) > 0)
+                .collect();
+            let offset = (rng.unit() * old.len() as f32) as usize % old.len();
+            let count = if choices.is_empty() { 3 } else { 1 };
+            for index in 0..count {
+                let replacement = DraftChoice::ReplaceSkill {
+                    old: old[(offset + index) % old.len()],
+                    new,
+                };
+                if choices.len() == 3 {
+                    choices[2] = replacement;
+                } else {
+                    choices.push(replacement);
+                }
+            }
+        }
+    }
+    choices
+}
+
 fn skill_rarity_available(rarity: Rarity, level: u32, elapsed: f32) -> bool {
     match rarity {
         Rarity::R => true,
@@ -494,6 +679,7 @@ enum BondChoiceBucket {
     Other,
 }
 
+#[cfg(test)]
 fn pick_bond_choices(
     rng: &mut RunRng,
     build: &PlayerBuild,
@@ -501,51 +687,106 @@ fn pick_bond_choices(
     drought: &mut DraftAntiDrought,
     guaranteed: Option<BondId>,
 ) -> Vec<DraftChoice> {
-    let available = available_bonds(build);
+    pick_bond_choices_from(
+        rng,
+        build,
+        selected,
+        drought,
+        guaranteed,
+        available_bond_cards(build),
+    )
+}
+fn pick_bond_choices_at(
+    rng: &mut RunRng,
+    build: &PlayerBuild,
+    selected: &SelectedHero,
+    drought: &mut DraftAntiDrought,
+    guaranteed: Option<BondId>,
+    session: &GameSession,
+) -> Vec<DraftChoice> {
+    pick_bond_choices_from(
+        rng,
+        build,
+        selected,
+        drought,
+        guaranteed,
+        available_bond_cards_at(build, session),
+    )
+}
+fn pick_bond_choices_from(
+    rng: &mut RunRng,
+    build: &PlayerBuild,
+    selected: &SelectedHero,
+    drought: &mut DraftAntiDrought,
+    guaranteed: Option<BondId>,
+    available: Vec<BondCardId>,
+) -> Vec<DraftChoice> {
     if available.is_empty() {
         return Vec::new();
     }
 
-    let mut choices: Vec<BondId> = Vec::with_capacity(3);
-    if let Some(guaranteed) = guaranteed.filter(|bond| available.contains(bond)) {
+    // Opening acquisition is always the three unique Journey cards. Refresh,
+    // hero preference and compass guarantees cannot skip this introduction.
+    if !build.bond_complete(BondId::Journey) {
+        return available.into_iter().map(DraftChoice::Bond).collect();
+    }
+
+    let mut choices: Vec<BondCardId> = Vec::with_capacity(3);
+    if let Some(guaranteed) = guaranteed.and_then(|family| {
+        available
+            .iter()
+            .copied()
+            .find(|card| card.family() == family)
+    }) {
         choices.push(guaranteed);
     }
     if drought.bond_missed_preference {
-        let preferred: Vec<BondId> = available
+        let preferred: Vec<BondCardId> = available
             .iter()
             .copied()
             .filter(|bond| !choices.contains(bond))
-            .filter(|bond| bond_matches_preference(*bond, selected, build))
+            .filter(|bond| bond_matches_preference(bond.family(), selected, build))
             .collect();
         if choices.len() < 3 && !preferred.is_empty() {
             choices.push(
-                choose_weighted_bond(&preferred, rng).expect("preferred bond pool is not empty"),
+                choose_weighted_bond(&preferred, rng, build)
+                    .expect("preferred bond pool is not empty"),
             );
         }
     }
 
     while choices.len() < 3 && choices.len() < available.len() {
-        let remaining: Vec<BondId> = available
+        let remaining: Vec<BondCardId> = available
             .iter()
             .copied()
             .filter(|bond| !choices.contains(bond))
             .collect();
-        let existing: Vec<BondId> = remaining
+        // The reference says agility-oriented draws gain weight. Treat that as
+        // a x2 adaptation and weight the whole remaining pool after completion,
+        // so the old preference buckets cannot cancel the multiplier.
+        if [BondId::Agility, BondId::Strength, BondId::Intelligence]
+            .into_iter()
+            .any(|family| build.bond_complete(family))
+        {
+            choices.push(choose_weighted_bond(&remaining, rng, build).expect("remaining cards"));
+            continue;
+        }
+        let existing: Vec<BondCardId> = remaining
             .iter()
             .copied()
-            .filter(|bond| build.bond(*bond) > 0)
+            .filter(|bond| build.bond(bond.family()) > 0)
             .collect();
-        let preferred: Vec<BondId> = remaining
+        let preferred: Vec<BondCardId> = remaining
             .iter()
             .copied()
-            .filter(|bond| build.bond(*bond) == 0)
-            .filter(|bond| bond_matches_preference(*bond, selected, build))
+            .filter(|bond| build.bond(bond.family()) == 0)
+            .filter(|bond| bond_matches_preference(bond.family(), selected, build))
             .collect();
-        let other: Vec<BondId> = remaining
+        let other: Vec<BondCardId> = remaining
             .iter()
             .copied()
-            .filter(|bond| build.bond(*bond) == 0)
-            .filter(|bond| !bond_matches_preference(*bond, selected, build))
+            .filter(|bond| build.bond(bond.family()) == 0)
+            .filter(|bond| !bond_matches_preference(bond.family(), selected, build))
             .collect();
         let Some(bucket) = bond_bucket_for_roll(
             rng.next_u32(),
@@ -561,27 +802,50 @@ fn pick_bond_choices(
             BondChoiceBucket::Other => &other,
         };
         choices.push(
-            choose_weighted_bond(candidates, rng).expect("selected bond bucket is not empty"),
+            choose_weighted_bond(candidates, rng, build)
+                .expect("selected bond bucket is not empty"),
         );
     }
 
     drought.bond_missed_preference = !choices
         .iter()
-        .any(|bond| bond_matches_preference(*bond, selected, build));
+        .any(|bond| bond_matches_preference(bond.family(), selected, build));
     choices.into_iter().map(DraftChoice::Bond).collect()
 }
 
-fn choose_weighted_bond(pool: &[BondId], rng: &mut RunRng) -> Option<BondId> {
-    let total_weight: u32 = pool.iter().map(|bond| bond.rarity().draw_weight()).sum();
+fn bond_card_draw_weight(card: BondCardId, build: &PlayerBuild) -> u32 {
+    let boosted = match card.family() {
+        BondId::Ranger | BondId::Archery => build.bond_complete(BondId::Agility),
+        BondId::Warpath => build.bond_complete(BondId::Strength),
+        BondId::Arcanum => build.bond_complete(BondId::Intelligence),
+        _ => false,
+    };
+    let multiplier = if boosted { 2 } else { 1 };
+    card.rarity().draw_weight() * multiplier
+}
+
+fn choose_weighted_bond(
+    pool: &[BondCardId],
+    rng: &mut RunRng,
+    build: &PlayerBuild,
+) -> Option<BondCardId> {
+    let total_weight: u32 = pool
+        .iter()
+        .map(|card| bond_card_draw_weight(*card, build))
+        .sum();
     if total_weight == 0 {
         return None;
     }
-    choose_weighted_bond_for_roll(pool, rng.next_u32() % total_weight)
+    choose_weighted_bond_for_roll(pool, rng.next_u32() % total_weight, build)
 }
 
-fn choose_weighted_bond_for_roll(pool: &[BondId], mut roll: u32) -> Option<BondId> {
+fn choose_weighted_bond_for_roll(
+    pool: &[BondCardId],
+    mut roll: u32,
+    build: &PlayerBuild,
+) -> Option<BondCardId> {
     pool.iter().copied().find(|bond| {
-        let weight = bond.rarity().draw_weight();
+        let weight = bond_card_draw_weight(*bond, build);
         if roll < weight {
             true
         } else {
@@ -591,17 +855,53 @@ fn choose_weighted_bond_for_roll(pool: &[BondId], mut roll: u32) -> Option<BondI
     })
 }
 
-fn available_bonds(build: &PlayerBuild) -> Vec<BondId> {
-    BondId::ALL
+fn bond_card_available(card: BondCardId, build: &PlayerBuild) -> bool {
+    !build.owns_bond_card(card)
+        && (card.family() == BondId::Journey || build.bond_complete(BondId::Journey))
+        && card
+            .family()
+            .definition()
+            .prerequisite
+            .is_none_or(|family| build.bond_complete(family))
+}
+
+pub fn available_bond_cards(build: &PlayerBuild) -> Vec<BondCardId> {
+    BondCardId::ALL
         .into_iter()
-        .filter(|id| !build.bond_complete(*id) && build.bond(*id) < id.required())
+        .filter(|card| bond_card_available(*card, build))
+        .collect()
+}
+
+/// Alternate level/time gate, shared by drafting and the collection UI.
+pub fn bond_stage_requirement(family: BondId) -> Option<(u32, f32)> {
+    use BondId::*;
+    match family {
+        Cultivation | ElementMaster | Hunter | Barbarian | Windrunner | Requiem => {
+            Some((20, 480.0))
+        }
+        SpiritEnergy | ElementArchmage | DemonHunter | Mountain | Sharpshooter => Some((40, 900.0)),
+        MadScientist | ForbiddenArts | RevivalWind | KillingIntent | Destruction => {
+            Some((50, 1200.0))
+        }
+        _ => None,
+    }
+}
+pub fn bond_stage_available(card: BondCardId, session: &GameSession) -> bool {
+    bond_stage_requirement(card.family())
+        .is_none_or(|(level, seconds)| session.level >= level || session.elapsed >= seconds)
+}
+pub fn available_bond_cards_at(build: &PlayerBuild, session: &GameSession) -> Vec<BondCardId> {
+    available_bond_cards(build)
+        .into_iter()
+        .filter(|card| bond_stage_available(*card, session))
         .collect()
 }
 
 fn highest_progress_unfinished_bond(build: &PlayerBuild) -> Option<BondId> {
-    available_bonds(build)
+    BondId::ALL
         .into_iter()
-        .max_by_key(|bond| (build.bond(*bond), std::cmp::Reverse(bond.index())))
+        .filter(|family| build.bond(*family) > 0 && !build.bond_complete(*family))
+        .max_by_key(|family| (build.bond(*family), std::cmp::Reverse(family.index())))
 }
 
 fn bond_bucket_for_roll(
@@ -628,7 +928,7 @@ fn bond_bucket_for_roll(
 }
 
 fn bond_matches_preference(bond: BondId, selected: &SelectedHero, build: &PlayerBuild) -> bool {
-    tags_match_preference(BONDS[bond.index()].favored_tags, selected, build)
+    tags_match_preference(bond.definition().favored_tags, selected, build)
 }
 
 fn tags_match_preference(tags: &[Tag], selected: &SelectedHero, build: &PlayerBuild) -> bool {
@@ -643,321 +943,60 @@ fn tags_match_preference(tags: &[Tag], selected: &SelectedHero, build: &PlayerBu
     })
 }
 
-fn spawn_draft_ui(
-    commands: &mut Commands,
-    draft: &mut DraftState,
-    kind: DraftKind,
-    rerolls: u32,
-    language: GameLanguage,
-) {
-    let replacing = kind == DraftKind::BondReplacement;
-    let replacement = draft.pending_bond_replacement;
-    let heading = match (kind, replacement) {
-        (DraftKind::Skill, _) => language.pick("CHOOSE A SKILL", "选择技能").to_string(),
-        (DraftKind::Bond, _) => language.pick("CHOOSE A BOND", "选择羁绊").to_string(),
-        (DraftKind::BondReplacement, Some(new_bond)) => {
-            if language.is_chinese() {
-                format!("替换羁绊：加入 {}", bond_name(language, new_bond))
-            } else {
-                format!("REPLACE A BOND WITH {}", bond_name(language, new_bond))
-            }
-        }
-        (DraftKind::BondReplacement, None) => {
-            language.pick("REPLACE A BOND", "替换羁绊").to_string()
-        }
-    };
-    let root = commands
-        .spawn((
-            DraftRoot,
-            Node {
-                position_type: PositionType::Absolute,
-                width: percent(100),
-                height: percent(100),
-                padding: UiRect::all(px(DRAFT_OVERLAY_PADDING)),
-                flex_direction: FlexDirection::Column,
-                align_items: AlignItems::Center,
-                justify_content: JustifyContent::Center,
-                row_gap: px(if replacing {
-                    REPLACEMENT_OVERLAY_GAP
-                } else {
-                    NORMAL_OVERLAY_GAP
-                }),
-                ..default()
-            },
-            BackgroundColor(Color::srgba(0.01, 0.02, 0.045, 0.9)),
-            GlobalZIndex(50),
-        ))
-        .with_children(|parent| {
-            parent.spawn((
-                Text::new(heading),
-                TextFont {
-                    font_size: FontSize::Px(if replacing {
-                        REPLACEMENT_HEADING_SIZE
-                    } else {
-                        NORMAL_HEADING_SIZE
-                    }),
-                    ..default()
-                },
-                TextColor(Color::srgb(0.75, 0.93, 1.0)),
-            ));
-            if replacing {
-                parent.spawn((
-                    Text::new(language.pick(
-                        "The draw is already paid. Choose one current family to remove.",
-                        "本次抽取已付费，请选择一个当前羁绊移除。",
-                    )),
-                    TextFont {
-                        font_size: FontSize::Px(REPLACEMENT_HELPER_SIZE),
-                        ..default()
-                    },
-                    TextColor(Color::srgb(0.72, 0.8, 0.88)),
-                    TextLayout::justify(Justify::Center),
-                ));
-            }
-            parent
-                .spawn(Node {
-                    width: percent(if replacing {
-                        REPLACEMENT_GRID_WIDTH_PERCENT
-                    } else {
-                        NORMAL_GRID_WIDTH_PERCENT
-                    }),
-                    max_width: px(if replacing {
-                        REPLACEMENT_GRID_MAX_WIDTH
-                    } else {
-                        NORMAL_GRID_MAX_WIDTH
-                    }),
-                    height: px(if replacing {
-                        REPLACEMENT_GRID_HEIGHT
-                    } else {
-                        NORMAL_GRID_HEIGHT
-                    }),
-                    flex_direction: FlexDirection::Row,
-                    flex_wrap: if replacing {
-                        FlexWrap::Wrap
-                    } else {
-                        FlexWrap::NoWrap
-                    },
-                    justify_content: JustifyContent::Center,
-                    align_content: AlignContent::Center,
-                    align_items: AlignItems::Stretch,
-                    column_gap: px(if replacing {
-                        REPLACEMENT_COLUMN_GAP
-                    } else {
-                        NORMAL_COLUMN_GAP
-                    }),
-                    row_gap: px(if replacing { REPLACEMENT_ROW_GAP } else { 0.0 }),
-                    ..default()
-                })
-                .with_children(|cards| {
-                    for (index, choice) in draft.choices.iter().copied().enumerate() {
-                        let (title, description) = match (kind, choice, replacement) {
-                            (
-                                DraftKind::BondReplacement,
-                                DraftChoice::Bond(old_bond),
-                                Some(new_bond),
-                            ) => {
-                                let old_name = bond_name(language, old_bond);
-                                let new_name = bond_name(language, new_bond);
-                                if language.is_chinese() {
-                                    (
-                                        format!("{}  替换 {}", index + 1, old_name),
-                                        format!(
-                                            "移除 {old_name} 全部进度\n→ 加入 {new_name} {}/{}",
-                                            new_bond.rarity().bond_points_per_pick(),
-                                            new_bond.required()
-                                        ),
-                                    )
-                                } else {
-                                    (
-                                        format!("{}  REPLACE {old_name}", index + 1),
-                                        format!(
-                                            "Remove all {old_name} progress\n-> Add {new_name} {}/{}",
-                                            new_bond.rarity().bond_points_per_pick(),
-                                            new_bond.required()
-                                        ),
-                                    )
-                                }
-                            }
-                            _ => {
-                                let title = match choice {
-                                    DraftChoice::Skill(skill) => skill_name(language, skill),
-                                    DraftChoice::Bond(bond) => bond_name(language, bond),
-                                };
-                                let description = match choice {
-                                    DraftChoice::Skill(skill) => {
-                                        skill_card_description(language, skill)
-                                    }
-                                    DraftChoice::Bond(bond) => {
-                                        bond_card_description(language, bond)
-                                    }
-                                };
-                                (
-                                    format!(
-                                        "{}  [{}] {title}",
-                                        index + 1,
-                                        choice.rarity().label()
-                                    ),
-                                    description,
-                                )
-                            }
-                        };
-                        cards
-                            .spawn((
-                                Button,
-                                DraftButton(index),
-                                Node {
-                                    width: percent(if replacing {
-                                        REPLACEMENT_CARD_WIDTH_PERCENT
-                                    } else {
-                                        NORMAL_CARD_WIDTH_PERCENT
-                                    }),
-                                    min_width: px(MIN_TOUCH_TARGET),
-                                    height: percent(if replacing { 48.0 } else { 100.0 }),
-                                    min_height: px(MIN_TOUCH_TARGET),
-                                    flex_direction: FlexDirection::Column,
-                                    align_items: AlignItems::Center,
-                                    justify_content: JustifyContent::Center,
-                                    padding: UiRect::all(px(if replacing { 5 } else { 8 })),
-                                    border: UiRect::all(px(2)),
-                                    border_radius: BorderRadius::all(px(if replacing {
-                                        9
-                                    } else {
-                                        12
-                                    })),
-                                    row_gap: px(if replacing { 4 } else { 8 }),
-                                    ..default()
-                                },
-                                BackgroundColor(Color::srgb(0.055, 0.11, 0.18)),
-                                BorderColor::all(choice_color(choice)),
-                            ))
-                            .with_children(|card| {
-                                card.spawn((
-                                    Text::new(title),
-                                    TextFont {
-                                        font_size: FontSize::Px(if replacing {
-                                            13.0
-                                        } else {
-                                            18.0
-                                        }),
-                                        ..default()
-                                    },
-                                    TextColor(Color::WHITE),
-                                    TextLayout::justify(Justify::Center)
-                                        .with_linebreak(LineBreak::WordOrCharacter),
-                                ));
-                                card.spawn((
-                                    Text::new(description),
-                                    TextFont {
-                                        font_size: FontSize::Px(if replacing {
-                                            10.0
-                                        } else {
-                                            13.0
-                                        }),
-                                        ..default()
-                                    },
-                                    TextColor(Color::srgb(0.72, 0.8, 0.88)),
-                                    TextLayout::justify(Justify::Center)
-                                        .with_linebreak(LineBreak::WordOrCharacter),
-                                ));
-                            });
-                    }
-                });
-            parent
-                .spawn(Node {
-                    width: percent(ACTION_ROW_WIDTH_PERCENT),
-                    max_width: px(ACTION_ROW_MAX_WIDTH),
-                    height: px(MIN_TOUCH_TARGET),
-                    flex_direction: FlexDirection::Row,
-                    justify_content: JustifyContent::Center,
-                    column_gap: px(ACTION_GAP),
-                    ..default()
-                })
-                .with_children(|actions| {
-                    if !replacing {
-                        spawn_draft_action(
-                            actions,
-                            DraftAction::Refresh,
-                            if language.is_chinese() {
-                                format!("刷新 ({rerolls})")
-                            } else {
-                                format!("REFRESH ({rerolls})")
-                            },
-                        );
-                    }
-                    spawn_draft_action(
-                        actions,
-                        DraftAction::Abandon,
-                        language.pick("ABANDON (+1)", "放弃 (+1)").to_string(),
-                    );
-                    spawn_draft_action(
-                        actions,
-                        DraftAction::Later,
-                        language.pick("CHOOSE LATER", "稍后选择").to_string(),
-                    );
-                });
-        })
-        .id();
-    draft.root = Some(root);
-}
-
-fn spawn_draft_action(parent: &mut ChildSpawnerCommands, action: DraftAction, label: String) {
-    parent
-        .spawn((
-            Button,
-            DraftActionButton(action),
-            Node {
-                width: percent(ACTION_BUTTON_WIDTH_PERCENT),
-                min_width: px(MIN_TOUCH_TARGET),
-                height: px(MIN_TOUCH_TARGET),
-                padding: UiRect::horizontal(px(6)),
-                align_items: AlignItems::Center,
-                justify_content: JustifyContent::Center,
-                border_radius: BorderRadius::all(px(8)),
-                ..default()
-            },
-            BackgroundColor(Color::srgb(0.10, 0.25, 0.20)),
-        ))
-        .with_children(|button| {
-            button.spawn((
-                Text::new(label),
-                TextFont {
-                    font_size: FontSize::Px(11.0),
-                    ..default()
-                },
-                TextColor(Color::WHITE),
-            ));
-        });
-}
-
-fn choice_color(choice: DraftChoice) -> Color {
-    rarity_color(choice.rarity())
-}
-
 fn handle_draft_buttons(
     mut commands: Commands,
     interactions: Query<(&Interaction, &DraftButton), Changed<Interaction>>,
+    mouse: Option<Res<ButtonInput<MouseButton>>>,
+    touches: Res<Touches>,
+    mut preview: ResMut<BuildPreview>,
     mut session: ResMut<GameSession>,
     mut build: ResMut<PlayerBuild>,
     mut draft: ResMut<DraftState>,
     mut skill_economy: ResMut<SkillEconomy>,
     mut bond_economy: ResMut<BondEconomy>,
     language: Res<GameLanguage>,
+    mut recruitment: ResMut<RecruitmentProgress>,
+    mut evolution: ResMut<SkillEvolution>,
+    mut encounters: ResMut<EncounterState>,
+    mut vitals: ResMut<HeroVitals>,
+    mut rng: ResMut<RunRng>,
 ) {
-    for (interaction, button) in &interactions {
-        if *interaction == Interaction::Pressed {
-            choose(
-                button.0,
-                &mut commands,
-                &mut session,
-                &mut build,
-                &mut draft,
-                &mut skill_economy,
-                &mut bond_economy,
-                *language,
-            );
-            break;
-        }
+    if draft.root.is_none() {
+        return;
     }
+    let held_pointer = mouse
+        .as_deref()
+        .is_some_and(|mouse| mouse.pressed(MouseButton::Left))
+        || touches.iter().next().is_some();
+    let fresh_pointer = mouse
+        .as_deref()
+        .is_some_and(|mouse| mouse.just_pressed(MouseButton::Left))
+        || touches.iter_just_pressed().next().is_some();
+    if held_pointer && !fresh_pointer {
+        return;
+    }
+    let Some(index) = interactions.iter().find_map(|(interaction, button)| {
+        (*interaction == Interaction::Pressed && button.0 < draft.choices.len()).then_some(button.0)
+    }) else {
+        return;
+    };
+    preview.index = Some(index);
+    preview.root = draft.root;
+    choose(
+        index,
+        &mut commands,
+        &mut session,
+        &mut build,
+        &mut draft,
+        &mut skill_economy,
+        &mut bond_economy,
+        *language,
+        &mut recruitment,
+        &mut evolution,
+        &mut encounters,
+        &mut vitals,
+        &mut rng,
+    );
 }
 
 fn handle_draft_actions(
@@ -972,6 +1011,7 @@ fn handle_draft_actions(
     selected: Res<SelectedHero>,
     mut drought: ResMut<DraftAntiDrought>,
     language: Res<GameLanguage>,
+    evolution: Res<SkillEvolution>,
 ) {
     for (interaction, button) in &interactions {
         if *interaction != Interaction::Pressed {
@@ -980,13 +1020,19 @@ fn handle_draft_actions(
         let Some(kind) = draft.kind else {
             return;
         };
+        commands.queue(|world: &mut World| {
+            let mut continuation = world.resource_mut::<DraftContinuation>();
+            continuation.queued = None;
+            continuation.enabled = false;
+        });
         match button.0 {
             DraftAction::Refresh => {
-                if session.skill_rerolls == 0 {
+                if session.skill_rerolls == 0
+                    || matches!(kind, DraftKind::BondReplacement | DraftKind::Encounter)
+                {
                     return;
                 }
-                session.skill_rerolls -= 1;
-                draft.choices = match kind {
+                let choices = match kind {
                     DraftKind::Skill => pick_skill_choices(
                         &mut rng,
                         session.level,
@@ -994,12 +1040,28 @@ fn handle_draft_actions(
                         &build,
                         &selected,
                         &mut drought,
+                        evolution.skill_capacity(),
                     ),
-                    DraftKind::Bond => {
-                        pick_bond_choices(&mut rng, &build, &selected, &mut drought, None)
-                    }
-                    DraftKind::BondReplacement => return,
+                    DraftKind::Bond => pick_bond_choices_at(
+                        &mut rng,
+                        &build,
+                        &selected,
+                        &mut drought,
+                        None,
+                        &session,
+                    ),
+                    DraftKind::BondReplacement | DraftKind::Encounter => return,
                 };
+                let choices = if kind == DraftKind::Skill {
+                    late_skill_choices(choices, &build, &evolution, session.elapsed, &mut rng)
+                } else {
+                    choices
+                };
+                if choices.is_empty() {
+                    return;
+                }
+                session.skill_rerolls -= 1;
+                draft.choices = choices;
                 if let Some(root) = draft.root.take() {
                     commands.entity(root).despawn();
                 }
@@ -1012,6 +1074,9 @@ fn handle_draft_actions(
                 );
             }
             DraftAction::Abandon => {
+                if kind == DraftKind::Encounter {
+                    return;
+                }
                 session.skill_rerolls = session.skill_rerolls.saturating_add(1);
                 clear_draft(
                     &mut commands,
@@ -1036,12 +1101,18 @@ fn handle_draft_actions(
 fn handle_draft_keys(
     mut commands: Commands,
     keyboard: Res<ButtonInput<KeyCode>>,
+    mut preview: ResMut<BuildPreview>,
     mut session: ResMut<GameSession>,
     mut build: ResMut<PlayerBuild>,
     mut draft: ResMut<DraftState>,
     mut skill_economy: ResMut<SkillEconomy>,
     mut bond_economy: ResMut<BondEconomy>,
     language: Res<GameLanguage>,
+    mut recruitment: ResMut<RecruitmentProgress>,
+    mut evolution: ResMut<SkillEvolution>,
+    mut encounters: ResMut<EncounterState>,
+    mut vitals: ResMut<HeroVitals>,
+    mut rng: ResMut<RunRng>,
 ) {
     if draft.root.is_none() {
         return;
@@ -1063,7 +1134,10 @@ fn handle_draft_keys(
     } else {
         None
     };
-    if let Some(index) = choice {
+    if let Some(index) = choice.filter(|index| *index < draft.choices.len())
+        && preview.root == draft.root
+    {
+        preview.index = Some(index);
         choose(
             index,
             &mut commands,
@@ -1073,6 +1147,11 @@ fn handle_draft_keys(
             &mut skill_economy,
             &mut bond_economy,
             *language,
+            &mut recruitment,
+            &mut evolution,
+            &mut encounters,
+            &mut vitals,
+            &mut rng,
         );
     }
 }
@@ -1087,20 +1166,34 @@ fn autoplay_draft(
     mut skill_economy: ResMut<SkillEconomy>,
     mut bond_economy: ResMut<BondEconomy>,
     language: Res<GameLanguage>,
+    mut recruitment: ResMut<RecruitmentProgress>,
+    mut evolution: ResMut<SkillEvolution>,
+    mut encounters: ResMut<EncounterState>,
+    mut vitals: ResMut<HeroVitals>,
+    mut rng: ResMut<RunRng>,
 ) {
     if autoplay.is_none() || draft.root.is_none() {
         return;
     }
     draft.opened_for += time.delta_secs();
     if draft.opened_for >= 1.15 {
-        let index = if draft.kind == Some(DraftKind::BondReplacement) {
+        let index = if draft.kind == Some(DraftKind::Encounter) {
+            // The balance bot takes the first event it can afford.
+            draft
+                .choices
+                .iter()
+                .position(|choice| {
+                    matches!(choice, DraftChoice::Encounter(event) if event.affordable(&session))
+                })
+                .unwrap_or(0)
+        } else if draft.kind == Some(DraftKind::BondReplacement) {
             draft
                 .choices
                 .iter()
                 .enumerate()
                 .filter_map(|(index, choice)| match choice {
-                    DraftChoice::Bond(bond) => Some((index, *bond)),
-                    DraftChoice::Skill(_) => None,
+                    DraftChoice::ReplaceBond(bond) => Some((index, *bond)),
+                    _ => None,
                 })
                 .min_by_key(|(_, bond)| (build.bond(*bond), bond.index()))
                 .map(|(index, _)| index)
@@ -1117,6 +1210,11 @@ fn autoplay_draft(
             &mut skill_economy,
             &mut bond_economy,
             *language,
+            &mut recruitment,
+            &mut evolution,
+            &mut encounters,
+            &mut vitals,
+            &mut rng,
         );
     }
 }
@@ -1130,6 +1228,11 @@ fn choose(
     skill_economy: &mut SkillEconomy,
     bond_economy: &mut BondEconomy,
     language: GameLanguage,
+    recruitment: &mut RecruitmentProgress,
+    evolution: &mut SkillEvolution,
+    encounters: &mut EncounterState,
+    vitals: &mut HeroVitals,
+    rng: &mut RunRng,
 ) {
     let Some(choice) = draft.choices.get(index).copied() else {
         return;
@@ -1139,41 +1242,120 @@ fn choose(
             if skill_economy.pending_payment.is_none() {
                 return;
             }
-            // Full bars intentionally offer upgrades only. Replacement needs an
-            // additional target-selection UI and is outside this first ruleset.
-            if build.skill_rank(skill) == 0 && active_skill_slots(build) >= SKILL_SLOT_LIMIT {
+            // New skills at a full bar require an explicit old → new replacement card.
+            if build.skill_rank(skill) == 0
+                && active_skill_slots(build) >= evolution.skill_capacity()
+            {
                 return;
             }
-            apply_skill(skill, session, build);
+            grant_skill_rank(skill, session, build, evolution);
         }
-        DraftChoice::Bond(bond) => {
-            if bond_economy.pending_payment.is_none() {
+        DraftChoice::Evolution { skill, tier } => {
+            let index = usize::from(skill.0);
+            if skill_economy.pending_payment.is_none()
+                || !evolution.eligible(skill, build)
+                || tier != evolution.tiers[index] + 1
+            {
                 return;
             }
-            if draft.kind == Some(DraftKind::BondReplacement) {
-                let Some(new_bond) = draft.pending_bond_replacement else {
-                    return;
-                };
-                if build.bond(bond) == 0
-                    || build.bond_complete(bond)
-                    || build.bond(new_bond) > 0
-                    || build.bond_complete(new_bond)
-                {
-                    return;
-                }
-                replace_bond(bond, new_bond, session, build);
-                clear_draft(commands, session, draft, skill_economy, bond_economy);
+            evolution.tiers[index] = tier;
+        }
+        DraftChoice::EvolveUr { skill, path } => {
+            if skill_economy.pending_payment.is_none() || !evolution.branch_ready(skill, build) {
                 return;
             }
-            if build.bond(bond) == 0 && build.active_bond_count() >= BOND_SLOT_LIMIT {
-                let rerolls = session.skill_rerolls;
-                begin_bond_replacement(bond, commands, session, build, draft, rerolls, language);
+            evolution.paths[usize::from(skill.0)] = Some(path);
+            evolution.tiers[usize::from(skill.0)] = 0;
+        }
+        DraftChoice::ReplaceSkill { old, new } => {
+            if skill_economy.pending_payment.is_none()
+                || build.skill_rank(old) == 0
+                || build.skill_rank(new) > 0
+                || new.definition().rarity != Rarity::Ur
+                || session.elapsed < EPIC_SKILL_UNLOCK_AT
+            {
                 return;
             }
-            apply_bond(bond, session, build);
+            evolution.rewarded_ranks[usize::from(old.0)] =
+                evolution.rewarded_ranks[usize::from(old.0)].max(build.skill_rank(old));
+            build.skills[usize::from(old.0)] = 0;
+            evolution.tiers[usize::from(old.0)] = 0;
+            evolution.paths[usize::from(old.0)] = None;
+            build.skills[usize::from(new.0)] = 1;
+            evolution.rewarded_ranks[usize::from(new.0)] =
+                evolution.rewarded_ranks[usize::from(new.0)].max(1);
+        }
+        DraftChoice::Bond(card) => {
+            if bond_economy.pending_payment.is_none()
+                || draft.kind != Some(DraftKind::Bond)
+                || !bond_card_available(card, build)
+                || !bond_stage_available(card, session)
+            {
+                return;
+            }
+            if build.bond(card.family()) == 0 && build.active_bond_count() >= BOND_SLOT_LIMIT {
+                begin_bond_replacement(
+                    card,
+                    commands,
+                    session,
+                    build,
+                    draft,
+                    session.skill_rerolls,
+                    language,
+                );
+                return;
+            }
+            recruitment.fruit_count = recruitment
+                .fruit_count
+                .saturating_add(apply_bond(card, session, build));
+        }
+        DraftChoice::ReplaceBond(family) => {
+            let Some(card) = draft.pending_bond_replacement else {
+                return;
+            };
+            if bond_economy.pending_payment.is_none()
+                || draft.kind != Some(DraftKind::BondReplacement)
+                || build.bond(family) == 0
+                || build.bond_complete(family)
+                || !bond_card_available(card, build)
+                || !bond_stage_available(card, session)
+                || build.bond(card.family()) > 0
+            {
+                return;
+            }
+            recruitment.fruit_count = recruitment
+                .fruit_count
+                .saturating_add(replace_bond(family, card, session, build));
+        }
+        DraftChoice::Encounter(event) => {
+            if draft.kind != Some(DraftKind::Encounter)
+                || !encounters.accept(event, session, build, vitals, rng)
+            {
+                return;
+            }
         }
     }
+    let next = match draft.kind {
+        Some(DraftKind::Skill)
+            if skill_economy.pending_payment == Some(SkillDrawPayment::Free)
+                && session.skill_points > 0 =>
+        {
+            Some(DraftKind::Skill)
+        }
+        Some(DraftKind::Bond | DraftKind::BondReplacement)
+            if bond_economy.free_draw_available
+                || session.wood >= bond_cost(session, encounters) =>
+        {
+            Some(DraftKind::Bond)
+        }
+        Some(DraftKind::Encounter) if encounters.banked > 0 => Some(DraftKind::Encounter),
+        _ => None,
+    };
     clear_draft(commands, session, draft, skill_economy, bond_economy);
+    commands.queue(move |world: &mut World| {
+        let mut continuation = world.resource_mut::<DraftContinuation>();
+        continuation.queued = if continuation.enabled { next } else { None };
+    });
 }
 
 fn clear_draft(
@@ -1196,7 +1378,7 @@ fn clear_draft(
 }
 
 fn begin_bond_replacement(
-    new_bond: BondId,
+    new_bond: BondCardId,
     commands: &mut Commands,
     session: &mut GameSession,
     build: &PlayerBuild,
@@ -1208,7 +1390,7 @@ fn begin_bond_replacement(
         .into_iter()
         .filter(|bond| build.bond(*bond) > 0 && !build.bond_complete(*bond))
         .take(BOND_SLOT_LIMIT)
-        .map(DraftChoice::Bond)
+        .map(DraftChoice::ReplaceBond)
         .collect();
     if choices.is_empty() {
         return;
@@ -1232,26 +1414,36 @@ fn begin_bond_replacement(
 
 fn replace_bond(
     old_bond: BondId,
-    new_bond: BondId,
+    new_bond: BondCardId,
     session: &mut GameSession,
     build: &mut PlayerBuild,
-) {
-    remove_bond(old_bond, session, build);
-    build.bonds[new_bond.index()] = 0;
-    build.completed_bonds[new_bond.index()] = false;
-    apply_bond(new_bond, session, build);
+) -> u32 {
+    remove_bond(old_bond, build);
+    apply_bond(new_bond, session, build)
 }
 
-fn remove_bond(bond: BondId, session: &mut GameSession, build: &mut PlayerBuild) {
-    let old_rank = build.bond(bond);
-    build.bonds[bond.index()] = 0;
-    build.completed_bonds[bond.index()] = false;
+pub(crate) fn remove_bond(bond: BondId, build: &mut PlayerBuild) {
+    for card in bond.definition().members {
+        build.owned_bond_cards[card.index()] = false;
+    }
+}
 
-    // Bastion 2 is the sole bond tier whose benefit is materialized directly
-    // in GameSession instead of being derived live by bonds.rs.
-    if bond == BondId::Bastion && old_rank >= 2 {
-        session.core_max_hp = (session.core_max_hp - 250.0).max(1.0);
-        session.core_hp = session.core_hp.min(session.core_max_hp);
+fn grant_skill_rank(
+    skill: SkillId,
+    session: &mut GameSession,
+    build: &mut PlayerBuild,
+    evolution: &mut SkillEvolution,
+) {
+    let index = usize::from(skill.0);
+    let next = (build.skills[index] + 1).min(skill.definition().max_rank);
+    if next == build.skills[index] {
+        return;
+    }
+    if next > evolution.rewarded_ranks[index] {
+        apply_skill(skill, session, build);
+        evolution.rewarded_ranks[index] = next;
+    } else {
+        build.skills[index] = next;
     }
 }
 
@@ -1280,7 +1472,7 @@ fn apply_skill(skill: SkillId, session: &mut GameSession, build: &mut PlayerBuil
         SkillEffectKind::Mark => build.pierce = build.pierce.saturating_add(1).min(12),
         SkillEffectKind::Revive => {
             session.core_max_hp += 80.0 * rarity_power;
-            session.core_hp = (session.core_hp + 180.0 * rarity_power).min(session.core_max_hp);
+            session.heal_gate(180.0 * rarity_power);
         }
     }
     if def.tags.contains(&Tag::Storm) {
@@ -1290,29 +1482,52 @@ fn apply_skill(skill: SkillId, session: &mut GameSession, build: &mut PlayerBuil
         build.attack_damage += 2.0 * rarity_power;
     }
     if def.tags.contains(&Tag::Guard) {
-        session.core_hp = (session.core_hp + 35.0 * rarity_power).min(session.core_max_hp);
+        session.heal_gate(35.0 * rarity_power);
     }
 }
 
-fn apply_bond(bond: BondId, session: &mut GameSession, build: &mut PlayerBuild) {
-    let required = bond.required();
-    let old_rank = build.bonds[bond.index()];
-    let rank = old_rank
-        .saturating_add(bond.rarity().bond_points_per_pick())
-        .min(required);
-    build.bonds[bond.index()] = rank;
-    if bond == BondId::Bastion && old_rank < 2 && rank >= 2 {
-        session.core_max_hp += 250.0;
-        session.core_hp += 250.0;
+/// Settle acquisition rewards once. The caller deposits returned Job Fruits into recruitment.
+fn apply_bond(card: BondCardId, session: &mut GameSession, build: &mut PlayerBuild) -> u32 {
+    use super::bond_catalog::BondEffect;
+    if !bond_card_available(card, build) {
+        return 0;
     }
-    if rank >= required {
-        build.completed_bonds[bond.index()] = true;
+    let family = card.family();
+    let previous_count = build.bond(family);
+    build.owned_bond_cards[card.index()] = true;
+    let new_count = build.bond(family);
+    let mut fruits = 0_u32;
+    let mut settle = |effect: &BondEffect| match effect {
+        BondEffect::Wood(amount) => session.wood = session.wood.saturating_add(*amount),
+        BondEffect::Gold(amount) => session.gold = session.gold.saturating_add(*amount),
+        BondEffect::JobFruit(amount) => fruits = fruits.saturating_add(*amount),
+        _ => {}
+    };
+    for effect in card.definition().effects {
+        settle(effect);
     }
+    for bonus in family.definition().bonuses {
+        if previous_count < bonus.required && new_count >= bonus.required {
+            for effect in bonus.effects {
+                settle(effect);
+            }
+        }
+    }
+    fruits
+}
+
+pub(crate) fn reset_run(world: &mut World) {
+    world.insert_resource(SkillEconomy::default());
+    world.insert_resource(BondEconomy::default());
+    world.insert_resource(DraftAntiDrought::default());
+    world.insert_resource(BuildPreview::default());
+    world.insert_resource(DraftContinuation::default());
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::game::DraftRoot;
 
     fn test_app() -> App {
         let mut app = App::new();
@@ -1324,21 +1539,284 @@ mod tests {
             .init_resource::<RunRng>()
             .init_resource::<SelectedHero>()
             .init_resource::<MarketEffects>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<EncounterState>()
             .add_plugins(ProgressionPlugin);
         app.update();
         app
     }
 
     #[test]
-    fn rarity_weight_boundaries_drive_skill_and_bond_candidates() {
+    fn all_six_mastered_skills_have_three_late_stages_and_relearning_cannot_farm_stats() {
+        let mut build = PlayerBuild::default();
+        build.skills.fill(0);
+        build.skills[..6].fill(5);
+        let mut evolution = SkillEvolution {
+            unlocked_stage: 3,
+            ..default()
+        };
+        let mut rng = RunRng::default();
+        for tier in 1..=3 {
+            for _ in 0..2 {
+                let choices = late_skill_choices(Vec::new(), &build, &evolution, 0.0, &mut rng);
+                assert_eq!(choices.len(), 3);
+                for choice in choices {
+                    let DraftChoice::Evolution {
+                        skill,
+                        tier: offered,
+                    } = choice
+                    else {
+                        panic!("expected mastery offer")
+                    };
+                    assert_eq!(offered, tier);
+                    evolution.tiers[usize::from(skill.0)] = offered;
+                }
+            }
+        }
+        assert_eq!(&evolution.tiers[..6], &[3; 6]);
+        assert!(late_skill_choices(Vec::new(), &build, &evolution, 0.0, &mut rng).is_empty());
+        let skill = SkillId(1);
+        let mut session = GameSession::default();
+        build.skills[1] = 0;
+        evolution.rewarded_ranks[1] = 0;
+        for _ in 0..5 {
+            grant_skill_rank(skill, &mut session, &mut build, &mut evolution);
+        }
+        let stats = (
+            build.attack_damage,
+            build.projectile_speed,
+            build.attacks_per_second,
+        );
+        build.skills[1] = 0;
+        for _ in 0..5 {
+            grant_skill_rank(skill, &mut session, &mut build, &mut evolution);
+        }
+        assert_eq!(
+            (
+                build.attack_damage,
+                build.projectile_speed,
+                build.attacks_per_second
+            ),
+            stats
+        );
+    }
+
+    #[test]
+    fn each_mastered_ur_offers_three_exclusive_routes_and_real_card_click_preserves_rank() {
+        use super::super::skill_evolution::UrEvolutionPath;
+        for index in 26..=29 {
+            for wanted in UrEvolutionPath::ALL {
+                let mut app = test_app();
+                app.world_mut().resource_mut::<PlayerBuild>().skills.fill(0);
+                app.world_mut().resource_mut::<PlayerBuild>().skills[index] = 5;
+                app.world_mut().resource_mut::<GameSession>().gold = 5000;
+                tap_g(&mut app);
+                let choices = app.world().resource::<DraftState>().choices.clone();
+                assert_eq!(choices.len(), 3);
+                for (choice, path) in choices.iter().zip(UrEvolutionPath::ALL) {
+                    assert_eq!(
+                        *choice,
+                        DraftChoice::EvolveUr {
+                            skill: SkillId(index as u8),
+                            path
+                        }
+                    );
+                }
+                press_choice(&mut app, wanted.index());
+                assert_eq!(
+                    app.world().resource::<SkillEvolution>().paths[index],
+                    Some(wanted)
+                );
+                assert_eq!(app.world().resource::<PlayerBuild>().skills[index], 5);
+                assert_eq!(app.world().resource::<SkillEvolution>().tiers[index], 0);
+                assert!(
+                    !app.world()
+                        .resource::<SkillEvolution>()
+                        .branch_ready(SkillId(index as u8), app.world().resource::<PlayerBuild>())
+                );
+                assert!(
+                    !app.world()
+                        .resource::<SkillEvolution>()
+                        .eligible(SkillId(index as u8), app.world().resource::<PlayerBuild>())
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn completed_weapon_families_grant_one_fruit_only_on_final_unique_card() {
+        for family in [BondId::Warpath, BondId::Arcanum, BondId::Archery] {
+            let mut session = GameSession::default();
+            let mut build = PlayerBuild::default();
+            build.owned_bond_cards.fill(true);
+            for card in family.definition().members {
+                build.owned_bond_cards[card.index()] = false;
+            }
+            let members = family.definition().members;
+            for (index, card) in members.iter().enumerate() {
+                assert_eq!(
+                    apply_bond(*card, &mut session, &mut build),
+                    u32::from(index + 1 == members.len())
+                );
+                assert_eq!(
+                    apply_bond(*card, &mut session, &mut build),
+                    0,
+                    "duplicate completion must not award again"
+                );
+            }
+        }
+    }
+    #[test]
+    fn fruit_requires_paid_card_acquisition_and_is_deposited_once() {
+        let mut app = test_app();
+        let card = BondCardId::WarpathFury;
+        {
+            let mut build = app.world_mut().resource_mut::<PlayerBuild>();
+            build.owned_bond_cards.fill(true);
+            build.owned_bond_cards[card.index()] = false;
+        }
+        install_test_bond_draft(
+            &mut app,
+            vec![DraftChoice::Bond(card)],
+            None,
+            BondDrawPayment::Free,
+        );
+        app.world_mut()
+            .resource_mut::<BondEconomy>()
+            .pending_payment = None;
+        let before = (
+            app.world().resource::<GameSession>().gold,
+            app.world().resource::<GameSession>().wood,
+        );
+        press_first_choice(&mut app);
+        assert!(!app.world().resource::<PlayerBuild>().owns_bond_card(card));
+        assert_eq!(app.world().resource::<RecruitmentProgress>().fruit_count, 0);
+        assert_eq!(
+            (
+                app.world().resource::<GameSession>().gold,
+                app.world().resource::<GameSession>().wood
+            ),
+            before
+        );
+        app.world_mut()
+            .resource_mut::<BondEconomy>()
+            .pending_payment = Some(BondDrawPayment::Free);
+        press_first_choice(&mut app);
+        assert_eq!(app.world().resource::<RecruitmentProgress>().fruit_count, 1);
+        install_test_bond_draft(
+            &mut app,
+            vec![DraftChoice::Bond(card)],
+            None,
+            BondDrawPayment::Free,
+        );
+        press_first_choice(&mut app);
+        assert_eq!(app.world().resource::<RecruitmentProgress>().fruit_count, 1);
+    }
+    #[test]
+    fn level_progression_reaches_forty_and_stops_at_sixty() {
+        let mut app = App::new();
+        app.insert_resource(GameSession {
+            xp: 1_000_000,
+            paused: false,
+            ..Default::default()
+        })
+        .add_systems(Update, check_level_up);
+        for _ in 0..39 {
+            app.update();
+        }
+        assert_eq!(app.world().resource::<GameSession>().level, 40);
+        for _ in 0..30 {
+            app.update();
+        }
+        assert_eq!(app.world().resource::<GameSession>().level, MAX_HERO_LEVEL);
+        let xp = app.world().resource::<GameSession>().xp;
+        app.update();
+        assert_eq!(app.world().resource::<GameSession>().xp, xp);
+    }
+    #[test]
+    fn three_consecutive_card_clicks_and_number_key_acquire_without_confirmation() {
+        let mut app = test_app();
+        app.world_mut().resource_mut::<GameSession>().skill_points = 4;
+        tap_g(&mut app);
+        for index in [0, 2, 1] {
+            let choice = app.world().resource::<DraftState>().choices[index];
+            let DraftChoice::Skill(skill) = choice else {
+                panic!("expected skill");
+            };
+            let before = app.world().resource::<PlayerBuild>().skill_rank(skill);
+            press_choice(&mut app, index);
+            assert_eq!(
+                app.world().resource::<PlayerBuild>().skill_rank(skill),
+                before + 1
+            );
+            assert!(app.world().resource::<DraftState>().root.is_none());
+            assert!(!app.world().resource::<GameSession>().paused);
+            app.update();
+            assert_eq!(
+                app.world().resource::<PlayerBuild>().skill_rank(skill),
+                before + 1
+            );
+        }
+        let DraftChoice::Skill(skill) = app.world().resource::<DraftState>().choices[1] else {
+            panic!("expected skill");
+        };
+        let before = app.world().resource::<PlayerBuild>().skill_rank(skill);
+        app.world_mut()
+            .resource_mut::<ButtonInput<KeyCode>>()
+            .press(KeyCode::Digit2);
+        app.update();
+        assert_eq!(
+            app.world().resource::<PlayerBuild>().skill_rank(skill),
+            before + 1
+        );
+        assert!(app.world().resource::<DraftState>().root.is_none());
+    }
+    #[test]
+    fn held_pointer_cannot_consume_a_new_draft_until_another_press() {
+        let mut app = test_app();
+        app.init_resource::<ButtonInput<MouseButton>>();
+        app.world_mut().resource_mut::<GameSession>().skill_points = 2;
+        tap_g(&mut app);
+        app.world_mut()
+            .resource_mut::<ButtonInput<MouseButton>>()
+            .press(MouseButton::Left);
+        press_choice(&mut app, 0);
+        app.world_mut()
+            .resource_mut::<ButtonInput<MouseButton>>()
+            .clear();
+        tap_g(&mut app);
+        let before = app.world().resource::<PlayerBuild>().skills;
+        press_choice(&mut app, 1);
+        assert_eq!(app.world().resource::<PlayerBuild>().skills, before);
+        assert!(app.world().resource::<DraftState>().root.is_some());
+        app.update();
+        assert_eq!(app.world().resource::<PlayerBuild>().skills, before);
+        let button = {
+            let world = app.world_mut();
+            let mut cards = world.query::<(Entity, &DraftButton)>();
+            cards
+                .iter(world)
+                .find(|(_, button)| button.0 == 1)
+                .unwrap()
+                .0
+        };
+        app.world_mut().entity_mut(button).insert(Interaction::None);
+        app.update();
+        app.world_mut()
+            .resource_mut::<ButtonInput<MouseButton>>()
+            .release(MouseButton::Left);
+        app.world_mut()
+            .resource_mut::<ButtonInput<MouseButton>>()
+            .press(MouseButton::Left);
+        press_choice(&mut app, 1);
+        assert!(app.world().resource::<DraftState>().root.is_none());
+        assert_ne!(app.world().resource::<PlayerBuild>().skills, before);
+    }
+
+    #[test]
+    fn rarity_weight_boundaries_drive_skill_and_card_candidates() {
         let skills = [SkillId(0), SkillId(12), SkillId(20), SkillId(26)];
-        let bonds = [
-            BondId::Thunder,
-            BondId::Elements,
-            BondId::Ascension,
-            BondId::Fortune,
-        ];
-        let boundaries = [
+        for (roll, index) in [
             (0, 0),
             (51, 0),
             (52, 1),
@@ -1347,78 +1825,87 @@ mod tests {
             (94, 2),
             (95, 3),
             (99, 3),
-        ];
-        for (roll, index) in boundaries {
+        ] {
             assert_eq!(
                 choose_weighted_skill_for_roll(&skills, roll),
                 Some(skills[index])
             );
+        }
+        let cards = [
+            BondCardId::JourneyStrength,
+            BondCardId::JudgeBrush,
+            BondCardId::BookOfLife,
+        ];
+        for (roll, index) in [(0, 0), (51, 0), (52, 1), (79, 1), (80, 2), (94, 2)] {
             assert_eq!(
-                choose_weighted_bond_for_roll(&bonds, roll),
-                Some(bonds[index])
+                choose_weighted_bond_for_roll(&cards, roll, &PlayerBuild::default()),
+                Some(cards[index])
             );
         }
     }
 
     #[test]
-    fn ur_bond_crosses_two_tiers_once_and_never_duplicates_direct_rewards() {
+    fn agility_completion_doubles_ranger_weight_without_boosting_other_families() {
+        let cards = [BondCardId::RangerRapidFire, BondCardId::DivineMight];
+        let mut build = PlayerBuild::default();
+        assert_eq!(
+            bond_card_draw_weight(cards[0], &build),
+            bond_card_draw_weight(cards[1], &build)
+        );
+        for card in BondId::Journey
+            .definition()
+            .members
+            .iter()
+            .chain(BondId::Agility.definition().members)
+        {
+            build.owned_bond_cards[card.index()] = true;
+        }
+        let mut counts = [0; 2];
+        let total: u32 = cards
+            .iter()
+            .map(|card| bond_card_draw_weight(*card, &build))
+            .sum();
+        for roll in 0..total {
+            let chosen = choose_weighted_bond_for_roll(&cards, roll, &build).unwrap();
+            counts[cards.iter().position(|card| *card == chosen).unwrap()] += 1;
+        }
+        assert_eq!(counts, [104, 52]);
+        let mut rng = RunRng(0x12345678);
+        for _ in 0..50 {
+            let choices = pick_bond_choices(
+                &mut rng,
+                &build,
+                &SelectedHero::default(),
+                &mut DraftAntiDrought::default(),
+                None,
+            );
+            for (index, choice) in choices.iter().enumerate() {
+                let DraftChoice::Bond(card) = *choice else {
+                    panic!("expected card");
+                };
+                assert!(bond_card_available(card, &build));
+                assert!(!choices[..index].contains(choice));
+            }
+        }
+    }
+
+    #[test]
+    fn distinct_cards_complete_family_and_reward_exactly_once() {
         let mut session = GameSession::default();
         let mut build = PlayerBuild::default();
-        let base_hp = session.core_max_hp;
-
-        apply_bond(BondId::Bastion, &mut session, &mut build);
-        assert_eq!(build.bond(BondId::Bastion), 4);
-        assert_eq!(session.core_max_hp, base_hp + 250.0);
-
-        apply_bond(BondId::Bastion, &mut session, &mut build);
-        assert_eq!(build.bond(BondId::Bastion), 6);
-        assert!(build.bond_complete(BondId::Bastion));
-        assert_eq!(session.core_max_hp, base_hp + 250.0);
-    }
-
-    #[test]
-    fn bond_selection_only_records_progress_and_never_reapplies_generic_stats() {
-        for bond in BondId::ALL {
-            let mut session = GameSession::default();
-            let mut build = PlayerBuild::default();
-            let baseline = (
-                build.attack_damage,
-                build.attacks_per_second,
-                build.projectile_speed,
-                build.move_speed,
-                build.multishot,
-                build.pierce,
-                session.wood,
-                session.core_hp,
-                session.core_max_hp,
-            );
-            for _ in 0..6 {
-                apply_bond(bond, &mut session, &mut build);
-            }
-            let expected_core = if bond == BondId::Bastion {
-                (baseline.7 + 250.0, baseline.8 + 250.0)
-            } else {
-                (baseline.7, baseline.8)
-            };
-            assert_eq!(
-                (
-                    build.attack_damage,
-                    build.attacks_per_second,
-                    build.projectile_speed,
-                    build.move_speed,
-                    build.multishot,
-                    build.pierce,
-                    session.wood,
-                ),
-                (
-                    baseline.0, baseline.1, baseline.2, baseline.3, baseline.4, baseline.5,
-                    baseline.6,
-                ),
-                "{bond:?} kept an obsolete generic stat bonus",
-            );
-            assert_eq!((session.core_hp, session.core_max_hp), expected_core);
-            assert!(build.bond_complete(bond));
+        let (gold, wood, attack) = (session.gold, session.wood, build.attack_damage);
+        for card in BondId::Journey.definition().members {
+            apply_bond(*card, &mut session, &mut build);
+            apply_bond(*card, &mut session, &mut build);
         }
+        assert_eq!(build.bond(BondId::Journey), 3);
+        assert!(build.bond_complete(BondId::Journey));
+        assert_eq!(build.active_bond_count(), 0);
+        assert_eq!((session.gold, session.wood), (gold + 100, wood + 160));
+        assert_eq!(build.attack_damage, attack);
+        apply_bond(BondCardId::BookOfLife, &mut session, &mut build);
+        assert_eq!(build.bond(BondId::Underworld), 1);
+        assert!(!build.bond_complete(BondId::Underworld));
     }
 
     fn tap_g(app: &mut App) {
@@ -1477,8 +1964,8 @@ mod tests {
 
     fn install_test_bond_draft(
         app: &mut App,
-        choices: Vec<BondId>,
-        replacement: Option<BondId>,
+        choices: Vec<DraftChoice>,
+        replacement: Option<BondCardId>,
         payment: BondDrawPayment,
     ) {
         let root = app.world_mut().spawn(DraftRoot).id();
@@ -1502,7 +1989,7 @@ mod tests {
         }
         {
             let mut draft = app.world_mut().resource_mut::<DraftState>();
-            draft.choices = choices.into_iter().map(DraftChoice::Bond).collect();
+            draft.choices = choices;
             draft.root = Some(root);
             draft.opened_for = 0.0;
             draft.kind = Some(if replacement.is_some() {
@@ -1762,6 +2249,7 @@ mod tests {
             &build,
             &selected,
             &mut drought,
+            SKILL_SLOT_LIMIT,
         );
         assert!(skills.iter().any(|choice| {
             matches!(choice, DraftChoice::Skill(skill)
@@ -1769,399 +2257,489 @@ mod tests {
         }));
         assert!(!drought.skill_missed_preference);
 
+        // Preference protection applies after the fixed Journey introduction.
+        for card in BondId::Journey.definition().members {
+            build.owned_bond_cards[card.index()] = true;
+        }
+        // Journey was the only Fortune family; use a mage with an unlocked
+        // Intelligence preference to exercise post-introduction protection.
+        let selected = SelectedHero {
+            kind: super::super::HeroKind::StormSavant,
+            locked: true,
+        };
+        assert!(
+            available_bond_cards(&build)
+                .iter()
+                .any(|card| bond_matches_preference(card.family(), &selected, &build))
+        );
         let bonds = pick_bond_choices(&mut rng, &build, &selected, &mut drought, None);
         assert!(bonds.iter().any(|choice| {
             matches!(choice, DraftChoice::Bond(bond)
-                if bond_matches_preference(*bond, &selected, &build))
+                if bond_matches_preference(bond.family(), &selected, &build))
         }));
         assert!(!drought.bond_missed_preference);
     }
 
     #[test]
-    fn seven_full_bond_slots_can_still_roll_a_new_family() {
-        let mut build = PlayerBuild::default();
-        for bond in BondId::ALL.into_iter().take(7) {
-            build.bonds[bond.index()] = 1;
+    fn opening_three_acquisitions_are_journey_for_every_hero_and_seed() {
+        for hero in super::super::HeroKind::ALL {
+            for seed in [1, 0xA11CE, u64::MAX] {
+                let mut rng = RunRng(seed);
+                let mut build = PlayerBuild::default();
+                let mut session = GameSession::default();
+                let mut drought = DraftAntiDrought {
+                    bond_missed_preference: true,
+                    ..default()
+                };
+                let selected = SelectedHero {
+                    kind: hero,
+                    locked: true,
+                };
+                for remaining in (1..=3).rev() {
+                    let expected: Vec<_> = BondId::Journey
+                        .definition()
+                        .members
+                        .iter()
+                        .copied()
+                        .filter(|card| !build.owns_bond_card(*card))
+                        .collect();
+                    assert_eq!(available_bond_cards(&build), expected);
+                    // Refresh repeatedly with an unrelated compass guarantee.
+                    for _ in 0..4 {
+                        let hand = pick_bond_choices(
+                            &mut rng,
+                            &build,
+                            &selected,
+                            &mut drought,
+                            Some(BondId::Ascension),
+                        );
+                        assert_eq!(hand.len(), remaining);
+                        assert!(hand.iter().zip(&expected).all(|(choice, expected)|
+                            matches!(choice, DraftChoice::Bond(card) if card == expected)));
+                    }
+                    apply_bond(*expected.last().unwrap(), &mut session, &mut build);
+                }
+                assert!(build.bond_complete(BondId::Journey));
+                let pool = available_bond_cards(&build);
+                for card in [
+                    BondCardId::StrengthTraining,
+                    BondCardId::AgilityTraining,
+                    BondCardId::IntelligenceTraining,
+                ] {
+                    assert!(pool.contains(&card));
+                }
+                assert!(pool.iter().all(|card| card.family() != BondId::Journey));
+            }
         }
-        let selected = SelectedHero::default();
-        let mut rng = RunRng::default();
-        let mut drought = DraftAntiDrought {
-            bond_missed_preference: true,
-            ..default()
-        };
-        assert_eq!(available_bonds(&build).len(), BondId::COUNT);
-        let mut saw_new_family = false;
-        for _ in 0..40 {
-            let choices = pick_bond_choices(&mut rng, &build, &selected, &mut drought, None);
-            assert_eq!(choices.len(), 3);
-            saw_new_family |= choices
-                .into_iter()
-                .any(|choice| matches!(choice, DraftChoice::Bond(bond) if build.bond(bond) == 0));
-        }
-        assert!(saw_new_family, "full slots must not suppress new families");
     }
 
     #[test]
-    fn new_family_at_seven_slots_waits_for_an_explicit_replacement() {
+    fn card_pool_unlocks_in_order_and_excludes_owned_cards() {
+        let mut build = PlayerBuild::default();
+        let mut session = GameSession::default();
+        assert!(
+            available_bond_cards(&build)
+                .iter()
+                .all(|c| !matches!(c.family(), BondId::Agility | BondId::Ranger))
+        );
+        for card in BondId::Journey.definition().members {
+            apply_bond(*card, &mut session, &mut build);
+        }
+        assert!(available_bond_cards(&build).contains(&BondCardId::AgilityTraining));
+        assert!(!available_bond_cards(&build).contains(&BondCardId::RangerDeadeye));
+        for card in BondId::Agility.definition().members {
+            apply_bond(*card, &mut session, &mut build);
+        }
+        assert!(available_bond_cards(&build).contains(&BondCardId::RangerDeadeye));
+        assert!(
+            available_bond_cards(&build)
+                .iter()
+                .all(|c| !build.owns_bond_card(*c))
+        );
+        let mut rng = RunRng::default();
+        for _ in 0..50 {
+            let choices = pick_bond_choices(
+                &mut rng,
+                &build,
+                &SelectedHero::default(),
+                &mut DraftAntiDrought::default(),
+                None,
+            );
+            for (index, choice) in choices.iter().enumerate() {
+                assert!(!choices[..index].contains(choice));
+            }
+        }
+    }
+
+    #[test]
+    fn real_ecs_draw_refresh_later_and_card_click_traverse_the_entire_card_chain() {
         let mut app = test_app();
         {
-            let mut build = app.world_mut().resource_mut::<PlayerBuild>();
-            for bond in BondId::ALL.into_iter().take(BOND_SLOT_LIMIT) {
-                build.bonds[bond.index()] = 1;
-            }
-            build.bonds[BondId::Bastion.index()] = BondId::Bastion.required();
-            build.completed_bonds[BondId::Bastion.index()] = true;
+            let mut session = app.world_mut().resource_mut::<GameSession>();
+            session.elapsed = 30.;
+            session.level = 50;
+            session.wood = 100_000;
+            session.skill_rerolls = 1000;
         }
-        let new_bond = BondId::Blood;
-        install_test_bond_draft(&mut app, vec![new_bond], None, BondDrawPayment::Wood(10));
-        let first_root = app
-            .world()
-            .resource::<DraftState>()
-            .root
-            .expect("first-stage root");
-
-        press_choice(&mut app, 0);
-
+        for acquired in 0..BondCardId::COUNT {
+            tap_f(&mut app);
+            assert!(app.world().resource::<DraftState>().root.is_some());
+            let choices = app.world().resource::<DraftState>().choices.clone();
+            let wood = app.world().resource::<GameSession>().wood;
+            let rng = app.world().resource::<RunRng>().0;
+            press_action(&mut app, DraftAction::Later);
+            tap_f(&mut app);
+            assert_eq!(app.world().resource::<DraftState>().choices, choices);
+            assert_eq!(app.world().resource::<GameSession>().wood, wood);
+            assert_eq!(app.world().resource::<RunRng>().0, rng);
+            press_action(&mut app, DraftAction::Refresh);
+            let choices = app.world().resource::<DraftState>().choices.clone();
+            let build = app.world().resource::<PlayerBuild>();
+            if acquired < 3 {
+                assert_eq!(choices.len(), 3 - acquired);
+                assert!(choices.iter().all(|choice| matches!(choice,
+                    DraftChoice::Bond(card) if card.family() == BondId::Journey)));
+            }
+            for (index, choice) in choices.iter().enumerate() {
+                let DraftChoice::Bond(card) = *choice else {
+                    panic!("expected card");
+                };
+                assert!(bond_card_available(card, build));
+                assert!(bond_stage_available(
+                    card,
+                    app.world().resource::<GameSession>()
+                ));
+                assert!(!choices[..index].contains(choice));
+            }
+            // Finish an in-progress family where possible. At seven occupied
+            // slots, use the real refresh control instead of discarding cards;
+            // this traversal must acquire every unique card exactly once.
+            let chosen = (0..100)
+                .find_map(|_| {
+                    let build = app.world().resource::<PlayerBuild>();
+                    let choices = &app.world().resource::<DraftState>().choices;
+                    let index = choices
+                        .iter()
+                        .enumerate()
+                        .filter_map(|(index, choice)| {
+                            let DraftChoice::Bond(card) = choice else {
+                                return None;
+                            };
+                            let owned = build.bond(card.family());
+                            (owned > 0 || build.active_bond_count() < BOND_SLOT_LIMIT)
+                                .then_some((index, owned))
+                        })
+                        .max_by_key(|(_, owned)| *owned)
+                        .map(|(index, _)| index);
+                    if index.is_none() {
+                        press_action(&mut app, DraftAction::Refresh);
+                    }
+                    index
+                })
+                .expect("refresh should offer an unfinished family within bounded attempts");
+            press_choice(&mut app, chosen);
+            assert_eq!(
+                app.world()
+                    .resource::<PlayerBuild>()
+                    .owned_bond_cards
+                    .iter()
+                    .filter(|owned| **owned)
+                    .count(),
+                acquired + 1
+            );
+        }
         let build = app.world().resource::<PlayerBuild>();
-        assert_eq!(build.bond(new_bond), 0, "new family applied too early");
-        assert_eq!(build.active_bond_count(), 7);
-        let draft = app.world().resource::<DraftState>();
-        assert_eq!(draft.kind, Some(DraftKind::BondReplacement));
-        assert_eq!(draft.pending_bond_replacement, Some(new_bond));
-        assert_eq!(draft.choices.len(), BOND_SLOT_LIMIT);
-        assert!(draft.choices.iter().all(|choice| {
-            matches!(choice, DraftChoice::Bond(bond)
-                if build.bond(*bond) > 0 && !build.bond_complete(*bond))
-        }));
-        assert!(draft.root.is_some());
-        assert_ne!(draft.root, Some(first_root));
-        assert!(build.bond_complete(BondId::Bastion));
-        assert!(app.world().resource::<GameSession>().paused);
+        assert!(
+            BondId::ALL
+                .into_iter()
+                .all(|family| build.bond_complete(family))
+        );
+        assert_eq!(build.active_bond_count(), 0);
+        let wood = app.world().resource::<GameSession>().wood;
+        tap_f(&mut app);
+        assert!(app.world().resource::<DraftState>().root.is_none());
+        assert_eq!(app.world().resource::<GameSession>().wood, wood);
+    }
+
+    #[test]
+    fn each_attribute_route_unlocks_its_advanced_family_through_ecs_card_click() {
+        for (parent, advanced) in [
+            (BondId::Strength, BondId::Warpath),
+            (BondId::Intelligence, BondId::Arcanum),
+            (BondId::Ranger, BondId::Archery),
+        ] {
+            let mut app = test_app();
+            {
+                let mut build = app.world_mut().resource_mut::<PlayerBuild>();
+                build.owned_bond_cards.fill(true);
+                for card in parent
+                    .definition()
+                    .members
+                    .iter()
+                    .chain(advanced.definition().members)
+                {
+                    build.owned_bond_cards[card.index()] = false;
+                }
+            }
+            {
+                let mut session = app.world_mut().resource_mut::<GameSession>();
+                session.elapsed = 30.;
+                session.wood = 1000;
+            }
+            for owned in 0..parent.required() {
+                tap_f(&mut app);
+                assert!(app.world().resource::<DraftState>().choices.iter().all(
+                    |choice| matches!(choice, DraftChoice::Bond(card) if card.family() == parent)
+                ));
+                press_first_choice(&mut app);
+                let build = app.world().resource::<PlayerBuild>();
+                assert_eq!(build.bond(parent), owned + 1);
+                assert_eq!(build.bond_complete(parent), owned + 1 == parent.required());
+            }
+            tap_f(&mut app);
+            assert!(app.world().resource::<DraftState>().choices.iter().all(
+                |choice| matches!(choice, DraftChoice::Bond(card) if card.family() == advanced)
+            ));
+            press_first_choice(&mut app);
+            assert_eq!(app.world().resource::<PlayerBuild>().bond(advanced), 1);
+        }
+    }
+
+    #[test]
+    fn clicking_injected_locked_card_cannot_acquire_or_reward_it() {
+        let mut app = test_app();
+        install_test_bond_draft(
+            &mut app,
+            vec![DraftChoice::Bond(BondCardId::AgilityTraining)],
+            None,
+            BondDrawPayment::Free,
+        );
+        let before = app.world().resource::<PlayerBuild>().owned_bond_cards;
+        press_first_choice(&mut app);
+        assert_eq!(
+            app.world().resource::<PlayerBuild>().owned_bond_cards,
+            before
+        );
+        assert!(app.world().resource::<DraftState>().root.is_some());
         assert_eq!(
             app.world().resource::<BondEconomy>().pending_payment,
-            Some(BondDrawPayment::Wood(10))
+            Some(BondDrawPayment::Free)
         );
     }
 
     #[test]
-    fn replacement_clears_one_family_then_adds_the_new_rarity_progress() {
+    fn exhausted_card_pool_never_charges_or_opens_empty_window() {
         let mut app = test_app();
-        {
-            let mut build = app.world_mut().resource_mut::<PlayerBuild>();
-            build.bonds[BondId::Thunder.index()] = 3;
-            build.bonds[BondId::Ember.index()] = 2;
-            build.bonds[BondId::Spirits.index()] = 4;
-            build.bonds[BondId::Bastion.index()] = BondId::Bastion.required();
-            build.completed_bonds[BondId::Bastion.index()] = true;
-        }
+        app.world_mut()
+            .resource_mut::<PlayerBuild>()
+            .owned_bond_cards
+            .fill(true);
         {
             let mut session = app.world_mut().resource_mut::<GameSession>();
-            session.core_max_hp += 250.0;
-            session.core_hp += 250.0;
+            session.elapsed = 30.;
+            session.wood = 100;
         }
-        let before = app.world().resource::<PlayerBuild>().bonds;
-        let completed_before = app.world().resource::<PlayerBuild>().completed_bonds;
-        let core_before = {
-            let session = app.world().resource::<GameSession>();
-            (session.core_hp, session.core_max_hp)
-        };
-        install_test_bond_draft(
-            &mut app,
-            vec![BondId::Thunder, BondId::Ember, BondId::Spirits],
-            Some(BondId::Blood),
-            BondDrawPayment::Free,
-        );
-
-        press_choice(&mut app, 1);
-
-        let build = app.world().resource::<PlayerBuild>();
-        assert_eq!(build.bond(BondId::Ember), 0);
-        assert!(!build.bond_complete(BondId::Ember));
-        assert_eq!(
-            build.bond(BondId::Blood),
-            BondId::Blood.rarity().bond_points_per_pick()
-        );
-        for bond in BondId::ALL {
-            if !matches!(bond, BondId::Ember | BondId::Blood) {
-                assert_eq!(build.bond(bond), before[bond.index()], "changed {bond:?}");
-                assert_eq!(
-                    build.bond_complete(bond),
-                    completed_before[bond.index()],
-                    "changed completed state for {bond:?}"
-                );
-            }
-        }
-        assert_eq!(build.active_bond_count(), 3);
-        let session = app.world().resource::<GameSession>();
-        assert_eq!((session.core_hp, session.core_max_hp), core_before);
-        assert!(app.world().resource::<DraftState>().kind.is_none());
-        assert!(!app.world().resource::<GameSession>().paused);
-        assert!(
-            app.world()
-                .resource::<BondEconomy>()
-                .pending_payment
-                .is_none()
-        );
+        tap_f(&mut app);
+        assert!(app.world().resource::<DraftState>().root.is_none());
+        assert_eq!(app.world().resource::<GameSession>().wood, 100);
+        assert!(app.world().resource::<BondEconomy>().free_draw_available);
+        app.world_mut()
+            .resource_mut::<BondEconomy>()
+            .free_draw_available = false;
+        tap_f(&mut app);
+        assert_eq!(app.world().resource::<GameSession>().wood, 100);
+        assert_eq!(app.world().resource::<GameSession>().bond_draws, 0);
     }
 
     #[test]
-    fn abandoning_replacement_grants_exactly_one_refresh() {
-        let mut app = test_app();
-        app.world_mut().resource_mut::<GameSession>().skill_rerolls = 2;
-        app.world_mut().resource_mut::<PlayerBuild>().bonds[BondId::Thunder.index()] = 3;
-        install_test_bond_draft(
-            &mut app,
-            vec![BondId::Thunder],
-            Some(BondId::Blood),
-            BondDrawPayment::Free,
-        );
-
-        press_action(&mut app, DraftAction::Abandon);
-        app.update();
-
-        let session = app.world().resource::<GameSession>();
-        assert_eq!(session.skill_rerolls, 3);
-        assert!(!session.paused);
-        let draft = app.world().resource::<DraftState>();
-        assert!(draft.kind.is_none());
-        assert!(draft.pending_bond_replacement.is_none());
-        assert!(draft.root.is_none());
-        assert!(
-            app.world()
-                .resource::<BondEconomy>()
-                .pending_payment
-                .is_none()
-        );
-    }
-
-    #[test]
-    fn autoplay_replaces_lowest_progress_then_lowest_bond_id_without_stalling() {
-        let mut app = test_app();
-        app.insert_resource(Autoplay);
-        {
-            let mut build = app.world_mut().resource_mut::<PlayerBuild>();
-            build.bonds[BondId::Thunder.index()] = 1;
-            build.bonds[BondId::Ember.index()] = 1;
-            build.bonds[BondId::Spirits.index()] = 2;
-            build.bonds[BondId::Elements.index()] = 3;
-            build.bonds[BondId::Arcane.index()] = 4;
-            build.bonds[BondId::Triune.index()] = 5;
-            build.bonds[BondId::Ascension.index()] = 2;
-        }
-        install_test_bond_draft(
-            &mut app,
-            vec![
-                BondId::Spirits,
-                BondId::Ember,
-                BondId::Ascension,
-                BondId::Thunder,
-                BondId::Elements,
-                BondId::Arcane,
-                BondId::Triune,
-            ],
-            Some(BondId::Blood),
-            BondDrawPayment::Free,
-        );
-        app.world_mut().resource_mut::<DraftState>().opened_for = 1.15;
-
-        app.update();
-
-        let build = app.world().resource::<PlayerBuild>();
-        assert_eq!(build.bond(BondId::Thunder), 0);
-        assert_eq!(build.bond(BondId::Ember), 1);
-        assert_eq!(
-            build.bond(BondId::Blood),
-            BondId::Blood.rarity().bond_points_per_pick()
-        );
-        assert!(app.world().resource::<DraftState>().kind.is_none());
-        assert!(!app.world().resource::<GameSession>().paused);
-    }
-
-    #[test]
-    fn completed_bond_releases_a_slot_and_new_family_applies_directly() {
-        let mut app = test_app();
-        {
-            let mut build = app.world_mut().resource_mut::<PlayerBuild>();
-            build.bonds[BondId::Thunder.index()] = BondId::Thunder.required();
-            build.completed_bonds[BondId::Thunder.index()] = true;
-            for bond in [
-                BondId::Ember,
-                BondId::Spirits,
-                BondId::Elements,
-                BondId::Arcane,
-                BondId::Triune,
-                BondId::Ascension,
-            ] {
-                build.bonds[bond.index()] = 1;
-            }
-            assert_eq!(build.active_bond_count(), 6);
-        }
-        install_test_bond_draft(&mut app, vec![BondId::Blood], None, BondDrawPayment::Free);
-
-        press_choice(&mut app, 0);
-
-        let build = app.world().resource::<PlayerBuild>();
-        assert_eq!(
-            build.bond(BondId::Blood),
-            BondId::Blood.rarity().bond_points_per_pick()
-        );
-        assert_eq!(build.active_bond_count(), 7);
-        assert!(build.bond_complete(BondId::Thunder));
-        let draft = app.world().resource::<DraftState>();
-        assert!(draft.kind.is_none());
-        assert!(draft.pending_bond_replacement.is_none());
-    }
-
-    #[test]
-    fn existing_family_upgrade_stays_direct_when_all_seven_slots_are_full() {
-        let mut app = test_app();
-        for bond in BondId::ALL.into_iter().take(BOND_SLOT_LIMIT) {
-            app.world_mut().resource_mut::<PlayerBuild>().bonds[bond.index()] = 1;
-        }
-        app.world_mut().resource_mut::<PlayerBuild>().bonds[BondId::Thunder.index()] = 2;
-        install_test_bond_draft(&mut app, vec![BondId::Thunder], None, BondDrawPayment::Free);
-
-        press_choice(&mut app, 0);
-
-        let build = app.world().resource::<PlayerBuild>();
-        assert_eq!(build.bond(BondId::Thunder), 3);
-        assert_eq!(build.active_bond_count(), 7);
-        let draft = app.world().resource::<DraftState>();
-        assert!(draft.kind.is_none());
-        assert!(draft.pending_bond_replacement.is_none());
-    }
-
-    #[test]
-    fn all_draft_overlays_fit_compact_landscape_phone_sizes() {
-        fn fits(width: f32, height: f32, replacing: bool) -> bool {
-            let inner_width = width - DRAFT_OVERLAY_PADDING * 2.0;
-            let (grid_percent, grid_max_width, grid_height, card_percent, columns, rows) =
-                if replacing {
-                    (
-                        REPLACEMENT_GRID_WIDTH_PERCENT,
-                        REPLACEMENT_GRID_MAX_WIDTH,
-                        REPLACEMENT_GRID_HEIGHT,
-                        REPLACEMENT_CARD_WIDTH_PERCENT,
-                        4.0,
-                        2.0,
-                    )
-                } else {
-                    (
-                        NORMAL_GRID_WIDTH_PERCENT,
-                        NORMAL_GRID_MAX_WIDTH,
-                        NORMAL_GRID_HEIGHT,
-                        NORMAL_CARD_WIDTH_PERCENT,
-                        3.0,
-                        1.0,
-                    )
-                };
-            let grid_width = (inner_width * grid_percent / 100.0).min(grid_max_width);
-            let column_gap = if replacing {
-                REPLACEMENT_COLUMN_GAP
-            } else {
-                NORMAL_COLUMN_GAP
-            };
-            let row_gap = if replacing { REPLACEMENT_ROW_GAP } else { 0.0 };
-            let cards_width =
-                grid_width * card_percent / 100.0 * columns + column_gap * (columns - 1.0);
-            let card_height_percent = if replacing { 48.0 } else { 100.0 };
-            let cards_height =
-                grid_height * card_height_percent / 100.0 * rows + row_gap * (rows - 1.0);
-            let vertical = if replacing {
-                DRAFT_OVERLAY_PADDING * 2.0
-                    + REPLACEMENT_HEADING_SIZE * 1.2
-                    + REPLACEMENT_HELPER_SIZE * 1.2
-                    + REPLACEMENT_GRID_HEIGHT
-                    + MIN_TOUCH_TARGET
-                    + REPLACEMENT_OVERLAY_GAP * 3.0
-            } else {
-                DRAFT_OVERLAY_PADDING * 2.0
-                    + NORMAL_HEADING_SIZE * 1.2
-                    + NORMAL_GRID_HEIGHT
-                    + MIN_TOUCH_TARGET
-                    + NORMAL_OVERLAY_GAP * 2.0
-            };
-            cards_width <= grid_width && cards_height <= grid_height && vertical <= height
-        }
-
-        for (width, height) in [(667.0, 375.0), (844.0, 390.0), (1280.0, 720.0)] {
-            assert!(
-                fits(width, height, false),
-                "normal draft at {width}x{height}"
-            );
-            assert!(
-                fits(width, height, true),
-                "replacement draft at {width}x{height}"
-            );
-        }
-    }
-
-    #[test]
-    fn replacement_choose_later_reopens_without_a_second_payment() {
+    fn replacement_later_preserves_payment_and_only_removes_selected_family() {
         let mut app = test_app();
         {
             let mut session = app.world_mut().resource_mut::<GameSession>();
-            session.elapsed = FIRST_FREE_BOND_AT;
+            session.elapsed = 30.;
             session.wood = 90;
             session.bond_draws = 1;
         }
         {
-            let mut economy = app.world_mut().resource_mut::<BondEconomy>();
-            economy.first_free_granted = true;
-            economy.free_draw_available = false;
+            let mut build = app.world_mut().resource_mut::<PlayerBuild>();
+            build.owned_bond_cards[BondCardId::DivineMight.index()] = true;
+            for card in BondId::Journey.definition().members {
+                build.owned_bond_cards[card.index()] = true;
+            }
         }
-        app.world_mut().resource_mut::<PlayerBuild>().bonds[BondId::Thunder.index()] = 2;
         install_test_bond_draft(
             &mut app,
-            vec![BondId::Thunder],
-            Some(BondId::Blood),
+            vec![DraftChoice::ReplaceBond(BondId::Ascension)],
+            Some(BondCardId::JudgeBrush),
             BondDrawPayment::Wood(10),
         );
-
         press_action(&mut app, DraftAction::Later);
-        assert!(!app.world().resource::<GameSession>().paused);
-        assert!(app.world().resource::<DraftState>().root.is_none());
-        assert_eq!(app.world().resource::<GameSession>().wood, 90);
-        assert_eq!(app.world().resource::<GameSession>().bond_draws, 1);
-
         tap_f(&mut app);
-
-        assert!(app.world().resource::<GameSession>().paused);
-        assert!(app.world().resource::<DraftState>().root.is_some());
-        assert_eq!(
-            app.world().resource::<DraftState>().kind,
-            Some(DraftKind::BondReplacement)
-        );
         assert_eq!(app.world().resource::<GameSession>().wood, 90);
-        assert_eq!(app.world().resource::<GameSession>().bond_draws, 1);
         assert_eq!(
             app.world().resource::<BondEconomy>().pending_payment,
             Some(BondDrawPayment::Wood(10))
         );
-
         press_choice(&mut app, 0);
+        let build = app.world().resource::<PlayerBuild>();
+        assert_eq!(build.bond(BondId::Ascension), 0);
+        assert!(build.bond_complete(BondId::Journey));
+        assert!(build.owns_bond_card(BondCardId::JudgeBrush));
         assert_eq!(app.world().resource::<GameSession>().wood, 90);
-        assert_eq!(app.world().resource::<GameSession>().bond_draws, 1);
+    }
+
+    #[test]
+    fn abandoning_replacement_preserves_owned_cards_and_grants_refresh() {
+        let mut app = test_app();
+        app.world_mut()
+            .resource_mut::<PlayerBuild>()
+            .owned_bond_cards[BondCardId::DivineMight.index()] = true;
+        let before = app.world().resource::<PlayerBuild>().owned_bond_cards;
+        let rerolls = app.world().resource::<GameSession>().skill_rerolls;
+        install_test_bond_draft(
+            &mut app,
+            vec![DraftChoice::ReplaceBond(BondId::Ascension)],
+            Some(BondCardId::JudgeBrush),
+            BondDrawPayment::Free,
+        );
+        press_action(&mut app, DraftAction::Abandon);
         assert_eq!(
-            app.world().resource::<PlayerBuild>().bond(BondId::Blood),
-            BondId::Blood.rarity().bond_points_per_pick()
+            app.world().resource::<PlayerBuild>().owned_bond_cards,
+            before
+        );
+        assert_eq!(
+            app.world().resource::<GameSession>().skill_rerolls,
+            rerolls + 1
+        );
+        assert!(
+            app.world()
+                .resource::<DraftState>()
+                .pending_bond_replacement
+                .is_none()
         );
     }
 
     #[test]
-    fn bond_compass_guarantees_the_highest_progress_unfinished_bond() {
+    fn compass_guarantees_an_unowned_card_from_highest_unfinished_family() {
         let mut build = PlayerBuild::default();
-        build.bonds[BondId::Thunder.index()] = 2;
-        build.bonds[BondId::Ember.index()] = 4;
-        build.bonds[BondId::Spirits.index()] = 1;
-        let selected = SelectedHero::default();
-        let mut rng = RunRng::default();
-        let mut drought = DraftAntiDrought::default();
-
+        for card in [
+            BondCardId::JourneyStrength,
+            BondCardId::JourneyAgility,
+            BondCardId::JourneyIntelligence,
+            BondCardId::DivineMight,
+            BondCardId::DivineBody,
+        ] {
+            build.owned_bond_cards[card.index()] = true;
+        }
         let target = highest_progress_unfinished_bond(&build);
-        assert_eq!(target, Some(BondId::Ember));
-        let choices = pick_bond_choices(&mut rng, &build, &selected, &mut drought, target);
-        assert!(choices.contains(&DraftChoice::Bond(BondId::Ember)));
+        assert_eq!(target, Some(BondId::Ascension));
+        let choices = pick_bond_choices(
+            &mut RunRng::default(),
+            &build,
+            &SelectedHero::default(),
+            &mut DraftAntiDrought::default(),
+            target,
+        );
+        assert!(choices.iter().any(|c|matches!(c,DraftChoice::Bond(card) if card.family()==BondId::Ascension && !build.owns_bond_card(*card))));
+    }
+
+    fn autoplay_bond_app(elapsed: f32, wood: u32) -> App {
+        let mut app = test_app();
+        app.insert_resource(Autoplay);
+        // Keep the automatic G draft out of the way: no free point and no gold.
+        app.world_mut()
+            .resource_mut::<SkillEconomy>()
+            .first_free_granted = true;
+        let mut session = app.world_mut().resource_mut::<GameSession>();
+        session.elapsed = elapsed;
+        session.gold = 0;
+        session.wood = wood;
+        app
+    }
+
+    #[test]
+    fn autoplay_draws_bonds_back_to_back_whenever_it_can_pay() {
+        let mut app = autoplay_bond_app(FIRST_AUTO_BOND_AT, 25);
+
+        app.update();
+        assert_eq!(
+            app.world().resource::<BondEconomy>().pending_payment,
+            Some(BondDrawPayment::Free)
+        );
+        app.update();
+        let session = app.world().resource::<GameSession>();
+        assert_eq!(
+            (session.wood, session.bond_draws),
+            (25, 0),
+            "an open draft must not be paid for twice"
+        );
+
+        // Chosen cards may grant wood, so each step funds exactly one draw.
+        for (paid_draws, price) in [(1, 10), (2, 15)] {
+            finish_autoplay_draft_after_1_15_seconds(&mut app);
+            app.world_mut().resource_mut::<GameSession>().wood = price;
+            app.update();
+            let session = app.world().resource::<GameSession>();
+            assert_eq!(
+                session.elapsed, FIRST_AUTO_BOND_AT,
+                "no waiting between draws"
+            );
+            assert_eq!((session.wood, session.bond_draws), (0, paid_draws));
+            assert_eq!(
+                app.world().resource::<BondEconomy>().pending_payment,
+                Some(BondDrawPayment::Wood(price))
+            );
+        }
+
+        finish_autoplay_draft_after_1_15_seconds(&mut app);
+        app.world_mut().resource_mut::<GameSession>().wood = 19;
+        app.update();
+        app.update();
+        let session = app.world().resource::<GameSession>();
+        assert_eq!((session.wood, session.bond_draws), (19, 2));
+        assert!(
+            app.world()
+                .resource::<BondEconomy>()
+                .pending_payment
+                .is_none(),
+            "a draw that cannot be paid for must not open"
+        );
+    }
+
+    #[test]
+    fn autoplay_waits_for_eighteen_seconds_before_its_first_bond_draw() {
+        assert_eq!(FIRST_FREE_BOND_AT, 12.0);
+        assert_eq!(FIRST_AUTO_BOND_AT, 18.0);
+        let mut app = autoplay_bond_app(FIRST_AUTO_BOND_AT - 0.1, 100);
+        app.update();
+        assert!(app.world().resource::<BondEconomy>().free_draw_available);
+        assert!(app.world().resource::<DraftState>().kind.is_none());
+
+        app.world_mut().resource_mut::<GameSession>().elapsed = FIRST_AUTO_BOND_AT;
+        app.update();
+        assert_eq!(
+            app.world().resource::<DraftState>().kind,
+            Some(DraftKind::Bond)
+        );
+    }
+
+    #[test]
+    fn autoplay_leaves_bonds_alone_when_auto_bond_draws_is_off() {
+        let mut app = autoplay_bond_app(300.0, 100);
+        app.world_mut()
+            .resource_mut::<GameSession>()
+            .auto_bond_draws = false;
+        app.update();
+        app.update();
+        assert!(app.world().resource::<DraftState>().kind.is_none());
+        assert_eq!(app.world().resource::<GameSession>().wood, 100);
+
+        tap_f(&mut app);
+        assert_eq!(
+            app.world().resource::<DraftState>().kind,
+            Some(DraftKind::Bond),
+            "manual F still works"
+        );
     }
 
     #[test]
@@ -2213,6 +2791,7 @@ mod tests {
                 .is_none()
         );
 
+        app.world_mut().resource_mut::<GameSession>().wood = 100;
         tap_f(&mut app);
         assert_eq!(app.world().resource::<GameSession>().wood, 90);
         assert_eq!(app.world().resource::<GameSession>().bond_draws, 1);
@@ -2229,18 +2808,97 @@ mod tests {
         );
 
         tap_f(&mut app);
-        assert_eq!(app.world().resource::<GameSession>().wood, 80);
+        assert_eq!(app.world().resource::<GameSession>().wood, 75);
         assert_eq!(app.world().resource::<GameSession>().bond_draws, 2);
         press_action(&mut app, DraftAction::Abandon);
         tap_f(&mut app);
-        assert_eq!(app.world().resource::<GameSession>().wood, 68);
+        assert_eq!(app.world().resource::<GameSession>().wood, 55);
         assert_eq!(app.world().resource::<GameSession>().bond_draws, 3);
         assert_eq!(
             app.world().resource::<BondEconomy>().pending_payment,
-            Some(BondDrawPayment::Wood(12))
+            Some(BondDrawPayment::Wood(20))
         );
     }
 
+    #[test]
+    fn unique_absorbed_heroes_open_real_training_slots_without_erasing_mastery() {
+        let mut app = test_app();
+        app.init_resource::<crate::game::HeroFusion>();
+        {
+            let mut fusion = app.world_mut().resource_mut::<crate::game::HeroFusion>();
+            assert!(fusion.record_absorbed(crate::game::HeroKind::StormSavant));
+            assert!(fusion.record_absorbed(crate::game::HeroKind::StoneWarden));
+            assert!(!fusion.record_absorbed(crate::game::HeroKind::StormSavant));
+            fusion.register_starting_skill(crate::game::HeroKind::StormSavant, SkillId(0));
+            fusion.register_starting_skill(crate::game::HeroKind::StoneWarden, SkillId(3));
+            fusion.register_starting_skill(crate::game::HeroKind::FrostOracle, SkillId(2));
+        }
+        for rank in &mut app.world_mut().resource_mut::<PlayerBuild>().skills[..6] {
+            *rank = 5;
+        }
+        app.world_mut().resource_mut::<SkillEvolution>().tiers[0] = 2;
+        {
+            let mut session = app.world_mut().resource_mut::<GameSession>();
+            session.level = 10;
+            session.elapsed = 30.0;
+            session.gold = 5000;
+        }
+        tap_g(&mut app);
+        assert_eq!(app.world().resource::<SkillEvolution>().skill_capacity(), 8);
+        let choice = app
+            .world()
+            .resource::<DraftState>()
+            .choices
+            .iter()
+            .position(|choice| matches!(choice,DraftChoice::Skill(skill) if skill.0 >= 6))
+            .expect("new fusion slot offers an unowned skill");
+        press_choice(&mut app, choice);
+        let build = app.world().resource::<PlayerBuild>();
+        assert_eq!(build.skills.iter().filter(|rank| **rank > 0).count(), 7);
+        assert!(build.skills[..6].iter().all(|rank| *rank == 5));
+        assert_eq!(app.world().resource::<SkillEvolution>().tiers[0], 2);
+    }
+    #[test]
+    fn returning_to_an_old_hero_preserves_registered_capacity_and_mastery() {
+        use crate::game::{HeroFusion, HeroKind};
+        let mut app = test_app();
+        app.init_resource::<HeroFusion>();
+        app.world_mut().resource_mut::<PlayerBuild>().skills[6] = 5;
+        app.world_mut().resource_mut::<SkillEvolution>().tiers[6] = 2;
+        let mut previous = None;
+        for (kind, skill, capacity) in [
+            (HeroKind::StormSavant, SkillId(0), 6),
+            (HeroKind::GroveArtificer, SkillId(17), 7),
+            (HeroKind::StormSavant, SkillId(12), 7),
+            (HeroKind::FrostOracle, SkillId(2), 8),
+        ] {
+            {
+                let mut fusion = app.world_mut().resource_mut::<HeroFusion>();
+                if let Some(old) = previous {
+                    fusion.record_absorbed(old);
+                }
+                fusion.register_starting_skill(kind, skill);
+            }
+            app.update();
+            assert_eq!(
+                app.world().resource::<HeroFusion>().skill_capacity(),
+                capacity
+            );
+            assert_eq!(
+                app.world().resource::<SkillEvolution>().skill_capacity(),
+                capacity
+            );
+            assert_eq!(app.world().resource::<PlayerBuild>().skills[6], 5);
+            assert_eq!(app.world().resource::<SkillEvolution>().tiers[6], 2);
+            previous = Some(kind);
+        }
+        assert_eq!(
+            app.world()
+                .resource::<HeroFusion>()
+                .starting_skill(HeroKind::StormSavant),
+            Some(SkillId(0))
+        );
+    }
     #[test]
     fn full_skill_bar_only_rolls_owned_upgrades() {
         let mut build = PlayerBuild::default();
@@ -2258,6 +2916,7 @@ mod tests {
                 &build,
                 &selected,
                 &mut drought,
+                SKILL_SLOT_LIMIT,
             );
             assert_eq!(choices.len(), 3);
             assert!(choices.into_iter().all(|choice| {
@@ -2329,5 +2988,245 @@ mod tests {
         tap_g(&mut app);
         assert_eq!(app.world().resource::<GameSession>().gold, 325);
         assert_eq!(app.world().resource::<SkillEconomy>().paid_draws, 2);
+    }
+    #[test]
+    fn collection_stage_requirement_matches_draft_gate_level_or_time() {
+        for family in BondId::ALL {
+            let Some((level, seconds)) = bond_stage_requirement(family) else {
+                continue;
+            };
+            let card = family.definition().members[0];
+            let mut session = GameSession {
+                level: level - 1,
+                elapsed: seconds - 0.1,
+                ..default()
+            };
+            assert!(!bond_stage_available(card, &session));
+            session.level = level;
+            assert!(bond_stage_available(card, &session));
+            session.level = level - 1;
+            session.elapsed = seconds;
+            assert!(bond_stage_available(card, &session));
+        }
+    }
+    fn three_remaining_bond_app(wood: u32) -> App {
+        let mut app = test_app();
+        {
+            let mut build = app.world_mut().resource_mut::<PlayerBuild>();
+            build.owned_bond_cards.fill(true);
+            for card in [
+                BondCardId::DivineMight,
+                BondCardId::DivineStrength,
+                BondCardId::DivineIntelligence,
+            ] {
+                build.owned_bond_cards[card.index()] = false;
+            }
+        }
+        {
+            let mut session = app.world_mut().resource_mut::<GameSession>();
+            session.elapsed = 30.0;
+            session.wood = wood;
+        }
+        app.world_mut()
+            .resource_mut::<BondEconomy>()
+            .first_free_granted = true;
+        app
+    }
+    #[test]
+    fn one_f_entry_chains_three_real_bond_acquisitions_until_wood_is_exhausted() {
+        let mut app = three_remaining_bond_app(45);
+        tap_f(&mut app);
+        for remaining in [35, 20, 0] {
+            let DraftChoice::Bond(card) = app.world().resource::<DraftState>().choices[0] else {
+                panic!("expected bond");
+            };
+            assert_eq!(app.world().resource::<GameSession>().wood, remaining);
+            press_first_choice(&mut app);
+            assert!(app.world().resource::<PlayerBuild>().owns_bond_card(card));
+            app.update();
+        }
+        assert_eq!(app.world().resource::<GameSession>().bond_draws, 3);
+        assert_eq!(app.world().resource::<GameSession>().wood, 0);
+        assert!(app.world().resource::<DraftState>().root.is_none());
+        assert!(app.world().resource::<DraftContinuation>().queued.is_none());
+    }
+    #[test]
+    fn bond_later_abandon_and_refresh_stop_continuation_without_another_charge() {
+        for action in [
+            DraftAction::Later,
+            DraftAction::Abandon,
+            DraftAction::Refresh,
+        ] {
+            let mut app = three_remaining_bond_app(100);
+            tap_f(&mut app);
+            press_action(&mut app, action);
+            assert!(!app.world().resource::<DraftContinuation>().enabled);
+            if action == DraftAction::Refresh {
+                press_first_choice(&mut app);
+            }
+            let wood = app.world().resource::<GameSession>().wood;
+            for _ in 0..3 {
+                app.update();
+            }
+            assert_eq!(app.world().resource::<GameSession>().wood, wood);
+            assert!(app.world().resource::<DraftState>().root.is_none());
+            assert!(app.world().resource::<DraftContinuation>().queued.is_none());
+        }
+    }
+    #[test]
+    fn one_e_entry_drains_three_banked_encounters_through_real_card_clicks() {
+        let mut app = test_app();
+        {
+            let mut encounters = app.world_mut().resource_mut::<EncounterState>();
+            for boss in 0..3 {
+                assert!(encounters.bank_for_boss(boss));
+            }
+        }
+        {
+            let mut session = app.world_mut().resource_mut::<GameSession>();
+            session.gold = 100_000;
+            session.wood = 100_000;
+        }
+        app.world_mut()
+            .resource_mut::<ButtonInput<KeyCode>>()
+            .press(KeyCode::KeyE);
+        app.update();
+        app.world_mut()
+            .resource_mut::<ButtonInput<KeyCode>>()
+            .reset_all();
+        for left in [2, 1, 0] {
+            assert_eq!(app.world().resource::<EncounterState>().banked, left);
+            let (index, event) = app
+                .world()
+                .resource::<DraftState>()
+                .choices
+                .iter()
+                .copied()
+                .enumerate()
+                .find_map(|(index, choice)| match choice {
+                    DraftChoice::Encounter(event)
+                        if event != super::super::encounters::EncounterId::AllIn
+                            && event.affordable(app.world().resource::<GameSession>()) =>
+                    {
+                        Some((index, event))
+                    }
+                    _ => None,
+                })
+                .expect("an affordable encounter");
+            press_choice(&mut app, index);
+            assert!(app.world().resource::<EncounterState>().taken(event));
+            app.update();
+        }
+        assert!(app.world().resource::<DraftState>().root.is_none());
+        assert!(!app.world().resource::<EncounterState>().pending());
+        assert_eq!(app.world().resource::<EncounterState>().banked, 0);
+    }
+}
+
+#[cfg(test)]
+mod bond_draw_sim {
+    //! `cargo test --lib bond_draw_sim -- --ignored --nocapture`
+    use super::*;
+
+    /// Picks the card whose family is closest to completion (a player chasing sets).
+    fn completer_pick(choices: &[DraftChoice], build: &PlayerBuild) -> BondCardId {
+        choices
+            .iter()
+            .filter_map(|choice| match choice {
+                DraftChoice::Bond(card) => Some(*card),
+                _ => None,
+            })
+            .max_by_key(|card| {
+                let family = card.family();
+                let missing = family.required() - build.bond(family);
+                (build.bond(family) > 0, std::cmp::Reverse(missing))
+            })
+            .expect("bond hand")
+    }
+
+    pub(super) fn run(seed: u64, draws: u32) -> (Vec<u32>, Vec<BondId>, u32, u32) {
+        let mut rng = RunRng::from_seed(seed);
+        let mut build = PlayerBuild::default();
+        let selected = SelectedHero {
+            kind: super::super::HeroKind::ALL[(seed % 12) as usize],
+            locked: true,
+        };
+        let mut drought = DraftAntiDrought::default();
+        let mut session = GameSession::default();
+        let mut completed_at = Vec::new();
+        let mut hands_with_existing = 0;
+        let mut hands = 0;
+        for draw in 0..draws {
+            // ~one draw every 40 s of a 25 min run, level ~ 1.6 per minute.
+            session.elapsed = draw as f32 * 40.0;
+            session.level = 1 + (session.elapsed / 37.5) as u32;
+            let choices =
+                pick_bond_choices_at(&mut rng, &build, &selected, &mut drought, None, &session);
+            if choices.is_empty() {
+                break;
+            }
+            if build.bond_complete(BondId::Journey) {
+                hands += 1;
+                if choices.iter().any(|choice| matches!(choice, DraftChoice::Bond(card) if build.bond(card.family()) > 0)) {
+                    hands_with_existing += 1;
+                }
+            }
+            let card = completer_pick(&choices, &build);
+            let before = build.bond_complete(card.family());
+            build.owned_bond_cards[card.index()] = true;
+            if !before && build.bond_complete(card.family()) && card.family() != BondId::Journey {
+                completed_at.push(draw + 1);
+            }
+        }
+        let completed = BondId::ALL
+            .into_iter()
+            .filter(|family| *family != BondId::Journey && build.bond_complete(*family))
+            .collect();
+        (completed_at, completed, hands_with_existing, hands)
+    }
+
+    fn affordable_draws(wood: u32) -> u32 {
+        let mut session = GameSession::default();
+        let mut remaining = wood;
+        let encounters = EncounterState::default();
+        // First draw is free.
+        let mut draws = 1;
+        while remaining >= bond_cost(&session, &encounters) {
+            remaining -= bond_cost(&session, &encounters);
+            session.bond_draws += 1;
+            draws += 1;
+        }
+        draws
+    }
+
+    #[test]
+    #[ignore]
+    fn report_bond_completion_pace() {
+        for wood in [800, 1_600, 2_400] {
+            let draws = affordable_draws(wood);
+            let seeds = 200;
+            let mut total = 0usize;
+            let mut sets = std::collections::BTreeSet::new();
+            let mut existing = 0;
+            let mut hands = 0;
+            for seed in 1..=seeds {
+                let (done, completed, e, h) = run(seed, draws);
+                total += done.len();
+                sets.insert(
+                    completed
+                        .iter()
+                        .map(|family| family.index())
+                        .collect::<Vec<_>>(),
+                );
+                existing += e;
+                hands += h;
+            }
+            println!(
+                "wood={wood:>5} draws={draws:>2} avg families completed={:.1}/25  distinct completed sets={}/{seeds}  hands with a started family={:.0}%",
+                total as f32 / seeds as f32,
+                sets.len(),
+                100.0 * existing as f32 / hands.max(1) as f32
+            );
+        }
     }
 }

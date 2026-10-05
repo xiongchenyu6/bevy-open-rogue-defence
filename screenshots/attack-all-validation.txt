@@ -1,0 +1,40 @@
+All twelve heroes — basic attack validation — 2026-09-30
+PASS cargo test --lib -j1: 302 passed; 0 failed
+PASS cargo clippy --all-targets -j1 -- -D warnings
+PASS cargo build --bins -j1
+PASS python tools/verify_ui_assets.py
+PASS git diff --check
+
+Finite geometry regression caught fractional power of negative sin(PI) rounding; corrected by clamping the tapered width before exponentiation. All captures regenerated after correction.
+
+PASS stone: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS solar: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS tide: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS rift: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS iron: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS void: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS ember: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS grove: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS storm: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS spirit: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS star: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS frost: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS stone-mobile: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS solar-mobile: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS tide-mobile: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS rift-mobile: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS iron-mobile: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS void-mobile: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS ember-mobile: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS grove-mobile: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS storm-mobile: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS spirit-mobile: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS star-mobile: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+PASS frost-mobile: actual target damage, weapon effect present; learned skills/ultimate/Autoplay suppressed; full video decode.
+
+Visual review: all12 desktop1280x720 and compact667x375 capture sequences; shared contact sheets and representative full frames.
+Showcase is a3-page montage of actual captured video,4heroes perpage,21seconds.
+Real basic attacks with native hero passives retained,100000HP stationary targets atmelee1.3/ranged5 distance; centralarena camera avoidsportalocclusion.
+Weapons remain cosmetic; existingdamage/range/cone/numberofcontacts retained. Boundedvisuals320motes/48cues; regression coversall12, pause/finishcleanup and noassetgrowth.
+Known compactHUD limitation: rising damage numbers can pass behind speed buttons; weaponpath remainsvisible.
+Nativeoffscreen videos have noaudio; physicalmobileGPU andWASM/browser notvalidated. Notafullrunbalancebenchmark.

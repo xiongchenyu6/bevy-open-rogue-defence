@@ -1,0 +1,37 @@
+Commander recruitment validation — 2026-09-29
+
+Native Bevy 0.19 offscreen rendering; seed 0xA11CE; 120 frames per capture.
+Build: nix develop --command cargo build --bin capture -j 4 — PASS
+Tests: nix develop --command cargo test --all-targets -j 4 — 252 passed, 0 failed
+Clippy: nix develop --command cargo clippy --all-targets -j 4 -- -D warnings — PASS
+Formatting: cargo fmt --all -- --check — PASS
+Python: uvx ruff check tools/render_draft_backdrop.py tools/render_hero_portraits.py — PASS
+Whitespace: git diff --check — PASS
+
+Capture scenarios: draft, draft-preview, draft-confirm.
+Viewports: 1280x720, 1760x1350, 844x390, 667x375, 390x844.
+Languages: English and Simplified Chinese (844x390).
+All eight captures passed actual computed button-boundary and >=44px touch-target assertions.
+Preview preserves paused/uncommitted state; confirmation commits hero and resumes combat.
+Unit tests additionally verify starting skill application.
+Images manually inspected for clipping, text legibility, selection and battle HUD occlusion.
+The first mobile capture exposed fractional-width wrapping; fixed with a rounding allowance
+and a non-wrapping landscape gallery, then recaptured all supported sizes.
+Font coverage test includes hero_draft.rs. Chinese screenshot has no missing glyph boxes.
+Nonfatal ICU4X 'No segmentation model for language: ja' diagnostics remain in renderer output.
+This validation does not cover Web/Android builds or physical touchscreen input.
+
+Logs:
+/tmp/rogue-draft-build-final.log
+/tmp/rogue-draft-tests.log
+/tmp/rogue-draft-clippy.log
+/tmp/rogue-draft-suite.log
+
+Screenshot SHA-256:
+8be208ee0fb7264f6c79888289a8859704bcafcfa5ad2b16c5f61939194918f2  screenshots/draft-compact.png
+ee6fc763ba92178abe2dc026fd974a42ac4d8e721fc9f610e3bd193bee4d2cfb  screenshots/draft-confirm.png
+092b116aa8f4995b04c0cbab42f8dcb0bc8efd1e2a40d22063d294afaa3c5399  screenshots/draft-desktop.png
+6db4f7f84f0c61efaf59990d5c7fb5adebc7dfa7e9c8bf5e2720ffb6733a07f0  screenshots/draft-large.png
+ecded2c282d26ffcf8a27a3af781d5a58b8b509294349598f65e82309ed15f1a  screenshots/draft-mobile.png
+1cd56005755e33e163d1cb2b3e360cbd2acad9e30489787a739919c0f603d336  screenshots/draft-portrait.png
+9247ce9f064cd36d2b28034b930a30f38c70cbd43c91c785a0bb9407ec746c61  screenshots/draft-zh.png

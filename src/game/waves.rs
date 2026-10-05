@@ -234,3 +234,76 @@ mod tests {
         }
     }
 }
+
+/// Keep the original total budget while concentrating sixty percent into two
+/// attack groups. The first two tutorial minutes retain their steady cadence.
+pub fn scheduled_spawn_count(wave_number: u32, wave: WaveDef, seconds: f32) -> u16 {
+    let seconds = seconds.clamp(0.0, 59.999);
+    if wave_number < 3 {
+        return ((seconds / (60.0 / f32::from(wave.count))).floor() as u16 + 1).min(wave.count);
+    }
+    let patrol = (wave.count * 2).div_ceil(5);
+    let first_rush = (wave.count - patrol) / 2;
+    let second_rush = wave.count - patrol - first_rush;
+    let patrol_due = ((seconds * f32::from(patrol) / 60.0).floor() as u16 + 1).min(patrol);
+    patrol_due
+        + if seconds >= 20.0 { first_rush } else { 0 }
+        + if seconds >= 44.0 { second_rush } else { 0 }
+}
+
+pub fn rush_warning(wave_number: u32, wave: WaveDef, seconds: f32) -> Option<(f32, u16)> {
+    if wave_number < 3 {
+        return None;
+    }
+    let patrol = (wave.count * 2).div_ceil(5);
+    let remaining = wave.count - patrol;
+    for (arrival, count) in [(20.0, remaining / 2), (44.0, remaining - remaining / 2)] {
+        if (arrival - 3.0..arrival).contains(&seconds) {
+            return Some((arrival - seconds, count));
+        }
+    }
+    None
+}
+
+/// Positions in the original per-minute budget promoted to leading elites.
+pub fn rush_champion(wave_number: u32, wave: WaveDef, spawned: u16) -> bool {
+    wave_number >= 4
+        && [20.0, 44.0]
+            .iter()
+            .any(|arrival| spawned == scheduled_spawn_count(wave_number, wave, arrival - 0.001))
+}
+
+#[cfg(test)]
+mod rush_tests {
+    use super::*;
+    #[test]
+    fn rushes_keep_all_original_budgets_and_have_three_second_warnings() {
+        for (index, wave) in WAVES.iter().copied().enumerate() {
+            let number = index as u32 + 1;
+            assert_eq!(scheduled_spawn_count(number, wave, 59.999), wave.count);
+            if number >= 3 {
+                assert!(
+                    scheduled_spawn_count(number, wave, 20.0)
+                        > scheduled_spawn_count(number, wave, 19.999) + 1
+                );
+                assert!(
+                    scheduled_spawn_count(number, wave, 44.0)
+                        > scheduled_spawn_count(number, wave, 43.999) + 1
+                );
+                assert_eq!(rush_warning(number, wave, 17.0).unwrap().0, 3.0);
+                assert!(rush_warning(number, wave, 20.0).is_none());
+                assert_eq!(rush_warning(number, wave, 41.0).unwrap().0, 3.0);
+            }
+        }
+    }
+    #[test]
+    fn promotion_adds_exactly_two_elites_without_extra_spawn_budget() {
+        for (index, wave) in WAVES.iter().copied().enumerate() {
+            let number = index as u32 + 1;
+            let count = (0..wave.count)
+                .filter(|spawned| rush_champion(number, wave, *spawned))
+                .count();
+            assert_eq!(count, if number >= 4 { 2 } else { 0 });
+        }
+    }
+}

@@ -1,0 +1,82 @@
+Ultimate — native validation
+2026-09-29T23:35:50
+
+PASS cargo test --lib -j1: 299 passed; 0 failed
+PASS cargo clippy --all-targets -j1 -- -D warnings
+PASS cargo build --bins -j1
+PASS python tools/verify_ui_assets.py
+
+storm
+[capture] ultimate-storm: automatic ultimate, no manual input
+[capture] StormSavant automatically cast at frame 31, cooldown 50.00
+[capture] PASS: one automatic cast; cooldown advances without repeated casts
+
+ember
+[capture] ultimate-ember: automatic ultimate, no manual input
+[capture] EmberRanger automatically cast at frame 31, cooldown 45.00
+[capture] PASS: one automatic cast; cooldown advances without repeated casts
+
+stone
+[capture] ultimate-stone: automatic ultimate, no manual input
+[capture] StoneWarden automatically cast at frame 31, cooldown 50.00
+[capture] PASS: one automatic cast; cooldown advances without repeated casts
+
+spirit
+[capture] ultimate-spirit: automatic ultimate, no manual input
+[capture] SpiritKeeper automatically cast at frame 31, cooldown 38.50
+[capture] PASS: one automatic cast; cooldown advances without repeated casts
+
+tide
+[capture] ultimate-tide: automatic ultimate, no manual input
+[capture] TideWalker automatically cast at frame 31, cooldown 47.84
+[capture] PASS: one automatic cast; cooldown advances without repeated casts
+
+star
+[capture] ultimate-star: automatic ultimate, no manual input
+[capture] StarWagerer automatically cast at frame 31, cooldown 44.16
+[capture] PASS: one automatic cast; cooldown advances without repeated casts
+
+frost
+[capture] ultimate-frost: automatic ultimate, no manual input
+[capture] FrostOracle automatically cast at frame 31, cooldown 44.28
+[capture] PASS: one automatic cast; cooldown advances without repeated casts
+
+iron
+[capture] ultimate-iron: automatic ultimate, no manual input
+[capture] IronBerserker automatically cast at frame 31, cooldown 39.36
+[capture] PASS: one automatic cast; cooldown advances without repeated casts
+
+rift
+[capture] ultimate-rift: automatic ultimate, no manual input
+[capture] RiftDancer automatically cast at frame 31, cooldown 37.72
+[capture] PASS: one automatic cast; cooldown advances without repeated casts
+
+grove
+[capture] ultimate-grove: automatic ultimate, no manual input
+[capture] GroveArtificer automatically cast at frame 31, cooldown 53.36
+[capture] PASS: one automatic cast; cooldown advances without repeated casts
+
+solar
+[capture] ultimate-solar: automatic ultimate, no manual input
+[capture] SolarVanguard automatically cast at frame 31, cooldown 36.40
+[capture] PASS: one automatic cast; cooldown advances without repeated casts
+
+void
+[capture] ultimate-void: automatic ultimate, no manual input
+[capture] VoidReaper automatically cast at frame 31, cooldown 35.00
+[capture] PASS: one automatic cast; cooldown advances without repeated casts
+
+tide-mobile
+[capture] ultimate-tide: automatic ultimate, no manual input
+[capture] TideWalker automatically cast at frame 31, cooldown 47.84
+[capture] PASS: one automatic cast; cooldown advances without repeated casts
+
+void-mobile
+[capture] ultimate-void: automatic ultimate, no manual input
+[capture] VoidReaper automatically cast at frame 31, cooldown 35.00
+[capture] PASS: one automatic cast; cooldown advances without repeated casts
+
+All videos decoded fully with ffmpeg. Desktop1280x720 Chinese and compact667x375 English visual review.
+Capture uses explicit durable target fixtures; real auto cast/skills, no manual ultimate request and no Autoplay. This is mechanics/presentation validation, not a full-run balance benchmark.
+Known existing ICU4X ja segmentation diagnostics may appear; bundled UI font coverage test passes. Native offscreen videos contain no audio.
+WASM/browser and physical mobile-device GPU performance were not verified in this change.

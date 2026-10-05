@@ -1,44 +1,23 @@
-use std::collections::HashMap;
-
+use super::bond_catalog::{BOND_FAMILIES, BondCardId, BondEffect};
+use super::content::{BossModifiers, SKILLS, Tag};
+use super::{GameSession, HeroVitals, PlayerBuild};
 use bevy::prelude::*;
 
-use super::market::MarketEffects;
-use super::pooling::CombatPools;
-
-use super::combat::CombatSet;
-use super::content::{BossModifiers, SKILLS, Tag};
-use super::{
-    BondId, Core, Enemy, GameAssets, GameSession, Hero, HeroVitals, ImpactFx, PlayerBuild,
-    Projectile, RunRng,
-};
-
-const BASE_SUMMON_CAP: usize = 18;
-const GLOBAL_SUMMON_CAP: usize = 20;
-const REACTION_COOLDOWN_SECONDS: f32 = 3.0;
-const REACTION_TIER_SIX_COOLDOWN_SECONDS: f32 = 1.0;
-
 pub(crate) struct BondsPlugin;
-
 #[derive(SystemSet, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub(crate) struct BondSet;
-
 impl Plugin for BondsPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<BondRuntime>()
-            .init_resource::<FortuneMarketRules>()
-            .add_systems(
-                Update,
-                (tick_bond_effects, resolve_bond_strikes)
-                    .chain()
-                    .in_set(BondSet)
-                    .before(CombatSet),
-            )
-            .add_systems(Update, observe_bond_results.after(CombatSet));
+        app.init_resource::<BondRuntime>().add_systems(
+            Update,
+            tick_cards
+                .in_set(BondSet)
+                .before(super::hero::synchronize_hero_growth),
+        );
     }
 }
-
 /// Element used by the final damage resolver. `Pure` bypasses armor and boss
-/// resistances and is reserved for the true-damage share of Triune Blast.
+/// resistances; elemental secondary effects remain owned by skills and equipment.
 #[derive(Component, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub(crate) enum DamageElement {
     Physical,
@@ -80,13 +59,14 @@ pub(crate) struct DamageProfile {
     /// Secondary equipment projectiles still use the authoritative damage
     /// resolver, but cannot recursively trigger another equipment proc.
     pub(crate) market_proc: bool,
+    pub(crate) card_proc: bool,
+    pub(crate) melee: bool,
+    pub(crate) arrow: bool,
 }
 
 impl DamageProfile {
     pub(crate) const PHYSICAL_ATTACK: Self =
         Self::new(DamageElement::Physical, DamageClass::Attack);
-    pub(crate) const FLAME_REACTION: Self = Self::new(DamageElement::Flame, DamageClass::Reaction);
-    pub(crate) const PURE_REACTION: Self = Self::new(DamageElement::Pure, DamageClass::Reaction);
 
     pub(crate) const fn new(element: DamageElement, class: DamageClass) -> Self {
         Self {
@@ -96,9 +76,24 @@ impl DamageProfile {
             burn_tick: false,
             skill_index: None,
             market_proc: false,
+            card_proc: false,
+            melee: false,
+            arrow: false,
         }
     }
 
+    pub(crate) const fn as_card_proc(mut self) -> Self {
+        self.card_proc = true;
+        self
+    }
+    pub(crate) const fn as_melee(mut self) -> Self {
+        self.melee = true;
+        self
+    }
+    pub(crate) const fn as_arrow(mut self) -> Self {
+        self.arrow = true;
+        self
+    }
     pub(crate) const fn with_burn(mut self) -> Self {
         self.applies_burn = true;
         self
@@ -142,889 +137,641 @@ impl DamageProfile {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub(crate) enum ReactionKind {
-    WetStormChain,
-    WetFrostFreeze,
-    BurnStormOverload,
-    FrozenPhysicalShatter,
-    StormJudgment,
+/// Source values use Warcraft range units; 100 units map to one arena metre.
+const REFERENCE_RANGE_SCALE: f32 = 0.01;
+#[derive(Default, Debug, Clone, Copy)]
+struct CardModifiers {
+    suppression_chance: f32,
+    suppression_multiplier: f32,
+    extra_attack: f32,
+    armor: f32,
+    movement: f32,
+    regeneration: f32,
+    regeneration_amp: f32,
+    life_leech: f32,
+    crit_chance: f32,
+    crit_damage: f32,
+    crit_damage_per300: f32,
+    summon_damage: f32,
+    summon_crit_inheritance: f32,
+    element_damage: [f32; 5],
+    elemental_damage: f32,
+    elemental_more: f32,
+    outgoing_more: f32,
+    incoming_more: f32,
+    distance_damage: f32,
+    normal_damage: f32,
+    trial_damage: f32,
+    boss_damage: f32,
+    model_scale: f32,
+    snapshot_attributes: f32,
+    strength_amp: f32,
+    intelligence_amp: f32,
+    strength_kill: f32,
+    strength_second: f32,
+    intelligence_kill: f32,
+    intelligence_second: f32,
+    quiver_capacity: u16,
+    arrow_damage: f32,
+    recharge_reduction: f32,
+    agility_arrow: f32,
+    agility_amp_arrow: f32,
+    melee_cleave: u8,
+    heal_kill: f32,
+    melee_damage: f32,
+    spell_echo: f32,
+    spell_chain: u8,
+
+    strength: f32,
+    agility: f32,
+    intelligence: f32,
+    attack: f32,
+    health: f32,
+    agility_amp: f32,
+    health_amp: f32,
+    attack_amp: f32,
+    damage_amp: f32,
+    skill_damage: f32,
+    attack_speed: f32,
+    range: f32,
+    evasion: f32,
+    arrows: u8,
+    pierce: u8,
+    ricochet: u8,
+    strength_level: f32,
+    agility_level: f32,
+    intelligence_level: f32,
+    attack_level: f32,
+    health_level: f32,
+    health_amp_level: f32,
+    skill_damage_level: f32,
+    attack_amp_level: f32,
+    damage_amp_level: f32,
+    agility_kill: f32,
+    agility_second: f32,
+    revives: u8,
+    immunity_seconds: f32,
+    immunity_cooldown: f32,
 }
-
-impl ReactionKind {
-    const fn index(self) -> usize {
-        match self {
-            Self::WetStormChain => 0,
-            Self::WetFrostFreeze => 1,
-            Self::BurnStormOverload => 2,
-            Self::FrozenPhysicalShatter => 3,
-            Self::StormJudgment => 0,
-        }
-    }
-
-    pub(crate) const fn is_element_reaction(self) -> bool {
-        !matches!(self, Self::StormJudgment)
-    }
-}
-
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub(crate) struct ReactionProc {
-    pub(crate) kind: ReactionKind,
-    pub(crate) damage: f32,
-    pub(crate) control_seconds: f32,
-    pub(crate) echo: bool,
-}
-
-#[derive(Debug, Clone, Copy)]
-pub(crate) struct ElementTarget {
-    pub(crate) entity: Entity,
-    pub(crate) max_hp: f32,
-    pub(crate) speed: f32,
-    pub(crate) boss: bool,
-}
-
-#[derive(Debug, Clone)]
-struct ElementState {
-    wet_remaining: f32,
-    burn_remaining: f32,
-    burn_layers: u8,
-    frozen_remaining: f32,
-    base_speed: f32,
-    reaction_cooldowns: [f32; 4],
-    detonation_remaining: f32,
-}
-
-impl ElementState {
-    fn new(base_speed: f32) -> Self {
-        Self {
-            wet_remaining: 0.0,
-            burn_remaining: 0.0,
-            burn_layers: 0,
-            frozen_remaining: 0.0,
-            base_speed,
-            reaction_cooldowns: [0.0; 4],
-            detonation_remaining: 2.0,
-        }
-    }
-
-    fn active(&self) -> bool {
-        self.wet_remaining > 0.0 || self.burn_remaining > 0.0 || self.frozen_remaining > 0.0
-    }
-}
-
-#[derive(Debug, Clone, Copy)]
-struct TargetSnapshot {
-    position: Vec3,
-    max_hp: f32,
-    elite: bool,
-}
-
-#[derive(Resource)]
-pub(crate) struct BondRuntime {
-    initialized: bool,
-    last_kills: u32,
-    last_hero_deaths: u32,
-    last_gold: u32,
-    last_core_hp: f32,
-    fortune_gold_fraction: f32,
-    blood_kills: u32,
-    blood_frenzy_remaining: f32,
-    frenzy_attack_bonus: f32,
-    guardian_intercept_remaining: f32,
-    guardian_last_stand_used: bool,
-    guardian_armor_bonus: f32,
-    guardian_magic_resistance_bonus: f32,
-    elemental_states: HashMap<Entity, ElementState>,
-    target_snapshots: HashMap<Entity, TargetSnapshot>,
-    storm_hits: u64,
-    spirit_marks: HashMap<Entity, f32>,
-    triune_windows: [f32; 3],
-    pub(crate) fortune_consumables_collected: u32,
-}
-
-impl Default for BondRuntime {
-    fn default() -> Self {
-        Self {
-            initialized: false,
-            last_kills: 0,
-            last_hero_deaths: 0,
-            last_gold: 0,
-            last_core_hp: 0.0,
-            fortune_gold_fraction: 0.0,
-            blood_kills: 0,
-            blood_frenzy_remaining: 0.0,
-            frenzy_attack_bonus: 0.0,
-            guardian_intercept_remaining: 0.0,
-            guardian_last_stand_used: false,
-            guardian_armor_bonus: 0.0,
-            guardian_magic_resistance_bonus: 0.0,
-            elemental_states: HashMap::new(),
-            target_snapshots: HashMap::new(),
-            storm_hits: 0,
-            spirit_marks: HashMap::new(),
-            triune_windows: [0.0; 3],
-            fortune_consumables_collected: 0,
-        }
-    }
-}
-
-impl BondRuntime {
-    pub(crate) fn blood_cast_speed_multiplier(&self, build: &PlayerBuild) -> f32 {
-        if build.bond(BondId::Blood) >= 6 && self.blood_frenzy_remaining > 0.0 {
-            1.35
-        } else {
-            1.0
-        }
-    }
-
-    pub(crate) fn is_frozen(&self, target: Entity) -> bool {
-        self.elemental_states
-            .get(&target)
-            .is_some_and(|state| state.frozen_remaining > 0.0)
-    }
-
-    #[cfg(test)]
-    fn register_burn(
-        &mut self,
-        target: ElementTarget,
-        duration: f32,
-        layers: u8,
-        ember_points: u8,
-    ) {
-        let cap = if ember_points >= 2 { 5 } else { 3 };
-        let state = self
-            .elemental_states
-            .entry(target.entity)
-            .or_insert_with(|| ElementState::new(target.speed));
-        state.base_speed = target.speed.max(state.base_speed);
-        state.burn_remaining = state.burn_remaining.max(duration);
-        state.burn_layers = state.burn_layers.saturating_add(layers).min(cap);
-    }
-
-    #[cfg(test)]
-    fn register_wet(&mut self, target: ElementTarget, duration: f32) {
-        let state = self
-            .elemental_states
-            .entry(target.entity)
-            .or_insert_with(|| ElementState::new(target.speed));
-        state.base_speed = target.speed.max(state.base_speed);
-        state.wet_remaining = state.wet_remaining.max(duration);
-    }
-
-    #[cfg(test)]
-    fn register_frozen(&mut self, target: ElementTarget, duration: f32) {
-        let state = self
-            .elemental_states
-            .entry(target.entity)
-            .or_insert_with(|| ElementState::new(target.speed));
-        state.base_speed = target.speed.max(state.base_speed);
-        state.frozen_remaining = state.frozen_remaining.max(duration);
-    }
-
-    /// Registers an actual projectile hit and returns any deterministic bond
-    /// procs that combat should route back through `Projectile`.
-    pub(crate) fn register_element_hit(
-        &mut self,
-        profile: DamageProfile,
-        target: ElementTarget,
-        build: &PlayerBuild,
-        spell_power: f32,
-        attack_damage: f32,
-    ) -> Vec<ReactionProc> {
-        let element_points = build.bond(BondId::Elements);
-        let status_scale = reaction_status_multiplier(element_points);
-        let state = self
-            .elemental_states
-            .entry(target.entity)
-            .or_insert_with(|| ElementState::new(target.speed));
-        state.base_speed = target.speed.max(state.base_speed);
-
-        let mut candidates = Vec::with_capacity(3);
-        if element_points >= 2 && profile.class != DamageClass::Reaction {
-            if profile.element == DamageElement::Storm && state.wet_remaining > 0.0 {
-                candidates.push(ReactionKind::WetStormChain);
+impl CardModifiers {
+    fn add(&mut self, effect: BondEffect) {
+        use BondEffect::*;
+        match effect {
+            SuppressionOnHit {
+                chance,
+                attack_multiplier,
+            } => {
+                self.suppression_chance += chance;
+                self.suppression_multiplier = self.suppression_multiplier.max(attack_multiplier);
             }
-            if profile.element == DamageElement::Frost && state.wet_remaining > 0.0 {
-                candidates.push(ReactionKind::WetFrostFreeze);
-            }
-            if profile.element == DamageElement::Storm && state.burn_remaining > 0.0 {
-                candidates.push(ReactionKind::BurnStormOverload);
-            }
-            if profile.element == DamageElement::Physical && state.frozen_remaining > 0.0 {
-                candidates.push(ReactionKind::FrozenPhysicalShatter);
-            }
-        }
-
-        let mut procs = Vec::with_capacity(candidates.len() + 1);
-        for kind in candidates {
-            let cooldown = &mut state.reaction_cooldowns[kind.index()];
-            if *cooldown > 0.0 {
-                continue;
-            }
-            *cooldown = reaction_cooldown(element_points);
-            let (damage, control_seconds) = match kind {
-                ReactionKind::WetStormChain => (50.0 + 0.45 * spell_power, 0.0),
-                ReactionKind::WetFrostFreeze => {
-                    state.wet_remaining = 0.0;
-                    state.frozen_remaining = 1.2 * status_scale;
-                    (0.0, state.frozen_remaining)
+            ExtraAttackChance(x) => self.extra_attack += x,
+            Armor(x) => self.armor += x,
+            MoveSpeed(x) => self.movement += x,
+            HealthRegeneration(x) => self.regeneration += x,
+            RegenerationAmplification(x) => self.regeneration_amp += x,
+            LifeLeech(x) => self.life_leech += x,
+            CriticalChance(x) => self.crit_chance += x,
+            CriticalDamage(x) => self.crit_damage += x,
+            CriticalDamagePer300Kills(x) => self.crit_damage_per300 += x,
+            SummonDamage(x) => self.summon_damage += x,
+            SummonCritInheritance(x) => self.summon_crit_inheritance += x,
+            ElementDamage(tag, x) => {
+                if let Some(index) = element_tag_index(tag) {
+                    self.element_damage[index] += x;
                 }
-                ReactionKind::BurnStormOverload => {
-                    (60.0 + 0.5 * spell_power + 0.4 * attack_damage, 0.0)
+            }
+            ElementalDamage(x) => self.elemental_damage += x,
+            ElementalMore(x) => self.elemental_more = (1. + self.elemental_more) * (1. + x) - 1.,
+            OutgoingMore(x) => self.outgoing_more = (1. + self.outgoing_more) * (1. + x) - 1.,
+            IncomingMore(x) => self.incoming_more = (1. + self.incoming_more) * (1. + x) - 1.,
+            DistanceDamage(x) => self.distance_damage += x,
+            NormalEnemyDamage(x) => self.normal_damage = (1. + self.normal_damage) * (1. + x) - 1.,
+            TrialDamage(x) => self.trial_damage = (1. + self.trial_damage) * (1. + x) - 1.,
+            BossDamage(x) => self.boss_damage = (1. + self.boss_damage) * (1. + x) - 1.,
+            ModelScale(x) => self.model_scale += x,
+            SnapshotAttributes(x) => self.snapshot_attributes += x,
+            SeriesDamagePerCard { .. }
+            | SkillDamagePerLearnedSkill(_)
+            | IntelligenceAmplificationPerLearnedSkill(_) => {
+                unreachable!("dynamic effects require the owning build")
+            }
+            StrengthAmplification(x) => self.strength_amp += x,
+            IntelligenceAmplification(x) => self.intelligence_amp += x,
+            StrengthPerKill(x) => self.strength_kill += x,
+            StrengthPerSecond(x) => self.strength_second += x,
+            IntelligencePerKill(x) => self.intelligence_kill += x,
+            IntelligencePerSecond(x) => self.intelligence_second += x,
+            QuiverCapacity(x) => self.quiver_capacity += x,
+            ArrowDamage(x) => self.arrow_damage += x,
+            ArrowRechargeReduction(x) => self.recharge_reduction += x,
+            AgilityPerArrow(x) => self.agility_arrow += x,
+            AgilityAmplificationPerArrow(x) => self.agility_amp_arrow += x,
+            MeleeCleave(x) => self.melee_cleave += x,
+            HealOnKill(x) => self.heal_kill += x,
+            MeleeDamage(x) => self.melee_damage += x,
+            SpellEchoChance(x) => self.spell_echo += x,
+            SpellChainTargets(x) => self.spell_chain += x,
+            Strength(x) => self.strength += x,
+            Agility(x) => self.agility += x,
+            Intelligence(x) => self.intelligence += x,
+            Attack(x) => self.attack += x,
+            MaxHealth(x) => self.health += x,
+            AgilityAmplification(x) => self.agility_amp += x,
+            HealthAmplification(x) => self.health_amp += x,
+            AttackAmplification(x) => self.attack_amp += x,
+            DamageAmplification(x) => self.damage_amp += x,
+            SkillDamage(x) => self.skill_damage += x,
+            AttackSpeed(x) => self.attack_speed += x,
+            AttackRange(x) => self.range += x * REFERENCE_RANGE_SCALE,
+            Evasion(x) => self.evasion += x * 0.01,
+            ArrowCount(x) => self.arrows += x,
+            ArrowPiercing(x) => self.pierce += x,
+            ArrowRicochet(x) => self.ricochet += x,
+            StrengthPerLevel(x) => self.strength_level += x,
+            AgilityPerLevel(x) => self.agility_level += x,
+            IntelligencePerLevel(x) => self.intelligence_level += x,
+            AttackPerLevel(x) => self.attack_level += x,
+            HealthPerLevel(x) => self.health_level += x,
+            HealthAmplificationPerLevel(x) => self.health_amp_level += x,
+            SkillDamagePerLevel(x) => self.skill_damage_level += x,
+            AttackAmplificationPerLevel(x) => self.attack_amp_level += x,
+            DamageAmplificationPerLevel(x) => self.damage_amp_level += x,
+            AgilityPerKill(x) => self.agility_kill += x,
+            AgilityPerSecond(x) => self.agility_second += x,
+            Revives(x) => self.revives += x,
+            LethalImmunity { seconds, cooldown } => {
+                self.immunity_seconds = seconds;
+                self.immunity_cooldown = cooldown;
+            }
+            Wood(_) | Gold(_) | JobFruit(_) => {} // Settled once by card acquisition.
+        }
+    }
+    fn add_for_build(&mut self, effect: BondEffect, build: &PlayerBuild) {
+        // The reference explicitly counts the supporting arrow skill. In this
+        // adaptation that volley is unlocked by the first Archery card.
+        let main_skills = build.skills.iter().filter(|rank| **rank > 0).count()
+            + usize::from(build.bond(super::BondId::Archery) > 0);
+        match effect {
+            BondEffect::SeriesDamagePerCard { family, amount } => {
+                self.damage_amp += f32::from(build.bond(family)) * amount
+            }
+            BondEffect::SkillDamagePerLearnedSkill(amount) => {
+                self.skill_damage += main_skills as f32 * amount
+            }
+            BondEffect::IntelligenceAmplificationPerLearnedSkill(amount) => {
+                self.intelligence_amp += main_skills as f32 * amount
+            }
+            other => self.add(other),
+        }
+    }
+    fn for_build(build: &PlayerBuild) -> Self {
+        let mut result = Self::default();
+        for card in BondCardId::ALL {
+            if build.owns_bond_card(card) {
+                for effect in card.definition().effects {
+                    result.add_for_build(*effect, build);
                 }
-                ReactionKind::FrozenPhysicalShatter => {
-                    state.frozen_remaining = 0.0;
-                    let fraction = if target.boss { 0.005 } else { 0.08 };
-                    (target.max_hp * fraction, 0.0)
-                }
-                ReactionKind::StormJudgment => unreachable!("judgment is not a status reaction"),
-            };
-            procs.push(ReactionProc {
-                kind,
-                damage: damage * reaction_damage_multiplier(element_points),
-                control_seconds,
-                echo: element_points >= 6,
-            });
-        }
-
-        if profile.element == DamageElement::Tide {
-            state.wet_remaining = state.wet_remaining.max(3.0 * status_scale);
-        }
-        if profile.applies_burn {
-            let ember_points = build.bond(BondId::Ember);
-            let cap = if ember_points >= 2 { 5 } else { 3 };
-            state.burn_layers = state.burn_layers.saturating_add(1).min(cap);
-            state.burn_remaining = 3.0 * status_scale;
-        }
-
-        if profile.class != DamageClass::Reaction
-            && profile.element == DamageElement::Storm
-            && build.bond(BondId::Thunder) >= 6
-        {
-            self.storm_hits = self.storm_hits.wrapping_add(1);
-            if self.storm_hits.is_multiple_of(8) {
-                procs.push(ReactionProc {
-                    kind: ReactionKind::StormJudgment,
-                    damage: 220.0 + 2.2 * spell_power,
-                    control_seconds: 0.0,
-                    echo: false,
-                });
             }
         }
-        procs
-    }
-
-    pub(crate) fn flame_taken_multiplier(&self, target: Entity, ember_points: u8) -> f32 {
-        if ember_points < 2 {
-            return 1.0;
-        }
-        1.0 + 0.04
-            * f32::from(
-                self.elemental_states
-                    .get(&target)
-                    .map_or(0, |state| state.burn_layers),
-            )
-    }
-
-    pub(crate) fn spirit_mark_multiplier_and_refresh(
-        &mut self,
-        target: Entity,
-        spirit_points: u8,
-        profile: DamageProfile,
-    ) -> f32 {
-        if spirit_points < 4 || profile.class != DamageClass::Summon {
-            return 1.0;
-        }
-        let multiplier = if self
-            .spirit_marks
-            .get(&target)
-            .is_some_and(|remaining| *remaining > 0.0)
-        {
-            1.12
-        } else {
-            1.0
-        };
-        self.spirit_marks.insert(target, 4.0);
-        multiplier
-    }
-
-    pub(crate) fn register_triune_hit(
-        &mut self,
-        triune_points: u8,
-        profile: DamageProfile,
-        source_damage: f32,
-    ) -> Option<TriuneProc> {
-        if triune_points < 4 || profile.class == DamageClass::Reaction {
-            return None;
-        }
-        let index = match profile.class {
-            DamageClass::Attack => 0,
-            DamageClass::Spell => 1,
-            DamageClass::Summon => 2,
-            DamageClass::Reaction => return None,
-        };
-        self.triune_windows[index] = 4.0;
-        if !self.triune_windows.iter().all(|remaining| *remaining > 0.0) {
-            return None;
-        }
-        self.triune_windows.fill(0.0);
-        Some(TriuneProc {
-            damage: 100.0 + source_damage * 1.5,
-            pure_share: if triune_points >= 6 { 0.25 } else { 0.0 },
-        })
-    }
-}
-
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub(crate) struct TriuneProc {
-    pub(crate) damage: f32,
-    pub(crate) pure_share: f32,
-}
-
-/// Runtime rules consumed by the market module. Keeping them in one resource
-/// makes the 2/4/6 Fortune behavior testable without duplicating thresholds.
-#[derive(Resource, Debug, Clone)]
-pub(crate) struct FortuneMarketRules {
-    pub(crate) price_multiplier: f32,
-    pub(crate) rarity_bonus: f32,
-    pub(crate) free_refresh_available: bool,
-}
-
-impl Default for FortuneMarketRules {
-    fn default() -> Self {
-        Self {
-            price_multiplier: 1.0,
-            rarity_bonus: 0.0,
-            free_refresh_available: false,
-        }
-    }
-}
-
-#[derive(Component)]
-pub(crate) struct BondStrike {
-    pub(crate) target: Option<Entity>,
-    pub(crate) position: Vec3,
-    pub(crate) damage: f32,
-    pub(crate) radius: f32,
-    pub(crate) remaining_hits: u8,
-    pub(crate) profile: DamageProfile,
-    pub(crate) delay: f32,
-}
-
-#[allow(clippy::too_many_arguments)]
-pub(crate) fn queue_bond_strike(
-    commands: &mut Commands,
-    target: Option<Entity>,
-    position: Vec3,
-    damage: f32,
-    radius: f32,
-    remaining_hits: u8,
-    profile: DamageProfile,
-    delay: f32,
-) {
-    commands.spawn(BondStrike {
-        target,
-        position,
-        damage,
-        radius,
-        remaining_hits,
-        profile,
-        delay,
-    });
-}
-
-#[allow(clippy::too_many_arguments)]
-fn tick_bond_effects(
-    mut commands: Commands,
-    time: Res<Time>,
-    session: Res<GameSession>,
-    mut build: ResMut<PlayerBuild>,
-    mut vitals: ResMut<HeroVitals>,
-    mut runtime: ResMut<BondRuntime>,
-    mut fortune: ResMut<FortuneMarketRules>,
-    market_effects: Res<MarketEffects>,
-    hero: Query<&Transform, (With<Hero>, Without<Core>)>,
-    core: Query<&Transform, (With<Core>, Without<Hero>)>,
-    mut enemies: Query<(Entity, &mut Enemy, &Transform)>,
-) {
-    if session.finished {
-        remove_frenzy_bonus(&mut runtime, &mut build);
-        remove_guardian_reduction(&mut runtime, &mut vitals);
-        return;
-    }
-    sync_fortune_rules(&build, session.wave, &mut fortune);
-    if session.paused {
-        return;
-    }
-    let delta = time.delta_secs();
-    runtime.guardian_intercept_remaining = (runtime.guardian_intercept_remaining - delta).max(0.0);
-    runtime.blood_frenzy_remaining = (runtime.blood_frenzy_remaining - delta).max(0.0);
-    for remaining in runtime.spirit_marks.values_mut() {
-        *remaining = (*remaining - delta).max(0.0);
-    }
-    runtime.spirit_marks.retain(|_, remaining| *remaining > 0.0);
-    for remaining in &mut runtime.triune_windows {
-        *remaining = (*remaining - delta).max(0.0);
-    }
-
-    let near_gate = hero
-        .single()
-        .ok()
-        .zip(core.single().ok())
-        .is_some_and(|(hero, core)| hero.translation.distance(core.translation) <= 8.0);
-    if build.bond(BondId::Bastion) >= 2 && near_gate {
-        apply_guardian_reduction(&mut runtime, &mut vitals);
-    } else {
-        remove_guardian_reduction(&mut runtime, &mut vitals);
-    }
-    if build.bond(BondId::Bastion) >= 6
-        && !runtime.guardian_last_stand_used
-        && session.core_max_hp > 0.0
-        && session.core_hp / session.core_max_hp <= 0.25
-    {
-        runtime.guardian_last_stand_used = true;
-        vitals.invulnerable_remaining = vitals.invulnerable_remaining.max(6.0);
-    }
-
-    let ember_detonation_damage =
-        120.0 + market_effects.effective_spell_power(vitals.spell_power()) + build.attack_damage;
-    runtime.target_snapshots.clear();
-    for (entity, mut enemy, transform) in &mut enemies {
-        runtime.target_snapshots.insert(
-            entity,
-            TargetSnapshot {
-                position: transform.translation,
-                max_hp: enemy.max_hp,
-                elite: enemy.elite,
-            },
-        );
-        let Some(state) = runtime.elemental_states.get_mut(&entity) else {
-            continue;
-        };
-        state.wet_remaining = (state.wet_remaining - delta).max(0.0);
-        state.burn_remaining = (state.burn_remaining - delta).max(0.0);
-        state.frozen_remaining = (state.frozen_remaining - delta).max(0.0);
-        for cooldown in &mut state.reaction_cooldowns {
-            *cooldown = (*cooldown - delta).max(0.0);
-        }
-        if state.burn_remaining <= 0.0 {
-            state.burn_layers = 0;
-            state.detonation_remaining = 2.0;
-        }
-        if state.frozen_remaining > 0.0 {
-            enemy.speed = 0.0;
-        } else if enemy.speed == 0.0 {
-            enemy.speed = state.base_speed;
-        }
-        if ember_detonation_ready(build.bond(BondId::Ember), state.burn_layers) {
-            state.detonation_remaining -= delta;
-            while state.detonation_remaining <= 0.0 {
-                state.detonation_remaining += 2.0;
-                queue_bond_strike(
-                    &mut commands,
-                    Some(entity),
-                    transform.translation,
-                    ember_detonation_damage,
-                    3.0,
-                    u8::MAX,
-                    DamageProfile::FLAME_REACTION,
-                    0.0,
-                );
-            }
-        } else {
-            state.detonation_remaining = 2.0;
-        }
-    }
-    runtime
-        .elemental_states
-        .retain(|entity, state| enemies.contains(*entity) && state.active());
-}
-
-#[allow(clippy::too_many_arguments)]
-fn observe_bond_results(
-    mut commands: Commands,
-    mut session: ResMut<GameSession>,
-    mut build: ResMut<PlayerBuild>,
-    mut vitals: ResMut<HeroVitals>,
-    mut runtime: ResMut<BondRuntime>,
-    mut rng: ResMut<RunRng>,
-    living: Query<(Entity, &Transform, &Enemy)>,
-) {
-    if !runtime.initialized {
-        runtime.initialized = true;
-        runtime.last_kills = session.total_kills;
-        runtime.last_hero_deaths = vitals.deaths;
-        runtime.last_gold = session.gold;
-        runtime.last_core_hp = session.core_hp;
-        return;
-    }
-
-    let kill_delta = session.total_kills.saturating_sub(runtime.last_kills);
-    if kill_delta > 0 {
-        if build.bond(BondId::Blood) >= 2 {
-            let healing = vitals.max_health * 0.01 * kill_delta as f32;
-            vitals.heal(healing);
-        }
-        if build.bond(BondId::Blood) >= 6 {
-            runtime.blood_kills = runtime.blood_kills.saturating_add(kill_delta);
-            while runtime.blood_kills >= 20 {
-                runtime.blood_kills -= 20;
-                runtime.blood_frenzy_remaining = 10.0;
-            }
-        }
-    }
-    runtime.last_kills = session.total_kills;
-
-    let frenzy_active = build.bond(BondId::Blood) >= 6 && runtime.blood_frenzy_remaining > 0.0;
-    if frenzy_active && runtime.frenzy_attack_bonus == 0.0 {
-        runtime.frenzy_attack_bonus = build.attacks_per_second * 0.35;
-        build.attacks_per_second += runtime.frenzy_attack_bonus;
-    } else if !frenzy_active && runtime.frenzy_attack_bonus != 0.0 {
-        build.attacks_per_second =
-            (build.attacks_per_second - runtime.frenzy_attack_bonus).max(0.2);
-        runtime.frenzy_attack_bonus = 0.0;
-    }
-
-    if session.gold >= runtime.last_gold {
-        let gained = session.gold - runtime.last_gold;
-        if build.bond(BondId::Fortune) >= 2 && gained > 0 {
-            runtime.fortune_gold_fraction += gained as f32 * 0.20;
-            let bonus = runtime.fortune_gold_fraction.floor() as u32;
-            runtime.fortune_gold_fraction -= bonus as f32;
-            session.gold = session.gold.saturating_add(bonus);
-        }
-    }
-    runtime.last_gold = session.gold;
-
-    let new_hero_deaths = vitals.deaths.saturating_sub(runtime.last_hero_deaths);
-    if session.core_hp < runtime.last_core_hp
-        && build.bond(BondId::Bastion) >= 4
-        && runtime.guardian_intercept_remaining <= 0.0
-    {
-        let breach_damage =
-            (runtime.last_core_hp - session.core_hp - new_hero_deaths as f32 * 80.0).max(0.0);
-        if breach_damage > 0.0 {
-            session.core_hp = (session.core_hp + breach_damage).min(session.core_max_hp);
-            runtime.guardian_intercept_remaining = 12.0;
-        }
-    }
-    runtime.last_hero_deaths = vitals.deaths;
-    runtime.last_core_hp = session.core_hp;
-
-    let living_entities: HashMap<Entity, Vec3> = living
-        .iter()
-        .filter(|(_, _, enemy)| enemy.hp > 0.0)
-        .map(|(entity, transform, _)| (entity, transform.translation))
-        .collect();
-    let mut defeated: Vec<(Entity, TargetSnapshot)> = runtime
-        .target_snapshots
-        .iter()
-        .filter(|(entity, _)| !living_entities.contains_key(entity))
-        .map(|(entity, snapshot)| (*entity, *snapshot))
-        .collect();
-    defeated.sort_by_key(|(entity, _)| entity.to_bits());
-    defeated.truncate(kill_delta as usize);
-    for (entity, snapshot) in defeated {
-        if build.bond(BondId::Ember) >= 4
-            && let Some(burn) = runtime.elemental_states.get(&entity).cloned()
-            && burn.burn_layers > 0
-        {
-            let mut nearby: Vec<(Entity, f32)> = living_entities
+        for family in &BOND_FAMILIES {
+            let count = family
+                .members
                 .iter()
-                .filter_map(|(candidate, position)| {
-                    let distance = snapshot.position.distance_squared(*position);
-                    (distance <= 3.0_f32.powi(2)).then_some((*candidate, distance))
-                })
-                .collect();
-            nearby.sort_by(|left, right| {
-                left.1
-                    .total_cmp(&right.1)
-                    .then_with(|| left.0.to_bits().cmp(&right.0.to_bits()))
-            });
-            for (candidate, _) in nearby.into_iter().take(3) {
-                let state = runtime
-                    .elemental_states
-                    .entry(candidate)
-                    .or_insert_with(|| ElementState::new(1.0));
-                state.burn_layers = state.burn_layers.max(burn.burn_layers).min(5);
-                state.burn_remaining = state.burn_remaining.max(burn.burn_remaining.max(1.5));
+                .filter(|c| build.owns_bond_card(**c))
+                .count();
+            for bonus in family.bonuses {
+                if count >= usize::from(bonus.required) {
+                    for effect in bonus.effects {
+                        result.add_for_build(*effect, build);
+                    }
+                }
             }
         }
-        if build.bond(BondId::Blood) >= 4 {
-            queue_bond_strike(
-                &mut commands,
-                None,
-                snapshot.position,
-                (snapshot.max_hp * 0.08).clamp(30.0, 1_200.0),
-                2.4,
-                u8::MAX,
-                DamageProfile::new(DamageElement::Physical, DamageClass::Reaction),
-                0.0,
-            );
-        }
-        if build.bond(BondId::Fortune) >= 6 && snapshot.elite {
-            runtime.fortune_consumables_collected =
-                runtime.fortune_consumables_collected.saturating_add(1);
-            match rng.next_u32() % 3 {
-                0 => session.core_hp = (session.core_hp + 200.0).min(session.core_max_hp),
-                1 => session.skill_rerolls = session.skill_rerolls.saturating_add(1),
-                _ => session.wood = session.wood.saturating_add(10),
-            }
-        }
-        runtime.elemental_states.remove(&entity);
+        result
     }
 }
+fn element_tag_index(tag: Tag) -> Option<usize> {
+    match tag {
+        Tag::Storm => Some(0),
+        Tag::Flame => Some(1),
+        Tag::Frost => Some(2),
+        Tag::Tide => Some(3),
+        Tag::Arcane => Some(4),
+        _ => None,
+    }
+}
+#[derive(Default, Debug, Clone, Copy)]
+struct AppliedStats {
+    armor: f32,
+    strength: f32,
+    agility: f32,
+    intelligence: f32,
+    health: f32,
+    energy: f32,
+    attack: f32,
+    speed: f32,
+    movement: f32,
+    projectile: f32,
+    range: f32,
+    arrows: u8,
+    pierce: u8,
+    ricochet: u8,
+}
+#[derive(Resource, Default)]
+pub(crate) struct BondRuntime {
+    modifiers: CardModifiers,
+    permanent: CardModifiers,
+    applied: AppliedStats,
+    last_level: Option<u32>,
+    last_kills: u32,
+    immunity_remaining: f32,
+    revives_used: u8,
+    archery_active: bool,
+    pub(crate) arrows_remaining: u16,
+    pub(crate) recharge_remaining: f32,
+    spell_proc_remaining: f32,
+    pending_heal: f32,
+    pending_hits: u32,
+    crit_kill_remainder: u32,
+    snapshot_attributes_taken: f32,
+    equipment_evasion: f32,
+    equipment_critical_chance: f32,
+}
+impl BondRuntime {
+    fn advance(&mut self, build: &PlayerBuild, level: u32, kills: u32, seconds: f32) {
+        // Attribute growth begins after acquisition, never retroactively.
+        let levels = self.last_level.map_or(0, |last| level.saturating_sub(last)) as f32;
+        let kills_gained = kills.saturating_sub(self.last_kills) as f32;
+        let previous = self.modifiers;
+        if previous.crit_damage_per300 > 0. {
+            self.crit_kill_remainder = self
+                .crit_kill_remainder
+                .saturating_add(kills.saturating_sub(self.last_kills));
+            self.permanent.crit_damage +=
+                (self.crit_kill_remainder / 300) as f32 * previous.crit_damage_per300;
+            self.crit_kill_remainder %= 300;
+        }
 
-fn resolve_bond_strikes(
-    mut commands: Commands,
+        self.permanent.strength +=
+            previous.strength_level * levels + previous.strength_kill * kills_gained;
+        self.permanent.agility +=
+            previous.agility_level * levels + previous.agility_kill * kills_gained;
+        self.permanent.intelligence +=
+            previous.intelligence_level * levels + previous.intelligence_kill * kills_gained;
+        self.pending_heal += previous.heal_kill * kills_gained;
+        self.permanent.attack += previous.attack_level * levels;
+        self.permanent.health += previous.health_level * levels;
+        self.permanent.health_amp += previous.health_amp_level * levels;
+        self.permanent.skill_damage += previous.skill_damage_level * levels;
+        self.permanent.attack_amp += previous.attack_amp_level * levels;
+        self.permanent.damage_amp += previous.damage_amp_level * levels;
+        self.modifiers = CardModifiers::for_build(build);
+        self.permanent.agility += self.modifiers.agility_second * seconds;
+        self.permanent.strength += self.modifiers.strength_second * seconds;
+        self.permanent.intelligence += self.modifiers.intelligence_second * seconds;
+        self.spell_proc_remaining = (self.spell_proc_remaining - seconds).max(0.);
+        self.recharge_remaining = (self.recharge_remaining
+            - (self.modifiers.recharge_reduction - previous.recharge_reduction))
+            .max(0.);
+        let archery = [
+            BondCardId::ArcheryPreparation,
+            BondCardId::ArcheryPiercing,
+            BondCardId::ArcheryVolley,
+            BondCardId::ArcheryHaste,
+        ]
+        .into_iter()
+        .any(|c| build.owns_bond_card(c));
+        let capacity = 30 + self.modifiers.quiver_capacity;
+        if archery && !self.archery_active {
+            self.arrows_remaining = capacity;
+            self.recharge_remaining = 0.;
+        }
+        self.archery_active = archery;
+        if archery {
+            let old_capacity = 30 + previous.quiver_capacity;
+            self.arrows_remaining =
+                (self.arrows_remaining + capacity.saturating_sub(old_capacity)).min(capacity);
+            if self.arrows_remaining == 0 {
+                self.recharge_remaining = (self.recharge_remaining - seconds).max(0.);
+                if self.recharge_remaining <= 0. {
+                    self.arrows_remaining = capacity;
+                }
+            }
+        } else {
+            self.arrows_remaining = 0;
+            self.recharge_remaining = 0.;
+        }
+
+        self.last_level = Some(level);
+        self.last_kills = kills;
+        self.immunity_remaining = (self.immunity_remaining - seconds).max(0.0);
+    }
+    pub(crate) fn remove_applied(&mut self, build: &mut PlayerBuild, vitals: &mut HeroVitals) {
+        let a = std::mem::take(&mut self.applied);
+        vitals.armor -= a.armor;
+        vitals.strength -= a.strength;
+        vitals.agility -= a.agility;
+        vitals.intelligence -= a.intelligence;
+        vitals.max_health -= a.health;
+        vitals.health -= a.health;
+        vitals.max_energy -= a.energy;
+        vitals.energy -= a.energy;
+        build.attack_damage -= a.attack;
+        build.attacks_per_second -= a.speed;
+        build.move_speed -= a.movement;
+        build.projectile_speed -= a.projectile;
+        build.attack_range -= a.range;
+        build.multishot = build.multishot.saturating_sub(a.arrows);
+        build.pierce = build.pierce.saturating_sub(a.pierce);
+        build.ricochet = build.ricochet.saturating_sub(a.ricochet);
+    }
+    pub(crate) fn apply_stats(&mut self, build: &mut PlayerBuild, vitals: &mut HeroVitals) {
+        let m = self.modifiers;
+        let snapshot_fraction = (m.snapshot_attributes - self.snapshot_attributes_taken).max(0.);
+        self.permanent.strength += vitals.strength * snapshot_fraction;
+        self.permanent.agility += vitals.agility * snapshot_fraction;
+        self.permanent.intelligence += vitals.intelligence * snapshot_fraction;
+        self.snapshot_attributes_taken = self.snapshot_attributes_taken.max(m.snapshot_attributes);
+        let p = self.permanent;
+        let primary_before = vitals.primary_attribute();
+        // remove_applied already removed our previous arrow bonus. Count it once.
+        // Arrow count means volley size here, never the separate quiver reserve.
+        let arrow_count = build.multishot.max(1).saturating_add(m.arrows) as f32;
+        let strength =
+            (vitals.strength + m.strength + p.strength) * (1. + m.strength_amp) - vitals.strength;
+        let agility = (vitals.agility + m.agility + p.agility + arrow_count * m.agility_arrow)
+            * (1.0 + m.agility_amp + arrow_count * m.agility_amp_arrow)
+            - vitals.agility;
+        let intelligence = (vitals.intelligence + m.intelligence + p.intelligence)
+            * (1. + m.intelligence_amp)
+            - vitals.intelligence;
+        vitals.strength += strength;
+        vitals.agility += agility;
+        vitals.intelligence += intelligence;
+        let health = (vitals.max_health
+            + strength * 14.0 * vitals.command_health_multiplier
+            + m.health
+            + p.health)
+            * (1.0 + m.health_amp + p.health_amp)
+            - vitals.max_health;
+        let energy = intelligence * 8.0;
+        let attack = vitals.primary_attribute() - primary_before + m.attack + p.attack;
+        let speed = (build.attacks_per_second + agility * 0.028) * (1.0 + m.attack_speed)
+            - build.attacks_per_second;
+        self.applied = AppliedStats {
+            armor: m.armor,
+            strength,
+            agility,
+            intelligence,
+            health,
+            energy,
+            attack,
+            speed,
+            movement: agility * 0.035 + m.movement,
+            projectile: intelligence * 0.08,
+            range: intelligence * 0.025 + m.range,
+            arrows: m.arrows,
+            pierce: m.pierce,
+            ricochet: m.ricochet,
+        };
+        let a = self.applied;
+        vitals.armor += m.armor;
+        vitals.max_health += health;
+        vitals.max_energy += energy;
+        if vitals.alive {
+            vitals.health = (vitals.health + health).clamp(0.0, vitals.max_health);
+            vitals.energy = (vitals.energy + energy).clamp(0.0, vitals.max_energy);
+        } else {
+            vitals.health = 0.0;
+        }
+        build.attack_damage += attack;
+        build.attacks_per_second += speed;
+        build.move_speed += a.movement;
+        build.projectile_speed += a.projectile;
+        build.attack_range += a.range;
+        build.multishot = build.multishot.saturating_add(a.arrows);
+        build.pierce = build.pierce.saturating_add(a.pierce);
+        build.ricochet = build.ricochet.saturating_add(a.ricochet);
+    }
+    pub(crate) fn damage_multiplier(&self, profile: DamageProfile) -> f32 {
+        let mut result = 1.0 + self.modifiers.damage_amp + self.permanent.damage_amp;
+        result *= 1. + self.modifiers.outgoing_more;
+        if profile.class == DamageClass::Summon {
+            result *= 1. + self.modifiers.summon_damage;
+        }
+        if profile.element.is_elemental() {
+            result *= (1. + self.modifiers.elemental_damage) * (1. + self.modifiers.elemental_more);
+            let index = match profile.element {
+                DamageElement::Storm => Some(0),
+                DamageElement::Flame => Some(1),
+                DamageElement::Frost => Some(2),
+                DamageElement::Tide => Some(3),
+                DamageElement::Arcane => Some(4),
+                _ => None,
+            };
+            if let Some(index) = index {
+                result *= 1. + self.modifiers.element_damage[index];
+            }
+        }
+        if profile.class == DamageClass::Attack {
+            result *= 1.0 + self.modifiers.attack_amp + self.permanent.attack_amp;
+        }
+        if profile.skill_index.is_some() || profile.class == DamageClass::Spell {
+            result *= 1.0 + self.modifiers.skill_damage + self.permanent.skill_damage;
+        }
+        if profile.melee {
+            result *= 1. + self.modifiers.melee_damage;
+        }
+        if profile.arrow {
+            result *= 1. + self.modifiers.arrow_damage;
+        }
+        result
+    }
+    pub(crate) fn suppression_chance(&self) -> f32 {
+        self.modifiers.suppression_chance.clamp(0., 0.95)
+    }
+    pub(crate) fn suppression_multiplier(&self) -> f32 {
+        self.modifiers.suppression_multiplier
+    }
+    pub(crate) fn extra_attack_chance(&self) -> f32 {
+        self.modifiers.extra_attack.clamp(0., 0.95)
+    }
+    pub(crate) fn take_received_hits(&mut self) -> u32 {
+        std::mem::take(&mut self.pending_hits)
+    }
+    pub(crate) fn critical_chance(&self) -> f32 {
+        (BASE_CRIT_CHANCE + self.modifiers.crit_chance + self.equipment_critical_chance)
+            .clamp(0., 1.)
+    }
+    pub(crate) fn critical_damage(&self) -> f32 {
+        BASE_CRIT_MULTIPLIER + self.modifiers.crit_damage + self.permanent.crit_damage
+    }
+    pub(crate) fn summon_crit_inheritance(&self) -> f32 {
+        self.modifiers.summon_crit_inheritance
+    }
+    pub(crate) fn life_leech(&self) -> f32 {
+        self.modifiers.life_leech
+    }
+    pub(crate) fn model_scale(&self) -> f32 {
+        1. + self.modifiers.model_scale
+    }
+    pub(crate) fn target_damage_multiplier(&self, boss: bool, trial: bool) -> f32 {
+        if boss {
+            1. + self.modifiers.boss_damage
+        } else if trial {
+            1. + self.modifiers.trial_damage
+        } else {
+            1. + self.modifiers.normal_damage
+        }
+    }
+    pub(crate) fn distance_damage_multiplier(&self, distance: f32) -> f32 {
+        1. + self.modifiers.distance_damage * (distance / 12.).clamp(0., 1.)
+    }
+    pub(crate) fn quiver_capacity(&self) -> u16 {
+        30 + self.modifiers.quiver_capacity
+    }
+    pub(crate) fn archery_active(&self) -> bool {
+        self.archery_active
+    }
+    pub(crate) fn consume_arrow(&mut self) {
+        if self.archery_active && self.arrows_remaining > 0 {
+            self.arrows_remaining -= 1;
+            if self.arrows_remaining == 0 {
+                self.recharge_remaining = (12. - self.modifiers.recharge_reduction).max(1.);
+            }
+        }
+    }
+    pub(crate) fn melee_cleave(&self) -> usize {
+        self.modifiers.melee_cleave as usize
+    }
+    pub(crate) fn take_kill_healing(&mut self) -> f32 {
+        std::mem::take(&mut self.pending_heal)
+    }
+    /// One shared cooldown and an explicit secondary flag prevent hit-chain recursion.
+    pub(crate) fn spell_procs(&mut self, profile: DamageProfile, roll: f32) -> (bool, u8) {
+        if profile.class != DamageClass::Spell
+            || profile.card_proc
+            || profile.market_proc
+            || self.spell_proc_remaining > 0.
+        {
+            return (false, 0);
+        }
+        let echo = roll < self.modifiers.spell_echo;
+        let chains = self.modifiers.spell_chain;
+        if echo || chains > 0 {
+            self.spell_proc_remaining = 1.;
+        }
+        (echo, chains)
+    }
+    pub(crate) fn evasion_chance(&self) -> f32 {
+        (self.modifiers.evasion + self.equipment_evasion).clamp(0.0, 0.95)
+    }
+    pub(crate) fn evade(&self, roll: f32) -> bool {
+        roll < self.evasion_chance()
+    }
+    pub(crate) fn take_physical_damage(&mut self, vitals: &mut HeroVitals, damage: f32) {
+        let before = vitals.health;
+        vitals.take_physical_damage(damage * (1. + self.modifiers.incoming_more));
+        if vitals.alive
+            && vitals.health <= 0.0
+            && self.modifiers.immunity_seconds > 0.0
+            && self.immunity_remaining <= 0.0
+        {
+            self.intercept_fatal(vitals);
+            // Judge's Brush negates the fatal hit rather than healing a fixed amount.
+            vitals.health = before.max(1.0);
+        }
+        if before > vitals.health {
+            self.pending_hits = self.pending_hits.saturating_add(1).min(64);
+        }
+    }
+    pub(crate) fn intercept_fatal(&mut self, vitals: &mut HeroVitals) -> bool {
+        if !vitals.alive || vitals.health > 0.0 {
+            return false;
+        }
+        if self.modifiers.immunity_seconds > 0.0 && self.immunity_remaining <= 0.0 {
+            vitals.health = 1.0;
+            vitals.invulnerable_remaining = vitals
+                .invulnerable_remaining
+                .max(self.modifiers.immunity_seconds);
+            self.immunity_remaining = self.modifiers.immunity_cooldown;
+            return true;
+        }
+        if self.revives_used < self.modifiers.revives {
+            self.revives_used += 1;
+            // Full health is this arena's revival adaptation; original refill amount is unverified.
+            vitals.health = vitals.max_health;
+            vitals.stunned_remaining = 0.0;
+            return true;
+        }
+        false
+    }
+}
+fn tick_cards(
+    market: Option<Res<super::market::MarketEffects>>,
     time: Res<Time>,
     session: Res<GameSession>,
-    assets: Option<Res<GameAssets>>,
-    mut pools: ResMut<CombatPools>,
-    mut strikes: Query<(Entity, &mut BondStrike)>,
-    targets: Query<&Transform, With<Enemy>>,
+    build: Res<PlayerBuild>,
+    mut runtime: ResMut<BondRuntime>,
+    mut vitals: ResMut<HeroVitals>,
 ) {
-    if session.paused || session.finished {
-        return;
-    }
-    let Some(assets) = assets else {
-        return;
-    };
-    for (entity, mut strike) in &mut strikes {
-        strike.delay -= time.delta_secs();
-        if strike.delay > 0.0 {
-            continue;
-        }
-        let position = strike
-            .target
-            .and_then(|target| {
-                targets
-                    .get(target)
-                    .ok()
-                    .map(|transform| transform.translation)
-            })
-            .unwrap_or(strike.position);
-        let Some(projectile_entity) = pools.rent_projectile(
-            &mut commands,
-            assets.projectile_mesh.clone(),
-            assets.projectile_material.clone(),
-            Transform::from_translation(position + Vec3::Y * 0.18).with_scale(Vec3::splat(
-                if strike.remaining_hits == u8::MAX {
-                    0.8
-                } else {
-                    0.34
-                },
-            )),
-            Projectile {
-                velocity: Vec3::ZERO,
-                damage: strike.damage.max(1.0),
-                radius: strike.radius,
-                remaining_hits: strike.remaining_hits,
-                lifetime: 0.12,
-            },
-        ) else {
-            continue;
-        };
-        commands.entity(projectile_entity).insert(strike.profile);
-        pools.rent_impact_fx(
-            &mut commands,
-            assets.fx_mesh.clone(),
-            assets.storm_material.clone(),
-            Transform::from_xyz(position.x, 0.16, position.z).with_scale(Vec3::splat(0.12)),
-            ImpactFx {
-                lifetime: 0.24,
-                start_scale: 0.12,
-                end_scale: strike.radius.max(0.5),
-            },
-        );
-        commands.entity(entity).despawn();
-    }
-}
-
-fn sync_fortune_rules(build: &PlayerBuild, _wave: u32, rules: &mut FortuneMarketRules) {
-    let points = build.bond(BondId::Fortune);
-    rules.price_multiplier = if points >= 2 { 0.90 } else { 1.0 };
-    rules.rarity_bonus = if points >= 4 { 0.15 } else { 0.0 };
-    rules.free_refresh_available = points >= 4;
-}
-
-fn apply_guardian_reduction(runtime: &mut BondRuntime, vitals: &mut HeroVitals) {
-    if runtime.guardian_armor_bonus != 0.0 {
-        return;
-    }
-    runtime.guardian_armor_bonus = armor_bonus_for_reduction(vitals.armor, 0.10);
-    runtime.guardian_magic_resistance_bonus = (1.0 - vitals.magic_resistance) * 0.10;
-    vitals.armor += runtime.guardian_armor_bonus;
-    vitals.magic_resistance =
-        (vitals.magic_resistance + runtime.guardian_magic_resistance_bonus).min(0.95);
-}
-
-fn remove_guardian_reduction(runtime: &mut BondRuntime, vitals: &mut HeroVitals) {
-    if runtime.guardian_armor_bonus == 0.0 {
-        return;
-    }
-    vitals.armor -= runtime.guardian_armor_bonus;
-    vitals.magic_resistance =
-        (vitals.magic_resistance - runtime.guardian_magic_resistance_bonus).clamp(0.0, 0.95);
-    runtime.guardian_armor_bonus = 0.0;
-    runtime.guardian_magic_resistance_bonus = 0.0;
-}
-
-fn remove_frenzy_bonus(runtime: &mut BondRuntime, build: &mut PlayerBuild) {
-    if runtime.frenzy_attack_bonus != 0.0 {
-        build.attacks_per_second =
-            (build.attacks_per_second - runtime.frenzy_attack_bonus).max(0.2);
-    }
-    runtime.frenzy_attack_bonus = 0.0;
-}
-
-fn armor_bonus_for_reduction(base_armor: f32, reduction: f32) -> f32 {
-    let effective_base = base_armor.max(0.0);
-    let target_armor =
-        ((100.0 + 5.0 * effective_base) / (1.0 - reduction.clamp(0.0, 0.9)) - 100.0) / 5.0;
-    target_armor - base_armor
-}
-
-pub(crate) const fn summon_cap(spirit_points: u8, equipment_bonus: u8) -> usize {
-    let bond_bonus = if spirit_points >= 2 { 2 } else { 0 };
-    let cap = BASE_SUMMON_CAP + bond_bonus + equipment_bonus as usize;
-    if cap > GLOBAL_SUMMON_CAP {
-        GLOBAL_SUMMON_CAP
-    } else {
-        cap
-    }
-}
-
-const fn ember_detonation_ready(ember_points: u8, burn_layers: u8) -> bool {
-    ember_points >= 6 && burn_layers >= 5
-}
-
-pub(crate) const fn reaction_cooldown(element_points: u8) -> f32 {
-    if element_points >= 6 {
-        REACTION_TIER_SIX_COOLDOWN_SECONDS
-    } else {
-        REACTION_COOLDOWN_SECONDS
-    }
-}
-
-pub(crate) const fn reaction_damage_multiplier(element_points: u8) -> f32 {
-    if element_points >= 4 { 1.60 } else { 1.0 }
-}
-
-pub(crate) const fn reaction_status_multiplier(element_points: u8) -> f32 {
-    if element_points >= 4 { 1.35 } else { 1.0 }
-}
-
-pub(crate) fn skill_cooldown_recovery(
-    index: usize,
-    build: &PlayerBuild,
-    runtime: &BondRuntime,
-) -> f32 {
-    let tags = SKILLS[index].tags;
-    let mut recovery = runtime.blood_cast_speed_multiplier(build);
-    if build.bond(BondId::Arcane) >= 2 && tags.contains(&Tag::Spell) {
-        recovery /= 0.90;
-    }
-    if build.bond(BondId::Thunder) >= 4 && tags.contains(&Tag::Storm) {
-        recovery /= 0.88;
-    }
-    if build.bond(BondId::Ascension) >= 6 && ascension_ready(build) {
-        recovery /= 0.80;
-    }
-    recovery
-}
-
-pub(crate) fn projectile_bond_damage_multiplier(
-    profile: DamageProfile,
-    build: &PlayerBuild,
-    session: &GameSession,
-) -> f32 {
-    let mut multiplier = 1.0;
-    if build.bond(BondId::Thunder) >= 2 && profile.element == DamageElement::Storm {
-        multiplier *= 1.15;
-    }
-    if build.bond(BondId::Spirits) >= 2 && profile.class == DamageClass::Summon {
-        multiplier *= 1.15;
-    }
-    if build.bond(BondId::Triune) >= 2 && profile.class != DamageClass::Reaction {
-        multiplier *= 1.08;
-    }
-    if build.bond(BondId::Ascension) >= 4
-        && profile
-            .skill_index
-            .is_some_and(|index| build.skills[index as usize] >= 4)
-    {
-        multiplier *= 1.25;
-    }
-    multiplier *= guardian_damage_multiplier(
-        build.bond(BondId::Bastion),
-        session.core_hp,
-        session.core_max_hp,
-    );
-    multiplier
-}
-
-pub(crate) fn ascension_ready(build: &PlayerBuild) -> bool {
-    build.skills.iter().filter(|rank| **rank >= 5).count() >= 4
-}
-
-pub(crate) const fn arcane_echo_scale(arcane_points: u8) -> f32 {
-    if arcane_points >= 6 {
-        1.0
-    } else if arcane_points >= 4 {
-        0.5
-    } else {
+    let seconds = if session.paused || session.finished {
         0.0
-    }
-}
-
-pub(crate) const fn guardian_damage_multiplier(
-    bastion_points: u8,
-    core_hp: f32,
-    core_max_hp: f32,
-) -> f32 {
-    if bastion_points >= 6 && core_max_hp > 0.0 && core_hp / core_max_hp > 0.75 {
-        1.30
     } else {
-        1.0
-    }
+        time.delta_secs()
+    };
+    runtime.equipment_evasion = market.as_ref().map_or(0.0, |equipment| equipment.evasion());
+    runtime.equipment_critical_chance = market
+        .as_ref()
+        .map_or(0.0, |equipment| equipment.critical_chance());
+    runtime.advance(&build, session.level, session.total_kills, seconds);
+    let healing =
+        runtime.modifiers.regeneration * (1. + runtime.modifiers.regeneration_amp) * seconds;
+    vitals.heal(healing);
 }
-
-pub(crate) const fn blood_execute_ready(
-    blood_points: u8,
-    current_hp: f32,
-    max_hp: f32,
-    special: bool,
-) -> bool {
-    blood_points >= 4 && !special && max_hp > 0.0 && current_hp / max_hp <= 0.12
+pub(crate) const fn summon_cap(equipment_bonus: u8) -> usize {
+    let cap = 18 + equipment_bonus as usize;
+    if cap > 20 { 20 } else { cap }
 }
-
+pub(crate) const BASE_CRIT_CHANCE: f32 = 0.05;
+pub(crate) const BASE_CRIT_MULTIPLIER: f32 = 1.75;
 pub(crate) fn critical_multiplier(
-    blood_points: u8,
-    ember_points: u8,
+    bonds: &BondRuntime,
     equipment_burns_can_crit: bool,
     profile: DamageProfile,
     roll: f32,
 ) -> f32 {
-    let chance = 0.05 + if blood_points >= 2 { 0.10 } else { 0.0 };
-    let burn_can_crit = !profile.burn_tick || ember_points >= 4 || equipment_burns_can_crit;
-    if burn_can_crit && roll < chance {
-        1.75
+    let chance = if profile.class == DamageClass::Summon {
+        (BASE_CRIT_CHANCE + bonds.critical_chance() * bonds.summon_crit_inheritance()).min(1.)
+    } else {
+        bonds.critical_chance()
+    };
+    if (!profile.burn_tick || equipment_burns_can_crit) && roll < chance {
+        bonds.critical_damage()
     } else {
         1.0
     }
 }
-
+#[cfg(test)]
 pub(crate) fn boss_damage_multiplier(profile: DamageProfile, modifiers: BossModifiers) -> f32 {
+    boss_damage_multiplier_with_penetration(profile, modifiers, 0.0)
+}
+pub(crate) fn boss_damage_multiplier_with_penetration(
+    profile: DamageProfile,
+    modifiers: BossModifiers,
+    penetration: f32,
+) -> f32 {
     if profile.element == DamageElement::Pure {
         return 1.0;
     }
     let mut multiplier = 1.0 - modifiers.damage_reduction.clamp(0.0, 0.95);
     if profile.element.is_elemental() {
-        multiplier *= 1.0 - modifiers.elemental_resistance.clamp(0.0, 0.95);
+        multiplier *=
+            1.0 - (modifiers.elemental_resistance - penetration.clamp(0.0, 0.95)).clamp(0.0, 0.95);
     }
     if profile.element == DamageElement::Flame {
-        multiplier *= 1.0 - modifiers.flame_resistance.clamp(0.0, 0.95);
+        multiplier *=
+            1.0 - (modifiers.flame_resistance - penetration.clamp(0.0, 0.95)).clamp(0.0, 0.95);
     }
     if profile.element == DamageElement::Frost {
         multiplier *= modifiers.frost_damage_taken_multiplier.max(0.0);
@@ -1034,234 +781,429 @@ pub(crate) fn boss_damage_multiplier(profile: DamageProfile, modifiers: BossModi
 
 #[cfg(test)]
 mod tests {
-    use super::super::content::{BONDS, BossModifiers};
     use super::*;
-
-    #[test]
-    fn every_bond_exposes_all_three_runtime_tiers() {
-        assert_eq!(BONDS.len(), BondId::COUNT);
-        for bond in BONDS {
-            assert_eq!(bond.tiers.map(|tier| tier.threshold), [2, 4, 6]);
-            assert!(bond.tiers.iter().all(|tier| !tier.description.is_empty()));
+    fn grant(build: &mut PlayerBuild, cards: &[BondCardId]) {
+        for card in cards {
+            build.owned_bond_cards[card.index()] = true;
         }
-        assert_eq!(summon_cap(0, 0), 18);
-        assert_eq!(summon_cap(0, 1), 19);
-        assert_eq!(summon_cap(2, 1), 20);
-        assert_eq!(arcane_echo_scale(4), 0.5);
-        assert_eq!(arcane_echo_scale(6), 1.0);
-        assert_eq!(reaction_damage_multiplier(4), 1.6);
-        assert_eq!(reaction_cooldown(6), 1.0);
-        assert_eq!(guardian_damage_multiplier(6, 800.0, 1_000.0), 1.3);
-        assert!(blood_execute_ready(4, 12.0, 100.0, false));
+    }
+    fn close(left: f32, right: f32) {
+        assert!((left - right).abs() < 0.005, "{left} != {right}");
     }
 
     #[test]
-    fn ember_heart_allows_burns_to_use_the_normal_critical_roll() {
-        let burn = DamageProfile::FLAME_REACTION.as_burn_tick();
-        assert_eq!(critical_multiplier(0, 0, false, burn, 0.01), 1.0);
-        assert_eq!(critical_multiplier(0, 0, true, burn, 0.01), 1.75);
-        assert_eq!(critical_multiplier(0, 0, true, burn, 0.05), 1.0);
-    }
-
-    #[test]
-    fn all_ten_bond_families_have_runtime_boundaries() {
-        let target = ElementTarget {
-            entity: Entity::from_bits(9),
-            max_hp: 1_000.0,
-            speed: 2.0,
-            boss: false,
-        };
-        let session = GameSession::default();
-
-        let mut thunder = PlayerBuild::default();
-        thunder.bonds[BondId::Thunder.index()] = 6;
-        assert_eq!(
-            projectile_bond_damage_multiplier(DamageProfile::for_skill(0), &thunder, &session),
-            1.15
-        );
-        let mut thunder_runtime = BondRuntime::default();
-        let mut judgment = false;
-        for _ in 0..8 {
-            judgment |= thunder_runtime
-                .register_element_hit(DamageProfile::for_skill(0), target, &thunder, 100.0, 80.0)
-                .iter()
-                .any(|proc| proc.kind == ReactionKind::StormJudgment);
-        }
-        assert!(judgment);
-
-        let mut ember_runtime = BondRuntime::default();
-        ember_runtime.register_burn(target, 3.0, 5, 6);
-        assert_eq!(ember_runtime.flame_taken_multiplier(target.entity, 2), 1.2);
-        assert!(ember_detonation_ready(6, 5));
-        assert_eq!(
-            critical_multiplier(
-                0,
-                4,
-                false,
-                DamageProfile::FLAME_REACTION.as_burn_tick(),
-                0.01,
-            ),
-            1.75
-        );
-
-        let mut spirit_runtime = BondRuntime::default();
-        assert_eq!(summon_cap(0, 0), 18);
-        assert_eq!(summon_cap(2, 0), 20);
-        assert_eq!(
-            spirit_runtime.spirit_mark_multiplier_and_refresh(
-                target.entity,
-                4,
-                DamageProfile::new(DamageElement::Physical, DamageClass::Summon),
-            ),
-            1.0
-        );
-        assert_eq!(
-            spirit_runtime.spirit_mark_multiplier_and_refresh(
-                target.entity,
-                4,
-                DamageProfile::new(DamageElement::Physical, DamageClass::Summon),
-            ),
-            1.12
-        );
-
-        assert_eq!(reaction_damage_multiplier(4), 1.6);
-        assert_eq!(reaction_cooldown(6), 1.0);
-        assert_eq!(arcane_echo_scale(4), 0.5);
-        assert_eq!(arcane_echo_scale(6), 1.0);
-
-        let mut triune_runtime = BondRuntime::default();
-        assert!(
-            triune_runtime
-                .register_triune_hit(6, DamageProfile::PHYSICAL_ATTACK, 100.0)
-                .is_none()
-        );
-        assert!(
-            triune_runtime
-                .register_triune_hit(
-                    6,
-                    DamageProfile::new(DamageElement::Arcane, DamageClass::Spell),
-                    100.0,
-                )
-                .is_none()
-        );
-        let blast = triune_runtime
-            .register_triune_hit(
-                6,
-                DamageProfile::new(DamageElement::Physical, DamageClass::Summon),
-                100.0,
-            )
-            .expect("three categories trigger the blast");
-        assert_eq!(blast.pure_share, 0.25);
-
-        let mut ascension = PlayerBuild::default();
-        ascension.bonds[BondId::Ascension.index()] = 6;
-        ascension.skills[..4].fill(5);
-        assert!(ascension_ready(&ascension));
-        assert!(skill_cooldown_recovery(0, &ascension, &BondRuntime::default()) > 1.2);
-
-        assert_eq!(
-            critical_multiplier(2, 0, false, DamageProfile::PHYSICAL_ATTACK, 0.10),
-            1.75
-        );
-        assert!(blood_execute_ready(4, 11.9, 100.0, false));
-
-        let mut fortune = FortuneMarketRules::default();
-        let mut fortunate_build = PlayerBuild::default();
-        fortunate_build.bonds[BondId::Fortune.index()] = 4;
-        sync_fortune_rules(&fortunate_build, 1, &mut fortune);
-        assert_eq!(fortune.price_multiplier, 0.90);
-        assert_eq!(fortune.rarity_bonus, 0.15);
-        assert!(fortune.free_refresh_available);
-
-        assert_eq!(guardian_damage_multiplier(6, 800.0, 1_000.0), 1.3);
-        assert_eq!(guardian_damage_multiplier(6, 250.0, 1_000.0), 1.0);
-    }
-
-    #[test]
-    fn all_four_element_reactions_are_detected() {
-        let target = ElementTarget {
-            entity: Entity::from_bits(1),
-            max_hp: 1_000.0,
-            speed: 2.0,
-            boss: false,
-        };
+    fn archmage_counts_learned_skills_and_supporting_archery_once() {
         let mut build = PlayerBuild::default();
-        build.bonds[BondId::Elements.index()] = 6;
-        build.bonds[BondId::Ember.index()] = 2;
-
-        let mut wet_storm = BondRuntime::default();
-        wet_storm.register_wet(target, 3.0);
-        let kinds: Vec<_> = wet_storm
-            .register_element_hit(
-                DamageProfile::new(DamageElement::Storm, DamageClass::Spell),
-                target,
-                &build,
-                100.0,
-                80.0,
-            )
-            .into_iter()
-            .map(|proc| proc.kind)
-            .collect();
-        assert!(kinds.contains(&ReactionKind::WetStormChain));
-
-        let mut wet_frost = BondRuntime::default();
-        wet_frost.register_wet(target, 3.0);
-        let proc = wet_frost.register_element_hit(
-            DamageProfile::new(DamageElement::Frost, DamageClass::Spell),
-            target,
-            &build,
-            100.0,
-            80.0,
-        )[0];
-        assert_eq!(proc.kind, ReactionKind::WetFrostFreeze);
-        assert!((proc.control_seconds - 1.62).abs() < 0.001);
-
-        let mut burn_storm = BondRuntime::default();
-        burn_storm.register_burn(target, 3.0, 1, 2);
-        let kinds: Vec<_> = burn_storm
-            .register_element_hit(
-                DamageProfile::new(DamageElement::Storm, DamageClass::Spell),
-                target,
-                &build,
-                100.0,
-                80.0,
-            )
-            .into_iter()
-            .map(|proc| proc.kind)
-            .collect();
-        assert!(kinds.contains(&ReactionKind::BurnStormOverload));
-
-        let mut frozen_physical = BondRuntime::default();
-        frozen_physical.register_frozen(target, 1.2);
-        let proc = frozen_physical.register_element_hit(
-            DamageProfile::PHYSICAL_ATTACK,
-            target,
-            &build,
-            100.0,
-            80.0,
-        )[0];
-        assert_eq!(proc.kind, ReactionKind::FrozenPhysicalShatter);
-        assert_eq!(proc.damage, 128.0);
+        build.skills.fill(0);
+        build.skills[0] = 5;
+        grant(
+            &mut build,
+            &[BondCardId::ElementResonance, BondCardId::ElementFocus],
+        );
+        let before = CardModifiers::for_build(&build);
+        grant(&mut build, &[BondCardId::ArcheryPreparation]);
+        let after = CardModifiers::for_build(&build);
+        close(after.skill_damage - before.skill_damage, 0.3);
+        close(after.intelligence_amp - before.intelligence_amp, 0.15);
+        grant(&mut build, &[BondCardId::ArcheryPiercing]);
+        close(
+            CardModifiers::for_build(&build).skill_damage,
+            after.skill_damage,
+        );
+    }
+    #[test]
+    fn critical_cards_and_summon_inheritance_change_resolver_thresholds() {
+        let mut build = PlayerBuild::default();
+        grant(&mut build, &[BondCardId::DemonBow, BondCardId::RequiemFate]);
+        let mut runtime = BondRuntime::default();
+        runtime.advance(&build, 1, 0, 0.);
+        close(
+            critical_multiplier(&runtime, false, DamageProfile::PHYSICAL_ATTACK, 0.07),
+            1.85,
+        );
+        close(
+            critical_multiplier(
+                &runtime,
+                false,
+                DamageProfile::PHYSICAL_ATTACK,
+                runtime.critical_chance(),
+            ),
+            1.,
+        );
+        let summon = DamageProfile::new(DamageElement::Physical, DamageClass::Summon);
+        close(critical_multiplier(&runtime, false, summon, 0.085), 1.85);
+        close(critical_multiplier(&runtime, false, summon, 0.1), 1.);
+        let burn = DamageProfile {
+            burn_tick: true,
+            ..DamageProfile::new(DamageElement::Flame, DamageClass::Spell)
+        };
+        close(critical_multiplier(&runtime, false, burn, 0.), 1.);
+        close(critical_multiplier(&runtime, true, burn, 0.), 1.85);
+    }
+    #[test]
+    fn cultivation_unique_cards_drive_real_damage_and_proc_chances() {
+        let mut build = PlayerBuild::default();
+        grant(&mut build, &[BondCardId::MortalCultivation]);
+        let mut runtime = BondRuntime::default();
+        runtime.advance(&build, 1, 0, 0.);
+        close(
+            runtime.damage_multiplier(DamageProfile::PHYSICAL_ATTACK),
+            1.05,
+        );
+        grant(
+            &mut build,
+            &[
+                BondCardId::BambooCloudSword,
+                BondCardId::VirtualHeavenCauldron,
+            ],
+        );
+        runtime.advance(&build, 1, 0, 0.);
+        close(
+            runtime.damage_multiplier(DamageProfile::PHYSICAL_ATTACK),
+            1.15,
+        );
+        close(runtime.extra_attack_chance(), 0.15);
+        close(runtime.suppression_chance(), 0.12);
+        close(runtime.suppression_multiplier(), 3.);
+        grant(&mut build, &[BondCardId::MortalCultivation]);
+        runtime.advance(&build, 1, 0, 0.);
+        close(
+            runtime.damage_multiplier(DamageProfile::PHYSICAL_ATTACK),
+            1.15,
+        );
+    }
+    #[test]
+    fn suppression_only_counts_real_health_loss_and_drains_once() {
+        let mut runtime = BondRuntime::default();
+        let mut vitals = HeroVitals {
+            invulnerable_remaining: 2.,
+            ..default()
+        };
+        runtime.take_physical_damage(&mut vitals, 10.);
+        assert_eq!(runtime.take_received_hits(), 0);
+        vitals.invulnerable_remaining = 0.;
+        runtime.take_physical_damage(&mut vitals, 10.);
+        assert_eq!(runtime.take_received_hits(), 1);
+        assert_eq!(runtime.take_received_hits(), 0);
+    }
+    #[test]
+    fn elemental_cards_do_not_amplify_unrelated_elements() {
+        let mut build = PlayerBuild::default();
+        grant(&mut build, &[BondCardId::LightningWill]);
+        let mut runtime = BondRuntime::default();
+        runtime.advance(&build, 1, 0, 0.);
+        close(
+            runtime.damage_multiplier(DamageProfile::new(DamageElement::Storm, DamageClass::Spell)),
+            1.3,
+        );
+        close(
+            runtime.damage_multiplier(DamageProfile::new(DamageElement::Flame, DamageClass::Spell)),
+            1.,
+        );
+        close(
+            runtime.damage_multiplier(DamageProfile::PHYSICAL_ATTACK),
+            1.,
+        );
+    }
+    #[test]
+    fn science_snapshot_is_granted_once_across_stat_rebuilds() {
+        let mut build = PlayerBuild::default();
+        grant(
+            &mut build,
+            &[
+                BondCardId::AgilityPotion,
+                BondCardId::StrengthSerum,
+                BondCardId::InsightElixir,
+                BondCardId::UnstableCatalyst,
+            ],
+        );
+        let mut runtime = BondRuntime::default();
+        let mut vitals = HeroVitals::default();
+        runtime.advance(&build, 1, 0, 0.);
+        runtime.apply_stats(&mut build, &mut vitals);
+        let first = vitals.strength;
+        let permanent = runtime.permanent.strength;
+        for _ in 0..10 {
+            runtime.remove_applied(&mut build, &mut vitals);
+            runtime.advance(&build, 1, 0, 0.);
+            runtime.apply_stats(&mut build, &mut vitals);
+        }
+        close(vitals.strength, first);
+        close(runtime.permanent.strength, permanent);
+        close(runtime.model_scale(), 1.4);
+    }
+    #[test]
+    fn slaughter_only_counts_future_kills_in_complete_batches() {
+        let mut build = PlayerBuild::default();
+        let mut runtime = BondRuntime::default();
+        runtime.advance(&build, 1, 900, 0.);
+        grant(&mut build, &[BondCardId::BloodSlaughter]);
+        runtime.advance(&build, 1, 900, 0.);
+        runtime.advance(&build, 1, 1199, 0.);
+        close(runtime.critical_damage(), BASE_CRIT_MULTIPLIER);
+        runtime.advance(&build, 1, 1500, 0.);
+        close(runtime.critical_damage(), BASE_CRIT_MULTIPLIER + 0.02);
+        runtime.advance(&build, 1, 1500, 0.);
+        close(runtime.critical_damage(), BASE_CRIT_MULTIPLIER + 0.02);
+    }
+    #[test]
+    fn strength_and_intelligence_cards_grow_and_amplify_their_actual_attributes() {
+        let mut build = PlayerBuild::default();
+        grant(
+            &mut build,
+            &[
+                BondCardId::StrengthTraining,
+                BondCardId::StrengthGrowth,
+                BondCardId::IntelligenceTraining,
+                BondCardId::IntelligenceGrowth,
+            ],
+        );
+        let mut runtime = BondRuntime::default();
+        runtime.advance(&build, 1, 100, 0.);
+        runtime.advance(&build, 1, 110, 5.);
+        close(runtime.permanent.strength, 2.);
+        close(runtime.permanent.intelligence, 2.);
+        let mut vitals = HeroVitals::default();
+        let strength = vitals.strength;
+        let intelligence = vitals.intelligence;
+        runtime.apply_stats(&mut build, &mut vitals);
+        close(vitals.strength, (strength + 52.) * 1.1);
+        close(vitals.intelligence, (intelligence + 52.) * 1.1);
+    }
+    #[test]
+    fn archery_ammo_is_opt_in_dynamic_and_recharges_only_with_elapsed_time() {
+        let mut build = PlayerBuild::default();
+        let mut runtime = BondRuntime::default();
+        runtime.advance(&build, 1, 0, 20.);
+        assert!(!runtime.archery_active());
+        assert_eq!(runtime.arrows_remaining, 0);
+        grant(
+            &mut build,
+            &[
+                BondCardId::ArcheryPreparation,
+                BondCardId::ArcheryPiercing,
+                BondCardId::ArcheryVolley,
+                BondCardId::ArcheryHaste,
+            ],
+        );
+        runtime.advance(&build, 1, 0, 0.);
+        assert_eq!(runtime.arrows_remaining, 40);
+        let mut vitals = HeroVitals::default();
+        let agility = vitals.agility;
+        runtime.apply_stats(&mut build, &mut vitals);
+        close(vitals.agility, (agility + 2. * 40.) * (1. + 2. * 0.05));
+        runtime.remove_applied(&mut build, &mut vitals);
+        for _ in 0..40 {
+            runtime.consume_arrow();
+        }
+        assert_eq!(runtime.arrows_remaining, 0);
+        close(runtime.recharge_remaining, 7.);
+        runtime.advance(&build, 1, 0, 0.);
+        assert_eq!(runtime.arrows_remaining, 0);
+        runtime.apply_stats(&mut build, &mut vitals);
+        close(vitals.agility, (agility + 2. * 40.) * (1. + 2. * 0.05));
+        // Empty reserve must not remove volley-based attributes or double their own bonus.
+        runtime.remove_applied(&mut build, &mut vitals);
+        runtime.apply_stats(&mut build, &mut vitals);
+        close(vitals.agility, (agility + 2. * 40.) * (1. + 2. * 0.05));
+        runtime.advance(&build, 1, 0, 6.);
+        assert_eq!(runtime.arrows_remaining, 0);
+        runtime.advance(&build, 1, 0, 1.);
+        assert_eq!(runtime.arrows_remaining, 40);
+    }
+    #[test]
+    fn arcane_echo_and_chain_share_cooldown_and_never_recurse() {
+        let mut build = PlayerBuild::default();
+        grant(
+            &mut build,
+            &[BondCardId::ArcanumEcho, BondCardId::ArcanumChain],
+        );
+        let mut runtime = BondRuntime::default();
+        runtime.advance(&build, 1, 0, 0.);
+        let spell = DamageProfile::new(DamageElement::Arcane, DamageClass::Spell);
+        assert_eq!(runtime.spell_procs(spell, 0.), (true, 1));
+        assert_eq!(runtime.spell_procs(spell, 0.), (false, 0));
+        runtime.advance(&build, 1, 0, 0.);
+        assert_eq!(runtime.spell_procs(spell, 0.), (false, 0));
+        runtime.advance(&build, 1, 0, 1.);
+        assert_eq!(runtime.spell_procs(spell.as_card_proc(), 0.), (false, 0));
+        assert_eq!(runtime.spell_procs(spell.as_market_proc(), 0.), (false, 0));
+        assert_eq!(runtime.spell_procs(spell, 0.9), (false, 1));
+    }
+    #[test]
+    fn warpath_changes_only_melee_damage_and_heals_each_kill_once() {
+        let mut build = PlayerBuild::default();
+        grant(
+            &mut build,
+            &[
+                BondCardId::WarpathCleave,
+                BondCardId::WarpathRecovery,
+                BondCardId::WarpathFury,
+            ],
+        );
+        let mut runtime = BondRuntime::default();
+        runtime.advance(&build, 1, 100, 0.);
+        runtime.advance(&build, 1, 103, 0.);
+        assert_eq!(runtime.melee_cleave(), 1);
+        close(runtime.take_kill_healing(), 6.);
+        close(runtime.take_kill_healing(), 0.);
+        close(
+            runtime.damage_multiplier(DamageProfile::PHYSICAL_ATTACK),
+            1.,
+        );
+        close(
+            runtime.damage_multiplier(DamageProfile::PHYSICAL_ATTACK.as_melee()),
+            1.25,
+        );
+    }
+    #[test]
+    fn arrow_ricochet_card_applies_once_and_removes_without_erasing_other_sources() {
+        let mut build = PlayerBuild {
+            ricochet: 2,
+            ..default()
+        };
+        let mut vitals = HeroVitals::default();
+        let mut runtime = BondRuntime::default();
+        grant(&mut build, &[BondCardId::ArcheryHaste]);
+        for _ in 0..3 {
+            runtime.advance(&build, 1, 0, 0.);
+            runtime.apply_stats(&mut build, &mut vitals);
+            assert_eq!(build.ricochet, 3);
+            runtime.remove_applied(&mut build, &mut vitals);
+            assert_eq!(build.ricochet, 2);
+        }
+        build.owned_bond_cards.fill(false);
+        runtime.advance(&build, 1, 0, 0.);
+        runtime.apply_stats(&mut build, &mut vitals);
+        assert_eq!(build.ricochet, 2);
     }
 
     #[test]
-    fn boss_modifiers_apply_by_damage_element() {
-        let cinder = BossModifiers {
-            flame_resistance: 0.70,
-            frost_damage_taken_multiplier: 1.35,
-            ..BossModifiers::NEUTRAL
+    fn ranger_tiers_are_cumulative_and_removal_restores_baseline() {
+        let mut build = PlayerBuild::default();
+        let baseline_shots = build.multishot;
+        grant(
+            &mut build,
+            &[BondCardId::RangerRapidFire, BondCardId::RangerDeadeye],
+        );
+        let mut runtime = BondRuntime::default();
+        let mut vitals = HeroVitals::default();
+        let baseline_agility = vitals.agility;
+        runtime.advance(&build, 1, 0, 0.);
+        runtime.apply_stats(&mut build, &mut vitals);
+        assert_eq!(build.multishot, baseline_shots + 1);
+        assert_eq!(build.pierce, 1);
+        runtime.remove_applied(&mut build, &mut vitals);
+        grant(
+            &mut build,
+            &[BondCardId::RangerSkyshot, BondCardId::RangerWindrunner],
+        );
+        runtime.advance(&build, 1, 0, 0.);
+        runtime.apply_stats(&mut build, &mut vitals);
+        assert_eq!(build.multishot, baseline_shots + 2);
+        assert_eq!(build.pierce, 2);
+        close(vitals.agility, baseline_agility + 120.);
+        runtime.remove_applied(&mut build, &mut vitals);
+        build.owned_bond_cards.fill(false);
+        runtime.advance(&build, 1, 0, 0.);
+        runtime.apply_stats(&mut build, &mut vitals);
+        assert_eq!(build.multishot, baseline_shots);
+        assert_eq!(build.pierce, 0);
+        close(vitals.agility, baseline_agility);
+    }
+    #[test]
+    fn growth_begins_after_acquisition_and_survives_family_removal() {
+        let mut build = PlayerBuild::default();
+        let mut runtime = BondRuntime::default();
+        runtime.advance(&build, 10, 100, 0.);
+        grant(
+            &mut build,
+            &[BondCardId::DivineStrength, BondCardId::DivineMight],
+        );
+        runtime.advance(&build, 10, 100, 0.);
+        close(runtime.permanent.strength, 0.);
+        runtime.advance(&build, 12, 100, 0.);
+        close(runtime.permanent.strength, 10.);
+        close(runtime.permanent.attack, 20.);
+        close(runtime.permanent.health_amp, 0.02);
+        build.owned_bond_cards.fill(false);
+        runtime.advance(&build, 12, 100, 0.);
+        runtime.advance(&build, 13, 100, 0.);
+        close(runtime.permanent.strength, 10.);
+    }
+    #[test]
+    fn agility_progression_counts_time_and_monotonic_kills_once() {
+        let mut build = PlayerBuild::default();
+        grant(
+            &mut build,
+            &[BondCardId::AgilityTraining, BondCardId::AgilityGrowth],
+        );
+        let mut runtime = BondRuntime::default();
+        runtime.advance(&build, 1, 100, 0.);
+        runtime.advance(&build, 1, 110, 5.);
+        close(runtime.permanent.agility, 2.);
+        runtime.advance(&build, 1, 110, 0.);
+        close(runtime.permanent.agility, 2.);
+    }
+    #[test]
+    fn judge_brush_blocks_fatal_hit_then_two_revives_are_consumed_once() {
+        let mut build = PlayerBuild::default();
+        grant(
+            &mut build,
+            &[BondCardId::JudgeBrush, BondCardId::BookOfLife],
+        );
+        let mut runtime = BondRuntime::default();
+        runtime.advance(&build, 1, 0, 0.);
+        let mut vitals = HeroVitals {
+            health: 37.,
+            ..Default::default()
         };
-        let flame = DamageProfile::new(DamageElement::Flame, DamageClass::Spell);
-        let frost = DamageProfile::new(DamageElement::Frost, DamageClass::Spell);
-        assert!((boss_damage_multiplier(flame, cinder) - 0.30).abs() < 0.001);
-        assert!((boss_damage_multiplier(frost, cinder) - 1.35).abs() < 0.001);
-
-        let veil = BossModifiers {
-            damage_reduction: 0.15,
-            elemental_resistance: 0.10,
-            ..BossModifiers::NEUTRAL
-        };
-        assert!((boss_damage_multiplier(frost, veil) - 0.765).abs() < 0.001);
-        assert!((boss_damage_multiplier(DamageProfile::PURE_REACTION, veil) - 1.0).abs() < 0.001);
+        runtime.take_physical_damage(&mut vitals, 10000.);
+        close(vitals.health, 37.);
+        close(vitals.invulnerable_remaining, 2.);
+        close(runtime.immunity_remaining, 120.);
+        assert_eq!(runtime.revives_used, 0);
+        vitals.invulnerable_remaining = 0.;
+        for used in 1..=2 {
+            vitals.health = 0.;
+            assert!(runtime.intercept_fatal(&mut vitals));
+            assert_eq!(runtime.revives_used, used);
+            close(vitals.health, vitals.max_health);
+        }
+        vitals.health = 0.;
+        assert!(!runtime.intercept_fatal(&mut vitals));
+        runtime.advance(&build, 1, 0, 120.);
+        assert!(runtime.intercept_fatal(&mut vitals));
+        assert_eq!(runtime.revives_used, 2);
+    }
+    #[test]
+    fn complete_ascension_grows_each_unlocked_damage_category() {
+        let mut build = PlayerBuild::default();
+        grant(
+            &mut build,
+            &[
+                BondCardId::DivineMight,
+                BondCardId::DivineStrength,
+                BondCardId::DivineIntelligence,
+                BondCardId::DivineAgility,
+                BondCardId::DivineBody,
+            ],
+        );
+        let mut runtime = BondRuntime::default();
+        runtime.advance(&build, 8, 0, 0.);
+        runtime.advance(&build, 9, 0, 0.);
+        close(runtime.permanent.health_amp, 0.01);
+        close(runtime.permanent.skill_damage, 0.01);
+        close(
+            runtime.damage_multiplier(DamageProfile::PHYSICAL_ATTACK),
+            1.01 * 1.01,
+        );
+        close(
+            runtime.damage_multiplier(DamageProfile::new(
+                DamageElement::Arcane,
+                DamageClass::Spell,
+            )),
+            1.01 * 1.01,
+        );
     }
 }

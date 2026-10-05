@@ -1,0 +1,30 @@
+Material finish and continuous choices — native validation
+
+PASS strict all-target Clippy (-D warnings).
+PASS gameplay regression: 525 library tests, 0 failed, 1 ignored.
+The final material-loading-only fix was checked with Clippy, native build and
+live imported-material assertions; gameplay tests were not redundantly rerun.
+PASS native binaries built after the final source changes.
+PASS BEFORE baseline: 2 scenes / 1360 frames, fixed seed 0xA11CE.
+PASS AFTER material comparison: 2 scenes / 1360 frames, same camera, seed and frames.
+PASS live material audit: 54 imported model materials per scene have reduced
+reflectance, matte roughness and no clearcoat. Late-loaded materials are covered.
+PASS choices: 11 native desktop/mobile scenes / 3310 frames, including three
+real bond pointer choices after ONE draw entry, one charge per hand, held
+mouse protection, later interruption, UR routes and commander selection.
+PASS ECS tests: one F drains 45 wood in three unique acquisitions; one E drains
+three banked encounter choices; explicit cancellation stops future charging.
+No panic, ERROR or GPU error in the 13 final native scene logs.
+
+Visual review: root inspected BEFORE/AFTER desktop frame210 and mobile bond
+frame100. Warm floor and masonry lighting, readable shaded cast faces, lower
+model specularity. UI artwork contains baked highlights and is unchanged.
+No claim of new normal/AO textures, remodeled giant bosses or redrawn icons.
+
+Comparison:
+screenshots/material-polish-before-en-1280x720-210.png
+screenshots/material-polish-after-en-1280x720-210.png
+screenshots/material-polish-before-zh-667x375-210.png
+screenshots/material-polish-after-zh-667x375-210.png
+screenshots/immediate-bond-continuous-final-zh-667x375-30.png
+screenshots/immediate-bond-continuous-final-zh-667x375-100.png

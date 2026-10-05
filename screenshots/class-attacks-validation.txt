@@ -1,0 +1,92 @@
+Native class basic attacks validation
+Completed: 10 desktop/mobile scenarios and 4,800 full simulation frames.
+Library tests: 507 passed, 0 failed, 1 ignored.
+Strict all-target Clippy and native binaries passed in the class-attacks pipeline logs. This validates native builds; browser behavior and performance were not tested.
+
+Mechanisms exercised
+- Archer level 1: real three-card opening selection, Ember Ranger preview and confirmation; two real arrows with distinct directions, actual Ricochet target lock and bounce state, visible ricochet trails, and authoritative damage beyond the first two targets.
+- Archer level 40: fixture advances GameSession.level; production level synchronization computes the stats. Five arrows and the four-bounce profile are observed, with actual projectile turning and damage. This does not simulate earning forty levels.
+- Sword and axe: real swing/contact resolver damages three front targets. Targets behind the hero and beyond melee range remain untouched. The real cleave sweep appears; measured primary and secondary damage are logged.
+- Inheritance: two fixture-awarded fruits are spent through real commander cards and confirmation controls: Stone Warden to Ember Ranger to Storm Savant. Ownership, both legacy weapon emission counters, ricochet and cleave effects are verified while the mage is active. HeroFusion is not manually changed. Learned skills and ultimates are suppressed to isolate basic weapons; earning the fruits is outside this fixture.
+- Pause: role effect transforms and target HP remain unchanged for eight paused frames. The actual hero portrait opens the attribute panel, and Hero basic attack details appears. The production camera is unchanged.
+
+Evidence
+Stage PNGs: screenshots/class-*-final-zh-{1280x720,667x375}-*.png.
+Opening selection: class-archer-1-final-zh-1280x720-initial-or-recruitment.png.
+Attributes: class-archer-40-final-zh-1280x720-attributes-visible.png.
+Inheritance: class-inheritance-final-zh-1280x720-inherited.png and attributes-visible.png.
+Raw selected frames and full native logs are retained under target/verification.
+
+Runtime audit
+ERROR: 0; panics: 0; GPU validation errors: 0.
+Existing ICU4X missing Japanese segmentation-model diagnostics: 258936. These remain unresolved; no clean-console claim is made.
+
+Actual stage output
+class-archer-1-final-zh-1280x720: [capture] class-stage volley frame=20 actual_arrows=2
+class-archer-1-final-zh-1280x720: [capture] class-stage ricochet frame=25 actual_target_lock=true
+class-archer-1-final-zh-1280x720: [capture] class-stage paused frame=25
+class-archer-1-final-zh-1280x720: [capture] class-stage archer-damage frame=440 actual_hp=[99950.0, 99950.0, 99962.5, 100000.0, 99962.5, 100000.0, 100000.0]
+class-archer-1-final-zh-1280x720: [capture] PASS class-archer-1: actual class attack, authoritative damage, real trails, paused transforms/HP, production camera
+class-archer-1-final-zh-1280x720: [capture] class-stage attributes frame=470 actual_class_description=true
+class-archer-1-final-zh-667x375: [capture] class-stage volley frame=20 actual_arrows=2
+class-archer-1-final-zh-667x375: [capture] class-stage ricochet frame=25 actual_target_lock=true
+class-archer-1-final-zh-667x375: [capture] class-stage paused frame=25
+class-archer-1-final-zh-667x375: [capture] class-stage archer-damage frame=440 actual_hp=[99950.0, 99950.0, 99962.5, 100000.0, 99962.5, 100000.0, 100000.0]
+class-archer-1-final-zh-667x375: [capture] PASS class-archer-1: actual class attack, authoritative damage, real trails, paused transforms/HP, production camera
+class-archer-1-final-zh-667x375: [capture] class-stage attributes frame=470 actual_class_description=true
+class-archer-40-final-zh-1280x720: [capture] class-stage volley frame=20 actual_arrows=5
+class-archer-40-final-zh-1280x720: [capture] class-stage ricochet frame=24 actual_target_lock=true
+class-archer-40-final-zh-1280x720: [capture] class-stage paused frame=24
+class-archer-40-final-zh-1280x720: [capture] class-stage archer-damage frame=440 actual_hp=[99329.766, 99708.59, 99415.734, 99685.28, 99673.625, 99763.96, 99755.22]
+class-archer-40-final-zh-1280x720: [capture] PASS class-archer-40: actual class attack, authoritative damage, real trails, paused transforms/HP, production camera
+class-archer-40-final-zh-1280x720: [capture] class-stage attributes frame=470 actual_class_description=true
+class-archer-40-final-zh-667x375: [capture] class-stage volley frame=20 actual_arrows=5
+class-archer-40-final-zh-667x375: [capture] class-stage ricochet frame=24 actual_target_lock=true
+class-archer-40-final-zh-667x375: [capture] class-stage paused frame=24
+class-archer-40-final-zh-667x375: [capture] class-stage archer-damage frame=440 actual_hp=[99329.766, 99708.59, 99415.734, 99685.28, 99673.625, 99763.96, 99755.22]
+class-archer-40-final-zh-667x375: [capture] PASS class-archer-40: actual class attack, authoritative damage, real trails, paused transforms/HP, production camera
+class-archer-40-final-zh-667x375: [capture] class-stage attributes frame=470 actual_class_description=true
+class-sword-final-zh-1280x720: [capture] class-stage cleave frame=25
+class-sword-final-zh-1280x720: [capture] class-stage paused frame=25
+class-sword-final-zh-1280x720: [capture] class-stage damage frame=440 primary=52 secondary=31.203125/31.203125 behind=0 outside=0
+class-sword-final-zh-1280x720: [capture] PASS class-sword: actual class attack, authoritative damage, real trails, paused transforms/HP, production camera
+class-sword-final-zh-1280x720: [capture] class-stage attributes frame=470 actual_class_description=true
+class-sword-final-zh-667x375: [capture] class-stage cleave frame=25
+class-sword-final-zh-667x375: [capture] class-stage paused frame=25
+class-sword-final-zh-667x375: [capture] class-stage damage frame=440 primary=52 secondary=31.203125/31.203125 behind=0 outside=0
+class-sword-final-zh-667x375: [capture] PASS class-sword: actual class attack, authoritative damage, real trails, paused transforms/HP, production camera
+class-sword-final-zh-667x375: [capture] class-stage attributes frame=470 actual_class_description=true
+class-axe-final-zh-1280x720: [capture] class-stage cleave frame=25
+class-axe-final-zh-1280x720: [capture] class-stage paused frame=25
+class-axe-final-zh-1280x720: [capture] class-stage damage frame=440 primary=59.679688 secondary=35.804688/35.804688 behind=0 outside=0
+class-axe-final-zh-1280x720: [capture] PASS class-axe: actual class attack, authoritative damage, real trails, paused transforms/HP, production camera
+class-axe-final-zh-1280x720: [capture] class-stage attributes frame=470 actual_class_description=true
+class-axe-final-zh-667x375: [capture] class-stage cleave frame=25
+class-axe-final-zh-667x375: [capture] class-stage paused frame=25
+class-axe-final-zh-667x375: [capture] class-stage damage frame=440 primary=59.679688 secondary=35.804688/35.804688 behind=0 outside=0
+class-axe-final-zh-667x375: [capture] PASS class-axe: actual class attack, authoritative damage, real trails, paused transforms/HP, production camera
+class-axe-final-zh-667x375: [capture] class-stage attributes frame=470 actual_class_description=true
+class-inheritance-final-zh-1280x720: [capture] class-stage absorbed frame=110 actual=StoneWarden+EmberRanger current=StormSavant
+class-inheritance-final-zh-1280x720: [capture] class-stage volley frame=146 actual_arrows=2
+class-inheritance-final-zh-1280x720: [capture] class-stage ricochet frame=147 actual_target_lock=true
+class-inheritance-final-zh-1280x720: [capture] class-stage paused frame=147
+class-inheritance-final-zh-1280x720: [capture] class-stage cleave frame=191
+class-inheritance-final-zh-1280x720: [capture] class-stage inherited frame=440 actual=[0, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+class-inheritance-final-zh-1280x720: [capture] PASS class-inheritance: actual class attack, authoritative damage, real trails, paused transforms/HP, production camera
+class-inheritance-final-zh-1280x720: [capture] class-stage attributes frame=470 actual_class_description=true
+class-inheritance-final-zh-667x375: [capture] class-stage absorbed frame=110 actual=StoneWarden+EmberRanger current=StormSavant
+class-inheritance-final-zh-667x375: [capture] class-stage volley frame=146 actual_arrows=2
+class-inheritance-final-zh-667x375: [capture] class-stage ricochet frame=147 actual_target_lock=true
+class-inheritance-final-zh-667x375: [capture] class-stage paused frame=147
+class-inheritance-final-zh-667x375: [capture] class-stage cleave frame=191
+class-inheritance-final-zh-667x375: [capture] class-stage inherited frame=440 actual=[0, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+class-inheritance-final-zh-667x375: [capture] PASS class-inheritance: actual class attack, authoritative damage, real trails, paused transforms/HP, production camera
+class-inheritance-final-zh-667x375: [capture] class-stage attributes frame=470 actual_class_description=true
+Final capture-only verification
+After arranging targets so a bounce reaches a target not selected by the initial volley, capture-only strict Clippy passed in 14.20s and the capture binary rebuilt in 1m38s. Logs: target/verification/class-attacks-capture-r5-{clippy,build}.log. All ten scenarios were rerun fresh; game source was unchanged and the 507-test result still applies.
+
+Measured examples from desktop logs
+- Level-1 archer: first two targets lose 50 HP each; two additional targets lose 37.5 HP each, proving real first-hop damage at 75%.
+- Sword: primary loses 52 HP, both secondary targets lose 31.203125 HP; behind and far targets lose zero.
+- Axe: primary loses 59.679688 HP, both secondary targets lose 35.804688 HP; behind and far targets lose zero.
+- Mage after real absorption: five actual Ember Ranger legacy volleys and five Stone Warden legacy swings emitted.

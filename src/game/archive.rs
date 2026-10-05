@@ -1,3 +1,5 @@
+use super::bonds::BondRuntime;
+use super::{EnemyAttackCue, EnemyAttackKind};
 use bevy::prelude::*;
 
 use super::combat::CombatSet;
@@ -43,26 +45,6 @@ pub enum ArchiveOutcome {
     Pending,
     Captured,
     TimedOut,
-    HeroFelled,
-}
-
-impl ArchiveOutcome {
-    pub const fn shards(self) -> u8 {
-        match self {
-            Self::Pending => 0,
-            Self::Captured => 3,
-            Self::TimedOut | Self::HeroFelled => 1,
-        }
-    }
-
-    pub const fn label(self) -> &'static str {
-        match self {
-            Self::Pending => "NOT REACHED",
-            Self::Captured => "ECHO CAPTURED",
-            Self::TimedOut => "TIME EXPIRED",
-            Self::HeroFelled => "HERO FELLED",
-        }
-    }
 }
 
 #[derive(Resource)]
@@ -70,7 +52,6 @@ pub struct ArchiveState {
     pub active: bool,
     pub outcome: ArchiveOutcome,
     pub echo: Option<Entity>,
-    pub frozen_core_hp: f32,
     attack_timer: f32,
     aura_elapsed: f32,
 }
@@ -81,7 +62,6 @@ impl Default for ArchiveState {
             active: false,
             outcome: ArchiveOutcome::Pending,
             echo: None,
-            frozen_core_hp: 1.0,
             attack_timer: 0.35,
             aura_elapsed: 0.0,
         }
@@ -89,10 +69,6 @@ impl Default for ArchiveState {
 }
 
 impl ArchiveState {
-    pub fn shards(&self) -> u8 {
-        self.outcome.shards()
-    }
-
     pub fn resolve(&mut self, session: &mut GameSession, outcome: ArchiveOutcome) {
         self.active = false;
         self.outcome = outcome;
@@ -169,10 +145,8 @@ fn begin_archive(
     }
 
     archive.active = true;
-    archive.frozen_core_hp = session.core_hp.max(1.0);
     archive.attack_timer = 0.35;
     archive.aura_elapsed = 0.0;
-    session.core_hp = archive.frozen_core_hp;
     session.save_remaining = ARCHIVE_DURATION;
 
     archive.echo = Some(echo);
@@ -204,12 +178,23 @@ fn reset_challenge(state: &mut impl ResettableChallenge) {
 }
 
 fn run_archive(
+    mut rng: Option<ResMut<super::RunRng>>,
     mut commands: Commands,
     time: Res<Time>,
     mut session: ResMut<GameSession>,
     mut archive: ResMut<ArchiveState>,
     mut vitals: ResMut<HeroVitals>,
-    mut hero: Query<(&Transform, &mut Visibility), (With<Hero>, Without<ArchiveEcho>)>,
+    mut bonds: ResMut<BondRuntime>,
+    mut cues: MessageWriter<EnemyAttackCue>,
+    hero: Query<(&Transform, &Visibility), (With<Hero>, Without<ArchiveEcho>)>,
+    core: Query<
+        &Transform,
+        (
+            With<super::components::Core>,
+            Without<Hero>,
+            Without<ArchiveEcho>,
+        ),
+    >,
     mut echoes: Query<
         (Entity, &Enemy, Option<&TimedSpeedEffect>, &mut Transform),
         With<ArchiveEcho>,
@@ -217,22 +202,16 @@ fn run_archive(
     assets: Option<Res<GameAssets>>,
     mut pools: ResMut<CombatPools>,
 ) {
-    if !archive.active || !session.save_active || session.finished {
+    if !archive.active || !session.save_active || session.finished || session.paused {
         return;
     }
 
     let delta = time.delta_secs();
     archive.aura_elapsed += delta;
-    session.core_hp = archive.frozen_core_hp.max(1.0);
     session.save_remaining = (session.save_remaining - delta).max(0.0);
 
-    if !vitals.alive {
-        if let Some(entity) = archive.echo {
-            pools.retire_enemy(&mut commands, entity);
-        }
-        pools.retire_all_projectiles(&mut commands);
-        pools.retire_all_effects(&mut commands);
-        archive.resolve(&mut session, ArchiveOutcome::HeroFelled);
+    if !vitals.alive || vitals.health <= 0.0 {
+        // The survival system owns life consumption and revival in the final echo too.
         return;
     }
 
@@ -249,28 +228,56 @@ fn run_archive(
     let Ok((echo_entity, echo, speed_effect, mut echo_transform)) = echoes.single_mut() else {
         return;
     };
-    let Ok((hero_transform, mut hero_visibility)) = hero.single_mut() else {
+    let Ok((hero_transform, _hero_visibility)) = hero.single() else {
         return;
     };
 
-    let to_hero = hero_transform.translation - echo_transform.translation;
-    let distance = to_hero.length();
-    if distance > ARCHIVE_ATTACK_RANGE {
-        echo_transform.translation += to_hero.normalize_or_zero()
-            * echo.speed
-            * speed_effect.map_or(1.0, |effect| effect.multiplier)
-            * time.delta_secs();
+    let protecting_gate = core.single().ok().filter(|gate| {
+        session.core_hp > 0.0
+            && session.gate_revive_remaining <= 0.0
+            && hero_transform.translation.x < gate.translation.x
+    });
+    let target = if let Some(gate) = protecting_gate {
+        echo_transform.translation.x = echo_transform.translation.x.max(gate.translation.x + 1.9);
+        Vec3::new(gate.translation.x, 0.0, echo_transform.translation.z)
     } else {
-        archive.attack_timer -= delta;
+        hero_transform.translation
+    };
+    let to_hero = target - echo_transform.translation;
+    let (next, attack_seconds, reached) = super::combat::move_towards_radius(
+        echo_transform.translation,
+        target,
+        echo.speed * speed_effect.map_or(1.0, |effect| effect.multiplier),
+        delta,
+        ARCHIVE_ATTACK_RANGE,
+    );
+    echo_transform.translation = next;
+    if reached {
+        archive.attack_timer -= attack_seconds;
         if archive.attack_timer <= 0.0 {
             archive.attack_timer += ARCHIVE_ATTACK_INTERVAL;
-            vitals.take_physical_damage(echo.damage);
+            if protecting_gate.is_some() {
+                session.core_hp = (session.core_hp - echo.damage).max(0.0);
+            } else {
+                if !rng
+                    .as_deref_mut()
+                    .is_some_and(|rng| bonds.evade(rng.unit()))
+                {
+                    bonds.take_physical_damage(&mut vitals, echo.damage);
+                }
+            }
+            cues.write(EnemyAttackCue {
+                source: echo_entity,
+                origin: echo_transform.translation,
+                target,
+                kind: EnemyAttackKind::Slam,
+            });
             if let Some(assets) = assets.as_deref() {
                 pools.rent_impact_fx(
                     &mut commands,
                     assets.fx_mesh.clone(),
                     assets.storm_material.clone(),
-                    Transform::from_translation(hero_transform.translation + Vec3::Y * 0.18)
+                    Transform::from_translation(target + Vec3::Y * 0.18)
                         .with_scale(Vec3::splat(0.2)),
                     ImpactFx {
                         lifetime: 0.42,
@@ -282,15 +289,8 @@ fn run_archive(
         }
     }
     echo_transform.translation.y = (archive.aura_elapsed * 2.2).sin() * 0.14;
-    echo_transform.rotate_y(delta * 1.25);
-
-    if vitals.health <= 0.0 {
-        vitals.alive = false;
-        *hero_visibility = Visibility::Hidden;
-        pools.retire_enemy(&mut commands, echo_entity);
-        pools.retire_all_projectiles(&mut commands);
-        pools.retire_all_effects(&mut commands);
-        archive.resolve(&mut session, ArchiveOutcome::HeroFelled);
+    if let Some(direction) = to_hero.with_y(0.0).try_normalize() {
+        echo_transform.look_to(direction, Vec3::Y);
     }
 }
 
@@ -309,23 +309,79 @@ fn animate_archive_aura(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn real_attack_emits_cue_records_received_hit_and_holds_facing() {
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<BondRuntime>()
+            .add_message::<EnemyAttackCue>()
+            .add_systems(Update, run_archive);
+        app.init_resource::<CombatPools>()
+            .insert_resource(ArchiveState {
+                active: true,
+                attack_timer: 0.,
+                ..default()
+            });
+        {
+            let mut session = app.world_mut().resource_mut::<GameSession>();
+            session.save_active = true;
+            session.save_remaining = 60.;
+        }
+        app.world_mut()
+            .spawn((Hero, Transform::from_xyz(-1., 0., 0.), Visibility::Visible));
+        let enemy = app
+            .world_mut()
+            .spawn((
+                ArchiveEcho,
+                Enemy {
+                    hp: 1000.,
+                    max_hp: 1000.,
+                    speed: 0.,
+                    damage: 10.,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+                Transform::default(),
+            ))
+            .id();
+        let before = app.world().resource::<HeroVitals>().health;
+        app.update();
+        assert!(app.world().resource::<HeroVitals>().health < before);
+        assert_eq!(
+            app.world_mut()
+                .resource_mut::<BondRuntime>()
+                .take_received_hits(),
+            1
+        );
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 1);
+        let rotation = app.world().get::<Transform>(enemy).unwrap().rotation;
+        app.update();
+        assert!(
+            rotation
+                .angle_between(app.world().get::<Transform>(enemy).unwrap().rotation)
+                .abs()
+                < 0.001
+        );
+        let health = app.world().resource::<HeroVitals>().health;
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        app.update();
+        assert_eq!(app.world().resource::<HeroVitals>().health, health);
+    }
 
     #[test]
     fn archive_rules_match_the_gameplay_spec() {
         assert_eq!(ARCHIVE_DURATION, 60.0);
         assert_eq!(ARCHIVE_ECHO_HP, 600_000.0);
-        assert_eq!(ArchiveOutcome::Captured.shards(), 3);
-        assert_eq!(ArchiveOutcome::TimedOut.shards(), 1);
-        assert_eq!(ArchiveOutcome::HeroFelled.shards(), 1);
     }
 
     #[test]
     fn every_archive_outcome_completes_the_run() {
-        for outcome in [
-            ArchiveOutcome::Captured,
-            ArchiveOutcome::TimedOut,
-            ArchiveOutcome::HeroFelled,
-        ] {
+        for outcome in [ArchiveOutcome::Captured, ArchiveOutcome::TimedOut] {
             let mut session = GameSession {
                 save_active: true,
                 ..default()

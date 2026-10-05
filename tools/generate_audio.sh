@@ -36,4 +36,6 @@ ffmpeg -hide_banner -loglevel error -y \
   -af "afade=t=in:d=2,afade=t=out:st=22:d=2,lowpass=f=1800" \
   -c:a libvorbis -q:a 3 "$audio_dir/arena_loop.ogg"
 
+python3 "$project_dir/tools/generate_hit_audio.py"
+
 echo "Generated original audio in $audio_dir"

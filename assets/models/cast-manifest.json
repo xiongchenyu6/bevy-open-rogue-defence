@@ -1,0 +1,660 @@
+[
+  {
+    "file": "hero_storm_savant.glb",
+    "source": "Mage.glb",
+    "source_sha256": "cf898585da33fab50c724d31605fb931eb2912e6d2280092141e98ca81ad507d",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walking_A",
+      "Attack": "Spellcast_Shoot",
+      "Hit": "Hit_A"
+    },
+    "tint": [
+      0.5,
+      0.95,
+      1.0
+    ],
+    "scale": 0.85,
+    "forward_rotation_y_pi": true,
+    "bytes": 433388
+  },
+  {
+    "file": "hero_ember_ranger.glb",
+    "source": "Rogue_Hooded.glb",
+    "source_sha256": "93e6e25213009952276d9cf34f5d96a243767334c66f280db0433ddfabb91545",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walking_A",
+      "Attack": "2H_Ranged_Shoot",
+      "Hit": "Hit_A"
+    },
+    "tint": [
+      1.0,
+      0.65,
+      0.36
+    ],
+    "scale": 0.85,
+    "forward_rotation_y_pi": true,
+    "bytes": 430352
+  },
+  {
+    "file": "hero_stone_warden.glb",
+    "source": "Knight.glb",
+    "source_sha256": "60428e3abc09ba83e595d256e3af8c5c976b46cdae599f0802fc82b4a3445168",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walking_A",
+      "Attack": "1H_Melee_Attack_Chop",
+      "Hit": "Hit_A"
+    },
+    "tint": [
+      0.65,
+      0.87,
+      0.78
+    ],
+    "scale": 0.85,
+    "forward_rotation_y_pi": true,
+    "bytes": 461224
+  },
+  {
+    "file": "hero_spirit_keeper.glb",
+    "source": "Mage.glb",
+    "source_sha256": "cf898585da33fab50c724d31605fb931eb2912e6d2280092141e98ca81ad507d",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walking_A",
+      "Attack": "Spellcast_Shoot",
+      "Hit": "Hit_A"
+    },
+    "tint": [
+      0.7,
+      1.0,
+      0.64
+    ],
+    "scale": 0.85,
+    "forward_rotation_y_pi": true,
+    "bytes": 436028
+  },
+  {
+    "file": "hero_tide_walker.glb",
+    "source": "Rogue.glb",
+    "source_sha256": "e825437cd4d2ee9c1960b517a74a69101e33eb409ae7fa8cedc7134a998fbb7d",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walking_A",
+      "Attack": "Dualwield_Melee_Attack_Slice",
+      "Hit": "Hit_A"
+    },
+    "tint": [
+      0.46,
+      0.86,
+      1.0
+    ],
+    "scale": 0.85,
+    "forward_rotation_y_pi": true,
+    "bytes": 422284
+  },
+  {
+    "file": "hero_star_wagerer.glb",
+    "source": "Mage.glb",
+    "source_sha256": "cf898585da33fab50c724d31605fb931eb2912e6d2280092141e98ca81ad507d",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walking_A",
+      "Attack": "Spellcast_Shoot",
+      "Hit": "Hit_A"
+    },
+    "tint": [
+      1.0,
+      0.78,
+      0.48
+    ],
+    "scale": 0.85,
+    "forward_rotation_y_pi": true,
+    "bytes": 436632
+  },
+  {
+    "file": "hero_frost_oracle.glb",
+    "source": "Mage.glb",
+    "source_sha256": "cf898585da33fab50c724d31605fb931eb2912e6d2280092141e98ca81ad507d",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walking_A",
+      "Attack": "Spellcast_Shoot",
+      "Hit": "Hit_A"
+    },
+    "tint": [
+      0.72,
+      0.91,
+      1.0
+    ],
+    "scale": 0.85,
+    "forward_rotation_y_pi": true,
+    "bytes": 448652
+  },
+  {
+    "file": "hero_iron_berserker.glb",
+    "source": "Barbarian.glb",
+    "source_sha256": "cefc311a0e10c7858b6141f5ada7e33268727564fb8ac1347aab97d000669cc6",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walking_A",
+      "Attack": "2H_Melee_Attack_Chop",
+      "Hit": "Hit_A"
+    },
+    "tint": [
+      1.0,
+      0.65,
+      0.55
+    ],
+    "scale": 0.85,
+    "forward_rotation_y_pi": true,
+    "bytes": 447156
+  },
+  {
+    "file": "hero_rift_dancer.glb",
+    "source": "Rogue_Hooded.glb",
+    "source_sha256": "93e6e25213009952276d9cf34f5d96a243767334c66f280db0433ddfabb91545",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walking_A",
+      "Attack": "Dualwield_Melee_Attack_Slice",
+      "Hit": "Hit_A"
+    },
+    "tint": [
+      0.88,
+      0.48,
+      1.0
+    ],
+    "scale": 0.85,
+    "forward_rotation_y_pi": true,
+    "bytes": 403856
+  },
+  {
+    "file": "hero_grove_artificer.glb",
+    "source": "Rogue.glb",
+    "source_sha256": "e825437cd4d2ee9c1960b517a74a69101e33eb409ae7fa8cedc7134a998fbb7d",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walking_A",
+      "Attack": "1H_Ranged_Shoot",
+      "Hit": "Hit_A"
+    },
+    "tint": [
+      0.63,
+      1.0,
+      0.55
+    ],
+    "scale": 0.85,
+    "forward_rotation_y_pi": true,
+    "bytes": 446256
+  },
+  {
+    "file": "hero_solar_vanguard.glb",
+    "source": "Knight.glb",
+    "source_sha256": "60428e3abc09ba83e595d256e3af8c5c976b46cdae599f0802fc82b4a3445168",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walking_A",
+      "Attack": "1H_Melee_Attack_Chop",
+      "Hit": "Hit_A"
+    },
+    "tint": [
+      1.0,
+      0.85,
+      0.4
+    ],
+    "scale": 0.85,
+    "forward_rotation_y_pi": true,
+    "bytes": 461192
+  },
+  {
+    "file": "hero_void_reaper.glb",
+    "source": "Barbarian.glb",
+    "source_sha256": "cefc311a0e10c7858b6141f5ada7e33268727564fb8ac1347aab97d000669cc6",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walking_A",
+      "Attack": "2H_Melee_Attack_Chop",
+      "Hit": "Hit_A"
+    },
+    "tint": [
+      0.65,
+      0.48,
+      0.9
+    ],
+    "scale": 0.85,
+    "forward_rotation_y_pi": true,
+    "bytes": 447156
+  },
+  {
+    "file": "enemy_rift_sapper.glb",
+    "source": "Skeleton_Rogue.glb",
+    "source_sha256": "4003f2b77891bb56f7e0de7d555abcb497aebbcaee35b614211f16275f9ccae3",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walking_A",
+      "Attack": "Spellcast_Shoot",
+      "Hit": "Hit_A"
+    },
+    "tint": [
+      0.85,
+      0.56,
+      0.92
+    ],
+    "scale": 0.6,
+    "forward_rotation_y_pi": true,
+    "bytes": 499228
+  },
+  {
+    "file": "enemy_gnawling.glb",
+    "source": "Dino.gltf",
+    "source_sha256": "d7c57a4ad6444f9c845ecdc13782a7430fcb377594a00f719cd2d37b9434b6de",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walk",
+      "Attack": "Punch",
+      "Hit": "HitReact"
+    },
+    "tint": [
+      1,
+      0.85,
+      0.75
+    ],
+    "scale": 0.42,
+    "forward_rotation_y_pi": true,
+    "bytes": 334124
+  },
+  {
+    "file": "enemy_shell_guard.glb",
+    "source": "ArmabeeEvolved.gltf",
+    "source_sha256": "1ad3e42c088e01e0c179d54537c63efad0dd185031df61d2833b9f1709362730",
+    "clips": {
+      "Idle": "Flying_Idle",
+      "Walk": "Fast_Flying",
+      "Attack": "Headbutt",
+      "Hit": "HitReact"
+    },
+    "tint": [
+      0.9,
+      0.88,
+      0.75
+    ],
+    "scale": 0.52,
+    "forward_rotation_y_pi": true,
+    "bytes": 172236
+  },
+  {
+    "file": "enemy_void_caster.glb",
+    "source": "WizardBlob.gltf",
+    "source_sha256": "074302ab7039f3a6644c8f0be2580a0d747e8981bfa9725bcc6af422222c155a",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walk",
+      "Attack": "Bite_Front",
+      "Hit": "HitRecieve"
+    },
+    "tint": [
+      0.83,
+      0.58,
+      1
+    ],
+    "scale": 0.48,
+    "forward_rotation_y_pi": true,
+    "bytes": 83560
+  },
+  {
+    "file": "enemy_core_rusher.glb",
+    "source": "BlueDemon.gltf",
+    "source_sha256": "9eb899fc619dff9a973669e0962452990c8ec44d4501dd41fe4f4fe5afd631f4",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walk",
+      "Attack": "Punch",
+      "Hit": "HitReact"
+    },
+    "tint": [
+      1,
+      0.64,
+      0.5
+    ],
+    "scale": 0.55,
+    "forward_rotation_y_pi": true,
+    "bytes": 334312
+  },
+  {
+    "file": "enemy_chanting_acolyte.glb",
+    "source": "Skeleton_Mage.glb",
+    "source_sha256": "e05b0f5cfa395271c9f75fd07c0a0613c56f401ece4ab644e080001a79971075",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walking_A",
+      "Attack": "Spellcast_Shoot",
+      "Hit": "Hit_A"
+    },
+    "tint": [
+      0.73,
+      0.52,
+      1
+    ],
+    "scale": 0.6,
+    "forward_rotation_y_pi": true,
+    "bytes": 433712
+  },
+  {
+    "file": "enemy_iron_colossus.glb",
+    "source": "GolelingEvolved.gltf",
+    "source_sha256": "a36f8c1636b692d44fd74fbca07e1164ad14acc5db71300a92d5e51bc1a476ca",
+    "clips": {
+      "Idle": "Flying_Idle",
+      "Walk": "Fast_Flying",
+      "Attack": "Headbutt",
+      "Hit": "HitReact"
+    },
+    "tint": [
+      0.72,
+      0.8,
+      0.87
+    ],
+    "scale": 0.62,
+    "forward_rotation_y_pi": true,
+    "bytes": 274828
+  },
+  {
+    "file": "enemy_burrow_stalker.glb",
+    "source": "Wolf.gltf",
+    "source_sha256": "cc02e9d128b5715f352ee8bea086f97a35f1d875d240de99b0f9f2775c37d415",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walk",
+      "Attack": "Attack",
+      "Hit": "Idle_HitReact1"
+    },
+    "tint": [
+      0.72,
+      0.58,
+      0.73
+    ],
+    "scale": 0.45,
+    "forward_rotation_y_pi": true,
+    "bytes": 744816
+  },
+  {
+    "file": "enemy_field_mender.glb",
+    "source": "Mushnub.gltf",
+    "source_sha256": "15e44e46e6c52ff677d946c70d41c4cbb1acb6598e7ec09f8642ee942d7751e2",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walk",
+      "Attack": "Bite_Front",
+      "Hit": "HitRecieve"
+    },
+    "tint": [
+      0.6,
+      1,
+      0.67
+    ],
+    "scale": 0.48,
+    "forward_rotation_y_pi": true,
+    "bytes": 61828
+  },
+  {
+    "file": "enemy_split_spore.glb",
+    "source": "GreenSpikyBlob.gltf",
+    "source_sha256": "ff55e6424f20576cac02578d012b3527af642ef15e7bab4abd2fd8d1f51b3e7e",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walk",
+      "Attack": "Bite_Front",
+      "Hit": "HitRecieve"
+    },
+    "tint": [
+      0.93,
+      0.78,
+      1
+    ],
+    "scale": 0.4,
+    "forward_rotation_y_pi": true,
+    "bytes": 195916
+  },
+  {
+    "file": "enemy_null_eye.glb",
+    "source": "AlienBlob.gltf",
+    "source_sha256": "9779ff35883ddf0afea041d4e05628e2233d374472d242310ff2d31c7c0a5108",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walk",
+      "Attack": "Bite_Front",
+      "Hit": "HitRecieve"
+    },
+    "tint": [
+      0.76,
+      0.54,
+      1
+    ],
+    "scale": 0.48,
+    "forward_rotation_y_pi": true,
+    "bytes": 110828
+  },
+  {
+    "file": "enemy_siege_lobber.glb",
+    "source": "Orc.gltf",
+    "source_sha256": "e61a37f8d9b2eee28928bdfad2c55e0798cc0a212e925cc5dcc66b243526c1a3",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walk",
+      "Attack": "Punch",
+      "Hit": "HitReact"
+    },
+    "tint": [
+      0.88,
+      0.73,
+      0.5
+    ],
+    "scale": 0.58,
+    "forward_rotation_y_pi": true,
+    "bytes": 401256
+  },
+  {
+    "file": "boss_cinder_colossus.glb",
+    "source": "Demon.gltf",
+    "source_sha256": "9ce361b41a0e80d42a70f6325169b9c70a6e3304b8d856b8344a2b7f185067af",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walk",
+      "Attack": "Weapon",
+      "Hit": "HitReact"
+    },
+    "tint": [
+      1,
+      0.85,
+      0.65
+    ],
+    "scale": 1.1,
+    "forward_rotation_y_pi": true,
+    "bytes": 389332
+  },
+  {
+    "file": "boss_abyssal_leviathan.glb",
+    "source": "Squidle.gltf",
+    "source_sha256": "ed41b8a3e4a49d0eb9522e52d3055a85e7c051607c6f1092aeb4242e0c87c77b",
+    "clips": {
+      "Idle": "Flying_Idle",
+      "Walk": "Fast_Flying",
+      "Attack": "Headbutt",
+      "Hit": "HitReact"
+    },
+    "tint": [
+      0.52,
+      0.82,
+      1
+    ],
+    "scale": 1.05,
+    "forward_rotation_y_pi": true,
+    "bytes": 313592
+  },
+  {
+    "file": "boss_dread_veil.glb",
+    "source": "GhostSkull.gltf",
+    "source_sha256": "5bf24cf0f22aa94b0b58315e7d879afc53a0964a5b326aa0c844ba3278cae1da",
+    "clips": {
+      "Idle": "Flying_Idle",
+      "Walk": "Fast_Flying",
+      "Attack": "Headbutt",
+      "Hit": "HitReact"
+    },
+    "tint": [
+      0.85,
+      0.65,
+      1
+    ],
+    "scale": 1.0,
+    "forward_rotation_y_pi": true,
+    "bytes": 258256
+  },
+  {
+    "file": "boss_sun_crown_magus.glb",
+    "source": "WizardBlob.gltf",
+    "source_sha256": "074302ab7039f3a6644c8f0be2580a0d747e8981bfa9725bcc6af422222c155a",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walk",
+      "Attack": "Bite_Front",
+      "Hit": "HitRecieve"
+    },
+    "tint": [
+      1,
+      0.85,
+      0.45
+    ],
+    "scale": 1.0,
+    "forward_rotation_y_pi": true,
+    "bytes": 83556
+  },
+  {
+    "file": "boss_green_regent.glb",
+    "source": "MushroomKing.gltf",
+    "source_sha256": "ccf27e126b881d80a2046c3ab96ddd94eb996837480e783142009ecd6629a3a4",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walk",
+      "Attack": "Punch",
+      "Hit": "HitReact"
+    },
+    "tint": [
+      0.62,
+      1,
+      0.67
+    ],
+    "scale": 0.96,
+    "forward_rotation_y_pi": true,
+    "bytes": 345388
+  },
+  {
+    "file": "summon_bone_sentry.glb",
+    "source": "Skeleton_Warrior.glb",
+    "source_sha256": "178b6fda810b814c250d8a2010c24dfd9b458b9006dd323353e620b7ff118bbe",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walking_A",
+      "Attack": "Spellcast_Shoot",
+      "Hit": "Hit_A"
+    },
+    "tint": [
+      0.63,
+      0.95,
+      1
+    ],
+    "scale": 0.85,
+    "forward_rotation_y_pi": true,
+    "bytes": 535536
+  },
+  {
+    "file": "summon_spirit_hound.glb",
+    "source": "Wolf.gltf",
+    "source_sha256": "cc02e9d128b5715f352ee8bea086f97a35f1d875d240de99b0f9f2775c37d415",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walk",
+      "Attack": "Attack",
+      "Hit": "Idle_HitReact1"
+    },
+    "tint": [
+      0.55,
+      1,
+      0.86
+    ],
+    "scale": 0.65,
+    "forward_rotation_y_pi": true,
+    "bytes": 744816
+  },
+  {
+    "file": "summon_tide_elemental.glb",
+    "source": "GreenSpikyBlob.gltf",
+    "source_sha256": "ff55e6424f20576cac02578d012b3527af642ef15e7bab4abd2fd8d1f51b3e7e",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walk",
+      "Attack": "Bite_Front",
+      "Hit": "HitRecieve"
+    },
+    "tint": [
+      0.4,
+      0.82,
+      1
+    ],
+    "scale": 0.58,
+    "forward_rotation_y_pi": true,
+    "bytes": 195916
+  },
+  {
+    "file": "summon_frost_wyrm.glb",
+    "source": "DragonEvolved.gltf",
+    "source_sha256": "39ba6ea24b5f27acf68bbf4c19fe80ba070dbec167ff14bbe933453303426f5c",
+    "clips": {
+      "Idle": "Flying_Idle",
+      "Walk": "Fast_Flying",
+      "Attack": "Headbutt",
+      "Hit": "HitReact"
+    },
+    "tint": [
+      0.58,
+      0.87,
+      1
+    ],
+    "scale": 0.85,
+    "forward_rotation_y_pi": true,
+    "bytes": 426928
+  },
+  {
+    "file": "summon_ancestor_colossus.glb",
+    "source": "Yeti.gltf",
+    "source_sha256": "ab60f4fbc1c2e1fdc3ed4f63023dc2185240dbd55751df568099557b29af6fd5",
+    "clips": {
+      "Idle": "Idle",
+      "Walk": "Walk",
+      "Attack": "Punch",
+      "Hit": "HitReact"
+    },
+    "tint": [
+      0.65,
+      0.92,
+      0.82
+    ],
+    "scale": 0.92,
+    "forward_rotation_y_pi": true,
+    "bytes": 346336
+  },
+  {
+    "file": "summon_bolt_turret.glb",
+    "source": "environment_catapult.glb",
+    "source_sha256": "6c999ef0ccae6e0464ca040cf2c823c486d6dabad3c5c6700cad019aab64bbde",
+    "clips": {
+      "Idle": "mechanical rest",
+      "Walk": "mechanical rest",
+      "Attack": "arm recoil",
+      "Hit": "arm shudder"
+    },
+    "bytes": 166216
+  }
+]

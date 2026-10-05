@@ -1,0 +1,59 @@
+Boss mechanisms, concentrated waves, and eight elite traits — native validation
+Completed: 2026-10-04. Native mechanics/capture checks PASS; repeat-seed determinism check FAIL (reported below).
+
+Final source checks
+- Strict all-target Clippy PASS (target/verification/boss-pressure-r3-clippy.log, 1m22s).
+- Library tests PASS: 497 passed, 0 failed, 1 ignored, 0.24s (boss-pressure-r3-tests.log).
+- Native bins build PASS, 7m27s (boss-pressure-r3-build.log). No WASM/browser or full performance validation claimed.
+
+Accepted native capture evidence: 32 distinct desktop/mobile scenes, 35360 full simulation frames
+- 10 unchanged Boss scenes from final-pressure R2, 14000 frames: boss-battle-{0..4}-pressure-r2-zh-{1280x720,667x375}.
+- 22 fresh R3 scenes, 21360 frames: raid-pressure-{3,4,24} and elite-pressure-{0..7}, pressure-r3-zh-{1280x720,667x375}.
+- Logs under target/verification; raw every-five-frame PNG evidence under target/verification/frames; stage PNGs under screenshots with the same scenario names. Production camera unchanged.
+- Boss evidence covers actual registered catalogue actor, primary warning/hit on exposed hero with collapsed gate, movement-based secondary dodge, half-health phase, frozen paused timers, and paused-death hazard/art cleanup. Actual hazard geometry is read, not faked.
+- Phase pressure summons: Boss2 actual6 atframe159 →12 at366; Boss4 actual10 at135 →12 at296. Every observed live pressure count asserts <=12; death waits actual cap and at least5 frames after dodge. The first ability resolves after fixture HP crosses half-health, so these capture counts demonstrate phase6/10, not base3/5. Base counts are covered by library tests.
+- Volatile/Brood lethal damage uses real hero basic attack after fixture lowers HP to1 and places hero in range. No affix state or fake projectile injected. Volatile pending observed551; Brood requires three live Enemy named SPLITLING with no affix, observed620.
+- Bloodrite healing verified from wounded realHP; Yellow Sign real recovery multiplier .5 inside /1 outside. Bulwark shield state observed. Frenzy/Commander/Siege capture validates actual type creation/unique presentation; numerical combat effects are covered by library tests, not inferred from screenshots.
+- Waves3/4/24 use actual RaidWarning/director. Both real paused deadlines and announced arrival counts verified. Latewave24: warning1 count38, warning2 count38; actual live actors56 after first arrival and115 after second. Pictures are evidence of a crowd; quantities come from native logs.
+- R3 front-road warning fully visible in production desktop screenshot (all three red chevrons and ground circle), with fresh mobile counterpart. New front-facing elite crests and genuine radius fields captured.
+
+Useful screenshots
+screenshots/raid-pressure-3-pressure-r3-zh-1280x720-warning1.png
+screenshots/raid-pressure-24-pressure-r3-zh-1280x720-burst2.png
+screenshots/raid-pressure-24-pressure-r3-zh-667x375-burst2.png
+screenshots/elite-pressure-2-pressure-r3-zh-1280x720-explosion-warning.png
+screenshots/elite-pressure-3-pressure-r3-zh-1280x720-regeneration.png
+screenshots/elite-pressure-5-pressure-r3-zh-667x375-yellow-aura.png
+screenshots/elite-pressure-6-pressure-r3-zh-1280x720-brood-split.png
+screenshots/boss-pressure-elite-r3-contact.jpg
+
+Frame-bounded main-world balance evidence
+- Before: three seeds0x1/0xA11CE/0xC0FFEE, each45000 frames. After: same three plus independent0x1-repeat, each45000 frames. Total315000 main-world frames, separate from native capture35360.
+- Actual main-world systems, fixed manual step, real autoplay. Rendering skipped after fixed bootstrap; after simulations run max2 processes concurrently only after visual captures finish. This is a numerical comparison, not a performance benchmark.
+- Same initial preferences: baseline XDG_CONFIG directory and per-seed detail preferences absent; both batches forceEN/detail defaulttrue, real default speed/autoUlt, fresh isolated campaign file. After runs additionally isolate XDG to avoid shared writes.
+- Every run stopped at the45000-frame bound with actual elapsed below1500s because real choices pause combat. All finish=false/victory=false, wave23, four bosses: this does not demonstrate a complete25-minute clear or win rate.
+- Min gate values below are minimum among scheduled checkpoints, not continuous damage minima. Enemy pool peak is the lifetime pool counter; checkpoint active counts are sparse snapshots.
+
+phase seed elapsed(s) bosses kills minGateHP minGateRatio poolPeak maxCheckpointActive enemyPoolReject visualFallbacks
+before 0x1 1364.8 4 1658 963 0.9630 20 9 0 571
+before 0xA11CE 1355.7 4 1631 1000 0.9557 16 13 0 2163
+before 0xC0FFEE 1364.8 4 1731 734 0.7340 15 3 0 16852
+after 0x1 1352.3 4 1668 1000 1.0000 37 8 0 1952
+after 0xA11CE 1327.4 4 1567 924 0.9240 35 4 0 11206
+after 0xC0FFEE 1361.4 4 1644 943 0.9430 41 3 0 2257
+after 0x1-repeat 1353.5 4 1672 1000 1.0000 37 8 0 2489
+
+- Strong autoplay keeps the gate mostly healthy at sampled checkpoints (after minimum ratio1.0000/.9240/.9430); increased actor pressure is proven, but challenging difficulty/win rate is not balanced or established.
+- Enemy lifetime pool peak rises20/16/15 →37/35/41 for the three seeds, with zero enemy pool rejections. This supports stronger concentrated actor pressure; it does not prove difficulty or performance is fully balanced. Existing projectile visual fallback counts vary with gameplay and are explicitly retained.
+- Seed0x1 repeat: 26 checkpoints in each run, exact gameplay/RNG equality FALSE. First mismatch atframe25200; full changed fields preserved in screenshots/raid-balance-comparison.json. Matching initial checkpoints does not establish determinism. Repeated run finalelapsed1353.5s/kills1672 vs first1352.3s/kills1668; RNG and economic/progression fields diverge. No root cause claimed and no mismatch hidden.
+- Raw logs/checkpoints/head-tail evidence: target/verification/raid-before and raid-after. Comparison JSON is durable under screenshots/raid-balance-comparison.json.
+
+Runtime audit
+Accepted36 native logs (32 visualscenes +4 afterruns): ERROR=0, panics=0, GPU validation errors=0. Existing ICU4X missing Japanese segmentation-model diagnostics=1825133; ShadowLodOrigin startup messages=72. These diagnostics remain unresolved; no clean-console or performance claim. Full per-log counts: screenshots/boss-pressure-runtime-audit.json.
+
+Rejected preflight evidence (not final acceptance)
+- Initial cave warning was hidden/partly hidden behind rocks; finalR3 front-road pictures replace it.
+- Initial Volatile fixture assignedHP0 and bypassed damage resolution; fixed to real basic attack.
+- Initial boss summon count was sampled before deferred actor batch; fixed to wait actual12-actor cap.
+- Chinese debug-menu affix index5 exposed a genuine old five-label bounds panic. Production source now typed eight labels, with all8 real debug inputs/native captures and English/Chinese request/status unit coverage.
+- R2 elite glyph was edge-on; finalR3 front-facing captures replace it. Boss2/4 summons-labelled frame may coincide with cleanup due five-frame screenshot sampling; use warning/phase pictures for activeBoss HUD and native logged counts for cap proof.

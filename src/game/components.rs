@@ -6,7 +6,7 @@ pub struct Hero;
 /// Marks every active player-owned summon, regardless of which gameplay
 /// module created it. The marker is removed while a pooled shell is idle.
 #[derive(Component, Debug, Clone, Copy, PartialEq, Eq)]
-pub(crate) struct PlayerSummon;
+pub struct PlayerSummon;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(u8)]
@@ -145,9 +145,6 @@ pub struct ImpactFx {
 }
 
 #[derive(Component)]
-pub struct RunStatsText;
-
-#[derive(Component)]
 pub struct TimerText;
 
 #[derive(Component)]
@@ -160,25 +157,13 @@ pub struct CoreBar;
 pub struct XpBar;
 
 #[derive(Component)]
-pub struct SkillButtonLabel;
-
-#[derive(Component)]
-pub struct HeroVitalsText;
-
-#[derive(Component)]
 pub struct DodgeButton;
 
 #[derive(Component)]
 pub struct DodgeButtonLabel;
 
 #[derive(Component)]
-pub struct UltimateButton;
-
-#[derive(Component)]
 pub struct BondDrawButton;
-
-#[derive(Component)]
-pub struct BondStatusText;
 
 #[derive(Component)]
 pub struct BondButtonLabel;
@@ -188,6 +173,12 @@ pub struct SkillDrawButton;
 
 #[derive(Component)]
 pub struct SkillDrawLabel;
+
+#[derive(Component)]
+pub struct EncounterButton;
+
+#[derive(Component)]
+pub struct EncounterButtonLabel;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum TrialAction {
@@ -223,5 +214,20 @@ pub enum DraftAction {
 #[derive(Component)]
 pub struct DraftActionButton(pub DraftAction);
 
-#[derive(Component)]
-pub struct ResultRoot;
+/// Emitted by a resolved hostile action; presentation never invents attack cadence.
+#[derive(Message, Clone, Copy, Debug)]
+pub struct EnemyAttackCue {
+    pub source: Entity,
+    pub origin: Vec3,
+    pub target: Vec3,
+    pub kind: EnemyAttackKind,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum EnemyAttackKind {
+    Shot,
+    Slash,
+    Slam,
+    Beam,
+    Burst,
+    Heal,
+}

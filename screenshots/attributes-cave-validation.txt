@@ -1,0 +1,45 @@
+Native attributes and demon cavern validation — fresh R5, 2026-10-01
+
+Strict Clippy: all targets PASS (24.28s); capture-only final fixture correction also PASS.
+Library tests: 411 passed, 0 failed (0.19s).
+Native binaries: cargo build --bins PASS (6m18s); final capture-only rebuild PASS (44.93s).
+Capture: 14 scenarios, 4280 full simulation/render frames, all PASS.
+Pipeline: target/verification/attributes-cave-pipeline.log
+Final capture log: target/verification/attributes-capture-fix-r5.log
+
+Four attribute-growth scenarios use actual named market purchase buttons and the actual
+purchase handler, funded only through fixture kill currency. No hero stats are injected.
+Five acquisitions spend 1020 kill currency. Authoritative initial -> acquired values:
+Armor 0 -> 6; evasion 0 -> 8%; lifesteal 0 -> 5%; armor penetration 0 -> 3 points;
+magic penetration 0 -> 10%. UI numerical rows match the actual HeroStatsSnapshot.
+Purchase wallet/gold are measured immediately before each purchase, excluding normal
+passive gold growth between earlier gameplay and market opening.
+Sixth Ember Heart acquisition covered by actual market library test: base 5% + equipment 8% = 13% critical chance.
+Actual combat tests PASS: purchased_penetration_and_leech_change_real_armored_and_resistant_target_health;
+damage_resolution_reports_only_actual_hp_loss_for_blood_leech. Equipment acquisition/runtime
+consistency test also PASS: purchased_equipment_unlocks_real_stats_once_and_bond_runtime_matches_the_sheet.
+Desktop and mobile EN/Chinese: actual opening/closing pauses, speed bounds/reset,
+all live attribute rows, mobile wheel scrolling and acquisition guidance verified.
+
+Four demon-cave scenarios use the unchanged production camera and actual SpawnDirector.
+Quiet frame 30: black mouth, 15 rock arch pieces, six fangs and 12 breathing mist actors.
+Actual waves enabled at frame 60; moving enemies and emergence pulse observed thereafter.
+Old R4 images with opaque purple spheres were invalidated. All final images are fresh R5.
+Desktop frame30/200 reviewed by root and art: PASS. Root reviewed fresh Chinese desktop/mobile attribute and cavern screenshots: PASS.
+R4 failed fixture logs and visually rejected screenshots are excluded from final evidence.
+
+Focused gate revival (400 frames) and summon assault (680 frames): PASS.
+Native only; browser/WASM not verified this pass.
+
+Evidence screenshots:
+screenshots/attribute-growth-en-1280x720-35.png (baseline)
+screenshots/attribute-growth-en-1280x720-210.png (acquired stats and guidance)
+screenshots/attribute-growth-en-667x375-250.png (actual mobile scrolling)
+screenshots/attribute-growth-zh-1280x720-210.png
+screenshots/attribute-growth-zh-667x375-250.png
+screenshots/demon-cave-en-1280x720-30.png (quiet entrance)
+screenshots/demon-cave-en-1280x720-200.png (actual wave)
+screenshots/demon-cave-en-667x375-30.png
+screenshots/demon-cave-en-667x375-200.png
+screenshots/demon-cave-zh-1280x720-200.png
+screenshots/demon-cave-zh-667x375-200.png

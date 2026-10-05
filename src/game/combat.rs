@@ -1,47 +1,47 @@
-use std::collections::{HashSet, VecDeque};
+use super::attack_vfx::{self, WeaponCues, WeaponFlight};
+use std::collections::{HashMap, HashSet, VecDeque};
 
 use bevy::{
-    camera::{ClearColorConfig, RenderTarget, visibility::RenderLayers},
+    camera::{ClearColorConfig, Hdr, RenderTarget, visibility::RenderLayers},
+    core_pipeline::tonemapping::Tonemapping,
     ecs::system::SystemParam,
     prelude::*,
 };
 
 use super::archive::{ArchiveEcho, ArchiveOutcome, ArchiveState};
-use super::bonds::{
-    BondRuntime, DamageClass, DamageElement, DamageProfile, ReactionKind, ReactionProc,
-    blood_execute_ready, boss_damage_multiplier, critical_multiplier,
-    projectile_bond_damage_multiplier, queue_bond_strike,
-};
+use super::basic_attacks::{self, BasicAttackAim, BasicAttackArt, PendingSwing};
+use super::bonds::{BondRuntime, DamageClass, DamageElement, DamageProfile, critical_multiplier};
 use super::bosses::BossSummon;
 use super::content::{BOSSES, ENEMIES, EnemyBehavior};
+use super::encounters::EncounterState;
 use super::hero_abilities::{BasicAttackCounter, HeroAttackSpeedModifier, TimedSpeedEffect};
+use super::hit_feedback::{HitEvent, HitFeedback, HitWeight};
 use super::market::MarketEffects;
 use super::pooling::{CombatPools, DAMAGE_NUMBER_RENDER_LAYER, EnemySceneKey};
 use super::skills::SkillRuntime;
 use super::trial::{complete_gold_target, complete_tower_challenge};
-use super::waves::{WAVES, WaveDef, choose_archetype};
+use super::waves::{
+    WAVES, WaveDef, choose_archetype, rush_champion, rush_warning, scheduled_spawn_count,
+};
+mod elite_pressure;
+pub use elite_pressure::{BLOODRITE_RADIUS, ElitePressure, YELLOW_SIGN_RADIUS};
+#[derive(Resource, Default)]
+pub struct RaidWarning {
+    pub wave: u32,
+    pub remaining_secs: f32,
+    pub count: u16,
+    pub origin: Vec3,
+}
 use super::{
-    ActiveSkill, AttackClock, BondId, BossEnemy, ChallengeKind, Core, DamageMeter, DodgeState,
-    Enemy, EnemyArchetype, EnemyHeroThreat, GameAssets, GameSession, GoldChallengeState,
-    HERO_RESPAWN_INVULNERABILITY, HERO_RESPAWN_POSITION, Hero, HeroKind, HeroVitals, ImpactFx,
-    MoveIntent, PlayerBuild, Projectile, RunRng, SelectedHero, SpawnDirector, TrialEnemy,
+    ActiveSkill, AttackClock, BossEnemy, ChallengeKind, Core, DamageMeter, DodgeState, Enemy,
+    EnemyArchetype, EnemyAttackCue, EnemyAttackKind, EnemyHeroThreat, GameAssets, GameSession,
+    GoldChallengeState, HERO_RESPAWN_INVULNERABILITY, HERO_RESPAWN_POSITION, Hero, HeroKind,
+    HeroVitals, ImpactFx, MoveIntent, PlayerBuild, Projectile, RunRng, SpawnDirector, TrialEnemy,
     TrialState, revive_delay_for_death,
 };
 
-pub const BOSS_NAMES: [&str; 5] = [
-    "CINDER COLOSSUS",
-    "ABYSSAL LEVIATHAN",
-    "DREAD VEIL",
-    "SUN CROWN MAGUS",
-    "THE GREEN REGENT",
-];
-const BOSS_TIMES: [f32; 5] = [300.0, 600.0, 900.0, 1_200.0, 1_500.0];
-const BOSS_HP: [f32; 5] = [8_000.0, 28_000.0, 70_000.0, 160_000.0, 420_000.0];
-const BOSS_SPEED: [f32; 5] = [0.85, 0.62, 0.92, 1.18, 0.78];
-const BOSS_DAMAGE_PER_SECOND: [f32; 5] = [14.0, 20.0, 28.0, 38.0, 55.0];
 pub(crate) const MAX_REGULAR_ENEMIES: usize = 130;
 const ARCHETYPE_VISUALS: [usize; 12] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-const HERO_DEATH_GATE_DAMAGE: f32 = 80.0;
 const ACID_ARCHER_RANGE: f32 = 6.0;
 const ACID_ARCHER_ATTACK_INTERVAL: f32 = 1.0;
 const BURROW_REVEAL_RANGE: f32 = 1.6;
@@ -59,20 +59,8 @@ const COMMANDER_AURA_RADIUS: f32 = 5.5;
 const COMMANDER_AURA_MULTIPLIER: f32 = 1.2;
 const BACKLOG_MERGE_WAIT_SECONDS: f32 = 8.0;
 
-pub(crate) const DEBUG_ENEMY_COUNT: usize = ENEMIES.len();
-pub(crate) const DEBUG_ELITE_AFFIX_COUNT: usize = 5;
-pub(crate) const DEBUG_BOSS_COUNT: usize = BOSS_NAMES.len();
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub(crate) enum DebugSpawnRequest {
-    Enemy {
-        archetype: usize,
-        elite_affix: Option<usize>,
-    },
-    Boss {
-        index: usize,
-    },
-}
+#[cfg(any(debug_assertions, feature = "dev-tools"))]
+pub(crate) mod debug_tools;
 
 #[derive(Resource, Default)]
 struct WaveSpawnRuntime {
@@ -89,6 +77,8 @@ struct SpawnBudget {
     wave: WaveDef,
     archetype: usize,
     elite: bool,
+    /// Elite Hunt encounter: tougher, pays extra wood.
+    hunted: bool,
     affix: Option<EliteAffixKind>,
     spawn_x: f32,
     spawn_z: f32,
@@ -111,12 +101,15 @@ pub(crate) struct EnemyArmor(pub(crate) f32);
 pub(crate) struct EnemyBreachDamage(pub(crate) f32);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum EliteAffixKind {
+pub enum EliteAffixKind {
     Frenzy,
     Bulwark,
     Volatile,
     Regeneration,
     Commander,
+    YellowSign,
+    Brood,
+    Siege,
 }
 
 impl EliteAffixKind {
@@ -127,26 +120,15 @@ impl EliteAffixKind {
             Self::Volatile => "VOLATILE",
             Self::Regeneration => "REGENERATION",
             Self::Commander => "COMMANDER",
+            Self::YellowSign => "YELLOW SIGN",
+            Self::Brood => "BROOD",
+            Self::Siege => "SIEGE",
         }
     }
-
-    const fn visual_index(self) -> usize {
-        match self {
-            Self::Frenzy => 0,
-            Self::Bulwark => 1,
-            Self::Volatile => 2,
-            Self::Regeneration => 3,
-            Self::Commander => 4,
-        }
-    }
-}
-
-pub(crate) fn debug_elite_affix_label(index: usize) -> &'static str {
-    elite_affix_from_index(index).label()
 }
 
 #[derive(Component, Debug, Clone, Copy)]
-pub(crate) struct EliteAffix {
+pub struct EliteAffix {
     kind: EliteAffixKind,
     shield: f32,
     shield_remaining: f32,
@@ -165,14 +147,15 @@ impl EliteAffix {
         }
     }
 
-    const fn is_volatile_pending(self) -> bool {
+    pub const fn kind(&self) -> EliteAffixKind {
+        self.kind
+    }
+    pub const fn shield_active(&self) -> bool {
+        self.shield > 0.0
+    }
+    pub const fn is_volatile_pending(self) -> bool {
         self.volatile_remaining > 0.0
     }
-}
-
-#[derive(Component)]
-struct EliteAffixVisual {
-    kind: EliteAffixKind,
 }
 
 #[derive(Component, Debug, Clone, Copy)]
@@ -221,9 +204,13 @@ pub(crate) struct AttackVolleyRuntime {
 }
 
 #[derive(SystemParam)]
-struct ProjectileHitFrame<'w> {
+struct ProjectileHitFrame<'w, 's> {
+    heroes: Query<'w, 's, &'static Transform, With<Hero>>,
+    cues: Option<ResMut<'w, WeaponCues>>,
+    hit_feedback: Option<ResMut<'w, HitFeedback>>,
     time: Res<'w, Time>,
     session: ResMut<'w, GameSession>,
+    encounters: ResMut<'w, EncounterState>,
 }
 
 fn catch_up_volley_travel_seconds(
@@ -253,27 +240,36 @@ struct DamageNumberCamera;
 impl Plugin for CombatPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<WaveSpawnRuntime>()
+            .init_resource::<RaidWarning>()
+            .init_resource::<ElitePressure>()
             .init_resource::<DamageMeter>()
             .init_resource::<AttackVolleyRuntime>()
+            .init_resource::<BasicAttackAim>()
+            .init_resource::<WeaponCues>()
+            .add_systems(Startup, attack_vfx::setup)
+            .add_systems(Startup, basic_attacks::setup_attack_art)
             .add_systems(PostStartup, setup_damage_number_camera)
             .add_systems(Update, tick_hero_survival.in_set(SurvivalSet))
             .add_systems(
                 Update,
                 (
+                    tick_gate_rebuild,
                     advance_run,
                     tick_damage_meter,
                     spawn_wave,
                     enemy_auras,
+                    elite_pressure::tick_pressure,
                     commander_aura,
                     tick_elite_affixes,
                     move_enemies,
                     auto_attack,
+                    basic_attacks::resolve_swings,
                     move_projectiles,
                     projectile_hits,
                     cast_active_skill,
-                    animate_elite_affix_visuals,
                     animate_effects,
-                    debug_shortcuts,
+                    basic_attacks::animate_swings,
+                    attack_vfx::animate,
                     cleanup_finished_enemies,
                 )
                     .chain()
@@ -287,6 +283,14 @@ impl Plugin for CombatPlugin {
                     .before(cast_active_skill)
                     .in_set(CombatSet),
             );
+        #[cfg(any(debug_assertions, feature = "dev-tools"))]
+        app.add_systems(
+            Update,
+            debug_tools::debug_shortcuts
+                .after(attack_vfx::animate)
+                .before(cleanup_finished_enemies)
+                .in_set(CombatSet),
+        );
     }
 }
 
@@ -301,6 +305,12 @@ fn setup_damage_number_camera(
         Name::new("DAMAGE NUMBER CAMERA"),
         DamageNumberCamera,
         Camera2d,
+        // Camera stacking shares main textures only when HDR and MSAA match.
+        // The world camera already applied tonemapping before this overlay.
+        Hdr,
+        Tonemapping::None,
+        // Render interface text after floating combat numbers, including tooltips.
+        IsDefaultUiCamera,
         Camera {
             order: source.order.saturating_add(1),
             clear_color: ClearColorConfig::None,
@@ -318,8 +328,8 @@ fn tick_hero_survival(
     mut session: ResMut<GameSession>,
     mut vitals: ResMut<HeroVitals>,
     mut market_effects: ResMut<MarketEffects>,
+    mut bond_runtime: ResMut<BondRuntime>,
     mut dodge: ResMut<DodgeState>,
-    mut active: ResMut<ActiveSkill>,
     mut intent: ResMut<MoveIntent>,
     mut hero: Query<(&mut Transform, &mut Visibility), With<Hero>>,
 ) {
@@ -338,8 +348,8 @@ fn tick_hero_survival(
             &mut session,
             &mut vitals,
             &mut market_effects,
+            &mut bond_runtime,
             &mut dodge,
-            &mut active,
             &mut intent,
             &mut transform,
             &mut visibility,
@@ -368,8 +378,8 @@ fn begin_hero_death(
     session: &mut GameSession,
     vitals: &mut HeroVitals,
     market_effects: &mut MarketEffects,
+    bond_runtime: &mut BondRuntime,
     dodge: &mut DodgeState,
-    active: &mut ActiveSkill,
     intent: &mut MoveIntent,
     transform: &mut Transform,
     visibility: &mut Visibility,
@@ -377,23 +387,59 @@ fn begin_hero_death(
     if !vitals.alive {
         return;
     }
-    if vitals.health <= 0.0 && market_effects.intercept_hero_fatal(vitals) {
+    if vitals.health <= 0.0
+        && (bond_runtime.intercept_fatal(vitals) || market_effects.intercept_hero_fatal(vitals))
+    {
         return;
     }
     vitals.alive = false;
     vitals.health = 0.0;
     vitals.deaths = vitals.deaths.saturating_add(1);
-    vitals.revive_remaining = revive_delay_for_death(vitals.deaths);
+    vitals.revive_remaining = if vitals.lives_remaining() > 0 {
+        revive_delay_for_death(vitals.deaths)
+    } else {
+        0.0
+    };
+    if vitals.lives_remaining() == 0 {
+        session.finished = true;
+        session.victory = false;
+        session.paused = true;
+    }
     vitals.invulnerable_remaining = 0.0;
     vitals.stunned_remaining = 0.0;
-    session.core_hp = (session.core_hp - HERO_DEATH_GATE_DAMAGE).max(0.0);
     dodge.requested = false;
-    active.requested = false;
     intent.0 = Vec2::ZERO;
-    // skills.rs cannot yet consume HeroVitals. Moving the hidden root outside
-    // combat range is the compatibility guard until that module calls can_act().
+    // The fallen hero is hidden until the surviving life revives.
     transform.translation = Vec3::new(0.0, -1_000.0, 0.0);
     *visibility = Visibility::Hidden;
+}
+
+fn tick_gate_rebuild(
+    time: Res<Time>,
+    mut session: ResMut<GameSession>,
+    mut gates: Query<&mut Visibility, With<Core>>,
+) {
+    if session.paused || session.finished {
+        return;
+    }
+    if session.gate_revive_remaining > 0.0 {
+        session.gate_revive_remaining =
+            (session.gate_revive_remaining - time.delta_secs()).max(0.0);
+        session.core_hp = if session.gate_revive_remaining == 0.0 {
+            session.core_max_hp
+        } else {
+            0.0
+        };
+    } else if session.core_hp <= 0.0 {
+        session.gate_revive_remaining = super::resources::GATE_REBUILD_SECONDS;
+    }
+    for mut visible in &mut gates {
+        *visible = if session.gate_revive_remaining > 0.0 {
+            Visibility::Hidden
+        } else {
+            Visibility::Visible
+        };
+    }
 }
 
 fn advance_run(time: Res<Time>, mut session: ResMut<GameSession>) {
@@ -411,11 +457,6 @@ fn advance_run(time: Res<Time>, mut session: ResMut<GameSession>) {
         session.gold_income_accum -= income as f32;
     }
     session.wave = ((session.elapsed / 60.0).floor() as u32 + 1).min(25);
-    if session.core_hp <= 0.0 {
-        session.finished = true;
-        session.victory = false;
-        session.paused = true;
-    }
 }
 
 fn tick_damage_meter(
@@ -478,7 +519,9 @@ fn spawn_wave(
     session: Res<GameSession>,
     mut director: ResMut<SpawnDirector>,
     mut wave_runtime: ResMut<WaveSpawnRuntime>,
+    mut raid: Option<ResMut<RaidWarning>>,
     mut rng: ResMut<RunRng>,
+    mut encounters: ResMut<EncounterState>,
     mut pools: ResMut<CombatPools>,
     assets: Option<Res<GameAssets>>,
     living_enemies: Query<
@@ -487,24 +530,26 @@ fn spawn_wave(
             With<Enemy>,
             Without<BossEnemy>,
             Without<BossSummon>,
+            Without<super::encounter_bosses::EncounterGuard>,
             Without<TrialEnemy>,
             Without<ArchiveEcho>,
         ),
     >,
 ) {
-    if session.paused || session.finished || session.save_active {
+    if !director.enabled || session.paused || session.finished || session.save_active {
         return;
     }
     let Some(assets) = assets else {
         return;
     };
 
-    for (index, spawn_at) in BOSS_TIMES.into_iter().enumerate() {
-        if session.elapsed >= spawn_at
+    for (index, boss) in BOSSES.iter().enumerate() {
+        if session.elapsed + encounters.boss_lead_seconds() >= boss.spawn_seconds
             && !director.boss_spawned[index]
             && spawn_boss(&mut commands, &mut pools, &assets, index).is_some()
         {
             director.boss_spawned[index] = true;
+            encounters.note_boss_spawned(index as u8);
         }
     }
     drain_splitling_backlog(&mut commands, &mut pools, &assets);
@@ -517,19 +562,45 @@ fn spawn_wave(
     let wave_index = session.wave.saturating_sub(1).min(24) as usize;
     let wave = WAVES[wave_index];
     let interval = wave_spawn_interval(wave);
+    let minute = session.elapsed.rem_euclid(60.0);
+    if let Some(raid) = raid.as_deref_mut() {
+        let warning = rush_warning(session.wave, wave, minute);
+        raid.wave = session.wave;
+        raid.remaining_secs = warning.map_or(0.0, |value| value.0);
+        raid.count = warning.map_or(0, |value| value.1);
+        raid.origin = Vec3::new(16.0, 0.0, 0.0);
+    }
     if wave_runtime.wave != session.wave {
         if wave_runtime.wave > 0 {
             let previous = WAVES[wave_runtime.wave.saturating_sub(1).min(24) as usize];
             while wave_runtime.spawned < previous.count {
-                let budget = next_spawn_budget(previous, session.elapsed, &mut director, &mut rng);
+                let mut budget = next_spawn_budget(
+                    previous,
+                    session.elapsed,
+                    &mut director,
+                    &mut encounters,
+                    &mut rng,
+                );
+                promote_pressure_elite(
+                    &mut budget,
+                    wave_runtime.wave,
+                    wave_runtime.spawned,
+                    &mut rng,
+                );
                 wave_runtime.backlog.push_back(budget);
                 wave_runtime.spawned += 1;
             }
             for skipped_wave in wave_runtime.wave + 1..session.wave {
                 let skipped = WAVES[skipped_wave.saturating_sub(1).min(24) as usize];
-                for _ in 0..skipped.count {
-                    let budget =
-                        next_spawn_budget(skipped, session.elapsed, &mut director, &mut rng);
+                for spawned in 0..skipped.count {
+                    let mut budget = next_spawn_budget(
+                        skipped,
+                        session.elapsed,
+                        &mut director,
+                        &mut encounters,
+                        &mut rng,
+                    );
+                    promote_pressure_elite(&mut budget, skipped_wave, spawned, &mut rng);
                     wave_runtime.backlog.push_back(budget);
                 }
             }
@@ -540,11 +611,17 @@ fn spawn_wave(
         // even count/60 cadence. This keeps all N entries inside that minute.
         wave_runtime.accumulator = interval;
     }
-    wave_runtime.accumulator += delta;
-
-    while wave_runtime.spawned < wave.count && wave_runtime.accumulator >= interval {
-        wave_runtime.accumulator -= interval;
-        let budget = next_spawn_budget(wave, session.elapsed, &mut director, &mut rng);
+    wave_runtime.accumulator = minute;
+    let due = scheduled_spawn_count(session.wave, wave, wave_runtime.accumulator);
+    while wave_runtime.spawned < due {
+        let mut budget = next_spawn_budget(
+            wave,
+            session.elapsed,
+            &mut director,
+            &mut encounters,
+            &mut rng,
+        );
+        promote_pressure_elite(&mut budget, session.wave, wave_runtime.spawned, &mut rng);
         wave_runtime.backlog.push_back(budget);
         wave_runtime.spawned += 1;
     }
@@ -621,16 +698,35 @@ fn backlog_spawn_decision(
     }
 }
 
+fn promote_pressure_elite(
+    budget: &mut SpawnBudget,
+    wave_number: u32,
+    spawned: u16,
+    rng: &mut RunRng,
+) {
+    if budget.elite || wave_number < 4 {
+        return;
+    }
+    let champion = rush_champion(wave_number, budget.wave, spawned);
+    let chance = (0.025 + 0.003 * wave_number.saturating_sub(4) as f32).min(0.09);
+    if champion || rng.unit() < chance {
+        budget.elite = true;
+        budget.affix = Some(elite_affix_from_roll(rng.next_u32()));
+    }
+}
+
 fn next_spawn_budget(
     wave: WaveDef,
     elapsed: f32,
     director: &mut SpawnDirector,
+    encounters: &mut EncounterState,
     rng: &mut RunRng,
 ) -> SpawnBudget {
     let elite = elapsed >= director.next_elite_at;
     if elite {
         director.next_elite_at += 120.0;
     }
+    let hunted = elite && encounters.take_hunted_elite();
     let archetype = choose_archetype(wave, rng.next_u32());
     let affix = elite.then(|| elite_affix_from_roll(rng.next_u32()));
     let (spawn_min_x, spawn_max_x) = spawn_x_range(archetype);
@@ -638,6 +734,7 @@ fn next_spawn_budget(
         wave,
         archetype,
         elite,
+        hunted,
         affix,
         spawn_x: rng.range(spawn_min_x, spawn_max_x),
         spawn_z: rng.range(-4.25, 4.25),
@@ -682,15 +779,25 @@ fn spawn_budget_totals(budgets: &[SpawnBudget]) -> SpawnBudgetTotals {
         .fold(SpawnBudgetTotals::default(), |mut total, budget| {
             let def = ENEMIES[budget.archetype.min(ENEMIES.len() - 1)];
             let elite_health = if budget.elite { 6.0 } else { 1.0 };
+            let hunted_health = if budget.hunted {
+                super::encounters::ELITE_HUNT_HEALTH_MULTIPLIER
+            } else {
+                1.0
+            };
             let elite_damage = if budget.elite { 1.8 } else { 1.0 };
             let elite_reward = if budget.elite { 8 } else { 1 };
-            total.hp += def.hp * budget.wave.hp_multiplier * elite_health;
+            total.hp += def.hp * budget.wave.hp_multiplier * elite_health * hunted_health;
             total.breach_damage +=
                 def.breach_damage as f32 * budget.wave.damage_multiplier * elite_damage;
             total.xp = total
                 .xp
                 .saturating_add(u32::from(def.xp).saturating_mul(elite_reward));
             total.wood = total.wood.saturating_add(if budget.elite { 16 } else { 0 });
+            if budget.hunted {
+                total.wood = total
+                    .wood
+                    .saturating_add(super::encounters::ELITE_HUNT_WOOD);
+            }
             total.gold = total
                 .gold
                 .saturating_add(u32::from(def.gold_bounty).saturating_mul(elite_reward));
@@ -764,17 +871,12 @@ fn spawn_enemy_group(
     ));
     if let Some(kind) = affix {
         commands.entity(entity).insert(EliteAffix::new(kind));
-        let decoration = commands
-            .spawn((
-                Name::new(format!("AFFIX · {}", kind.label())),
-                Mesh3d(assets.fx_mesh.clone()),
-                MeshMaterial3d(elite_affix_material(assets, kind)),
-                Transform::from_xyz(0.0, 1.35, 0.0).with_scale(Vec3::splat(0.26)),
-                EliteAffixVisual { kind },
-            ))
-            .id();
-        commands.entity(entity).add_child(decoration);
-        pools.track_enemy_decoration(entity, decoration);
+        if kind == EliteAffixKind::Brood {
+            commands.entity(entity).insert(EnemyArchetype(9));
+        }
+        if kind == EliteAffixKind::Bulwark {
+            commands.entity(entity).insert(EnemyArmor(def.armor + 6.0));
+        }
     }
     match def.behavior {
         EnemyBehavior::HuntHero => {
@@ -797,23 +899,16 @@ fn enemy_base_scale(base_hp: f32, elite: bool, scale_jitter: f32) -> f32 {
 }
 
 const fn elite_affix_from_roll(roll: u32) -> EliteAffixKind {
-    let bucket = ((roll as u64 * 5) >> 32) as u8;
+    let bucket = ((roll as u64 * 8) >> 32) as u8;
     match bucket {
         0 => EliteAffixKind::Frenzy,
         1 => EliteAffixKind::Bulwark,
         2 => EliteAffixKind::Volatile,
         3 => EliteAffixKind::Regeneration,
-        _ => EliteAffixKind::Commander,
-    }
-}
-
-fn elite_affix_material(assets: &GameAssets, kind: EliteAffixKind) -> Handle<StandardMaterial> {
-    match kind {
-        EliteAffixKind::Frenzy => assets.storm_material.clone(),
-        EliteAffixKind::Bulwark => assets.enemy_materials[2].clone(),
-        EliteAffixKind::Volatile => assets.enemy_materials[1].clone(),
-        EliteAffixKind::Regeneration => assets.enemy_materials[3].clone(),
-        EliteAffixKind::Commander => assets.elite_material.clone(),
+        4 => EliteAffixKind::Commander,
+        5 => EliteAffixKind::YellowSign,
+        6 => EliteAffixKind::Brood,
+        _ => EliteAffixKind::Siege,
     }
 }
 
@@ -843,7 +938,7 @@ fn spawn_boss(
     assets: &GameAssets,
     index: usize,
 ) -> Option<Entity> {
-    let hp = BOSS_HP[index];
+    let boss = &BOSSES[index];
     let entity = pools.rent_enemy_scene(
         commands,
         EnemySceneKey::Boss(index as u8),
@@ -852,10 +947,10 @@ fn spawn_boss(
     )?;
     commands.entity(entity).insert((
         Enemy {
-            hp,
-            max_hp: hp,
-            speed: BOSS_SPEED[index],
-            damage: BOSS_DAMAGE_PER_SECOND[index],
+            hp: boss.hp,
+            max_hp: boss.hp,
+            speed: boss.speed,
+            damage: boss.damage_per_second,
             xp: 240 + index as u32 * 160,
             wood: 30 + index as u32 * 18,
             gold: 250 + index as u32 * 180,
@@ -864,62 +959,30 @@ fn spawn_boss(
         },
         BossEnemy { index: index as u8 },
         EnemyArmor(0.0),
-        EnemyBreachDamage(BOSS_DAMAGE_PER_SECOND[index]),
+        EnemyBreachDamage(boss.damage_per_second),
     ));
     Some(entity)
 }
 
-/// Uses the same spawn builders as scheduled waves without advancing their RNG,
-/// backlog, elapsed time, or checkpoint bookkeeping.
-pub(crate) fn spawn_debug_request(
-    commands: &mut Commands,
-    pools: &mut CombatPools,
-    assets: &GameAssets,
-    request: DebugSpawnRequest,
-    wave_number: u32,
-) -> Option<Entity> {
-    match request {
-        DebugSpawnRequest::Enemy {
-            archetype,
-            elite_affix,
-        } => {
-            let archetype = archetype % DEBUG_ENEMY_COUNT;
-            let wave = WAVES[wave_number.saturating_sub(1).min(24) as usize];
-            let (min_x, max_x) = spawn_x_range(archetype);
-            let affix = elite_affix.map(elite_affix_from_index);
-            spawn_enemy(
-                commands,
-                pools,
-                assets,
-                SpawnBudget {
-                    wave,
-                    archetype,
-                    elite: affix.is_some(),
-                    affix,
-                    spawn_x: (min_x + max_x) * 0.5,
-                    spawn_z: (archetype % 5) as f32 * 1.55 - 3.1,
-                    scale_jitter: 1.0,
-                    speed_jitter: 1.0,
-                },
-            )
-        }
-        DebugSpawnRequest::Boss { index } => {
-            spawn_boss(commands, pools, assets, index % DEBUG_BOSS_COUNT)
-        }
+/// Boss lunges and teleports cannot tunnel through a standing road barrier.
+pub(crate) fn stop_at_live_gate(
+    session: &GameSession,
+    gate: Option<Vec3>,
+    origin: Vec3,
+    mut destination: Vec3,
+) -> Vec3 {
+    if session.core_hp > 0.0
+        && session.gate_revive_remaining <= 0.0
+        && let Some(gate) = gate
+        && origin.x >= gate.x
+        && origin.z.abs() <= 5.65
+    {
+        destination.x = destination.x.max(gate.x + 1.9);
     }
+    destination
 }
 
-const fn elite_affix_from_index(index: usize) -> EliteAffixKind {
-    match index % DEBUG_ELITE_AFFIX_COUNT {
-        0 => EliteAffixKind::Frenzy,
-        1 => EliteAffixKind::Bulwark,
-        2 => EliteAffixKind::Volatile,
-        3 => EliteAffixKind::Regeneration,
-        _ => EliteAffixKind::Commander,
-    }
-}
-
-fn move_towards_radius(
+pub(crate) fn move_towards_radius(
     position: Vec3,
     target: Vec3,
     speed: f32,
@@ -952,14 +1015,17 @@ fn move_towards_radius(
 }
 
 fn move_enemies(
+    fusion: Option<Res<super::hero_fusion::HeroFusion>>,
     mut commands: Commands,
+    mut attack_cues: MessageWriter<EnemyAttackCue>,
+    mut cue_clocks: Local<HashMap<Entity, f32>>,
     mut pools: ResMut<CombatPools>,
     time: Res<Time>,
     mut session: ResMut<GameSession>,
     mut vitals: ResMut<HeroVitals>,
-    mut market_effects: ResMut<MarketEffects>,
+    guards: HeroDamageGuards,
+    mut rng: ResMut<RunRng>,
     mut dodge: ResMut<DodgeState>,
-    mut active: ResMut<ActiveSkill>,
     mut intent: ResMut<MoveIntent>,
     core_query: Query<&Transform, (With<Core>, Without<Enemy>)>,
     mut hero_query: Query<
@@ -982,16 +1048,32 @@ fn move_enemies(
                 Option<&EliteAffix>,
                 Option<&CommanderAuraState>,
                 Option<&TimedSpeedEffect>,
+                Option<&super::encounter_bosses::CampCombatant>,
                 &mut Transform,
             ),
             (Without<TrialEnemy>, Without<ArchiveEcho>),
         >,
     )>,
 ) {
-    if session.paused || session.finished {
+    let HeroDamageGuards {
+        mut market_effects,
+        mut bond_runtime,
+        encounters,
+    } = guards;
+    if session.finished {
+        cue_clocks.clear();
+        return;
+    }
+    if session.paused {
         return;
     }
     let delta = time.delta_secs().max(0.0);
+    // Bounty encounter: every lane attacker hits harder while it runs.
+    let bounty = encounters.enemy_damage_multiplier();
+    cue_clocks.retain(|entity, remaining| {
+        *remaining -= delta;
+        enemies.p1().contains(*entity)
+    });
     let Ok(core) = core_query.single() else {
         return;
     };
@@ -1008,7 +1090,6 @@ fn move_enemies(
         })
         .map(|(entity, transform, _, _)| (entity, transform.translation))
         .collect();
-    let target = Vec3::new(core.translation.x, 0.0, core.translation.z);
     for (
         entity,
         enemy,
@@ -1019,10 +1100,14 @@ fn move_enemies(
         affix,
         commander_aura,
         speed_effect,
+        camp,
         mut transform,
     ) in &mut enemies.p1()
     {
         if affix.is_some_and(|affix| affix.is_volatile_pending()) {
+            continue;
+        }
+        if camp.is_some_and(|camp| hero_position.xz().distance(camp.center.xz()) > 6.0) {
             continue;
         }
         let action_speed = elite_action_speed_multiplier(affix.map(|affix| affix.kind));
@@ -1032,10 +1117,79 @@ fn move_enemies(
             * commander_multiplier
             * speed_effect.map_or(1.0, |effect| effect.multiplier)
             * market_effects.enemy_movement_multiplier(boss.is_some());
-        let attack_damage = enemy.damage * commander_multiplier;
-        let behavior =
-            archetype.map(|kind| ENEMIES[usize::from(kind.0).min(ENEMIES.len() - 1)].behavior);
+        let attack_damage = enemy.damage * commander_multiplier * bounty;
+        let siege = affix.is_some_and(|affix| affix.kind == EliteAffixKind::Siege);
+        let behavior = if siege {
+            Some(EnemyBehavior::SiegeGate)
+        } else {
+            archetype.map(|kind| ENEMIES[usize::from(kind.0).min(ENEMIES.len() - 1)].behavior)
+        };
+        if (camp.is_some() && hero_position.x >= core_position.x)
+            || session.core_hp <= 0.0
+            || session.gate_revive_remaining > 0.0
+        {
+            // Rushers carry their damage in the breach profile; ordinary attackers
+            // keep their existing native damage when switching to the exposed hero.
+            let hero_damage = if attack_damage > 0.0 {
+                attack_damage
+            } else {
+                breach_damage.map_or(0.0, |breach| breach.0 * commander_multiplier * bounty)
+            };
+            if vitals.can_be_targeted() {
+                let (next, attack_seconds, reached) = move_towards_radius(
+                    transform.translation,
+                    hero_position,
+                    movement_speed,
+                    delta,
+                    if boss.is_some() { 2.0 } else { 1.35 },
+                );
+                transform.translation = next;
+                if reached && attack_seconds > 0.0 && hero_damage > 0.0 {
+                    if continuous_enemy_cue_due(&mut cue_clocks, entity) {
+                        attack_cues.write(EnemyAttackCue {
+                            source: entity,
+                            origin: next,
+                            target: hero_position,
+                            kind: if boss.is_some() {
+                                EnemyAttackKind::Slam
+                            } else {
+                                EnemyAttackKind::Slash
+                            },
+                        });
+                    }
+                    if !bond_runtime.evade(rng.unit()) {
+                        bond_runtime.take_physical_damage(
+                            &mut vitals,
+                            hero_damage * action_speed * attack_seconds,
+                        );
+                    }
+                    if vitals.health <= 0.0 {
+                        begin_hero_death(
+                            &mut session,
+                            &mut vitals,
+                            &mut market_effects,
+                            &mut bond_runtime,
+                            &mut dodge,
+                            &mut intent,
+                            &mut hero_transform,
+                            &mut hero_visibility,
+                        );
+                    }
+                }
+            }
+            continue;
+        }
+
+        // Rebuilding closes the road again, including enemies which passed
+        // through the opening while the gate was down.
+        transform.translation.x = transform.translation.x.max(core.translation.x + 1.25);
+        // A live wall spans the road: keep each attacker's lane instead of
+        // funneling it into the center, and protect heroes on its rear side.
+        let target = Vec3::new(core.translation.x, 0.0, transform.translation.z);
+        let gate_protects_hero =
+            hero_position.x < core.translation.x && transform.translation.x >= core.translation.x;
         if vitals.can_be_targeted()
+            && !gate_protects_hero
             && matches!(
                 behavior,
                 Some(EnemyBehavior::HuntHero | EnemyBehavior::BurrowAmbush)
@@ -1060,16 +1214,29 @@ fn move_enemies(
                         threat.attack_remaining -= attack_seconds * action_speed;
                         while threat.attack_remaining <= 0.0 && vitals.alive {
                             threat.attack_remaining += ACID_ARCHER_ATTACK_INTERVAL;
-                            let guard =
-                                hero_guard_damage_multiplier(&vitals, hero_position, core_position);
-                            vitals.take_physical_damage(attack_damage * guard);
+                            attack_cues.write(EnemyAttackCue {
+                                source: entity,
+                                origin: transform.translation,
+                                target: hero_position,
+                                kind: EnemyAttackKind::Shot,
+                            });
+                            let guard = hero_guard_damage_multiplier(
+                                &vitals,
+                                hero_position,
+                                core_position,
+                                fusion.as_deref(),
+                            );
+                            if !bond_runtime.evade(rng.unit()) {
+                                bond_runtime
+                                    .take_physical_damage(&mut vitals, attack_damage * guard);
+                            }
                             if vitals.health <= 0.0 {
                                 begin_hero_death(
                                     &mut session,
                                     &mut vitals,
                                     &mut market_effects,
+                                    &mut bond_runtime,
                                     &mut dodge,
-                                    &mut active,
                                     &mut intent,
                                     &mut hero_transform,
                                     &mut hero_visibility,
@@ -1093,17 +1260,30 @@ fn move_enemies(
                         transform.translation.y = 0.0;
                         if !threat.stun_applied {
                             threat.stun_applied = true;
+                            attack_cues.write(EnemyAttackCue {
+                                source: entity,
+                                origin: transform.translation,
+                                target: hero_position,
+                                kind: EnemyAttackKind::Slam,
+                            });
                             market_effects.try_apply_hero_stun(&mut vitals, BURROW_STUN_SECONDS);
-                            let guard =
-                                hero_guard_damage_multiplier(&vitals, hero_position, core_position);
-                            vitals.take_physical_damage(attack_damage * guard);
+                            let guard = hero_guard_damage_multiplier(
+                                &vitals,
+                                hero_position,
+                                core_position,
+                                fusion.as_deref(),
+                            );
+                            if !bond_runtime.evade(rng.unit()) {
+                                bond_runtime
+                                    .take_physical_damage(&mut vitals, attack_damage * guard);
+                            }
                             if vitals.health <= 0.0 {
                                 begin_hero_death(
                                     &mut session,
                                     &mut vitals,
                                     &mut market_effects,
+                                    &mut bond_runtime,
                                     &mut dodge,
-                                    &mut active,
                                     &mut intent,
                                     &mut hero_transform,
                                     &mut hero_visibility,
@@ -1127,16 +1307,29 @@ fn move_enemies(
                         threat.attack_remaining -= attack_seconds * action_speed;
                         while threat.attack_remaining <= 0.0 && vitals.alive {
                             threat.attack_remaining += BURROW_ATTACK_INTERVAL;
-                            let guard =
-                                hero_guard_damage_multiplier(&vitals, hero_position, core_position);
-                            vitals.take_physical_damage(attack_damage * guard);
+                            attack_cues.write(EnemyAttackCue {
+                                source: entity,
+                                origin: transform.translation,
+                                target: hero_position,
+                                kind: EnemyAttackKind::Slash,
+                            });
+                            let guard = hero_guard_damage_multiplier(
+                                &vitals,
+                                hero_position,
+                                core_position,
+                                fusion.as_deref(),
+                            );
+                            if !bond_runtime.evade(rng.unit()) {
+                                bond_runtime
+                                    .take_physical_damage(&mut vitals, attack_damage * guard);
+                            }
                             if vitals.health <= 0.0 {
                                 begin_hero_death(
                                     &mut session,
                                     &mut vitals,
                                     &mut market_effects,
+                                    &mut bond_runtime,
                                     &mut dodge,
-                                    &mut active,
                                     &mut intent,
                                     &mut hero_transform,
                                     &mut hero_visibility,
@@ -1147,7 +1340,6 @@ fn move_enemies(
                 }
                 _ => {}
             }
-            transform.rotate_y(delta * if enemy.elite { 0.8 } else { 2.2 });
             continue;
         }
 
@@ -1158,7 +1350,12 @@ fn move_enemies(
             *chanter != entity && position.distance_squared(transform.translation) <= 12.25
         });
         let speed_multiplier = chanter_speed_multiplier(hastened);
-        if archetype.is_some_and(|kind| kind.0 == 11) {
+        if matches!(behavior, Some(EnemyBehavior::SiegeGate)) {
+            let siege_damage = if attack_damage > 0.0 {
+                attack_damage
+            } else {
+                breach_damage.map_or(0.0, |breach| breach.0 * commander_multiplier * bounty)
+            };
             let (next, attack_seconds, reached) = move_towards_radius(
                 transform.translation,
                 target,
@@ -1168,12 +1365,23 @@ fn move_enemies(
             );
             transform.translation = next;
             if reached {
+                if attack_seconds > 0.0
+                    && siege_damage > 0.0
+                    && continuous_enemy_cue_due(&mut cue_clocks, entity)
+                {
+                    attack_cues.write(EnemyAttackCue {
+                        source: entity,
+                        origin: transform.translation,
+                        target: core_position,
+                        kind: EnemyAttackKind::Shot,
+                    });
+                }
                 session.core_hp = (session.core_hp
-                    - attack_damage * action_speed * 0.35 * attack_seconds)
+                    - siege_damage
+                        * action_speed
+                        * if siege { 0.7 } else { 0.35 }
+                        * attack_seconds)
                     .max(0.0);
-                transform.rotate_y(delta * 0.7);
-            } else {
-                transform.rotate_y(delta * if enemy.elite { 0.8 } else { 2.2 });
             }
             continue;
         }
@@ -1189,29 +1397,68 @@ fn move_enemies(
         transform.translation = next;
         if reached {
             if boss.is_some() {
+                if attack_seconds > 0.0
+                    && attack_damage > 0.0
+                    && continuous_enemy_cue_due(&mut cue_clocks, entity)
+                {
+                    attack_cues.write(EnemyAttackCue {
+                        source: entity,
+                        origin: transform.translation,
+                        target: core_position,
+                        kind: EnemyAttackKind::Slam,
+                    });
+                }
                 session.core_hp =
                     (session.core_hp - attack_damage * action_speed * attack_seconds).max(0.0);
-            } else {
-                if !market_effects.try_intercept_ordinary_breach() {
-                    session.core_hp = (session.core_hp
-                        - breach_damage
-                            .map_or(attack_damage, |breach| breach.0 * commander_multiplier))
-                    .max(0.0);
+            } else if attack_seconds > 0.0 {
+                if continuous_enemy_cue_due(&mut cue_clocks, entity) {
+                    attack_cues.write(EnemyAttackCue {
+                        source: entity,
+                        origin: transform.translation,
+                        target: core_position,
+                        kind: EnemyAttackKind::Slash,
+                    });
                 }
-                pools.retire_enemy(&mut commands, entity);
+                if market_effects.try_intercept_ordinary_breach() {
+                    pools.retire_enemy(&mut commands, entity);
+                } else {
+                    session.core_hp = (session.core_hp
+                        - breach_damage.map_or(attack_damage, |breach| {
+                            breach.0 * commander_multiplier * bounty
+                        }) * action_speed
+                            * attack_seconds)
+                        .max(0.0);
+                }
             }
-        } else {
-            transform.rotate_y(delta * if enemy.elite { 0.8 } else { 2.2 });
         }
     }
+}
+
+/// Continuous DPS/healing stays unchanged; presentation pulses have a bounded cadence.
+fn continuous_enemy_cue_due(clocks: &mut HashMap<Entity, f32>, source: Entity) -> bool {
+    if clocks
+        .get(&source)
+        .is_some_and(|remaining| *remaining > 0.0)
+    {
+        return false;
+    }
+    if clocks.len() >= 256 && !clocks.contains_key(&source) {
+        return false;
+    }
+    clocks.insert(source, 0.8);
+    true
 }
 
 fn hero_guard_damage_multiplier(
     vitals: &HeroVitals,
     hero_position: Vec3,
     core_position: Vec3,
+    fusion: Option<&super::hero_fusion::HeroFusion>,
 ) -> f32 {
-    if vitals.kind == HeroKind::StoneWarden && hero_position.distance(core_position) <= 8.0 {
+    if (vitals.kind == HeroKind::StoneWarden
+        || fusion.is_some_and(|fusion| fusion.has(HeroKind::StoneWarden)))
+        && hero_position.distance(core_position) <= 8.0
+    {
         0.85
     } else {
         1.0
@@ -1240,20 +1487,30 @@ fn commander_aura_multiplier(state: Option<&CommanderAuraState>) -> f32 {
 
 fn enemy_auras(
     time: Res<Time>,
+    mut attack_cues: MessageWriter<EnemyAttackCue>,
+    mut cue_clocks: Local<HashMap<Entity, f32>>,
     session: Res<GameSession>,
     mut enemies: ParamSet<(
-        Query<(&Transform, &EnemyArchetype), With<Enemy>>,
+        Query<(Entity, &Transform, &EnemyArchetype), With<Enemy>>,
         Query<(&mut Enemy, &Transform, Option<&EnemyArchetype>)>,
     )>,
 ) {
-    if session.paused || session.finished {
+    if session.finished {
+        cue_clocks.clear();
         return;
     }
-    let healers: Vec<Vec3> = enemies
+    if session.paused {
+        return;
+    }
+    cue_clocks.retain(|entity, remaining| {
+        *remaining -= time.delta_secs();
+        enemies.p0().contains(*entity)
+    });
+    let healers: Vec<(Entity, Vec3)> = enemies
         .p0()
         .iter()
-        .filter(|(_, kind)| kind.0 == 8)
-        .map(|(transform, _)| transform.translation)
+        .filter(|(_, _, kind)| kind.0 == 8)
+        .map(|(entity, transform, _)| (entity, transform.translation))
         .collect();
     if healers.is_empty() {
         return;
@@ -1262,11 +1519,20 @@ fn enemy_auras(
         if kind.is_some_and(|kind| kind.0 == 8) {
             continue;
         }
-        if healers
+        if let Some((source, origin)) = healers
             .iter()
-            .any(|position| position.distance_squared(transform.translation) <= 12.25)
+            .find(|(_, position)| position.distance_squared(transform.translation) <= 12.25)
         {
+            let before = enemy.hp;
             enemy.hp = (enemy.hp + enemy.max_hp * 0.02 * time.delta_secs()).min(enemy.max_hp);
+            if enemy.hp > before && continuous_enemy_cue_due(&mut cue_clocks, *source) {
+                attack_cues.write(EnemyAttackCue {
+                    source: *source,
+                    origin: *origin,
+                    target: transform.translation,
+                    kind: EnemyAttackKind::Heal,
+                });
+            }
         }
     }
 }
@@ -1348,9 +1614,18 @@ fn within_commander_aura(commander: Vec3, target: Vec3) -> bool {
     planar_distance_squared(commander, target) <= COMMANDER_AURA_RADIUS * COMMANDER_AURA_RADIUS
 }
 
+/// Resources that scale damage between enemies and the hero.
+#[derive(SystemParam)]
+struct HeroDamageGuards<'w> {
+    market_effects: ResMut<'w, MarketEffects>,
+    bond_runtime: ResMut<'w, BondRuntime>,
+    encounters: ResMut<'w, EncounterState>,
+}
+
 #[allow(clippy::too_many_arguments)]
 fn tick_elite_affixes(
     mut commands: Commands,
+    mut attack_cues: MessageWriter<EnemyAttackCue>,
     time: Res<Time>,
     mut session: ResMut<GameSession>,
     mut archive: ResMut<ArchiveState>,
@@ -1358,9 +1633,8 @@ fn tick_elite_affixes(
     mut gold_trial: ResMut<GoldChallengeState>,
     mut build: ResMut<PlayerBuild>,
     mut vitals: ResMut<HeroVitals>,
-    mut market_effects: ResMut<MarketEffects>,
+    guards: HeroDamageGuards,
     mut dodge: ResMut<DodgeState>,
-    mut active: ResMut<ActiveSkill>,
     mut intent: ResMut<MoveIntent>,
     assets: Option<Res<GameAssets>>,
     mut pools: ResMut<CombatPools>,
@@ -1373,6 +1647,7 @@ fn tick_elite_affixes(
             &mut EliteAffix,
             Option<&TrialEnemy>,
             Option<&BossEnemy>,
+            Option<&super::encounter_bosses::EncounterBoss>,
             Option<&EnemyArchetype>,
             Option<&ArchiveEcho>,
             Option<&CommanderAuraState>,
@@ -1380,6 +1655,11 @@ fn tick_elite_affixes(
         (With<Enemy>, Without<Hero>, Without<Projectile>),
     >,
 ) {
+    let HeroDamageGuards {
+        mut market_effects,
+        mut bond_runtime,
+        mut encounters,
+    } = guards;
     if session.paused || session.finished {
         return;
     }
@@ -1394,6 +1674,7 @@ fn tick_elite_affixes(
         mut affix,
         trial_enemy,
         boss_enemy,
+        adventure_boss,
         archetype,
         archive_echo,
         commander_state,
@@ -1405,6 +1686,12 @@ fn tick_elite_affixes(
                 continue;
             }
             let position = transform.translation;
+            attack_cues.write(EnemyAttackCue {
+                source: entity,
+                origin: position,
+                target: position,
+                kind: EnemyAttackKind::Burst,
+            });
             spawn_affix_trigger_fx(
                 &mut commands,
                 &mut pools,
@@ -1420,15 +1707,16 @@ fn tick_elite_affixes(
             {
                 let damage = enemy.damage
                     * commander_aura_multiplier(commander_state)
+                    * encounters.enemy_damage_multiplier()
                     * VOLATILE_DAMAGE_MULTIPLIER;
-                vitals.take_physical_damage(damage);
+                bond_runtime.take_physical_damage(&mut vitals, damage);
                 if vitals.health <= 0.0 {
                     begin_hero_death(
                         &mut session,
                         &mut vitals,
                         &mut market_effects,
+                        &mut bond_runtime,
                         &mut dodge,
-                        &mut active,
                         &mut intent,
                         &mut hero_transform,
                         &mut hero_visibility,
@@ -1447,12 +1735,14 @@ fn tick_elite_affixes(
                 &mut build,
                 &mut vitals,
                 &market_effects,
+                &mut encounters,
                 false,
                 entity,
                 &enemy,
                 position,
                 trial_enemy,
                 boss_enemy,
+                adventure_boss,
                 archetype,
                 archive_echo,
             );
@@ -1491,6 +1781,15 @@ fn planar_distance_squared(left: Vec3, right: Vec3) -> f32 {
     Vec2::new(left.x - right.x, left.z - right.z).length_squared()
 }
 
+#[derive(SystemParam)]
+struct AttackState<'w> {
+    fusion: Option<ResMut<'w, super::hero_fusion::HeroFusion>>,
+    rng: ResMut<'w, RunRng>,
+    cues: Option<ResMut<'w, WeaponCues>>,
+    clock: ResMut<'w, AttackClock>,
+    volley_runtime: ResMut<'w, AttackVolleyRuntime>,
+    bonds: ResMut<'w, BondRuntime>,
+}
 fn auto_attack(
     mut commands: Commands,
     time: Res<Time>,
@@ -1501,10 +1800,11 @@ fn auto_attack(
     mut basic_attacks: Option<ResMut<BasicAttackCounter>>,
     mut market_effects: ResMut<MarketEffects>,
     assets: Option<Res<GameAssets>>,
+    attack_art: Option<Res<BasicAttackArt>>,
+    mut attack_aim: Option<ResMut<BasicAttackAim>>,
     mut pools: ResMut<CombatPools>,
-    mut clock: ResMut<AttackClock>,
-    mut volley_runtime: ResMut<AttackVolleyRuntime>,
-    hero_query: Query<&Transform, With<Hero>>,
+    state: AttackState,
+    hero_query: Query<(Entity, &Transform), With<Hero>>,
     enemies: Query<
         (
             Entity,
@@ -1519,7 +1819,18 @@ fn auto_attack(
         With<Enemy>,
     >,
 ) {
+    let AttackState {
+        mut fusion,
+        mut rng,
+        mut cues,
+        mut clock,
+        mut volley_runtime,
+        mut bonds,
+    } = state;
     volley_runtime.resolved_this_frame = 0;
+    if let Some(aim) = attack_aim.as_deref_mut() {
+        aim.0 = None;
+    }
     if session.finished || !vitals.can_act() {
         volley_runtime.pending = 0;
         return;
@@ -1531,17 +1842,19 @@ fn auto_attack(
         volley_runtime.pending = 0;
         return;
     };
-    let Ok(hero) = hero_query.single() else {
+    let Ok((hero_entity, hero)) = hero_query.single() else {
         volley_runtime.pending = 0;
         return;
     };
-    let attacks_per_second = build.attacks_per_second
-        * attack_speed_modifier
+    let attacks_per_second = effective_basic_attack_rate(
+        build.attacks_per_second,
+        attack_speed_modifier
             .as_deref()
-            .map_or(1.0, |modifier| modifier.0);
-    clock.0.set_duration(std::time::Duration::from_secs_f32(
-        1.0 / attacks_per_second.max(0.2),
-    ));
+            .map_or(1.0, |modifier| modifier.0),
+    );
+    clock
+        .0
+        .set_duration(std::time::Duration::from_secs_f32(1.0 / attacks_per_second));
     clock.0.tick(time.delta());
     let raw_volley_count = clock.0.times_finished_this_tick();
     let previous_pending = volley_runtime.pending;
@@ -1553,7 +1866,10 @@ fn auto_attack(
 
     let mut target: Option<(u8, f32, Entity, Vec3)> = None;
     let mut target_positions = Vec::new();
-    let range_squared = build.attack_range * build.attack_range;
+    let weapon = basic_attacks::weapon(vitals.kind);
+    let class_stats = basic_attacks::class_basic_stats(vitals.kind, vitals.level, &build);
+    let attack_range = class_stats.range;
+    let range_squared = attack_range * attack_range;
     for (entity, enemy, enemy_transform, boss, archive, trial, archetype, affix) in &enemies {
         if enemy.hp <= 0.0 || affix.is_some_and(|affix| affix.is_volatile_pending()) {
             continue;
@@ -1592,82 +1908,211 @@ fn auto_attack(
         return;
     };
 
+    let mut archer_targets = target_positions.clone();
+    archer_targets
+        .retain(|(_, position)| position.distance_squared(hero.translation) <= range_squared);
+    archer_targets.sort_by(|a, b| {
+        (a.0 != target_entity)
+            .cmp(&(b.0 != target_entity))
+            .then_with(|| {
+                a.1.distance_squared(hero.translation)
+                    .total_cmp(&b.1.distance_squared(hero.translation))
+            })
+            .then_with(|| a.0.to_bits().cmp(&b.0.to_bits()))
+    });
     let backlog_volley_count = previous_pending.min(u64::from(planned_volley_count)) as u32;
     let new_volley_count = planned_volley_count - backlog_volley_count;
     volley_runtime.pending = available - u64::from(planned_volley_count);
 
     for volley_index in 0..planned_volley_count {
-        if market_effects.record_basic_attack() {
-            for (entity, position) in storm_coil_targets(target_entity, target, &target_positions) {
-                if let Some(projectile_entity) = rent_market_projectile(
-                    &mut commands,
-                    &mut pools,
-                    &assets,
-                    position,
-                    build.attack_damage * 0.60,
-                    0.30,
-                    0,
-                    DamageProfile::new(DamageElement::Storm, DamageClass::Attack).as_market_proc(),
-                ) {
-                    restrict_projectile_to_target(
+        // Roll once for the scheduled volley: bonus attacks use the same weapon
+        // and on-attack effects, but can never roll another bonus attack.
+        let chance = bonds.extra_attack_chance();
+        let extra = chance > 0.0 && rng.unit() < chance;
+        for attack_index in 0..=u32::from(extra) {
+            if market_effects.record_basic_attack() {
+                for (entity, position) in
+                    storm_coil_targets(target_entity, target, &target_positions)
+                {
+                    if let Some(projectile_entity) = rent_market_projectile(
                         &mut commands,
-                        projectile_entity,
-                        entity,
-                        &target_positions,
-                    );
+                        &mut pools,
+                        &assets,
+                        position,
+                        build.attack_damage * 0.60,
+                        0.30,
+                        0,
+                        DamageProfile::new(DamageElement::Storm, DamageClass::Attack)
+                            .as_market_proc(),
+                    ) {
+                        restrict_projectile_to_target(
+                            &mut commands,
+                            projectile_entity,
+                            entity,
+                            &target_positions,
+                        );
+                    }
                 }
             }
-        }
 
-        let base_direction = (target - hero.translation).normalize_or_zero();
-        let shot_count = build.multishot.max(1);
-        let mut fired = false;
-        for i in 0..shot_count {
-            let spread_index = i as f32 - (shot_count as f32 - 1.0) * 0.5;
-            let spread = spread_index * 0.14;
-            let direction = Quat::from_rotation_y(spread) * base_direction;
-            let thunder = build.bond(BondId::Thunder);
-            let Some(entity) = pools.rent_projectile(
-                &mut commands,
-                assets.projectile_mesh.clone(),
-                assets.projectile_material.clone(),
-                Transform::from_translation(hero.translation + Vec3::Y * 0.25)
-                    .with_scale(Vec3::splat(1.0 + thunder as f32 * 0.04)),
-                Projectile {
-                    velocity: direction * build.projectile_speed,
+            let base_direction = (target - hero.translation).normalize_or_zero();
+            let shot_count = class_stats.shots;
+            let mut fired = false;
+            if weapon.melee() {
+                commands.spawn(PendingSwing {
+                    hero: hero_entity,
+                    target: target_entity,
+                    kind: vitals.kind,
+                    direction: base_direction,
                     damage: build.attack_damage,
-                    radius: 0.48,
-                    remaining_hits: build.pierce,
-                    lifetime: 1.4,
-                },
-            ) else {
-                break;
-            };
-            commands
-                .entity(entity)
-                .insert(DamageProfile::PHYSICAL_ATTACK);
-            let is_new_completion = volley_index >= backlog_volley_count;
-            if is_new_completion && (raw_volley_count > 1 || backlog_volley_count > 0) {
-                let new_volley_index = volley_index - backlog_volley_count;
-                commands.entity(entity).insert(ProjectileFirstFrameTravel(
-                    catch_up_volley_travel_seconds(
-                        &clock,
-                        raw_volley_count,
-                        new_volley_index,
-                        time.delta_secs(),
-                    ),
-                ));
+                    hit_limit: class_stats.cleave_targets + bonds.melee_cleave(),
+                    remaining: basic_attacks::swing_windup(clock.0.duration().as_secs_f32()),
+                });
+                fired = true;
             }
-            fired = true;
-        }
-        if fired && let Some(attacks) = basic_attacks.as_deref_mut() {
-            attacks.0 = attacks.0.wrapping_add(1);
-        }
-        if fired {
-            volley_runtime.resolved_this_frame =
-                volley_runtime.resolved_this_frame.saturating_add(1);
-        } else {
-            volley_runtime.pending = volley_runtime.pending.saturating_add(1);
+            for i in 0..if weapon.melee() { 0 } else { shot_count } {
+                let spread_index = i as f32 - (shot_count as f32 - 1.0) * 0.5;
+                let spread = spread_index * 0.14;
+                let direction = if weapon == basic_attacks::BasicWeapon::Crossbow {
+                    archer_targets.get(usize::from(i)).map_or_else(
+                        || Quat::from_rotation_y(spread) * base_direction,
+                        |(_, position)| (*position - hero.translation).normalize_or(Vec3::X),
+                    )
+                } else {
+                    Quat::from_rotation_y(spread) * base_direction
+                };
+                let (mesh, material) = attack_art
+                    .as_deref()
+                    .map(|art| art.projectile(vitals.kind))
+                    .unwrap_or_else(|| {
+                        (
+                            assets.projectile_mesh.clone(),
+                            assets.projectile_material.clone(),
+                        )
+                    });
+                let Some(entity) = pools.rent_projectile(
+                    &mut commands,
+                    mesh,
+                    material,
+                    Transform::from_translation(hero.translation + Vec3::Y * 0.25)
+                        .looking_to(direction, Vec3::Y)
+                        .with_scale(Vec3::ONE),
+                    Projectile {
+                        velocity: direction * build.projectile_speed,
+                        damage: build.attack_damage,
+                        radius: 0.48,
+                        remaining_hits: build.pierce,
+                        lifetime: 1.4,
+                    },
+                ) else {
+                    break;
+                };
+                commands.entity(entity).insert((
+                    DamageProfile::PHYSICAL_ATTACK,
+                    WeaponFlight::new(vitals.kind),
+                ));
+                if class_stats.bounces > 0 {
+                    commands
+                        .entity(entity)
+                        .insert(basic_attacks::Ricochet::new(class_stats.bounces));
+                }
+                let is_new_completion = volley_index >= backlog_volley_count;
+                if is_new_completion && (raw_volley_count > 1 || backlog_volley_count > 0) {
+                    let new_volley_index = volley_index - backlog_volley_count;
+                    commands.entity(entity).insert(ProjectileFirstFrameTravel(
+                        catch_up_volley_travel_seconds(
+                            &clock,
+                            raw_volley_count,
+                            new_volley_index,
+                            time.delta_secs(),
+                        ),
+                    ));
+                }
+                fired = true;
+            }
+            // Archery is a supporting volley. An empty quiver never stops the native weapon.
+            if fired && bonds.archery_active() && bonds.arrows_remaining > 0 {
+                let mut arrow_fired = false;
+                for i in 0..build.multishot.max(1) {
+                    let direction = Quat::from_rotation_y(
+                        (i as f32 - (build.multishot.max(1) as f32 - 1.) * 0.5) * 0.14,
+                    ) * base_direction;
+                    let (mesh, material) = attack_art
+                        .as_deref()
+                        .map(BasicAttackArt::arrow)
+                        .unwrap_or_else(|| {
+                            (
+                                assets.projectile_mesh.clone(),
+                                assets.projectile_material.clone(),
+                            )
+                        });
+                    if let Some(entity) = pools.rent_projectile(
+                        &mut commands,
+                        mesh,
+                        material,
+                        Transform::from_translation(hero.translation + Vec3::Y * 0.65)
+                            .looking_to(direction, Vec3::Y),
+                        Projectile {
+                            velocity: direction * build.projectile_speed,
+                            damage: build.attack_damage,
+                            radius: 0.3,
+                            remaining_hits: build.pierce,
+                            lifetime: 1.4,
+                        },
+                    ) {
+                        commands.entity(entity).insert((
+                            DamageProfile::PHYSICAL_ATTACK.as_arrow(),
+                            WeaponFlight::new(HeroKind::EmberRanger),
+                        ));
+                        if build.ricochet > 0 {
+                            commands
+                                .entity(entity)
+                                .insert(basic_attacks::Ricochet::new(build.ricochet.min(4)));
+                        }
+                        arrow_fired = true;
+                    }
+                }
+                if arrow_fired {
+                    bonds.consume_arrow();
+                }
+            }
+            if fired && let Some(attacks) = basic_attacks.as_deref_mut() {
+                attacks.0 = attacks.0.wrapping_add(1);
+            }
+            if fired {
+                super::basic_relics::on_attack(
+                    &mut commands,
+                    target,
+                    build.attack_damage,
+                    vitals.spell_power(),
+                );
+                if let Some(fusion) = fusion.as_deref_mut()
+                    && let Some(kind) = fusion.on_attack(vitals.kind)
+                {
+                    commands.spawn(super::hero_fusion::FusionRequest {
+                        hero: hero_entity,
+                        kind,
+                        target: target_entity,
+                        damage: build.attack_damage,
+                        speed: build.projectile_speed,
+                    });
+                }
+                if !weapon.melee()
+                    && let Some(cues) = cues.as_deref_mut()
+                {
+                    cues.push(vitals.kind, hero.translation, base_direction, false);
+                }
+                if let Some(aim) = attack_aim.as_deref_mut() {
+                    aim.0 = Some(target);
+                }
+                volley_runtime.resolved_this_frame =
+                    volley_runtime.resolved_this_frame.saturating_add(1);
+            } else {
+                if attack_index == 0 {
+                    volley_runtime.pending = volley_runtime.pending.saturating_add(1);
+                }
+                break;
+            }
         }
     }
 
@@ -1731,6 +2176,43 @@ fn rent_market_projectile(
     Some(entity)
 }
 
+/// Feed an already validated weapon contact into the authoritative damage pipeline.
+/// This carrier has no mesh, travel or area reach and can hit only its chosen enemy.
+pub(crate) fn queue_melee_contact(
+    commands: &mut Commands,
+    pools: &mut CombatPools,
+    assets: &GameAssets,
+    target: Entity,
+    position: Vec3,
+    damage: f32,
+    candidates: &[(Entity, Vec3)],
+) -> Option<Entity> {
+    if let Some(entity) = pools.rent_projectile(
+        commands,
+        assets.projectile_mesh.clone(),
+        assets.projectile_material.clone(),
+        Transform::from_translation(position),
+        Projectile {
+            velocity: Vec3::ZERO,
+            damage,
+            radius: 0.01,
+            remaining_hits: 0,
+            lifetime: 0.01,
+        },
+    ) {
+        commands
+            .entity(entity)
+            .remove::<(Mesh3d, MeshMaterial3d<StandardMaterial>)>()
+            .insert((
+                Visibility::Hidden,
+                DamageProfile::PHYSICAL_ATTACK.as_melee(),
+            ));
+        restrict_projectile_to_target(commands, entity, target, candidates);
+        return Some(entity);
+    }
+    None
+}
+
 fn restrict_projectile_to_target(
     commands: &mut Commands,
     projectile: Entity,
@@ -1760,19 +2242,40 @@ const fn target_priority(archive: bool, boss: bool, trial: bool, archetype: Opti
 }
 
 fn move_projectiles(
+    mut commands: Commands,
     time: Res<Time>,
     session: Res<GameSession>,
-    mut projectiles: Query<(
-        &mut Projectile,
-        &mut Transform,
-        Option<&ProjectileFirstFrameTravel>,
-    )>,
+    mut pools: ResMut<CombatPools>,
+    targets: Query<(&Enemy, &Transform, Option<&EliteAffix>), Without<Projectile>>,
+    mut projectiles: Query<
+        (
+            Entity,
+            &mut Projectile,
+            &mut Transform,
+            Option<&ProjectileFirstFrameTravel>,
+            Option<&basic_attacks::Ricochet>,
+        ),
+        With<Projectile>,
+    >,
 ) {
     if session.paused || session.finished {
         return;
     }
     let delta = time.delta_secs().max(0.0);
-    for (mut projectile, mut transform, first_frame) in &mut projectiles {
+    for (entity, mut projectile, mut transform, first_frame, ricochet) in &mut projectiles {
+        if let Some(target) = ricochet.and_then(|bounce| bounce.target) {
+            let Ok((enemy, target, affix)) = targets.get(target) else {
+                pools.retire_projectile(&mut commands, entity);
+                continue;
+            };
+            if enemy.hp <= 0.0 || affix.is_some_and(|affix| affix.is_volatile_pending()) {
+                pools.retire_projectile(&mut commands, entity);
+                continue;
+            }
+            let direction = (target.translation - transform.translation).normalize_or(Vec3::X);
+            projectile.velocity = direction * projectile.velocity.length();
+            transform.look_to(direction, Vec3::Y);
+        }
         let simulation_seconds = first_frame.map_or(delta, |travel| travel.0.clamp(0.0, delta));
         let travel_seconds = simulation_seconds.min(projectile.lifetime.max(0.0));
         transform.translation += projectile.velocity * travel_seconds;
@@ -1876,12 +2379,14 @@ fn settle_enemy_defeat(
     build: &mut PlayerBuild,
     vitals: &mut HeroVitals,
     market_effects: &MarketEffects,
+    encounters: &mut EncounterState,
     frost_mirror_kill: bool,
     enemy_entity: Entity,
     enemy: &Enemy,
     position: Vec3,
     trial_enemy: Option<&TrialEnemy>,
     boss_enemy: Option<&BossEnemy>,
+    adventure_boss: Option<&super::encounter_bosses::EncounterBoss>,
     archetype: Option<&EnemyArchetype>,
     archive_echo: Option<&ArchiveEcho>,
 ) {
@@ -1907,15 +2412,24 @@ fn settle_enemy_defeat(
                 complete_gold_target(challenge.level, challenge.reward, session, gold_trial);
             }
         }
+    } else if let Some(adventure) = adventure_boss {
+        let index = adventure.index;
+        commands.queue(move |world: &mut World| {
+            super::encounter_bosses::successful_defeat(world, enemy_entity, index);
+        });
     } else if let Some(boss) = boss_enemy {
+        // Forced March pays the marched boss one and a half times.
+        let xp = encounters.boss_reward(boss.index, enemy.xp);
         session.xp = session
             .xp
-            .saturating_add(xp_with_efficiency(enemy.xp, session.xp_multiplier));
-        session.wood += enemy.wood;
-        session.gold += enemy.gold;
-        session.kills += enemy.kill_credit;
+            .saturating_add(xp_with_efficiency(xp, session.xp_multiplier));
+        session.wood += encounters.boss_reward(boss.index, enemy.wood);
+        session.gold += encounters.boss_reward(boss.index, enemy.gold);
+        session.kills +=
+            encounters.kill_credit(encounters.boss_reward(boss.index, enemy.kill_credit));
         session.total_kills += 1;
         session.bosses_defeated = session.bosses_defeated.max(boss.index + 1);
+        encounters.bank_for_boss(boss.index);
         if boss.index == 4 {
             session.save_active = true;
             session.save_remaining = 60.0;
@@ -1926,7 +2440,7 @@ fn settle_enemy_defeat(
             .saturating_add(xp_with_efficiency(enemy.xp, session.xp_multiplier));
         session.wood += enemy.wood;
         session.gold += enemy.gold;
-        session.kills += enemy.kill_credit;
+        session.kills += encounters.kill_credit(enemy.kill_credit);
         session.total_kills += 1;
     }
     if trial_enemy.is_none() && boss_enemy.is_none() && archetype.is_some_and(|kind| kind.0 == 9) {
@@ -1952,6 +2466,16 @@ fn frost_mirror_damage(effective_spell_power: f32) -> f32 {
 
 fn xp_with_efficiency(base_xp: u32, multiplier: f32) -> u32 {
     (base_xp as f32 * multiplier.max(0.0)).round() as u32
+}
+
+fn affix_trigger_material(assets: &GameAssets, kind: EliteAffixKind) -> Handle<StandardMaterial> {
+    match kind {
+        EliteAffixKind::Frenzy => assets.storm_material.clone(),
+        EliteAffixKind::Bulwark => assets.enemy_materials[2].clone(),
+        EliteAffixKind::Volatile | EliteAffixKind::Siege => assets.enemy_materials[1].clone(),
+        EliteAffixKind::Regeneration | EliteAffixKind::Brood => assets.enemy_materials[3].clone(),
+        EliteAffixKind::Commander | EliteAffixKind::YellowSign => assets.elite_material.clone(),
+    }
 }
 
 fn spawn_affix_trigger_fx(
@@ -1980,7 +2504,7 @@ fn spawn_affix_trigger_fx(
     pools.rent_named_impact_fx(
         commands,
         assets.fx_mesh.clone(),
-        elite_affix_material(assets, kind),
+        affix_trigger_material(assets, kind),
         Transform::from_xyz(position.x, 0.2, position.z).with_scale(Vec3::splat(start_scale)),
         ImpactFx {
             lifetime,
@@ -2006,14 +2530,20 @@ fn projectile_hits(
     skill_runtime: Res<SkillRuntime>,
     market_effects: Res<MarketEffects>,
     mut pools: ResMut<CombatPools>,
-    mut projectiles: Query<(
-        Entity,
-        &mut Projectile,
-        &Transform,
-        Option<&DamageProfile>,
-        Option<&mut ProjectileHitMemory>,
-        Option<&ProjectileFirstFrameTravel>,
-    )>,
+    mut projectiles: Query<
+        (
+            Entity,
+            &mut Projectile,
+            &mut Transform,
+            Option<&DamageProfile>,
+            Option<&mut ProjectileHitMemory>,
+            Option<&ProjectileFirstFrameTravel>,
+            Option<&WeaponFlight>,
+            Option<&super::hero_fusion::FusionAttack>,
+            Option<&mut basic_attacks::Ricochet>,
+        ),
+        (With<Projectile>, Without<Hero>),
+    >,
     mut enemies: Query<
         (
             Entity,
@@ -2021,16 +2551,26 @@ fn projectile_hits(
             &Transform,
             Option<&TrialEnemy>,
             Option<&BossEnemy>,
+            Option<&super::encounter_bosses::EncounterBoss>,
             Option<&EnemyArchetype>,
             Option<&ArchiveEcho>,
             Option<&EnemyArmor>,
             Option<&mut EliteAffix>,
+            Option<&TimedSpeedEffect>,
         ),
         Without<Projectile>,
     >,
 ) {
     let delta = frame.time.delta_secs().max(0.0);
+    let hero_position = frame
+        .heroes
+        .iter()
+        .next()
+        .map(|transform| transform.translation);
     let mut session = frame.session;
+    let mut encounters = frame.encounters;
+    let mut cues = frame.cues;
+    let mut hit_feedback = frame.hit_feedback;
     if session.paused || session.finished {
         return;
     }
@@ -2039,8 +2579,8 @@ fn projectile_hits(
     };
     let collision_targets: Vec<(Entity, Vec3, bool)> = enemies
         .iter()
-        .filter(|(_, enemy, _, _, _, _, _, _, _)| enemy.hp > 0.0)
-        .map(|(entity, enemy, transform, _, _, _, _, _, _)| {
+        .filter(|(_, enemy, _, _, _, _, _, _, _, _, _)| enemy.hp > 0.0)
+        .map(|(entity, enemy, transform, _, _, _, _, _, _, _, _)| {
             (entity, transform.translation, enemy.elite)
         })
         .collect();
@@ -2051,10 +2591,13 @@ fn projectile_hits(
     for (
         projectile_entity,
         mut projectile,
-        projectile_transform,
+        mut projectile_transform,
         profile,
         mut hit_memory,
         first_frame,
+        flight,
+        fusion,
+        mut ricochet,
     ) in &mut projectiles
     {
         let profile = profile.copied().unwrap_or(DamageProfile::PHYSICAL_ATTACK);
@@ -2064,6 +2607,8 @@ fn projectile_hits(
         let sweep_start = projectile_transform.translation - projectile.velocity * travel_seconds;
         let projectile_radius = if profile.class == DamageClass::Spell {
             projectile.radius * market_effects.spell_area_multiplier()
+        } else if profile.class == DamageClass::Reaction && profile.element.is_elemental() {
+            projectile.radius * market_effects.element_reaction_area_multiplier()
         } else {
             projectile.radius
         };
@@ -2102,10 +2647,12 @@ fn projectile_hits(
                 enemy_transform,
                 trial_enemy,
                 boss_enemy,
+                adventure_boss,
                 archetype,
                 archive_echo,
                 armor,
                 mut affix,
+                speed_effect,
             )) = enemies.get_mut(ordered_enemy)
             else {
                 continue;
@@ -2139,110 +2686,46 @@ fn projectile_hits(
                 let direct_shell_hit = profile.element == DamageElement::Physical
                     && projectile.velocity.length_squared() > 0.01
                     && archetype.is_some_and(|kind| kind.0 == 2);
-                let target = super::bonds::ElementTarget {
-                    entity: enemy_entity,
-                    max_hp: enemy.max_hp,
-                    speed: enemy.speed,
-                    boss: boss_enemy.is_some(),
-                };
-                let reaction_procs = bond_runtime.register_element_hit(
-                    profile,
-                    target,
-                    &build,
-                    market_effects.effective_spell_power(vitals.spell_power()),
-                    build.attack_damage,
-                );
-                let frozen =
-                    skill_runtime.is_frozen(enemy_entity) || bond_runtime.is_frozen(enemy_entity);
-                queue_element_reactions(
-                    &mut commands,
-                    enemy_entity,
-                    enemy_transform.translation,
-                    &target_positions,
-                    &reaction_procs,
-                    market_effects.element_reaction_multiplier(),
-                    market_effects.element_reaction_area_multiplier(),
-                );
-                if let Some(triune) = bond_runtime.register_triune_hit(
-                    build.bond(BondId::Triune),
-                    profile,
-                    projectile.damage,
-                ) {
-                    let normal_share = 1.0 - triune.pure_share;
-                    if normal_share > 0.0 {
-                        queue_bond_strike(
-                            &mut commands,
-                            None,
-                            enemy_transform.translation,
-                            triune.damage * normal_share,
-                            2.8,
-                            u8::MAX,
-                            DamageProfile::new(DamageElement::Arcane, DamageClass::Reaction),
-                            0.0,
-                        );
-                    }
-                    if triune.pure_share > 0.0 {
-                        queue_bond_strike(
-                            &mut commands,
-                            None,
-                            enemy_transform.translation,
-                            triune.damage * triune.pure_share,
-                            2.8,
-                            u8::MAX,
-                            DamageProfile::PURE_REACTION,
-                            0.0,
-                        );
-                    }
-                }
-
-                let mut raw_damage = projectile.damage
-                    * projectile_bond_damage_multiplier(profile, &build, &session)
-                    * bond_runtime.spirit_mark_multiplier_and_refresh(
-                        enemy_entity,
-                        build.bond(BondId::Spirits),
-                        profile,
-                    );
-                if profile.element == DamageElement::Flame {
-                    raw_damage *= bond_runtime
-                        .flame_taken_multiplier(enemy_entity, build.bond(BondId::Ember));
-                }
-                raw_damage *= critical_multiplier(
-                    build.bond(BondId::Blood),
-                    build.bond(BondId::Ember),
+                let frozen = skill_runtime.is_frozen(enemy_entity);
+                let mut raw_damage = projectile.damage * bond_runtime.damage_multiplier(profile);
+                let crit_multiplier = critical_multiplier(
+                    &bond_runtime,
                     market_effects.burns_can_crit(),
                     profile,
                     rng.unit(),
                 );
+                let critical = crit_multiplier > 1.0;
+                raw_damage *= crit_multiplier;
+                raw_damage *= bond_runtime.target_damage_multiplier(
+                    boss_enemy.is_some(),
+                    trial_enemy.is_some_and(|trial| trial.kind == ChallengeKind::Tower),
+                );
+                if let Some(origin) = hero_position {
+                    raw_damage *= bond_runtime
+                        .distance_damage_multiplier(origin.distance(enemy_transform.translation));
+                }
                 raw_damage *=
                     market_outgoing_damage_multiplier(&market_effects, profile, &build, &vitals);
-                raw_damage *= market_effects
-                    .chaos_damage_multiplier(&mut rng, build.bond(BondId::Fortune) >= 6);
+                raw_damage *= encounters.outgoing_damage_multiplier();
+                raw_damage *= market_effects.chaos_damage_multiplier(&mut rng);
                 if let Some(boss) = boss_enemy {
-                    raw_damage *= boss_damage_multiplier(
+                    raw_damage *= super::bonds::boss_damage_multiplier_with_penetration(
                         profile,
                         BOSSES[usize::from(boss.index.min(4))].modifiers,
+                        market_effects.spell_penetration(),
                     );
                 }
-                let mut damage = if profile.element == DamageElement::Physical {
+                let damage = if profile.element == DamageElement::Physical {
                     physical_damage_after_armor(
                         raw_damage,
-                        armor.map_or(0.0, |armor| armor.0),
+                        (armor.map_or(0.0, |armor| armor.0)
+                            - market_effects.physical_penetration())
+                        .max(0.0),
                         direct_shell_hit,
                     )
                 } else {
                     raw_damage
                 };
-                if blood_execute_ready(
-                    build.bond(BondId::Blood),
-                    enemy.hp,
-                    enemy.max_hp,
-                    enemy.elite
-                        || boss_enemy.is_some()
-                        || trial_enemy.is_some()
-                        || archive_echo.is_some(),
-                ) {
-                    damage = damage.max(enemy.hp);
-                }
                 let resolution = apply_enemy_damage(
                     &mut enemy,
                     affix.as_deref_mut(),
@@ -2256,8 +2739,21 @@ fn projectile_hits(
                         enemy_transform.translation,
                         resolution.hp_damage,
                         profile.element,
+                        critical,
                     );
-                    vitals.heal(resolution.hp_damage * market_effects.life_leech());
+                    if let Some(fusion) = fusion {
+                        super::hero_fusion::apply_contact(
+                            &mut commands,
+                            enemy_entity,
+                            fusion.kind,
+                            boss_enemy.is_some(),
+                            speed_effect,
+                        );
+                    }
+                    vitals.heal(
+                        resolution.hp_damage
+                            * (market_effects.life_leech() + bond_runtime.life_leech()),
+                    );
                 }
                 if profile.class == DamageClass::Attack
                     && !profile.market_proc
@@ -2285,6 +2781,53 @@ fn projectile_hits(
                         }
                     }
                 }
+                if resolution.hp_damage > 0. {
+                    let (echo, chain_count) = bond_runtime.spell_procs(profile, rng.unit());
+                    let mut proc_targets = Vec::new();
+                    if echo && enemy.hp > 0. {
+                        proc_targets.push((enemy_entity, enemy_transform.translation));
+                    }
+                    proc_targets.extend(
+                        splash_targets(
+                            enemy_entity,
+                            enemy_transform.translation,
+                            &target_positions,
+                        )
+                        .into_iter()
+                        .take(chain_count as usize),
+                    );
+                    for (target, position) in proc_targets {
+                        if let Some(entity) = rent_market_projectile(
+                            &mut commands,
+                            &mut pools,
+                            &assets,
+                            position,
+                            projectile.damage,
+                            0.2,
+                            0,
+                            profile.as_card_proc(),
+                        ) {
+                            restrict_projectile_to_target(
+                                &mut commands,
+                                entity,
+                                target,
+                                &target_positions,
+                            );
+                        }
+                    }
+                }
+                if let Some(cues) = cues.as_deref_mut() {
+                    if let Some(flight) = flight {
+                        cues.push(
+                            flight.kind,
+                            enemy_transform.translation,
+                            projectile.velocity,
+                            true,
+                        );
+                    } else if profile.melee {
+                        cues.push(vitals.kind, enemy_transform.translation, Vec3::X, true);
+                    }
+                }
                 spawn_hit_fx(
                     &mut commands,
                     &mut pools,
@@ -2292,6 +2835,24 @@ fn projectile_hits(
                     enemy_transform.translation,
                     enemy.elite,
                 );
+                if let Some(feedback) = hit_feedback.as_deref_mut()
+                    && resolution.outcome != DamageOutcome::Pending
+                {
+                    feedback.push(HitEvent {
+                        target: enemy_entity,
+                        position: enemy_transform.translation,
+                        element: profile.element,
+                        weight: if boss_enemy.is_some() {
+                            HitWeight::Boss
+                        } else if enemy.elite {
+                            HitWeight::Elite
+                        } else {
+                            HitWeight::Normal
+                        },
+                        critical,
+                        killed: resolution.outcome == DamageOutcome::Defeated,
+                    });
+                }
                 match resolution.outcome {
                     DamageOutcome::Regenerated => spawn_affix_trigger_fx(
                         &mut commands,
@@ -2320,18 +2881,65 @@ fn projectile_hits(
                         &mut build,
                         &mut vitals,
                         &market_effects,
+                        &mut encounters,
                         frozen && !profile.market_proc,
                         enemy_entity,
                         &enemy,
                         enemy_transform.translation,
                         trial_enemy,
                         boss_enemy,
+                        adventure_boss,
                         archetype,
                         archive_echo,
                     ),
                     DamageOutcome::Alive | DamageOutcome::Pending => {}
                 }
                 if projectile.remaining_hits == 0 {
+                    let origin = enemy_transform.translation;
+                    let next = if ricochet
+                        .as_deref()
+                        .is_some_and(|bounce| bounce.remaining > 0)
+                    {
+                        let mut hit = first_frame_hits.clone();
+                        if let Some(memory) = hit_memory.as_deref() {
+                            hit.extend(memory.enemies.iter().copied());
+                        }
+                        let alive: Vec<_> = enemies
+                            .iter()
+                            .filter(|(_, enemy, _, _, _, _, _, _, _, affix, _)| {
+                                enemy.hp > 0.0
+                                    && !affix
+                                        .as_deref()
+                                        .is_some_and(|affix| affix.is_volatile_pending())
+                            })
+                            .map(|(entity, _, transform, ..)| (entity, transform.translation))
+                            .collect();
+                        basic_attacks::next_ricochet_target(origin, &alive, &hit)
+                    } else {
+                        None
+                    };
+                    if let Some((target, position)) = next {
+                        let bounce = ricochet.as_deref_mut().expect("active ricochet");
+                        bounce.remaining -= 1;
+                        bounce.bounces_used += 1;
+                        bounce.target = Some(target);
+                        projectile.damage *= basic_attacks::RICOCHET_DAMAGE_RATIO;
+                        let speed = projectile.velocity.length().max(1.0);
+                        let direction = (position - origin).normalize_or(Vec3::X);
+                        projectile.velocity = direction * speed;
+                        projectile.lifetime = basic_attacks::RICOCHET_RANGE / speed + 0.2;
+                        projectile_transform.translation = origin + Vec3::Y * 0.25;
+                        projectile_transform.look_to(direction, Vec3::Y);
+                        if let Some(cues) = cues.as_deref_mut() {
+                            cues.ricochet(
+                                flight.map_or(HeroKind::EmberRanger, |flight| flight.kind),
+                                origin,
+                                position,
+                                bounce.bounces_used,
+                            );
+                        }
+                        break;
+                    }
                     consumed = true;
                     break;
                 }
@@ -2356,12 +2964,16 @@ fn projectile_hits(
     }
 }
 
+pub(crate) fn effective_basic_attack_rate(base: f32, modifier: f32) -> f32 {
+    (base * modifier).max(0.2)
+}
+
 fn physical_damage_after_armor(damage: f32, armor: f32, shell_guard_direct_hit: bool) -> f32 {
     let armor_multiplier = 100.0 / (100.0 + 5.0 * armor.max(0.0));
     damage * armor_multiplier * if shell_guard_direct_hit { 0.6 } else { 1.0 }
 }
 
-fn market_outgoing_damage_multiplier(
+pub(crate) fn market_outgoing_damage_multiplier(
     effects: &MarketEffects,
     profile: DamageProfile,
     build: &PlayerBuild,
@@ -2372,7 +2984,14 @@ fn market_outgoing_damage_multiplier(
     } else {
         effects.threefold_multiplier()
     };
+    let elemental_secondary =
+        if profile.class == DamageClass::Reaction && profile.element.is_elemental() {
+            effects.element_reaction_multiplier()
+        } else {
+            1.0
+        };
     threefold
+        * elemental_secondary
         * effects.low_health_damage_multiplier(vitals)
         * effects.top_skill_multiplier(profile.skill_index, build)
         * effects.last_oath_damage_multiplier()
@@ -2406,138 +3025,11 @@ fn splash_targets(
         .collect()
 }
 
-fn queue_element_reactions(
-    commands: &mut Commands,
-    source: Entity,
-    position: Vec3,
-    targets: &[(Entity, Vec3)],
-    procs: &[ReactionProc],
-    damage_multiplier: f32,
-    area_multiplier: f32,
-) {
-    for reaction in procs {
-        let (reaction_damage_multiplier, reaction_area_multiplier) =
-            reaction_market_scales(reaction.kind, damage_multiplier, area_multiplier);
-        queue_element_reaction(
-            commands,
-            source,
-            position,
-            targets,
-            *reaction,
-            0.0,
-            reaction_damage_multiplier,
-            reaction_area_multiplier,
-        );
-        if reaction.echo && reaction.damage > 0.0 {
-            queue_element_reaction(
-                commands,
-                source,
-                position,
-                targets,
-                *reaction,
-                0.12,
-                reaction_damage_multiplier,
-                reaction_area_multiplier,
-            );
-        }
-    }
-}
-
-const fn reaction_market_scales(
-    kind: ReactionKind,
-    damage_multiplier: f32,
-    area_multiplier: f32,
-) -> (f32, f32) {
-    if kind.is_element_reaction() {
-        (damage_multiplier, area_multiplier)
-    } else {
-        (1.0, 1.0)
-    }
-}
-
-#[allow(clippy::too_many_arguments)]
-fn queue_element_reaction(
-    commands: &mut Commands,
-    source: Entity,
-    position: Vec3,
-    targets: &[(Entity, Vec3)],
-    reaction: ReactionProc,
-    delay: f32,
-    damage_scale: f32,
-    area_scale: f32,
-) {
-    match reaction.kind {
-        ReactionKind::WetStormChain => {
-            let mut nearby: Vec<(Entity, f32)> = targets
-                .iter()
-                .filter_map(|(entity, target_position)| {
-                    let distance = position.distance_squared(*target_position);
-                    (*entity != source && distance <= (5.5 * area_scale).powi(2))
-                        .then_some((*entity, distance))
-                })
-                .collect();
-            nearby.sort_by(|left, right| {
-                left.1
-                    .total_cmp(&right.1)
-                    .then_with(|| left.0.to_bits().cmp(&right.0.to_bits()))
-            });
-            for (target, _) in nearby.into_iter().take(2) {
-                queue_bond_strike(
-                    commands,
-                    Some(target),
-                    position,
-                    reaction.damage * damage_scale,
-                    0.28,
-                    0,
-                    DamageProfile::new(DamageElement::Storm, DamageClass::Reaction),
-                    delay,
-                );
-            }
-        }
-        ReactionKind::WetFrostFreeze => {}
-        ReactionKind::BurnStormOverload => queue_bond_strike(
-            commands,
-            None,
-            position,
-            reaction.damage * damage_scale,
-            3.0 * area_scale,
-            u8::MAX,
-            DamageProfile::new(DamageElement::Storm, DamageClass::Reaction),
-            delay,
-        ),
-        ReactionKind::FrozenPhysicalShatter => queue_bond_strike(
-            commands,
-            Some(source),
-            position,
-            reaction.damage * damage_scale,
-            0.18 * area_scale,
-            0,
-            DamageProfile::new(DamageElement::Physical, DamageClass::Reaction),
-            delay,
-        ),
-        ReactionKind::StormJudgment => queue_bond_strike(
-            commands,
-            Some(source),
-            position,
-            reaction.damage * damage_scale,
-            0.34,
-            0,
-            DamageProfile::new(DamageElement::Storm, DamageClass::Reaction),
-            delay,
-        ),
-    }
-}
-
 fn cast_active_skill(
-    mut commands: Commands,
     time: Res<Time>,
     session: Res<GameSession>,
-    vitals: Res<HeroVitals>,
-    selected: Res<SelectedHero>,
-    build: Res<PlayerBuild>,
-    assets: Option<Res<GameAssets>>,
-    mut pools: ResMut<CombatPools>,
     mut active: ResMut<ActiveSkill>,
+    pressure: Option<Res<ElitePressure>>,
     hero_query: Query<&Transform, With<Hero>>,
     enemies: Query<(
         &Enemy,
@@ -2559,57 +3051,15 @@ fn cast_active_skill(
                     && hero.distance_squared(transform.translation) <= 20.25
             })
     });
-    if active.remaining > 0.0 && !session.paused {
+    if active.remaining > 0.0 && !session.paused && !session.finished {
         active.remaining = (active.remaining
-            - time.delta_secs() * ultimate_recovery_rate(null_eye_nearby))
+            - time.delta_secs()
+                * ultimate_recovery_rate(null_eye_nearby)
+                * pressure
+                    .as_ref()
+                    .map_or(1.0, |p| p.cooldown_recovery_multiplier()))
         .max(0.0);
     }
-    if !active.requested
-        || active.remaining > 0.0
-        || session.paused
-        || session.finished
-        || !vitals.can_act()
-    {
-        active.requested = false;
-        return;
-    }
-    active.requested = false;
-    active.remaining = active.cooldown;
-    // Each hero's ultimate is resolved by `hero_abilities`. Storm Savant alone
-    // keeps this immediate lightning burst as the opening hit of Thunder Domain.
-    if selected.kind != HeroKind::StormSavant {
-        return;
-    }
-    let Some(assets) = assets else {
-        return;
-    };
-    let Ok(hero) = hero_query.single() else {
-        return;
-    };
-    let thunder = build.bond(BondId::Thunder);
-    let radius = 4.2 + thunder as f32 * 0.2;
-    pools.rent_impact_fx(
-        &mut commands,
-        assets.fx_mesh.clone(),
-        assets.storm_material.clone(),
-        Transform::from_xyz(hero.translation.x, 0.18, hero.translation.z)
-            .with_scale(Vec3::splat(0.3)),
-        ImpactFx {
-            lifetime: 0.42,
-            start_scale: 0.3,
-            end_scale: radius,
-        },
-    );
-    rent_market_projectile(
-        &mut commands,
-        &mut pools,
-        &assets,
-        hero.translation,
-        (75.0 + thunder as f32 * 18.0) * selected.rarity().hero_ability_multiplier(),
-        radius,
-        u8::MAX,
-        DamageProfile::new(DamageElement::Storm, DamageClass::Spell),
-    );
 }
 
 const fn ultimate_recovery_rate(null_eye_nearby: bool) -> f32 {
@@ -2747,20 +3197,6 @@ fn spawn_hit_fx(
     );
 }
 
-fn animate_elite_affix_visuals(
-    time: Res<Time>,
-    mut visuals: Query<(&EliteAffixVisual, &mut Transform)>,
-) {
-    let elapsed = time.elapsed_secs();
-    for (visual, mut transform) in &mut visuals {
-        let index = visual.kind.visual_index() as f32;
-        let pulse = 0.26 + ((elapsed * (3.2 + index * 0.35) + index).sin() + 1.0) * 0.045;
-        transform.scale = Vec3::splat(pulse);
-        transform.rotation = Quat::from_rotation_y(elapsed * (1.1 + index * 0.22))
-            * Quat::from_rotation_z(index * 0.18);
-    }
-}
-
 fn animate_effects(
     mut commands: Commands,
     time: Res<Time>,
@@ -2779,24 +3215,52 @@ fn animate_effects(
     }
 }
 
-fn debug_shortcuts(
-    keyboard: Res<ButtonInput<KeyCode>>,
-    mut session: ResMut<GameSession>,
-    mut director: ResMut<SpawnDirector>,
-) {
-    if keyboard.just_pressed(KeyCode::F8) && !session.finished {
-        if keyboard.pressed(KeyCode::ShiftLeft) || keyboard.pressed(KeyCode::ShiftRight) {
-            session.elapsed = 1_499.0;
-            director.boss_spawned[4] = false;
-        } else {
-            session.elapsed = 299.0;
-            director.boss_spawned[0] = false;
-        }
-    }
+pub(crate) fn reset_run(world: &mut World) {
+    world.insert_resource(WaveSpawnRuntime::default());
+    world.insert_resource(RaidWarning::default());
+    world.insert_resource(ElitePressure::default());
+    world.insert_resource(AttackVolleyRuntime::default());
 }
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn damage_overlay_shares_hdr_target_without_tonemapping_world_twice() {
+        let mut app = App::new();
+        app.add_systems(Update, super::setup_damage_number_camera);
+        app.world_mut().spawn((
+            Camera3d::default(),
+            Camera {
+                order: 3,
+                ..default()
+            },
+            Hdr,
+            Msaa::Off,
+            Tonemapping::TonyMcMapface,
+            RenderTarget::default(),
+        ));
+        app.update();
+        let world = app.world_mut();
+        let mut cameras = world.query::<(
+            &Camera,
+            &Hdr,
+            &Msaa,
+            &Tonemapping,
+            Option<&super::DamageNumberCamera>,
+        )>();
+        assert_eq!(cameras.iter(world).count(), 2);
+        for (camera, _, msaa, tonemapping, overlay) in cameras.iter(world) {
+            assert_eq!(*msaa, Msaa::Off);
+            if overlay.is_some() {
+                assert_eq!(camera.order, 4);
+                assert_eq!(*tonemapping, Tonemapping::None);
+                assert!(matches!(camera.clear_color, ClearColorConfig::None));
+            } else {
+                assert_eq!(*tonemapping, Tonemapping::TonyMcMapface);
+            }
+        }
+    }
+
     use bevy::ecs::system::RunSystemOnce;
 
     use super::*;
@@ -2807,9 +3271,6 @@ mod tests {
             enemy_scenes: std::array::from_fn(|_| Handle::default()),
             boss_scenes: std::array::from_fn(|_| Handle::default()),
             summon_scenes: std::array::from_fn(|_| Handle::default()),
-            enemy_mesh: Handle::default(),
-            enemy_meshes: std::array::from_fn(|_| Handle::default()),
-            elite_mesh: Handle::default(),
             projectile_mesh: Handle::default(),
             fx_mesh: Handle::default(),
             enemy_material: Handle::default(),
@@ -2839,9 +3300,11 @@ mod tests {
     fn wave_test_app(elapsed: f32, wave: u32) -> App {
         let mut app = App::new();
         app.add_plugins(MinimalPlugins)
+            .add_message::<EnemyAttackCue>()
             .init_resource::<SpawnDirector>()
             .init_resource::<WaveSpawnRuntime>()
             .init_resource::<RunRng>()
+            .init_resource::<EncounterState>()
             .init_resource::<CombatPools>()
             .insert_resource(GameSession {
                 elapsed,
@@ -2852,9 +3315,34 @@ mod tests {
         app
     }
 
+    #[test]
+    fn disabled_director_blocks_ordinary_elites_and_due_bosses_without_advancing_state() {
+        let mut app = wave_test_app(300.0, 6);
+        app.world_mut().resource_mut::<SpawnDirector>().enabled = false;
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs(30));
+        let system = app.world_mut().register_system(spawn_wave);
+        for _ in 0..3 {
+            app.world_mut().run_system(system).unwrap();
+        }
+        assert_eq!(
+            app.world_mut().query::<&Enemy>().iter(app.world()).count(),
+            0
+        );
+        let director = app.world().resource::<SpawnDirector>();
+        assert_eq!(director.boss_spawned, [false; 5]);
+        assert_eq!(director.next_elite_at, 120.0);
+        app.world_mut().resource_mut::<SpawnDirector>().enabled = true;
+        app.world_mut().run_system(system).unwrap();
+        assert!(app.world().resource::<SpawnDirector>().boss_spawned[0]);
+        assert!(app.world_mut().query::<&Enemy>().iter(app.world()).count() > 0);
+    }
+
     fn projectile_test_app() -> App {
         let mut app = App::new();
         app.add_plugins(MinimalPlugins)
+            .add_message::<EnemyAttackCue>()
             .init_resource::<GameSession>()
             .init_resource::<DamageMeter>()
             .init_resource::<ArchiveState>()
@@ -2866,6 +3354,9 @@ mod tests {
             .init_resource::<BondRuntime>()
             .init_resource::<SkillRuntime>()
             .init_resource::<MarketEffects>()
+            .init_resource::<BondRuntime>()
+            .init_resource::<RunRng>()
+            .init_resource::<EncounterState>()
             .init_resource::<CombatPools>()
             .insert_resource(test_game_assets());
         app
@@ -2874,9 +3365,13 @@ mod tests {
     fn enemy_movement_test_app() -> App {
         let mut app = App::new();
         app.add_plugins(MinimalPlugins)
+            .add_message::<EnemyAttackCue>()
             .init_resource::<GameSession>()
             .init_resource::<HeroVitals>()
             .init_resource::<MarketEffects>()
+            .init_resource::<BondRuntime>()
+            .init_resource::<EncounterState>()
+            .init_resource::<RunRng>()
             .init_resource::<DodgeState>()
             .init_resource::<ActiveSkill>()
             .init_resource::<MoveIntent>()
@@ -2885,6 +3380,229 @@ mod tests {
         app.world_mut()
             .spawn((Hero, Transform::default(), Visibility::Visible));
         app
+    }
+
+    #[test]
+    fn enemy_attack_messages_follow_real_contact_and_freeze_when_paused() {
+        let mut app = enemy_movement_test_app();
+        let mut enemy = test_enemy(100.0);
+        enemy.speed = 0.0;
+        enemy.damage = 10.0;
+        let source = app
+            .world_mut()
+            .spawn((
+                enemy,
+                EnemyArchetype(3),
+                EnemyHeroThreat::ranged(),
+                Transform::from_xyz(7.0, 0.0, 0.0),
+            ))
+            .id();
+        let system = app.world_mut().register_system(move_enemies);
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(1.0));
+        let health = app.world().resource::<HeroVitals>().health;
+        app.world_mut().run_system(system).unwrap();
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 0);
+        assert_eq!(app.world().resource::<HeroVitals>().health, health);
+        app.world_mut()
+            .get_mut::<Transform>(source)
+            .unwrap()
+            .translation
+            .x = 5.0;
+        app.world_mut()
+            .get_mut::<EnemyHeroThreat>(source)
+            .unwrap()
+            .attack_remaining = 0.5;
+        app.world_mut().run_system(system).unwrap();
+        assert_eq!(app.world().resource::<HeroVitals>().health, health - 10.0);
+        let messages = app.world().resource::<Messages<EnemyAttackCue>>();
+        let mut cursor = messages.get_cursor();
+        let cues: Vec<_> = cursor.read(messages).collect();
+        assert_eq!(cues.len(), 1);
+        assert_eq!(cues[0].source, source);
+        assert!(matches!(cues[0].kind, EnemyAttackKind::Shot));
+        assert_eq!(cues[0].target, Vec3::ZERO);
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        app.world_mut().run_system(system).unwrap();
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 1);
+        assert_eq!(app.world().resource::<HeroVitals>().health, health - 10.0);
+    }
+
+    #[test]
+    fn siege_visual_cadence_does_not_change_continuous_gate_damage() {
+        let mut app = enemy_movement_test_app();
+        let mut enemy = test_enemy(100.0);
+        enemy.speed = 0.0;
+        enemy.damage = 10.0;
+        app.world_mut().spawn((
+            enemy,
+            EnemyArchetype(11),
+            Transform::from_xyz(8.0, 0.0, 0.0),
+        ));
+        let initial = app.world().resource::<GameSession>().core_hp;
+        let system = app.world_mut().register_system(move_enemies);
+        for _ in 0..5 {
+            app.world_mut()
+                .resource_mut::<Time>()
+                .advance_by(std::time::Duration::from_secs_f32(0.25));
+            app.world_mut().run_system(system).unwrap();
+        }
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 2);
+        assert!(
+            (app.world().resource::<GameSession>().core_hp - (initial - 10.0 * 0.35 * 1.25)).abs()
+                < 0.001
+        );
+    }
+
+    #[test]
+    fn siege_affix_prioritizes_live_gate_and_doubles_real_ranged_siege_damage() {
+        let mut app = enemy_movement_test_app();
+        let mut enemy = test_enemy(100.0);
+        enemy.speed = 0.0;
+        enemy.damage = 10.0;
+        app.world_mut().spawn((
+            enemy,
+            EnemyArchetype(3),
+            EnemyHeroThreat::ranged(),
+            EliteAffix::new(EliteAffixKind::Siege),
+            Transform::from_xyz(8.0, 0.0, 0.0),
+        ));
+        let mut query = app
+            .world_mut()
+            .query_filtered::<&mut Transform, With<Hero>>();
+        query.single_mut(app.world_mut()).unwrap().translation = Vec3::X * 6.0;
+        let hp = app.world().resource::<HeroVitals>().health;
+        let gate = app.world().resource::<GameSession>().core_hp;
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs(1));
+        app.world_mut().run_system_once(move_enemies).unwrap();
+        assert_eq!(app.world().resource::<HeroVitals>().health, hp);
+        assert!((app.world().resource::<GameSession>().core_hp - (gate - 7.0)).abs() < 0.001);
+    }
+
+    #[test]
+    fn brood_affix_uses_real_death_queue_once_and_children_cannot_hatch_again() {
+        let mut app = wave_test_app(180.0, 4);
+        app.init_resource::<ArchiveState>()
+            .init_resource::<TrialState>()
+            .init_resource::<GoldChallengeState>()
+            .init_resource::<PlayerBuild>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<MarketEffects>();
+        app.world_mut()
+            .run_system_once(
+                |mut commands: Commands,
+                 mut pools: ResMut<CombatPools>,
+                 assets: Res<GameAssets>| {
+                    let mut budget = test_budget(0, true);
+                    budget.affix = Some(EliteAffixKind::Brood);
+                    spawn_enemy(&mut commands, &mut pools, &assets, budget).unwrap();
+                },
+            )
+            .unwrap();
+        let settle = app.world_mut().register_system(
+            |mut commands: Commands,
+             mut pools: ResMut<CombatPools>,
+             assets: Res<GameAssets>,
+             (mut session, mut archive, mut trial, mut gold, mut build, mut vitals): (
+                ResMut<GameSession>,
+                ResMut<ArchiveState>,
+                ResMut<TrialState>,
+                ResMut<GoldChallengeState>,
+                ResMut<PlayerBuild>,
+                ResMut<HeroVitals>,
+            ),
+             market: Res<MarketEffects>,
+             mut encounters: ResMut<EncounterState>,
+             mut enemies: Query<(
+                Entity,
+                &mut Enemy,
+                &Transform,
+                &EnemyArchetype,
+                &mut EliteAffix,
+            )>| {
+                for (entity, mut enemy, transform, archetype, mut affix) in &mut enemies {
+                    if affix.kind == EliteAffixKind::Brood {
+                        assert_eq!(
+                            apply_enemy_damage(&mut enemy, Some(&mut affix), 100_000.0, None)
+                                .outcome,
+                            DamageOutcome::Defeated
+                        );
+                        settle_enemy_defeat(
+                            &mut commands,
+                            &mut pools,
+                            &assets,
+                            &mut session,
+                            &mut archive,
+                            &mut trial,
+                            &mut gold,
+                            &mut build,
+                            &mut vitals,
+                            &market,
+                            &mut encounters,
+                            false,
+                            entity,
+                            &enemy,
+                            transform.translation,
+                            None,
+                            None,
+                            None,
+                            Some(archetype),
+                            None,
+                        );
+                    }
+                }
+            },
+        );
+        app.world_mut().run_system(settle).unwrap();
+        let mut children = app
+            .world_mut()
+            .query::<(&EnemyArchetype, Option<&EliteAffix>)>();
+        let children: Vec<_> = children.iter(app.world()).collect();
+        assert_eq!(children.len(), 3);
+        assert!(
+            children
+                .iter()
+                .all(|(kind, affix)| kind.0 == 1 && affix.is_none())
+        );
+        app.world_mut().run_system(settle).unwrap();
+        let mut living = app.world_mut().query::<&Enemy>();
+        assert_eq!(living.iter(app.world()).count(), 3);
+    }
+
+    #[test]
+    fn heal_cues_require_actual_healing_and_keep_original_aura_rate() {
+        let mut app = enemy_movement_test_app();
+        app.world_mut().spawn((
+            test_enemy(100.0),
+            EnemyArchetype(8),
+            Transform::from_xyz(1.0, 0.0, 0.0),
+        ));
+        let target = app
+            .world_mut()
+            .spawn((test_enemy(100.0), Transform::from_xyz(2.0, 0.0, 0.0)))
+            .id();
+        let system = app.world_mut().register_system(enemy_auras);
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(0.25));
+        app.world_mut().run_system(system).unwrap();
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 0);
+        app.world_mut().get_mut::<Enemy>(target).unwrap().hp = 50.0;
+        for _ in 0..5 {
+            app.world_mut().run_system(system).unwrap();
+        }
+        assert_eq!(app.world().get::<Enemy>(target).unwrap().hp, 52.5);
+        let messages = app.world().resource::<Messages<EnemyAttackCue>>();
+        let mut cursor = messages.get_cursor();
+        let cues: Vec<_> = cursor.read(messages).collect();
+        assert_eq!(cues.len(), 2);
+        assert!(
+            cues.iter()
+                .all(|cue| matches!(cue.kind, EnemyAttackKind::Heal))
+        );
     }
 
     #[test]
@@ -2900,6 +3618,180 @@ mod tests {
         assert!(!arrived);
         assert!((position.x - 1.5).abs() < 0.000_001);
         assert_eq!(remaining, 0.0);
+    }
+
+    #[test]
+    fn gate_rebuilds_repeatedly_without_losing_and_pause_preserves_timer() {
+        let mut app = App::new();
+        app.init_resource::<Time>().init_resource::<GameSession>();
+        let gate = app.world_mut().spawn((Core, Visibility::Visible)).id();
+        let system = app.world_mut().register_system(tick_gate_rebuild);
+        for _ in 0..5 {
+            app.world_mut().resource_mut::<GameSession>().core_hp = 0.0;
+            app.world_mut().run_system(system).unwrap();
+            assert_eq!(
+                app.world().resource::<GameSession>().gate_revive_remaining,
+                4.0
+            );
+            assert_eq!(
+                *app.world().get::<Visibility>(gate).unwrap(),
+                Visibility::Hidden
+            );
+            app.world_mut()
+                .resource_mut::<Time>()
+                .advance_by(std::time::Duration::from_secs(4));
+            app.world_mut().resource_mut::<GameSession>().paused = true;
+            app.world_mut().run_system(system).unwrap();
+            assert_eq!(
+                app.world().resource::<GameSession>().gate_revive_remaining,
+                4.0
+            );
+            app.world_mut().resource_mut::<GameSession>().paused = false;
+            app.world_mut().run_system(system).unwrap();
+            assert_eq!(app.world().resource::<GameSession>().core_hp, 1000.0);
+            assert!(!app.world().resource::<GameSession>().finished);
+            assert_eq!(
+                *app.world().get::<Visibility>(gate).unwrap(),
+                Visibility::Visible
+            );
+        }
+    }
+    #[test]
+    fn broken_gate_redirects_ordinary_enemies_into_real_hero_damage() {
+        let mut app = enemy_movement_test_app();
+        app.world_mut().resource_mut::<GameSession>().core_hp = 0.0;
+        let hero_position = app
+            .world_mut()
+            .query_filtered::<&Transform, With<Hero>>()
+            .single(app.world())
+            .unwrap()
+            .translation;
+        let before = app.world().resource::<HeroVitals>().health;
+        let entity = app
+            .world_mut()
+            .spawn((
+                test_enemy(100.0),
+                EnemyArchetype(0),
+                Transform::from_translation(hero_position + Vec3::X),
+            ))
+            .id();
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs(1));
+        app.world_mut().run_system_once(move_enemies).unwrap();
+        assert!(app.world().resource::<HeroVitals>().health < before);
+        assert_eq!(app.world().resource::<GameSession>().core_hp, 0.0);
+        assert!(app.world().get::<Enemy>(entity).is_some());
+        assert!(!app.world().resource::<GameSession>().finished);
+    }
+
+    #[test]
+    fn broken_gate_redirects_zero_native_damage_rushers_using_their_breach_damage() {
+        let mut app = enemy_movement_test_app();
+        app.world_mut().resource_mut::<GameSession>().core_hp = 0.0;
+        let hero_position = app
+            .world_mut()
+            .query_filtered::<&Transform, With<Hero>>()
+            .single(app.world())
+            .unwrap()
+            .translation;
+        let before = app.world().resource::<HeroVitals>().health;
+        let entity = app
+            .world_mut()
+            .spawn((
+                Enemy {
+                    damage: 0.0,
+                    ..test_enemy(100.0)
+                },
+                EnemyArchetype(0),
+                EnemyBreachDamage(20.0),
+                Transform::from_translation(hero_position + Vec3::X),
+            ))
+            .id();
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs(1));
+        app.world_mut().run_system_once(move_enemies).unwrap();
+        assert!(app.world().resource::<HeroVitals>().health < before);
+        assert_eq!(app.world().resource::<GameSession>().core_hp, 0.0);
+        assert!(app.world().get::<Enemy>(entity).is_some());
+        assert!(!app.world().resource::<GameSession>().finished);
+    }
+
+    #[test]
+    fn standing_gate_blocks_every_lane_and_protects_rear_hero_from_hunters_and_burrowers() {
+        for (archetype, lane) in [(0, -4.3), (3, -2.0), (7, 2.0), (11, 4.3)] {
+            let mut app = enemy_movement_test_app();
+            let hero_entity = app
+                .world_mut()
+                .query_filtered::<Entity, With<Hero>>()
+                .single(app.world())
+                .unwrap();
+            app.world_mut()
+                .get_mut::<Transform>(hero_entity)
+                .unwrap()
+                .translation
+                .x = -3.0;
+            let original_health = app.world().resource::<HeroVitals>().health;
+            let original_gate = app.world().resource::<GameSession>().core_hp;
+            let mut enemy = test_enemy(100.0);
+            enemy.damage = 10.0;
+            enemy.speed = 100.0;
+            enemy.elite = false;
+            let entity = app
+                .world_mut()
+                .spawn((
+                    enemy,
+                    EnemyArchetype(archetype),
+                    EnemyBreachDamage(10.0),
+                    EnemyHeroThreat::burrowed(),
+                    Transform::from_xyz(10.0, 0.0, lane),
+                ))
+                .id();
+            app.world_mut()
+                .resource_mut::<Time>()
+                .advance_by(std::time::Duration::from_secs(1));
+            app.world_mut().run_system_once(move_enemies).unwrap();
+            let position = app.world().get::<Transform>(entity).unwrap().translation;
+            assert!(
+                position.x >= 1.25,
+                "archetype {archetype} crossed the live wall"
+            );
+            assert_eq!(position.z, lane, "gate attackers must keep their lane");
+            assert_eq!(app.world().resource::<HeroVitals>().health, original_health);
+            assert!(app.world().resource::<GameSession>().core_hp < original_gate);
+            assert!(!app.world().get::<EnemyHeroThreat>(entity).unwrap().emerged);
+        }
+    }
+
+    #[test]
+    fn rebuilt_gate_returns_passed_enemies_to_the_enemy_side() {
+        let mut app = enemy_movement_test_app();
+        let entity = app
+            .world_mut()
+            .spawn((test_enemy(100.0), Transform::from_xyz(-2.0, 0.0, 4.0)))
+            .id();
+        app.world_mut().run_system_once(move_enemies).unwrap();
+        let position = app.world().get::<Transform>(entity).unwrap().translation;
+        assert_eq!(position.x, 1.25);
+        assert_eq!(position.z, 4.0);
+    }
+
+    #[test]
+    fn boss_charge_cannot_tunnel_through_live_gate_but_can_pass_collapsed_gate() {
+        let mut session = GameSession::default();
+        let gate = Some(Vec3::ZERO);
+        let origin = Vec3::new(5.0, 0.0, -4.3);
+        let target = Vec3::new(-3.0, 0.0, -4.3);
+        assert_eq!(
+            stop_at_live_gate(&session, gate, origin, target),
+            Vec3::new(1.9, 0.0, -4.3)
+        );
+        session.core_hp = 0.0;
+        assert_eq!(stop_at_live_gate(&session, gate, origin, target), target);
+        session.core_hp = 1000.0;
+        session.gate_revive_remaining = 2.0;
+        assert_eq!(stop_at_live_gate(&session, gate, origin, target), target);
     }
 
     #[test]
@@ -2924,10 +3816,11 @@ mod tests {
         app.world_mut()
             .run_system_once(move_enemies)
             .expect("gate crossing should run");
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 1);
 
         assert_eq!(
             app.world().resource::<GameSession>().core_hp,
-            initial_core_hp - 17.0
+            initial_core_hp - 17.0 * 0.375
         );
         assert!(
             (app.world().get::<Transform>(entity).unwrap().translation.x - 1.25).abs() < 0.000_001,
@@ -3004,6 +3897,13 @@ mod tests {
         app.world_mut()
             .run_system_once(move_enemies)
             .expect("burrow crossing should run");
+        let cues = app.world().resource::<Messages<EnemyAttackCue>>();
+        assert_eq!(cues.len(), 1);
+        assert!(
+            cues.get_cursor()
+                .read(cues)
+                .all(|cue| matches!(cue.kind, EnemyAttackKind::Slam))
+        );
 
         let threat = app.world().get::<EnemyHeroThreat>(entity).unwrap();
         let transform = app.world().get::<Transform>(entity).unwrap();
@@ -3025,10 +3925,13 @@ mod tests {
     fn basic_attack_counter_advances_once_per_successful_volley() {
         let mut app = App::new();
         app.add_plugins(MinimalPlugins)
+            .add_message::<EnemyAttackCue>()
             .init_resource::<GameSession>()
             .init_resource::<HeroVitals>()
             .init_resource::<PlayerBuild>()
             .init_resource::<MarketEffects>()
+            .init_resource::<BondRuntime>()
+            .init_resource::<RunRng>()
             .init_resource::<CombatPools>()
             .init_resource::<AttackClock>()
             .init_resource::<AttackVolleyRuntime>()
@@ -3058,13 +3961,543 @@ mod tests {
     }
 
     #[test]
+    fn archer_native_volley_aims_distinct_targets_and_attaches_real_bounces() {
+        let mut app = projectile_test_app();
+        app.init_resource::<AttackClock>()
+            .init_resource::<AttackVolleyRuntime>();
+        app.world_mut().resource_mut::<HeroVitals>().kind = HeroKind::EmberRanger;
+        app.world_mut()
+            .resource_mut::<PlayerBuild>()
+            .attacks_per_second = 1.0;
+        app.world_mut().spawn((Hero, Transform::default()));
+        app.world_mut()
+            .spawn((test_enemy(1000.0), Transform::from_xyz(3.0, 0.0, -1.0)));
+        app.world_mut()
+            .spawn((test_enemy(1000.0), Transform::from_xyz(3.0, 0.0, 1.0)));
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs(1));
+        app.world_mut().run_system_once(auto_attack).unwrap();
+        let mut arrows = app
+            .world_mut()
+            .query::<(&Projectile, &basic_attacks::Ricochet)>();
+        let arrows: Vec<_> = arrows.iter(app.world()).collect();
+        assert_eq!(arrows.len(), 2);
+        assert!(arrows.iter().all(|(_, bounce)| bounce.remaining == 1));
+        assert!(arrows[0].0.velocity.z * arrows[1].0.velocity.z < 0.0);
+        assert_eq!(arrows[0].0.damage, arrows[1].0.damage);
+    }
+
+    #[test]
+    fn ricochet_hits_alive_unvisited_targets_and_applies_falloff() {
+        let mut app = projectile_test_app();
+        app.world_mut()
+            .insert_resource(RunRng::from_seed(123456789));
+        let first = app
+            .world_mut()
+            .spawn((
+                test_enemy(1000.0),
+                EnemyArmor(20.0),
+                Transform::from_xyz(2.0, 0.0, 0.0),
+            ))
+            .id();
+        let second = app
+            .world_mut()
+            .spawn((
+                test_enemy(1000.0),
+                EnemyArmor(20.0),
+                Transform::from_xyz(2.0, 0.0, 3.0),
+            ))
+            .id();
+        let third = app
+            .world_mut()
+            .spawn((
+                test_enemy(1000.0),
+                EnemyArmor(20.0),
+                Transform::from_xyz(2.0, 0.0, 6.0),
+            ))
+            .id();
+        let dead = app
+            .world_mut()
+            .spawn((test_enemy(0.0), Transform::from_xyz(2.0, 0.0, 1.0)))
+            .id();
+        let projectile = app
+            .world_mut()
+            .run_system_once(|mut commands: Commands, mut pools: ResMut<CombatPools>| {
+                let entity = pools
+                    .rent_projectile(
+                        &mut commands,
+                        Handle::default(),
+                        Handle::default(),
+                        Transform::from_xyz(2.0, 0.0, 0.0),
+                        Projectile {
+                            velocity: Vec3::X * 20.0,
+                            damage: 100.0,
+                            radius: 0.1,
+                            remaining_hits: 0,
+                            lifetime: 1.0,
+                        },
+                    )
+                    .unwrap();
+                commands
+                    .entity(entity)
+                    .insert(basic_attacks::Ricochet::new(2));
+                entity
+            })
+            .unwrap();
+        app.world_mut().run_system_once(projectile_hits).unwrap();
+        assert_eq!(app.world().get::<Enemy>(first).unwrap().hp, 950.0);
+        assert_eq!(
+            app.world()
+                .get::<basic_attacks::Ricochet>(projectile)
+                .unwrap()
+                .target,
+            Some(second)
+        );
+        assert_eq!(
+            app.world().get::<Projectile>(projectile).unwrap().damage,
+            75.0
+        );
+        app.world_mut()
+            .get_mut::<Transform>(projectile)
+            .unwrap()
+            .translation = Vec3::new(2.0, 0.0, 3.0);
+        app.world_mut().run_system_once(projectile_hits).unwrap();
+        assert_eq!(app.world().get::<Enemy>(second).unwrap().hp, 962.5);
+        assert_eq!(
+            app.world()
+                .get::<basic_attacks::Ricochet>(projectile)
+                .unwrap()
+                .target,
+            Some(third)
+        );
+        assert_eq!(
+            app.world().get::<Projectile>(projectile).unwrap().damage,
+            56.25
+        );
+        app.world_mut()
+            .get_mut::<Transform>(projectile)
+            .unwrap()
+            .translation = Vec3::new(2.0, 0.0, 6.0);
+        app.world_mut().run_system_once(projectile_hits).unwrap();
+        assert_eq!(app.world().get::<Enemy>(third).unwrap().hp, 971.875);
+        assert_eq!(app.world().get::<Enemy>(dead).unwrap().hp, 0.0);
+        assert_eq!(app.world().get::<Enemy>(first).unwrap().hp, 950.0);
+        assert!(app.world().get::<Projectile>(projectile).is_none());
+        assert!(
+            app.world()
+                .get::<basic_attacks::Ricochet>(projectile)
+                .is_none()
+        );
+    }
+
+    #[test]
+    fn pierce_keeps_full_damage_until_final_contact_then_redirects_a_real_arrow() {
+        let mut app = projectile_test_app();
+        app.world_mut()
+            .insert_resource(RunRng::from_seed(123456789));
+        let first = app
+            .world_mut()
+            .spawn((
+                test_enemy(1000.0),
+                EnemyArmor(20.0),
+                Transform::from_xyz(2.0, 0.0, 0.0),
+            ))
+            .id();
+        let second = app
+            .world_mut()
+            .spawn((
+                test_enemy(1000.0),
+                EnemyArmor(20.0),
+                Transform::from_xyz(4.0, 0.0, 0.0),
+            ))
+            .id();
+        let next = app
+            .world_mut()
+            .spawn((test_enemy(1000.0), Transform::from_xyz(4.0, 0.0, 3.0)))
+            .id();
+        let projectile = app
+            .world_mut()
+            .run_system_once(|mut commands: Commands, mut pools: ResMut<CombatPools>| {
+                let entity = pools
+                    .rent_projectile(
+                        &mut commands,
+                        Handle::default(),
+                        Handle::default(),
+                        Transform::from_xyz(6.0, 0.0, 0.0),
+                        Projectile {
+                            velocity: Vec3::X * 20.0,
+                            damage: 100.0,
+                            radius: 0.1,
+                            remaining_hits: 1,
+                            lifetime: 1.0,
+                        },
+                    )
+                    .unwrap();
+                commands
+                    .entity(entity)
+                    .insert(basic_attacks::Ricochet::new(1));
+                entity
+            })
+            .unwrap();
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(0.3));
+        app.world_mut().run_system_once(projectile_hits).unwrap();
+        assert_eq!(app.world().get::<Enemy>(first).unwrap().hp, 950.0);
+        assert_eq!(app.world().get::<Enemy>(second).unwrap().hp, 950.0);
+        assert_eq!(app.world().get::<Enemy>(next).unwrap().hp, 1000.0);
+        assert_eq!(
+            app.world()
+                .get::<basic_attacks::Ricochet>(projectile)
+                .unwrap()
+                .target,
+            Some(next)
+        );
+        assert_eq!(
+            app.world().get::<Projectile>(projectile).unwrap().damage,
+            75.0
+        );
+    }
+
+    #[test]
+    fn mage_inherits_genuine_archer_volley_bounces_and_warrior_cleave_after_absorption() {
+        let mut app = projectile_test_app();
+        app.init_resource::<AttackClock>()
+            .init_resource::<AttackVolleyRuntime>()
+            .init_resource::<BasicAttackCounter>()
+            .init_resource::<WeaponCues>()
+            .add_plugins(super::super::hero_fusion::HeroFusionPlugin);
+        app.world_mut().resource_mut::<HeroVitals>().kind = HeroKind::StormSavant;
+        app.world_mut().resource_mut::<HeroVitals>().level = 40;
+        app.world_mut()
+            .resource_mut::<PlayerBuild>()
+            .attacks_per_second = 1.0;
+        {
+            let mut fusion = app.world_mut().resource_mut::<super::super::HeroFusion>();
+            fusion.record_absorbed(HeroKind::StoneWarden);
+            fusion.record_absorbed(HeroKind::EmberRanger);
+        }
+        app.world_mut().spawn((Hero, Transform::default()));
+        app.world_mut()
+            .spawn((test_enemy(1000.0), Transform::from_xyz(2.0, 0.0, 0.0)));
+        for _ in 0..8 {
+            app.world_mut()
+                .resource_mut::<Time>()
+                .advance_by(std::time::Duration::from_secs(1));
+            app.world_mut().run_system_once(auto_attack).unwrap();
+        }
+        app.update();
+        let mut arrows=app.world_mut().query_filtered::<(&Projectile,&basic_attacks::Ricochet),With<super::super::hero_fusion::FusionAttack>>();
+        let arrows: Vec<_> = arrows.iter(app.world()).collect();
+        assert_eq!(arrows.len(), 5);
+        assert!(arrows.iter().all(|(_, bounce)| bounce.remaining == 4));
+        let base = app.world().resource::<PlayerBuild>().attack_damage;
+        assert!(
+            arrows
+                .iter()
+                .all(|(arrow, _)| (arrow.damage - base * 0.45).abs() < 0.001)
+        );
+        let mut swings = app
+            .world_mut()
+            .query_filtered::<&PendingSwing, With<super::super::hero_fusion::FusionAttack>>();
+        let swing = swings.single(app.world()).unwrap();
+        assert_eq!(swing.hit_limit, 3);
+        assert!((swing.damage - base * 0.45).abs() < 0.001);
+        assert_eq!(app.world().resource::<BasicAttackCounter>().0, 8);
+    }
+
+    #[test]
+    fn bounced_arrow_steers_toward_moving_target_without_teleporting_and_retires_if_it_dies() {
+        let mut app = projectile_test_app();
+        let target = app
+            .world_mut()
+            .spawn((test_enemy(1000.0), Transform::from_xyz(8.0, 0.0, 0.0)))
+            .id();
+        let projectile = app
+            .world_mut()
+            .run_system_once(
+                move |mut commands: Commands, mut pools: ResMut<CombatPools>| {
+                    let entity = pools
+                        .rent_projectile(
+                            &mut commands,
+                            Handle::default(),
+                            Handle::default(),
+                            Transform::default(),
+                            Projectile {
+                                velocity: Vec3::X * 10.0,
+                                damage: 100.0,
+                                radius: 0.1,
+                                remaining_hits: 0,
+                                lifetime: 1.0,
+                            },
+                        )
+                        .unwrap();
+                    commands.entity(entity).insert(basic_attacks::Ricochet {
+                        remaining: 0,
+                        bounces_used: 1,
+                        target: Some(target),
+                    });
+                    entity
+                },
+            )
+            .unwrap();
+        app.world_mut()
+            .get_mut::<Transform>(target)
+            .unwrap()
+            .translation
+            .z = 4.0;
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(0.1));
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        app.world_mut().run_system_once(move_projectiles).unwrap();
+        assert_eq!(
+            app.world()
+                .get::<Transform>(projectile)
+                .unwrap()
+                .translation,
+            Vec3::ZERO
+        );
+        app.world_mut().resource_mut::<GameSession>().paused = false;
+        app.world_mut().run_system_once(move_projectiles).unwrap();
+        let position = app
+            .world()
+            .get::<Transform>(projectile)
+            .unwrap()
+            .translation;
+        assert!(position.x > 0.0 && position.z > 0.0);
+        assert!((position.length() - 1.0).abs() < 0.001);
+        assert_eq!(app.world().get::<Enemy>(target).unwrap().hp, 1000.0);
+        app.world_mut().get_mut::<Enemy>(target).unwrap().hp = 0.0;
+        app.world_mut().run_system_once(move_projectiles).unwrap();
+        assert!(app.world().get::<Projectile>(projectile).is_none());
+        assert!(
+            app.world()
+                .get::<basic_attacks::Ricochet>(projectile)
+                .is_none()
+        );
+    }
+
+    #[test]
+    fn melee_basics_require_weapon_reach_and_count_one_swing() {
+        let mut app = projectile_test_app();
+        app.init_resource::<AttackClock>()
+            .init_resource::<AttackVolleyRuntime>()
+            .init_resource::<BasicAttackCounter>();
+        app.world_mut().resource_mut::<HeroVitals>().kind = HeroKind::StoneWarden;
+        app.world_mut().resource_mut::<PlayerBuild>().multishot = 3;
+        app.world_mut()
+            .resource_mut::<PlayerBuild>()
+            .attacks_per_second = 1.0;
+        app.world_mut().spawn((Hero, Transform::default()));
+        let enemy = app
+            .world_mut()
+            .spawn((test_enemy(100.0), Transform::from_xyz(7.0, 0.0, 0.0)))
+            .id();
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs(1));
+        app.world_mut().run_system_once(auto_attack).unwrap();
+        assert_eq!(app.world().resource::<BasicAttackCounter>().0, 0);
+        assert_eq!(
+            app.world_mut()
+                .query::<&PendingSwing>()
+                .iter(app.world())
+                .count(),
+            0
+        );
+        app.world_mut()
+            .get_mut::<Transform>(enemy)
+            .unwrap()
+            .translation
+            .x = 1.5;
+        app.world_mut().run_system_once(auto_attack).unwrap();
+        assert_eq!(app.world().resource::<BasicAttackCounter>().0, 1);
+        assert_eq!(
+            app.world_mut()
+                .query::<&PendingSwing>()
+                .iter(app.world())
+                .count(),
+            1
+        );
+        assert_eq!(
+            app.world_mut()
+                .query::<&Projectile>()
+                .iter(app.world())
+                .count(),
+            0,
+            "starting a melee swing must not launch a projectile"
+        );
+    }
+
+    #[test]
+    fn weapon_contact_uses_shared_damage_resolution_and_cannot_hit_behind() {
+        let mut app = projectile_test_app();
+        app.world_mut().resource_mut::<HeroVitals>().kind = HeroKind::StoneWarden;
+        app.world_mut()
+            .insert_resource(RunRng::from_seed(123456789));
+        let hero = app.world_mut().spawn((Hero, Transform::default())).id();
+        let primary = app
+            .world_mut()
+            .spawn((test_enemy(100.0), Transform::from_xyz(1.5, 0.0, 0.0)))
+            .id();
+        let nearby = app
+            .world_mut()
+            .spawn((test_enemy(100.0), Transform::from_xyz(1.3, 0.0, 0.2)))
+            .id();
+        let behind = app
+            .world_mut()
+            .spawn((test_enemy(100.0), Transform::from_xyz(-1.0, 0.0, 0.0)))
+            .id();
+        app.world_mut().entity_mut(primary).insert(EnemyArmor(20.0));
+        app.world_mut().entity_mut(nearby).insert(EnemyArmor(20.0));
+        app.world_mut().spawn(PendingSwing {
+            hero,
+            target: primary,
+            kind: HeroKind::StoneWarden,
+            direction: Vec3::X,
+            damage: 10.0,
+            hit_limit: 2,
+            remaining: 0.05,
+        });
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(100));
+        app.world_mut()
+            .run_system_once(basic_attacks::resolve_swings)
+            .unwrap();
+        let contact_entities: Vec<_> = app
+            .world_mut()
+            .query_filtered::<Entity, With<Projectile>>()
+            .iter(app.world())
+            .collect();
+        let mut contacts = app.world_mut().query::<(&Projectile, Option<&Mesh3d>)>();
+        assert_eq!(contacts.iter(app.world()).count(), 2);
+        for (contact, mesh) in contacts.iter(app.world()) {
+            assert_eq!(contact.velocity, Vec3::ZERO);
+            assert!(mesh.is_none(), "melee contacts are not visible bullets");
+        }
+        app.world_mut().run_system_once(move_projectiles).unwrap();
+        app.world_mut().run_system_once(projectile_hits).unwrap();
+        assert_eq!(app.world().get::<Enemy>(primary).unwrap().hp, 95.0);
+        assert_eq!(app.world().get::<Enemy>(nearby).unwrap().hp, 97.0);
+        assert_eq!(app.world().get::<Enemy>(behind).unwrap().hp, 100.0);
+        assert_eq!(
+            app.world_mut()
+                .query::<&Projectile>()
+                .iter(app.world())
+                .count(),
+            0,
+            "contact carriers retire through the normal pool path"
+        );
+        app.world_mut()
+            .run_system_once(super::super::pooling::finalize_recycles)
+            .unwrap();
+        let reused = app
+            .world_mut()
+            .run_system_once(|mut commands: Commands, mut pools: ResMut<CombatPools>| {
+                pools
+                    .rent_projectile(
+                        &mut commands,
+                        Handle::default(),
+                        Handle::default(),
+                        Transform::default(),
+                        Projectile {
+                            velocity: Vec3::X * 20.0,
+                            damage: 10.0,
+                            radius: 0.4,
+                            remaining_hits: 0,
+                            lifetime: 1.0,
+                        },
+                    )
+                    .unwrap()
+            })
+            .unwrap();
+        assert!(contact_entities.contains(&reused));
+        assert!(app.world().get::<Mesh3d>(reused).is_some());
+        assert!(
+            app.world()
+                .get::<MeshMaterial3d<StandardMaterial>>(reused)
+                .is_some()
+        );
+        assert_eq!(
+            app.world().get::<Visibility>(reused),
+            Some(&Visibility::Visible)
+        );
+        assert!(app.world().get::<ProjectileHitMemory>(reused).is_none());
+    }
+
+    #[test]
+    fn melee_target_can_leave_reach_during_windup() {
+        let mut app = projectile_test_app();
+        app.world_mut().resource_mut::<HeroVitals>().kind = HeroKind::IronBerserker;
+        let hero = app.world_mut().spawn((Hero, Transform::default())).id();
+        let target = app
+            .world_mut()
+            .spawn((test_enemy(100.0), Transform::from_xyz(1.0, 0.0, 0.0)))
+            .id();
+        app.world_mut().spawn(PendingSwing {
+            hero,
+            target,
+            kind: HeroKind::IronBerserker,
+            direction: Vec3::X,
+            damage: 10.0,
+            hit_limit: 1,
+            remaining: 0.12,
+        });
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(50));
+        app.world_mut()
+            .run_system_once(basic_attacks::resolve_swings)
+            .unwrap();
+        assert_eq!(
+            app.world_mut()
+                .query::<&PendingSwing>()
+                .iter(app.world())
+                .count(),
+            1
+        );
+        app.world_mut()
+            .get_mut::<Transform>(target)
+            .unwrap()
+            .translation
+            .x = 6.0;
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(100));
+        app.world_mut()
+            .run_system_once(basic_attacks::resolve_swings)
+            .unwrap();
+        assert_eq!(
+            app.world_mut()
+                .query::<&PendingSwing>()
+                .iter(app.world())
+                .count(),
+            0
+        );
+        assert_eq!(
+            app.world_mut()
+                .query::<&Projectile>()
+                .iter(app.world())
+                .count(),
+            0
+        );
+        assert_eq!(app.world().get::<Enemy>(target).unwrap().hp, 100.0);
+    }
+
+    #[test]
     fn auto_attack_catches_up_every_elapsed_volley_and_preserves_timer_remainder() {
         let mut app = App::new();
         app.add_plugins(MinimalPlugins)
+            .add_message::<EnemyAttackCue>()
             .init_resource::<GameSession>()
             .init_resource::<HeroVitals>()
             .init_resource::<PlayerBuild>()
             .init_resource::<MarketEffects>()
+            .init_resource::<BondRuntime>()
+            .init_resource::<RunRng>()
             .init_resource::<CombatPools>()
             .init_resource::<AttackClock>()
             .init_resource::<AttackVolleyRuntime>()
@@ -3098,6 +4531,113 @@ mod tests {
         assert!(
             (app.world().resource::<AttackClock>().0.elapsed_secs() - 0.25).abs() < 0.000_001,
             "the repeating timer must retain the quarter-second remainder"
+        );
+    }
+
+    #[test]
+    fn absorbed_melee_strikes_at_ranged_target_without_counting_another_basic_attack() {
+        let mut app = projectile_test_app();
+        app.init_resource::<BasicAttackCounter>();
+        app.world_mut().resource_mut::<HeroVitals>().kind = HeroKind::StormSavant;
+        let hero = app.world_mut().spawn((Hero, Transform::default())).id();
+        let target = app
+            .world_mut()
+            .spawn((test_enemy(1000.0), Transform::from_xyz(5.0, 0.0, 0.0)))
+            .id();
+        app.world_mut().spawn((
+            super::super::hero_fusion::FusionAttack {
+                kind: HeroKind::StoneWarden,
+                origin: Vec3::new(4.4, 0.0, 0.0),
+            },
+            PendingSwing {
+                hero,
+                target,
+                kind: HeroKind::StoneWarden,
+                direction: Vec3::X,
+                damage: 45.0,
+                hit_limit: 3,
+                remaining: 0.0,
+            },
+        ));
+        app.world_mut()
+            .run_system_once(basic_attacks::resolve_swings)
+            .unwrap();
+        let contacts = app
+            .world_mut()
+            .query_filtered::<Entity, With<super::super::hero_fusion::FusionAttack>>()
+            .iter(app.world())
+            .count();
+        assert_eq!(
+            contacts, 1,
+            "ranged host must emit the old sword's actual contact"
+        );
+        app.world_mut().run_system_once(projectile_hits).unwrap();
+        assert!(app.world().get::<Enemy>(target).unwrap().hp < 1000.0);
+        assert_eq!(
+            app.world().resource::<BasicAttackCounter>().0,
+            0,
+            "a legacy cannot recursively advance the primary attack cadence"
+        );
+    }
+
+    #[test]
+    fn bamboo_bonus_is_a_real_weapon_volley_without_advancing_clock_or_recursing() {
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<PlayerBuild>()
+            .init_resource::<MarketEffects>()
+            .init_resource::<RunRng>()
+            .init_resource::<CombatPools>()
+            .init_resource::<AttackClock>()
+            .init_resource::<AttackVolleyRuntime>()
+            .init_resource::<BasicAttackCounter>()
+            .insert_resource(test_game_assets())
+            .add_plugins(crate::game::bonds::BondsPlugin);
+        app.world_mut()
+            .resource_mut::<PlayerBuild>()
+            .owned_bond_cards[crate::game::bond_catalog::BondCardId::BambooCloudSword.index()] =
+            true;
+        app.update();
+        app.world_mut().resource_mut::<HeroVitals>().kind = HeroKind::EmberRanger;
+        app.world_mut()
+            .resource_mut::<PlayerBuild>()
+            .attacks_per_second = 2.0;
+        let seed = (0..10000)
+            .find(|seed| RunRng::from_seed(*seed).unit() < 0.15)
+            .unwrap();
+        app.insert_resource(RunRng::from_seed(seed));
+        app.world_mut().spawn((Hero, Transform::default()));
+        app.world_mut()
+            .spawn((test_enemy(1000.0), Transform::from_xyz(2.0, 0.0, 0.0)));
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(500));
+        app.world_mut().run_system_once(auto_attack).unwrap();
+        assert_eq!(
+            app.world()
+                .resource::<AttackVolleyRuntime>()
+                .resolved_this_frame,
+            2
+        );
+        assert_eq!(app.world().resource::<BasicAttackCounter>().0, 2);
+        assert_eq!(app.world().resource::<AttackVolleyRuntime>().pending, 0);
+        assert!(app.world().resource::<AttackClock>().0.elapsed_secs() < 0.001);
+        let flights: Vec<_> = app
+            .world_mut()
+            .query::<(&Projectile, &WeaponFlight)>()
+            .iter(app.world())
+            .collect();
+        assert_eq!(
+            flights.len(),
+            4,
+            "two native arrows plus two arrows in exactly one nonrecursive bonus volley"
+        );
+        assert!(
+            flights
+                .iter()
+                .all(|(p, _)| p.damage == app.world().resource::<PlayerBuild>().attack_damage)
         );
     }
 
@@ -3178,10 +4718,13 @@ mod tests {
     fn single_volley_keeps_legacy_full_frame_projectile_travel() {
         let mut app = App::new();
         app.add_plugins(MinimalPlugins)
+            .add_message::<EnemyAttackCue>()
             .init_resource::<GameSession>()
             .init_resource::<HeroVitals>()
             .init_resource::<PlayerBuild>()
             .init_resource::<MarketEffects>()
+            .init_resource::<BondRuntime>()
+            .init_resource::<RunRng>()
             .init_resource::<CombatPools>()
             .init_resource::<AttackClock>()
             .init_resource::<AttackVolleyRuntime>()
@@ -3224,10 +4767,13 @@ mod tests {
     fn attack_catch_up_backlog_carries_every_volley_without_dropping_over_cap_work() {
         let mut app = App::new();
         app.add_plugins(MinimalPlugins)
+            .add_message::<EnemyAttackCue>()
             .init_resource::<GameSession>()
             .init_resource::<HeroVitals>()
             .init_resource::<PlayerBuild>()
             .init_resource::<MarketEffects>()
+            .init_resource::<BondRuntime>()
+            .init_resource::<RunRng>()
             .init_resource::<CombatPools>()
             .init_resource::<AttackClock>()
             .init_resource::<AttackVolleyRuntime>()
@@ -3294,10 +4840,13 @@ mod tests {
     fn attack_backlog_is_discarded_when_no_valid_target_exists() {
         let mut app = App::new();
         app.add_plugins(MinimalPlugins)
+            .add_message::<EnemyAttackCue>()
             .init_resource::<GameSession>()
             .init_resource::<HeroVitals>()
             .init_resource::<PlayerBuild>()
             .init_resource::<MarketEffects>()
+            .init_resource::<BondRuntime>()
+            .init_resource::<RunRng>()
             .init_resource::<CombatPools>()
             .init_resource::<AttackClock>()
             .insert_resource(AttackVolleyRuntime {
@@ -3453,8 +5002,35 @@ mod tests {
     }
 
     #[test]
+    fn announced_rush_enters_as_one_real_group_and_never_repeats_on_the_same_frame() {
+        let mut app = wave_test_app(199.999, 4);
+        app.init_resource::<RaidWarning>();
+        app.world_mut().run_system_once(spawn_wave).unwrap();
+        let mut living = app
+            .world_mut()
+            .query_filtered::<Entity, (With<Enemy>, Without<BossEnemy>)>();
+        assert_eq!(living.iter(app.world()).count(), 5);
+        assert!(app.world().resource::<RaidWarning>().remaining_secs > 0.0);
+        assert_eq!(app.world().resource::<RaidWarning>().count, 9);
+        app.world_mut().resource_mut::<GameSession>().elapsed = 200.0;
+        app.world_mut().run_system_once(spawn_wave).unwrap();
+        assert_eq!(living.iter(app.world()).count(), 14);
+        assert_eq!(app.world().resource::<RaidWarning>().remaining_secs, 0.0);
+        app.world_mut().run_system_once(spawn_wave).unwrap();
+        assert_eq!(living.iter(app.world()).count(), 14);
+        app.world_mut().resource_mut::<GameSession>().elapsed = 221.0;
+        app.world_mut().run_system_once(spawn_wave).unwrap();
+        assert_eq!(app.world().resource::<RaidWarning>().remaining_secs, 3.0);
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        let count = living.iter(app.world()).count();
+        app.world_mut().run_system_once(spawn_wave).unwrap();
+        assert_eq!(living.iter(app.world()).count(), count);
+        assert_eq!(app.world().resource::<RaidWarning>().remaining_secs, 3.0);
+    }
+
+    #[test]
     fn checkpoint_boss_spawns_exactly_on_time_with_130_regular_shells_active() {
-        let mut app = wave_test_app(BOSS_TIMES[0] - 0.001, 5);
+        let mut app = wave_test_app(BOSSES[0].spawn_seconds - 0.001, 5);
         app.world_mut()
             .run_system_once(|mut commands: Commands, mut pools: ResMut<CombatPools>| {
                 pools
@@ -3486,7 +5062,7 @@ mod tests {
             0
         );
 
-        app.world_mut().resource_mut::<GameSession>().elapsed = BOSS_TIMES[0];
+        app.world_mut().resource_mut::<GameSession>().elapsed = BOSSES[0].spawn_seconds;
         app.world_mut()
             .run_system_once(spawn_wave)
             .expect("checkpoint wave system should run");
@@ -3522,6 +5098,7 @@ mod tests {
             wave: WAVES[0],
             archetype: 0,
             elite: false,
+            hunted: false,
             affix: None,
             spawn_x: 15.75,
             spawn_z: 1.25,
@@ -3649,9 +5226,220 @@ mod tests {
     }
 
     #[test]
+    fn forged_bloodreaver_really_increases_armor_damage_and_inherited_lifesteal() {
+        let mut app = projectile_test_app();
+        let (build, mut vitals, effects) =
+            super::super::market::purchased_attribute_equipment_for_test();
+        vitals.health = vitals.max_health - 100.0;
+        let before = vitals.health;
+        app.insert_resource(build)
+            .insert_resource(vitals)
+            .insert_resource(effects)
+            .init_resource::<super::super::crafting::CraftingState>()
+            .add_plugins(super::super::bonds::BondsPlugin);
+        assert!(super::super::crafting::craft_recipe(
+            app.world_mut(),
+            super::super::crafting::RecipeId::Bloodreaver
+        ));
+        app.update();
+        let enemy = app
+            .world_mut()
+            .spawn((
+                Enemy {
+                    hp: 1000.0,
+                    max_hp: 1000.0,
+                    speed: 0.0,
+                    damage: 0.0,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+                EnemyArmor(8.0),
+                Transform::default(),
+            ))
+            .id();
+        app.world_mut().spawn((
+            Projectile {
+                velocity: Vec3::ZERO,
+                damage: 100.0,
+                radius: 0.3,
+                remaining_hits: 0,
+                lifetime: 1.0,
+            },
+            Transform::default(),
+            DamageProfile::PHYSICAL_ATTACK,
+        ));
+        let mut rng = *app.world().resource::<RunRng>();
+        let raw = 100.0
+            * critical_multiplier(
+                app.world().resource::<BondRuntime>(),
+                false,
+                DamageProfile::PHYSICAL_ATTACK,
+                rng.unit(),
+            );
+        app.world_mut().run_system_once(projectile_hits).unwrap();
+        let actual = 1000.0 - app.world().get::<Enemy>(enemy).unwrap().hp;
+        assert!((actual - physical_damage_after_armor(raw, 2.0, false)).abs() < 0.001);
+        assert!(actual > physical_damage_after_armor(raw, 5.0, false));
+        assert!(
+            (app.world().resource::<HeroVitals>().health - before - actual * 0.10).abs() < 0.001
+        );
+    }
+
+    #[test]
+    fn purchased_penetration_and_leech_change_real_armored_and_resistant_target_health() {
+        for profile in [DamageProfile::PHYSICAL_ATTACK, DamageProfile::for_skill(3)] {
+            let mut app = projectile_test_app();
+            let (build, mut vitals, effects) =
+                super::super::market::purchased_attribute_equipment_for_test();
+            vitals.health = vitals.max_health - 100.0;
+            let health_before = vitals.health;
+            app.insert_resource(build)
+                .insert_resource(vitals)
+                .insert_resource(effects)
+                .add_plugins(super::super::bonds::BondsPlugin);
+            app.update();
+            let enemy = app
+                .world_mut()
+                .spawn((
+                    Enemy {
+                        hp: 1000.0,
+                        max_hp: 1000.0,
+                        speed: 0.0,
+                        damage: 0.0,
+                        xp: 0,
+                        wood: 0,
+                        gold: 0,
+                        kill_credit: 0,
+                        elite: false,
+                    },
+                    EnemyArmor(8.0),
+                    BossEnemy { index: 2 },
+                    Transform::default(),
+                ))
+                .id();
+            app.world_mut().spawn((
+                Projectile {
+                    velocity: Vec3::ZERO,
+                    damage: 100.0,
+                    radius: 0.3,
+                    remaining_hits: 0,
+                    lifetime: 1.0,
+                },
+                Transform::default(),
+                profile,
+            ));
+            let mut rng = *app.world().resource::<RunRng>();
+            let crit = critical_multiplier(
+                app.world().resource::<BondRuntime>(),
+                false,
+                profile,
+                rng.unit(),
+            );
+            let raw = 100.0 * crit;
+            let resistance = super::super::bonds::boss_damage_multiplier_with_penetration(
+                profile,
+                BOSSES[2].modifiers,
+                0.10,
+            );
+            let expected = if profile.element == DamageElement::Physical {
+                physical_damage_after_armor(raw * resistance, 5.0, false)
+            } else {
+                raw * resistance
+            };
+            app.world_mut().run_system_once(projectile_hits).unwrap();
+            let actual = 1000.0 - app.world().get::<Enemy>(enemy).unwrap().hp;
+            assert!((actual - expected).abs() < 0.001, "{actual} != {expected}");
+            assert!(
+                (app.world().resource::<HeroVitals>().health - health_before - actual * 0.05).abs()
+                    < 0.001
+            );
+            let without_penetration = if profile.element == DamageElement::Physical {
+                physical_damage_after_armor(raw * resistance, 8.0, false)
+            } else {
+                raw * super::super::bonds::boss_damage_multiplier(profile, BOSSES[2].modifiers)
+            };
+            assert!(
+                actual > without_penetration,
+                "equipped penetration must increase real health loss"
+            );
+        }
+    }
+
+    #[test]
+    fn expanded_bond_damage_distance_and_lifesteal_reach_actual_hp() {
+        let mut app = projectile_test_app();
+        app.add_plugins(super::super::bonds::BondsPlugin);
+        for card in [
+            super::super::BondCardId::JungleKnife,
+            super::super::BondCardId::BloodFeast,
+            super::super::BondCardId::ArcherTalent,
+            super::super::BondCardId::WindFootwork,
+            super::super::BondCardId::WindQuiver,
+            super::super::BondCardId::WindAim,
+        ] {
+            app.world_mut()
+                .resource_mut::<PlayerBuild>()
+                .owned_bond_cards[card.index()] = true;
+        }
+        app.update();
+        app.world_mut().resource_mut::<HeroVitals>().health = 100.;
+        app.world_mut()
+            .spawn((Hero, Transform::from_xyz(-12., 0., 0.)));
+        let enemy = app
+            .world_mut()
+            .spawn((
+                Enemy {
+                    hp: 1000.,
+                    max_hp: 1000.,
+                    speed: 0.,
+                    damage: 0.,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+                Transform::default(),
+            ))
+            .id();
+        app.world_mut().spawn((
+            Projectile {
+                velocity: Vec3::ZERO,
+                damage: 100.,
+                radius: 0.3,
+                remaining_hits: 0,
+                lifetime: 1.,
+            },
+            Transform::default(),
+            DamageProfile::PHYSICAL_ATTACK,
+        ));
+        let mut rng = *app.world().resource::<RunRng>();
+        let crit = critical_multiplier(
+            app.world().resource::<BondRuntime>(),
+            false,
+            DamageProfile::PHYSICAL_ATTACK,
+            rng.unit(),
+        );
+        let expected = 100. * 1.1 * 1.3 * crit;
+        app.world_mut().run_system_once(projectile_hits).unwrap();
+        let actual = 1000. - app.world().get::<Enemy>(enemy).unwrap().hp;
+        assert!(
+            (actual - expected).abs() < 0.01,
+            "actual {actual}, expected {expected}"
+        );
+        assert!(
+            (app.world().resource::<HeroVitals>().health - (100. + actual * 0.03)).abs() < 0.01
+        );
+    }
+
+    #[test]
     fn logic_only_projectile_still_runs_the_authoritative_damage_resolver() {
         let mut app = App::new();
         app.add_plugins(MinimalPlugins)
+            .add_message::<EnemyAttackCue>()
             .init_resource::<GameSession>()
             .init_resource::<DamageMeter>()
             .init_resource::<ArchiveState>()
@@ -3663,6 +5451,9 @@ mod tests {
             .init_resource::<BondRuntime>()
             .init_resource::<SkillRuntime>()
             .init_resource::<MarketEffects>()
+            .init_resource::<BondRuntime>()
+            .init_resource::<RunRng>()
+            .init_resource::<EncounterState>()
             .init_resource::<CombatPools>()
             .insert_resource(test_game_assets());
         let enemy = app
@@ -3745,6 +5536,69 @@ mod tests {
     }
 
     #[test]
+    fn landed_hits_report_kill_weight_and_survivors_to_hit_feedback() {
+        let mut app = projectile_test_app();
+        app.init_resource::<HitFeedback>();
+        let spawn_enemy = |app: &mut App, hp: f32, elite: bool, x: f32| {
+            app.world_mut()
+                .spawn((
+                    Enemy {
+                        hp,
+                        max_hp: hp,
+                        speed: 0.0,
+                        damage: 0.0,
+                        xp: 0,
+                        wood: 0,
+                        gold: 0,
+                        kill_credit: 0,
+                        elite,
+                    },
+                    Transform::from_xyz(x, 0.0, 0.0),
+                ))
+                .id()
+        };
+        let doomed_elite = spawn_enemy(&mut app, 10.0, true, 0.0);
+        let survivor = spawn_enemy(&mut app, 1_000.0, false, 20.0);
+        app.world_mut()
+            .run_system_once(|mut commands: Commands, mut pools: ResMut<CombatPools>| {
+                for x in [0.0, 20.0] {
+                    pools.rent_projectile(
+                        &mut commands,
+                        Handle::default(),
+                        Handle::default(),
+                        Transform::from_xyz(x, 0.0, 0.0),
+                        Projectile {
+                            velocity: Vec3::ZERO,
+                            damage: 50.0,
+                            radius: 0.3,
+                            remaining_hits: 0,
+                            lifetime: 1.0,
+                        },
+                    );
+                }
+            })
+            .expect("projectile fixture should run");
+        app.world_mut()
+            .run_system_once(projectile_hits)
+            .expect("projectiles should resolve");
+
+        let feedback = app.world().resource::<HitFeedback>();
+        let find = |target| {
+            *feedback
+                .events()
+                .iter()
+                .find(|event| event.target == target)
+                .expect("every landed hit is reported")
+        };
+        let kill = find(doomed_elite);
+        assert!(kill.killed);
+        assert_eq!(kill.weight, HitWeight::Elite);
+        let hit = find(survivor);
+        assert!(!hit.killed);
+        assert_eq!(hit.weight, HitWeight::Normal);
+    }
+
+    #[test]
     fn finished_session_retires_every_active_enemy_shell() {
         let mut app = App::new();
         app.init_resource::<CombatPools>()
@@ -3791,6 +5645,7 @@ mod tests {
     fn damage_number_lifetime_freezes_while_paused_and_archive_start_cleans_up() {
         let mut app = App::new();
         app.add_plugins(MinimalPlugins)
+            .add_message::<EnemyAttackCue>()
             .init_resource::<CombatPools>()
             .init_resource::<ArchiveState>()
             .insert_resource(GameSession {
@@ -3808,6 +5663,7 @@ mod tests {
                             Vec3::ZERO,
                             20.0,
                             DamageElement::Frost,
+                            false,
                         )
                         .expect("positive HP loss should show");
                 },
@@ -3880,6 +5736,7 @@ mod tests {
                         Vec3::ZERO,
                         5.0,
                         DamageElement::Physical,
+                        false,
                     )
                     .expect("damage number should show");
             })
@@ -3905,6 +5762,7 @@ mod tests {
             wave: WAVES[0],
             archetype,
             elite,
+            hunted: false,
             affix: elite.then_some(EliteAffixKind::Frenzy),
             spawn_x: 16.0,
             spawn_z: 0.0,
@@ -3974,40 +5832,22 @@ mod tests {
     }
 
     #[test]
-    fn prismatic_engine_scales_only_the_four_element_reactions() {
-        for kind in [
-            ReactionKind::WetStormChain,
-            ReactionKind::WetFrostFreeze,
-            ReactionKind::BurnStormOverload,
-            ReactionKind::FrozenPhysicalShatter,
-        ] {
-            assert_eq!(reaction_market_scales(kind, 1.8, 1.4), (1.8, 1.4));
+    fn elite_affix_rolls_are_deterministic_and_cover_all_eight_kinds() {
+        for (index, expected) in [
+            EliteAffixKind::Frenzy,
+            EliteAffixKind::Bulwark,
+            EliteAffixKind::Volatile,
+            EliteAffixKind::Regeneration,
+            EliteAffixKind::Commander,
+            EliteAffixKind::YellowSign,
+            EliteAffixKind::Brood,
+            EliteAffixKind::Siege,
+        ]
+        .into_iter()
+        .enumerate()
+        {
+            assert_eq!(elite_affix_from_roll((index as u32) * (1 << 29)), expected);
         }
-        assert_eq!(
-            reaction_market_scales(ReactionKind::StormJudgment, 1.8, 1.4),
-            (1.0, 1.0)
-        );
-    }
-
-    #[test]
-    fn elite_affix_rolls_are_deterministic_and_cover_all_five_kinds() {
-        assert_eq!(elite_affix_from_roll(0), EliteAffixKind::Frenzy);
-        assert_eq!(
-            elite_affix_from_roll(1_000_000_000),
-            EliteAffixKind::Bulwark
-        );
-        assert_eq!(
-            elite_affix_from_roll(2_000_000_000),
-            EliteAffixKind::Volatile
-        );
-        assert_eq!(
-            elite_affix_from_roll(3_000_000_000),
-            EliteAffixKind::Regeneration
-        );
-        assert_eq!(
-            elite_affix_from_roll(4_000_000_000),
-            EliteAffixKind::Commander
-        );
 
         let mut first = RunRng::default();
         let mut second = RunRng::default();
@@ -4020,8 +5860,14 @@ mod tests {
         assert_eq!(first_sequence, second_sequence);
     }
 
+    #[cfg(any(debug_assertions, feature = "dev-tools"))]
     #[test]
     fn debug_dispatch_spawns_every_runtime_enemy_affix_and_boss_component_set() {
+        use super::debug_tools::{
+            DEBUG_BOSS_COUNT, DEBUG_ELITE_AFFIX_COUNT, DEBUG_ENEMY_COUNT, DebugSpawnRequest,
+            spawn_debug_request,
+        };
+
         let mut world = World::new();
         let assets = test_game_assets();
         let mut pools = CombatPools::default();
@@ -4098,10 +5944,20 @@ mod tests {
             EliteAffixKind::Volatile,
             EliteAffixKind::Regeneration,
             EliteAffixKind::Commander,
+            EliteAffixKind::YellowSign,
+            EliteAffixKind::Brood,
+            EliteAffixKind::Siege,
         ];
         for expected in expected_affixes {
             assert!(regular.iter().any(|(_, enemy, kind, _, _, affix, _)| {
-                enemy.elite && kind.0 == 7 && affix.is_some_and(|affix| affix.kind == expected)
+                enemy.elite
+                    && kind.0
+                        == if expected == EliteAffixKind::Brood {
+                            9
+                        } else {
+                            7
+                        }
+                    && affix.is_some_and(|affix| affix.kind == expected)
             }));
         }
         drop(regular);
@@ -4115,12 +5971,21 @@ mod tests {
         )>();
         let bosses: Vec<_> = boss_query.iter(&world).collect();
         assert_eq!(bosses.len(), DEBUG_BOSS_COUNT);
-        for (index, expected_damage) in BOSS_DAMAGE_PER_SECOND.into_iter().enumerate() {
+        let expected = [
+            (8_000.0, 0.85, 14.0),
+            (28_000.0, 0.62, 20.0),
+            (70_000.0, 0.92, 28.0),
+            (160_000.0, 1.18, 38.0),
+            (420_000.0, 0.78, 55.0),
+        ];
+        for (index, (hp, speed, damage)) in expected.into_iter().enumerate() {
             assert!(bosses.iter().any(|(boss, enemy, armor, breach, _)| {
                 usize::from(boss.index) == index
                     && enemy.elite
+                    && (enemy.hp, enemy.max_hp, enemy.speed, enemy.damage)
+                        == (hp, hp, speed, damage)
                     && armor.0 == 0.0
-                    && breach.0 == expected_damage
+                    && breach.0 == damage
             }));
         }
     }
@@ -4316,12 +6181,12 @@ mod tests {
     }
 
     #[test]
-    fn one_death_charges_the_gate_once_and_escalates_revive_time() {
+    fn deaths_consume_only_lives_and_escalate_revive_time() {
         let mut session = GameSession::default();
         let mut vitals = HeroVitals::default();
         let mut market_effects = MarketEffects::default();
+        let mut bond_runtime = BondRuntime::default();
         let mut dodge = DodgeState::default();
-        let mut active = ActiveSkill::default();
         let mut intent = MoveIntent(Vec2::ONE);
         let mut transform = Transform::default();
         let mut visibility = Visibility::Visible;
@@ -4331,13 +6196,13 @@ mod tests {
             &mut session,
             &mut vitals,
             &mut market_effects,
+            &mut bond_runtime,
             &mut dodge,
-            &mut active,
             &mut intent,
             &mut transform,
             &mut visibility,
         );
-        assert_eq!(session.core_hp, 920.0);
+        assert_eq!(session.core_hp, 1000.0);
         assert!(!vitals.alive);
         assert_eq!(vitals.deaths, 1);
         assert_eq!(vitals.revive_remaining, 8.0);
@@ -4347,13 +6212,13 @@ mod tests {
             &mut session,
             &mut vitals,
             &mut market_effects,
+            &mut bond_runtime,
             &mut dodge,
-            &mut active,
             &mut intent,
             &mut transform,
             &mut visibility,
         );
-        assert_eq!(session.core_hp, 920.0);
+        assert_eq!(session.core_hp, 1000.0);
 
         vitals.alive = true;
         vitals.health = 0.0;
@@ -4361,14 +6226,32 @@ mod tests {
             &mut session,
             &mut vitals,
             &mut market_effects,
+            &mut bond_runtime,
             &mut dodge,
-            &mut active,
             &mut intent,
             &mut transform,
             &mut visibility,
         );
-        assert_eq!(session.core_hp, 840.0);
+        assert_eq!(session.core_hp, 1000.0);
         assert_eq!(vitals.revive_remaining, 11.0);
+        assert_eq!(vitals.lives_remaining(), 1);
+        assert!(!session.finished);
+        vitals.alive = true;
+        vitals.health = 0.0;
+        begin_hero_death(
+            &mut session,
+            &mut vitals,
+            &mut market_effects,
+            &mut bond_runtime,
+            &mut dodge,
+            &mut intent,
+            &mut transform,
+            &mut visibility,
+        );
+        assert_eq!(vitals.lives_remaining(), 0);
+        assert_eq!(vitals.revive_remaining, 0.0);
+        assert_eq!(session.core_hp, 1000.0);
+        assert!(session.finished && session.paused && !session.victory);
     }
 
     #[test]
@@ -4381,8 +6264,8 @@ mod tests {
         };
         let expected_health = vitals.max_health * 0.35;
         let mut market_effects = MarketEffects::with_revival_seed_for_test();
+        let mut bond_runtime = BondRuntime::default();
         let mut dodge = DodgeState::default();
-        let mut active = ActiveSkill::default();
         let mut intent = MoveIntent(Vec2::ONE);
         let mut transform = Transform::default();
         let mut visibility = Visibility::Visible;
@@ -4391,8 +6274,8 @@ mod tests {
             &mut session,
             &mut vitals,
             &mut market_effects,
+            &mut bond_runtime,
             &mut dodge,
-            &mut active,
             &mut intent,
             &mut transform,
             &mut visibility,
@@ -4419,17 +6302,46 @@ mod tests {
     fn stone_warden_guard_only_applies_near_the_gate() {
         let stone = HeroVitals::for_hero(HeroKind::StoneWarden, 1);
         assert_eq!(
-            hero_guard_damage_multiplier(&stone, Vec3::ZERO, Vec3::new(7.9, 0.0, 0.0)),
+            hero_guard_damage_multiplier(&stone, Vec3::ZERO, Vec3::new(7.9, 0.0, 0.0), None),
             0.85
         );
         assert_eq!(
-            hero_guard_damage_multiplier(&stone, Vec3::ZERO, Vec3::new(8.1, 0.0, 0.0)),
+            hero_guard_damage_multiplier(&stone, Vec3::ZERO, Vec3::new(8.1, 0.0, 0.0), None),
             1.0
         );
         let storm = HeroVitals::default();
         assert_eq!(
-            hero_guard_damage_multiplier(&storm, Vec3::ZERO, Vec3::ZERO),
+            hero_guard_damage_multiplier(&storm, Vec3::ZERO, Vec3::ZERO, None),
             1.0
+        );
+    }
+    #[test]
+    fn absorbed_stone_guard_survives_recruitment_without_double_stacking() {
+        let mut fusion = super::super::HeroFusion::default();
+        fusion.record_absorbed(HeroKind::StoneWarden);
+        let storm = HeroVitals::for_hero(HeroKind::StormSavant, 1);
+        assert_eq!(
+            hero_guard_damage_multiplier(
+                &storm,
+                Vec3::ZERO,
+                Vec3::new(7.9, 0.0, 0.0),
+                Some(&fusion)
+            ),
+            0.85
+        );
+        assert_eq!(
+            hero_guard_damage_multiplier(
+                &storm,
+                Vec3::ZERO,
+                Vec3::new(8.1, 0.0, 0.0),
+                Some(&fusion)
+            ),
+            1.0
+        );
+        let stone = HeroVitals::for_hero(HeroKind::StoneWarden, 1);
+        assert_eq!(
+            hero_guard_damage_multiplier(&stone, Vec3::ZERO, Vec3::ZERO, Some(&fusion)),
+            0.85
         );
     }
 }

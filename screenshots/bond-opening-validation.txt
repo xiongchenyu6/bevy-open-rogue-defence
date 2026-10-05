@@ -1,0 +1,28 @@
+bond-opening native validation — 2026-09-30
+PASS cargo test --lib -j1: 300 passed; 0 failed
+PASS cargo clippy --all-targets -j1 -- -D warnings
+PASS native cargo build --bins -j1 (subsequent edit only corrected test fixture)
+PASS python tools/verify_ui_assets.py
+PASS git diff --check
+
+PASS desktop capture and complete video decode
+[capture] 3 opening offers in fixed order; owned 0/3; cards fit viewport
+[capture] 3 opening offers in fixed order; owned 0/3; cards fit viewport
+[capture] choose-later grants no card; reopening preserves opening offers
+[capture] 3 opening offers in fixed order; owned 0/3; cards fit viewport
+[capture] 2 opening offers in fixed order; owned 1/3; cards fit viewport
+[capture] 1 opening offers in fixed order; owned 2/3; cards fit viewport
+[capture] PASS: opening 3 -> 2 -> 1, refresh/later preserved gate, all three progression pools unlocked after completion
+PASS mobile capture and complete video decode
+[capture] 3 opening offers in fixed order; owned 0/3; cards fit viewport
+[capture] 3 opening offers in fixed order; owned 0/3; cards fit viewport
+[capture] choose-later grants no card; reopening preserves opening offers
+[capture] 3 opening offers in fixed order; owned 0/3; cards fit viewport
+[capture] 2 opening offers in fixed order; owned 1/3; cards fit viewport
+[capture] 1 opening offers in fixed order; owned 2/3; cards fit viewport
+[capture] PASS: opening 3 -> 2 -> 1, refresh/later preserved gate, all three progression pools unlocked after completion
+
+Visual review: desktop1280x720 and compact667x375 native offscreen captures.
+Mage fixtures: learned skills cleared; ultimate remaining10000; no Autoplay; stationary5000HP targets. Innate hero passives retained.
+Opening fixture: actual draw/refresh/later/preview/confirm UI, offers3->2->1, nextpools unlocked aftercompletion.
+Physical mobile GPU and WASM/browser not tested; videos contain no audio.

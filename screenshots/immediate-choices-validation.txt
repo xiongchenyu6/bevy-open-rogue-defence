@@ -1,0 +1,49 @@
+Immediate three-choice native validation
+11 scenes, 3310 full native frames, English desktop 1280x720 / Chinese mobile 667x375.
+Library tests: 522 passed, 0 failed, 1 ignored. Strict all-target Clippy and native build recorded in target/verification/immediate-choices-{pipeline,clippy,tests,build}.log.
+
+Four immediate skill/bond scenes click real ComputedNode button centers using native virtual-window mouse Focus. Camera image targets route to the existing Window only during Focus and restore before Render; production camera transform/lens unchanged. Each mouse press held4frames, then released before the next fresh press; selected card positions2,1,0 differ.
+Skill uses three banked free points: only the first hand is explicitly drawn. Subsequent hands open automatically after settlement, each spending exactly one free point, with no paid gold draws. New hand remains pending through the held pointer and settles only after a fresh click. After the third choice the overlay closes and battle resumes.
+Bond uses genuine opening Journey choices3→2→1 through the real draw control. Each click grants exactly one owned card; wallet deltas include exactly +20 wood per card and +100 wood on completing the third Journey card, with no extra payment during settlement. Held pointer never duplicates the award.
+UR26's three exclusive evolutionbranches are selected directly (all three desktop, Surge additionally mobile). Existing native behavior/damage/pause probes remain active, without confirmation controls. Two fruit recruitment cases replace and inherit via real card click, consume exactly one fruit and retain learned skills/bonds. Initial recruitment additionally verifies one card click starts battle.
+Fixture elapsed/points/fruit/mastery ranks are controlled prerequisites, not natural full-run progression. Legacy isolated UR fixtures mark free grants already claimed and use paid gold draws; they do not accidentally queue extra free hands. No draft ownership or settlement is manually populated by the new mouse fixture.
+
+Evidence: screenshots/*-immediate-final-{en-1280x720,zh-667x375}-*.png. Mobile skill/bond frames30,40,100,170,185 show initial/next/final hands. Raw selected frames: target/verification/frames/*-immediate-final-*.
+Runtime ERROR 0, panics 0, GPU validation errors 0. Existing ICU4X diagnostics 81263, retained without clean-console claim.
+Native only; browser build, natural earning progression, balance and performance not validated.
+
+ur26-surge-immediate-final-zh-667x375.log: [capture] PASS UR 26 Surge: real 3-way selection exclusive; actions=24 damage=true pull=false summons_max=1 wood=60 core=500 pause frozen
+immediate-skill-immediate-final-en-1280x720.log: [capture] immediate-stage offered frame=30
+immediate-skill-immediate-final-en-1280x720.log: [capture] immediate-stage settled frame=36
+immediate-skill-immediate-final-en-1280x720.log: [capture] immediate-stage offered frame=100
+immediate-skill-immediate-final-en-1280x720.log: [capture] immediate-stage settled frame=106
+immediate-skill-immediate-final-en-1280x720.log: [capture] immediate-stage offered frame=170
+immediate-skill-immediate-final-en-1280x720.log: [capture] immediate-stage settled frame=176
+immediate-skill-immediate-final-en-1280x720.log: [capture] PASS immediate-skill: three real mouse choices2/1/0, one settlement/payment per hand, held mouse no duplicate
+recruit-fruit-confirm-immediate-final-zh-667x375.log: [recruit capture] confirmed replacement, absorbed innate attributes, retained learned skills/bonds; token claimed once
+recruit-fruit-confirm-immediate-final-en-1280x720.log: [recruit capture] confirmed replacement, absorbed innate attributes, retained learned skills/bonds; token claimed once
+draft-confirm-immediate-final-en-1280x720.log: [capture] confirmation committed hero and resumed battle
+ur26-control-immediate-final-en-1280x720.log: [capture] PASS UR 26 Control: real 3-way selection exclusive; actions=6 damage=true pull=false summons_max=1 wood=60 core=500 pause frozen
+immediate-bond-immediate-final-en-1280x720.log: [capture] immediate-stage offered frame=30
+immediate-bond-immediate-final-en-1280x720.log: [capture] immediate-stage settled frame=36
+immediate-bond-immediate-final-en-1280x720.log: [capture] immediate-stage offered frame=100
+immediate-bond-immediate-final-en-1280x720.log: [capture] immediate-stage settled frame=106
+immediate-bond-immediate-final-en-1280x720.log: [capture] immediate-stage offered frame=170
+immediate-bond-immediate-final-en-1280x720.log: [capture] immediate-stage settled frame=176
+immediate-bond-immediate-final-en-1280x720.log: [capture] PASS immediate-bond: three real mouse choices2/1/0, one settlement/payment per hand, held mouse no duplicate
+ur26-sustain-immediate-final-en-1280x720.log: [capture] PASS UR 26 Sustain: real 3-way selection exclusive; actions=1 damage=true pull=false summons_max=2 wood=60 core=500 pause frozen
+immediate-bond-immediate-final-zh-667x375.log: [capture] immediate-stage offered frame=30
+immediate-bond-immediate-final-zh-667x375.log: [capture] immediate-stage settled frame=36
+immediate-bond-immediate-final-zh-667x375.log: [capture] immediate-stage offered frame=100
+immediate-bond-immediate-final-zh-667x375.log: [capture] immediate-stage settled frame=106
+immediate-bond-immediate-final-zh-667x375.log: [capture] immediate-stage offered frame=170
+immediate-bond-immediate-final-zh-667x375.log: [capture] immediate-stage settled frame=176
+immediate-bond-immediate-final-zh-667x375.log: [capture] PASS immediate-bond: three real mouse choices2/1/0, one settlement/payment per hand, held mouse no duplicate
+immediate-skill-immediate-final-zh-667x375.log: [capture] immediate-stage offered frame=30
+immediate-skill-immediate-final-zh-667x375.log: [capture] immediate-stage settled frame=36
+immediate-skill-immediate-final-zh-667x375.log: [capture] immediate-stage offered frame=100
+immediate-skill-immediate-final-zh-667x375.log: [capture] immediate-stage settled frame=106
+immediate-skill-immediate-final-zh-667x375.log: [capture] immediate-stage offered frame=170
+immediate-skill-immediate-final-zh-667x375.log: [capture] immediate-stage settled frame=176
+immediate-skill-immediate-final-zh-667x375.log: [capture] PASS immediate-skill: three real mouse choices2/1/0, one settlement/payment per hand, held mouse no duplicate
+ur26-surge-immediate-final-en-1280x720.log: [capture] PASS UR 26 Surge: real 3-way selection exclusive; actions=24 damage=true pull=false summons_max=1 wood=60 core=500 pause frozen

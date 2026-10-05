@@ -1,9 +1,8 @@
 use bevy::prelude::*;
 
-use super::combat::BOSS_NAMES;
-use super::content::{Attribute, BOSSES, HEROES, SkillEffectKind};
+use super::content::{BOSSES, HEROES};
 use super::hero_abilities::ultimate_profile;
-use super::{BondId, HeroKind, SkillId};
+use super::{BondCardId, BondId, HeroKind, SkillId};
 
 /// One bundled face is used for every Bevy text node so Web builds never rely
 /// on unavailable system-font fallback for CJK glyphs.
@@ -103,7 +102,24 @@ pub fn skill_name(language: GameLanguage, skill: SkillId) -> String {
     if language.is_chinese() {
         skill.definition().name.to_string()
     } else {
-        skill.title()
+        match skill.0 {
+            0 => "VIOLET CHAIN",
+            1 => "FIRE ARROW",
+            2 => "FROST ARROW",
+            3 => "BOUNDLESS SEA",
+            4 => "RAISE DEAD",
+            6 => "RETURNING WIND BLADE",
+            7 => "ARCHERY",
+            12 => "THUNDER STORM",
+            14 => "FALLING ICE",
+            15 => "TORNADO",
+            16 => "WATER ELEMENTAL",
+            26 => "FROST BONE DRAGON",
+            30 => "FLAME RAY",
+            31 => "GOBLIN MINE",
+            _ => return skill.title(),
+        }
+        .to_string()
     }
 }
 
@@ -111,103 +127,99 @@ pub fn bond_name(language: GameLanguage, bond: BondId) -> String {
     if language.is_chinese() {
         bond.definition().name.to_string()
     } else {
-        bond.title().to_string()
+        bond.definition().name_en.to_string()
     }
 }
 
-pub fn skill_card_description(language: GameLanguage, skill: SkillId) -> String {
-    let def = skill.definition();
-    let rarity = def.rarity.label();
-    let multiplier = def.rarity.skill_power_multiplier();
-    let cooldown = def.cooldown_secs * def.rarity.skill_cooldown_multiplier();
-    let kind = skill_kind_name(language, def.effect.kind);
-    if language.is_chinese() {
-        if def.cooldown_secs > 0.0 {
-            format!(
-                "[{rarity}] {kind} · {cooldown:.1}秒\n威力 ×{multiplier:.2} · {:.0} + {:.0}/级",
-                def.effect.power.base, def.effect.power.per_rank
-            )
-        } else {
-            format!(
-                "[{rarity}] {kind}\n威力 ×{multiplier:.2} · {:.0} + {:.0}/级",
-                def.effect.power.base, def.effect.power.per_rank
-            )
-        }
-    } else {
-        skill.description()
-    }
+pub fn bond_card_name(language: GameLanguage, card: BondCardId) -> String {
+    let def = card.definition();
+    language.pick(def.name_en, def.name).to_string()
 }
 
-pub fn bond_card_description(language: GameLanguage, bond: BondId) -> String {
-    if !language.is_chinese() {
-        return format!(
-            "[{}] +{} BOND POINTS\n{}",
-            bond.rarity().label(),
-            bond.rarity().bond_points_per_pick(),
-            bond.description()
+pub fn bond_family_detail(
+    language: GameLanguage,
+    family: BondId,
+    build: &super::PlayerBuild,
+) -> String {
+    let def = family.definition();
+    let members = def
+        .members
+        .iter()
+        .map(|card| {
+            format!(
+                "{} {}",
+                if build.owned_bond_cards[card.index()] {
+                    "✓"
+                } else {
+                    "○"
+                },
+                bond_card_name(language, *card)
+            )
+        })
+        .collect::<Vec<_>>()
+        .join(" · ");
+    let next_bonus = def
+        .bonuses
+        .iter()
+        .find(|bonus| bonus.required > build.bond(family));
+    let current_bonus = def
+        .bonuses
+        .iter()
+        .rev()
+        .find(|bonus| bonus.required <= build.bond(family));
+    let bonuses = next_bonus
+        .or(current_bonus)
+        .into_iter()
+        .map(|bonus| {
+            format!(
+                "{}: {}",
+                bonus.required,
+                language.pick(bonus.description_en, bonus.description)
+            )
+        })
+        .collect::<Vec<_>>()
+        .join("\n");
+    let unlocks = super::BondId::ALL
+        .iter()
+        .filter(|id| id.definition().prerequisite == Some(family))
+        .map(|id| bond_name(language, *id))
+        .collect::<Vec<_>>()
+        .join(", ");
+    let mut result = format!(
+        "{} · {}/{}\n{}",
+        bond_name(language, family),
+        build.bond(family),
+        family.required(),
+        members
+    );
+    if !bonuses.is_empty() {
+        result.push_str(&format!("\n{bonuses}"));
+    }
+    if build.bond_complete(family) {
+        result = format!(
+            "{} · {}\n{}\n{}",
+            bond_name(language, family),
+            language.pick("COMPLETE", "已集齐"),
+            language.pick("Effects active · Slot released", "效果生效 · 已释放羁绊槽"),
+            bonuses,
         );
     }
-
-    let summary = match bond {
-        BondId::Thunder => "2/4/6：攻速、连锁、裁决",
-        BondId::Ember => "2/4/6：灼烧、暴击灼烧、引爆",
-        BondId::Spirits => "2/4/6：召唤上限、标记、回响",
-        BondId::Elements => "2/4/6：元素反应、威力、回响",
-        BondId::Arcane => "2/4/6：冷却缩减与法术回响",
-        BondId::Triune => "2/4/6：攻击、法术、召唤融合",
-        BondId::Ascension => "2/4/6：飞剑与登临",
-        BondId::Blood => "2/4/6：暴击、处决、狂热",
-        BondId::Fortune => "2/4/6：收入、品阶、幸运抽取",
-        BondId::Bastion => "2/4/6：城门耐久、拦截、背水一战",
-    };
-    format!(
-        "[{}] +{} 羁绊点\n{summary}",
-        bond.rarity().label(),
-        bond.rarity().bond_points_per_pick()
-    )
+    if !unlocks.is_empty() {
+        result.push_str(&format!(
+            "\n{}: {unlocks}",
+            if build.bond_complete(family) {
+                language.pick("Pools unlocked", "已解锁卡池")
+            } else {
+                language.pick("Completion unlocks", "集齐解锁")
+            }
+        ));
+    }
+    result
 }
 
 pub fn boss_name(language: GameLanguage, index: usize) -> String {
-    let index = index.min(BOSSES.len() - 1);
-    if language.is_chinese() {
-        BOSSES[index].name.to_string()
-    } else {
-        BOSS_NAMES[index].to_string()
-    }
-}
-
-pub const fn attribute_name(language: GameLanguage, attribute: Attribute) -> &'static str {
-    match (language, attribute) {
-        (GameLanguage::English, Attribute::Strength) => "STR",
-        (GameLanguage::English, Attribute::Agility) => "AGI",
-        (GameLanguage::English, Attribute::Intelligence) => "INT",
-        (GameLanguage::SimplifiedChinese, Attribute::Strength) => "力量",
-        (GameLanguage::SimplifiedChinese, Attribute::Agility) => "敏捷",
-        (GameLanguage::SimplifiedChinese, Attribute::Intelligence) => "智力",
-    }
-}
-
-pub const fn skill_kind_name(language: GameLanguage, kind: SkillEffectKind) -> &'static str {
-    match (language, kind) {
-        (GameLanguage::English, SkillEffectKind::Projectile) => "PROJECTILE",
-        (GameLanguage::English, SkillEffectKind::Nova) => "NOVA",
-        (GameLanguage::English, SkillEffectKind::GroundZone) => "GROUND ZONE",
-        (GameLanguage::English, SkillEffectKind::AttackProc) => "ATTACK PROC",
-        (GameLanguage::English, SkillEffectKind::Orbit) => "ORBIT",
-        (GameLanguage::English, SkillEffectKind::Summon) => "SUMMON",
-        (GameLanguage::English, SkillEffectKind::Mark) => "MARK",
-        (GameLanguage::English, SkillEffectKind::Echo) => "ECHO",
-        (GameLanguage::English, SkillEffectKind::Revive) => "REVIVE",
-        (GameLanguage::SimplifiedChinese, SkillEffectKind::Projectile) => "投射物",
-        (GameLanguage::SimplifiedChinese, SkillEffectKind::Nova) => "新星",
-        (GameLanguage::SimplifiedChinese, SkillEffectKind::GroundZone) => "区域",
-        (GameLanguage::SimplifiedChinese, SkillEffectKind::AttackProc) => "攻击触发",
-        (GameLanguage::SimplifiedChinese, SkillEffectKind::Orbit) => "环绕",
-        (GameLanguage::SimplifiedChinese, SkillEffectKind::Summon) => "召唤",
-        (GameLanguage::SimplifiedChinese, SkillEffectKind::Mark) => "标记",
-        (GameLanguage::SimplifiedChinese, SkillEffectKind::Echo) => "回响",
-        (GameLanguage::SimplifiedChinese, SkillEffectKind::Revive) => "复活",
-    }
+    let boss = &BOSSES[index.min(BOSSES.len() - 1)];
+    language.pick(boss.name_en, boss.name).to_string()
 }
 
 #[cfg(test)]
@@ -219,11 +231,38 @@ mod tests {
     const UI_FONT_BYTES: &[u8] = include_bytes!("../../assets/fonts/rogue_commander_ui.ttf");
     const PLAYER_FACING_SOURCES: &[&str] = &[
         include_str!("content.rs"),
+        include_str!("bond_catalog.rs"),
+        include_str!("bond_catalog/expanded.rs"),
+        include_str!("skill_evolution.rs"),
+        include_str!("ur_evolution.rs"),
+        include_str!("campaign_ui.rs"),
+        include_str!("survival_ui.rs"),
         include_str!("hero.rs"),
+        include_str!("hero_draft.rs"),
         include_str!("localization.rs"),
         include_str!("market.rs"),
         include_str!("progression.rs"),
+        include_str!("progression_ui.rs"),
         include_str!("ui.rs"),
+        include_str!("boss_status.rs"),
+        include_str!("ui_art.rs"),
+        include_str!("bond_collection_ui.rs"),
+        include_str!("hero_stats_ui.rs"),
+        include_str!("basic_attack_details.rs"),
+        include_str!("basic_relics.rs"),
+        include_str!("encounter_bosses.rs"),
+        include_str!("encounter_boss_ui.rs"),
+        include_str!("equipment_ui.rs"),
+        include_str!("equipment_ui/panel.rs"),
+        include_str!("crafting.rs"),
+        include_str!("hero_fusion_ui.rs"),
+        include_str!("skill_feedback.rs"),
+        include_str!("bond_feedback.rs"),
+        include_str!("settings.rs"),
+        include_str!("selection_detail.rs"),
+        include_str!("skill_details.rs"),
+        include_str!("debug_menu.rs"),
+        include_str!("encounters.rs"),
         include_str!("../../web/index.html"),
     ];
 
@@ -247,11 +286,23 @@ mod tests {
             hero_name(GameLanguage::SimplifiedChinese, HeroKind::StormSavant),
             "玄霆术师"
         );
-        assert_eq!(skill_name(GameLanguage::English, SkillId(0)), "ARC CHAIN");
         assert_eq!(
-            bond_name(GameLanguage::SimplifiedChinese, BondId::Thunder),
-            "天雷导体"
+            skill_name(GameLanguage::English, SkillId(0)),
+            "VIOLET CHAIN"
         );
+        assert_eq!(
+            bond_name(GameLanguage::SimplifiedChinese, BondId::Journey),
+            "启程"
+        );
+    }
+
+    #[test]
+    fn gold_challenge_has_a_single_chinese_name_in_player_facing_text() {
+        let retired_name = concat!("金币", "试炼");
+        for source in PLAYER_FACING_SOURCES {
+            assert!(!source.contains(retired_name));
+        }
+        assert!(include_str!("ui.rs").contains("金币挑战"));
     }
 
     #[test]

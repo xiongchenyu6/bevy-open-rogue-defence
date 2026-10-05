@@ -1,0 +1,17 @@
+attack-mage native validation — 2026-09-30
+PASS cargo test --lib -j1: 300 passed; 0 failed
+PASS cargo clippy --all-targets -j1 -- -D warnings
+PASS native cargo build --bins -j1 (subsequent edit only corrected test fixture)
+PASS python tools/verify_ui_assets.py
+PASS git diff --check
+
+PASS storm capture and complete video decode
+PASS spirit capture and complete video decode
+PASS star capture and complete video decode
+PASS frost capture and complete video decode
+PASS storm-mobile capture and complete video decode
+
+Visual review: desktop1280x720 and compact667x375 native offscreen captures.
+Mage fixtures: learned skills cleared; ultimate remaining10000; no Autoplay; stationary5000HP targets. Innate hero passives retained.
+Opening fixture: actual draw/refresh/later/preview/confirm UI, offers3->2->1, nextpools unlocked aftercompletion.
+Physical mobile GPU and WASM/browser not tested; videos contain no audio.

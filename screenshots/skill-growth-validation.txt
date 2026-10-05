@@ -1,0 +1,37 @@
+Skill upgrade feedback validation — 2026-09-29
+
+PASS cargo test --lib -j1: 285 passed, 0 failed.
+PASS cargo clippy --all-targets -j1 -- -D warnings.
+PASS cargo build --bins -j1.
+PASS git diff --check.
+All Cargo commands executed through nix develop.
+
+New tests cover existing skeleton growth, stable position, pause behavior,
+absolute scaling without compounding, summon skill attribution on reuse,
+rank notification queue coalescing, and projectile visual size applied once
+with collision radius unchanged and fresh scale after pool reuse.
+
+Desktop: 1280x720, Simplified Chinese.
+Mobile-size: 667x375, English (video padded to 668x376 for H.264).
+Each capture: 270 frames / 30 fps / 9 seconds, seed 0xA11CE.
+Both videos fully decoded with ffmpeg; rank 1/3/5 images inspected.
+
+Harness assertions passed in both viewports:
+- A skeleton spawned through the real skill system at scale 0.70.
+- The SAME entity grows to 0.98 and 1.26 after rank increases.
+- Its position stays fixed through upgrades.
+- Skill upgrade notice exists after each increase and expires afterward.
+
+Outputs: skill-growth-{desktop,mobile}.mp4;
+         skill-growth-{desktop,mobile}-{1,3,5}.png;
+         skill-growth-{desktop,mobile}-review.png.
+
+Reproduce: ROGUE_COMMANDER_LANG=zh nix develop --command target/debug/capture
+           frames <directory> 270 skill-growth 0xA11CE 1280x720
+
+Limits: harness assigns ranks 3 and 5 at frames 90 and 180; it does not simulate
+naturally earning them. Rendering is native offscreen, not a physical phone
+performance benchmark. Other summon families and projectile rank scaling are
+covered by code/tests; the visual timeline focuses on Bone Sentry.
+Existing ICU4X Japanese segmentation-data diagnostics remain in native logs;
+Chinese labels render. No Bevy ERROR/panic/failure markers in these captures.

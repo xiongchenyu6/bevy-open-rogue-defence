@@ -1,0 +1,228 @@
+{
+  "repository": "https://raw.githubusercontent.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/",
+  "commit": "b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07",
+  "normalization": "Y-up, height 1, horizontal center at origin, lowest vertex at Y=0; original mesh and embedded PNG atlas preserved",
+  "models": [
+    {
+      "file": "environment_wall_window_closed.glb",
+      "source": "addons/kaykit_dungeon_remastered/Assets/gltf/wall_window_closed.gltf.glb",
+      "source_sha256": "c20ce2a7db1430810774caeb337b8d3d94af936ca0fea5be8b063a28695686e5",
+      "sha256": "f7b04902a3f75749b65a5a02d88fcde034758e2ea379f0f63431e27b2e442352",
+      "source_dimensions": [
+        4,
+        4,
+        1.0
+      ],
+      "normalized_dimensions": [
+        1.0,
+        1.0,
+        0.25
+      ],
+      "vertices": 1264
+    },
+    {
+      "file": "environment_wall.glb",
+      "source": "addons/kaykit_dungeon_remastered/Assets/gltf/wall.gltf.glb",
+      "source_sha256": "f2f343a7bdf2d45947e3f354494e16095a923485e05637e3804e3b81ce11d921",
+      "sha256": "587e702791a5bd9a372421ab4101900c5871f0086c73b01c0996cea82a81d213",
+      "source_dimensions": [
+        4,
+        4,
+        1.0
+      ],
+      "normalized_dimensions": [
+        1.0,
+        1.0,
+        0.25
+      ],
+      "vertices": 1037
+    },
+    {
+      "file": "environment_wall_gated.glb",
+      "source": "addons/kaykit_dungeon_remastered/Assets/gltf/wall_gated.gltf.glb",
+      "source_sha256": "68e766c2b4eb05c4bf2c0fcd908ea5dc5192dda56cfdd5d56b7cbf446063220c",
+      "sha256": "f8c31a3decfc713af5f479e3e3d8c824d1d8fd5d4752c2dba99eb8a4f86aed86",
+      "source_dimensions": [
+        4,
+        4,
+        1.0
+      ],
+      "normalized_dimensions": [
+        1.0,
+        1.0,
+        0.25
+      ],
+      "vertices": 833
+    },
+    {
+      "file": "environment_pillar_decorated.glb",
+      "source": "addons/kaykit_dungeon_remastered/Assets/gltf/pillar_decorated.gltf.glb",
+      "source_sha256": "eecf7d454a1b6767a113e2490cb1536134abea0b57329a50cf2250d3ed8e2f65",
+      "sha256": "6843bffca04b689fe6bb25fec15bf848bf58c8b16a4e690276dc56c8a8fd0364",
+      "source_dimensions": [
+        2.232,
+        4,
+        1.7102
+      ],
+      "normalized_dimensions": [
+        0.558,
+        1.0,
+        0.42754
+      ],
+      "vertices": 1276
+    },
+    {
+      "file": "environment_pillar.glb",
+      "source": "addons/kaykit_dungeon_remastered/Assets/gltf/pillar.gltf.glb",
+      "source_sha256": "e31da496461921475384c62ce761cd23924892bd6f32aeea68bd913545caee33",
+      "sha256": "4449a9bd696d0d69fbd8d917cb16e18a789906d0252cf9b354166c8f196d5d9b",
+      "source_dimensions": [
+        1.5,
+        4,
+        1.5
+      ],
+      "normalized_dimensions": [
+        0.375,
+        1.0,
+        0.375
+      ],
+      "vertices": 241
+    },
+    {
+      "file": "environment_rubble_large.glb",
+      "source": "addons/kaykit_dungeon_remastered/Assets/gltf/rubble_large.gltf.glb",
+      "source_sha256": "0292da1b5788a5a52b616d5d27d3270c676a5fbf9e921b6dd3dc30364d355b54",
+      "sha256": "d9175a7d34efe6e139d6d4e29566ca522733f3c5a8d4de2809d5d90bfbfe842a",
+      "source_dimensions": [
+        8.1293,
+        3.4961,
+        3.1831
+      ],
+      "normalized_dimensions": [
+        2.32525,
+        1.0,
+        0.91048
+      ],
+      "vertices": 1200
+    },
+    {
+      "file": "environment_rubble_half.glb",
+      "source": "addons/kaykit_dungeon_remastered/Assets/gltf/rubble_half.gltf.glb",
+      "source_sha256": "7514ccbda643c13d5a782579e4f01ee6402eec5519590d3f048d396cdaedec24",
+      "sha256": "5f72dd19c24145bded66929f4e15ce38c4d30bafec43a556440aeec1382f9cd7",
+      "source_dimensions": [
+        3.9997,
+        3.5,
+        3.0
+      ],
+      "normalized_dimensions": [
+        1.14276,
+        1.0,
+        0.85714
+      ],
+      "vertices": 607
+    },
+    {
+      "file": "environment_torch_lit.glb",
+      "source": "addons/kaykit_dungeon_remastered/Assets/gltf/torch_lit.gltf.glb",
+      "source_sha256": "45fcfeb3b129722019d42aef0acae8f6c5f8f6dbdf5d3346ceea1f084b69b396",
+      "sha256": "8fcb5a9966698958d1bc819643e8748c1bf96fd83782c5e06ec07dcf6948b060",
+      "source_dimensions": [
+        0.5503,
+        1.1258,
+        0.5503
+      ],
+      "normalized_dimensions": [
+        0.4888,
+        1.0,
+        0.4888
+      ],
+      "vertices": 392
+    },
+    {
+      "file": "environment_banner_blue.glb",
+      "source": "addons/kaykit_dungeon_remastered/Assets/gltf/banner_blue.gltf.glb",
+      "source_sha256": "219995a647a17a506770f998b2194e882e3c078753cebe37e608e2b65ed14d5a",
+      "sha256": "1c930ace50132d497fc0b19b0ac4f32607cddeb213d922f56f040dea24150bf1",
+      "source_dimensions": [
+        1.5,
+        3.1961,
+        0.3119
+      ],
+      "normalized_dimensions": [
+        0.46933,
+        1.0,
+        0.09759
+      ],
+      "vertices": 205
+    },
+    {
+      "file": "environment_wall_broken.glb",
+      "source": "addons/kaykit_dungeon_remastered/Assets/gltf/wall_broken.gltf.glb",
+      "source_sha256": "ee7598ef2b88aaeb7b61e46d5f1da1a059de3860b080b38b7a507ca2f461302c",
+      "sha256": "c23061dfe5050c4a44bbf14a6ea0100d5b5dcd3be3b3433fcbe6d0bbc19c4d4e",
+      "source_dimensions": [
+        4,
+        4,
+        1.0
+      ],
+      "normalized_dimensions": [
+        1.0,
+        1.0,
+        0.25
+      ],
+      "vertices": 1486
+    },
+    {
+      "file": "environment_core.glb",
+      "source": "addons/kaykit_dungeon_remastered/Assets/gltf/sword_shield_gold.gltf.glb",
+      "source_sha256": "7b7dd709bd6a24e9e2913da2ebc1fd64ca318e22fbef66f0e8cf14b79adae9aa",
+      "sha256": "7926b81aa3f8e14e81a957a06bdc6546f168dab45bec693fe0c8a0838331c969",
+      "source_dimensions": [
+        2.232,
+        1.6674,
+        0.3357
+      ],
+      "normalized_dimensions": [
+        1.33858,
+        1.0,
+        0.20135
+      ],
+      "vertices": 857
+    },
+    {
+      "file": "environment_floor.glb",
+      "source": "addons/kaykit_dungeon_remastered/Assets/gltf/floor_tile_small.gltf.glb",
+      "source_sha256": "645f02c82d1fa15e3e1daa7892b70c8a9d44f44d0e520d76ae6afd08633c5b34",
+      "sha256": "194e1737202a2dd37246bb18fb58a765ef9754a385fc25c2c601f261a8228690",
+      "source_dimensions": [
+        2,
+        0.15,
+        2
+      ],
+      "normalized_dimensions": [
+        13.33333,
+        1.0,
+        13.33333
+      ],
+      "vertices": 104
+    },
+    {
+      "file": "environment_border.glb",
+      "source": "addons/kaykit_dungeon_remastered/Assets/gltf/barrier.gltf.glb",
+      "source_sha256": "2c6a1b89de1c87778c7ae9afc17fa9eabc4aa4148f3b8748f062b5c8ec7f6c00",
+      "sha256": "61df555ce972c94564e258e80c44564b89dac3759a70ae0bd0cf1c43a18c8799",
+      "source_dimensions": [
+        4,
+        1.1,
+        0.5
+      ],
+      "normalized_dimensions": [
+        3.63636,
+        1.0,
+        0.45455
+      ],
+      "vertices": 180
+    }
+  ]
+}

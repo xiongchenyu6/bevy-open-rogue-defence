@@ -1,0 +1,43 @@
+Authored asset replacement verification — 2026-09-28
+
+Native renderer: NVIDIA GeForce RTX 3070 Laptop GPU, Vulkan.
+
+cargo build --bin capture
+Finished `dev` profile [optimized + debuginfo] target(s) in 2m 52s
+
+cargo test --all-targets
+Finished `test` profile [optimized + debuginfo] target(s) in 1m 14s
+test result: ok. 249 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+cargo clippy --all-targets -- -D warnings
+Finished `dev` profile [optimized + debuginfo] target(s) in 5m 21s
+
+python3 tools/verify_models.py
+PASS: 47 self-contained authored GLBs; 35 cast models with Idle/Walk/Attack/Hit; 13,357,836 bytes.
+
+cargo fmt --all -- --check: PASS
+ruff check (five new Python tools): PASS
+git diff --check: PASS
+
+Capture: assets loaded before frame 0; paused warm-up preserves gameplay time.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 1500.000s (paused restored to false)
+[capture] saved 1/1 screenshots/models-desktop.png (978833 bytes)
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 480.000s (paused restored to false)
+[capture] saved 1/1 screenshots/models-mobile.png (360471 bytes)
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 1500.000s (paused restored to false)
+[capture] all 180 screenshot(s) saved after 3 wait frame(s)
+
+Video: 1280x720, 30 FPS, 180 frames, 6 seconds; ffmpeg full decode exit 0.
+Visual inspection: cast contact sheet, desktop and 844x390 captures, first and sampled combat video frames.
+Mobile capture is desktop offscreen rendering; Web/Android builds and physical-device performance were not tested in this change.
+
+Artifact SHA-256:
+bdb15e8961318b1e47a436a22296036e7149c80c1ba94707d2acceb68156acdd  model-cast-review.png
+60c7af62533cbb0700988e732bb5204a8c2df3ace50625a4797a13247df32bdb  models-desktop.png
+4303b346724110987b8f8f6862a8e7638a6b1e9d4562704d7de30b43afc98e39  models-mobile.png
+968681293db33e087050daed8f391579961cf2267fbc264b93db624fbc343e3f  models-animation.mp4

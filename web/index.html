@@ -400,6 +400,9 @@
         }
       }
 
+      // Called by the running game settings; preserve the current run and canvas.
+      window.rogueCommanderLanguage = (value) => setLanguage(value);
+
       function normalizeRunSeed(value) {
         const raw = value?.trim() ?? "";
         if (!/^(?:0[xX][0-9a-fA-F]+|[0-9]+)$/.test(raw)) return null;

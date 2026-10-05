@@ -1,0 +1,73 @@
+Native validation — final R11 source and assets
+
+PASS: 407 Rust library tests, 0 failures.
+PASS: cargo clippy --all-targets -j1 -- -D warnings.
+PASS: cargo build --bins -j1.
+PASS: 46 fresh native capture scenes, 14,410 complete simulated/rendered frames.
+Desktop: 1280 x 720; mobile viewport: 667 x 375.
+Chinese scenes plus English desktop gate and skill selection scenes.
+Screenshots are selected frames; simulation/render/verification ran on every frame.
+No browser/WASM verification was run.
+
+Real gate validation (3 scenes):
+- Twelve actual enemy archetypes, each with its real model, approach across all road lanes.
+- A live finite-health gate blocks them east of the wall and protects the rear hero.
+- Real damage reduces the gate HP; HUD reports current / maximum HP without infinity.
+- Central closed gate plus two stone walls share a transverse plane and span road edges.
+- Gate destruction is nonterminal and does not spend hero lives.
+- World-positioned countdown actually renders every digit 4, 3, 2, 1.
+- Pause freezes reconstruction; full-health reconstruction removes the countdown.
+- Two actual hero deaths respawn; the third consumes the final life and settles defeat.
+
+Selection validation (3 scenes):
+- A real paid skill draw opens the UI; fixture resumes a controlled pending skill hand.
+- Actual buttons toggle detailed -> simple -> detailed.
+- Detailed text contains cooldown, numeric damage, current -> next rank, and effect dimensions.
+- Simple mode retains one-line rank/effect and excludes formula and numeric damage lines.
+- Selecting Tidal Wave displays real wave width and travel distance.
+- Preview and mode switches preserve the learned skill ranks.
+
+Summon validation (2 scenes, 680 frames each):
+- Six real mobile summon families spawn through actual learned skills/hero companion.
+- They pursue, reach attack range, damage targets, retarget and freeze during pause.
+- With no enemy, all six active families stand on the enemy side of the wall and face +X.
+- Idle checks use active PlayerSummon actors, excluding unused pooled shells.
+- The bone turret anchors on the wall, not on the road behind the hero.
+- After a real gate collapse/rebuild, all remaining active summons retain the forward formation.
+- Timed summons may expire normally; the colossus's 18-second lifetime is respected.
+- Real unit tests also verify tower firing stops while the gate is down and resumes when rebuilt.
+- A regression test verifies animation presentation preserves the summon AI's idle facing.
+
+Skill growth and spectacle (38 scenes):
+- Storm Matrix ranks 1, 3, 5 tested separately in both viewports.
+- Actual collision radii: 3.1 m, 4.65 m, 6.2 m.
+- Actual damage-zone transform scales: 1.054, 1.581, 2.108.
+- Rank 5 diameter is twice rank 1; unit tests verify the larger radius reaches a real outer target.
+- Every one of the 32 skills has a fresh isolated native rank-5 capture.
+- Each scene verifies attributable visual feedback plus actual damage, summons, rebirth or buff outcomes.
+
+Representative artifacts (relative to repository):
+screenshots/gate-barrier-zh-1280x720-14.png — full-road varied enemy pressure and finite HP
+screenshots/gate-barrier-zh-1280x720-70.png — rebuilt wall, hero behind, finite maximum HP
+screenshots/gate-barrier-zh-1280x720-82.png — world countdown 4
+screenshots/gate-barrier-zh-1280x720-89.png — world countdown 3
+screenshots/gate-barrier-zh-1280x720-97.png — world countdown 2
+screenshots/gate-barrier-zh-1280x720-104.png — world countdown 1
+screenshots/gate-barrier-zh-667x375-82.png — mobile countdown
+screenshots/gate-barrier-zh-1280x720.mp4 — two rebuilds and all three hero lives
+screenshots/selection-details-zh-667x375-40.png — detailed skill preview
+screenshots/selection-details-zh-667x375-80.png — simple skill preview
+screenshots/selection-details-en-1280x720-135.png — English wave dimensions
+screenshots/summon-assault-zh-667x375-510.png — all six active families outside the wall
+screenshots/skill-identity-12-rank-1-zh-1280x720-signature.png
+screenshots/skill-identity-12-rank-5-zh-1280x720-signature.png
+screenshots/gate-skills-contact-1.jpg — fresh skills 0 through 15
+screenshots/gate-skills-contact-2.jpg — fresh skills 16 through 31
+
+Authoritative logs:
+target/verification/gate-final-test.log
+target/verification/gate-final-clippy.log
+target/verification/gate-final-build.log
+target/verification/gate-final-captures.log
+Individual scene logs and selected raw frames: target/verification/.
+Preflight R6/R7 logs are archived separately and are not counted as final verification.

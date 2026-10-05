@@ -1,0 +1,624 @@
+[
+  {
+    "file": "Wolf.gltf",
+    "url": "https://raw.githubusercontent.com/benjaminpjones/catch-the-animal/cf8e52eeb64429a210cebb4b12fe62b3ab06af2b/models/glTF/Wolf.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimateanimatedanimals.html",
+    "clips": [
+      "Attack",
+      "Death",
+      "Eating",
+      "Gallop",
+      "Gallop_Jump",
+      "Idle",
+      "Idle_2",
+      "Idle_2_HeadLow",
+      "Idle_HitReact1",
+      "Idle_HitReact2",
+      "Jump_ToIdle",
+      "Walk"
+    ],
+    "bounds": [
+      [
+        -0.532599925994873,
+        -0.010202704928815365,
+        -2.9918973445892334
+      ],
+      [
+        0.532599925994873,
+        2.670809745788574,
+        2.5611910820007324
+      ]
+    ],
+    "sha256": "cc02e9d128b5715f352ee8bea086f97a35f1d875d240de99b0f9f2775c37d415",
+    "bytes": 3175890,
+    "self_contained": true
+  },
+  {
+    "file": "Dragon.glb",
+    "url": "https://raw.githubusercontent.com/euuuuuuan/cairnfall-public/8ee4cfd789282c59632a9339e61564b7d6c1acfe/assets/vendor/quaternius_monsters/Dragon.glb",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/animatedmonster.html",
+    "clips": [
+      "2H_Melee_Attack_Chop",
+      "Death_A",
+      "DragonArmature|DragonArmature|Dragon_Attack2",
+      "DragonArmature|DragonArmature|Dragon_Hit",
+      "Idle"
+    ],
+    "bounds": [
+      [
+        -1.7048425674438477,
+        0.1298896074295044,
+        -1.9001264572143555
+      ],
+      [
+        1.7048425674438477,
+        3.9822640419006348,
+        1.8113453388214111
+      ]
+    ],
+    "sha256": "95ed1323831ea74b1268e3a9d583a5293ed56297638729992c0ddfc2dc0eda30",
+    "bytes": 324860,
+    "self_contained": true
+  },
+  {
+    "file": "Slime.glb",
+    "url": "https://raw.githubusercontent.com/euuuuuuan/cairnfall-public/8ee4cfd789282c59632a9339e61564b7d6c1acfe/assets/vendor/quaternius_monsters/Slime.glb",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/animatedmonster.html",
+    "clips": [
+      "2H_Melee_Attack_Chop",
+      "Death_A",
+      "Idle",
+      "Running_A"
+    ],
+    "bounds": [
+      [
+        -1.2683874368667603,
+        -0.014278629794716835,
+        -1.530877709388733
+      ],
+      [
+        1.2683874368667603,
+        1.9337544441223145,
+        1.5308769941329956
+      ]
+    ],
+    "sha256": "0b40dc5f5488c7861b0f5ff16ffcc93bc3462ef19baacc8ba58ff3a4a596f429",
+    "bytes": 192132,
+    "self_contained": true
+  },
+  {
+    "file": "Orc.gltf",
+    "url": "https://raw.githubusercontent.com/511action/descent-3d-assets/7c5af55b84faf6dbe4a9bada9f11627151acbe62/models/Orc.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "clips": [
+      "Death",
+      "Duck",
+      "HitReact",
+      "Idle",
+      "Jump",
+      "Jump_Idle",
+      "Jump_Land",
+      "No",
+      "Punch",
+      "Run",
+      "Walk",
+      "Wave",
+      "Weapon",
+      "Yes"
+    ],
+    "bounds": [
+      [
+        -2.36281418800354,
+        -0.013371377252042294,
+        -0.7231585383415222
+      ],
+      [
+        2.321995496749878,
+        3.1953015327453613,
+        1.147653579711914
+      ]
+    ],
+    "sha256": "e61a37f8d9b2eee28928bdfad2c55e0798cc0a212e925cc5dcc66b243526c1a3",
+    "bytes": 1280189,
+    "self_contained": true
+  },
+  {
+    "file": "BlueDemon.gltf",
+    "url": "https://raw.githubusercontent.com/511action/descent-3d-assets/7c5af55b84faf6dbe4a9bada9f11627151acbe62/models/BlueDemon.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "clips": [
+      "Death",
+      "Duck",
+      "HitReact",
+      "Idle",
+      "Jump",
+      "Jump_Idle",
+      "Jump_Land",
+      "No",
+      "Punch",
+      "Run",
+      "Walk",
+      "Wave",
+      "Weapon",
+      "Yes"
+    ],
+    "bounds": [
+      [
+        -2.314230442047119,
+        -0.007405395153909922,
+        -0.6192836761474609
+      ],
+      [
+        2.314230442047119,
+        2.8332438468933105,
+        1.5372564792633057
+      ]
+    ],
+    "sha256": "9eb899fc619dff9a973669e0962452990c8ec44d4501dd41fe4f4fe5afd631f4",
+    "bytes": 1190068,
+    "self_contained": true
+  },
+  {
+    "file": "Mushnub.gltf",
+    "url": "https://clockworkcoliseum.com/models/quaternius/blob/Mushnub.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "mirror_evidence": "https://clockworkcoliseum.com/monsters",
+    "clips": [
+      "Bite_Front",
+      "Dance",
+      "Death",
+      "HitRecieve",
+      "Idle",
+      "Jump",
+      "No",
+      "Walk",
+      "Yes"
+    ],
+    "bounds": [
+      [
+        -1.3755918741226196,
+        -0.051154136657714844,
+        -1.3755918741226196
+      ],
+      [
+        1.3755918741226196,
+        3.2448863983154297,
+        1.3755918741226196
+      ]
+    ],
+    "sha256": "15e44e46e6c52ff677d946c70d41c4cbb1acb6598e7ec09f8642ee942d7751e2",
+    "bytes": 132465,
+    "self_contained": true
+  },
+  {
+    "file": "GreenSpikyBlob.gltf",
+    "url": "https://clockworkcoliseum.com/models/quaternius/blob/GreenSpikyBlob.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "mirror_evidence": "https://clockworkcoliseum.com/monsters",
+    "clips": [
+      "Bite_Front",
+      "Dance",
+      "Death",
+      "HitRecieve",
+      "Idle",
+      "Jump",
+      "No",
+      "Walk",
+      "Yes"
+    ],
+    "bounds": [
+      [
+        -1.7500934600830078,
+        -0.052710287272930145,
+        -2.300224781036377
+      ],
+      [
+        1.7500934600830078,
+        4.089883804321289,
+        1.8584342002868652
+      ]
+    ],
+    "sha256": "ff55e6424f20576cac02578d012b3527af642ef15e7bab4abd2fd8d1f51b3e7e",
+    "bytes": 312327,
+    "self_contained": true
+  },
+  {
+    "file": "Goleling.gltf",
+    "url": "https://clockworkcoliseum.com/models/quaternius/flying/Goleling.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "mirror_evidence": "https://clockworkcoliseum.com/monsters",
+    "clips": [
+      "Death",
+      "Fast_Flying",
+      "Flying_Idle",
+      "Headbutt",
+      "HitReact",
+      "No",
+      "Punch",
+      "Yes"
+    ],
+    "bounds": [
+      [
+        -2.191018581390381,
+        1.4888737201690674,
+        -1.430202841758728
+      ],
+      [
+        2.191018581390381,
+        3.041060447692871,
+        0.5119189023971558
+      ]
+    ],
+    "sha256": "fad1c4d98e88b21a139fadd74e96c370f1c8ece8d1ae8c4b3bec80d1d7163c29",
+    "bytes": 384972,
+    "self_contained": true
+  },
+  {
+    "file": "DragonEvolved.gltf",
+    "url": "https://clockworkcoliseum.com/models/quaternius/flying/Dragon_Evolved.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "mirror_evidence": "https://clockworkcoliseum.com/monsters",
+    "clips": [
+      "Death",
+      "Fast_Flying",
+      "Flying_Idle",
+      "Headbutt",
+      "HitReact",
+      "No",
+      "Punch",
+      "Yes"
+    ],
+    "bounds": [
+      [
+        -2.7376062870025635,
+        0.30027779936790466,
+        -1.4310814142227173
+      ],
+      [
+        2.7376062870025635,
+        3.1581382751464844,
+        0.984516441822052
+      ]
+    ],
+    "sha256": "39ba6ea24b5f27acf68bbf4c19fe80ba070dbec167ff14bbe933453303426f5c",
+    "bytes": 991335,
+    "self_contained": true
+  },
+  {
+    "file": "MushroomKing.gltf",
+    "url": "https://clockworkcoliseum.com/models/quaternius/big/MushroomKing.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "mirror_evidence": "https://clockworkcoliseum.com/monsters",
+    "clips": [
+      "Death",
+      "Duck",
+      "HitReact",
+      "Idle",
+      "Jump",
+      "Jump_Idle",
+      "Jump_Land",
+      "No",
+      "Punch",
+      "Run",
+      "Walk",
+      "Wave",
+      "Weapon",
+      "Yes"
+    ],
+    "bounds": [
+      [
+        -2.3241915702819824,
+        -0.010805952362716198,
+        -0.8768366575241089
+      ],
+      [
+        2.3241915702819824,
+        3.597780466079712,
+        1.1791908740997314
+      ]
+    ],
+    "sha256": "ccf27e126b881d80a2046c3ab96ddd94eb996837480e783142009ecd6629a3a4",
+    "bytes": 1219690,
+    "self_contained": true
+  },
+  {
+    "file": "AlienBlob.gltf",
+    "url": "https://clockworkcoliseum.com/models/quaternius/blob/Alien.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "mirror_evidence": "https://clockworkcoliseum.com/monsters",
+    "clips": [
+      "Bite_Front",
+      "Dance",
+      "Death",
+      "HitRecieve",
+      "Idle",
+      "Jump",
+      "No",
+      "Walk",
+      "Yes"
+    ],
+    "bounds": [
+      [
+        -1.9346407651901245,
+        0.016914352774620056,
+        -1.2698860168457031
+      ],
+      [
+        1.9346407651901245,
+        3.2597575187683105,
+        0.671283483505249
+      ]
+    ],
+    "sha256": "9779ff35883ddf0afea041d4e05628e2233d374472d242310ff2d31c7c0a5108",
+    "bytes": 198883
+  },
+  {
+    "file": "ArmabeeEvolved.gltf",
+    "url": "https://clockworkcoliseum.com/models/quaternius/flying/Armabee_Evolved.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "mirror_evidence": "https://clockworkcoliseum.com/monsters",
+    "clips": [
+      "Death",
+      "Fast_Flying",
+      "Flying_Idle",
+      "Headbutt",
+      "HitReact",
+      "No",
+      "Punch",
+      "Yes"
+    ],
+    "bounds": [
+      [
+        -2.1519534587860107,
+        0.8201850652694702,
+        -1.37824547290802
+      ],
+      [
+        2.1519534587860107,
+        2.958115577697754,
+        0.668084442615509
+      ]
+    ],
+    "sha256": "1ad3e42c088e01e0c179d54537c63efad0dd185031df61d2833b9f1709362730",
+    "bytes": 357537
+  },
+  {
+    "file": "Squidle.gltf",
+    "url": "https://clockworkcoliseum.com/models/quaternius/flying/Squidle.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "mirror_evidence": "https://clockworkcoliseum.com/monsters",
+    "clips": [
+      "Death",
+      "Fast_Flying",
+      "Flying_Idle",
+      "Headbutt",
+      "HitReact",
+      "No",
+      "Punch",
+      "Yes"
+    ],
+    "bounds": [
+      [
+        -2.7359256744384766,
+        0.9941383004188538,
+        -1.430202841758728
+      ],
+      [
+        2.7359256744384766,
+        2.9807486534118652,
+        0.6924780607223511
+      ]
+    ],
+    "sha256": "ed41b8a3e4a49d0eb9522e52d3055a85e7c051607c6f1092aeb4242e0c87c77b",
+    "bytes": 805758
+  },
+  {
+    "file": "GolelingEvolved.gltf",
+    "url": "https://clockworkcoliseum.com/models/quaternius/flying/Goleling_Evolved.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "mirror_evidence": "https://clockworkcoliseum.com/monsters",
+    "clips": [
+      "Death",
+      "Fast_Flying",
+      "Flying_Idle",
+      "Headbutt",
+      "HitReact",
+      "No",
+      "Punch",
+      "Yes"
+    ],
+    "bounds": [
+      [
+        -2.191018581390381,
+        1.239808201789856,
+        -1.430202841758728
+      ],
+      [
+        2.191018581390381,
+        3.808109998703003,
+        0.7560267448425293
+      ]
+    ],
+    "sha256": "a36f8c1636b692d44fd74fbca07e1164ad14acc5db71300a92d5e51bc1a476ca",
+    "bytes": 494339
+  },
+  {
+    "file": "Yeti.gltf",
+    "url": "https://clockworkcoliseum.com/models/quaternius/big/Yeti.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "mirror_evidence": "https://clockworkcoliseum.com/monsters",
+    "clips": [
+      "Death",
+      "Duck",
+      "HitReact",
+      "Idle",
+      "Jump",
+      "Jump_Idle",
+      "Jump_Land",
+      "No",
+      "Punch",
+      "Run",
+      "Walk",
+      "Wave",
+      "Weapon",
+      "Yes"
+    ],
+    "bounds": [
+      [
+        -2.324557065963745,
+        -0.01076574344187975,
+        -0.6450535655021667
+      ],
+      [
+        2.324557065963745,
+        2.8173701763153076,
+        0.8274230360984802
+      ]
+    ],
+    "sha256": "ab60f4fbc1c2e1fdc3ed4f63023dc2185240dbd55751df568099557b29af6fd5",
+    "bytes": 1227684
+  },
+  {
+    "file": "WizardBlob.gltf",
+    "url": "https://clockworkcoliseum.com/models/quaternius/blob/Wizard.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "mirror_evidence": "https://clockworkcoliseum.com/monsters",
+    "clips": [
+      "Bite_Front",
+      "Dance",
+      "Death",
+      "HitRecieve",
+      "Idle",
+      "Jump",
+      "No",
+      "Walk",
+      "Yes"
+    ],
+    "bounds": [
+      [
+        -1.1615796089172363,
+        -0.00021869373449590057,
+        -1.2305529117584229
+      ],
+      [
+        1.1682137250900269,
+        2.6011719703674316,
+        1.0787900686264038
+      ]
+    ],
+    "sha256": "074302ab7039f3a6644c8f0be2580a0d747e8981bfa9725bcc6af422222c155a",
+    "bytes": 162486
+  },
+  {
+    "file": "Dino.gltf",
+    "url": "https://clockworkcoliseum.com/models/quaternius/big/Dino.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "mirror_evidence": "https://clockworkcoliseum.com/monsters",
+    "clips": [
+      "Death",
+      "Duck",
+      "HitReact",
+      "Idle",
+      "Jump",
+      "Jump_Idle",
+      "Jump_Land",
+      "No",
+      "Punch",
+      "Run",
+      "Walk",
+      "Wave",
+      "Weapon",
+      "Yes"
+    ],
+    "bounds": [
+      [
+        -2.324558734893799,
+        -0.0033269033301621675,
+        -0.8749696016311646
+      ],
+      [
+        2.324558734893799,
+        3.2226181030273438,
+        1.0436656475067139
+      ]
+    ],
+    "sha256": "d7c57a4ad6444f9c845ecdc13782a7430fcb377594a00f719cd2d37b9434b6de",
+    "bytes": 1211215
+  },
+  {
+    "file": "Demon.gltf",
+    "url": "https://clockworkcoliseum.com/models/quaternius/big/Demon.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "sha256": "9ce361b41a0e80d42a70f6325169b9c70a6e3304b8d856b8344a2b7f185067af",
+    "clips": [
+      "Death",
+      "Duck",
+      "HitReact",
+      "Idle",
+      "Jump",
+      "Jump_Idle",
+      "Jump_Land",
+      "No",
+      "Punch",
+      "Run",
+      "Walk",
+      "Wave",
+      "Weapon",
+      "Yes"
+    ]
+  },
+  {
+    "file": "GhostSkull.gltf",
+    "url": "https://clockworkcoliseum.com/models/quaternius/flying/Ghost_Skull.gltf",
+    "author": "Quaternius",
+    "license": "CC0-1.0",
+    "pack_url": "https://quaternius.com/packs/ultimatemonsters.html",
+    "sha256": "5bf24cf0f22aa94b0b58315e7d879afc53a0964a5b326aa0c844ba3278cae1da",
+    "clips": [
+      "Death",
+      "Fast_Flying",
+      "Flying_Idle",
+      "Headbutt",
+      "HitReact",
+      "No",
+      "Punch",
+      "Yes"
+    ]
+  }
+]

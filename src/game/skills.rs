@@ -3,18 +3,39 @@ use std::collections::{HashMap, HashSet};
 use bevy::prelude::*;
 
 use super::archive::ArchiveEcho;
-use super::bonds::{
-    BondRuntime, BondSet, DamageClass, DamageElement, DamageProfile, arcane_echo_scale,
-    ascension_ready, queue_bond_strike, skill_cooldown_recovery, summon_cap,
-};
+use super::bonds::{BondSet, DamageClass, DamageElement, DamageProfile, summon_cap};
 use super::combat::{AttackVolleyRuntime, CombatSet, SurvivalSet};
 use super::content::{SKILLS, Tag};
 use super::market::MarketEffects;
 use super::pooling::{CombatPools, SummonVisual};
 use super::{
-    BondId, BossEnemy, Enemy, GameAssets, GameSession, Hero, HeroVitals, ImpactFx, PlayerBuild,
+    BossEnemy, Enemy, GameAssets, GameSession, Hero, HeroVitals, ImpactFx, PlayerBuild,
     PlayerSummon, Projectile, RunRng, SelectedHero, SkillId, TrialEnemy,
 };
+
+#[path = "skills/evolution_mechanics.rs"]
+mod evolution_mechanics;
+#[path = "skills/growth.rs"]
+mod growth;
+#[path = "skills/infection.rs"]
+pub(crate) mod infection;
+#[path = "skills/orbit_art.rs"]
+mod orbit_art;
+#[path = "skills/presentation.rs"]
+mod presentation;
+#[path = "skills/reference_skills.rs"]
+mod reference_skills;
+#[path = "skills/ur_evolutions.rs"]
+pub(crate) mod ur_evolutions;
+
+#[path = "skills/summons.rs"]
+mod summons;
+use summons::{update_epic_summons, update_rare_summons, update_skill_summons};
+
+#[path = "skills/tidal_wave.rs"]
+pub(crate) mod tidal_wave;
+#[path = "skills/tidal_wave_vfx.rs"]
+mod tidal_wave_vfx;
 
 const BURN_TICK_SECONDS: f32 = 0.5;
 const MARKET_ECHO_DAMAGE_SCALE: f32 = 0.45;
@@ -23,6 +44,13 @@ pub struct SkillsPlugin;
 
 impl Plugin for SkillsPlugin {
     fn build(&self, app: &mut App) {
+        presentation::install(app);
+        tidal_wave::install(app);
+        tidal_wave_vfx::install(app);
+        orbit_art::install(app);
+        evolution_mechanics::install(app);
+        ur_evolutions::install(app);
+        reference_skills::install(app);
         app.init_resource::<SkillRuntime>()
             .add_systems(
                 Update,
@@ -36,6 +64,7 @@ impl Plugin for SkillsPlugin {
                     update_oath_banners,
                     cleanup_skill_summons,
                     update_spell_zones,
+                    infection::update,
                     update_execution_brands,
                     update_homing_swords,
                     update_blood_wheels,
@@ -50,9 +79,12 @@ impl Plugin for SkillsPlugin {
             .add_systems(Update, intercept_ember_rebirth.before(SurvivalSet))
             .add_systems(
                 Update,
+                growth::update_summon_growth.after(cast_learned_skills),
+            )
+            .add_systems(
+                Update,
                 (
                     resolve_transmute_kills,
-                    resolve_bond_summon_deaths,
                     intercept_ember_rebirth,
                     cast_learned_skills,
                     resolve_market_echoes,
@@ -66,6 +98,7 @@ impl Plugin for SkillsPlugin {
 #[derive(Resource)]
 pub(crate) struct SkillRuntime {
     cooldowns: [f32; SkillId::COUNT],
+    evolution_tiers: [u8; SkillId::COUNT],
     attack_count: u64,
     burns: HashMap<Entity, BurnState>,
     controls: HashMap<Entity, ControlState>,
@@ -77,9 +110,6 @@ pub(crate) struct SkillRuntime {
     last_spell: Option<SpellRecord>,
     triune: TriuneState,
     last_hero_position: Vec3,
-    spirit_mirror_remaining: f32,
-    ascension_rain_remaining: f32,
-    known_summons: HashMap<Entity, Vec3>,
     spell_power_multiplier: f32,
     summon_inherit_multiplier: f32,
     market_echo_chance: f32,
@@ -89,6 +119,7 @@ impl Default for SkillRuntime {
     fn default() -> Self {
         Self {
             cooldowns: [0.0; SkillId::COUNT],
+            evolution_tiers: [0; SkillId::COUNT],
             attack_count: 0,
             burns: HashMap::new(),
             controls: HashMap::new(),
@@ -100,9 +131,6 @@ impl Default for SkillRuntime {
             last_spell: None,
             triune: TriuneState::default(),
             last_hero_position: Vec3::new(-8.2, 0.0, 0.0),
-            spirit_mirror_remaining: 12.0,
-            ascension_rain_remaining: 6.0,
-            known_summons: HashMap::new(),
             spell_power_multiplier: 1.0,
             summon_inherit_multiplier: 1.0,
             market_echo_chance: 0.0,
@@ -111,6 +139,27 @@ impl Default for SkillRuntime {
 }
 
 impl SkillRuntime {
+    pub(crate) fn freeze_relic(
+        &mut self,
+        entity: Entity,
+        speed: f32,
+        elite: bool,
+        boss: bool,
+        seconds: f32,
+    ) {
+        let control = self.controls.entry(entity).or_insert(ControlState {
+            base_speed: speed,
+            slow_remaining: 0.0,
+            frozen_remaining: 0.0,
+            stunned_remaining: 0.0,
+        });
+        control.frozen_remaining = control
+            .frozen_remaining
+            .max(seconds * control_duration_scale(elite, boss));
+    }
+    pub(crate) fn ignite_relic(&mut self, entity: Entity, damage: f32) {
+        add_burn(&mut self.burns, entity, damage, 3);
+    }
     pub(crate) fn is_frozen(&self, target: Entity) -> bool {
         self.controls
             .get(&target)
@@ -175,35 +224,36 @@ pub(crate) struct SkillSummon;
 
 #[derive(Component)]
 pub(crate) struct BoneSentry {
-    attack_remaining: f32,
+    pub(crate) attack_remaining: f32,
     damage: f32,
 }
 
 #[derive(Component)]
 pub(crate) struct SpiritHound {
+    source_skill: usize,
     remaining: f32,
-    attack_remaining: f32,
+    pub(crate) attack_remaining: f32,
     damage: f32,
 }
 
 #[derive(Component)]
 pub(crate) struct TideElemental {
     remaining: f32,
-    attack_remaining: f32,
+    pub(crate) attack_remaining: f32,
     damage: f32,
 }
 
 #[derive(Component)]
 pub(crate) struct BoltTurret {
     remaining: f32,
-    attack_remaining: f32,
+    pub(crate) attack_remaining: f32,
     damage: f32,
 }
 
 #[derive(Component)]
 pub(crate) struct FrostWyrm {
     remaining: f32,
-    attack_remaining: f32,
+    pub(crate) attack_remaining: f32,
     damage: f32,
     frost_hits: HashMap<Entity, u8>,
 }
@@ -211,7 +261,7 @@ pub(crate) struct FrostWyrm {
 #[derive(Component)]
 pub(crate) struct AncestorColossus {
     remaining: f32,
-    slam_remaining: f32,
+    pub(crate) slam_remaining: f32,
     damage: f32,
 }
 
@@ -233,7 +283,7 @@ enum ZoneKind {
 }
 
 #[derive(Component)]
-struct SkillZone {
+pub(crate) struct SkillZone {
     kind: ZoneKind,
     remaining: f32,
     pulse_remaining: f32,
@@ -243,15 +293,26 @@ struct SkillZone {
     profile: DamageProfile,
 }
 
+impl SkillZone {
+    pub(crate) fn lighting_radius(&self) -> f32 {
+        self.radius
+    }
+    pub(crate) fn lighting_profile(&self) -> &DamageProfile {
+        &self.profile
+    }
+}
+
 #[derive(Component)]
 struct ExecutionBrand {
+    infection_rank: u8,
+    infection_damage: f32,
     target: Entity,
     remaining: f32,
     threshold: f32,
 }
 
 #[derive(Component)]
-struct HomingSword {
+pub(crate) struct HomingSword {
     target: Entity,
     damage: f32,
     speed: f32,
@@ -260,7 +321,7 @@ struct HomingSword {
 }
 
 #[derive(Component)]
-struct BloodWheel {
+pub(crate) struct BloodWheel {
     origin: Vec3,
     direction: Vec3,
     speed: f32,
@@ -292,7 +353,7 @@ struct TransmuteReward {
 }
 
 #[derive(Component)]
-struct OrbitBlade {
+pub(crate) struct OrbitBlade {
     slot: u8,
 }
 
@@ -338,8 +399,8 @@ enum FateOutcome {
 struct SummonBudget(usize);
 
 impl SummonBudget {
-    fn from_existing(existing: usize, spirit_points: u8, equipment_bonus: u8) -> Self {
-        Self(summon_cap(spirit_points, equipment_bonus).saturating_sub(existing))
+    fn from_existing(existing: usize, equipment_bonus: u8) -> Self {
+        Self(summon_cap(equipment_bonus).saturating_sub(existing))
     }
 
     fn take(&mut self) -> bool {
@@ -356,14 +417,15 @@ fn tick_skill_runtime(
     mut commands: Commands,
     time: Res<Time>,
     mut session: ResMut<GameSession>,
-    build: Res<PlayerBuild>,
-    bond_runtime: Res<BondRuntime>,
     market_effects: Res<MarketEffects>,
+    pressure: Option<Res<super::combat::ElitePressure>>,
+    encounters: Res<super::encounters::EncounterState>,
     mut runtime: ResMut<SkillRuntime>,
     mut enemies: Query<(Entity, &mut Enemy, &Transform)>,
     tide_elementals: Query<(), With<TideElemental>>,
-    summons: Query<(Entity, &Transform), With<SkillSummon>>,
+    evolution: Option<Res<super::skill_evolution::SkillEvolution>>,
 ) {
+    runtime.evolution_tiers = evolution.as_ref().map_or([0; SkillId::COUNT], |e| e.tiers);
     runtime.spell_power_multiplier = market_effects.effective_spell_power(1.0);
     runtime.summon_inherit_multiplier = market_effects.effective_summon_power(1.0);
     runtime.market_echo_chance = market_effects.spell_echo_chance();
@@ -371,24 +433,15 @@ fn tick_skill_runtime(
         return;
     }
     let delta = time.delta_secs();
-    for (index, cooldown) in runtime.cooldowns.iter_mut().enumerate() {
-        *cooldown =
-            (*cooldown - delta * skill_cooldown_recovery(index, &build, &bond_runtime)).max(0.0);
+    // Armory Donation shortens every skill cooldown by recovering it faster.
+    let recovery = delta
+        * encounters.cooldown_recovery_multiplier()
+        * pressure
+            .as_ref()
+            .map_or(1.0, |p| p.cooldown_recovery_multiplier());
+    for cooldown in &mut runtime.cooldowns {
+        *cooldown = (*cooldown - recovery).max(0.0);
     }
-    if build.bond(BondId::Spirits) >= 6 {
-        runtime.spirit_mirror_remaining -= delta;
-    } else {
-        runtime.spirit_mirror_remaining = 12.0;
-    }
-    if build.bond(BondId::Ascension) >= 6 && ascension_ready(&build) {
-        runtime.ascension_rain_remaining -= delta;
-    } else {
-        runtime.ascension_rain_remaining = 6.0;
-    }
-    runtime.known_summons = summons
-        .iter()
-        .map(|(entity, transform)| (entity, transform.translation))
-        .collect();
     for cooldown in runtime.orbit_hit_cooldowns.values_mut() {
         *cooldown -= delta;
     }
@@ -410,7 +463,7 @@ fn tick_skill_runtime(
         .map(|(entity, repair)| (*entity, *repair))
         .collect();
     for (entity, repair) in removed_tides {
-        session.core_hp = (session.core_hp + repair).min(session.core_max_hp);
+        session.heal_gate(repair);
         runtime.tide_repairs.remove(&entity);
     }
 
@@ -516,13 +569,12 @@ fn update_triune_engine(
 #[allow(clippy::too_many_arguments)]
 fn intercept_ember_rebirth(
     mut commands: Commands,
-    session: ResMut<GameSession>,
+    session: Res<GameSession>,
     build: Res<PlayerBuild>,
     mut vitals: ResMut<HeroVitals>,
     mut runtime: ResMut<SkillRuntime>,
     mut hero: Query<(&mut Transform, &mut Visibility), With<Hero>>,
 ) {
-    let mut session = session;
     if session.paused || session.finished {
         return;
     }
@@ -545,8 +597,6 @@ fn intercept_ember_rebirth(
     };
     if had_settled_death {
         vitals.deaths = vitals.deaths.saturating_sub(1);
-        session.core_hp =
-            (session.core_hp + 80.0 * skill_utility_multiplier(25)).min(session.core_max_hp);
     }
     vitals.alive = true;
     vitals.health = vitals.max_health * (0.35 * skill_utility_multiplier(25)).min(0.9);
@@ -563,9 +613,9 @@ fn intercept_ember_rebirth(
         position,
         damage,
         0.0,
-        3.6,
+        skill_effect_radius(25, rank).unwrap(),
         true,
-        3.8,
+        skill_effect_radius(25, rank).unwrap(),
         DamageProfile::for_skill(25),
     );
 }
@@ -575,20 +625,22 @@ fn sync_orbit_blades(
     session: Res<GameSession>,
     build: Res<PlayerBuild>,
     vitals: Res<HeroVitals>,
-    assets: Option<Res<GameAssets>>,
+    art: Option<Res<orbit_art::OrbitArt>>,
     hero: Query<&Transform, With<Hero>>,
     blades: Query<(Entity, &OrbitBlade)>,
+    evolution: Option<Res<super::skill_evolution::SkillEvolution>>,
 ) {
     if session.paused || session.finished {
         return;
     }
+    let tier = evolution.as_ref().map_or(0, |e| e.tiers[6]);
     let rank = build.skills[6];
     let desired = if vitals.alive && rank > 0 {
-        orbit_blade_count(rank)
+        orbit_blade_count(rank) + tier * 2
     } else {
         0
     };
-    let mut occupied = [false; 4];
+    let mut occupied = [false; 10];
     for (entity, blade) in &blades {
         if blade.slot >= desired {
             commands.entity(entity).despawn();
@@ -599,7 +651,7 @@ fn sync_orbit_blades(
     if desired == 0 {
         return;
     }
-    let Some(assets) = assets else {
+    let Some(art) = art else {
         return;
     };
     let Ok(hero) = hero.single() else {
@@ -609,342 +661,19 @@ fn sync_orbit_blades(
         if occupied[slot as usize] {
             continue;
         }
-        commands.spawn((
-            Mesh3d(assets.projectile_mesh.clone()),
-            MeshMaterial3d(assets.projectile_material.clone()),
-            Transform::from_translation(hero.translation + Vec3::Y * 0.42)
-                .with_scale(Vec3::splat(0.58)),
-            OrbitBlade { slot },
-        ));
+        orbit_art::spawn(
+            &mut commands,
+            &art,
+            hero.translation + Vec3::Y * 0.48,
+            rank,
+            slot,
+        );
     }
 }
 
 #[allow(clippy::too_many_arguments)]
 fn summon_attack_delta(delta: f32, attack_speed_multiplier: f32) -> f32 {
     delta * attack_speed_multiplier
-}
-
-fn update_skill_summons(
-    mut commands: Commands,
-    time: Res<Time>,
-    session: Res<GameSession>,
-    assets: Option<Res<GameAssets>>,
-    mut sentries: Query<
-        (&Transform, &mut BoneSentry),
-        (With<SkillSummon>, Without<SpiritHound>, Without<Enemy>),
-    >,
-    mut hounds: Query<
-        (Entity, &mut Transform, &mut SpiritHound),
-        (With<SkillSummon>, Without<BoneSentry>, Without<Enemy>),
-    >,
-    enemies: Query<(Entity, &Transform, &Enemy), (Without<SkillSummon>, Without<OrbitBlade>)>,
-    mut pools: ResMut<CombatPools>,
-    market_effects: Res<MarketEffects>,
-) {
-    if session.paused || session.finished {
-        return;
-    }
-    let Some(assets) = assets else {
-        return;
-    };
-    let delta = time.delta_secs();
-    let attack_delta = summon_attack_delta(delta, market_effects.summon_attack_speed_multiplier());
-    let targets: Vec<(Entity, Vec3)> = enemies
-        .iter()
-        .filter(|(_, _, enemy)| enemy.hp > 0.0)
-        .map(|(entity, transform, _)| (entity, transform.translation))
-        .collect();
-    for (transform, mut sentry) in &mut sentries {
-        sentry.attack_remaining -= attack_delta;
-        if sentry.attack_remaining > 0.0 {
-            continue;
-        }
-        let Some((_, target)) = nearest_position(transform.translation, &targets) else {
-            continue;
-        };
-        sentry.attack_remaining += 0.9;
-        let direction = (target - transform.translation).normalize_or_zero();
-        spawn_typed_projectile(
-            &mut commands,
-            &assets,
-            &mut pools,
-            transform.translation + Vec3::Y * 0.3,
-            direction,
-            17.0,
-            sentry.damage,
-            0.4,
-            0,
-            1.5,
-            0.72,
-            DamageProfile::for_skill(4),
-        );
-    }
-
-    for (entity, mut transform, mut hound) in &mut hounds {
-        hound.remaining -= delta;
-        if hound.remaining <= 0.0 {
-            pools.retire_summon(&mut commands, entity);
-            continue;
-        }
-        hound.attack_remaining -= attack_delta;
-        let Some((target_entity, target)) = nearest_position(transform.translation, &targets)
-        else {
-            continue;
-        };
-        let offset = target - transform.translation;
-        let distance = offset.length();
-        if distance > 1.1 {
-            transform.translation += offset.normalize_or_zero() * 5.2 * delta;
-            transform.translation.y = 0.0;
-            transform.rotate_y(delta * 5.0);
-        } else if hound.attack_remaining <= 0.0 {
-            hound.attack_remaining += 0.7;
-            schedule_typed_strike(
-                &mut commands,
-                target_entity,
-                hound.damage,
-                0.0,
-                0.05,
-                false,
-                0.48,
-                DamageProfile::for_skill(5),
-            );
-        }
-    }
-}
-
-#[allow(clippy::too_many_arguments)]
-fn update_rare_summons(
-    mut commands: Commands,
-    time: Res<Time>,
-    session: Res<GameSession>,
-    assets: Option<Res<GameAssets>>,
-    mut runtime: ResMut<SkillRuntime>,
-    mut tide_elementals: Query<
-        (Entity, &mut Transform, &mut TideElemental),
-        (With<SkillSummon>, Without<BoltTurret>, Without<Enemy>),
-    >,
-    mut bolt_turrets: Query<
-        (Entity, &Transform, &mut BoltTurret),
-        (With<SkillSummon>, Without<TideElemental>, Without<Enemy>),
-    >,
-    enemies: Query<(Entity, &Transform, &Enemy), (Without<SkillSummon>, Without<Hero>)>,
-    mut pools: ResMut<CombatPools>,
-    market_effects: Res<MarketEffects>,
-) {
-    if session.paused || session.finished {
-        return;
-    }
-    let Some(assets) = assets else {
-        return;
-    };
-    let delta = time.delta_secs();
-    let attack_delta = summon_attack_delta(delta, market_effects.summon_attack_speed_multiplier());
-    let targets: Vec<(Entity, Vec3)> = enemies
-        .iter()
-        .filter(|(_, _, enemy)| enemy.hp > 0.0)
-        .map(|(entity, transform, _)| (entity, transform.translation))
-        .collect();
-    for (entity, mut transform, mut elemental) in &mut tide_elementals {
-        elemental.remaining -= delta;
-        if elemental.remaining <= 0.0 {
-            pools.retire_summon(&mut commands, entity);
-            continue;
-        }
-        elemental.attack_remaining -= attack_delta;
-        let Some((target_entity, target)) = nearest_position(transform.translation, &targets)
-        else {
-            continue;
-        };
-        transform.rotate_y(delta * 1.8);
-        if elemental.attack_remaining <= 0.0 {
-            elemental.attack_remaining += 1.0;
-            let direction = (target - transform.translation).normalize_or_zero();
-            if spawn_typed_projectile(
-                &mut commands,
-                &assets,
-                &mut pools,
-                transform.translation + Vec3::Y * 0.65,
-                direction,
-                15.0,
-                elemental.damage,
-                0.46,
-                0,
-                1.8,
-                0.76,
-                DamageProfile::for_skill(16),
-            ) {
-                runtime.wet.insert(target_entity, 3.0);
-            }
-        }
-    }
-
-    for (entity, transform, mut turret) in &mut bolt_turrets {
-        turret.remaining -= delta;
-        if turret.remaining <= 0.0 {
-            pools.retire_summon(&mut commands, entity);
-            continue;
-        }
-        turret.attack_remaining -= attack_delta;
-        if turret.attack_remaining > 0.0 {
-            continue;
-        }
-        let Some((_, target)) = targets
-            .iter()
-            .copied()
-            .min_by(|left, right| left.1.x.total_cmp(&right.1.x))
-        else {
-            continue;
-        };
-        turret.attack_remaining += 0.72;
-        spawn_typed_projectile(
-            &mut commands,
-            &assets,
-            &mut pools,
-            transform.translation + Vec3::Y * 0.75,
-            (target - transform.translation).normalize_or_zero(),
-            21.0,
-            turret.damage,
-            0.43,
-            1,
-            1.7,
-            0.72,
-            DamageProfile::for_skill(17),
-        );
-    }
-}
-
-#[allow(clippy::too_many_arguments)]
-fn update_epic_summons(
-    mut commands: Commands,
-    time: Res<Time>,
-    session: Res<GameSession>,
-    assets: Option<Res<GameAssets>>,
-    mut runtime: ResMut<SkillRuntime>,
-    mut wyrms: Query<
-        (Entity, &Transform, &mut FrostWyrm),
-        (With<SkillSummon>, Without<AncestorColossus>, Without<Enemy>),
-    >,
-    mut colossi: Query<
-        (Entity, &Transform, &mut AncestorColossus),
-        (With<SkillSummon>, Without<FrostWyrm>, Without<Enemy>),
-    >,
-    mut enemies: Query<
-        (
-            Entity,
-            &mut Transform,
-            &Enemy,
-            Option<&BossEnemy>,
-            Option<&TrialEnemy>,
-            Option<&ArchiveEcho>,
-        ),
-        (Without<SkillSummon>, Without<Hero>),
-    >,
-    mut pools: ResMut<CombatPools>,
-    market_effects: Res<MarketEffects>,
-) {
-    if session.paused || session.finished {
-        return;
-    }
-    let Some(assets) = assets else {
-        return;
-    };
-    let delta = time.delta_secs();
-    let attack_delta = summon_attack_delta(delta, market_effects.summon_attack_speed_multiplier());
-    let snapshots: Vec<TargetInfo> = enemies
-        .iter()
-        .filter(|(_, _, enemy, _, _, _)| enemy.hp > 0.0)
-        .map(|(entity, transform, enemy, boss, trial, archive)| {
-            target_info(entity, transform, enemy, boss, trial, archive)
-        })
-        .collect();
-
-    for (entity, transform, mut wyrm) in &mut wyrms {
-        wyrm.remaining -= delta;
-        if wyrm.remaining <= 0.0 {
-            pools.retire_summon(&mut commands, entity);
-            continue;
-        }
-        wyrm.attack_remaining -= attack_delta;
-        if wyrm.attack_remaining > 0.0 {
-            continue;
-        }
-        let Some(target) = snapshots.iter().copied().min_by(|left, right| {
-            transform
-                .translation
-                .distance_squared(left.position)
-                .total_cmp(&transform.translation.distance_squared(right.position))
-        }) else {
-            continue;
-        };
-        wyrm.attack_remaining += 1.15;
-        let direction = (target.position - transform.translation).normalize_or_zero();
-        if spawn_typed_projectile(
-            &mut commands,
-            &assets,
-            &mut pools,
-            transform.translation + Vec3::Y * 0.7,
-            direction,
-            17.0,
-            wyrm.damage,
-            0.62,
-            3,
-            2.0,
-            1.05,
-            DamageProfile::for_skill(26),
-        ) {
-            for hit in line_targets(transform.translation, direction, &snapshots, 14.0, 0.9, 4) {
-                let count = wyrm.frost_hits.entry(hit.entity).or_default();
-                *count += 1;
-                if *count >= 3 {
-                    *count = 0;
-                    apply_control(&mut runtime, hit, 1.8, 1.2, 0.0);
-                }
-            }
-        }
-        wyrm.frost_hits
-            .retain(|target, _| enemies.contains(*target));
-    }
-
-    for (entity, transform, mut colossus) in &mut colossi {
-        colossus.remaining -= delta;
-        colossus.slam_remaining -= attack_delta;
-        let center = transform.translation;
-        for (enemy_entity, mut enemy_transform, enemy, boss, trial, archive) in &mut enemies {
-            if enemy.hp <= 0.0 {
-                continue;
-            }
-            let distance = center.distance(enemy_transform.translation);
-            if distance > 5.2 {
-                continue;
-            }
-            let target = target_info(enemy_entity, &enemy_transform, enemy, boss, trial, archive);
-            let pull_scale = forced_movement_scale(enemy.elite, boss.is_some());
-            if distance > 1.55 {
-                let to_center = center - enemy_transform.translation;
-                enemy_transform.translation +=
-                    to_center.normalize_or_zero() * 2.4 * pull_scale * delta;
-            } else {
-                apply_control(&mut runtime, target, 0.0, 0.0, 0.16);
-            }
-        }
-        while colossus.slam_remaining <= 0.0 && colossus.remaining >= -0.001 {
-            colossus.slam_remaining += 3.0;
-            schedule_typed_fixed_strike(
-                &mut commands,
-                center,
-                colossus.damage,
-                0.0,
-                3.1,
-                true,
-                3.25,
-                DamageProfile::for_skill(27),
-            );
-        }
-        if colossus.remaining <= 0.0 {
-            pools.retire_summon(&mut commands, entity);
-        }
-    }
 }
 
 fn update_oath_banners(
@@ -957,7 +686,7 @@ fn update_oath_banners(
     mut pools: ResMut<CombatPools>,
     mut banners: Query<(Entity, &mut OathBanner)>,
 ) {
-    if session.finished || selected.is_changed() {
+    if session.finished || selected.is_changed() || build.skills[21] == 0 {
         for (entity, mut banner) in &mut banners {
             retire_oath_banner(
                 &mut commands,
@@ -981,8 +710,7 @@ fn update_oath_banners(
         banner.remaining -= delta;
         banner.repair_remaining -= delta;
         while banner.repair_remaining <= 0.0 && banner.remaining >= -0.001 {
-            session.core_hp =
-                (session.core_hp + skill_utility_multiplier(21)).min(session.core_max_hp);
+            session.heal_gate(skill_utility_multiplier(21));
             banner.repair_remaining += 1.0;
         }
         if banner.remaining <= 0.0 {
@@ -1014,15 +742,44 @@ fn cleanup_skill_summons(
     mut commands: Commands,
     session: Res<GameSession>,
     selected: Res<SelectedHero>,
-    summons: Query<Entity, With<SkillSummon>>,
+    build: Res<PlayerBuild>,
+    summons: Query<
+        (
+            Entity,
+            Option<&BoneSentry>,
+            Option<&SpiritHound>,
+            Option<&TideElemental>,
+            Option<&BoltTurret>,
+            Option<&FrostWyrm>,
+            Option<&AncestorColossus>,
+        ),
+        With<SkillSummon>,
+    >,
     mut runtime: ResMut<SkillRuntime>,
     mut pools: ResMut<CombatPools>,
 ) {
-    if !session.finished && !selected.is_changed() {
-        return;
-    }
-    for entity in &summons {
-        runtime.known_summons.remove(&entity);
+    for (entity, bone, hound, tide, turret, wyrm, colossus) in &summons {
+        let skill = if bone.is_some() {
+            Some(4)
+        } else if let Some(hound) = hound {
+            Some(hound.source_skill)
+        } else if tide.is_some() {
+            Some(16)
+        } else if turret.is_some() {
+            Some(17)
+        } else if wyrm.is_some() {
+            Some(26)
+        } else if colossus.is_some() {
+            Some(27)
+        } else {
+            None
+        };
+        if !session.finished
+            && !selected.is_changed()
+            && !skill.is_some_and(|skill| build.skills[skill] == 0)
+        {
+            continue;
+        }
         runtime.tide_repairs.remove(&entity);
         pools.retire_summon(&mut commands, entity);
     }
@@ -1189,7 +946,7 @@ fn update_homing_swords(
         };
         sword.target = target_entity;
         let offset = target_position - transform.translation;
-        if offset.length() <= 0.55 {
+        if offset.length() <= 0.55 * (transform.scale.x / 0.62) {
             schedule_typed_strike(
                 &mut commands,
                 target_entity,
@@ -1240,7 +997,7 @@ fn update_blood_wheels(
                 || transform
                     .translation
                     .distance_squared(enemy_transform.translation)
-                    > 0.82_f32.powi(2)
+                    > (0.82 * transform.scale.x / 1.15).powi(2)
             {
                 continue;
             }
@@ -1297,38 +1054,6 @@ fn resolve_transmute_kills(
     }
 }
 
-fn resolve_bond_summon_deaths(
-    mut commands: Commands,
-    session: Res<GameSession>,
-    build: Res<PlayerBuild>,
-    vitals: Res<HeroVitals>,
-    mut runtime: ResMut<SkillRuntime>,
-    summons: Query<(), With<SkillSummon>>,
-) {
-    if session.paused || session.finished || build.bond(BondId::Spirits) < 4 {
-        return;
-    }
-    let vanished: Vec<(Entity, Vec3)> = runtime
-        .known_summons
-        .iter()
-        .filter(|(entity, _)| !summons.contains(**entity))
-        .map(|(entity, position)| (*entity, *position))
-        .collect();
-    for (entity, position) in vanished {
-        queue_bond_strike(
-            &mut commands,
-            None,
-            position,
-            50.0 + 0.35 * effective_summon_power(&vitals, &runtime),
-            2.3,
-            u8::MAX,
-            DamageProfile::new(DamageElement::Physical, DamageClass::Summon),
-            0.0,
-        );
-        runtime.known_summons.remove(&entity);
-    }
-}
-
 fn update_orbit_blades(
     mut commands: Commands,
     session: Res<GameSession>,
@@ -1338,10 +1063,12 @@ fn update_orbit_blades(
     hero: Query<&Transform, (With<Hero>, Without<OrbitBlade>)>,
     mut blades: Query<(&OrbitBlade, &mut Transform), (Without<Enemy>, Without<Hero>)>,
     enemies: Query<(Entity, &Transform, &Enemy), (Without<OrbitBlade>, Without<Hero>)>,
+    evolution: Option<Res<super::skill_evolution::SkillEvolution>>,
 ) {
     if session.paused || session.finished || !vitals.can_act() {
         return;
     }
+    let tier = evolution.as_ref().map_or(0, |e| e.tiers[6]);
     let rank = build.skills[6];
     if rank == 0 {
         return;
@@ -1349,20 +1076,26 @@ fn update_orbit_blades(
     let Ok(hero) = hero.single() else {
         return;
     };
-    let count = orbit_blade_count(rank).max(1);
+    let count = (orbit_blade_count(rank) + tier * 2).max(1);
     let damage = scaled_skill_damage(6, rank, &build, &vitals, &runtime);
     for (blade, mut transform) in &mut blades {
         let angle =
             session.elapsed * 2.8 + blade.slot as f32 * std::f32::consts::TAU / count as f32;
+        let radius = if tier > 0 && blade.slot % 2 == 1 {
+            2.65 + f32::from(tier) * 0.2
+        } else {
+            2.05
+        } * rank_size(rank);
         transform.translation =
-            hero.translation + Vec3::new(angle.cos() * 2.05, 0.48, angle.sin() * 2.05);
-        transform.rotate_y(0.18);
+            hero.translation + Vec3::new(angle.cos() * radius, 0.48, angle.sin() * radius);
+        transform.rotation = Quat::from_rotation_y(session.elapsed * 11.0 + blade.slot as f32);
+        transform.scale = Vec3::splat(orbit_art::scale(rank));
         for (enemy_entity, enemy_transform, enemy) in &enemies {
             if enemy.hp <= 0.0
                 || transform
                     .translation
                     .distance_squared(enemy_transform.translation)
-                    > 0.85 * 0.85
+                    > skill_effect_radius(6, rank).unwrap().powi(2)
                 || runtime
                     .orbit_hit_cooldowns
                     .get(&enemy_entity)
@@ -1439,7 +1172,7 @@ fn resolve_skill_strikes(
                 reward: reward.reward,
             });
         }
-        pools.rent_impact_fx(
+        if let Some(impact) = pools.rent_impact_fx(
             &mut commands,
             assets.fx_mesh.clone(),
             assets.storm_material.clone(),
@@ -1449,7 +1182,11 @@ fn resolve_skill_strikes(
                 start_scale: 0.12,
                 end_scale: strike.fx_scale,
             },
-        );
+        ) {
+            commands
+                .entity(impact)
+                .insert(super::skill_lighting::GroundLightProfile(strike.profile));
+        }
         commands.entity(entity).despawn();
     }
 }
@@ -1526,11 +1263,8 @@ fn cast_learned_skills(
         })
     });
     let primary = targets.first().copied();
-    let mut summon_budget = SummonBudget::from_existing(
-        summons.iter().count(),
-        build.bond(BondId::Spirits),
-        market_effects.summon_cap_bonus(),
-    );
+    let mut summon_budget =
+        SummonBudget::from_existing(summons.iter().count(), market_effects.summon_cap_bonus());
 
     apply_resolved_attack_volleys(
         &mut runtime,
@@ -1630,17 +1364,6 @@ fn cast_learned_skills(
         &mut summon_budget,
         &mut runtime,
     );
-    cast_bond_summons(
-        &mut commands,
-        &assets,
-        &mut pools,
-        &build,
-        &vitals,
-        origin,
-        &targets,
-        &mut summon_budget,
-        &mut runtime,
-    );
     cast_cinder_aura(
         &mut commands,
         &assets,
@@ -1720,13 +1443,13 @@ fn cast_attack_procs(
             direction,
             build.projectile_speed,
             damage,
-            0.46,
+            0.46 * rank_size(ember_rank),
             0,
-            1.5,
-            0.94,
+            1.5 * rank_size(ember_rank),
+            0.94 * rank_size(ember_rank),
             DamageProfile::for_skill(1).with_burn(),
         ) {
-            let burn_cap = if build.bond(BondId::Ember) >= 2 { 5 } else { 3 };
+            let burn_cap = 3;
             add_burn(&mut runtime.burns, target.entity, damage, burn_cap);
         }
     }
@@ -1746,10 +1469,10 @@ fn cast_attack_procs(
                 direction,
                 build.projectile_speed * 1.08,
                 build.attack_damage * 0.6,
-                0.4,
+                0.4 * rank_size(volley_rank),
                 4,
-                1.7,
-                0.66,
+                1.7 * rank_size(volley_rank),
+                0.66 * rank_size(volley_rank),
                 DamageProfile::for_skill(7),
             );
         }
@@ -1774,11 +1497,11 @@ fn cast_arc_chain(
     }
     runtime.cooldowns[0] = skill_cooldown(0);
     let damage = scaled_skill_damage(0, rank, build, vitals, runtime);
-    let extra_chain = u8::from(build.bond(BondId::Thunder) >= 4);
     let chain = chain_target_sequence(
         targets,
         first,
-        arc_chain_hit_count(rank).saturating_add(extra_chain),
+        arc_chain_hit_count(rank),
+        skill_effect_radius(0, rank).unwrap(),
     );
     let mut from = origin;
     for (hop, target) in chain.iter().enumerate() {
@@ -1792,7 +1515,14 @@ fn cast_arc_chain(
             0.58,
             DamageProfile::for_skill(0),
         );
-        spawn_visual_bolt(commands, assets, from, target.position, 22.0, 0.38);
+        spawn_visual_bolt(
+            commands,
+            assets,
+            from,
+            target.position,
+            22.0,
+            0.38 * rank_size(rank),
+        );
         from = target.position;
     }
     apply_static_seals(commands, runtime, chain, build, vitals, 0.04);
@@ -1850,10 +1580,10 @@ fn cast_frost_lance(
             direction,
             build.projectile_speed * 0.92,
             damage,
-            0.5,
+            0.5 * rank_size(rank),
             1,
-            1.8,
-            0.86,
+            1.8 * rank_size(rank),
+            0.86 * rank_size(rank),
             DamageProfile::for_skill(2),
         ) {
             continue;
@@ -1862,8 +1592,8 @@ fn cast_frost_lance(
             origin,
             direction,
             targets,
-            build.attack_range + 5.0,
-            0.75,
+            (build.attack_range + 5.0) * rank_size(rank),
+            0.75 * rank_size(rank),
             2,
         ) {
             if controlled.insert(target.entity) {
@@ -1897,7 +1627,7 @@ fn cast_tidal_fan(
     vitals: &HeroVitals,
     origin: Vec3,
     first: TargetInfo,
-    targets: &[TargetInfo],
+    _targets: &[TargetInfo],
     runtime: &mut SkillRuntime,
 ) {
     let rank = build.skills[3];
@@ -1905,55 +1635,15 @@ fn cast_tidal_fan(
         return;
     }
     runtime.cooldowns[3] = skill_cooldown(3);
-    let damage = scaled_skill_damage(3, rank, build, vitals, runtime);
-    let base_direction = (first.position - origin).normalize_or_zero();
-    let mut ordered_per_blade = Vec::with_capacity(5);
-    for blade in 0..5 {
-        let offset = blade as f32 - 2.0;
-        let direction = Quat::from_rotation_y(offset * 0.16) * base_direction;
-        spawn_free_visual_bolt(commands, assets, origin, direction, 15.0, 0.62, 0.52);
-        let mut candidates: Vec<(Entity, f32)> = targets
-            .iter()
-            .filter_map(|target| {
-                let delta = target.position - origin;
-                let distance = delta.length();
-                let alignment = direction.dot(delta.normalize_or_zero());
-                (distance <= build.attack_range + 5.0 && alignment >= 0.88)
-                    .then_some((target.entity, distance + (1.0 - alignment) * 20.0))
-            })
-            .collect();
-        candidates.sort_by(|left, right| left.1.total_cmp(&right.1));
-        ordered_per_blade.push(candidates.into_iter().map(|(entity, _)| entity).collect());
-    }
-    let assignments = assign_capped_targets(&ordered_per_blade, 2);
-    let by_entity: HashMap<Entity, TargetInfo> = targets
-        .iter()
-        .map(|target| (target.entity, *target))
-        .collect();
-    let mut marked = Vec::new();
-    let mut unique = HashSet::new();
-    for (blade, target_entity) in assignments.into_iter().enumerate() {
-        let Some(target_entity) = target_entity else {
-            continue;
-        };
-        let delay = 0.08 + blade as f32 * 0.025;
-        schedule_typed_strike(
-            commands,
-            target_entity,
-            damage,
-            delay,
-            0.05,
-            false,
-            0.46,
-            DamageProfile::for_skill(3),
-        );
-        if unique.insert(target_entity)
-            && let Some(target) = by_entity.get(&target_entity)
-        {
-            marked.push(*target);
-        }
-    }
-    apply_static_seals(commands, runtime, marked, build, vitals, 0.08);
+    let damage = scaled_skill_damage(3, rank, build, vitals, runtime) * 2.0;
+    tidal_wave::spawn(
+        commands,
+        origin,
+        first.position - origin,
+        rank,
+        damage,
+        runtime.evolution_tiers[3],
+    );
     record_spell_and_echo(
         commands,
         assets,
@@ -1985,16 +1675,22 @@ fn cast_bone_sentry(
         return;
     }
     runtime.cooldowns[4] = skill_cooldown(4);
-    if existing_sentries >= bone_sentry_cap(rank) as usize || !summon_budget.take() {
+    let cap = if runtime.evolution_tiers[4] > 0 {
+        1
+    } else {
+        bone_sentry_cap(rank)
+    };
+    if existing_sentries >= cap as usize || !summon_budget.take() {
         return;
     }
     let damage = scaled_skill_damage(4, rank, build, vitals, runtime);
-    let lane = existing_sentries as f32 - (bone_sentry_cap(rank) as f32 - 1.0) * 0.5;
+
     let Some(entity) = pools.rent_scene_summon(
         commands,
         SummonVisual::BoneSentry,
         assets.summon_scenes[0].clone(),
-        Transform::from_xyz(-8.6, 0.0, lane * 1.65).with_scale(Vec3::splat(0.7)),
+        Transform::from_translation(growth::bone_anchor(existing_sentries))
+            .with_scale(growth::summon_scale(4, rank)),
     ) else {
         return;
     };
@@ -2033,79 +1729,24 @@ fn cast_spirit_hounds(
             commands,
             SummonVisual::SpiritHound,
             assets.summon_scenes[1].clone(),
-            Transform::from_translation(
-                origin + Vec3::new(angle.cos() * 0.9, 0.0, angle.sin() * 0.9),
-            )
-            .with_scale(Vec3::splat(0.82)),
+            Transform::from_translation(Vec3::new(
+                origin.x.max(super::resources::GATE_POSITION.x + 1.8) + angle.cos() * 0.9,
+                0.0,
+                angle.sin() * 0.9,
+            ))
+            .with_scale(growth::summon_scale(5, rank)),
         ) else {
             break;
         };
         commands.entity(entity).insert((
             SkillSummon,
             SpiritHound {
+                source_skill: 5,
                 remaining: 10.0,
                 attack_remaining: index as f32 * 0.12,
                 damage,
             },
         ));
-    }
-}
-
-#[allow(clippy::too_many_arguments)]
-fn cast_bond_summons(
-    commands: &mut Commands,
-    assets: &GameAssets,
-    pools: &mut CombatPools,
-    build: &PlayerBuild,
-    vitals: &HeroVitals,
-    origin: Vec3,
-    targets: &[TargetInfo],
-    summon_budget: &mut SummonBudget,
-    runtime: &mut SkillRuntime,
-) {
-    if build.bond(BondId::Spirits) >= 6
-        && runtime.spirit_mirror_remaining <= 0.0
-        && summon_budget.take()
-    {
-        runtime.spirit_mirror_remaining += 12.0;
-        if let Some(entity) = pools.rent_scene_summon(
-            commands,
-            SummonVisual::SpiritHound,
-            assets.summon_scenes[1].clone(),
-            Transform::from_translation(origin + Vec3::new(-0.7, 0.0, 0.8))
-                .with_scale(Vec3::splat(0.9)),
-        ) {
-            commands.entity(entity).insert((
-                SkillSummon,
-                SpiritHound {
-                    remaining: 8.0,
-                    attack_remaining: 0.0,
-                    damage: 45.0 + 0.45 * effective_summon_power(vitals, runtime),
-                },
-            ));
-        }
-    }
-
-    if build.bond(BondId::Ascension) >= 6
-        && ascension_ready(build)
-        && runtime.ascension_rain_remaining <= 0.0
-        && !targets.is_empty()
-    {
-        runtime.ascension_rain_remaining += 6.0;
-        let damage = 55.0 + 0.45 * effective_spell_power(vitals, runtime);
-        for strike in 0..6 {
-            let target = targets[strike % targets.len()];
-            queue_bond_strike(
-                commands,
-                Some(target.entity),
-                target.position,
-                damage,
-                0.36,
-                0,
-                DamageProfile::new(DamageElement::Physical, DamageClass::Spell),
-                strike as f32 * 0.08,
-            );
-        }
     }
 }
 
@@ -2132,16 +1773,19 @@ fn cast_arcane_star(
         first.entity,
         damage,
         0.18,
-        2.0,
+        skill_effect_radius(8, rank).unwrap(),
         true,
-        2.1,
+        skill_effect_radius(8, rank).unwrap(),
         DamageProfile::for_skill(8),
     );
     spawn_visual_bolt(commands, assets, origin, first.position, 15.5, 0.72);
     let marked: Vec<TargetInfo> = targets
         .iter()
         .copied()
-        .filter(|target| target.position.distance_squared(first.position) <= 2.0_f32.powi(2))
+        .filter(|target| {
+            target.position.distance_squared(first.position)
+                <= skill_effect_radius(8, rank).unwrap().powi(2)
+        })
         .collect();
     apply_static_seals(commands, runtime, marked, build, vitals, 0.18);
     record_spell_and_echo(
@@ -2181,7 +1825,15 @@ fn cast_ground_pulse(
     let hit: Vec<TargetInfo> = targets
         .iter()
         .copied()
-        .filter(|target| inside_cone(origin, forward, target.position, 5.4, 36.0_f32.to_radians()))
+        .filter(|target| {
+            inside_cone(
+                origin,
+                forward,
+                target.position,
+                skill_effect_radius(9, rank).unwrap(),
+                36.0_f32.to_radians(),
+            )
+        })
         .collect();
     for target in &hit {
         let delay = origin.distance(target.position) / 22.0;
@@ -2198,7 +1850,7 @@ fn cast_ground_pulse(
         apply_control(runtime, *target, 0.0, 0.0, 0.6);
     }
     let center = origin + forward * 2.4;
-    pools.rent_impact_fx(
+    if let Some(impact) = pools.rent_impact_fx(
         commands,
         assets.fx_mesh.clone(),
         assets.storm_material.clone(),
@@ -2206,9 +1858,15 @@ fn cast_ground_pulse(
         ImpactFx {
             lifetime: 0.34,
             start_scale: 0.2,
-            end_scale: 2.5,
+            end_scale: 2.5 * rank_size(rank),
         },
-    );
+    ) {
+        commands
+            .entity(impact)
+            .insert(super::skill_lighting::GroundLightProfile(
+                DamageProfile::for_skill(9),
+            ));
+    }
     apply_static_seals(commands, runtime, hit, build, vitals, 0.08);
     record_spell_and_echo(
         commands,
@@ -2244,7 +1902,10 @@ fn cast_cinder_aura(
     let nearby: Vec<TargetInfo> = targets
         .iter()
         .copied()
-        .filter(|target| origin.distance_squared(target.position) <= 2.6_f32.powi(2))
+        .filter(|target| {
+            origin.distance_squared(target.position)
+                <= skill_effect_radius(11, rank).unwrap().powi(2)
+        })
         .collect();
     for target in &nearby {
         schedule_typed_strike(
@@ -2305,14 +1966,10 @@ fn cast_rare_skills(
             assets,
             primary.position,
             ZoneKind::StormMatrix,
-            4.0 + if build.bond(BondId::Thunder) >= 4 {
-                0.6
-            } else {
-                0.0
-            },
+            4.0,
             0.6,
             damage,
-            3.1,
+            skill_effect_radius(12, storm_rank).unwrap(),
         );
         record_spell_and_echo(
             commands,
@@ -2332,18 +1989,19 @@ fn cast_rare_skills(
     let meteor_rank = build.skills[13];
     if meteor_rank > 0 && runtime.cooldowns[13] <= 0.0 {
         runtime.cooldowns[13] = skill_cooldown(13);
+        let radius = skill_effect_radius(13, meteor_rank).unwrap();
         let damage = scaled_skill_damage(13, meteor_rank, build, vitals, runtime);
         schedule_typed_fixed_strike(
             commands,
             primary.position,
             damage,
             0.8,
-            3.2,
+            radius,
             true,
-            3.4,
+            radius,
             DamageProfile::for_skill(13),
         );
-        pools.rent_impact_fx(
+        if let Some(warning) = pools.rent_impact_fx(
             commands,
             assets.fx_mesh.clone(),
             assets.storm_material.clone(),
@@ -2352,13 +2010,19 @@ fn cast_rare_skills(
             ImpactFx {
                 lifetime: 0.8,
                 start_scale: 0.18,
-                end_scale: 3.2,
+                end_scale: radius,
             },
-        );
+        ) {
+            commands
+                .entity(warning)
+                .insert(super::skill_lighting::GroundLightProfile(
+                    DamageProfile::for_skill(13),
+                ));
+        }
         let affected = targets
             .iter()
             .copied()
-            .filter(|target| target.position.distance_squared(primary.position) <= 3.2_f32.powi(2));
+            .filter(|target| target.position.distance_squared(primary.position) <= radius.powi(2));
         apply_static_seals(commands, runtime, affected, build, vitals, 0.8);
         record_spell_and_echo(
             commands,
@@ -2387,7 +2051,7 @@ fn cast_rare_skills(
             5.0,
             0.8,
             damage,
-            2.8,
+            skill_effect_radius(14, glacier_rank).unwrap(),
         );
         record_spell_and_echo(
             commands,
@@ -2413,14 +2077,10 @@ fn cast_rare_skills(
             assets,
             primary.position,
             ZoneKind::VortexColumn,
-            4.0 + if build.bond(BondId::Thunder) >= 4 {
-                0.5
-            } else {
-                0.0
-            },
+            4.0,
             0.5,
             total_damage / 8.0,
-            3.4,
+            skill_effect_radius(15, vortex_rank).unwrap(),
         );
         record_spell_and_echo(
             commands,
@@ -2445,8 +2105,12 @@ fn cast_rare_skills(
                 commands,
                 SummonVisual::TideElemental,
                 assets.summon_scenes[2].clone(),
-                Transform::from_translation(origin + Vec3::new(0.8, 0.0, -0.9))
-                    .with_scale(Vec3::splat(0.82)),
+                Transform::from_translation(Vec3::new(
+                    origin.x.max(super::resources::GATE_POSITION.x + 1.8),
+                    0.0,
+                    -0.9,
+                ))
+                .with_scale(growth::summon_scale(16, tide_rank)),
             )
         {
             commands.entity(entity).insert((
@@ -2472,7 +2136,9 @@ fn cast_rare_skills(
                 commands,
                 SummonVisual::BoltTurret,
                 assets.summon_scenes[3].clone(),
-                Transform::from_xyz(-9.2, 0.0, 2.3).with_scale(Vec3::splat(0.82)),
+                Transform::from_translation(super::resources::GATE_POSITION + Vec3::Y * 2.1)
+                    .with_rotation(Quat::from_rotation_y(-std::f32::consts::FRAC_PI_2))
+                    .with_scale(growth::summon_scale(17, turret_rank)),
             )
         {
             commands.entity(entity).insert((
@@ -2495,11 +2161,13 @@ fn cast_rare_skills(
             .max_by(|left, right| left.max_hp.total_cmp(&right.max_hp))
         {
             commands.spawn(ExecutionBrand {
+                infection_rank: brand_rank,
+                infection_damage: infection::damage_per_tick(brand_rank, vitals.attack_damage()),
                 target: target.entity,
                 remaining: 8.0,
                 threshold: execution_threshold(target.special),
             });
-            pools.rent_impact_fx(
+            if let Some(impact) = pools.rent_impact_fx(
                 commands,
                 assets.fx_mesh.clone(),
                 assets.storm_material.clone(),
@@ -2510,7 +2178,13 @@ fn cast_rare_skills(
                     start_scale: 0.15,
                     end_scale: 1.3,
                 },
-            );
+            ) {
+                commands
+                    .entity(impact)
+                    .insert(super::skill_lighting::GroundLightProfile(
+                        DamageProfile::for_skill(18),
+                    ));
+            }
         }
     }
 
@@ -2529,12 +2203,12 @@ fn cast_rare_skills(
                 Transform::from_translation(
                     origin + Vec3::new(0.0, 0.38, (index as f32 - 1.0) * 0.28),
                 )
-                .with_scale(Vec3::splat(0.62)),
+                .with_scale(Vec3::splat(0.62 * rank_size(swords_rank))),
                 HomingSword {
                     target: target.entity,
                     damage,
                     speed: 18.5,
-                    remaining: 2.0,
+                    remaining: 2.0 * rank_size(swords_rank),
                     profile: DamageProfile::for_skill(19),
                 },
             ));
@@ -2564,7 +2238,8 @@ fn cast_rare_skills(
                 SummonVisual::OathBanner,
                 assets.fx_mesh.clone(),
                 assets.storm_material.clone(),
-                Transform::from_xyz(-9.0, 0.5, -2.3).with_scale(Vec3::new(0.32, 1.9, 0.32)),
+                Transform::from_xyz(-9.0, 0.5, -2.3)
+                    .with_scale(growth::summon_scale(21, banner_rank)),
             )
         {
             commands.entity(entity).insert((
@@ -2587,7 +2262,7 @@ fn cast_rare_skills(
     if transmute_rank > 0 && runtime.cooldowns[22] <= 0.0 {
         runtime.cooldowns[22] = skill_cooldown(22);
         let damage = scaled_skill_damage(22, transmute_rank, build, vitals, runtime);
-        let radius = 2.8;
+        let radius = skill_effect_radius(22, transmute_rank).unwrap();
         let affected: Vec<TargetInfo> = targets
             .iter()
             .copied()
@@ -2603,7 +2278,7 @@ fn cast_rare_skills(
                 reward: target.gold,
             })
             .collect();
-        schedule_transmute_strike(commands, primary.entity, damage, radius, 2.9, rewards);
+        schedule_transmute_strike(commands, primary.entity, damage, radius, radius, rewards);
         apply_static_seals(
             commands,
             runtime,
@@ -2633,16 +2308,17 @@ fn cast_rare_skills(
         commands.spawn((
             Mesh3d(assets.fx_mesh.clone()),
             MeshMaterial3d(assets.storm_material.clone()),
-            Transform::from_translation(origin + Vec3::Y * 0.4).with_scale(Vec3::splat(1.15)),
+            Transform::from_translation(origin + Vec3::Y * 0.4)
+                .with_scale(Vec3::splat(1.15 * rank_size(wheel_rank))),
             BloodWheel {
                 origin: origin + Vec3::Y * 0.4,
                 direction: (primary.position - origin).normalize_or_zero(),
                 speed: 14.0,
-                max_distance: (build.attack_range + 2.0).clamp(7.0, 16.0),
+                max_distance: (build.attack_range + 2.0).clamp(7.0, 16.0) * rank_size(wheel_rank),
                 traveled: 0.0,
                 returning: false,
                 damage: build.attack_damage * 0.9 * skill_utility_multiplier(23),
-                burn_cap: if build.bond(BondId::Ember) >= 2 { 5 } else { 3 },
+                burn_cap: 3,
                 outbound_hits: HashSet::new(),
                 return_hits: HashSet::new(),
                 outbound_profile: DamageProfile::new(DamageElement::Physical, DamageClass::Attack),
@@ -2718,8 +2394,12 @@ fn cast_epic_skills(
                 commands,
                 SummonVisual::FrostWyrm,
                 assets.summon_scenes[4].clone(),
-                Transform::from_translation(origin + Vec3::new(0.6, 0.0, 1.0))
-                    .with_scale(Vec3::splat(0.9)),
+                Transform::from_translation(Vec3::new(
+                    origin.x.max(super::resources::GATE_POSITION.x + 1.8),
+                    0.0,
+                    1.0,
+                ))
+                .with_scale(growth::summon_scale(26, wyrm_rank)),
             )
         {
             commands.entity(entity).insert((
@@ -2742,7 +2422,8 @@ fn cast_epic_skills(
                 commands,
                 SummonVisual::AncestorColossus,
                 assets.summon_scenes[5].clone(),
-                Transform::from_xyz(-8.5, 0.0, 0.0).with_scale(Vec3::splat(0.92)),
+                Transform::from_xyz(super::resources::GATE_POSITION.x + 2.2, 0.0, 0.0)
+                    .with_scale(growth::summon_scale(27, colossus_rank)),
             )
         {
             commands.entity(entity).insert((
@@ -2759,12 +2440,7 @@ fn cast_epic_skills(
     let fate_rank = build.skills[29];
     if fate_rank > 0 && runtime.cooldowns[29] <= 0.0 {
         runtime.cooldowns[29] = skill_cooldown(29);
-        let first_outcome = roll_fate_cube(fate_rank, rng.next_u32());
-        let outcome = if build.bond(BondId::Fortune) >= 6 {
-            choose_luckier_fate(first_outcome, roll_fate_cube(fate_rank, rng.next_u32()))
-        } else {
-            first_outcome
-        };
+        let outcome = roll_fate_cube(fate_rank, rng.next_u32());
         let rank_value = fate_rank.saturating_sub(1) as f32;
         let fx_center = match outcome {
             FateOutcome::Lightning | FateOutcome::FireRain => primary.position,
@@ -2826,16 +2502,19 @@ fn cast_epic_skills(
                         commands,
                         SummonVisual::SpiritHound,
                         assets.summon_scenes[1].clone(),
-                        Transform::from_translation(
-                            origin + Vec3::new(angle.cos(), 0.0, angle.sin()),
-                        )
-                        .with_scale(Vec3::splat(0.78)),
+                        Transform::from_translation(Vec3::new(
+                            origin.x.max(super::resources::GATE_POSITION.x + 1.8) + angle.cos(),
+                            0.0,
+                            angle.sin(),
+                        ))
+                        .with_scale(growth::summon_scale(29, fate_rank)),
                     ) else {
                         break;
                     };
                     commands.entity(entity).insert((
                         SkillSummon,
                         SpiritHound {
+                            source_skill: 29,
                             remaining: 8.0,
                             attack_remaining: summon as f32 * 0.1,
                             damage: (45.0
@@ -2847,7 +2526,7 @@ fn cast_epic_skills(
                 }
             }
         }
-        pools.rent_impact_fx(
+        if let Some(impact) = pools.rent_impact_fx(
             commands,
             assets.fx_mesh.clone(),
             assets.storm_material.clone(),
@@ -2857,7 +2536,20 @@ fn cast_epic_skills(
                 start_scale: 0.16,
                 end_scale: 2.4,
             },
-        );
+        ) {
+            let profile = match outcome {
+                FateOutcome::Lightning => {
+                    DamageProfile::new(DamageElement::Storm, DamageClass::Spell)
+                }
+                FateOutcome::FireRain => {
+                    DamageProfile::new(DamageElement::Flame, DamageClass::Spell)
+                }
+                _ => DamageProfile::for_skill(29),
+            };
+            commands
+                .entity(impact)
+                .insert(super::skill_lighting::GroundLightProfile(profile));
+        }
     }
 }
 
@@ -2873,6 +2565,11 @@ fn spawn_skill_zone(
     radius: f32,
 ) {
     commands.spawn((
+        Name::new(match kind {
+            ZoneKind::StormMatrix => "Storm matrix damage zone",
+            ZoneKind::GlacierCore => "Glacier core damage zone",
+            ZoneKind::VortexColumn => "Vortex column damage zone",
+        }),
         Mesh3d(assets.fx_mesh.clone()),
         MeshMaterial3d(assets.storm_material.clone()),
         Transform::from_xyz(center.x, 0.12, center.z).with_scale(Vec3::splat(radius * 0.34)),
@@ -2908,18 +2605,7 @@ fn record_spell_and_echo(
         });
     }
     let fifth_cast = record_non_echo_spell(&mut runtime.spell_cast_count);
-    if build.bond(BondId::Ascension) >= 2 && runtime.spell_cast_count.is_multiple_of(10) {
-        queue_bond_strike(
-            commands,
-            Some(record.target),
-            record.center,
-            (record.damage * 0.75).max(35.0),
-            0.42,
-            0,
-            DamageProfile::new(DamageElement::Physical, DamageClass::Spell),
-            0.08,
-        );
-    }
+
     if !fifth_cast {
         return;
     }
@@ -2929,7 +2615,7 @@ fn record_spell_and_echo(
     } else {
         0.0
     };
-    let scale = prism_scale.max(arcane_echo_scale(build.bond(BondId::Arcane)));
+    let scale = prism_scale;
     if scale > 0.0 {
         let replay = runtime
             .last_spell
@@ -3005,7 +2691,7 @@ fn spawn_echo_replay(
                 3.4,
                 DamageProfile::for_skill(13),
             );
-            pools.rent_impact_fx(
+            if let Some(warning) = pools.rent_impact_fx(
                 commands,
                 assets.fx_mesh.clone(),
                 assets.storm_material.clone(),
@@ -3016,7 +2702,13 @@ fn spawn_echo_replay(
                     start_scale: 0.16,
                     end_scale: 3.2,
                 },
-            );
+            ) {
+                commands
+                    .entity(warning)
+                    .insert(super::skill_lighting::GroundLightProfile(
+                        DamageProfile::for_skill(13),
+                    ));
+            }
         }
         14 => spawn_skill_zone(
             commands,
@@ -3108,7 +2800,39 @@ fn target_info(
     }
 }
 
-fn scaled_skill_damage(
+/// Shared collision and presentation growth; rank 5 doubles rank 1 geometry.
+pub(crate) fn summon_size_multiplier(index: usize, rank: u8) -> f32 {
+    growth::summon_scale(index, rank).x / growth::summon_scale(index, 1).x
+}
+
+pub(crate) fn rank_size(rank: u8) -> f32 {
+    1.0 + f32::from(rank.clamp(1, 5) - 1) * 0.25
+}
+
+/// Radius (or cone reach) used by actual combat, not an illustrative UI value.
+pub(crate) fn skill_effect_radius(index: usize, rank: u8) -> Option<f32> {
+    let base = match index {
+        0 => 5.5,
+        6 => 0.85,
+        8 => 2.0,
+        9 => 5.4,
+        10 => 2.1,
+        11 => 2.6,
+        12 => 3.1,
+        13 => 3.2,
+        14 => 2.8,
+        15 => 3.4,
+        22 => 2.8,
+        25 => 3.6,
+        27 => 5.2,
+        18 => return Some(3.0 + 0.25 * f32::from(rank.clamp(1, 5))),
+        31 => return Some(2.0 + 0.2 * f32::from(rank.clamp(1, 5))),
+        _ => return None,
+    };
+    Some(base * rank_size(rank))
+}
+
+pub(crate) fn scaled_skill_damage(
     index: usize,
     rank: u8,
     build: &PlayerBuild,
@@ -3128,7 +2852,22 @@ fn scaled_skill_damage(
         * triune_skill_multiplier(index, &runtime.triune)
 }
 
-fn skill_cooldown(index: usize) -> f32 {
+pub(crate) fn skill_preview_damage(
+    index: usize,
+    rank: u8,
+    build: &PlayerBuild,
+    vitals: &HeroVitals,
+    runtime: &SkillRuntime,
+) -> Option<f32> {
+    match index {
+        7 => Some(build.attack_damage * 0.6),
+        18 => Some(infection::damage_per_tick(rank, vitals.attack_damage())),
+        20 | 21 | 28 | 29 => None,
+        _ => Some(scaled_skill_damage(index, rank, build, vitals, runtime)),
+    }
+}
+
+pub(crate) fn skill_cooldown(index: usize) -> f32 {
     let skill = SKILLS[index];
     skill.cooldown_secs * skill.rarity.skill_cooldown_multiplier()
 }
@@ -3137,11 +2876,11 @@ const fn skill_utility_multiplier(index: usize) -> f32 {
     SKILLS[index].rarity.skill_power_multiplier()
 }
 
-fn effective_spell_power(vitals: &HeroVitals, runtime: &SkillRuntime) -> f32 {
+pub(crate) fn effective_spell_power(vitals: &HeroVitals, runtime: &SkillRuntime) -> f32 {
     vitals.spell_power() * runtime.spell_power_multiplier
 }
 
-fn effective_summon_power(vitals: &HeroVitals, runtime: &SkillRuntime) -> f32 {
+pub(crate) fn effective_summon_power(vitals: &HeroVitals, runtime: &SkillRuntime) -> f32 {
     let inherited = effective_spell_power(vitals, runtime) * 0.7 + vitals.attack_damage() * 0.5;
     inherited * runtime.summon_inherit_multiplier
 }
@@ -3171,9 +2910,9 @@ fn apply_static_seals(
                 target.entity,
                 explosion_damage,
                 delay + 0.04,
-                2.1,
+                skill_effect_radius(10, rank).unwrap(),
                 true,
-                2.2,
+                skill_effect_radius(10, rank).unwrap(),
                 DamageProfile::for_skill(10),
             );
         }
@@ -3246,7 +2985,7 @@ fn schedule_typed_strike(
 }
 
 #[allow(clippy::too_many_arguments)]
-fn schedule_typed_fixed_strike(
+pub(crate) fn schedule_typed_fixed_strike(
     commands: &mut Commands,
     position: Vec3,
     damage: f32,
@@ -3405,6 +3144,7 @@ fn chain_target_sequence(
     targets: &[TargetInfo],
     first: TargetInfo,
     max_hits: u8,
+    hop_radius: f32,
 ) -> Vec<TargetInfo> {
     let mut chain = vec![first];
     let mut visited = HashSet::from([first.entity]);
@@ -3415,7 +3155,7 @@ fn chain_target_sequence(
             .copied()
             .filter(|candidate| {
                 !visited.contains(&candidate.entity)
-                    && current.position.distance_squared(candidate.position) <= 5.5_f32.powi(2)
+                    && current.position.distance_squared(candidate.position) <= hop_radius.powi(2)
             })
             .min_by(|left, right| {
                 current
@@ -3432,26 +3172,6 @@ fn chain_target_sequence(
     chain
 }
 
-fn assign_capped_targets<T: Copy + Eq + std::hash::Hash>(
-    ordered_per_shot: &[Vec<T>],
-    cap: u8,
-) -> Vec<Option<T>> {
-    let mut hit_counts = HashMap::<T, u8>::new();
-    ordered_per_shot
-        .iter()
-        .map(|candidates| {
-            let selected = candidates
-                .iter()
-                .copied()
-                .find(|candidate| hit_counts.get(candidate).copied().unwrap_or(0) < cap);
-            if let Some(target) = selected {
-                *hit_counts.entry(target).or_default() += 1;
-            }
-            selected
-        })
-        .collect()
-}
-
 fn inside_cone(origin: Vec3, forward: Vec3, point: Vec3, range: f32, half_angle: f32) -> bool {
     let forward = Vec2::new(forward.x, forward.z).normalize_or_zero();
     let delta = Vec2::new(point.x - origin.x, point.z - origin.z);
@@ -3461,7 +3181,7 @@ fn inside_cone(origin: Vec3, forward: Vec3, point: Vec3, range: f32, half_angle:
         && forward.dot(delta / distance) >= half_angle.cos()
 }
 
-const fn arc_chain_hit_count(rank: u8) -> u8 {
+pub(crate) const fn arc_chain_hit_count(rank: u8) -> u8 {
     3 + rank.saturating_sub(1) / 2
 }
 
@@ -3469,15 +3189,15 @@ const fn ember_attack_interval(rank: u8) -> u8 {
     if rank >= 5 { 2 } else { 3 }
 }
 
-const fn frost_lance_count(rank: u8) -> u8 {
+pub(crate) const fn frost_lance_count(rank: u8) -> u8 {
     if rank >= 3 { 2 } else { 1 }
 }
 
-const fn bone_sentry_cap(rank: u8) -> u8 {
+pub(crate) const fn bone_sentry_cap(rank: u8) -> u8 {
     rank.div_ceil(2)
 }
 
-const fn spirit_hound_count(rank: u8) -> u8 {
+pub(crate) const fn spirit_hound_count(rank: u8) -> u8 {
     1 + rank.div_ceil(2)
 }
 
@@ -3491,15 +3211,15 @@ const fn forced_movement_scale(elite: bool, boss: bool) -> f32 {
     }
 }
 
-const fn orbit_blade_count(rank: u8) -> u8 {
+pub(crate) const fn orbit_blade_count(rank: u8) -> u8 {
     2 + rank.saturating_sub(1) / 2
 }
 
-const fn piercing_volley_count(rank: u8) -> u8 {
+pub(crate) const fn piercing_volley_count(rank: u8) -> u8 {
     3 + rank.saturating_sub(1) / 2
 }
 
-const fn flying_sword_count(rank: u8) -> u8 {
+pub(crate) const fn flying_sword_count(rank: u8) -> u8 {
     1 + rank.saturating_sub(1) / 2
 }
 
@@ -3543,7 +3263,7 @@ const fn prism_echo_scale(rank: u8) -> f32 {
     0.35 + 0.10 * rank.saturating_sub(1) as f32
 }
 
-const fn sky_judgment_target_count(rank: u8) -> u8 {
+pub(crate) const fn sky_judgment_target_count(rank: u8) -> u8 {
     6 + rank.saturating_sub(1)
 }
 
@@ -3621,24 +3341,6 @@ fn roll_fate_cube(rank: u8, roll: u32) -> FateOutcome {
     FateOutcome::Summon
 }
 
-const fn choose_luckier_fate(first: FateOutcome, second: FateOutcome) -> FateOutcome {
-    if fate_outcome_value(second) > fate_outcome_value(first) {
-        second
-    } else {
-        first
-    }
-}
-
-const fn fate_outcome_value(outcome: FateOutcome) -> u8 {
-    match outcome {
-        FateOutcome::Heal => 1,
-        FateOutcome::Gold => 2,
-        FateOutcome::Summon => 3,
-        FateOutcome::Lightning => 4,
-        FateOutcome::FireRain => 5,
-    }
-}
-
 fn record_non_echo_spell(spell_cast_count: &mut u64) -> bool {
     *spell_cast_count = spell_cast_count.wrapping_add(1);
     spell_cast_count.is_multiple_of(5)
@@ -3668,11 +3370,162 @@ fn advance_static_seal(stacks: &mut u8) -> bool {
     }
 }
 
+pub(crate) fn reset_run(world: &mut World) {
+    world.insert_resource(SkillRuntime::default());
+    evolution_mechanics::reset_run(world);
+    ur_evolutions::reset_run(world);
+    presentation::reset_run(world);
+}
+
 #[cfg(test)]
 mod tests {
     use bevy::ecs::system::RunSystemOnce;
 
     use super::*;
+
+    #[test]
+    fn yellow_sign_halves_real_skill_cooldown_recovery_and_releases_on_exit() {
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<GameSession>()
+            .init_resource::<MarketEffects>()
+            .init_resource::<super::super::encounters::EncounterState>()
+            .init_resource::<SkillRuntime>()
+            .insert_resource(super::super::combat::ElitePressure {
+                yellow_sign_active: true,
+            });
+        app.world_mut().resource_mut::<SkillRuntime>().cooldowns[0] = 10.0;
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs(2));
+        app.world_mut().run_system_once(tick_skill_runtime).unwrap();
+        assert_eq!(app.world().resource::<SkillRuntime>().cooldowns[0], 9.0);
+        app.world_mut()
+            .resource_mut::<super::super::combat::ElitePressure>()
+            .yellow_sign_active = false;
+        app.world_mut().run_system_once(tick_skill_runtime).unwrap();
+        assert_eq!(app.world().resource::<SkillRuntime>().cooldowns[0], 7.0);
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        app.world_mut().run_system_once(tick_skill_runtime).unwrap();
+        assert_eq!(app.world().resource::<SkillRuntime>().cooldowns[0], 7.0);
+    }
+
+    #[test]
+    fn real_meteor_strike_transmits_cosmetic_element_without_changing_damage() {
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<GameSession>()
+            .init_resource::<CombatPools>()
+            .insert_resource(GameAssets {
+                hero_scenes: std::array::from_fn(|_| Handle::default()),
+                enemy_scenes: std::array::from_fn(|_| Handle::default()),
+                boss_scenes: std::array::from_fn(|_| Handle::default()),
+                summon_scenes: std::array::from_fn(|_| Handle::default()),
+                projectile_mesh: Handle::default(),
+                fx_mesh: Handle::default(),
+                enemy_material: Handle::default(),
+                enemy_materials: std::array::from_fn(|_| Handle::default()),
+                elite_material: Handle::default(),
+                boss_materials: std::array::from_fn(|_| Handle::default()),
+                hero_materials: std::array::from_fn(|_| Handle::default()),
+                projectile_material: Handle::default(),
+                storm_material: Handle::default(),
+            })
+            .add_systems(Update, resolve_skill_strikes);
+        app.world_mut().spawn(SkillStrike {
+            target: Entity::PLACEHOLDER,
+            fixed_position: Some(Vec3::new(2.0, 0.0, 1.0)),
+            delay: 0.0,
+            damage: 123.0,
+            radius: 3.2,
+            area: true,
+            fx_scale: 3.2,
+            transmute_rewards: Vec::new(),
+            profile: DamageProfile::for_skill(13),
+        });
+        app.update();
+        let projectile = app
+            .world_mut()
+            .query::<(&Projectile, &DamageProfile)>()
+            .single(app.world())
+            .unwrap();
+        assert_eq!(projectile.0.damage, 123.0);
+        assert_eq!(projectile.0.radius, 3.2);
+        assert_eq!(
+            projectile.1.element,
+            super::super::bonds::DamageElement::Flame
+        );
+        let (impact, light) = app
+            .world_mut()
+            .query::<(&ImpactFx, &super::super::skill_lighting::GroundLightProfile)>()
+            .single(app.world())
+            .unwrap();
+        assert_eq!(impact.end_scale, 3.2);
+        assert_eq!(light.0, DamageProfile::for_skill(13));
+        // The warning appears before damage resolves; exercise both real cast
+        // and echo paths so the long pre-impact ring cannot silently stay blue.
+        app.world_mut()
+            .run_system_once(
+                |mut commands: Commands,
+                 mut pools: ResMut<CombatPools>,
+                 assets: Res<GameAssets>| {
+                    let mut build = PlayerBuild::default();
+                    build.skills.fill(0);
+                    build.skills[13] = 5;
+                    let target = TargetInfo {
+                        entity: Entity::PLACEHOLDER,
+                        position: Vec3::new(2.0, 0.0, 1.0),
+                        speed: 1.0,
+                        elite: false,
+                        boss: false,
+                        special: false,
+                        hp: 500.0,
+                        max_hp: 500.0,
+                        gold: 1,
+                    };
+                    cast_rare_skills(
+                        &mut commands,
+                        &assets,
+                        &mut pools,
+                        &build,
+                        &HeroVitals::default(),
+                        Vec3::ZERO,
+                        target,
+                        &[target],
+                        &mut SummonBudget(20),
+                        &mut SkillRuntime::default(),
+                    );
+                    spawn_echo_replay(
+                        &mut commands,
+                        &mut pools,
+                        &assets,
+                        SpellRecord {
+                            skill_index: 13,
+                            target: target.entity,
+                            center: target.position,
+                            damage: 100.0,
+                        },
+                        0.5,
+                    );
+                },
+            )
+            .unwrap();
+        let effects = app
+            .world_mut()
+            .query::<(&ImpactFx, &super::super::skill_lighting::GroundLightProfile)>()
+            .iter(app.world())
+            .collect::<Vec<_>>();
+        assert_eq!(effects.len(), 3);
+        assert_eq!(
+            effects.iter().filter(|(fx, _)| fx.lifetime == 0.8).count(),
+            2
+        );
+        assert!(
+            effects
+                .iter()
+                .all(|(_, p)| p.0 == DamageProfile::for_skill(13))
+        );
+    }
 
     #[test]
     fn skill_attack_procs_consume_exactly_the_combat_resolved_volley_count() {
@@ -3707,24 +3560,50 @@ mod tests {
     }
 
     #[test]
-    fn tidal_fan_never_assigns_more_than_two_blades_to_one_target() {
-        let order = vec![
-            vec![1_u8, 2, 3],
-            vec![1, 2, 3],
-            vec![1, 2, 3],
-            vec![1, 2, 3],
-            vec![1, 2, 3],
-        ];
-        let assigned = assign_capped_targets(&order, 2);
-        let mut counts = HashMap::new();
-        for target in assigned.into_iter().flatten() {
-            *counts.entry(target).or_insert(0) += 1;
+    fn upgraded_storm_zone_really_hits_outer_targets_that_rank_one_cannot() {
+        use bevy::ecs::system::RunSystemOnce;
+        for (rank, expected_hits) in [(1, 0), (3, 1), (5, 1)] {
+            let mut app = App::new();
+            app.init_resource::<Time>()
+                .init_resource::<GameSession>()
+                .init_resource::<PlayerBuild>()
+                .init_resource::<HeroVitals>()
+                .init_resource::<SkillRuntime>();
+            app.world_mut().spawn((
+                Enemy {
+                    hp: 100.0,
+                    max_hp: 100.0,
+                    speed: 0.0,
+                    damage: 0.0,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+                Transform::from_xyz(4.5, 0.0, 0.0),
+            ));
+            app.world_mut().spawn((
+                SkillZone {
+                    kind: ZoneKind::StormMatrix,
+                    remaining: 4.0,
+                    pulse_remaining: 0.0,
+                    damage_per_pulse: 10.0,
+                    radius: skill_effect_radius(12, rank).unwrap(),
+                    glacier_hits: HashMap::new(),
+                    profile: DamageProfile::for_skill(12),
+                },
+                Transform::default(),
+            ));
+            app.world_mut().run_system_once(update_spell_zones).unwrap();
+            assert_eq!(
+                app.world_mut()
+                    .query::<&SkillStrike>()
+                    .iter(app.world())
+                    .count(),
+                expected_hits
+            );
         }
-        assert_eq!(counts.values().sum::<i32>(), 5);
-        assert!(counts.values().all(|count| *count <= 2));
-
-        let lone_target = assign_capped_targets(&vec![vec![7_u8]; 5], 2);
-        assert_eq!(lone_target.into_iter().flatten().count(), 2);
     }
 
     #[test]
@@ -3990,16 +3869,16 @@ mod tests {
 
     #[test]
     fn summon_budget_hard_caps_every_summon_family_together() {
-        let mut budget = SummonBudget::from_existing(18, 2, 0);
+        let mut budget = SummonBudget::from_existing(18, 2);
         assert!(budget.take());
         assert!(budget.take());
         assert!(!budget.take());
 
-        let mut legion_budget = SummonBudget::from_existing(18, 0, 1);
+        let mut legion_budget = SummonBudget::from_existing(18, 1);
         assert!(legion_budget.take());
         assert!(!legion_budget.take());
 
-        let mut capped_legion_budget = SummonBudget::from_existing(19, 2, 1);
+        let mut capped_legion_budget = SummonBudget::from_existing(19, 3);
         assert!(capped_legion_budget.take());
         assert!(!capped_legion_budget.take());
     }
@@ -4059,7 +3938,7 @@ mod tests {
         let session = app.world().resource::<GameSession>();
         let vitals = app.world().resource::<HeroVitals>();
         let runtime = app.world().resource::<SkillRuntime>();
-        assert_eq!(session.core_hp, 1_000.0);
+        assert_eq!(session.core_hp, 920.0);
         assert!(vitals.alive);
         assert_eq!(vitals.deaths, 0);
         assert!(

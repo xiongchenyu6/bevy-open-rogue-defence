@@ -1,0 +1,61 @@
+Bond completion feedback — native validation
+2026-09-29T21:20:17
+
+PASS cargo test --lib -j1: 289 passed; 0 failed
+PASS cargo clippy --all-targets -j1 -- -D warnings
+PASS cargo build --bins -j1
+PASS python tools/verify_ui_assets.py
+PASS both 9-second videos decoded fully by ffmpeg
+
+Capture fixtures explicitly pre-own prerequisites. Final draw, preview, confirmation, rewards and completion systems are real. No claim of complete-run balance validation.
+
+desktop
+[capture] bond-completion: explicit pre-owned prerequisites; real final-card draw and confirm
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 20.000s (paused restored to false)
+[capture] render target warmed
+[capture] final-card preview does not complete family or trigger celebration
+[capture] bottom actions and speed controls fit viewport; celebration does not cover controls
+[capture] actual confirmation completed Journey: celebration fits viewport; pool/reward/slot verified
+[capture] touch-pinned completion details remain visible after release and fit viewport
+[capture] second badge tap closes completion details
+[capture] bottom actions and speed controls fit viewport; celebration does not cover controls
+[capture] celebration expired; completed badge retained; fruit reward remains exactly once
+[capture] wrote 270 simulation frames to /tmp/rogue-bond-frames/desktop
+
+mobile
+[capture] bond-completion-fruit: explicit pre-owned prerequisites; real final-card draw and confirm
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 20.000s (paused restored to false)
+[capture] render target warmed
+[capture] final-card preview does not complete family or trigger celebration
+[capture] bottom actions and speed controls fit viewport; celebration does not cover controls
+[capture] actual confirmation completed Warpath: celebration fits viewport; pool/reward/slot verified
+[capture] touch-pinned completion details remain visible after release and fit viewport
+[capture] second badge tap closes completion details
+[capture] bottom actions and speed controls fit viewport; celebration does not cover controls
+[capture] celebration expired; completed badge retained; fruit reward remains exactly once
+[capture] wrote 270 simulation frames to /tmp/rogue-bond-frames/mobile
+
+mobile-pool
+[capture] bond-completion: explicit pre-owned prerequisites; real final-card draw and confirm
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 20.000s (paused restored to false)
+[capture] render target warmed
+[capture] final-card preview does not complete family or trigger celebration
+[capture] bottom actions and speed controls fit viewport; celebration does not cover controls
+[capture] actual confirmation completed Journey: celebration fits viewport; pool/reward/slot verified
+
+desktop-fruit
+[capture] bond-completion-fruit: explicit pre-owned prerequisites; real final-card draw and confirm
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 20.000s (paused restored to false)
+[capture] render target warmed
+[capture] final-card preview does not complete family or trigger celebration
+[capture] bottom actions and speed controls fit viewport; celebration does not cover controls
+[capture] actual confirmation completed Warpath: celebration fits viewport; pool/reward/slot verified
+
+Visual review: Chinese desktop pool unlock and English compact fruit receipt; opposite-language supplementary stills; fusion sequence and pinned records. Compact 667x375 controls fully inside viewport; celebration does not intersect skill/dodge/ultimate/speed controls.
+Known pre-existing ICU4X ja segmentation diagnostics appear in captures; bundled UI font coverage test passes.
+Audio asset verified as original 1.6s mono PCM chime. Offscreen capture videos do not record sound.
+WASM/browser build not run in this change.

@@ -1,0 +1,21 @@
+Desktop/touch HUD verification
+Native build: PASS
+Library tests: 306 passed, 0 failed
+Clippy --all-targets -- -D warnings: PASS
+Desktop and compact native render captures inspected at 1280x720 and 667x375.
+
+hud-input-1280x720.log
+[capture] PASS input layout frame 40: touch=false, pad=false, dodge=Vec2(88.0, 40.0)
+[capture] PASS input layout frame 95: touch=true, pad=true, dodge=Vec2(76.0, 76.0)
+[capture] PASS input layout frame 125: touch=true, pad=true, dodge=Vec2(76.0, 76.0)
+[capture] PASS input layout frame 150: touch=false, pad=false, dodge=Vec2(88.0, 40.0)
+[capture] PASS input layout frame 180: touch=false, pad=false, dodge=Vec2(88.0, 40.0)
+hud-input-667x375.log
+[capture] PASS input layout frame 40: touch=false, pad=false, dodge=Vec2(88.0, 40.0)
+[capture] PASS input layout frame 95: touch=true, pad=true, dodge=Vec2(84.0, 84.0)
+[capture] PASS input layout frame 125: touch=true, pad=true, dodge=Vec2(84.0, 84.0)
+[capture] PASS input layout frame 150: touch=false, pad=false, dodge=Vec2(88.0, 40.0)
+[capture] PASS input layout frame 180: touch=false, pad=false, dodge=Vec2(88.0, 40.0)
+
+Checks: native default keyboard mode; no joystick even in narrow desktop window; real touch enables pad; touch release keeps mode; real arrow key restores desktop and moves hero; 40px bottom bar; XP and dodge centers aligned; viewport bounds.
+Native offscreen captures use real Bevy touch/key messages. Physical touchscreen hardware and browser coarse-pointer initialization were not exercised.

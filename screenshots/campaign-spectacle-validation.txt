@@ -1,0 +1,39 @@
+Native validation — 2026-09-30
+
+PASS: 394 Rust tests, zero failures.
+PASS: cargo clippy --all-targets -j1 -- -D warnings.
+PASS: cargo build --bins -j1.
+PASS: 75 native capture scenarios, 25,500 simulated/rendered frames.
+Viewports: 1280x720 and 667x375; Chinese and English scenarios.
+PNG/video snapshots sample rendered frames; simulation runs every frame.
+
+Gate: ahead of hero; unlimited full-health reconstruction after 4 seconds;
+reconstruction freezes while paused; destroyed gate does not consume hero lives.
+Hero: 3 total lives; first two deaths revive; third death produces defeat.
+Actual capture exercises two gate collapses and all three lethal hero hits.
+
+Campaign: six chapters, increasing enemy health/damage, permanent training,
+chapter unlocks, retry/continue, and persistent save reload in another process.
+Actual campaign flow validates 75 reward currency, purchases leaving 45,
+defeat reward leaving 50, and retained upgrades with fresh run state.
+
+UR: four mastered skills each offer three exclusive evolution routes (12 total).
+Real confirmation retains rank 5; chosen route cannot repeat; absorption retains it.
+Tests cover actual damage/control/healing/summon/resource mechanics and caps.
+
+Skills: 32 isolated skill scenarios; shared bounded visual assets and pause cleanup.
+Tidal wave: broad advancing blue water wall, swept collision and delayed hits,
+wet/slow effects, one hit per target per wave.
+
+Representative evidence:
+gate-revival-zh-1280x720-70.png
+gate-revival-zh-1280x720-375.png
+tidal-wave-zh-1280x720-210.png
+campaign-zh-1280x720-310.png
+ur26-control-zh-1280x720-38.png
+skills-contact-1.jpg
+skills-contact-2.jpg
+
+Raw logs: target/verification/growth-{captures,final-test,clippy,build}.log
+Scope: native execution verified; browser/WASM execution was not verified.
+Mobile long descriptions use scrolling. Evolution routes share base skill art.

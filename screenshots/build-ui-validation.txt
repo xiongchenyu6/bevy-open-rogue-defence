@@ -1,0 +1,57 @@
+Build drafts and battle HUD validation — 2026-09-29
+
+Native Bevy0.19 offscreen capture on Nvidia3070; seed0xA11CE;120frames/capture.
+Build: nix develop --command cargo build --bin capture -j4 — PASS
+Tests: nix develop --command cargo test --all-targets -j4 — 253 passed,0 failed
+Clippy: nix develop --command cargo clippy --all-targets -j4 -- -D warnings — PASS
+cargo fmt --all -- --check; git diff --check — PASS
+uvx ruff check tools/render_game_icons.py tools/verify_ui_assets.py — PASS
+python3 tools/verify_ui_assets.py — PASS:30skill+10bond+16action icons,12portraits
+Asset coverage, dimensions, PNG CRCs and decoded payload sizes verified.
+
+17 build/HUD captures plus1 recruitment regression:
+Bond desktop1280x720,large1760x1350,mobile844x390,compact667x375;
+skill desktop/mobile; confirmation,refresh,later,abandon;Chinese bond mobile;
+seven-slot replacement mobile;HUD desktop/mobile/large;acquired bonds;hover tooltip.
+Actual UI bounds and >=44px draft action touch targets asserted in capture harness.
+Preview keeps simulation paused;confirm/later/abandon close overlay and resume.
+Seven-slot replacement retains a paused overlay with7 visible choices.
+Unit tests verify no reward before confirmation,payment/refund rules,one-time grants,
+keyboard preview/Enter confirmation and replacement accounting.
+Screenshots manually reviewed for artwork,legible copy,selection and clipping.
+
+Fixed damage numbers drawing over tooltips: moved default UI rendering to the
+last overlay camera. Reproduced screenshot hud-hint-before.png;after hud-hint.png.
+Abandon icon corrected from visually ambiguous plus to a diagonal red X.
+Chinese font subset regenerated;all source characters covered by font test.
+Nonfatal ICU4X Japanese segmentation diagnostics remain in renderer output.
+This run covers native rendering and scripted ECS interactions,not Web/Android builds
+or physical touchscreen testing.
+
+Logs:
+/tmp/rogue-build-ui-final2.log
+/tmp/rogue-build-ui-tests-final.log
+/tmp/rogue-build-ui-clippy-final.log
+/tmp/rogue-build-ui-suite.log
+/tmp/rogue-ui-camera-regression.log
+
+Screenshot SHA-256:
+0809b387b0dd38b77b2d4514ce394e6da38edae48fd750fc19f8d88ee924a4b9  screenshots/bond-abandon.png
+4b49b7b2ebe4729de56b868fcafea32ad78042d40490b95acd3722277b14c0b8  screenshots/bond-compact.png
+15ae20f078d959e6e744b41e3c1ef7bf64161ea5a6dcf0e3349bcfc1c33a53f8  screenshots/bond-confirm.png
+3eb8b82aee1247851600c2f44b0dca1352caeb28aadb5878226d8b8cefa80881  screenshots/bond-desktop.png
+42c6975c42c88ad9a6f6a0b3128321b5c13db93337194907cf7e754d44e5f81f  screenshots/bond-large.png
+0809b387b0dd38b77b2d4514ce394e6da38edae48fd750fc19f8d88ee924a4b9  screenshots/bond-later.png
+87182b8b4058975bb190f9f12e9f9342459d273e7caafb78ea48545ff68c296b  screenshots/bond-mobile.png
+50f7054cf292eb4ebeca8fa2dc68cbbbfbfc54f0aebdfa99116c4410ad51ad0f  screenshots/bond-refresh.png
+505551c715e5e0233b0d72dcce5df1af4744630948e3a419100f403dfa2e64d0  screenshots/bond-replace.png
+4f40cb56d82e8526575a7228001a9ad72f064c3e0a4ebcec0638f14ac92befa5  screenshots/bond-zh.png
+8c1d46964c27bf13f3fb22d2bf8ae401a59e1970a7697b9cd5671d91e331372c  screenshots/hud-bonds.png
+be22e8a8929b13a2050315dd60de87ae316fb5053b7d315d184832c95ec1dbaf  screenshots/hud-desktop.png
+6a1fcb1e4c8825b5b2b02ca0b041a729341cfe7760d567b4ca9c9832000165c5  screenshots/hud-hint-before.png
+ff6507549940f4e159c9f05c49c6a4db412c93e7f926653824045a2fb4ebe4ca  screenshots/hud-hint.png
+49aef4d15dfca93ca409eca369c647afa5cfec0e6d92f0f15005d74567082bb2  screenshots/hud-large.png
+84b557e948088614626b439879d16c0dac391b95feb9669a08a7528574996722  screenshots/hud-mobile.png
+092b116aa8f4995b04c0cbab42f8dcb0bc8efd1e2a40d22063d294afaa3c5399  screenshots/hud-recruitment.png
+5b5dd174c7ffe0c618cab855b62dd3d8fc359a53e77cc66d5324905837a92aff  screenshots/skill-desktop.png
+175296bf821228e33371ac37a0756bfad279e3f012e3199082231d787f376320  screenshots/skill-mobile.png

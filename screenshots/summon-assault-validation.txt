@@ -1,0 +1,13 @@
+Active summon combat validation — 2026-09-30
+clippy: PASS
+test result: ok. 360 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+build: PASS
+summon-assault-zh-1280x720
+[capture] PASS: all six summon types pursue and reach range; actual enemy HP decreased; closest=[0.23458901, 0.019999027, 3.8461182, 4.8476152, 1.55, 3.1800013]
+[capture] PASS: 7 active summon transforms frozen for 29 frames
+[capture] PASS: dead enemy replaced, all summons re-engage live target; walk=[true, true, true, true, true], attack=[true, true, true, true, true]
+summon-assault-zh-667x375
+[capture] PASS: all six summon types pursue and reach range; actual enemy HP decreased; closest=[0.23458901, 0.019999027, 3.8461182, 4.8476152, 1.55, 3.1800013]
+[capture] PASS: 7 active summon transforms frozen for 29 frames
+[capture] PASS: dead enemy replaced, all summons re-engage live target; walk=[true, true, true, true, true], attack=[true, true, true, true, true]
+summon growth regression: PASS; same moving skeleton preserved while ranks grow from 1 to 3 to 5

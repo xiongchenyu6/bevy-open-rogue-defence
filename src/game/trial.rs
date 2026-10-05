@@ -1,12 +1,14 @@
+use super::bonds::BondRuntime;
+use super::{EnemyAttackCue, EnemyAttackKind};
 use bevy::prelude::*;
 
 use super::combat::CombatSet;
+use super::encounters::EncounterState;
 use super::hero_abilities::TimedSpeedEffect;
 use super::pooling::{CombatPools, EnemySceneKey};
 use super::{
-    BossEnemy, ChallengeKind, CommandGrowth, DamageMeter, Enemy, GameAssets, GameSession,
-    GoldChallengeState, Hero, HeroVitals, PlayerBuild, TrialAction, TrialButton, TrialEnemy,
-    TrialState,
+    ChallengeKind, CommandGrowth, Enemy, GameAssets, GameSession, GoldChallengeState, Hero,
+    HeroVitals, PlayerBuild, TrialAction, TrialButton, TrialEnemy, TrialState,
 };
 
 pub struct TrialPlugin;
@@ -27,7 +29,8 @@ impl Plugin for TrialPlugin {
     }
 }
 
-const TOWER_HP: [f32; 24] = [
+pub(crate) const TOWER_FLOOR_COUNT: usize = 24;
+const TOWER_HP: [f32; TOWER_FLOOR_COUNT] = [
     1_200.0,
     1_900.0,
     2_800.0,
@@ -53,13 +56,9 @@ const TOWER_HP: [f32; 24] = [
     2_800_000.0,
     3_800_000.0,
 ];
-const TOWER_RECOMMENDED_DPS: [f32; 24] = [
-    60.0, 95.0, 140.0, 220.0, 350.0, 470.0, 650.0, 900.0, 1_250.0, 1_800.0, 2_400.0, 3_200.0,
-    4_300.0, 6_000.0, 9_000.0, 12_500.0, 17_500.0, 24_200.0, 33_300.0, 45_800.0, 62_500.0,
-    83_300.0, 116_700.0, 158_300.0,
-];
-pub(crate) const TOWER_UNLOCK_AT: [f32; 24] = [18.0; 24];
-const TOWER_REWARD: [u32; 24] = [
+/// Every floor shares one unlock time; floors gate each other through HP.
+pub(crate) const TOWER_UNLOCK_AT: f32 = 18.0;
+const TOWER_REWARD: [u32; TOWER_FLOOR_COUNT] = [
     50, 50, 55, 60, 65, 70, 75, 80, 85, 90, 100, 105, 110, 120, 125, 130, 135, 140, 145, 150, 150,
     150, 150, 150,
 ];
@@ -73,9 +72,6 @@ const TOWER_DURATION: f32 = 25.0;
 const GOLD_DURATION: f32 = 20.0;
 const TOWER_COOLDOWN: f32 = 8.0;
 const GOLD_COOLDOWN: f32 = 60.0;
-const TOWER_AUTO_MULTIPLIER: f32 = 1.15;
-const GOLD_AUTO_MULTIPLIER: f32 = 1.20;
-const BOSS_TIMES: [f32; 5] = [300.0, 600.0, 900.0, 1_200.0, 1_500.0];
 const CHALLENGE_ATTACK_RANGE: f32 = 1.35;
 const CHALLENGE_ATTACK_INTERVAL: f32 = 1.0;
 const COMMAND_ATTACK_MULTIPLIER: f32 = 1.08;
@@ -98,14 +94,13 @@ fn challenge_input(
     mut commands: Commands,
     keyboard: Res<ButtonInput<KeyCode>>,
     session: Res<GameSession>,
-    damage_meter: Res<DamageMeter>,
     assets: Option<Res<GameAssets>>,
-    bosses: Query<&Enemy, With<BossEnemy>>,
     challenges: Query<(Entity, &TrialEnemy)>,
     interactions: Query<(&Interaction, &TrialButton), Changed<Interaction>>,
     mut pools: ResMut<CombatPools>,
     mut tower: ResMut<TrialState>,
     mut gold: ResMut<GoldChallengeState>,
+    encounters: Res<EncounterState>,
 ) {
     if session.finished || session.paused || session.save_active {
         return;
@@ -123,6 +118,9 @@ fn challenge_input(
             &mut tower,
             &mut gold,
         );
+        tower.auto = false;
+        gold.auto = false;
+        return;
     }
     for (interaction, button) in &interactions {
         if *interaction != Interaction::Pressed {
@@ -138,11 +136,9 @@ fn challenge_input(
     let Some(assets) = assets.as_deref() else {
         return;
     };
-    // Headless capture uses the same unlock, Boss-safety and DPS checks as a
-    // player run; Autoplay supplies input but is not a balance cheat.
+    // Automatic starts use the same unlock/cooldown/capacity rules as manual input.
+    // A quiet lane or a Boss must not silently disable the player's auto toggle.
     let bypass = false;
-    let no_living_boss = bosses.iter().all(|boss| boss.hp <= 0.0);
-    let recent_dps = damage_meter.recent_dps();
 
     if keyboard.just_pressed(KeyCode::KeyQ) {
         start_tower(
@@ -159,6 +155,7 @@ fn challenge_input(
             &mut commands,
             &mut pools,
             &session,
+            &encounters,
             assets,
             &mut gold,
             bypass,
@@ -181,6 +178,7 @@ fn challenge_input(
                 &mut commands,
                 &mut pools,
                 &session,
+                &encounters,
                 assets,
                 &mut gold,
                 bypass,
@@ -189,20 +187,7 @@ fn challenge_input(
         }
     }
 
-    let tower_recommended = TOWER_RECOMMENDED_DPS
-        .get(tower.level as usize)
-        .copied()
-        .unwrap_or(f32::INFINITY);
-    if tower.auto
-        && !tower.active
-        && tower_auto_allowed(
-            recent_dps,
-            tower_recommended,
-            session.elapsed,
-            no_living_boss,
-            bypass,
-        )
-    {
+    if tower.auto && !tower.active {
         start_tower(
             &mut commands,
             &mut pools,
@@ -212,19 +197,12 @@ fn challenge_input(
             bypass,
         );
     }
-    if gold.auto
-        && !gold.active
-        && gold_auto_allowed(
-            recent_dps,
-            gold_recommended_dps(gold.level),
-            no_living_boss,
-            bypass,
-        )
-    {
+    if gold.auto && !gold.active {
         start_gold(
             &mut commands,
             &mut pools,
             &session,
+            &encounters,
             assets,
             &mut gold,
             bypass,
@@ -266,6 +244,7 @@ fn start_gold(
     commands: &mut Commands,
     pools: &mut CombatPools,
     session: &GameSession,
+    encounters: &EncounterState,
     assets: &GameAssets,
     state: &mut GoldChallengeState,
     bypass_unlock: bool,
@@ -273,7 +252,8 @@ fn start_gold(
     if !can_start_gold(session, state, bypass_unlock) {
         return;
     }
-    let total_hp = gold_hp(state.level);
+    // Treasure Map: richer targets that take longer to break.
+    let total_hp = gold_hp(state.level) * encounters.gold_challenge_health_multiplier();
     let hp_per_target = total_hp / f32::from(GOLD_TARGET_COUNT);
     let specs: Vec<_> = (0..GOLD_TARGET_COUNT)
         .map(|slot| {
@@ -296,7 +276,7 @@ fn start_gold(
         ChallengeKind::Gold,
         state.level + 1,
         hp_per_target,
-        gold_total_reward(state.level),
+        encounters.gold_challenge_reward(gold_total_reward(state.level)),
         &specs,
     ) else {
         return;
@@ -312,8 +292,8 @@ fn can_start_tower(session: &GameSession, state: &TrialState, bypass_unlock: boo
     let index = state.level as usize;
     !state.active
         && state.cooldown <= 0.0
-        && index < TOWER_HP.len()
-        && (bypass_unlock || session.elapsed >= TOWER_UNLOCK_AT[index])
+        && index < TOWER_FLOOR_COUNT
+        && (bypass_unlock || session.elapsed >= TOWER_UNLOCK_AT)
 }
 
 fn can_start_gold(session: &GameSession, state: &GoldChallengeState, bypass_unlock: bool) -> bool {
@@ -335,39 +315,6 @@ fn gold_reward(level: u8) -> u32 {
 
 fn gold_total_reward(level: u8) -> u32 {
     gold_reward(level).saturating_mul(u32::from(GOLD_TARGET_COUNT))
-}
-
-fn gold_recommended_dps(level: u8) -> f32 {
-    gold_hp(level) / 18.0
-}
-
-fn tower_auto_allowed(
-    recent_dps: f32,
-    recommended_dps: f32,
-    elapsed: f32,
-    no_living_boss: bool,
-    bypass: bool,
-) -> bool {
-    bypass
-        || (no_living_boss
-            && recent_dps > recommended_dps * TOWER_AUTO_MULTIPLIER
-            && next_boss_is_more_than_twenty_seconds_away(elapsed))
-}
-
-fn gold_auto_allowed(
-    recent_dps: f32,
-    recommended_dps: f32,
-    no_living_boss: bool,
-    bypass: bool,
-) -> bool {
-    bypass || (no_living_boss && recent_dps > recommended_dps * GOLD_AUTO_MULTIPLIER)
-}
-
-fn next_boss_is_more_than_twenty_seconds_away(elapsed: f32) -> bool {
-    BOSS_TIMES
-        .into_iter()
-        .find(|boss_time| elapsed <= *boss_time)
-        .is_some_and(|boss_time| boss_time - elapsed > 20.0)
 }
 
 fn spawn_challenge(
@@ -570,12 +517,24 @@ fn retire_challenge_kind(
 }
 
 fn move_challenge_enemies(
+    mut rng: Option<ResMut<super::RunRng>>,
     time: Res<Time>,
-    session: Res<GameSession>,
+    mut session: ResMut<GameSession>,
     mut vitals: ResMut<HeroVitals>,
+    mut bonds: ResMut<BondRuntime>,
+    mut cues: MessageWriter<EnemyAttackCue>,
     hero: Query<&Transform, (With<Hero>, Without<TrialEnemy>)>,
+    core: Query<
+        &Transform,
+        (
+            With<super::components::Core>,
+            Without<Hero>,
+            Without<TrialEnemy>,
+        ),
+    >,
     mut challenges: Query<
         (
+            Entity,
             &Enemy,
             &mut ChallengeFighter,
             Option<&TimedSpeedEffect>,
@@ -590,25 +549,51 @@ fn move_challenge_enemies(
     let Ok(hero) = hero.single() else {
         return;
     };
-    for (enemy, mut fighter, speed_effect, mut transform) in &mut challenges {
-        let to_hero = Vec3::new(
-            hero.translation.x - transform.translation.x,
-            0.0,
-            hero.translation.z - transform.translation.z,
-        );
-        if to_hero.length_squared() > CHALLENGE_ATTACK_RANGE * CHALLENGE_ATTACK_RANGE {
-            transform.translation += to_hero.normalize_or_zero()
-                * enemy.speed
-                * speed_effect.map_or(1.0, |effect| effect.multiplier)
-                * time.delta_secs();
+    for (entity, enemy, mut fighter, speed_effect, mut transform) in &mut challenges {
+        let protecting_gate = core.single().ok().filter(|gate| {
+            session.core_hp > 0.0
+                && session.gate_revive_remaining <= 0.0
+                && hero.translation.x < gate.translation.x
+        });
+        let target = if let Some(gate) = protecting_gate {
+            transform.translation.x = transform.translation.x.max(gate.translation.x + 1.9);
+            Vec3::new(gate.translation.x, 0.0, transform.translation.z)
         } else {
-            fighter.attack_remaining -= time.delta_secs();
+            hero.translation
+        };
+        let to_hero = (target - transform.translation).with_y(0.0);
+        let (next, attack_seconds, reached) = super::combat::move_towards_radius(
+            transform.translation,
+            target,
+            enemy.speed * speed_effect.map_or(1.0, |effect| effect.multiplier),
+            time.delta_secs(),
+            CHALLENGE_ATTACK_RANGE,
+        );
+        transform.translation = next;
+        if reached {
+            fighter.attack_remaining -= attack_seconds;
             while fighter.attack_remaining <= 0.0 && vitals.alive {
                 fighter.attack_remaining += CHALLENGE_ATTACK_INTERVAL;
-                vitals.take_physical_damage(enemy.damage);
+                if protecting_gate.is_some() && session.core_hp > 0.0 {
+                    session.core_hp = (session.core_hp - enemy.damage).max(0.0);
+                } else if protecting_gate.is_none()
+                    && !rng
+                        .as_deref_mut()
+                        .is_some_and(|rng| bonds.evade(rng.unit()))
+                {
+                    bonds.take_physical_damage(&mut vitals, enemy.damage);
+                }
+                cues.write(EnemyAttackCue {
+                    source: entity,
+                    origin: transform.translation,
+                    target,
+                    kind: EnemyAttackKind::Slam,
+                });
             }
         }
-        transform.rotate_y(time.delta_secs() * 1.4);
+        if let Some(direction) = to_hero.try_normalize() {
+            transform.look_to(direction, Vec3::Y);
+        }
     }
 }
 
@@ -682,6 +667,66 @@ pub(crate) fn complete_gold_target(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn real_attack_emits_cue_records_received_hit_and_holds_facing() {
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<BondRuntime>()
+            .add_message::<EnemyAttackCue>()
+            .add_systems(Update, move_challenge_enemies);
+
+        app.world_mut()
+            .spawn((Hero, Transform::from_xyz(-1., 0., 0.), Visibility::Visible));
+        let enemy = app
+            .world_mut()
+            .spawn((
+                TrialEnemy {
+                    level: 1,
+                    reward: 0,
+                    kind: ChallengeKind::Tower,
+                },
+                ChallengeFighter {
+                    attack_remaining: 0.,
+                },
+                Enemy {
+                    hp: 1000.,
+                    max_hp: 1000.,
+                    speed: 0.,
+                    damage: 10.,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+                Transform::default(),
+            ))
+            .id();
+        let before = app.world().resource::<HeroVitals>().health;
+        app.update();
+        assert!(app.world().resource::<HeroVitals>().health < before);
+        assert_eq!(
+            app.world_mut()
+                .resource_mut::<BondRuntime>()
+                .take_received_hits(),
+            1
+        );
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 1);
+        let rotation = app.world().get::<Transform>(enemy).unwrap().rotation;
+        app.update();
+        assert!(
+            rotation
+                .angle_between(app.world().get::<Transform>(enemy).unwrap().rotation)
+                .abs()
+                < 0.001
+        );
+        let health = app.world().resource::<HeroVitals>().health;
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        app.update();
+        assert_eq!(app.world().resource::<HeroVitals>().health, health);
+    }
 
     fn test_game_assets() -> GameAssets {
         GameAssets {
@@ -689,9 +734,6 @@ mod tests {
             enemy_scenes: std::array::from_fn(|_| Handle::default()),
             boss_scenes: std::array::from_fn(|_| Handle::default()),
             summon_scenes: std::array::from_fn(|_| Handle::default()),
-            enemy_mesh: Handle::default(),
-            enemy_meshes: std::array::from_fn(|_| Handle::default()),
-            elite_mesh: Handle::default(),
             projectile_mesh: Handle::default(),
             fx_mesh: Handle::default(),
             enemy_material: Handle::default(),
@@ -702,6 +744,151 @@ mod tests {
             projectile_material: Handle::default(),
             storm_material: Handle::default(),
         }
+    }
+
+    fn auto_app(elapsed: f32) -> App {
+        let mut app = App::new();
+        app.insert_resource(GameSession {
+            elapsed,
+            ..default()
+        })
+        .insert_resource(test_game_assets())
+        .init_resource::<ButtonInput<KeyCode>>()
+        .init_resource::<Time>()
+        .init_resource::<CombatPools>()
+        .init_resource::<TrialState>()
+        .init_resource::<GoldChallengeState>()
+        .init_resource::<EncounterState>()
+        .add_systems(Update, (challenge_input, update_challenges).chain());
+        app
+    }
+
+    #[test]
+    fn auto_buttons_start_at_unlock_without_dps_and_retry_after_timeout() {
+        let mut app = auto_app(17.0);
+        let tower_button = app
+            .world_mut()
+            .spawn((
+                Interaction::Pressed,
+                TrialButton(TrialAction::ToggleTowerAuto),
+            ))
+            .id();
+        let gold_button = app
+            .world_mut()
+            .spawn((
+                Interaction::Pressed,
+                TrialButton(TrialAction::ToggleGoldAuto),
+            ))
+            .id();
+        app.update();
+        assert!(app.world().resource::<TrialState>().auto);
+        assert!(app.world().resource::<GoldChallengeState>().auto);
+        assert!(!app.world().resource::<TrialState>().active);
+        for entity in [tower_button, gold_button] {
+            *app.world_mut().get_mut::<Interaction>(entity).unwrap() = Interaction::None;
+        }
+        app.world_mut().resource_mut::<GameSession>().elapsed = 18.;
+        app.update();
+        assert!(app.world().resource::<TrialState>().active);
+        assert!(!app.world().resource::<GoldChallengeState>().active);
+        app.world_mut().resource_mut::<GameSession>().elapsed = 60.;
+        app.update();
+        assert!(app.world().resource::<GoldChallengeState>().active);
+        assert_eq!(
+            app.world()
+                .resource::<GoldChallengeState>()
+                .remaining_targets,
+            10
+        );
+        assert_eq!(
+            app.world()
+                .resource::<CombatPools>()
+                .enemy_metrics()
+                .active(),
+            11
+        );
+        app.update();
+        assert_eq!(
+            app.world()
+                .resource::<CombatPools>()
+                .enemy_metrics()
+                .active(),
+            11,
+            "active challenges must not spawn twice"
+        );
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs(26));
+        app.update();
+        assert!(!app.world().resource::<TrialState>().active);
+        assert!(!app.world().resource::<GoldChallengeState>().active);
+        assert_eq!(
+            app.world()
+                .resource::<CombatPools>()
+                .enemy_metrics()
+                .active(),
+            0
+        );
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs(34));
+        app.update();
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::ZERO);
+        app.update();
+        assert!(app.world().resource::<TrialState>().active);
+        assert!(app.world().resource::<GoldChallengeState>().active);
+        assert_eq!(
+            app.world()
+                .resource::<CombatPools>()
+                .enemy_metrics()
+                .active(),
+            11
+        );
+    }
+
+    #[test]
+    fn auto_respects_pause_completion_and_explicit_clear_disables_repeat() {
+        let mut app = auto_app(1510.);
+        app.world_mut().resource_mut::<TrialState>().auto = true;
+        app.world_mut().resource_mut::<GoldChallengeState>().auto = true;
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        app.update();
+        assert!(!app.world().resource::<TrialState>().active);
+        app.world_mut().resource_mut::<GameSession>().paused = false;
+        app.update();
+        assert!(app.world().resource::<TrialState>().active);
+        assert!(app.world().resource::<GoldChallengeState>().active);
+        app.world_mut()
+            .resource_mut::<ButtonInput<KeyCode>>()
+            .press(KeyCode::F4);
+        app.update();
+        assert!(!app.world().resource::<TrialState>().auto);
+        assert!(!app.world().resource::<GoldChallengeState>().auto);
+        app.world_mut()
+            .resource_mut::<ButtonInput<KeyCode>>()
+            .clear();
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs(61));
+        app.update();
+        app.update();
+        assert!(!app.world().resource::<TrialState>().active);
+        assert!(!app.world().resource::<GoldChallengeState>().active);
+        {
+            let mut tower = app.world_mut().resource_mut::<TrialState>();
+            tower.auto = true;
+            tower.level = 24;
+        }
+        {
+            let mut gold = app.world_mut().resource_mut::<GoldChallengeState>();
+            gold.auto = true;
+            gold.level = 15;
+        }
+        app.update();
+        assert!(!app.world().resource::<TrialState>().active);
+        assert!(!app.world().resource::<GoldChallengeState>().active);
     }
 
     #[test]
@@ -729,6 +916,7 @@ mod tests {
                 &mut commands,
                 &mut blocked_pool,
                 &session,
+                &EncounterState::default(),
                 &assets,
                 &mut blocked_state,
                 false,
@@ -763,6 +951,7 @@ mod tests {
                 &mut commands,
                 &mut exact_pool,
                 &session,
+                &EncounterState::default(),
                 &assets,
                 &mut exact_state,
                 false,
@@ -782,8 +971,59 @@ mod tests {
     }
 
     #[test]
+    fn chapter_six_scales_regular_enemies_but_not_tower_or_gold_challengers() {
+        use super::super::campaign::{CampaignRun, chapter, scale_enemies};
+
+        let mut app = auto_app(GOLD_UNLOCK_AT);
+        app.insert_resource(CampaignRun {
+            stage: 5,
+            run_id: 0,
+        })
+        .add_systems(Update, scale_enemies.after(update_challenges));
+        app.world_mut().resource_mut::<TrialState>().auto = true;
+        app.world_mut().resource_mut::<GoldChallengeState>().auto = true;
+        let regular = app
+            .world_mut()
+            .spawn(Enemy {
+                hp: 100.0,
+                max_hp: 100.0,
+                speed: 1.0,
+                damage: 10.0,
+                xp: 0,
+                wood: 0,
+                gold: 0,
+                kill_credit: 0,
+                elite: false,
+            })
+            .id();
+        app.update();
+        app.update();
+
+        let scaled = app.world().get::<Enemy>(regular).unwrap();
+        assert_eq!(scaled.max_hp, 100.0 * chapter(5).health_scale);
+        assert_eq!(scaled.damage, 10.0 * chapter(5).damage_scale);
+        let challengers: Vec<_> = app
+            .world_mut()
+            .query::<(&Enemy, &TrialEnemy)>()
+            .iter(app.world())
+            .map(|(enemy, trial)| (trial.kind, enemy.hp, enemy.max_hp, enemy.damage))
+            .collect();
+        assert_eq!(challengers.len(), 1 + usize::from(GOLD_TARGET_COUNT));
+        for (kind, hp, max_hp, damage) in challengers {
+            let (expected_hp, expected_damage) = match kind {
+                ChallengeKind::Tower => (1_200.0, 12.0),
+                ChallengeKind::Gold => (120.0, 3.65),
+            };
+            assert_eq!(
+                (hp, max_hp, damage),
+                (expected_hp, expected_hp, expected_damage)
+            );
+        }
+    }
+
+    #[test]
     fn tower_table_matches_specification() {
-        assert_eq!(TOWER_UNLOCK_AT, [18.0; 24]);
+        assert_eq!(TOWER_UNLOCK_AT, 18.0);
         assert_eq!(
             TOWER_HP,
             [
@@ -826,59 +1066,21 @@ mod tests {
     }
 
     #[test]
-    fn each_tower_floor_obeys_its_own_unlock_time() {
+    fn every_tower_floor_obeys_the_shared_unlock_time() {
         let mut session = GameSession::default();
         let mut tower = TrialState::default();
-        for (index, unlock) in TOWER_UNLOCK_AT.into_iter().enumerate() {
+        for index in 0..TOWER_FLOOR_COUNT {
             tower.level = index as u8;
-            session.elapsed = unlock - 0.01;
+            session.elapsed = TOWER_UNLOCK_AT - 0.01;
             assert!(!can_start_tower(&session, &tower, false));
-            session.elapsed = unlock;
+            session.elapsed = TOWER_UNLOCK_AT;
             assert!(can_start_tower(&session, &tower, false));
         }
-        tower.level = TOWER_HP.len() as u8;
+        tower.level = TOWER_FLOOR_COUNT as u8;
         assert!(!can_start_tower(&session, &tower, false));
         tower.level = 23;
         session.elapsed = 0.0;
         assert!(can_start_tower(&session, &tower, true));
-    }
-
-    #[test]
-    fn auto_thresholds_are_strict_and_boss_rules_differ() {
-        let tower_required = TOWER_RECOMMENDED_DPS[0] * 1.15;
-        assert!(!tower_auto_allowed(
-            tower_required,
-            60.0,
-            100.0,
-            true,
-            false
-        ));
-        assert!(tower_auto_allowed(
-            tower_required + 0.01,
-            60.0,
-            100.0,
-            true,
-            false
-        ));
-        assert!(!tower_auto_allowed(999.0, 60.0, 280.0, true, false));
-        assert!(!tower_auto_allowed(999.0, 60.0, 100.0, false, false));
-
-        let gold_required = gold_recommended_dps(0) * 1.20;
-        assert!(!gold_auto_allowed(
-            gold_required,
-            gold_recommended_dps(0),
-            true,
-            false
-        ));
-        assert!(gold_auto_allowed(
-            gold_required + 0.01,
-            gold_recommended_dps(0),
-            true,
-            false
-        ));
-        assert!(!gold_auto_allowed(999.0, 1.0, false, false));
-        assert!(tower_auto_allowed(0.0, f32::INFINITY, 299.0, false, true));
-        assert!(gold_auto_allowed(0.0, f32::INFINITY, false, true));
     }
 
     #[test]
@@ -979,7 +1181,6 @@ mod tests {
             let expected_hp = 1_200.0 * 1.55_f32.powi(level as i32);
             assert!((gold_hp(level) - expected_hp).abs() < 0.01);
             assert_eq!(gold_reward(level), 100 + 530 * u32::from(level) / 14);
-            assert!((gold_recommended_dps(level) - expected_hp / 18.0).abs() < 0.01);
         }
         assert_eq!(GOLD_TARGET_COUNT, 10);
         assert_eq!(GOLD_DURATION, 20.0);

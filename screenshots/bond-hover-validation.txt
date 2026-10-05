@@ -1,0 +1,17 @@
+Bond detail hover regression — 2026-09-29
+PASS cargo test --lib -j1: 278 passed, 0 failed.
+PASS cargo clippy --all-targets -j1 -- -D warnings.
+PASS cargo build --bins -j1.
+Commands run inside nix develop.
+
+Regression test: hover_details_follow_each_card_and_action_help_stays_separate
+Checks Divine Might / Divine Body / Divine Grace titles and exact effect text;
+hover does not change the selected purchase; abandon help is separate;
+leaving action hides help; English switch updates selected details.
+
+Capture command: target/debug/capture still <path> 160 <scenario> 0xA11CE <size>
+PASS bond-hover-card.png: build-hover-card, zh, 1280x720.
+PASS bond-hover-action.png: build-hover-action, zh, 1280x720.
+PASS bond-hover-action-mobile.png: build-hover-action, en, 667x375.
+All three images visually inspected; no error/panic markers in capture logs.
+The harness simulates hover interactions after selecting another card.

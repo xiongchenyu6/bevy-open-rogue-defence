@@ -1,6 +1,5 @@
 use bevy::{prelude::*, window::PrimaryWindow};
 
-use super::bonds::FortuneMarketRules;
 use super::combat::SurvivalSet;
 use super::content::Rarity as BuildRarity;
 use super::mobile_layout::hud_metrics;
@@ -14,7 +13,6 @@ impl Plugin for MarketPlugin {
         app.init_resource::<GameLanguage>()
             .init_resource::<MarketState>()
             .init_resource::<MarketEffects>()
-            .init_resource::<FortuneMarketRules>()
             .add_systems(Startup, setup_market)
             .add_systems(
                 Update,
@@ -25,9 +23,12 @@ impl Plugin for MarketPlugin {
                     tick_market_notice,
                     apply_market_layout,
                     update_market_ui,
+                    update_market_tooltip,
+                    refresh_market_language,
                 )
                     .chain()
-                    .before(SurvivalSet),
+                    .before(SurvivalSet)
+                    .before(super::bonds::BondSet),
             );
     }
 }
@@ -35,10 +36,9 @@ impl Plugin for MarketPlugin {
 const MARKET_UNLOCK_AT: f32 = 180.0;
 const STOCK_INTERVAL: f32 = 180.0;
 // The current public match footage shows five stock rows before any equipment
-// is purchased. Keep all five visible; MarketBadge remains valuable for its
+// is purchased. All five are always visible; MarketBadge is valuable for its
 // price reduction instead of fabricating a sixth row outside the observed UI.
-const BASE_OFFER_COUNT: usize = 5;
-const MAX_OFFER_COUNT: usize = 5;
+const OFFER_COUNT: usize = 5;
 const AUTOPLAY_MAX_PURCHASES_PER_GENERATION: usize = 2;
 const AUTOPLAY_KILL_RESERVE: u32 = 100;
 const REFRESH_COSTS: [u32; 4] = [60, 80, 100, 120];
@@ -55,7 +55,7 @@ const MARKET_COMPACT_HEADER_HEIGHT: f32 = 28.0;
 const MARKET_COMPACT_ROW_HEIGHT: f32 = 54.0;
 const MARKET_COMPACT_ROW_WIDTH_PERCENT: f32 = 49.0;
 const MARKET_COMPACT_MARK_WIDTH: f32 = 64.0;
-const MARKET_COMPACT_TOGGLE_WIDTH: f32 = 168.0;
+const MARKET_COMPACT_TOGGLE_WIDTH: f32 = 96.0;
 const MARKET_COMPACT_TOGGLE_HEIGHT: f32 = 52.0;
 const MARKET_REFRESH_HEIGHT: f32 = 48.0;
 const _: () = assert!(MARKET_REFRESH_HEIGHT >= 48.0);
@@ -164,7 +164,7 @@ impl MarketQuality {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
-enum MarketItem {
+pub(crate) enum MarketItem {
     CorePatch,
     SkillTuner,
     BondCompass,
@@ -192,9 +192,34 @@ enum MarketItem {
 }
 
 impl MarketItem {
-    fn name(self, language: GameLanguage) -> &'static str {
+    pub(crate) fn icon_path(self) -> &'static str {
+        match self {
+            Self::SerratedDisc => "ui/icons/orbit_blade.png",
+            Self::ArcLens => "ui/icons/arcane_loop.png",
+            Self::HardenedPlate => "ui/icons/shield.png",
+            Self::SpiritDrum => "ui/icons/spirit_pact.png",
+            Self::WindBoots => "ui/icons/windrunner.png",
+            Self::EchoCore => "ui/icons/prism_echo.png",
+            Self::EmberHeart => "ui/icons/cinder_aura.png",
+            Self::StormCoil => "ui/icons/storm_conduit.png",
+            Self::FrostMirror => "ui/icons/glacier_core.png",
+            Self::ThreefoldRelic => "ui/icons/triune_engine.png",
+            Self::BloodContract => "ui/icons/blood_array.png",
+            Self::MarketBadge => "ui/icons/raider_fortune.png",
+            Self::GuardianSeed => "ui/icons/guardian_oath.png",
+            Self::AscendantCrown => "ui/icons/qi_ascension.png",
+            Self::ChaosDie => "ui/icons/fate_cube.png",
+            Self::WorldAnchor => "ui/icons/mountain.png",
+            Self::LegionStandard => "ui/icons/oath_banner.png",
+            Self::PrismaticEngine => "ui/icons/element_master.png",
+            Self::LastOath => "ui/icons/ember_oath.png",
+            _ => "ui/icons/market.png",
+        }
+    }
+
+    pub(crate) fn name(self, language: GameLanguage) -> &'static str {
         let (english, chinese) = match self {
-            Self::CorePatch => ("Core Patch", "核心修补包"),
+            Self::CorePatch => ("Gate Patch", "城门修补包"),
             Self::SkillTuner => ("Skill Tuner", "技能调谐器"),
             Self::BondCompass => ("Bond Compass", "羁绊罗盘"),
             Self::SlowHourglass => ("Slow Hourglass", "缓时沙漏"),
@@ -277,7 +302,7 @@ impl MarketItem {
 
     /// Keep the observed five internal stock bands while presenting the same
     /// four build tiers used by heroes, skills and bonds.
-    fn build_rarity(self) -> BuildRarity {
+    pub(crate) fn build_rarity(self) -> BuildRarity {
         match self.market_quality() {
             MarketQuality::White => BuildRarity::R,
             MarketQuality::Blue => BuildRarity::Sr,
@@ -286,9 +311,9 @@ impl MarketItem {
         }
     }
 
-    fn effect_text(self, language: GameLanguage) -> &'static str {
+    pub(crate) fn effect_text(self, language: GameLanguage) -> &'static str {
         let (english, chinese) = match self {
-            Self::CorePatch => ("restore 200 core integrity", "核心耐久+200"),
+            Self::CorePatch => ("restore 200 gate integrity", "城门耐久+200"),
             Self::SkillTuner => ("+1 skill refresh charge", "技能刷新次数+1"),
             Self::BondCompass => (
                 "next bond draft favors strongest bond",
@@ -296,22 +321,28 @@ impl MarketItem {
             ),
             Self::SlowHourglass => ("all enemies -50% speed for 15s", "敌人减速50%，持续15秒"),
             Self::RevivalSeed => ("prevent the next fatal defeat", "抵消下一次致命失败"),
-            Self::SerratedDisc => ("+22% attack; attacks gain splash", "攻击+22%；普攻获得溅射"),
+            Self::SerratedDisc => (
+                "+22% attack, +3 armor penetration; attacks splash",
+                "攻击+22%，物理穿透+3点；普攻溅射",
+            ),
             Self::ArcLens => (
-                "+18% spell range, +10% spell power",
-                "法术范围+18%，威力+10%",
+                "+18% spell range, +10% spell power, +10% spell penetration",
+                "法术范围+18%，威力+10%，法术穿透+10%",
             ),
             Self::HardenedPlate => ("+6 armor, +20% maximum health", "护甲+6，最大生命+20%"),
             Self::SpiritDrum => ("+25% summon attack speed", "召唤物攻速+25%"),
             Self::WindBoots => (
-                "+15% move speed, -15% dodge cooldown",
-                "移速+15%，闪避冷却-15%",
+                "+15% move speed, -15% dodge cooldown, +8% evasion",
+                "移速+15%，闪避冷却-15%，闪避率+8%",
             ),
             Self::EchoCore => (
                 "20% chance to echo skills at 45%",
                 "技能20%概率以45%效果回响",
             ),
-            Self::EmberHeart => ("burns can critically strike", "燃烧可以暴击"),
+            Self::EmberHeart => (
+                "+8% critical chance; burns can critically strike",
+                "暴击率+8%；燃烧可以暴击",
+            ),
             Self::StormCoil => ("every 5th attack chains lightning", "每5次攻击触发连锁闪电"),
             Self::FrostMirror => (
                 "frozen deaths create an ice burst",
@@ -326,7 +357,7 @@ impl MarketItem {
                 "低生命伤害+40%，吸血+5%",
             ),
             Self::MarketBadge => ("-20% market prices", "黑市价格-20%"),
-            Self::GuardianSeed => ("+1 core/sec; intercept every 30s", "核心每秒+1；每30秒拦截"),
+            Self::GuardianSeed => ("+1 gate/sec; intercept every 30s", "城门每秒+1；每30秒拦截"),
             Self::AscendantCrown => (
                 "top skill gains rank 6 and +30% power",
                 "最高技能升至6级，威力+30%",
@@ -340,7 +371,10 @@ impl MarketItem {
                 "+1 summon cap, +30% inherited stats",
                 "召唤上限+1，继承属性+30%",
             ),
-            Self::PrismaticEngine => ("+80% reactions and +40% area", "元素反应+80%，范围+40%"),
+            Self::PrismaticEngine => (
+                "+80% elemental aftereffects and +40% area",
+                "元素持续与连锁伤害+80%，范围+40%",
+            ),
             Self::LastOath => (
                 "negate one fatal hit; empower for 8s",
                 "抵消一次致命伤；强化8秒",
@@ -361,7 +395,9 @@ impl MarketItem {
         }
 
         match self {
-            Self::CorePatch => session.core_hp = (session.core_hp + 200.0).min(session.core_max_hp),
+            Self::CorePatch => {
+                session.heal_gate(200.0);
+            }
             Self::SkillTuner => {
                 session.skill_rerolls = session.skill_rerolls.saturating_add(1);
                 effects.skill_tuner_uses = effects.skill_tuner_uses.saturating_add(1);
@@ -372,10 +408,12 @@ impl MarketItem {
             Self::SlowHourglass => effects.enemy_slow_remaining = 15.0,
             Self::RevivalSeed => effects.revival_seeds = effects.revival_seeds.saturating_add(1),
             Self::SerratedDisc => {
+                effects.physical_penetration = 3.0;
                 build.attack_damage *= 1.22;
                 effects.splash_ratio = effects.splash_ratio.max(0.30);
             }
             Self::ArcLens => {
+                effects.spell_penetration = 0.10;
                 effects.spell_area_multiplier *= 1.18;
                 effects.spell_power_multiplier *= 1.10;
             }
@@ -394,11 +432,15 @@ impl MarketItem {
                 effects.summon_attack_speed_multiplier *= 1.25;
             }
             Self::WindBoots => {
+                effects.evasion = 0.08;
                 build.move_speed *= 1.15;
                 effects.dodge_cooldown_multiplier *= 0.85;
             }
             Self::EchoCore => effects.spell_echo_chance = 0.20,
-            Self::EmberHeart => effects.burns_can_crit = true,
+            Self::EmberHeart => {
+                effects.burns_can_crit = true;
+                effects.critical_chance = 0.08;
+            }
             Self::StormCoil => effects.storm_coil = true,
             Self::FrostMirror => effects.frost_mirror = true,
             Self::ThreefoldRelic => effects.threefold_multiplier = 1.12,
@@ -482,52 +524,45 @@ struct AutoplayPurchasePlan {
 
 #[derive(Resource)]
 struct MarketState {
-    offers: [MarketOffer; MAX_OFFER_COUNT],
-    marked: [Option<MarketItem>; MAX_OFFER_COUNT],
+    offers: [MarketOffer; OFFER_COUNT],
+    marked: [Option<MarketItem>; OFFER_COUNT],
     level: u8,
     manual_refreshes: u32,
     next_stock_at: f32,
     stock_generation: u32,
-    free_refresh_used_generation: Option<u32>,
     autoplay_planned_generation: Option<u32>,
     autoplay_plan: [Option<AutoplayPurchasePlan>; AUTOPLAY_MAX_PURCHASES_PER_GENERATION],
     autoplay_purchases_generation: u8,
     open: bool,
     paused_by_market: bool,
-    notice: String,
+    notice: [String; 2],
     notice_timer: f32,
 }
 
 impl Default for MarketState {
     fn default() -> Self {
         Self {
-            offers: [MarketOffer::PLACEHOLDER; MAX_OFFER_COUNT],
-            marked: [None; MAX_OFFER_COUNT],
+            offers: [MarketOffer::PLACEHOLDER; OFFER_COUNT],
+            marked: [None; OFFER_COUNT],
             level: 1,
             manual_refreshes: 0,
             next_stock_at: MARKET_UNLOCK_AT + STOCK_INTERVAL,
             stock_generation: 0,
-            free_refresh_used_generation: None,
             autoplay_planned_generation: None,
             autoplay_plan: [None; AUTOPLAY_MAX_PURCHASES_PER_GENERATION],
             autoplay_purchases_generation: 0,
             open: false,
             paused_by_market: false,
-            notice: String::new(),
+            notice: [String::new(), String::new()],
             notice_timer: 0.0,
         }
     }
 }
 
 impl MarketState {
-    fn refresh_price(&self, effects: &MarketEffects, fortune: &FortuneMarketRules) -> u32 {
-        if fortune.free_refresh_available
-            && self.free_refresh_used_generation != Some(self.stock_generation)
-        {
-            return 0;
-        }
+    fn refresh_price(&self, effects: &MarketEffects) -> u32 {
         let tier = (self.manual_refreshes as usize).min(REFRESH_COSTS.len() - 1);
-        discounted_cost(REFRESH_COSTS[tier], effects, fortune)
+        discounted_cost(REFRESH_COSTS[tier], effects)
     }
 }
 
@@ -540,11 +575,16 @@ fn market_level(bosses_defeated: u8) -> u8 {
 #[derive(Resource)]
 pub(crate) struct MarketEffects {
     owned_equipment: u32,
+    consumed_equipment: u32,
     skill_tuner_uses: u8,
     bond_compass_uses: u8,
     revival_seeds: u8,
     enemy_slow_remaining: f32,
     splash_ratio: f32,
+    physical_penetration: f32,
+    spell_penetration: f32,
+    evasion: f32,
+    critical_chance: f32,
     spell_area_multiplier: f32,
     spell_power_multiplier: f32,
     summon_attack_speed_multiplier: f32,
@@ -579,11 +619,16 @@ impl Default for MarketEffects {
     fn default() -> Self {
         Self {
             owned_equipment: 0,
+            consumed_equipment: 0,
             skill_tuner_uses: 0,
             bond_compass_uses: 0,
             revival_seeds: 0,
             enemy_slow_remaining: 0.0,
             splash_ratio: 0.0,
+            physical_penetration: 0.0,
+            spell_penetration: 0.0,
+            evasion: 0.0,
+            critical_chance: 0.0,
             spell_area_multiplier: 1.0,
             spell_power_multiplier: 1.0,
             summon_attack_speed_multiplier: 1.0,
@@ -617,13 +662,61 @@ impl Default for MarketEffects {
 }
 
 impl MarketEffects {
+    pub(crate) fn equipment(&self) -> Vec<MarketItem> {
+        ALL_EQUIPMENT
+            .iter()
+            .copied()
+            .filter(|item| {
+                self.owns(*item)
+                    && item
+                        .equipment_index()
+                        .is_some_and(|index| self.consumed_equipment & (1 << index) == 0)
+            })
+            .collect()
+    }
+    pub(crate) fn consume_equipment(&mut self, item: MarketItem) {
+        if let Some(index) = item.equipment_index() {
+            self.consumed_equipment |= 1 << index;
+        }
+    }
+    pub(crate) fn apply_crafting_bonus(
+        &mut self,
+        recipe: super::crafting::RecipeId,
+        vitals: &mut HeroVitals,
+    ) {
+        use super::crafting::RecipeId;
+        match recipe {
+            RecipeId::Bloodreaver => {
+                self.physical_penetration += 3.0;
+                self.life_leech += 0.05;
+            }
+            RecipeId::AstralPrism => {
+                self.spell_penetration += 0.10;
+                self.spell_power_multiplier *= 1.15;
+            }
+            RecipeId::StormBastion => {
+                vitals.armor += 4.0;
+                self.evasion += 0.05;
+            }
+            RecipeId::Suncoil => {
+                self.critical_chance += 0.05;
+                self.spell_power_multiplier *= 1.15;
+            }
+            RecipeId::NightCrown => {
+                self.physical_penetration += 4.0;
+                self.life_leech += 0.05;
+                vitals.armor += 4.0;
+            }
+            RecipeId::WorldEngine => {
+                self.spell_penetration += 0.10;
+                self.spell_echo_chance = (self.spell_echo_chance + 0.10).min(1.0);
+            }
+        }
+    }
+
     fn owns(&self, item: MarketItem) -> bool {
         item.equipment_index()
             .is_some_and(|index| self.owned_equipment & (1 << index) != 0)
-    }
-
-    fn visible_offer_count(&self) -> usize {
-        BASE_OFFER_COUNT
     }
 
     pub(crate) fn enemy_movement_multiplier(&self, is_boss: bool) -> f32 {
@@ -696,6 +789,19 @@ impl MarketEffects {
         }
     }
 
+    pub(crate) fn physical_penetration(&self) -> f32 {
+        self.physical_penetration
+    }
+    pub(crate) fn spell_penetration(&self) -> f32 {
+        self.spell_penetration
+    }
+    pub(crate) fn evasion(&self) -> f32 {
+        self.evasion
+    }
+    pub(crate) fn critical_chance(&self) -> f32 {
+        self.critical_chance
+    }
+
     pub(crate) fn life_leech(&self) -> f32 {
         self.life_leech
     }
@@ -710,20 +816,19 @@ impl MarketEffects {
         }
     }
 
-    pub(crate) fn chaos_damage_multiplier(
-        &self,
-        rng: &mut RunRng,
-        fortune_take_better: bool,
-    ) -> f32 {
+    pub(crate) fn chaos_damage_bounds(&self) -> (f32, f32) {
+        if self.chaos_die {
+            (chaos_multiplier_for_roll(0), chaos_multiplier_for_roll(2))
+        } else {
+            (1.0, 1.0)
+        }
+    }
+
+    pub(crate) fn chaos_damage_multiplier(&self, rng: &mut RunRng) -> f32 {
         if !self.chaos_die {
             return 1.0;
         }
-        let first = roll_chaos_multiplier(rng);
-        if fortune_take_better {
-            first.max(roll_chaos_multiplier(rng))
-        } else {
-            first
-        }
+        roll_chaos_multiplier(rng)
     }
 
     pub(crate) fn summon_cap_bonus(&self) -> u8 {
@@ -841,7 +946,7 @@ impl MarketEffects {
 struct MarketOfferButton(usize);
 
 #[derive(Component)]
-struct MarketOfferRow(usize);
+struct MarketOfferRow;
 
 #[derive(Component)]
 struct MarketOfferGrid;
@@ -876,6 +981,12 @@ struct MarketToggleButton;
 #[derive(Component)]
 struct MarketToggleLabel;
 
+#[derive(Component)]
+struct MarketTooltip;
+
+#[derive(Component)]
+struct MarketTooltipText;
+
 #[derive(Clone, Copy, Debug, PartialEq)]
 struct MarketLayout {
     compact: bool,
@@ -892,7 +1003,7 @@ struct MarketLayout {
 
 impl MarketLayout {
     fn minimum_compact_panel_height(self) -> f32 {
-        let grid_rows = MAX_OFFER_COUNT.div_ceil(2) as f32;
+        let grid_rows = OFFER_COUNT.div_ceil(2) as f32;
         MARKET_COMPACT_PANEL_PADDING * 2.0
             + MARKET_COMPACT_HEADER_HEIGHT
             + grid_rows * self.row_height
@@ -927,7 +1038,7 @@ fn market_layout(width: f32, height: f32) -> MarketLayout {
             row_height: 52.0,
             mark_width: 72.0,
             toggle_right: 18.0,
-            toggle_width: 230.0,
+            toggle_width: 96.0,
             toggle_height: 48.0,
         }
     }
@@ -935,14 +1046,15 @@ fn market_layout(width: f32, height: f32) -> MarketLayout {
 
 fn setup_market(
     mut commands: Commands,
+    assets: Option<Res<AssetServer>>,
     language: Res<GameLanguage>,
     mut state: ResMut<MarketState>,
     effects: Res<MarketEffects>,
-    fortune: Res<FortuneMarketRules>,
+
     mut rng: ResMut<RunRng>,
 ) {
     let level = state.level;
-    reroll_all(&mut state, &effects, &fortune, &mut rng, level);
+    reroll_all(&mut state, &effects, &mut rng, level);
 
     commands
         .spawn((
@@ -952,29 +1064,72 @@ fn setup_market(
                 position_type: PositionType::Absolute,
                 right: px(18),
                 bottom: px(18),
-                width: px(230),
+                width: px(96),
                 height: px(48),
                 align_items: AlignItems::Center,
                 justify_content: JustifyContent::Center,
                 border: UiRect::all(px(1)),
                 border_radius: BorderRadius::all(px(9)),
+                column_gap: px(6),
                 ..default()
             },
-            BackgroundColor(Color::srgba(0.19, 0.105, 0.035, 0.94)),
-            BorderColor::all(Color::srgba(0.92, 0.58, 0.20, 0.72)),
+            BackgroundColor(Color::srgba(0.045, 0.055, 0.075, 0.95)),
+            BorderColor::all(Color::srgba(0.71, 0.55, 0.29, 0.8)),
             GlobalZIndex(21),
         ))
         .with_children(|button| {
+            if let Some(assets) = assets.as_ref() {
+                button.spawn((
+                    ImageNode::new(assets.load("ui/icons/market.png")),
+                    Node {
+                        width: px(32),
+                        height: px(32),
+                        flex_shrink: 0.0,
+                        ..default()
+                    },
+                    Pickable::IGNORE,
+                ));
+            }
             button.spawn((
                 MarketToggleLabel,
-                Text::new(
-                    language.pick("B  BLACK MARKET  [LOCKED 03:00]", "B  黑市  [锁定 03:00]"),
-                ),
+                Text::new("03:00"),
                 TextFont {
                     font_size: FontSize::Px(13.0),
                     ..default()
                 },
                 TextColor(Color::srgb(1.0, 0.78, 0.38)),
+            ));
+        });
+
+    commands
+        .spawn((
+            MarketTooltip,
+            Node {
+                position_type: PositionType::Absolute,
+                right: px(18),
+                bottom: px(76),
+                width: px(260),
+                padding: UiRect::all(px(12)),
+                display: Display::None,
+                border: UiRect::all(px(1)),
+                border_radius: BorderRadius::all(px(8)),
+                ..default()
+            },
+            BackgroundColor(Color::srgba(0.018, 0.027, 0.045, 0.97)),
+            BorderColor::all(Color::srgba(0.71, 0.55, 0.29, 0.8)),
+            GlobalZIndex(25),
+            Pickable::IGNORE,
+        ))
+        .with_children(|tip| {
+            tip.spawn((
+                MarketTooltipText,
+                Text::new(""),
+                TextFont {
+                    font_size: FontSize::Px(13.0),
+                    ..default()
+                },
+                TextColor(Color::srgb(0.92, 0.87, 0.74)),
+                Pickable::IGNORE,
             ));
         });
 
@@ -1011,6 +1166,7 @@ fn setup_market(
                 ))
                 .with_children(|header| {
                     header.spawn((
+                        MarketTitle,
                         Text::new(language.pick("BLACK MARKET", "黑市")),
                         TextFont {
                             font_size: FontSize::Px(15.0),
@@ -1041,17 +1197,12 @@ fn setup_market(
                     },
                 ))
                 .with_children(|grid| {
-                    for index in 0..MAX_OFFER_COUNT {
+                    for index in 0..OFFER_COUNT {
                         grid.spawn((
-                            MarketOfferRow(index),
+                            MarketOfferRow,
                             Node {
                                 width: percent(100),
                                 min_height: px(52),
-                                display: if index < BASE_OFFER_COUNT {
-                                    Display::Flex
-                                } else {
-                                    Display::None
-                                },
                                 column_gap: px(MARKET_PANEL_GAP),
                                 align_items: AlignItems::Center,
                                 ..default()
@@ -1060,6 +1211,7 @@ fn setup_market(
                         .with_children(|row| {
                             row.spawn((
                                 Button,
+                                Name::new(format!("Market offer {index}")),
                                 MarketOfferButton(index),
                                 Node {
                                     flex_grow: 1.0,
@@ -1141,9 +1293,8 @@ fn setup_market(
 
 fn maintain_market_stock(
     session: Res<GameSession>,
-    language: Res<GameLanguage>,
     effects: Res<MarketEffects>,
-    fortune: Res<FortuneMarketRules>,
+
     mut state: ResMut<MarketState>,
     mut rng: ResMut<RunRng>,
 ) {
@@ -1153,14 +1304,13 @@ fn maintain_market_stock(
     }
     while session.elapsed >= state.next_stock_at {
         let level = state.level;
-        reroll_all(&mut state, &effects, &fortune, &mut rng, level);
+        reroll_all(&mut state, &effects, &mut rng, level);
         state.next_stock_at += STOCK_INTERVAL;
         state.stock_generation = state.stock_generation.saturating_add(1);
         if state.open {
-            set_notice(
-                &mut state,
-                language.pick("Automatic restock", "自动补货").to_string(),
-            );
+            set_notice(&mut state, |language: GameLanguage| {
+                language.pick("Automatic restock", "自动补货").to_string()
+            });
         }
     }
 }
@@ -1175,7 +1325,7 @@ fn handle_market_actions(
     mut session: ResMut<GameSession>,
     mut build: ResMut<PlayerBuild>,
     mut vitals: ResMut<HeroVitals>,
-    fortune: Res<FortuneMarketRules>,
+
     mut rng: ResMut<RunRng>,
     offer_interactions: Query<(&Interaction, &MarketOfferButton), Changed<Interaction>>,
     mark_interactions: Query<(&Interaction, &MarketMarkButton), Changed<Interaction>>,
@@ -1192,28 +1342,25 @@ fn handle_market_actions(
             close_market(&mut state, &mut session);
         } else if session.elapsed < MARKET_UNLOCK_AT {
             let remaining = (MARKET_UNLOCK_AT - session.elapsed).ceil() as u32;
-            set_notice(
-                &mut state,
+            set_notice(&mut state, |language: GameLanguage| {
                 if language.is_chinese() {
                     format!("{:02}:{:02} 后解锁", remaining / 60, remaining % 60)
                 } else {
                     format!("Unlocks in {:02}:{:02}", remaining / 60, remaining % 60)
-                },
-            );
+                }
+            });
         } else if session.finished {
-            set_notice(
-                &mut state,
+            set_notice(&mut state, |language: GameLanguage| {
                 language
                     .pick("Market closed after the run", "对局结束后黑市已关闭")
-                    .to_string(),
-            );
+                    .to_string()
+            });
         } else if session.paused {
-            set_notice(
-                &mut state,
+            set_notice(&mut state, |language: GameLanguage| {
                 language
                     .pick("Close the current choice first", "请先关闭当前选择")
-                    .to_string(),
-            );
+                    .to_string()
+            });
         } else {
             state.open = true;
             state.paused_by_market = true;
@@ -1223,38 +1370,35 @@ fn handle_market_actions(
 
     if state.open && session.elapsed >= MARKET_UNLOCK_AT {
         for (interaction, button) in &mark_interactions {
-            if *interaction != Interaction::Pressed || button.0 >= effects.visible_offer_count() {
+            if *interaction != Interaction::Pressed || button.0 >= OFFER_COUNT {
                 continue;
             }
             let item = state.offers[button.0].item;
             if effects.owns(item) {
                 state.marked[button.0] = None;
-                set_notice(
-                    &mut state,
+                set_notice(&mut state, |language: GameLanguage| {
                     language
                         .pick("Owned equipment cannot be marked", "已拥有装备，无法标记")
-                        .to_string(),
-                );
+                        .to_string()
+                });
             } else if state.marked[button.0] == Some(item) {
                 state.marked[button.0] = None;
-                set_notice(
-                    &mut state,
+                set_notice(&mut state, |language: GameLanguage| {
                     if language.is_chinese() {
                         format!("取消自动购买：{}", item.name(language))
                     } else {
                         format!("Auto-buy canceled: {}", item.name(language))
-                    },
-                );
+                    }
+                });
             } else {
                 state.marked[button.0] = Some(item);
-                set_notice(
-                    &mut state,
+                set_notice(&mut state, |language: GameLanguage| {
                     if language.is_chinese() {
                         format!("标记自动购买：{}", item.name(language))
                     } else {
                         format!("Auto-buy marked: {}", item.name(language))
-                    },
-                );
+                    }
+                });
             }
         }
 
@@ -1269,39 +1413,35 @@ fn handle_market_actions(
                 &mut session,
                 &mut build,
                 &mut vitals,
-                &fortune,
                 &mut rng,
             );
             match outcome {
                 PurchaseOutcome::Bought(item) => {
-                    set_notice(
-                        &mut state,
+                    set_notice(&mut state, |language: GameLanguage| {
                         if language.is_chinese() {
                             format!("已购买 {}", item.name(language))
                         } else {
                             format!("Bought {}", item.name(language))
-                        },
-                    );
+                        }
+                    });
                 }
                 PurchaseOutcome::Unaffordable(shortfall) => {
-                    set_notice(
-                        &mut state,
+                    set_notice(&mut state, |language: GameLanguage| {
                         if language.is_chinese() {
                             format!("还差 {shortfall} 击杀")
                         } else {
                             format!("Need {shortfall} more kills")
-                        },
-                    );
+                        }
+                    });
                 }
-                PurchaseOutcome::Owned => set_notice(
-                    &mut state,
+                PurchaseOutcome::Owned => set_notice(&mut state, |language: GameLanguage| {
                     language
                         .pick(
                             "Equipment already owned; stock replaced",
                             "装备已拥有，货品已替换",
                         )
-                        .to_string(),
-                ),
+                        .to_string()
+                }),
                 PurchaseOutcome::Hidden => {}
             }
         }
@@ -1310,35 +1450,25 @@ fn handle_market_actions(
             if *interaction != Interaction::Pressed {
                 continue;
             }
-            let price = state.refresh_price(&effects, &fortune);
+            let price = state.refresh_price(&effects);
             if session.kills < price {
-                set_notice(
-                    &mut state,
+                set_notice(&mut state, |language: GameLanguage| {
                     if language.is_chinese() {
                         format!("刷新还差 {} 击杀", price - session.kills)
                     } else {
                         format!("Refresh needs {} more kills", price - session.kills)
-                    },
-                );
+                    }
+                });
                 continue;
             }
             session.kills -= price;
             state.manual_refreshes = state.manual_refreshes.saturating_add(1);
-            if fortune.free_refresh_available {
-                state.free_refresh_used_generation = Some(state.stock_generation);
-            }
+
             let level = state.level;
-            reroll_all(&mut state, &effects, &fortune, &mut rng, level);
-            set_notice(
-                &mut state,
-                if price == 0 {
-                    language
-                        .pick("Fortune refresh used", "已使用幸运刷新")
-                        .to_string()
-                } else {
-                    language.pick("Stock refreshed", "货品已刷新").to_string()
-                },
-            );
+            reroll_all(&mut state, &effects, &mut rng, level);
+            set_notice(&mut state, |language: GameLanguage| {
+                language.pick("Stock refreshed", "货品已刷新").to_string()
+            });
         }
     }
 
@@ -1351,7 +1481,6 @@ fn handle_market_actions(
                 &mut session,
                 &mut build,
                 &mut vitals,
-                &fortune,
                 &mut rng,
                 language,
             );
@@ -1362,7 +1491,6 @@ fn handle_market_actions(
             &mut session,
             &mut build,
             &mut vitals,
-            &fortune,
             &mut rng,
             language,
         );
@@ -1386,8 +1514,8 @@ fn prepare_autoplay_plan(state: &mut MarketState, effects: &MarketEffects, sessi
     state.autoplay_plan = [None; AUTOPLAY_MAX_PURCHASES_PER_GENERATION];
     state.autoplay_purchases_generation = 0;
 
-    let mut candidates = Vec::with_capacity(effects.visible_offer_count());
-    for index in 0..effects.visible_offer_count() {
+    let mut candidates = Vec::with_capacity(OFFER_COUNT);
+    for index in 0..OFFER_COUNT {
         let item = state.offers[index].item;
         if effects.owns(item) {
             continue;
@@ -1457,9 +1585,9 @@ fn process_autoplay_purchases(
     session: &mut GameSession,
     build: &mut PlayerBuild,
     vitals: &mut HeroVitals,
-    fortune: &FortuneMarketRules,
+
     rng: &mut RunRng,
-    language: GameLanguage,
+    _language: GameLanguage,
 ) {
     let mut bought = Vec::new();
     for plan_index in 0..AUTOPLAY_MAX_PURCHASES_PER_GENERATION {
@@ -1474,18 +1602,16 @@ fn process_autoplay_purchases(
             continue;
         }
 
-        let price = discounted_cost(plan.item.price(), effects, fortune);
+        let price = discounted_cost(plan.item.price(), effects);
         if session.kills.saturating_sub(AUTOPLAY_KILL_RESERVE) < price {
             continue;
         }
-        match purchase_offer(
-            plan.index, state, effects, session, build, vitals, fortune, rng,
-        ) {
+        match purchase_offer(plan.index, state, effects, session, build, vitals, rng) {
             PurchaseOutcome::Bought(item) => {
                 state.autoplay_plan[plan_index] = None;
                 state.autoplay_purchases_generation =
                     state.autoplay_purchases_generation.saturating_add(1);
-                bought.push(item.name(language));
+                bought.push(item);
             }
             PurchaseOutcome::Owned | PurchaseOutcome::Hidden => {
                 state.autoplay_plan[plan_index] = None;
@@ -1494,14 +1620,27 @@ fn process_autoplay_purchases(
         }
     }
     if !bought.is_empty() {
-        set_notice(
-            state,
+        set_notice(state, |language: GameLanguage| {
             if language.is_chinese() {
-                format!("指挥官购买：{}", bought.join("、"))
+                format!(
+                    "指挥官购买：{}",
+                    bought
+                        .iter()
+                        .map(|item| item.name(language))
+                        .collect::<Vec<_>>()
+                        .join("、")
+                )
             } else {
-                format!("Commander bought {}", bought.join(", "))
-            },
-        );
+                format!(
+                    "Commander bought {}",
+                    bought
+                        .iter()
+                        .map(|item| item.name(language))
+                        .collect::<Vec<_>>()
+                        .join(", ")
+                )
+            }
+        });
     }
 }
 
@@ -1512,21 +1651,21 @@ fn purchase_offer(
     session: &mut GameSession,
     build: &mut PlayerBuild,
     vitals: &mut HeroVitals,
-    fortune: &FortuneMarketRules,
+
     rng: &mut RunRng,
 ) -> PurchaseOutcome {
-    if index >= effects.visible_offer_count() {
+    if index >= OFFER_COUNT {
         return PurchaseOutcome::Hidden;
     }
     let item = state.offers[index].item;
     if effects.owns(item) {
         state.marked[index] = None;
         let level = state.level;
-        replace_offer(index, state, effects, fortune, rng, level);
+        replace_offer(index, state, effects, rng, level);
         return PurchaseOutcome::Owned;
     }
 
-    let price = discounted_cost(item.price(), effects, fortune);
+    let price = discounted_cost(item.price(), effects);
     if session.kills < price {
         return PurchaseOutcome::Unaffordable(price - session.kills);
     }
@@ -1535,7 +1674,7 @@ fn purchase_offer(
     item.apply(session, build, vitals, effects);
     state.marked[index] = None;
     let level = state.level;
-    replace_offer(index, state, effects, fortune, rng, level);
+    replace_offer(index, state, effects, rng, level);
     PurchaseOutcome::Bought(item)
 }
 
@@ -1545,13 +1684,12 @@ fn process_auto_purchases(
     session: &mut GameSession,
     build: &mut PlayerBuild,
     vitals: &mut HeroVitals,
-    fortune: &FortuneMarketRules,
+
     rng: &mut RunRng,
-    language: GameLanguage,
+    _language: GameLanguage,
 ) {
     let mut bought = Vec::new();
-    let visible = effects.visible_offer_count();
-    for index in 0..visible {
+    for index in 0..OFFER_COUNT {
         let Some(marked_item) = state.marked[index] else {
             continue;
         };
@@ -1559,21 +1697,34 @@ fn process_auto_purchases(
             state.marked[index] = None;
             continue;
         }
-        match purchase_offer(index, state, effects, session, build, vitals, fortune, rng) {
-            PurchaseOutcome::Bought(item) => bought.push(item.name(language)),
+        match purchase_offer(index, state, effects, session, build, vitals, rng) {
+            PurchaseOutcome::Bought(item) => bought.push(item),
             PurchaseOutcome::Owned => {}
             PurchaseOutcome::Unaffordable(_) | PurchaseOutcome::Hidden => continue,
         }
     }
     if !bought.is_empty() {
-        set_notice(
-            state,
+        set_notice(state, |language: GameLanguage| {
             if language.is_chinese() {
-                format!("自动购买：{}", bought.join("、"))
+                format!(
+                    "自动购买：{}",
+                    bought
+                        .iter()
+                        .map(|item| item.name(language))
+                        .collect::<Vec<_>>()
+                        .join("、")
+                )
             } else {
-                format!("Auto-bought {}", bought.join(", "))
-            },
-        );
+                format!(
+                    "Auto-bought {}",
+                    bought
+                        .iter()
+                        .map(|item| item.name(language))
+                        .collect::<Vec<_>>()
+                        .join(", ")
+                )
+            }
+        });
     }
 }
 
@@ -1588,8 +1739,7 @@ fn tick_market_effects(
     let delta = time.delta_secs();
     effects.advance(delta);
     if effects.core_regen_per_second > 0.0 {
-        session.core_hp =
-            (session.core_hp + effects.core_regen_per_second * delta).min(session.core_max_hp);
+        session.heal_gate(effects.core_regen_per_second * delta);
     }
 }
 
@@ -1599,7 +1749,7 @@ fn tick_market_notice(time: Res<Time>, session: Res<GameSession>, mut state: Res
     }
     state.notice_timer = (state.notice_timer - time.delta_secs()).max(0.0);
     if state.notice_timer == 0.0 {
-        state.notice.clear();
+        state.notice.iter_mut().for_each(String::clear);
     }
 }
 
@@ -1742,7 +1892,7 @@ fn update_market_ui(
     language: Res<GameLanguage>,
     state: Res<MarketState>,
     effects: Res<MarketEffects>,
-    fortune: Res<FortuneMarketRules>,
+
     session: Res<GameSession>,
     mut item_labels: Query<
         (
@@ -1791,14 +1941,6 @@ fn update_market_ui(
             Without<MarketOfferRow>,
         ),
     >,
-    mut rows: Query<
-        (&MarketOfferRow, &mut Node),
-        (
-            Without<MarketPanel>,
-            Without<MarketOfferButton>,
-            Without<MarketMarkButton>,
-        ),
-    >,
     mut panels: Query<
         &mut Node,
         (
@@ -1833,21 +1975,22 @@ fn update_market_ui(
         };
     }
     if let Ok((mut label, mut font)) = toggle_labels.single_mut() {
-        **label = market_toggle_label(
-            language,
-            layout.compact,
-            session.elapsed,
-            state.open,
-            state.level,
-        );
-        font.font_size = FontSize::Px(if layout.compact { 14.0 } else { 13.0 });
+        **label = if session.elapsed < MARKET_UNLOCK_AT {
+            let remaining = (MARKET_UNLOCK_AT - session.elapsed).ceil() as u32;
+            format!("{:02}:{:02}", remaining / 60, remaining % 60)
+        } else if state.open {
+            "×".to_string()
+        } else {
+            "B".to_string()
+        };
+        font.font_size = FontSize::Px(13.0);
     }
 
     for (offer_label, mark_label, mut text, mut color, mut font) in &mut item_labels {
         font.font_size = FontSize::Px(if layout.compact { 12.0 } else { 11.0 });
         if let Some(label) = offer_label {
             let item = state.offers[label.0].item;
-            let price = discounted_cost(item.price(), &effects, &fortune);
+            let price = discounted_cost(item.price(), &effects);
             let kind = if item.is_consumable() {
                 language.pick("USE", "使用")
             } else {
@@ -1912,13 +2055,29 @@ fn update_market_ui(
         font.font_size = FontSize::Px(if layout.compact { 12.0 } else { 11.0 });
         **text = if state.notice_timer > 0.0 {
             if language.is_chinese() && layout.compact {
-                format!("等级{}｜{}", state.level, state.notice)
+                format!(
+                    "等级{}｜{}",
+                    state.level,
+                    state.notice[usize::from(language.is_chinese())]
+                )
             } else if language.is_chinese() {
-                format!("等级{}  {}", state.level, state.notice)
+                format!(
+                    "等级{}  {}",
+                    state.level,
+                    state.notice[usize::from(language.is_chinese())]
+                )
             } else if layout.compact {
-                format!("LV{} | {}", state.level, state.notice)
+                format!(
+                    "LV{} | {}",
+                    state.level,
+                    state.notice[usize::from(language.is_chinese())]
+                )
             } else {
-                format!("LV{}  {}", state.level, state.notice)
+                format!(
+                    "LV{}  {}",
+                    state.level,
+                    state.notice[usize::from(language.is_chinese())]
+                )
             }
         } else if language.is_chinese() && layout.compact {
             format!(
@@ -1957,7 +2116,7 @@ fn update_market_ui(
 
     for (mut text, mut font) in &mut refresh_labels {
         font.font_size = FontSize::Px(if layout.compact { 13.0 } else { 12.0 });
-        let price = state.refresh_price(&effects, &fortune);
+        let price = state.refresh_price(&effects);
         **text = if language.is_chinese() && price == 0 {
             if layout.compact {
                 "刷新｜免费".to_string()
@@ -1981,18 +2140,10 @@ fn update_market_ui(
         };
     }
 
-    for (row, mut node) in &mut rows {
-        node.display = if row.0 < effects.visible_offer_count() {
-            Display::Flex
-        } else {
-            Display::None
-        };
-    }
-
     for (offer_button, mark_button, mut background) in &mut action_buttons {
         if let Some(button) = offer_button {
             let item = state.offers[button.0].item;
-            let affordable = session.kills >= discounted_cost(item.price(), &effects, &fortune);
+            let affordable = session.kills >= discounted_cost(item.price(), &effects);
             background.0 = if effects.owns(item) {
                 Color::srgb(0.05, 0.045, 0.055)
             } else if affordable {
@@ -2010,6 +2161,55 @@ fn update_market_ui(
                 Color::srgb(0.10, 0.16, 0.20)
             };
         }
+    }
+}
+
+fn update_market_tooltip(
+    windows: Query<&Window, With<PrimaryWindow>>,
+    language: Res<GameLanguage>,
+    session: Res<GameSession>,
+    state: Res<MarketState>,
+    buttons: Query<&Interaction, With<MarketToggleButton>>,
+    mut tips: Query<&mut Node, With<MarketTooltip>>,
+    mut labels: Query<&mut Text, With<MarketTooltipText>>,
+) {
+    let layout = windows
+        .single()
+        .map(|w| market_layout(w.width(), w.height()))
+        .unwrap_or_else(|_| market_layout(1280.0, 720.0));
+    let visible = !state.open && buttons.iter().any(|i| *i != Interaction::None);
+    for mut node in &mut tips {
+        node.display = if visible {
+            Display::Flex
+        } else {
+            Display::None
+        };
+        node.right = px(layout.safe_x);
+        node.top = if layout.compact {
+            px(layout.safe_y + 60.0)
+        } else {
+            Val::Auto
+        };
+        node.bottom = if layout.compact { Val::Auto } else { px(76) };
+    }
+    if !visible {
+        return;
+    }
+    for mut text in &mut labels {
+        **text = format!(
+            "{}\n{}",
+            market_toggle_label(
+                *language,
+                layout.compact,
+                session.elapsed,
+                state.open,
+                state.level
+            ),
+            language.pick(
+                "Spend kills on equipment and supplies. Preview each offer before buying.",
+                "使用击杀数兑换装备与补给，购买前可查看商品详情。"
+            )
+        );
     }
 }
 
@@ -2070,26 +2270,23 @@ fn close_market(state: &mut MarketState, session: &mut GameSession) {
     }
 }
 
-fn discounted_cost(price: u32, effects: &MarketEffects, fortune: &FortuneMarketRules) -> u32 {
-    (price as f32 * (1.0 - effects.market_discount) * fortune.price_multiplier).ceil() as u32
+fn discounted_cost(price: u32, effects: &MarketEffects) -> u32 {
+    (price as f32 * (1.0 - effects.market_discount)).ceil() as u32
 }
 
-fn set_notice(state: &mut MarketState, message: String) {
-    state.notice = message;
+fn set_notice(state: &mut MarketState, message: impl Fn(GameLanguage) -> String) {
+    state.notice = [
+        message(GameLanguage::English),
+        message(GameLanguage::SimplifiedChinese),
+    ];
     state.notice_timer = 2.2;
 }
 
-fn reroll_all(
-    state: &mut MarketState,
-    effects: &MarketEffects,
-    fortune: &FortuneMarketRules,
-    rng: &mut RunRng,
-    level: u8,
-) {
-    state.marked = [None; MAX_OFFER_COUNT];
-    let mut selected = [MarketItem::CorePatch; MAX_OFFER_COUNT];
-    for index in 0..MAX_OFFER_COUNT {
-        let offer = roll_slot(index, effects, fortune, rng, level, &selected[..index]);
+fn reroll_all(state: &mut MarketState, effects: &MarketEffects, rng: &mut RunRng, level: u8) {
+    state.marked = [None; OFFER_COUNT];
+    let mut selected = [MarketItem::CorePatch; OFFER_COUNT];
+    for index in 0..OFFER_COUNT {
+        let offer = roll_slot(index, effects, rng, level, &selected[..index]);
         state.offers[index] = offer;
         selected[index] = offer.item;
     }
@@ -2099,24 +2296,24 @@ fn replace_offer(
     index: usize,
     state: &mut MarketState,
     effects: &MarketEffects,
-    fortune: &FortuneMarketRules,
+
     rng: &mut RunRng,
     level: u8,
 ) {
     let selected = state.offers.map(|offer| offer.item);
-    state.offers[index] = roll_slot(index, effects, fortune, rng, level, &selected);
+    state.offers[index] = roll_slot(index, effects, rng, level, &selected);
     state.marked[index] = None;
 }
 
 fn roll_slot(
     index: usize,
     effects: &MarketEffects,
-    fortune: &FortuneMarketRules,
+
     rng: &mut RunRng,
     level: u8,
     avoid: &[MarketItem],
 ) -> MarketOffer {
-    let rarity = roll_market_quality(level, fortune.rarity_bonus, rng);
+    let rarity = roll_market_quality(level, rng);
     let item = match index {
         0 | 1 => roll_equipment(rarity, effects, rng, avoid),
         2 => roll_consumable(rarity, rng, avoid),
@@ -2182,14 +2379,150 @@ fn market_quality_for_roll(level: u8, roll: u8) -> MarketQuality {
     MarketQuality::Red
 }
 
-fn roll_market_quality(level: u8, rarity_bonus: f32, rng: &mut RunRng) -> MarketQuality {
+fn roll_market_quality(level: u8, rng: &mut RunRng) -> MarketQuality {
     let roll = (rng.next_u32() % 100) as u8;
-    market_quality_for_fortune_roll(level, roll, rarity_bonus)
+    market_quality_for_roll(level, roll)
 }
 
-fn market_quality_for_fortune_roll(level: u8, roll: u8, rarity_bonus: f32) -> MarketQuality {
-    let shift = (rarity_bonus.clamp(0.0, 1.0) * 100.0).round() as u8;
-    market_quality_for_roll(level, roll.saturating_add(shift).min(99))
+pub(crate) fn reset_run(world: &mut World) {
+    world.insert_resource(MarketState::default());
+    world.insert_resource(MarketEffects::default());
+}
+
+pub fn prepare_crafting_market(world: &mut World, phase: u8) {
+    let items = if phase == 0 {
+        [
+            MarketItem::SerratedDisc,
+            MarketItem::BloodContract,
+            MarketItem::HardenedPlate,
+            MarketItem::WindBoots,
+            MarketItem::AscendantCrown,
+        ]
+    } else {
+        [
+            MarketItem::ArcLens,
+            MarketItem::EchoCore,
+            MarketItem::EmberHeart,
+            MarketItem::StormCoil,
+            MarketItem::PrismaticEngine,
+        ]
+    };
+    let mut state = world.resource_mut::<MarketState>();
+    state.offers = items.map(|item| MarketOffer { item });
+    state.level = 1;
+    state.next_stock_at = 10000.0;
+    state.open = true;
+    state.paused_by_market = true;
+}
+
+/// Deterministic stock for the native input capture harness; purchases still
+/// pass through the normal button handler, prices and ownership validation.
+pub fn prepare_attribute_growth_market(world: &mut World) {
+    let mut state = world.resource_mut::<MarketState>();
+    state.offers = [
+        MarketItem::SerratedDisc,
+        MarketItem::ArcLens,
+        MarketItem::WindBoots,
+        MarketItem::HardenedPlate,
+        MarketItem::BloodContract,
+    ]
+    .map(|item| MarketOffer { item });
+    state.level = 1;
+    state.next_stock_at = 10000.0;
+    state.open = true;
+    state.paused_by_market = true;
+}
+
+#[cfg(test)]
+pub(crate) fn purchased_attribute_equipment_for_test() -> (PlayerBuild, HeroVitals, MarketEffects) {
+    let mut state = MarketState::default();
+    let mut effects = MarketEffects::default();
+    let mut session = GameSession {
+        kills: 10000,
+        ..default()
+    };
+    let mut build = PlayerBuild::default();
+    let mut vitals = HeroVitals::default();
+    let mut rng = RunRng::default();
+    for item in [
+        MarketItem::SerratedDisc,
+        MarketItem::ArcLens,
+        MarketItem::WindBoots,
+        MarketItem::HardenedPlate,
+        MarketItem::BloodContract,
+        MarketItem::EmberHeart,
+    ] {
+        state.offers[0] = MarketOffer { item };
+        let balance = session.kills;
+        assert_eq!(
+            purchase_offer(
+                0,
+                &mut state,
+                &mut effects,
+                &mut session,
+                &mut build,
+                &mut vitals,
+                &mut rng
+            ),
+            PurchaseOutcome::Bought(item)
+        );
+        assert_eq!(session.kills, balance - item.price());
+        state.offers[0] = MarketOffer { item };
+        assert_eq!(
+            purchase_offer(
+                0,
+                &mut state,
+                &mut effects,
+                &mut session,
+                &mut build,
+                &mut vitals,
+                &mut rng
+            ),
+            PurchaseOutcome::Owned
+        );
+        assert_eq!(session.kills, balance - item.price());
+    }
+    (build, vitals, effects)
+}
+
+#[cfg(test)]
+pub(crate) fn purchased_crafting_materials_for_test() -> (PlayerBuild, HeroVitals, MarketEffects) {
+    let mut state = MarketState::default();
+    let mut effects = MarketEffects::default();
+    let mut session = GameSession {
+        kills: 10000,
+        ..default()
+    };
+    let mut build = PlayerBuild::default();
+    let mut vitals = HeroVitals::default();
+    let mut rng = RunRng::default();
+    for item in [
+        MarketItem::SerratedDisc,
+        MarketItem::BloodContract,
+        MarketItem::HardenedPlate,
+        MarketItem::WindBoots,
+        MarketItem::AscendantCrown,
+        MarketItem::ArcLens,
+        MarketItem::EchoCore,
+        MarketItem::EmberHeart,
+        MarketItem::StormCoil,
+        MarketItem::PrismaticEngine,
+    ] {
+        state.offers[0] = MarketOffer { item };
+        assert_eq!(
+            purchase_offer(
+                0,
+                &mut state,
+                &mut effects,
+                &mut session,
+                &mut build,
+                &mut vitals,
+                &mut rng
+            ),
+            PurchaseOutcome::Bought(item)
+        );
+    }
+    (build, vitals, effects)
 }
 
 #[cfg(test)]
@@ -2197,6 +2530,136 @@ mod tests {
     use std::collections::HashSet;
 
     use super::*;
+
+    #[test]
+    fn consumed_crafting_material_cannot_be_bought_again_or_reapply_its_stats() {
+        let (mut build, vitals, effects) = purchased_attribute_equipment_for_test();
+        let mut world = World::new();
+        world.insert_resource(vitals);
+        world.insert_resource(effects);
+        world.init_resource::<super::super::crafting::CraftingState>();
+        assert!(super::super::crafting::craft_recipe(
+            &mut world,
+            super::super::crafting::RecipeId::Bloodreaver
+        ));
+        let mut state = MarketState::default();
+        state.offers[0] = MarketOffer {
+            item: MarketItem::SerratedDisc,
+        };
+        let mut session = GameSession {
+            kills: 1000,
+            ..default()
+        };
+        let mut vitals = world.resource::<HeroVitals>().clone();
+        let before = build.attack_damage;
+        world.resource_scope(|_world, mut effects: Mut<MarketEffects>| {
+            assert_eq!(
+                purchase_offer(
+                    0,
+                    &mut state,
+                    &mut effects,
+                    &mut session,
+                    &mut build,
+                    &mut vitals,
+                    &mut RunRng::default()
+                ),
+                PurchaseOutcome::Owned
+            );
+            assert_eq!(session.kills, 1000);
+            assert_eq!(build.attack_damage, before);
+            assert_eq!(effects.physical_penetration(), 6.0);
+            assert!(!effects.equipment().contains(&MarketItem::SerratedDisc));
+        });
+    }
+
+    #[test]
+    fn purchased_equipment_unlocks_real_stats_once_and_bond_runtime_matches_the_sheet() {
+        let (build, vitals, effects) = purchased_attribute_equipment_for_test();
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<GameSession>()
+            .insert_resource(build)
+            .insert_resource(vitals)
+            .insert_resource(effects)
+            .add_plugins(super::super::bonds::BondsPlugin);
+        app.update();
+        let runtime = app.world().resource::<super::super::bonds::BondRuntime>();
+        let snapshot = super::super::hero_stats::HeroStatsSnapshot::capture(
+            app.world().resource::<HeroVitals>(),
+            app.world().resource::<PlayerBuild>(),
+            runtime,
+            app.world().resource::<MarketEffects>(),
+            &super::super::hero_abilities::HeroAttackSpeedModifier::default(),
+        );
+        assert_eq!(snapshot.armor, 6.0);
+        assert_eq!(snapshot.physical_penetration, 3.0);
+        assert!((snapshot.spell_penetration - 0.10).abs() < 0.0001);
+        assert!((snapshot.evasion - 0.08).abs() < 0.0001);
+        assert!((snapshot.crit_chance - 0.13).abs() < 0.0001);
+        assert!((snapshot.life_leech - 0.05).abs() < 0.0001);
+        assert!(runtime.evade(0.079));
+        assert!(!runtime.evade(0.08));
+        assert_eq!(
+            super::super::bonds::critical_multiplier(
+                runtime,
+                false,
+                super::super::bonds::DamageProfile::PHYSICAL_ATTACK,
+                0.12
+            ),
+            runtime.critical_damage()
+        );
+        let mut vitals = app.world().resource::<HeroVitals>().clone();
+        let expected = 100.0 * 100.0 / 130.0;
+        assert!((vitals.take_physical_damage(100.0) - expected).abs() < 0.001);
+        let kind = super::super::HeroKind::StoneWarden;
+        vitals.synchronize_level(kind, 10);
+        assert_eq!(vitals.armor, 6.0);
+    }
+
+    #[test]
+    fn live_market_language_keeps_stock_wallet_and_translates_existing_notice() {
+        let mut app = test_app(MARKET_UNLOCK_AT);
+        {
+            let mut state = app.world_mut().resource_mut::<MarketState>();
+            state.open = true;
+            set_notice(&mut state, |language| {
+                language.pick("Stock refreshed", "货品已刷新").into()
+            });
+        }
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        let offers = app
+            .world()
+            .resource::<MarketState>()
+            .offers
+            .map(|offer| offer.item);
+        let rng = app.world().resource::<RunRng>().0;
+        let kills = app.world().resource::<GameSession>().kills;
+        *app.world_mut().resource_mut::<GameLanguage>() = GameLanguage::SimplifiedChinese;
+        app.update();
+        assert_eq!(
+            app.world()
+                .resource::<MarketState>()
+                .offers
+                .map(|offer| offer.item),
+            offers
+        );
+        assert_eq!(app.world().resource::<RunRng>().0, rng);
+        assert_eq!(app.world().resource::<GameSession>().kills, kills);
+        assert!(app.world().resource::<MarketState>().open);
+        let titles: Vec<_> = app
+            .world_mut()
+            .query_filtered::<&Text, With<MarketTitle>>()
+            .iter(app.world())
+            .map(|text| text.0.clone())
+            .collect();
+        assert_eq!(titles, ["黑市"]);
+        assert!(
+            app.world_mut()
+                .query_filtered::<&Text, With<MarketWalletLabel>>()
+                .iter(app.world())
+                .any(|text| text.0.contains("货品已刷新"))
+        );
+    }
 
     #[test]
     fn every_market_item_has_distinct_complete_bilingual_copy() {
@@ -2285,7 +2748,7 @@ mod tests {
             let purchase_width = row_width - MARKET_PANEL_GAP - layout.mark_width;
 
             assert!(layout.compact, "{width}x{height} should use compact layout");
-            assert_eq!(MAX_OFFER_COUNT.div_ceil(2), 3);
+            assert_eq!(OFFER_COUNT.div_ceil(2), 3);
             assert!(layout.minimum_compact_panel_height() <= available_height + f32::EPSILON);
             assert!(row_width * 2.0 + MARKET_PANEL_GAP <= inner_width + f32::EPSILON);
             assert!(layout.row_height >= 48.0);
@@ -2334,14 +2797,14 @@ mod tests {
                 .query_filtered::<Entity, With<MarketOfferButton>>()
                 .iter(app.world())
                 .count(),
-            MAX_OFFER_COUNT
+            OFFER_COUNT
         );
         assert_eq!(
             app.world_mut()
                 .query_filtered::<Entity, With<MarketMarkButton>>()
                 .iter(app.world())
                 .count(),
-            MAX_OFFER_COUNT
+            OFFER_COUNT
         );
         assert_eq!(
             app.world_mut()
@@ -2370,56 +2833,28 @@ mod tests {
     #[test]
     fn stock_is_deterministic_and_refresh_cost_caps() {
         let effects = MarketEffects::default();
-        let fortune = FortuneMarketRules::default();
         let mut first_state = MarketState::default();
         let mut second_state = MarketState::default();
         let mut first_rng = RunRng::default();
         let mut second_rng = RunRng::default();
-        assert_eq!(first_state.refresh_price(&effects, &fortune), 60);
-        reroll_all(&mut first_state, &effects, &fortune, &mut first_rng, 5);
-        reroll_all(&mut second_state, &effects, &fortune, &mut second_rng, 5);
+        assert_eq!(first_state.refresh_price(&effects), 60);
+        reroll_all(&mut first_state, &effects, &mut first_rng, 5);
+        reroll_all(&mut second_state, &effects, &mut second_rng, 5);
         assert_eq!(first_state.offers, second_state.offers);
         assert!(!first_state.offers[0].item.is_consumable());
         assert!(!first_state.offers[1].item.is_consumable());
         assert!(first_state.offers[2].item.is_consumable());
-        for left in 0..BASE_OFFER_COUNT {
-            for right in left + 1..BASE_OFFER_COUNT {
+        for left in 0..OFFER_COUNT {
+            for right in left + 1..OFFER_COUNT {
                 assert_ne!(first_state.offers[left], first_state.offers[right]);
             }
         }
 
         first_state.marked[0] = Some(first_state.offers[0].item);
-        reroll_all(&mut first_state, &effects, &fortune, &mut first_rng, 5);
+        reroll_all(&mut first_state, &effects, &mut first_rng, 5);
         assert!(first_state.marked.iter().all(Option::is_none));
         first_state.manual_refreshes = 99;
-        assert_eq!(first_state.refresh_price(&effects, &fortune), 120);
-    }
-
-    #[test]
-    fn fortune_refresh_is_free_once_per_stock_generation_and_stays_deterministic() {
-        let effects = MarketEffects::default();
-        let fortune = FortuneMarketRules {
-            price_multiplier: 0.90,
-            rarity_bonus: 0.15,
-            free_refresh_available: true,
-        };
-        let mut state = MarketState::default();
-        assert_eq!(state.refresh_price(&effects, &fortune), 0);
-        state.free_refresh_used_generation = Some(state.stock_generation);
-        assert_eq!(state.refresh_price(&effects, &fortune), 54);
-        state.stock_generation += 1;
-        assert_eq!(state.refresh_price(&effects, &fortune), 0);
-
-        assert_eq!(market_quality_for_roll(1, 70), MarketQuality::White);
-        assert_eq!(
-            market_quality_for_fortune_roll(1, 70, 0.15),
-            MarketQuality::Blue
-        );
-        let mut first = MarketState::default();
-        let mut second = MarketState::default();
-        reroll_all(&mut first, &effects, &fortune, &mut RunRng::default(), 3);
-        reroll_all(&mut second, &effects, &fortune, &mut RunRng::default(), 3);
-        assert_eq!(first.offers, second.offers);
+        assert_eq!(first_state.refresh_price(&effects), 120);
     }
 
     #[test]
@@ -2639,7 +3074,7 @@ mod tests {
 
     #[test]
     fn autoplay_market_results_are_deterministic_and_stay_five_rows() {
-        fn run_once() -> (u32, u32, [MarketOffer; MAX_OFFER_COUNT], u64, usize) {
+        fn run_once() -> (u32, u32, [MarketOffer; OFFER_COUNT], u64, usize) {
             let mut app = test_app(MARKET_UNLOCK_AT);
             install_autoplay_priority_stock(&mut app, 900);
             app.insert_resource(Autoplay);
@@ -2659,7 +3094,7 @@ mod tests {
         let first = run_once();
         let second = run_once();
         assert_eq!(first, second);
-        assert_eq!(first.4, MAX_OFFER_COUNT);
+        assert_eq!(first.4, OFFER_COUNT);
     }
 
     #[test]
@@ -2756,6 +3191,24 @@ mod tests {
     }
 
     #[test]
+    fn gate_items_call_the_gate_a_gate_in_both_languages() {
+        for item in [MarketItem::CorePatch, MarketItem::GuardianSeed] {
+            let english = item.effect_text(GameLanguage::English);
+            assert!(english.contains("gate") && !english.contains("core"));
+            let chinese = item.effect_text(GameLanguage::SimplifiedChinese);
+            assert!(chinese.contains("城门") && !chinese.contains("核心"));
+        }
+        assert_eq!(
+            MarketItem::CorePatch.name(GameLanguage::English),
+            "Gate Patch"
+        );
+        assert_eq!(
+            MarketItem::CorePatch.name(GameLanguage::SimplifiedChinese),
+            "城门修补包"
+        );
+    }
+
+    #[test]
     fn hardened_plate_buffs_hero_without_changing_core_or_drifting() {
         let item = MarketItem::HardenedPlate;
         let mut state = MarketState::default();
@@ -2768,7 +3221,6 @@ mod tests {
         let original_core = (session.core_hp, session.core_max_hp);
         let mut build = PlayerBuild::default();
         let mut vitals = HeroVitals::default();
-        let fortune = FortuneMarketRules::default();
         let original_max = vitals.max_health;
         vitals.health = original_max * 0.40;
         let mut rng = RunRng::default();
@@ -2781,7 +3233,6 @@ mod tests {
                 &mut session,
                 &mut build,
                 &mut vitals,
-                &fortune,
                 &mut rng,
             ),
             PurchaseOutcome::Bought(item)
@@ -2802,7 +3253,6 @@ mod tests {
                 &mut session,
                 &mut build,
                 &mut vitals,
-                &fortune,
                 &mut rng,
             ),
             PurchaseOutcome::Owned
@@ -2893,6 +3343,33 @@ mod tests {
     }
 
     #[test]
+    fn hero_sheet_tracks_equipment_leech_low_health_damage_and_chaos_range() {
+        use crate::game::{
+            bonds::BondRuntime, hero_abilities::HeroAttackSpeedModifier,
+            hero_stats::HeroStatsSnapshot,
+        };
+        let (_, build, mut vitals, mut effects) = apply_item_for_test(MarketItem::BloodContract);
+        let bonds = BondRuntime::default();
+        let speed = HeroAttackSpeedModifier::default();
+        let full = HeroStatsSnapshot::capture(&vitals, &build, &bonds, &effects, &speed);
+        assert_eq!(full.life_leech, 0.05);
+        assert_eq!(full.basic_hit_damage, build.attack_damage);
+        vitals.health = vitals.max_health * 0.5;
+        let low = HeroStatsSnapshot::capture(&vitals, &build, &bonds, &effects, &speed);
+        assert!((low.basic_hit_damage - full.basic_hit_damage * 1.4).abs() < 0.001);
+        assert_eq!(low.life_leech, full.life_leech);
+        effects.chaos_die = true;
+        let chaos = HeroStatsSnapshot::capture(&vitals, &build, &bonds, &effects, &speed);
+        assert!((chaos.basic_hit_min - low.basic_hit_damage * 0.7).abs() < 0.001);
+        assert!((chaos.basic_hit_max - low.basic_hit_damage * 1.8).abs() < 0.001);
+        // The sheet reports the owned rate, while the actual heal path still
+        // rejects a dead hero and never heals from armor-absorbed damage.
+        vitals.alive = false;
+        vitals.health = 0.0;
+        assert_eq!(vitals.heal(100.0 * chaos.life_leech), 0.0);
+    }
+
+    #[test]
     fn blood_contract_uses_half_health_boundary_and_five_percent_leech() {
         let (_, _, mut vitals, effects) = apply_item_for_test(MarketItem::BloodContract);
         vitals.health = vitals.max_health * 0.50;
@@ -2921,7 +3398,7 @@ mod tests {
     }
 
     #[test]
-    fn chaos_die_has_three_equal_outcomes_and_fortune_takes_the_better_roll() {
+    fn chaos_die_has_three_equal_outcomes_and_consumes_one_roll() {
         assert_eq!(chaos_multiplier_for_roll(0), 0.7);
         assert_eq!(chaos_multiplier_for_roll(1), 1.0);
         assert_eq!(chaos_multiplier_for_roll(2), 1.8);
@@ -2930,13 +3407,9 @@ mod tests {
         let (_, _, _, effects) = apply_item_for_test(MarketItem::ChaosDie);
         let mut expected_rng = RunRng::from_seed(0xCA05);
         let first = roll_chaos_multiplier(&mut expected_rng);
-        let second = roll_chaos_multiplier(&mut expected_rng);
         let expected_state = expected_rng.state();
         let mut actual_rng = RunRng::from_seed(0xCA05);
-        assert_eq!(
-            effects.chaos_damage_multiplier(&mut actual_rng, true),
-            first.max(second)
-        );
+        assert_eq!(effects.chaos_damage_multiplier(&mut actual_rng), first);
         assert_eq!(actual_rng.state(), expected_state);
     }
 
@@ -3018,5 +3491,20 @@ mod tests {
         effects.advance(0.001);
         assert_eq!(effects.last_oath_damage_multiplier(), 1.0);
         assert!(!effects.intercept_hero_fatal(&mut vitals));
+    }
+}
+
+#[derive(Component)]
+struct MarketTitle;
+
+fn refresh_market_language(
+    language: Res<GameLanguage>,
+    mut titles: Query<&mut Text, With<MarketTitle>>,
+) {
+    if !language.is_changed() {
+        return;
+    }
+    for mut title in &mut titles {
+        **title = language.pick("BLACK MARKET", "黑市").into();
     }
 }

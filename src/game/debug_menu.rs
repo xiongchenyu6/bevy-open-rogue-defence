@@ -1,18 +1,24 @@
 use bevy::prelude::*;
 
-use super::combat::{
-    CombatSet, DEBUG_BOSS_COUNT, DEBUG_ELITE_AFFIX_COUNT, DEBUG_ENEMY_COUNT, DebugSpawnRequest,
+use super::combat::CombatSet;
+use super::combat::debug_tools::{
+    DEBUG_BOSS_COUNT, DEBUG_ELITE_AFFIX_COUNT, DEBUG_ENEMY_COUNT, DebugSpawnRequest,
     debug_elite_affix_label, spawn_debug_request,
 };
 use super::content::{BOSSES, ENEMIES};
 use super::pooling::CombatPools;
-use super::{GameAssets, GameSession};
+use super::{GameAssets, GameLanguage, GameSession};
+
+const ELITE_AFFIX_ZH: [&str; DEBUG_ELITE_AFFIX_COUNT] = [
+    "狂乱", "硬壳", "爆裂", "血祭", "统御", "黄印", "孵化", "攻城",
+];
 
 pub struct DebugMenuPlugin;
 
 impl Plugin for DebugMenuPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<DebugSpawnMenu>()
+            .init_resource::<GameLanguage>()
             .add_systems(Startup, setup_debug_menu)
             .add_systems(Update, toggle_debug_menu.before(CombatSet))
             .add_systems(
@@ -42,13 +48,22 @@ impl DebugSpawnMode {
         }
     }
 
-    const fn label(self) -> &'static str {
+    const fn label(self, language: GameLanguage) -> &'static str {
         match self {
-            Self::Normal => "NORMAL ENEMY",
-            Self::Elite => "ELITE ENEMY",
-            Self::Boss => "BOSS",
+            Self::Normal => language.pick("NORMAL ENEMY", "普通敌人"),
+            Self::Elite => language.pick("ELITE ENEMY", "精英敌人"),
+            Self::Boss => language.pick("BOSS", "首领"),
         }
     }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum DebugStatus {
+    Ready,
+    Spawned(DebugSpawnRequest),
+    SessionBlocked,
+    PoolFull,
+    AssetsLoading,
 }
 
 #[derive(Resource, Debug)]
@@ -59,7 +74,7 @@ struct DebugSpawnMenu {
     elite_affix_index: usize,
     boss_index: usize,
     spawned: u32,
-    status: String,
+    status: DebugStatus,
 }
 
 impl Default for DebugSpawnMenu {
@@ -71,7 +86,7 @@ impl Default for DebugSpawnMenu {
             elite_affix_index: 0,
             boss_index: 0,
             spawned: 0,
-            status: "Ready".to_string(),
+            status: DebugStatus::Ready,
         }
     }
 }
@@ -100,10 +115,15 @@ struct DebugMenuRoot;
 #[derive(Component)]
 struct DebugMenuText;
 
-fn setup_debug_menu(mut commands: Commands, state: Res<DebugSpawnMenu>) {
+fn setup_debug_menu(
+    mut commands: Commands,
+    state: Res<DebugSpawnMenu>,
+    language: Res<GameLanguage>,
+) {
     commands
         .spawn((
             DebugMenuRoot,
+            Name::new("Debug menu"),
             Node {
                 position_type: PositionType::Absolute,
                 left: px(18),
@@ -124,7 +144,7 @@ fn setup_debug_menu(mut commands: Commands, state: Res<DebugSpawnMenu>) {
         .with_children(|root| {
             root.spawn((
                 DebugMenuText,
-                Text::new(menu_text(&state)),
+                Text::new(menu_text(&state, *language)),
                 TextFont {
                     font_size: FontSize::Px(15.0),
                     ..default()
@@ -138,6 +158,7 @@ fn setup_debug_menu(mut commands: Commands, state: Res<DebugSpawnMenu>) {
 
 fn toggle_debug_menu(
     keyboard: Res<ButtonInput<KeyCode>>,
+    language: Res<GameLanguage>,
     mut state: ResMut<DebugSpawnMenu>,
     mut roots: Query<&mut Visibility, With<DebugMenuRoot>>,
     mut labels: Query<&mut Text, With<DebugMenuText>>,
@@ -154,7 +175,7 @@ fn toggle_debug_menu(
         };
     }
     if state.open {
-        update_label(&state, &mut labels);
+        update_label(&state, *language, &mut labels);
     }
 }
 
@@ -165,13 +186,14 @@ fn debug_menu_open(state: Res<DebugSpawnMenu>) -> bool {
 fn handle_debug_menu(
     mut commands: Commands,
     keyboard: Res<ButtonInput<KeyCode>>,
+    language: Res<GameLanguage>,
     session: Res<GameSession>,
     assets: Option<Res<GameAssets>>,
     mut pools: ResMut<CombatPools>,
     mut state: ResMut<DebugSpawnMenu>,
     mut labels: Query<&mut Text, With<DebugMenuText>>,
 ) {
-    let mut changed = false;
+    let mut changed = language.is_changed();
     if keyboard.just_pressed(KeyCode::Tab) {
         state.mode = state.mode.next();
         changed = true;
@@ -211,79 +233,128 @@ fn handle_debug_menu(
         keyboard.just_pressed(KeyCode::Enter) || keyboard.just_pressed(KeyCode::NumpadEnter);
     if spawn_requested {
         if !spawn_allowed(&session) {
-            state.status = "BLOCKED: spawning is disabled while paused or finished".to_string();
+            state.status = DebugStatus::SessionBlocked;
         } else if let Some(assets) = assets.as_deref() {
             let request = state.selected_request();
             if spawn_debug_request(&mut commands, &mut pools, assets, request, session.wave)
                 .is_some()
             {
                 state.spawned = state.spawned.saturating_add(1);
-                state.status = format!("Spawned {}", selection_label(&state));
+                state.status = DebugStatus::Spawned(request);
             } else {
-                state.status = "BLOCKED: enemy scene pool is at capacity".to_string();
+                state.status = DebugStatus::PoolFull;
             }
         } else {
-            state.status = "BLOCKED: game assets are not ready".to_string();
+            state.status = DebugStatus::AssetsLoading;
         }
         changed = true;
     }
 
     if changed {
-        update_label(&state, &mut labels);
+        update_label(&state, *language, &mut labels);
     }
 }
 
-fn update_label(state: &DebugSpawnMenu, labels: &mut Query<&mut Text, With<DebugMenuText>>) {
-    let text = menu_text(state);
+fn update_label(
+    state: &DebugSpawnMenu,
+    language: GameLanguage,
+    labels: &mut Query<&mut Text, With<DebugMenuText>>,
+) {
+    let text = menu_text(state, language);
     for mut label in labels {
         **label = text.clone();
     }
 }
 
-fn menu_text(state: &DebugSpawnMenu) -> String {
+fn status_label(status: DebugStatus, language: GameLanguage) -> String {
+    match status {
+        DebugStatus::Ready => language.pick("Ready", "就绪").to_string(),
+        DebugStatus::Spawned(request) => format!(
+            "{} {}",
+            language.pick("Spawned", "已生成"),
+            request_label(request, language),
+        ),
+        DebugStatus::SessionBlocked => language
+            .pick(
+                "BLOCKED: spawning is disabled while paused or finished",
+                "无法生成：游戏已暂停或结束",
+            )
+            .to_string(),
+        DebugStatus::PoolFull => language
+            .pick(
+                "BLOCKED: enemy scene pool is at capacity",
+                "无法生成：敌人数量已达上限",
+            )
+            .to_string(),
+        DebugStatus::AssetsLoading => language
+            .pick(
+                "BLOCKED: game assets are not ready",
+                "无法生成：游戏资源尚未就绪",
+            )
+            .to_string(),
+    }
+}
+
+fn menu_text(state: &DebugSpawnMenu, language: GameLanguage) -> String {
     let affix_help = if state.mode == DebugSpawnMode::Elite {
-        "\n- / = or NUM2 / NUM8  affix"
+        language.pick(
+            "\n- / = or NUM2 / NUM8  affix",
+            "\n- / = 或小键盘 2 / 8  切换词缀",
+        )
     } else {
         ""
     };
+    let header = language.pick(
+        "F7 DEBUG SPAWNER  |  F7 close\nTAB  mode     [ / ] or NUM4 / NUM6  selection",
+        "F7 调试生成器  |  F7 关闭\nTAB 切换模式    [ / ] 或小键盘 4 / 6  选择目标",
+    );
     format!(
-        "F7 DEBUG SPAWNER  |  F7 close\n\
-         TAB  mode     [ / ] or NUM4 / NUM6  selection{affix_help}\n\
-         ENTER / NUM ENTER  spawn\n\n\
-         MODE    {}\n\
-         TARGET  {}\n\
-         STATUS  {}\n\
-         SPAWNED {}",
-        state.mode.label(),
-        selection_label(state),
-        state.status,
+        "{header}{affix_help}\n{}\n\n{}    {}\n{}  {}\n{}  {}\n{} {}",
+        language.pick("ENTER / NUM ENTER  spawn", "回车 / 小键盘回车  生成"),
+        language.pick("MODE", "模式"),
+        state.mode.label(language),
+        language.pick("TARGET", "目标"),
+        request_label(state.selected_request(), language),
+        language.pick("STATUS", "状态"),
+        status_label(state.status, language),
+        language.pick("SPAWNED", "已生成数量"),
         state.spawned,
     )
 }
 
-fn selection_label(state: &DebugSpawnMenu) -> String {
-    match state.mode {
-        DebugSpawnMode::Normal => format!(
-            "{:02}/{:02} {}",
-            state.enemy_index + 1,
-            DEBUG_ENEMY_COUNT,
-            ENEMIES[state.enemy_index].name,
-        ),
-        DebugSpawnMode::Elite => format!(
-            "{:02}/{:02} {} + {:02}/{:02} {}",
-            state.enemy_index + 1,
-            DEBUG_ENEMY_COUNT,
-            ENEMIES[state.enemy_index].name,
-            state.elite_affix_index + 1,
-            DEBUG_ELITE_AFFIX_COUNT,
-            debug_elite_affix_label(state.elite_affix_index),
-        ),
-        DebugSpawnMode::Boss => format!(
-            "{:02}/{:02} {}",
-            state.boss_index + 1,
-            DEBUG_BOSS_COUNT,
-            BOSSES[state.boss_index].name,
-        ),
+fn request_label(request: DebugSpawnRequest, language: GameLanguage) -> String {
+    match request {
+        DebugSpawnRequest::Enemy {
+            archetype,
+            elite_affix,
+        } => {
+            let enemy = &ENEMIES[archetype];
+            let name = if language.is_chinese() {
+                enemy.name.to_string()
+            } else {
+                enemy.id.replace('_', " ").to_ascii_uppercase()
+            };
+            let mut label = format!("{:02}/{:02} {}", archetype + 1, DEBUG_ENEMY_COUNT, name);
+            if let Some(index) = elite_affix {
+                let affix = if language.is_chinese() {
+                    ELITE_AFFIX_ZH[index % DEBUG_ELITE_AFFIX_COUNT]
+                } else {
+                    debug_elite_affix_label(index)
+                };
+                label.push_str(&format!(
+                    " + {:02}/{:02} {}",
+                    index + 1,
+                    DEBUG_ELITE_AFFIX_COUNT,
+                    affix
+                ));
+            }
+            label
+        }
+        DebugSpawnRequest::Boss { index } => {
+            let boss = &BOSSES[index];
+            let name = language.pick(boss.name_en, boss.name);
+            format!("{:02}/{:02} {}", index + 1, DEBUG_BOSS_COUNT, name)
+        }
     }
 }
 
@@ -298,6 +369,10 @@ fn spawn_allowed(session: &GameSession) -> bool {
     !session.paused && !session.finished
 }
 
+pub(crate) fn reset_run(world: &mut World) {
+    world.insert_resource(DebugSpawnMenu::default());
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -310,6 +385,50 @@ mod tests {
         let mut keyboard = app.world_mut().resource_mut::<ButtonInput<KeyCode>>();
         keyboard.release(key);
         keyboard.clear();
+    }
+
+    #[test]
+    fn spawned_status_retains_target_and_translates_affix_after_language_switch() {
+        let request = DebugSpawnRequest::Enemy {
+            archetype: 2,
+            elite_affix: Some(0),
+        };
+        let status = DebugStatus::Spawned(request);
+        let english = status_label(status, GameLanguage::English);
+        let chinese = status_label(status, GameLanguage::SimplifiedChinese);
+        assert!(english.contains("Spawned"));
+        assert!(english.contains("FRENZY"));
+        assert!(!english.contains(ENEMIES[2].name));
+        assert!(chinese.contains("已生成"));
+        assert!(chinese.contains(ENEMIES[2].name));
+        assert!(chinese.contains("狂乱"));
+        assert!(!chinese.contains("FRENZY"));
+    }
+
+    #[test]
+    fn all_eight_elites_can_be_selected_and_reported_in_both_languages() {
+        let chinese: Vec<_> = (0..DEBUG_ELITE_AFFIX_COUNT)
+            .map(|index| {
+                let request = DebugSpawnRequest::Enemy {
+                    archetype: 0,
+                    elite_affix: Some(index),
+                };
+                let english = request_label(request, GameLanguage::English);
+                assert!(english.contains(debug_elite_affix_label(index)));
+                let label = request_label(request, GameLanguage::SimplifiedChinese);
+                assert_eq!(
+                    status_label(
+                        DebugStatus::Spawned(request),
+                        GameLanguage::SimplifiedChinese
+                    ),
+                    format!("已生成 {label}")
+                );
+                label
+            })
+            .collect();
+        assert!(chinese[5].contains("黄印"));
+        assert!(chinese[6].contains("孵化"));
+        assert!(chinese[7].contains("攻城"));
     }
 
     #[test]
@@ -401,15 +520,36 @@ mod tests {
                 .count(),
             0
         );
-        assert!(
-            app.world()
-                .resource::<DebugSpawnMenu>()
-                .status
-                .contains("BLOCKED")
+        assert_eq!(
+            app.world().resource::<DebugSpawnMenu>().status,
+            DebugStatus::SessionBlocked,
         );
 
+        *app.world_mut().resource_mut::<GameLanguage>() = GameLanguage::SimplifiedChinese;
+        app.update();
+        let localized = {
+            let world = app.world_mut();
+            let mut labels = world.query_filtered::<&Text, With<DebugMenuText>>();
+            labels.single(world).expect("one debug label").0.clone()
+        };
+        assert!(localized.contains("调试生成器"));
+        assert!(localized.contains("无法生成：游戏已暂停或结束"));
+        assert!(localized.contains(ENEMIES[0].name));
+        assert!(!localized.contains("BLOCKED"));
+
+        *app.world_mut().resource_mut::<GameLanguage>() = GameLanguage::English;
+        app.update();
+        let localized = {
+            let world = app.world_mut();
+            let mut labels = world.query_filtered::<&Text, With<DebugMenuText>>();
+            labels.single(world).expect("one debug label").0.clone()
+        };
+        assert!(localized.contains("DEBUG SPAWNER"));
+        assert!(localized.contains("BLOCKED"));
+        assert!(!localized.contains(ENEMIES[0].name));
+
         tap_key(&mut app, KeyCode::F7);
-        let status = app.world().resource::<DebugSpawnMenu>().status.clone();
+        let status = app.world().resource::<DebugSpawnMenu>().status;
         tap_key(&mut app, KeyCode::Enter);
         assert_eq!(app.world().resource::<DebugSpawnMenu>().status, status);
     }

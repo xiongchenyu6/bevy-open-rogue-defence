@@ -1,0 +1,43 @@
+Five boss mechanisms: native R4 validation, 2026-10-04
+
+Strict all-target Clippy PASS (1m10s).
+Library tests: 476 passed, 0 failed, 1 ignored (0.30s).
+Native bins build PASS (10m45s).
+Ten fresh production-camera scenes (five bosses, desktop1280x720/mobile667x375):
+1400 full simulation/render frames each, total14000, all PASS.
+
+Each scenario spawns the actual catalog boss model and BossEnemy/Enemy components;
+production registration applies actual health/movement/action modifiers.
+Controlled setup holds the gate collapsed and funds hero100000HP to allow repeated
+mechanism observation without early loss. No danger/damage/phase visual fabricated.
+First real primary telegraph is read from BossTelegraph; the exposed hero takes actual
+hazard damage. Real pause freezes target lock and remaining warning time.
+Actual boss HP set to49% of its registered max triggers native half-health phase once;
+Boss phase crest Visibility becomes Visible. Actual enraged secondary warning geometry
+is dodged; no secondary hazard health loss. Setting actual bossHP0 during real pause
+removes hazard components and attached art; resuming permits actual combat cleanup.
+State-driven screenshot records primary-warning, primary-hit, phase-two,
+secondary-warning-dodge and death-cleanup. Secondary-dodged image may already show
+cleanup because the fixture immediately kills after the genuine dodge assertion.
+Read-only art review: actual boss1 lane and boss2 mobile phase glyph clear.
+
+Library coverage includes true geometry/resistance/dodge, pause timing, boss death
+cleanup, half-health phase, bounded owner-linked summon pressure and pooled art cleanup.
+Native only; browser/WASM and full performance validation not performed here.
+Repeated existing ICU4X segmentation messages are present in runtime logs; not hidden.
+
+Logs:
+target/verification/boss-battles-{pipeline,clippy,tests,build,captures}.log
+target/verification/boss-battle-{0..4}-zh-{1280x720,667x375}.log
+Runner: target/verification/capture_boss_battles.py
+Evidence: screenshots/boss-battle-{0..4}-zh-{1280x720,667x375}-primary-warning.png
+          screenshots/boss-battle-{0..4}-zh-{1280x720,667x375}-primary-hit.png
+          screenshots/boss-battle-{0..4}-zh-{1280x720,667x375}-phase-two.png
+          screenshots/boss-battle-{0..4}-zh-{1280x720,667x375}-secondary-warning-dodge.png
+          screenshots/boss-battle-{0..4}-zh-{1280x720,667x375}-death-cleanup.png
+
+Follow-on raid baseline runs are separate, still in progress when this report was written:
+three actual capture simulate45000 balance seeds1/A11CE/C0FFEE,
+target/verification/raid-before/{rawlogs,checkpoints,head-tail,finalPNG}.
+These are frame-bounded main-world simulations; paused choices mean elapsed battle
+seconds can be below1500 at frame45000. Do not describe them as completed25min victories.

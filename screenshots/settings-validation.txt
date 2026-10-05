@@ -1,0 +1,47 @@
+Language settings validation — 2026-09-29
+
+Native build: cargo build --bin capture -j4 — PASS
+Tests: cargo test --all-targets -j4 — 261 passed,0 failed
+Clippy: cargo clippy --all-targets -j4 -- -D warnings — PASS
+WASM: cargo check --target wasm32-unknown-unknown --lib -j2 — PASS
+Formatting / whitespace: cargo fmt --all -- --check;git diff --check — PASS
+Web shell: node syntax check and VM live-language/URL-seed preservation checks — PASS
+Assets: python3 tools/verify_ui_assets.py — PASS
+
+10 inspected native screenshots:
+Chinese settings1280x720,844x390,667x375;English settings667x375;
+settings over recruitment;recruitment after live Chinese switch;
+bond draft after live Chinese switch;battle Chinese/English;existing pause overlay Chinese.
+Scripted language clicks used actual named UI controls in SettingsInputSet order.
+Asserted pause ownership restoration,seed/build/offer/card-entity preservation,
+>=44px visible settings targets,and viewport bounds.
+Every explicit switch saved the expected canonical language to an isolated XDG config directory.
+User configuration was not modified by captures.
+Preference unit test covers reload,replacement,invalid values and failed writes.
+Live-translation tests cover recruitment,skill/bond/replacement drafts,market notices and debug UI.
+Chinese font subset regenerated and coverage tested against all relevant UI sources.
+Web hook updates document language and URL without reloading;seed preserved.
+
+Validation scope: native Vulkan rendering and scripted interactions;WASM compile plus web-shell
+VM tests. No full browser runtime or Android device test in this run.
+Nonfatal ICU4X Japanese segmentation diagnostics remain in capture renderer logs.
+
+Logs:
+/tmp/rogue-settings-build.log
+/tmp/rogue-settings-tests.log
+/tmp/rogue-settings-clippy.log
+/tmp/rogue-settings-suite.log
+/tmp/rogue-settings-english.log
+/tmp/rogue-settings-wasm.log
+
+Screenshot SHA-256:
+8ea88ec8007a860903e20ef218e186816c27412d95639eb925c373dd66c91aa2  screenshots/settings-battle-en.png
+b14170541a2f0ead71f607faf5520c670c0315002bce752e3c8a2dab6b59fd07  screenshots/settings-battle-zh.png
+c40b2071810b1eaf9ece65f46223c4ef6d7688b8053a76953015ec3f9ece8d68  screenshots/settings-bond-zh.png
+51b0fd87461317f6ce4db3c882be81210b08a4163b9d283318f1cf7a9fd89b64  screenshots/settings-compact.png
+103393a9b82b5942d55b75567690b85b7bc673fc724ef4ba1b4db8480ad06c07  screenshots/settings-desktop.png
+778b6b0810ae0313e84f0d180e6f922dd4dbcce095b841474e3ae0ffa488e1bc  screenshots/settings-english-page.png
+fff537e02e1151d3e9f59b5aef37f861ea9fb9b10f368b4827061ecb027d23ec  screenshots/settings-mobile.png
+722ee091b63c856df85aea22298d8aa37eb36814e20e04f622012cf833b49431  screenshots/settings-pause-zh.png
+103393a9b82b5942d55b75567690b85b7bc673fc724ef4ba1b4db8480ad06c07  screenshots/settings-recruit-open.png
+6f636cc45b263153866b8651709bf574aa44d44ae40f54c1981cea8eac19025e  screenshots/settings-recruit-zh.png

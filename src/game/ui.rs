@@ -1,24 +1,38 @@
 use bevy::{prelude::*, time::Virtual, window::PrimaryWindow};
 
-use super::archive::{ArchiveEcho, ArchiveOutcome, ArchiveState};
-use super::content::HEROES;
-use super::localization::{bond_name, boss_name, hero_ultimate_name};
-use super::mobile_layout::hud_metrics;
+use super::archive::ArchiveEcho;
+use super::encounters::EncounterState;
+use super::mobile_layout::{ControlScheme, hud_metrics};
 use super::progression::{SkillEconomy, bond_cost, skill_cost};
-use super::trial::{GOLD_LEVEL_COUNT, GOLD_TARGET_COUNT, GOLD_UNLOCK_AT, TOWER_UNLOCK_AT};
-use super::{
-    ActiveSkill, BondButtonLabel, BondDrawButton, BondId, BondStatusText, BossEnemy, CoreBar,
-    DamageMeter, DodgeButton, DodgeButtonLabel, DodgeState, Enemy, GameLanguage, GameSession,
-    GoldChallengeState, GoldChallengeStatusText, HeroVitals, HeroVitalsText, LevelText,
-    PlayerBuild, ResultRoot, RunSeed, RunStatsText, SkillButtonLabel, SkillDrawButton,
-    SkillDrawLabel, TimerText, TrialAction, TrialButton, TrialState, TrialStatusText,
-    UltimateButton, XpBar,
+use super::trial::{
+    GOLD_LEVEL_COUNT, GOLD_TARGET_COUNT, GOLD_UNLOCK_AT, TOWER_FLOOR_COUNT, TOWER_UNLOCK_AT,
 };
+use super::{
+    BondButtonLabel, BondDrawButton, CoreBar, DodgeButton, DodgeButtonLabel, DodgeState,
+    EncounterButton, EncounterButtonLabel, Enemy, GameLanguage, GameSession, GoldChallengeState,
+    GoldChallengeStatusText, HeroVitals, LevelText, PlayerBuild, RunSeed, SkillDrawButton,
+    SkillDrawLabel, TimerText, TrialAction, TrialButton, TrialState, TrialStatusText, XpBar,
+};
+
+#[path = "ui_art.rs"]
+mod ui_art;
+use ui_art::*;
+
+#[path = "bond_collection_ui.rs"]
+mod bond_collection_ui;
+#[path = "hero_stats_ui.rs"]
+pub(crate) mod hero_stats_ui;
+#[path = "survival_ui.rs"]
+mod survival_ui;
 
 pub struct GameUiPlugin;
 
 impl Plugin for GameUiPlugin {
     fn build(&self, app: &mut App) {
+        hero_stats_ui::install(app);
+        super::equipment_ui::install(app);
+        survival_ui::install(app);
+        bond_collection_ui::install(app);
         app.init_resource::<ManualPauseState>()
             .init_resource::<TrialDrawerState>()
             .init_resource::<BattleSpeed>()
@@ -32,10 +46,15 @@ impl Plugin for GameUiPlugin {
                     update_battle_speed_ui.after(handle_battle_speed),
                     handle_manual_pause,
                     update_static_ui_language,
+                    update_trial_auto_feedback.after(update_static_ui_language),
                     update_joystick_visual,
                     update_hud,
-                    show_result,
-                    update_result_text,
+                    update_icon_hud,
+                    update_bond_strip,
+                    update_small_controls,
+                    update_fruit_button,
+                    update_encounter_button,
+                    update_seed_language,
                 ),
             );
     }
@@ -46,6 +65,9 @@ struct HudRoot;
 
 #[derive(Component)]
 struct HudLeft;
+
+#[derive(Component)]
+struct HudBottom;
 
 #[derive(Component)]
 struct CoreIntegrityLabel;
@@ -64,6 +86,12 @@ struct MovementLabel;
 
 #[derive(Component)]
 struct XpPanel;
+
+#[derive(Component)]
+struct XpReadout;
+
+#[derive(Component)]
+struct DodgeArt;
 
 #[derive(Component)]
 struct XpBarTrack;
@@ -93,7 +121,17 @@ struct PauseButton;
 struct SpeedControl;
 
 #[derive(Component, Clone, Copy)]
-struct SpeedButton(u8);
+struct SpeedButton(SpeedAction);
+
+#[derive(Component)]
+struct SpeedLabel(SpeedAction);
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum SpeedAction {
+    Decrease,
+    Increase,
+    Reset,
+}
 
 #[derive(Component)]
 struct PauseResumeButton;
@@ -108,13 +146,6 @@ enum PauseCopyLabel {
     Resume,
 }
 
-#[derive(Component, Clone, Copy)]
-enum ResultCopyLabel {
-    Title,
-    Summary,
-    Archive,
-}
-
 #[derive(Resource, Default)]
 struct ManualPauseState {
     root: Option<Entity>,
@@ -126,7 +157,7 @@ struct TrialDrawerState {
     open: bool,
 }
 
-const BATTLE_SPEEDS: [f32; 3] = [1.0, 2.0, 3.0];
+const BATTLE_SPEEDS: [f32; 6] = [1.0, 2.0, 4.0, 8.0, 16.0, 32.0];
 
 #[derive(Resource, Debug, Clone, Copy, PartialEq, Eq, Default)]
 struct BattleSpeed {
@@ -135,19 +166,19 @@ struct BattleSpeed {
 
 impl BattleSpeed {
     fn multiplier(self) -> f32 {
-        BATTLE_SPEEDS[usize::from(self.selected.min(2))]
+        BATTLE_SPEEDS[usize::from(self.selected.min(5))]
     }
 
-    fn select(&mut self, selected: u8) {
-        self.selected = selected.min(2);
-    }
-
-    fn cycle(&mut self) {
-        self.selected = (self.selected + 1) % BATTLE_SPEEDS.len() as u8;
+    fn apply(&mut self, action: SpeedAction) {
+        self.selected = match action {
+            SpeedAction::Decrease => self.selected.saturating_sub(1),
+            SpeedAction::Increase => (self.selected + 1).min(5),
+            SpeedAction::Reset => 0,
+        };
     }
 }
 
-fn setup_hud(mut commands: Commands, language: Res<GameLanguage>, battle_speed: Res<BattleSpeed>) {
+fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<GameLanguage>) {
     let language = *language;
     commands
         .spawn((
@@ -183,14 +214,27 @@ fn setup_hud(mut commands: Commands, language: Res<GameLanguage>, battle_speed: 
                 ))
                 .with_children(|left| {
                     left.spawn((
-                        CoreIntegrityLabel,
-                        Text::new(language.pick("CORE INTEGRITY", "城门耐久")),
-                        TextFont {
-                            font_size: FontSize::Px(11.0),
+                        Button,
+                        HudHint::Gate,
+                        Node {
+                            align_items: AlignItems::Center,
+                            column_gap: px(7),
                             ..default()
                         },
-                        TextColor(Color::srgb(0.62, 0.86, 0.88)),
-                    ));
+                    ))
+                    .with_children(|row| {
+                        hud_icon(row, &assets, "tower", 24.0);
+                        row.spawn((
+                            CoreIntegrityLabel,
+                            Text::new(language.pick("GATE · ∞", "城门 · ∞")),
+                            TextFont {
+                                font_size: FontSize::Px(11.0),
+                                ..default()
+                            },
+                            TextColor(Color::srgb(0.86, 0.76, 0.52)),
+                        ));
+                        hero_stats_ui::spawn_entry(row, &assets);
+                    });
                     left.spawn((
                         CoreBarTrack,
                         Node {
@@ -214,56 +258,132 @@ fn setup_hud(mut commands: Commands, language: Res<GameLanguage>, battle_speed: 
                             BackgroundColor(Color::srgb(0.12, 0.9, 0.72)),
                         ));
                     });
-                    left.spawn((
-                        HeroVitalsText,
-                        Text::new(language.pick("HERO HP", "英雄生命")),
-                        TextFont {
-                            font_size: FontSize::Px(13.0),
-                            ..default()
-                        },
-                        TextColor(Color::srgb(0.35, 1.0, 0.62)),
-                    ));
-                    left.spawn((
-                        RunStatsText,
-                        Text::new(""),
-                        TextFont {
-                            font_size: FontSize::Px(13.0),
-                            ..default()
-                        },
-                        TextColor(Color::WHITE),
-                    ));
-                    left.spawn((
-                        BondStatusText,
-                        Text::new(language.pick("BONDS 0/7", "羁绊 0/7")),
-                        TextFont {
-                            font_size: FontSize::Px(11.0),
-                            ..default()
-                        },
-                        TextColor(Color::srgb(0.96, 0.78, 0.3)),
-                    ));
-                    left.spawn((
-                        Button,
-                        BondDrawButton,
-                        Node {
-                            width: px(146),
-                            height: px(48),
+                    survival_ui::spawn(left, false);
+                    for (icon, value, color) in [
+                        ("shield", HudValue::Health, Color::srgb(0.25, 0.82, 0.55)),
+                        ("energy", HudValue::Energy, Color::srgb(0.30, 0.59, 0.94)),
+                    ] {
+                        left.spawn(Node {
                             align_items: AlignItems::Center,
-                            justify_content: JustifyContent::Center,
-                            border_radius: BorderRadius::all(px(7)),
+                            column_gap: px(7),
                             ..default()
-                        },
-                        BackgroundColor(Color::srgb(0.36, 0.19, 0.06)),
-                    ))
-                    .with_children(|button| {
-                        button.spawn((
-                            BondButtonLabel,
-                            Text::new(language.pick("BOND | 10 WOOD", "羁绊 | 10 木材")),
-                            TextFont {
-                                font_size: FontSize::Px(12.0),
+                        })
+                        .with_children(|row| {
+                            hud_icon(row, &assets, icon, 23.0);
+                            row.spawn(Node {
+                                width: px(176),
+                                flex_direction: FlexDirection::Column,
+                                row_gap: px(3),
                                 ..default()
-                            },
-                            TextColor(Color::WHITE),
-                        ));
+                            })
+                            .with_children(|gauge| {
+                                gauge.spawn((
+                                    value,
+                                    Text::new(""),
+                                    TextFont {
+                                        font_size: FontSize::Px(12.0),
+                                        ..default()
+                                    },
+                                    TextColor(Color::srgb(0.86, 0.9, 0.94)),
+                                ));
+                                gauge
+                                    .spawn((
+                                        Node {
+                                            width: percent(100),
+                                            height: px(5),
+                                            ..default()
+                                        },
+                                        BackgroundColor(Color::srgba(0.01, 0.02, 0.04, 0.9)),
+                                    ))
+                                    .with_children(|track| {
+                                        track.spawn((
+                                            HudGauge(value),
+                                            Node {
+                                                width: percent(100),
+                                                height: percent(100),
+                                                ..default()
+                                            },
+                                            BackgroundColor(color),
+                                        ));
+                                    });
+                            });
+                        });
+                    }
+                    left.spawn(Node {
+                        align_items: AlignItems::Center,
+                        column_gap: px(12),
+                        margin: UiRect::vertical(px(4)),
+                        ..default()
+                    })
+                    .with_children(|row| {
+                        for (icon, value) in [
+                            ("gold", HudValue::Gold),
+                            ("wood", HudValue::Wood),
+                            ("skull", HudValue::Kills),
+                        ] {
+                            row.spawn(Node {
+                                align_items: AlignItems::Center,
+                                column_gap: px(4),
+                                ..default()
+                            })
+                            .with_children(|counter| {
+                                hud_icon(counter, &assets, icon, 22.0);
+                                counter.spawn((
+                                    value,
+                                    Text::new("0"),
+                                    TextFont {
+                                        font_size: FontSize::Px(13.0),
+                                        ..default()
+                                    },
+                                    TextColor(Color::srgb(0.95, 0.85, 0.61)),
+                                ));
+                            });
+                        }
+                    });
+                    spawn_bond_strip(left, &assets);
+                    left.spawn(Node {
+                        column_gap: px(4),
+                        row_gap: px(4),
+                        flex_wrap: FlexWrap::Wrap,
+                        align_items: AlignItems::Center,
+                        ..default()
+                    })
+                    .with_children(|actions| {
+                        spawn_fruit_button(actions, &assets);
+                        bond_collection_ui::spawn_entry(actions, &assets);
+                        super::equipment_ui::spawn_entry(actions, &assets);
+                        actions
+                            .spawn((
+                                Button,
+                                BondDrawButton,
+                                HudHint::Bond,
+                                Node {
+                                    width: px(104),
+                                    height: px(44),
+                                    flex_shrink: 0.0,
+                                    align_items: AlignItems::Center,
+                                    justify_content: JustifyContent::Center,
+                                    border_radius: BorderRadius::all(px(7)),
+                                    column_gap: px(8),
+                                    border: UiRect::all(px(1)),
+                                    ..default()
+                                },
+                                BackgroundColor(Color::srgba(0.055, 0.065, 0.085, 0.94)),
+                                BorderColor::all(Color::srgba(0.65, 0.49, 0.25, 0.8)),
+                            ))
+                            .with_children(|button| {
+                                hud_icon(button, &assets, "bond", 30.0);
+                                button.spawn((
+                                    BondButtonLabel,
+                                    Text::new(language.pick("BOND | 10 WOOD", "羁绊 | 10 木材")),
+                                    TextFont {
+                                        font_size: FontSize::Px(12.0),
+                                        ..default()
+                                    },
+                                    TextColor(Color::WHITE),
+                                ));
+                            });
+                        spawn_encounter_button(actions, &assets);
                     });
                 });
                 top.spawn((
@@ -278,16 +398,24 @@ fn setup_hud(mut commands: Commands, language: Res<GameLanguage>, battle_speed: 
                 ));
             });
 
-            root.spawn(Node {
-                width: percent(100),
-                align_items: AlignItems::FlexEnd,
-                justify_content: JustifyContent::SpaceBetween,
-                ..default()
-            })
+            root.spawn((
+                HudBottom,
+                Name::new("Battle bottom controls"),
+                Node {
+                    position_type: PositionType::Absolute,
+                    left: px(12),
+                    right: px(12),
+                    bottom: px(12),
+                    align_items: AlignItems::FlexEnd,
+                    justify_content: JustifyContent::SpaceBetween,
+                    ..default()
+                },
+            ))
             .with_children(|bottom| {
                 bottom
                     .spawn((
                         MovementPad,
+                        Name::new("Movement pad"),
                         Node {
                             width: px(112),
                             height: px(112),
@@ -342,51 +470,71 @@ fn setup_hud(mut commands: Commands, language: Res<GameLanguage>, battle_speed: 
                     ))
                     .with_children(|xp| {
                         xp.spawn((
-                            Text::new(language.pick("LEVEL 1", "等级 1")),
-                            LevelText,
-                            TextFont {
-                                font_size: FontSize::Px(12.0),
-                                ..default()
-                            },
-                            TextColor(Color::srgb(0.78, 0.84, 0.96)),
-                        ));
-                        xp.spawn((
-                            XpBarTrack,
+                            XpReadout,
+                            Name::new("XP readout"),
                             Node {
-                                width: px(204),
-                                height: px(13),
-                                padding: UiRect::all(px(2)),
-                                border_radius: BorderRadius::MAX,
+                                width: percent(100),
+                                flex_direction: FlexDirection::Column,
+                                align_items: AlignItems::Center,
+                                row_gap: px(7),
                                 ..default()
                             },
-                            BackgroundColor(Color::srgba(0.0, 0.0, 0.0, 0.72)),
                         ))
-                        .with_children(|bar| {
-                            bar.spawn((
-                                XpBar,
-                                Node {
-                                    width: percent(0),
-                                    height: percent(100),
-                                    border_radius: BorderRadius::MAX,
+                        .with_children(|readout| {
+                            readout.spawn((
+                                Text::new(language.pick("LEVEL 1", "等级 1")),
+                                LevelText,
+                                TextFont {
+                                    font_size: FontSize::Px(12.0),
                                     ..default()
                                 },
-                                BackgroundColor(Color::srgb(0.42, 0.36, 1.0)),
+                                TextColor(Color::srgb(0.78, 0.84, 0.96)),
                             ));
+                            readout
+                                .spawn((
+                                    XpBarTrack,
+                                    Node {
+                                        width: px(204),
+                                        height: px(13),
+                                        padding: UiRect::all(px(2)),
+                                        border_radius: BorderRadius::MAX,
+                                        ..default()
+                                    },
+                                    BackgroundColor(Color::srgba(0.0, 0.0, 0.0, 0.72)),
+                                ))
+                                .with_children(|bar| {
+                                    bar.spawn((
+                                        XpBar,
+                                        Node {
+                                            width: percent(0),
+                                            height: percent(100),
+                                            border_radius: BorderRadius::MAX,
+                                            ..default()
+                                        },
+                                        BackgroundColor(Color::srgb(0.42, 0.36, 1.0)),
+                                    ));
+                                });
                         });
                         xp.spawn((
                             Button,
                             SkillDrawButton,
+                            Name::new("Skill draw control"),
+                            HudHint::Skill,
                             Node {
-                                width: px(142),
+                                width: px(112),
                                 height: px(48),
                                 align_items: AlignItems::Center,
                                 justify_content: JustifyContent::Center,
                                 border_radius: BorderRadius::all(px(8)),
+                                column_gap: px(8),
+                                border: UiRect::all(px(1)),
                                 ..default()
                             },
-                            BackgroundColor(Color::srgb(0.12, 0.22, 0.48)),
+                            BackgroundColor(Color::srgba(0.055, 0.065, 0.085, 0.94)),
+                            BorderColor::all(Color::srgba(0.65, 0.49, 0.25, 0.8)),
                         ))
                         .with_children(|button| {
+                            hud_icon(button, &assets, "skill", 30.0);
                             button.spawn((
                                 SkillDrawLabel,
                                 Text::new(language.pick("SKILL | 80 GOLD", "技能 | 80 金币")),
@@ -416,52 +564,38 @@ fn setup_hud(mut commands: Commands, language: Res<GameLanguage>, battle_speed: 
                             .spawn((
                                 Button,
                                 DodgeButton,
+                                Name::new("Dodge control"),
+                                HudHint::Dodge,
                                 Node {
                                     width: px(78),
                                     height: px(78),
                                     align_items: AlignItems::Center,
                                     justify_content: JustifyContent::Center,
-                                    border_radius: BorderRadius::MAX,
-                                    border: UiRect::all(px(3)),
+                                    border_radius: BorderRadius::all(px(9)),
+                                    border: UiRect::all(px(1)),
+                                    flex_direction: FlexDirection::Column,
+                                    row_gap: px(3),
                                     ..default()
                                 },
-                                BackgroundColor(Color::srgba(0.42, 0.16, 0.58, 0.84)),
-                                BorderColor::all(Color::srgb(0.78, 0.5, 1.0)),
+                                BackgroundColor(Color::srgba(0.045, 0.045, 0.075, 0.95)),
+                                BorderColor::all(Color::srgb(0.53, 0.42, 0.27)),
                             ))
                             .with_children(|button| {
+                                button.spawn((
+                                    DodgeArt,
+                                    ImageNode::new(assets.load("ui/icons/dodge.png")),
+                                    Node {
+                                        width: px(44),
+                                        height: px(44),
+                                        ..default()
+                                    },
+                                    Pickable::IGNORE,
+                                ));
                                 button.spawn((
                                     DodgeButtonLabel,
                                     Text::new(language.pick("DODGE\nREADY", "闪避\n就绪")),
                                     TextFont {
                                         font_size: FontSize::Px(12.0),
-                                        ..default()
-                                    },
-                                    TextColor(Color::WHITE),
-                                    TextLayout::justify(Justify::Center),
-                                ));
-                            });
-                        controls
-                            .spawn((
-                                Button,
-                                UltimateButton,
-                                Node {
-                                    width: px(112),
-                                    height: px(112),
-                                    align_items: AlignItems::Center,
-                                    justify_content: JustifyContent::Center,
-                                    border_radius: BorderRadius::MAX,
-                                    border: UiRect::all(px(3)),
-                                    ..default()
-                                },
-                                BackgroundColor(Color::srgba(0.02, 0.34, 0.55, 0.78)),
-                                BorderColor::all(Color::srgb(0.25, 0.9, 1.0)),
-                            ))
-                            .with_children(|button| {
-                                button.spawn((
-                                    SkillButtonLabel,
-                                    Text::new(language.pick("STORM\nREADY", "雷域\n就绪")),
-                                    TextFont {
-                                        font_size: FontSize::Px(14.0),
                                         ..default()
                                     },
                                     TextColor(Color::WHITE),
@@ -517,7 +651,7 @@ fn setup_hud(mut commands: Commands, language: Res<GameLanguage>, battle_speed: 
                 });
             panel.spawn((
                 GoldChallengeStatusText,
-                Text::new(language.pick("GOLD 1 LOCKED  01:00", "金币试炼 1 未解锁 01:00")),
+                Text::new(language.pick("GOLD 1 LOCKED  01:00", "金币挑战 1 未解锁 01:00")),
                 TextFont {
                     font_size: FontSize::Px(11.0),
                     ..default()
@@ -545,6 +679,8 @@ fn setup_hud(mut commands: Commands, language: Res<GameLanguage>, battle_speed: 
         .spawn((
             Button,
             TrialToggleButton,
+            Name::new("Trial drawer"),
+            HudHint::Trials,
             Node {
                 position_type: PositionType::Absolute,
                 right: px(12),
@@ -558,11 +694,12 @@ fn setup_hud(mut commands: Commands, language: Res<GameLanguage>, battle_speed: 
                 border_radius: BorderRadius::all(px(9)),
                 ..default()
             },
-            BackgroundColor(Color::srgba(0.035, 0.14, 0.20, 0.94)),
-            BorderColor::all(Color::srgba(0.25, 0.75, 0.9, 0.65)),
+            BackgroundColor(Color::srgba(0.035, 0.045, 0.065, 0.95)),
+            BorderColor::all(Color::srgba(0.65, 0.49, 0.25, 0.75)),
             GlobalZIndex(22),
         ))
         .with_children(|button| {
+            hud_icon(button, &assets, "tower", 26.0);
             button.spawn((
                 TrialToggleLabel,
                 Text::new(language.pick("CHALLENGES", "挑战")),
@@ -570,7 +707,7 @@ fn setup_hud(mut commands: Commands, language: Res<GameLanguage>, battle_speed: 
                     font_size: FontSize::Px(12.0),
                     ..default()
                 },
-                TextColor(Color::srgb(0.72, 0.92, 1.0)),
+                TextColor(Color::srgb(0.94, 0.85, 0.63)),
             ));
         });
 
@@ -578,6 +715,7 @@ fn setup_hud(mut commands: Commands, language: Res<GameLanguage>, battle_speed: 
         .spawn((
             Button,
             PauseButton,
+            HudHint::Pause,
             Node {
                 position_type: PositionType::Absolute,
                 right: px(150),
@@ -590,8 +728,8 @@ fn setup_hud(mut commands: Commands, language: Res<GameLanguage>, battle_speed: 
                 border_radius: BorderRadius::all(px(9)),
                 ..default()
             },
-            BackgroundColor(Color::srgba(0.055, 0.11, 0.17, 0.9)),
-            BorderColor::all(Color::srgba(0.52, 0.76, 0.88, 0.65)),
+            BackgroundColor(Color::srgba(0.035, 0.045, 0.065, 0.95)),
+            BorderColor::all(Color::srgba(0.65, 0.49, 0.25, 0.75)),
             GlobalZIndex(22),
         ))
         .with_children(|button| {
@@ -622,27 +760,59 @@ fn setup_hud(mut commands: Commands, language: Res<GameLanguage>, battle_speed: 
             GlobalZIndex(19),
         ))
         .with_children(|control| {
-            for (index, label) in ["1×", "2×", "3×"].into_iter().enumerate() {
-                spawn_speed_button(
-                    control,
-                    index as u8,
-                    label,
-                    battle_speed.selected == index as u8,
-                );
+            for (action, label) in [
+                (SpeedAction::Decrease, "−"),
+                (SpeedAction::Increase, "+"),
+                (SpeedAction::Reset, "1×"),
+            ] {
+                spawn_speed_button(control, action, label);
             }
+        });
+    commands
+        .spawn((
+            HudTooltip,
+            Name::new("Bond detail tooltip"),
+            Node {
+                position_type: PositionType::Absolute,
+                right: px(24),
+                bottom: px(160),
+                width: px(260),
+                padding: UiRect::all(px(12)),
+                display: Display::None,
+                border: UiRect::all(px(1)),
+                border_radius: BorderRadius::all(px(8)),
+                ..default()
+            },
+            BackgroundColor(Color::srgba(0.018, 0.027, 0.045, 0.97)),
+            BorderColor::all(Color::srgba(0.71, 0.55, 0.29, 0.8)),
+            GlobalZIndex(25),
+            Pickable::IGNORE,
+        ))
+        .with_children(|tip| {
+            tip.spawn((
+                HudTooltipText,
+                Text::new(""),
+                TextFont {
+                    font_size: FontSize::Px(13.0),
+                    ..default()
+                },
+                TextColor(Color::srgb(0.92, 0.87, 0.74)),
+                Pickable::IGNORE,
+            ));
         });
 }
 
-fn spawn_speed_button(
-    parent: &mut ChildSpawnerCommands,
-    index: u8,
-    label: &'static str,
-    selected: bool,
-) {
+fn spawn_speed_button(parent: &mut ChildSpawnerCommands, action: SpeedAction, label: &'static str) {
     parent
         .spawn((
             Button,
-            SpeedButton(index),
+            SpeedButton(action),
+            Name::new(match action {
+                SpeedAction::Decrease => "Speed decrease",
+                SpeedAction::Increase => "Speed increase",
+                SpeedAction::Reset => "Speed reset",
+            }),
+            HudHint::Speed(action),
             Node {
                 width: px(48),
                 height: px(48),
@@ -652,19 +822,20 @@ fn spawn_speed_button(
                 border_radius: BorderRadius::all(px(9)),
                 ..default()
             },
-            BackgroundColor(if selected {
-                Color::srgba(0.06, 0.46, 0.58, 0.96)
+            BackgroundColor(if action == SpeedAction::Reset {
+                Color::srgba(0.26, 0.18, 0.075, 0.96)
             } else {
-                Color::srgba(0.055, 0.11, 0.17, 0.9)
+                Color::srgba(0.035, 0.045, 0.065, 0.95)
             }),
-            BorderColor::all(if selected {
-                Color::srgb(0.38, 0.92, 1.0)
+            BorderColor::all(if action == SpeedAction::Reset {
+                Color::srgb(0.92, 0.72, 0.34)
             } else {
-                Color::srgba(0.35, 0.58, 0.68, 0.58)
+                Color::srgba(0.65, 0.49, 0.25, 0.75)
             }),
         ))
         .with_children(|button| {
             button.spawn((
+                SpeedLabel(action),
                 Text::new(label),
                 TextFont {
                     font_size: FontSize::Px(14.0),
@@ -685,6 +856,7 @@ fn spawn_trial_button(
         .spawn((
             Button,
             TrialButton(action),
+            HudHint::Trial(action),
             Node {
                 width: px(width),
                 height: px(48),
@@ -717,16 +889,9 @@ fn trial_action_label(language: GameLanguage, action: TrialAction) -> &'static s
     }
 }
 
-fn command_growth_label(language: GameLanguage, growth: super::CommandGrowth) -> &'static str {
-    match growth {
-        super::CommandGrowth::Attack => language.pick("ATTACK", "攻击"),
-        super::CommandGrowth::Vitality => language.pick("MAX HP", "生命"),
-        super::CommandGrowth::Insight => language.pick("XP EFF", "悟性"),
-    }
-}
-
 #[allow(clippy::type_complexity)]
 fn apply_hud_layout(
+    scheme: Res<ControlScheme>,
     windows: Query<&Window, With<PrimaryWindow>>,
     drawer: Res<TrialDrawerState>,
     mut nodes: Query<
@@ -736,20 +901,21 @@ fn apply_hud_layout(
             Option<&HudLeft>,
             Option<&CoreBarTrack>,
             Option<&MovementPad>,
-            Option<&XpPanel>,
-            Option<&XpBarTrack>,
+            (Option<&XpPanel>, Option<&XpReadout>, Option<&XpBarTrack>),
+            Option<&SkillDrawButton>,
             Option<&ActionPanel>,
             Option<&DodgeButton>,
-            Option<&UltimateButton>,
             Option<&TrialPanel>,
             Option<&TrialButtonRow>,
             Option<&TrialButton>,
             Option<&TrialToggleButton>,
             Option<&PauseButton>,
         ),
-        Without<SpeedControl>,
+        (Without<SpeedControl>, Without<HudBottom>, Without<DodgeArt>),
     >,
-    mut speed_controls: Query<&mut Node, With<SpeedControl>>,
+    mut bottom_rows: Query<&mut Node, (With<HudBottom>, Without<SpeedControl>)>,
+    mut speed_controls: Query<&mut Node, (With<SpeedControl>, Without<DodgeArt>)>,
+    mut dodge_art: Query<&mut Node, (With<DodgeArt>, Without<HudBottom>, Without<SpeedControl>)>,
 ) {
     let Ok(window) = windows.single() else {
         return;
@@ -759,6 +925,9 @@ fn apply_hud_layout(
     let xp_width = compact_xp_width(window.width());
     let compact_dodge_size = compact_dodge_size(layout.joystick_size);
     let action_width = compact_action_width(layout.joystick_size);
+    let desktop_width = (window.width() - layout.safe_x * 2.0).min(420.0);
+    let desktop_xp_width = desktop_width - 100.0;
+    let desktop_readout_width = desktop_xp_width - 102.0;
 
     for (
         mut node,
@@ -766,11 +935,10 @@ fn apply_hud_layout(
         left,
         core_track,
         movement_pad,
-        xp_panel,
-        xp_track,
+        (xp_panel, xp_readout, xp_track),
+        skill_button,
         action_panel,
         dodge_button,
-        ultimate_button,
         trial_panel,
         trial_row,
         trial_button,
@@ -786,34 +954,93 @@ fn apply_hud_layout(
                 bottom: px(layout.safe_y),
             };
         } else if left.is_some() {
-            node.width = px(if compact { 240 } else { 350 });
-            node.row_gap = px(if compact { 4 } else { 7 });
+            node.width = px(220);
+            node.row_gap = px(if compact { 1 } else { 4 });
         } else if core_track.is_some() {
-            node.width = px(if compact { 230 } else { 330 });
-            node.height = px(if compact { 12 } else { 18 });
+            node.width = px(206);
+            node.height = px(8);
             node.padding = UiRect::all(px(if compact { 2 } else { 3 }));
         } else if movement_pad.is_some() {
+            node.display = if scheme.touch {
+                Display::Flex
+            } else {
+                Display::None
+            };
             node.width = px(layout.joystick_size);
             node.height = px(layout.joystick_size);
         } else if xp_panel.is_some() {
-            node.width = px(if compact { xp_width } else { 360.0 });
+            node.height = if scheme.touch { Val::Auto } else { px(40) };
+            node.width = px(if !scheme.touch {
+                desktop_xp_width
+            } else if compact {
+                xp_width
+            } else {
+                180.0
+            });
+            node.flex_direction = if scheme.touch {
+                FlexDirection::Column
+            } else {
+                FlexDirection::Row
+            };
+            node.column_gap = px(10);
             node.row_gap = px(if compact { 5 } else { 7 });
+        } else if xp_readout.is_some() {
+            node.height = if scheme.touch { Val::Auto } else { px(28) };
+            node.justify_content = if scheme.touch {
+                JustifyContent::FlexStart
+            } else {
+                JustifyContent::Center
+            };
+            node.width = if scheme.touch {
+                percent(100)
+            } else {
+                px(desktop_readout_width)
+            };
+            node.row_gap = px(if scheme.touch { 7 } else { 4 });
         } else if xp_track.is_some() {
-            node.width = px(if compact { xp_width - 16.0 } else { 340.0 });
+            node.width = px(if !scheme.touch {
+                desktop_readout_width
+            } else if compact {
+                xp_width - 16.0
+            } else {
+                170.0
+            });
+            node.height = px(if scheme.touch { 13 } else { 8 });
+        } else if skill_button.is_some() {
+            node.width = px(if scheme.touch { 112 } else { 92 });
+            node.height = px(if scheme.touch { 48 } else { 40 });
         } else if action_panel.is_some() {
-            node.width = px(if compact { action_width } else { 260.0 });
-            node.height = px(if compact { layout.joystick_size } else { 150.0 });
-            node.margin = UiRect::right(px(action_panel_margin_right(compact)));
+            node.width = px(if !scheme.touch {
+                88.0
+            } else if compact {
+                action_width
+            } else {
+                76.0
+            });
+            node.height = px(if !scheme.touch {
+                40.0
+            } else if compact {
+                layout.joystick_size
+            } else {
+                94.0
+            });
+            node.margin = UiRect::right(px(if scheme.touch {
+                action_panel_margin_right(compact)
+            } else {
+                0.0
+            }));
         } else if dodge_button.is_some() {
-            let size = if compact { compact_dodge_size } else { 96.0 };
-            node.width = px(size);
-            node.height = px(size);
-        } else if ultimate_button.is_some() {
-            let size = if compact { layout.joystick_size } else { 150.0 };
-            node.width = px(size);
-            node.height = px(size);
+            let size = if compact { compact_dodge_size } else { 76.0 };
+            node.width = px(if scheme.touch { size } else { 88.0 });
+            node.height = px(if scheme.touch { size } else { 40.0 });
+            node.flex_direction = if scheme.touch {
+                FlexDirection::Column
+            } else {
+                FlexDirection::Row
+            };
+            node.column_gap = px(6);
         } else if trial_panel.is_some() {
-            node.display = if compact && !drawer.open {
+            node.display = if !drawer.open {
                 Display::None
             } else {
                 Display::Flex
@@ -836,11 +1063,7 @@ fn apply_hud_layout(
                 (false, TrialAction::CancelAll) => 196.0,
             });
         } else if trial_toggle.is_some() {
-            node.display = if compact {
-                Display::Flex
-            } else {
-                Display::None
-            };
+            node.display = Display::Flex;
             node.right = px(layout.safe_x);
             node.top = px(64);
         } else if pause_button.is_some() {
@@ -851,6 +1074,40 @@ fn apply_hud_layout(
             });
             node.top = px(layout.safe_y);
         }
+    }
+    for mut node in &mut bottom_rows {
+        node.height = if scheme.touch { Val::Auto } else { px(40) };
+        node.left = if scheme.touch {
+            px(layout.safe_x)
+        } else {
+            px((window.width() - desktop_width) * 0.5)
+        };
+        node.right = if scheme.touch {
+            px(layout.safe_x)
+        } else {
+            Val::Auto
+        };
+        node.width = if scheme.touch {
+            Val::Auto
+        } else {
+            px(desktop_width)
+        };
+        node.bottom = px(layout.safe_y);
+        node.align_items = if scheme.touch {
+            AlignItems::FlexEnd
+        } else {
+            AlignItems::Center
+        };
+        node.justify_content = if scheme.touch {
+            JustifyContent::SpaceBetween
+        } else {
+            JustifyContent::FlexStart
+        };
+        node.column_gap = px(if scheme.touch { 0 } else { 12 });
+    }
+    for mut node in &mut dodge_art {
+        node.width = px(if scheme.touch { 44 } else { 22 });
+        node.height = px(if scheme.touch { 44 } else { 22 });
     }
     for mut node in &mut speed_controls {
         node.right = px(speed_control_right(layout.safe_x, compact));
@@ -867,7 +1124,7 @@ fn compact_dodge_size(joystick_size: f32) -> f32 {
 }
 
 fn compact_action_width(joystick_size: f32) -> f32 {
-    joystick_size + compact_dodge_size(joystick_size) + 12.0
+    compact_dodge_size(joystick_size)
 }
 
 fn action_panel_margin_right(compact: bool) -> f32 {
@@ -896,7 +1153,7 @@ fn handle_trial_drawer(
     }
     for mut label in &mut labels {
         **label = if drawer.open {
-            language.pick("CLOSE CHALLENGES", "关闭挑战").to_string()
+            language.pick("CLOSE", "关闭").to_string()
         } else {
             language.pick("CHALLENGES", "挑战").to_string()
         };
@@ -913,9 +1170,9 @@ fn handle_battle_speed(
         (*interaction == Interaction::Pressed).then_some(button.0)
     });
     if let Some(selected) = selected {
-        battle_speed.select(selected);
+        battle_speed.apply(selected);
     } else if keyboard.just_pressed(KeyCode::KeyT) {
-        battle_speed.cycle();
+        battle_speed.apply(SpeedAction::Increase);
     } else {
         return;
     }
@@ -924,19 +1181,32 @@ fn handle_battle_speed(
 
 fn update_battle_speed_ui(
     battle_speed: Res<BattleSpeed>,
-    mut buttons: Query<(&SpeedButton, &mut BackgroundColor, &mut BorderColor)>,
+    mut buttons: Query<(
+        &SpeedButton,
+        &Interaction,
+        &mut BackgroundColor,
+        &mut BorderColor,
+    )>,
+    mut labels: Query<(&SpeedLabel, &mut Text)>,
 ) {
-    for (button, mut background, mut border) in &mut buttons {
-        let selected = button.0 == battle_speed.selected;
+    for (label, mut text) in &mut labels {
+        **text = match label.0 {
+            SpeedAction::Decrease => "−".into(),
+            SpeedAction::Increase => "+".into(),
+            SpeedAction::Reset => format!("{}×", battle_speed.multiplier() as u8),
+        };
+    }
+    for (button, interaction, mut background, mut border) in &mut buttons {
+        let selected = button.0 == SpeedAction::Reset || *interaction != Interaction::None;
         background.0 = if selected {
-            Color::srgba(0.06, 0.46, 0.58, 0.96)
+            Color::srgba(0.26, 0.18, 0.075, 0.96)
         } else {
-            Color::srgba(0.055, 0.11, 0.17, 0.9)
+            Color::srgba(0.035, 0.045, 0.065, 0.95)
         };
         *border = BorderColor::all(if selected {
-            Color::srgb(0.38, 0.92, 1.0)
+            Color::srgb(0.92, 0.72, 0.34)
         } else {
-            Color::srgba(0.35, 0.58, 0.68, 0.58)
+            Color::srgba(0.65, 0.49, 0.25, 0.75)
         });
     }
 }
@@ -982,7 +1252,7 @@ fn update_static_ui_language(
         return;
     }
     for mut text in &mut core_labels {
-        **text = language.pick("CORE INTEGRITY", "城门耐久").to_string();
+        **text = language.pick("GATE · ∞", "城门 · ∞").to_string();
     }
     for mut text in &mut movement_labels {
         **text = language.pick("MOVE", "移动").to_string();
@@ -1004,6 +1274,11 @@ fn update_static_ui_language(
 
 fn handle_manual_pause(
     mut commands: Commands,
+    settings: Option<Res<super::settings::SettingsState>>,
+    attributes: Option<Res<hero_stats_ui::HeroStatsPanelState>>,
+    collection: Option<Res<bond_collection_ui::CollectionState>>,
+    equipment: Option<Res<super::equipment_ui::EquipmentPanelState>>,
+    adventure: Option<Res<super::AdventureBossState>>,
     keyboard: Res<ButtonInput<KeyCode>>,
     windows: Query<&Window, With<PrimaryWindow>>,
     pause_buttons: Query<&Interaction, (With<PauseButton>, Changed<Interaction>)>,
@@ -1013,6 +1288,14 @@ fn handle_manual_pause(
     run_seed: Res<RunSeed>,
     language: Res<GameLanguage>,
 ) {
+    if adventure.is_some_and(|state| state.pending.is_some())
+        || equipment.is_some_and(|state| state.open())
+        || collection.is_some_and(|state| state.open())
+        || attributes.is_some_and(|state| state.open())
+        || settings.is_some_and(|state| state.open)
+    {
+        return;
+    }
     let focused = windows
         .single()
         .map(|window| window.focused)
@@ -1080,6 +1363,7 @@ fn handle_manual_pause(
                 TextLayout::new(Justify::Center, LineBreak::WordOrCharacter),
             ));
             overlay.spawn((
+                RunSeedLabel(run_seed.0),
                 Text::new(format_run_seed(run_seed.0)),
                 TextFont {
                     font_size: FontSize::Px(14.0),
@@ -1140,32 +1424,25 @@ fn update_joystick_visual(
 }
 
 fn update_hud(
-    windows: Query<&Window, With<PrimaryWindow>>,
+    scheme: Res<ControlScheme>,
+    build: Res<PlayerBuild>,
     language: Res<GameLanguage>,
     session: Res<GameSession>,
-    damage_meter: Res<DamageMeter>,
-    run_seed: Res<RunSeed>,
     skill_economy: Res<SkillEconomy>,
-    build: Res<PlayerBuild>,
-    active: Res<ActiveSkill>,
+    encounters: Res<EncounterState>,
     vitals: Res<HeroVitals>,
     dodge: Res<DodgeState>,
     trial: Res<TrialState>,
     gold_trial: Res<GoldChallengeState>,
-    bosses: Query<(&Enemy, &BossEnemy)>,
     archive_echo: Query<&Enemy, With<ArchiveEcho>>,
     mut text_nodes: Query<(
         &mut Text,
-        Option<&RunStatsText>,
         Option<&TimerText>,
         Option<&LevelText>,
-        Option<&SkillButtonLabel>,
         Option<&TrialStatusText>,
         Option<&GoldChallengeStatusText>,
-        Option<&BondStatusText>,
         Option<&BondButtonLabel>,
         Option<&SkillDrawLabel>,
-        Option<&HeroVitalsText>,
         Option<&DodgeButtonLabel>,
     )>,
     mut bars: ParamSet<(
@@ -1174,18 +1451,7 @@ fn update_hud(
     )>,
 ) {
     let language = *language;
-    let compact = windows
-        .single()
-        .map(|window| hud_metrics(window.width(), window.height()).compact)
-        .unwrap_or(false);
     let remaining = (session.duration - session.elapsed).max(0.0) as u32;
-    let boss_status = bosses.iter().next().map(|(enemy, boss)| {
-        format!(
-            "{}  {:.0}%",
-            boss_name(language, boss.index as usize),
-            (enemy.hp / enemy.max_hp * 100.0).clamp(0.0, 100.0)
-        )
-    });
     let archive_hp = archive_echo
         .iter()
         .next()
@@ -1202,10 +1468,10 @@ fn update_hud(
         } else {
             format!("TOWER {}  {:.1}s", trial.level + 1, trial.remaining)
         }
-    } else if usize::from(trial.level) >= TOWER_UNLOCK_AT.len() {
+    } else if usize::from(trial.level) >= TOWER_FLOOR_COUNT {
         language.pick("TOWER COMPLETE", "爬塔完成").to_string()
-    } else if session.elapsed < TOWER_UNLOCK_AT[trial.level as usize] {
-        let unlock = (TOWER_UNLOCK_AT[trial.level as usize] - session.elapsed).ceil() as u32;
+    } else if session.elapsed < TOWER_UNLOCK_AT {
+        let unlock = (TOWER_UNLOCK_AT - session.elapsed).ceil() as u32;
         if language.is_chinese() {
             format!(
                 "爬塔 {} 未解锁 {:02}:{:02}",
@@ -1242,45 +1508,15 @@ fn update_hud(
             )
         }
     };
-    let next_growth = super::CommandGrowth::from_point(trial.command_points);
-    let last_growth = trial
-        .last_growth
-        .map_or("-", |growth| command_growth_label(language, growth));
-    let trial_status = if compact {
-        if language.is_chinese() {
-            format!("{trial_base} | 指挥 {}", trial.command_points)
-        } else {
-            format!("{trial_base} | CMD {}", trial.command_points)
-        }
-    } else if language.is_chinese() {
-        format!(
-            "{trial_base}\n指挥 {}  攻{} 体{} 悟{}  上次 {}  下次 {}",
-            trial.command_points,
-            trial.growth_ranks[0],
-            trial.growth_ranks[1],
-            trial.growth_ranks[2],
-            last_growth,
-            command_growth_label(language, next_growth),
-        )
-    } else {
-        format!(
-            "{trial_base}\nCMD {}  A{} H{} X{}  LAST {}  NEXT {}",
-            trial.command_points,
-            trial.growth_ranks[0],
-            trial.growth_ranks[1],
-            trial.growth_ranks[2],
-            last_growth,
-            command_growth_label(language, next_growth),
-        )
-    };
+    let trial_status = trial_base;
     let gold_status = if session.save_active {
         language
-            .pick("GOLD SEALED - ARCHIVE ACTIVE", "金币试炼封印 · 战果刻印中")
+            .pick("GOLD SEALED - ARCHIVE ACTIVE", "金币挑战封印 · 战果刻印中")
             .to_string()
     } else if gold_trial.active {
         if language.is_chinese() {
             format!(
-                "金币试炼 {} · {:.1}秒 · 目标 {}/{}",
+                "金币挑战 {} · {:.1}秒 · 目标 {}/{}",
                 gold_trial.level + 1,
                 gold_trial.remaining,
                 gold_trial.remaining_targets,
@@ -1296,12 +1532,12 @@ fn update_hud(
             )
         }
     } else if usize::from(gold_trial.level) >= GOLD_LEVEL_COUNT {
-        language.pick("GOLD COMPLETE", "金币试炼完成").to_string()
+        language.pick("GOLD COMPLETE", "金币挑战完成").to_string()
     } else if session.elapsed < GOLD_UNLOCK_AT {
         let unlock = (GOLD_UNLOCK_AT - session.elapsed).ceil() as u32;
         if language.is_chinese() {
             format!(
-                "金币试炼 {} 未解锁 {:02}:{:02}",
+                "金币挑战 {} 未解锁 {:02}:{:02}",
                 gold_trial.level + 1,
                 unlock / 60,
                 unlock % 60
@@ -1317,7 +1553,7 @@ fn update_hud(
     } else if gold_trial.cooldown > 0.0 {
         if language.is_chinese() {
             format!(
-                "金币试炼 {} · 冷却 {:.0}秒",
+                "金币挑战 {} · 冷却 {:.0}秒",
                 gold_trial.level + 1,
                 gold_trial.cooldown
             )
@@ -1331,7 +1567,7 @@ fn update_hud(
     } else {
         if language.is_chinese() {
             format!(
-                "金币试炼 {} 就绪{}",
+                "金币挑战 {} 就绪{}",
                 gold_trial.level + 1,
                 if gold_trial.auto { " [自动]" } else { "" }
             )
@@ -1343,180 +1579,24 @@ fn update_hud(
             )
         }
     };
-    let mut bond_lines = vec![if language.is_chinese() {
-        format!("羁绊 {}/7", build.active_bond_count())
-    } else {
-        format!("BONDS {}/7", build.active_bond_count())
-    }];
-    for id in BondId::ALL {
-        let rank = build.bond(id);
-        if rank > 0 && !build.bond_complete(id) {
-            bond_lines.push(format!(
-                "{}  {}/{}",
-                bond_name(language, id),
-                rank,
-                id.required()
-            ));
-        }
-    }
-    if bond_lines.len() == 1 {
-        bond_lines.push(
-            language
-                .pick("No active bond - press F", "暂无羁绊 · 按 F 抽取")
-                .to_string(),
-        );
-    }
-    let compact_bonds = build.bonds.iter().filter(|rank| **rank > 0).count();
-
-    for (
-        mut text,
-        stats,
-        timer,
-        level,
-        skill,
-        trial_marker,
-        gold_marker,
-        bonds,
-        bond_button,
-        skill_draw,
-        hero_vitals_marker,
-        dodge_label,
-    ) in &mut text_nodes
+    for (mut text, timer, level, trial_marker, gold_marker, bond_button, skill_draw, dodge_label) in
+        &mut text_nodes
     {
-        **text = if hero_vitals_marker.is_some() {
-            if vitals.alive {
-                let condition = if vitals.stunned_remaining > 0.0 {
-                    if language.is_chinese() {
-                        format!("眩晕 {:.1}秒", vitals.stunned_remaining)
-                    } else {
-                        format!("STUNNED {:.1}s", vitals.stunned_remaining)
-                    }
-                } else if vitals.invulnerable_remaining > 0.0 {
-                    if language.is_chinese() {
-                        format!("无敌 {:.1}秒", vitals.invulnerable_remaining)
-                    } else {
-                        format!("INVULNERABLE {:.1}s", vitals.invulnerable_remaining)
-                    }
-                } else if language.is_chinese() {
-                    "正常".to_string()
+        **text = if dodge_label.is_some() {
+            if !vitals.alive || vitals.stunned_remaining > 0.0 {
+                "—".to_string()
+            } else if dodge.cooldown_remaining > 0.0 {
+                format!(
+                    "{:.1}{}",
+                    dodge.cooldown_remaining,
+                    language.pick("s", "秒")
+                )
+            } else {
+                if scheme.touch {
+                    language.pick("DODGE", "闪避").to_string()
                 } else {
-                    "ACTIVE".to_string()
-                };
-                if compact && language.is_chinese() {
-                    format!(
-                        "血 {:.0}/{:.0} | 能 {:.0}/{:.0} | {condition}\n力 {:.0}  敏 {:.0}  智 {:.0}",
-                        vitals.health,
-                        vitals.max_health,
-                        vitals.energy,
-                        vitals.max_energy,
-                        vitals.strength,
-                        vitals.agility,
-                        vitals.intelligence,
-                    )
-                } else if compact {
-                    format!(
-                        "HP {:.0}/{:.0} | EN {:.0}/{:.0} | {condition}\nSTR {:.0}  AGI {:.0}  INT {:.0}",
-                        vitals.health,
-                        vitals.max_health,
-                        vitals.energy,
-                        vitals.max_energy,
-                        vitals.strength,
-                        vitals.agility,
-                        vitals.intelligence,
-                    )
-                } else if language.is_chinese() {
-                    format!(
-                        "英雄 {:04.0}/{:04.0} HP  {:03.0}/{:03.0} 能量  [{condition}]\n力量 {:.0}  敏捷 {:.0}  智力 {:.0}",
-                        vitals.health,
-                        vitals.max_health,
-                        vitals.energy,
-                        vitals.max_energy,
-                        vitals.strength,
-                        vitals.agility,
-                        vitals.intelligence,
-                    )
-                } else {
-                    format!(
-                        "HERO {:04.0}/{:04.0} HP  {:03.0}/{:03.0} EN  [{condition}]\nSTR {:.0}  AGI {:.0}  INT {:.0}",
-                        vitals.health,
-                        vitals.max_health,
-                        vitals.energy,
-                        vitals.max_energy,
-                        vitals.strength,
-                        vitals.agility,
-                        vitals.intelligence,
-                    )
+                    "Shift".to_string()
                 }
-            } else if language.is_chinese() {
-                format!(
-                    "英雄倒地 · {:.1}秒复活\n阵亡 {}  |  城门 -80",
-                    vitals.revive_remaining, vitals.deaths
-                )
-            } else {
-                format!(
-                    "HERO DOWN - REVIVE {:.1}s\nDEATH {}  |  CORE -80",
-                    vitals.revive_remaining, vitals.deaths
-                )
-            }
-        } else if dodge_label.is_some() {
-            if !vitals.alive {
-                language.pick("DODGE\nLOCKED", "闪避\n锁定").to_string()
-            } else if vitals.stunned_remaining > 0.0 {
-                language.pick("DODGE\nSTUNNED", "闪避\n眩晕").to_string()
-            } else if dodge.cooldown_remaining <= 0.0 {
-                if compact {
-                    language.pick("DODGE\nREADY", "闪避\n就绪").to_string()
-                } else if language.is_chinese() {
-                    "闪避就绪\nSHIFT / 轻触".to_string()
-                } else {
-                    "DODGE READY\nSHIFT / TAP".to_string()
-                }
-            } else if language.is_chinese() {
-                format!("闪避\n{:.1}秒", dodge.cooldown_remaining)
-            } else {
-                format!("DODGE\n{:.1}s", dodge.cooldown_remaining)
-            }
-        } else if stats.is_some() {
-            if compact && language.is_chinese() {
-                format!(
-                    "金 {:04}  杀 {:04}  木 {:03}\n秒伤 {:05.1}",
-                    session.gold,
-                    session.kills,
-                    session.wood,
-                    damage_meter.recent_dps(),
-                )
-            } else if compact {
-                format!(
-                    "G {:04}  K {:04}  W {:03}\nDPS {:05.1}",
-                    session.gold,
-                    session.kills,
-                    session.wood,
-                    damage_meter.recent_dps(),
-                )
-            } else if language.is_chinese() {
-                format!(
-                    "金币 {:04}   击杀 {:04}   木材 {:03}\n10秒伤害 {:06.1}   种子 {:08X}\n雷 {}  火 {}  灵 {}",
-                    session.gold,
-                    session.kills,
-                    session.wood,
-                    damage_meter.recent_dps(),
-                    run_seed.0 as u32,
-                    build.bond(BondId::Thunder),
-                    build.bond(BondId::Ember),
-                    build.bond(BondId::Spirits)
-                )
-            } else {
-                format!(
-                    "GOLD {:04}   KILLS {:04}   WOOD {:03}\nDPS(10s) {:06.1}   SEED {:08X}\nTHUNDER {}  EMBER {}  SPIRITS {}",
-                    session.gold,
-                    session.kills,
-                    session.wood,
-                    damage_meter.recent_dps(),
-                    run_seed.0 as u32,
-                    build.bond(BondId::Thunder),
-                    build.bond(BondId::Ember),
-                    build.bond(BondId::Spirits)
-                )
             }
         } else if timer.is_some() {
             if session.save_active {
@@ -1533,24 +1613,6 @@ fn update_hud(
                         session.save_remaining.ceil() as u32,
                         archive_hp,
                         hero_hp
-                    )
-                }
-            } else if let Some(boss) = &boss_status {
-                if language.is_chinese() {
-                    format!(
-                        "{:02}:{:02}\n首领 {}/5\n{}",
-                        remaining / 60,
-                        remaining % 60,
-                        session.bosses_defeated,
-                        boss
-                    )
-                } else {
-                    format!(
-                        "{:02}:{:02}\nROUND {}/5\n{}",
-                        remaining / 60,
-                        remaining % 60,
-                        session.bosses_defeated,
-                        boss
                     )
                 }
             } else if language.is_chinese() {
@@ -1586,75 +1648,29 @@ fn update_hud(
                     session.level, session.xp, session.xp_next
                 )
             }
-        } else if skill.is_some() {
-            ultimate_button_text(language, vitals.kind, active.remaining, compact)
         } else if trial_marker.is_some() {
             trial_status.clone()
         } else if gold_marker.is_some() {
             gold_status.clone()
-        } else if bonds.is_some() {
-            if compact {
-                if language.is_chinese() {
-                    format!(
-                        "羁绊 {}/7 | {} 套",
-                        build.active_bond_count(),
-                        compact_bonds
-                    )
-                } else {
-                    format!(
-                        "BONDS {}/7 | {} ACTIVE",
-                        build.active_bond_count(),
-                        compact_bonds
-                    )
-                }
-            } else {
-                bond_lines.join("\n")
-            }
         } else if bond_button.is_some() {
-            if session.save_active {
-                if compact {
-                    language.pick("BOND SEALED", "羁绊封印").to_string()
-                } else if language.is_chinese() {
-                    "F  羁绊封印".to_string()
+            if super::available_bond_cards_at(&build, &session).is_empty() {
+                if super::available_bond_cards(&build).is_empty() {
+                    language.pick("DONE", "集齐").to_string()
                 } else {
-                    "F  BOND SEALED".to_string()
+                    language.pick("LOCKED", "待解锁").to_string()
                 }
-            } else if compact && language.is_chinese() {
-                format!("羁绊 | {} 木材", bond_cost(&session))
-            } else if compact {
-                format!("BOND | {} WOOD", bond_cost(&session))
-            } else if language.is_chinese() {
-                format!("F  抽取羁绊  [{} 木材]", bond_cost(&session))
+            } else if session.save_active {
+                "—".to_string()
             } else {
-                format!("F  DRAW BOND  [{} WOOD]", bond_cost(&session))
+                format!("{}", bond_cost(&session, &encounters))
             }
         } else if skill_draw.is_some() {
             if session.save_active {
-                if compact {
-                    language.pick("SKILL SEALED", "技能封印").to_string()
-                } else if language.is_chinese() {
-                    "G  技能封印".to_string()
-                } else {
-                    "G  SKILL SEALED".to_string()
-                }
+                "—".to_string()
             } else if session.skill_points > 0 {
-                if compact && language.is_chinese() {
-                    format!("技能 | 免费 {}", session.skill_points)
-                } else if compact {
-                    format!("SKILL | FREE {}", session.skill_points)
-                } else if language.is_chinese() {
-                    format!("G  技能  [免费 {}]", session.skill_points)
-                } else {
-                    format!("G  SKILL  [FREE {}]", session.skill_points)
-                }
-            } else if compact && language.is_chinese() {
-                format!("技能 | {} 金币", skill_cost(&skill_economy))
-            } else if compact {
-                format!("SKILL | {} GOLD", skill_cost(&skill_economy))
-            } else if language.is_chinese() {
-                format!("G  技能  [{} 金币]", skill_cost(&skill_economy))
+                format!("+{}", session.skill_points)
             } else {
-                format!("G  SKILL  [{} GOLD]", skill_cost(&skill_economy))
+                format!("{}", skill_cost(&skill_economy))
             }
         } else {
             continue;
@@ -1670,183 +1686,19 @@ fn update_hud(
     }
 }
 
-fn ultimate_button_text(
-    language: GameLanguage,
-    kind: super::HeroKind,
-    remaining: f32,
-    compact: bool,
-) -> String {
-    let ultimate = hero_ultimate_name(language, kind);
-    let rarity = HEROES[kind.index()].rarity.label();
-    if remaining <= 0.0 {
-        if compact {
-            format!("[{rarity}] {ultimate}\n{}", language.pick("READY", "就绪"))
-        } else if language.is_chinese() {
-            format!("[{rarity}] {ultimate} 就绪\n空格 / 轻触")
+#[derive(Component)]
+struct RunSeedLabel(u64);
+
+fn update_seed_language(
+    language: Res<GameLanguage>,
+    mut labels: Query<(&RunSeedLabel, &mut Text)>,
+) {
+    for (seed, mut text) in &mut labels {
+        **text = if language.is_chinese() {
+            format!("种子 0x{:016X}", seed.0)
         } else {
-            format!("[{rarity}] {ultimate} READY\nSPACE / TAP")
-        }
-    } else if language.is_chinese() {
-        format!("[{rarity}] {ultimate}\n{remaining:.1}秒")
-    } else {
-        format!("[{rarity}] {ultimate}\n{remaining:.1}s")
-    }
-}
-
-fn show_result(
-    mut commands: Commands,
-    language: Res<GameLanguage>,
-    session: Res<GameSession>,
-    archive: Res<ArchiveState>,
-    run_seed: Res<RunSeed>,
-    existing: Query<Entity, With<ResultRoot>>,
-) {
-    if !session.finished || !existing.is_empty() {
-        return;
-    }
-    commands
-        .spawn((
-            ResultRoot,
-            Node {
-                position_type: PositionType::Absolute,
-                width: percent(100),
-                height: percent(100),
-                align_items: AlignItems::Center,
-                justify_content: JustifyContent::Center,
-                flex_direction: FlexDirection::Column,
-                row_gap: px(14),
-                ..default()
-            },
-            BackgroundColor(Color::srgba(0.01, 0.02, 0.04, 0.84)),
-            GlobalZIndex(100),
-        ))
-        .with_children(|root| {
-            root.spawn((
-                ResultCopyLabel::Title,
-                Text::new(result_title(*language, archive.outcome, session.victory)),
-                Node {
-                    max_width: percent(94),
-                    ..default()
-                },
-                TextFont {
-                    font_size: FontSize::Px(46.0),
-                    ..default()
-                },
-                TextColor(if session.victory {
-                    Color::srgb(0.25, 1.0, 0.72)
-                } else {
-                    Color::srgb(1.0, 0.24, 0.3)
-                }),
-                TextLayout::new(Justify::Center, LineBreak::WordOrCharacter),
-            ));
-            root.spawn((
-                ResultCopyLabel::Summary,
-                Text::new(result_summary(*language, &session)),
-                Node {
-                    max_width: percent(94),
-                    ..default()
-                },
-                TextFont {
-                    font_size: FontSize::Px(21.0),
-                    ..default()
-                },
-                TextColor(Color::srgb(0.78, 0.85, 0.92)),
-                TextLayout::new(Justify::Center, LineBreak::WordOrCharacter),
-            ));
-            root.spawn((
-                Text::new(format_run_seed(run_seed.0)),
-                TextFont {
-                    font_size: FontSize::Px(15.0),
-                    ..default()
-                },
-                TextColor(Color::srgb(0.52, 0.76, 0.86)),
-            ));
-            if archive.outcome != ArchiveOutcome::Pending {
-                root.spawn((
-                    ResultCopyLabel::Archive,
-                    Text::new(result_archive(*language, &archive)),
-                    Node {
-                        max_width: percent(94),
-                        ..default()
-                    },
-                    TextFont {
-                        font_size: FontSize::Px(19.0),
-                        ..default()
-                    },
-                    TextColor(Color::srgb(0.38, 0.9, 1.0)),
-                    TextLayout::new(Justify::Center, LineBreak::WordOrCharacter),
-                ));
-            }
-        });
-}
-
-fn update_result_text(
-    language: Res<GameLanguage>,
-    session: Res<GameSession>,
-    archive: Res<ArchiveState>,
-    mut labels: Query<(&ResultCopyLabel, &mut Text)>,
-) {
-    for (label, mut text) in &mut labels {
-        **text = match label {
-            ResultCopyLabel::Title => result_title(*language, archive.outcome, session.victory),
-            ResultCopyLabel::Summary => result_summary(*language, &session),
-            ResultCopyLabel::Archive => result_archive(*language, &archive),
+            format_run_seed(seed.0)
         };
-    }
-}
-
-fn result_title(language: GameLanguage, outcome: ArchiveOutcome, victory: bool) -> String {
-    match outcome {
-        ArchiveOutcome::Captured => language
-            .pick("ARCHIVE ECHO CAPTURED", "战果回响已捕获")
-            .to_string(),
-        ArchiveOutcome::TimedOut | ArchiveOutcome::HeroFelled => language
-            .pick("ARCHIVE RUN COMPLETE", "战果刻印完成")
-            .to_string(),
-        ArchiveOutcome::Pending if victory => {
-            language.pick("THE CORE ENDURES", "城门屹立").to_string()
-        }
-        ArchiveOutcome::Pending => language.pick("THE CORE HAS FALLEN", "城门陷落").to_string(),
-    }
-}
-
-fn result_summary(language: GameLanguage, session: &GameSession) -> String {
-    if language.is_chinese() {
-        format!(
-            "等级 {}  |  总击杀 {}  |  木材 {}",
-            session.level, session.total_kills, session.wood
-        )
-    } else {
-        format!(
-            "Level {}  |  {} total kills  |  {} wood",
-            session.level, session.total_kills, session.wood
-        )
-    }
-}
-
-fn archive_outcome_label(language: GameLanguage, outcome: ArchiveOutcome) -> &'static str {
-    match outcome {
-        ArchiveOutcome::Pending => language.pick("NOT REACHED", "未到达"),
-        ArchiveOutcome::Captured => language.pick("ECHO CAPTURED", "回响已捕获"),
-        ArchiveOutcome::TimedOut => language.pick("TIME EXPIRED", "时间耗尽"),
-        ArchiveOutcome::HeroFelled => language.pick("HERO FELLED", "英雄倒地"),
-    }
-}
-
-fn result_archive(language: GameLanguage, archive: &ArchiveState) -> String {
-    if language.is_chinese() {
-        format!(
-            "{}  |  +{} 战果碎片",
-            archive_outcome_label(language, archive.outcome),
-            archive.shards(),
-        )
-    } else {
-        format!(
-            "{}  |  +{} ARCHIVE SHARD{}",
-            archive_outcome_label(language, archive.outcome),
-            archive.shards(),
-            if archive.shards() == 1 { "" } else { "S" }
-        )
     }
 }
 
@@ -1854,9 +1706,89 @@ fn format_run_seed(seed: u64) -> String {
     format!("SEED 0x{seed:016X}")
 }
 
+fn update_trial_auto_feedback(
+    language: Res<GameLanguage>,
+    tower: Res<TrialState>,
+    gold: Res<GoldChallengeState>,
+    mut buttons: Query<(&TrialButton, &mut BackgroundColor)>,
+    mut labels: Query<(&TrialActionLabel, &mut Text)>,
+) {
+    let enabled = |action| match action {
+        TrialAction::ToggleTowerAuto => Some(tower.auto),
+        TrialAction::ToggleGoldAuto => Some(gold.auto),
+        _ => None,
+    };
+    for (button, mut background) in &mut buttons {
+        if let Some(on) = enabled(button.0) {
+            background.0 = if on {
+                Color::srgb(0.36, 0.26, 0.10)
+            } else {
+                Color::srgb(0.055, 0.11, 0.15)
+            };
+        }
+    }
+    for (label, mut text) in &mut labels {
+        if let Some(on) = enabled(label.0) {
+            **text = if on {
+                language.pick("AUTO ON", "自动开启")
+            } else {
+                language.pick("AUTO OFF", "自动关闭")
+            }
+            .to_string();
+        }
+    }
+}
+
+pub(crate) fn reset_run(world: &mut World) {
+    world.insert_resource(ManualPauseState::default());
+    world.insert_resource(TrialDrawerState::default());
+    world.insert_resource(BattleSpeed::default());
+    hero_stats_ui::reset_run(world);
+    bond_collection_ui::reset_run(world);
+    super::equipment_ui::reset_run(world);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn narrow_desktop_hides_touch_controls_until_real_touch_mode() {
+        let mut app = App::new();
+        app.insert_resource(ControlScheme { touch: false })
+            .init_resource::<TrialDrawerState>()
+            .add_systems(Update, apply_hud_layout);
+        app.world_mut().spawn((
+            Window {
+                resolution: (667, 375).into(),
+                ..default()
+            },
+            PrimaryWindow,
+        ));
+        let pad = app.world_mut().spawn((MovementPad, Node::default())).id();
+        let dodge = app.world_mut().spawn((DodgeButton, Node::default())).id();
+        let bottom = app.world_mut().spawn((HudBottom, Node::default())).id();
+        for touch in [false, true, false] {
+            app.world_mut().resource_mut::<ControlScheme>().touch = touch;
+            app.update();
+            let pad_node = app.world().get::<Node>(pad).unwrap();
+            let dodge_node = app.world().get::<Node>(dodge).unwrap();
+            assert_eq!(
+                app.world().get::<Node>(bottom).unwrap().height,
+                if touch { Val::Auto } else { px(40) }
+            );
+            assert_eq!(
+                pad_node.display,
+                if touch { Display::Flex } else { Display::None }
+            );
+            if !touch {
+                assert_eq!(dodge_node.height, px(40));
+                assert_eq!(app.world().get::<Node>(bottom).unwrap().width, px(420));
+            } else {
+                assert_ne!(dodge_node.height, px(40));
+            }
+        }
+    }
 
     #[test]
     fn compact_bottom_controls_fit_common_phone_widths() {
@@ -1912,17 +1844,19 @@ mod tests {
     }
 
     #[test]
-    fn battle_speed_levels_are_exact_and_cycle_without_rng() {
+    fn battle_speed_doubles_halves_and_clamps_without_rng() {
         let mut speed = BattleSpeed::default();
-        assert_eq!(speed.multiplier(), 1.0);
-        speed.cycle();
-        assert_eq!(speed.multiplier(), 2.0);
-        speed.cycle();
-        assert_eq!(speed.multiplier(), 3.0);
-        speed.cycle();
-        assert_eq!(speed.multiplier(), 1.0);
-        speed.select(99);
-        assert_eq!(speed.multiplier(), 3.0);
+        for expected in [1., 2., 4., 8., 16., 32., 32.] {
+            assert_eq!(speed.multiplier(), expected);
+            speed.apply(SpeedAction::Increase);
+        }
+        for expected in [32., 16., 8., 4., 2., 1., 1.] {
+            assert_eq!(speed.multiplier(), expected);
+            speed.apply(SpeedAction::Decrease);
+        }
+        speed.apply(SpeedAction::Increase);
+        speed.apply(SpeedAction::Reset);
+        assert_eq!(speed.multiplier(), 1.);
     }
 
     #[test]
@@ -1933,14 +1867,12 @@ mod tests {
             .insert_resource(Time::<Virtual>::default())
             .add_systems(Update, handle_battle_speed);
         app.world_mut()
-            .spawn((SpeedButton(2), Interaction::Pressed));
-
+            .spawn((SpeedButton(SpeedAction::Increase), Interaction::Pressed));
         app.update();
-
-        assert_eq!(app.world().resource::<BattleSpeed>().selected, 2);
+        assert_eq!(app.world().resource::<BattleSpeed>().selected, 1);
         assert_eq!(
             app.world().resource::<Time<Virtual>>().relative_speed(),
-            3.0
+            2.0
         );
     }
 
@@ -1961,61 +1893,6 @@ mod tests {
             "SEED 0x123456789ABCDEF0"
         );
         assert_eq!(format_run_seed(0xA11CE), "SEED 0x00000000000A11CE");
-    }
-
-    #[test]
-    fn ultimate_button_uses_the_selected_hero_profile() {
-        assert_eq!(
-            ultimate_button_text(
-                GameLanguage::English,
-                super::super::HeroKind::SolarVanguard,
-                0.0,
-                true,
-            ),
-            "[UR] DAWN BASTION\nREADY"
-        );
-        assert_eq!(
-            ultimate_button_text(
-                GameLanguage::English,
-                super::super::HeroKind::VoidReaper,
-                12.34,
-                false,
-            ),
-            "[UR] EVENT HORIZON\n12.3s"
-        );
-        assert_eq!(
-            ultimate_button_text(
-                GameLanguage::SimplifiedChinese,
-                super::super::HeroKind::SolarVanguard,
-                0.0,
-                true,
-            ),
-            "[UR] 曙光壁垒\n就绪"
-        );
-    }
-
-    #[test]
-    fn result_overlay_includes_the_complete_run_seed() {
-        let seed = 0x1234_5678_9ABC_DEF0;
-        let mut app = App::new();
-        app.insert_resource(GameSession {
-            finished: true,
-            ..default()
-        })
-        .insert_resource(GameLanguage::English)
-        .insert_resource(ArchiveState::default())
-        .insert_resource(RunSeed(seed))
-        .add_systems(Update, show_result);
-
-        app.update();
-
-        let world = app.world_mut();
-        let mut texts = world.query::<&Text>();
-        assert!(
-            texts
-                .iter(world)
-                .any(|text| text.0 == format_run_seed(seed))
-        );
     }
 
     #[test]

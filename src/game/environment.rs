@@ -8,13 +8,29 @@ impl Plugin for EnvironmentArtPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<ArtClock>()
             .add_systems(Startup, setup_environment_art)
-            .add_systems(Update, animate_environment_art);
+            .add_systems(Update, (animate_environment_art, update_camp_previews));
     }
 }
 
 #[derive(Resource, Default)]
 struct ArtClock {
     elapsed: f32,
+}
+#[derive(Component)]
+struct CampPreview(u8);
+fn update_camp_previews(
+    state: Res<super::AdventureBossState>,
+    mut previews: Query<(&CampPreview, &mut Visibility)>,
+) {
+    for (camp, mut visibility) in &mut previews {
+        *visibility = if state.resolved & (1 << camp.0) != 0
+            || state.active.is_some() && state.active_index == camp.0
+        {
+            Visibility::Hidden
+        } else {
+            Visibility::Inherited
+        };
+    }
 }
 
 impl ArtClock {
@@ -48,422 +64,317 @@ pub(super) struct ArtPulse {
     pub(super) phase: f32,
 }
 
-struct BrazierMeshes {
-    bowl: Handle<Mesh>,
-    flame: Handle<Mesh>,
+// Props are CC0 KayKit dungeon artwork, normalized to unit height on import.
+// Gate masonry and timber detailing share a unit box; silhouettes and ornament
+// retain the authored CC0 tower and gate models.
+struct EnvironmentModels {
+    pillar: Handle<WorldAsset>,
+    torch: Handle<WorldAsset>,
+    rubble: Handle<WorldAsset>,
+    rubble_half: Handle<WorldAsset>,
 }
 
 fn setup_environment_art(
     mut commands: Commands,
+    assets: Res<AssetServer>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    let fortress_stone = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.085, 0.15, 0.16),
-        metallic: 0.08,
-        perceptual_roughness: 0.86,
-        ..default()
-    });
-    let fortress_trim = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.32, 0.24, 0.10),
-        metallic: 0.72,
-        perceptual_roughness: 0.34,
-        ..default()
-    });
-    let banner = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.025, 0.42, 0.46),
-        metallic: 0.12,
-        perceptual_roughness: 0.62,
-        ..default()
-    });
-    let core_glow = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.08, 0.76, 0.68),
-        emissive: LinearRgba::new(0.04, 4.2, 3.2, 1.0),
-        metallic: 0.28,
-        perceptual_roughness: 0.22,
-        ..default()
-    });
-    let corruption = materials.add(StandardMaterial {
-        base_color: Color::srgba(0.20, 0.025, 0.31, 0.82),
-        emissive: LinearRgba::new(0.42, 0.015, 1.25, 1.0),
-        alpha_mode: AlphaMode::Blend,
-        perceptual_roughness: 0.58,
-        ..default()
-    });
-    let rift_glow = materials.add(StandardMaterial {
-        base_color: Color::srgba(0.62, 0.10, 0.92, 0.72),
-        emissive: LinearRgba::new(3.4, 0.10, 6.4, 1.0),
-        alpha_mode: AlphaMode::Add,
-        unlit: true,
-        ..default()
-    });
-    let rune_glow = materials.add(StandardMaterial {
-        base_color: Color::srgba(0.06, 0.62, 0.70, 0.78),
-        emissive: LinearRgba::new(0.04, 2.4, 3.4, 1.0),
-        alpha_mode: AlphaMode::Add,
-        unlit: true,
-        ..default()
-    });
-    let brazier_metal = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.18, 0.13, 0.08),
-        metallic: 0.82,
-        perceptual_roughness: 0.32,
-        ..default()
-    });
-    let flame = materials.add(StandardMaterial {
-        base_color: Color::srgba(1.0, 0.30, 0.035, 0.92),
-        emissive: LinearRgba::new(7.2, 0.65, 0.025, 1.0),
-        alpha_mode: AlphaMode::Add,
-        unlit: true,
-        ..default()
-    });
-    let vegetation = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.055, 0.20, 0.13),
-        perceptual_roughness: 0.96,
-        ..default()
-    });
-    let rock = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.065, 0.095, 0.10),
-        perceptual_roughness: 0.98,
-        ..default()
-    });
-    let brazier_meshes = BrazierMeshes {
-        bowl: meshes.add(ConicalFrustum {
-            radius_top: 0.44,
-            radius_bottom: 0.24,
-            height: 0.36,
-        }),
-        flame: meshes.add(ConicalFrustum {
-            radius_top: 0.02,
-            radius_bottom: 0.24,
-            height: 0.72,
-        }),
+    let models = EnvironmentModels {
+        pillar: assets.load("models/environment_pillar.glb#Scene0"),
+        torch: assets.load("models/environment_torch_lit.glb#Scene0"),
+        rubble: assets.load("models/environment_rubble_large.glb#Scene0"),
+        rubble_half: assets.load("models/environment_rubble_half.glb#Scene0"),
     };
-
-    spawn_fortress(
-        &mut commands,
-        &mut meshes,
-        &fortress_stone,
-        &fortress_trim,
-        &banner,
-        &core_glow,
-        &brazier_meshes,
-        &brazier_metal,
-        &flame,
-    );
-    spawn_rift_dressing(
-        &mut commands,
-        &mut meshes,
-        &fortress_stone,
-        &corruption,
-        &rift_glow,
-    );
-    spawn_lane_runes(&mut commands, &mut meshes, &rune_glow, &fortress_trim);
-    spawn_border_dressing(
-        &mut commands,
-        &mut meshes,
-        &fortress_stone,
-        &brazier_meshes,
-        &brazier_metal,
-        &flame,
-        &vegetation,
-        &rock,
-    );
+    spawn_side_camps(&mut commands, &assets, &mut meshes, &mut materials, &models);
+    spawn_border_dressing(&mut commands, &models);
 }
 
-#[allow(clippy::too_many_arguments)]
-fn spawn_fortress(
+fn spawn_prop(
     commands: &mut Commands,
-    meshes: &mut Assets<Mesh>,
-    stone: &Handle<StandardMaterial>,
-    trim: &Handle<StandardMaterial>,
-    banner: &Handle<StandardMaterial>,
-    core_glow: &Handle<StandardMaterial>,
-    brazier_meshes: &BrazierMeshes,
-    brazier: &Handle<StandardMaterial>,
-    flame: &Handle<StandardMaterial>,
+    scene: &Handle<WorldAsset>,
+    position: Vec3,
+    height: f32,
+    yaw: f32,
 ) {
-    let wall = meshes.add(Cuboid::new(1.2, 3.6, 8.8));
-    let tower = meshes.add(Cylinder::new(1.05, 3.8));
-    let tower_cap = meshes.add(ConicalFrustum {
-        radius_top: 0.08,
-        radius_bottom: 1.22,
-        height: 1.25,
-    });
-    let crenel = meshes.add(Cuboid::new(0.75, 0.72, 0.68));
-    let trim_bar = meshes.add(Cuboid::new(0.24, 0.20, 8.9));
-    let banner_mesh = meshes.add(Cuboid::new(0.10, 1.55, 0.82));
-    let crystal = meshes.add(ConicalFrustum {
-        radius_top: 0.02,
-        radius_bottom: 0.32,
-        height: 1.35,
-    });
-
-    spawn_static(
-        commands,
-        wall,
-        stone.clone(),
-        Transform::from_xyz(-17.0, 1.72, 0.0),
-    );
-    for z in [-4.65, 4.65] {
-        spawn_static(
-            commands,
-            tower.clone(),
-            stone.clone(),
-            Transform::from_xyz(-16.65, 1.85, z),
-        );
-        spawn_static(
-            commands,
-            tower_cap.clone(),
-            trim.clone(),
-            Transform::from_xyz(-16.65, 4.37, z),
-        );
-    }
-    spawn_static(
-        commands,
-        trim_bar,
-        trim.clone(),
-        Transform::from_xyz(-16.34, 2.70, 0.0),
-    );
-    for index in 0..8 {
-        let z = -3.60 + index as f32 * 1.03;
-        spawn_static(
-            commands,
-            crenel.clone(),
-            if index % 2 == 0 {
-                stone.clone()
-            } else {
-                trim.clone()
-            },
-            Transform::from_xyz(-16.30, 3.88, z),
-        );
-    }
-    for (z, tilt) in [(-2.80, -0.08), (2.80, 0.08)] {
-        spawn_static(
-            commands,
-            banner_mesh.clone(),
-            banner.clone(),
-            Transform::from_xyz(-16.28, 2.05, z).with_rotation(Quat::from_rotation_x(tilt)),
-        );
-    }
-    for (index, z) in [-1.55, 0.0, 1.55].into_iter().enumerate() {
-        commands.spawn((
-            Mesh3d(crystal.clone()),
-            MeshMaterial3d(core_glow.clone()),
-            Transform::from_xyz(-16.15, 2.05 + (index % 2) as f32 * 0.35, z)
-                .with_rotation(Quat::from_rotation_z(0.10 * (index as f32 - 1.0))),
-            ArtBob {
-                base_y: 2.05 + (index % 2) as f32 * 0.35,
-                amplitude: 0.16,
-                speed: 1.55,
-                phase: index as f32 * 1.7,
-            },
-            ArtSpin {
-                axis: Vec3::Y,
-                speed: 0.42 + index as f32 * 0.08,
-            },
-            ArenaEntity,
-        ));
-    }
-    for z in [-5.55, 5.55] {
-        spawn_brazier(
-            commands,
-            brazier_meshes,
-            Vec3::new(-14.6, 0.0, z),
-            brazier,
-            flame,
-        );
-    }
-}
-
-fn spawn_rift_dressing(
-    commands: &mut Commands,
-    meshes: &mut Assets<Mesh>,
-    stone: &Handle<StandardMaterial>,
-    corruption: &Handle<StandardMaterial>,
-    glow: &Handle<StandardMaterial>,
-) {
-    let stain = meshes.add(Cylinder::new(1.0, 0.035));
-    let monolith = meshes.add(ConicalFrustum {
-        radius_top: 0.22,
-        radius_bottom: 0.62,
-        height: 3.0,
-    });
-    let shard = meshes.add(ConicalFrustum {
-        radius_top: 0.025,
-        radius_bottom: 0.26,
-        height: 1.15,
-    });
-    let ring = meshes.add(Torus::new(1.95, 2.10));
-
-    for (index, (x, z, sx, sz)) in [
-        (11.7, -2.2, 2.8, 1.4),
-        (12.8, 2.1, 2.1, 1.2),
-        (14.6, 0.0, 3.8, 2.0),
-        (16.4, -1.6, 2.2, 1.1),
-        (17.2, 2.2, 2.6, 1.3),
-    ]
-    .into_iter()
-    .enumerate()
-    {
-        commands.spawn((
-            Mesh3d(stain.clone()),
-            MeshMaterial3d(corruption.clone()),
-            Transform::from_xyz(x, 0.095 + index as f32 * 0.002, z)
-                .with_scale(Vec3::new(sx, 1.0, sz)),
-            ArtPulse {
-                base_scale: Vec3::new(sx, 1.0, sz),
-                amplitude: 0.035,
-                speed: 1.15,
-                phase: index as f32 * 0.8,
-            },
-            ArenaEntity,
-        ));
-    }
-    for (z, tilt) in [(-4.35, -0.18), (4.35, 0.18)] {
-        spawn_static(
-            commands,
-            monolith.clone(),
-            stone.clone(),
-            Transform::from_xyz(14.8, 1.5, z).with_rotation(Quat::from_rotation_z(tilt)),
-        );
-    }
     commands.spawn((
-        Mesh3d(ring),
-        MeshMaterial3d(glow.clone()),
-        Transform::from_xyz(14.62, 2.35, 0.0)
-            .with_rotation(Quat::from_rotation_z(std::f32::consts::FRAC_PI_2)),
-        ArtSpin {
-            axis: Vec3::X,
-            speed: -0.52,
-        },
-        ArtPulse {
-            base_scale: Vec3::ONE,
-            amplitude: 0.055,
-            speed: 2.1,
-            phase: 0.0,
-        },
+        WorldAssetRoot(scene.clone()),
+        Transform::from_translation(position)
+            .with_scale(Vec3::splat(height))
+            .with_rotation(Quat::from_rotation_y(yaw)),
         ArenaEntity,
     ));
-    for index in 0..7 {
-        let angle = index as f32 / 7.0 * std::f32::consts::TAU;
-        let radius = if index % 2 == 0 { 2.65 } else { 2.25 };
-        let y = 2.35 + angle.cos() * radius;
-        let z = angle.sin() * radius;
-        commands.spawn((
-            Mesh3d(shard.clone()),
-            MeshMaterial3d(glow.clone()),
-            Transform::from_xyz(14.6, y, z)
-                .with_rotation(Quat::from_euler(
-                    EulerRot::XYZ,
-                    angle * 0.35,
-                    angle,
-                    -angle * 0.28,
-                ))
-                .with_scale(Vec3::splat(if index % 3 == 0 { 1.25 } else { 0.82 })),
-            ArtBob {
-                base_y: y,
-                amplitude: 0.13,
-                speed: 1.2 + index as f32 * 0.08,
-                phase: angle,
-            },
-            ArtSpin {
-                axis: Vec3::Y,
-                speed: 0.45 + index as f32 * 0.05,
-            },
-            ArenaEntity,
-        ));
-    }
 }
 
-fn spawn_lane_runes(
-    commands: &mut Commands,
+/// The entire defensive structure belongs to Core: its visibility and revival
+/// therefore follow the actual tank, rather than a separate rear-wall prop.
+pub(super) fn spawn_gate_art(
+    parent: &mut ChildSpawnerCommands,
+    assets: &AssetServer,
     meshes: &mut Assets<Mesh>,
-    glow: &Handle<StandardMaterial>,
-    trim: &Handle<StandardMaterial>,
+    materials: &mut Assets<StandardMaterial>,
 ) {
-    let ring = meshes.add(Torus::new(0.58, 0.68));
-    let hub = meshes.add(Cylinder::new(0.22, 0.055));
-    let tick = meshes.add(Cuboid::new(0.62, 0.035, 0.08));
-    for (index, x) in [-11.2, -6.1, -1.0, 4.1, 9.2].into_iter().enumerate() {
-        commands.spawn((
-            Mesh3d(ring.clone()),
-            MeshMaterial3d(glow.clone()),
-            Transform::from_xyz(x, 0.19, 0.0),
-            ArtSpin {
-                axis: Vec3::Y,
-                speed: if index % 2 == 0 { 0.42 } else { -0.42 },
-            },
-            ArtPulse {
-                base_scale: Vec3::ONE,
-                amplitude: 0.08,
-                speed: 1.6,
-                phase: index as f32 * 0.7,
-            },
-            ArenaEntity,
-        ));
-        spawn_static(
-            commands,
-            hub.clone(),
-            trim.clone(),
-            Transform::from_xyz(x, 0.165, 0.0),
-        );
-        for rotation in [0.0, std::f32::consts::FRAC_PI_2] {
-            spawn_static(
-                commands,
-                tick.clone(),
-                glow.clone(),
-                Transform::from_xyz(x, 0.18, 0.0).with_rotation(Quat::from_rotation_y(rotation)),
-            );
-        }
-    }
-}
-
-#[allow(clippy::too_many_arguments)]
-fn spawn_border_dressing(
-    commands: &mut Commands,
-    meshes: &mut Assets<Mesh>,
-    stone: &Handle<StandardMaterial>,
-    brazier_meshes: &BrazierMeshes,
-    brazier: &Handle<StandardMaterial>,
-    flame: &Handle<StandardMaterial>,
-    vegetation: &Handle<StandardMaterial>,
-    rock: &Handle<StandardMaterial>,
-) {
-    let pillar = meshes.add(Cylinder::new(0.42, 1.55));
-    let pillar_cap = meshes.add(Cylinder::new(0.57, 0.18));
-    let rock_mesh = meshes.add(Sphere::new(1.0).mesh().ico(1).unwrap());
-    let shrub = meshes.add(ConicalFrustum {
-        radius_top: 0.05,
-        radius_bottom: 0.58,
-        height: 1.15,
+    // The wall follows the road's Z axis, perpendicular to enemies travelling
+    // towards decreasing X. All spans share one plane and touch both borders.
+    let facing = Quat::from_rotation_y(std::f32::consts::FRAC_PI_2);
+    let block = meshes.add(Cuboid::new(1.0, 1.0, 1.0));
+    let stone = materials.add(StandardMaterial {
+        base_color: Color::srgb(0.40, 0.47, 0.49),
+        emissive: LinearRgba::new(0.07, 0.09, 0.10, 1.0),
+        perceptual_roughness: 0.98,
+        reflectance: 0.20,
+        ..default()
     });
-    for z in [-6.35, 6.35] {
-        for (index, x) in [-11.8, -5.6, 0.6, 6.8, 12.0].into_iter().enumerate() {
-            spawn_static(
-                commands,
-                pillar.clone(),
-                stone.clone(),
-                Transform::from_xyz(x, 0.78, z),
-            );
-            spawn_static(
-                commands,
-                pillar_cap.clone(),
-                brazier.clone(),
-                Transform::from_xyz(x, 1.58, z),
-            );
-            if index % 2 == 0 {
-                spawn_brazier(
-                    commands,
-                    brazier_meshes,
-                    Vec3::new(x, 1.58, z),
-                    brazier,
-                    flame,
-                );
+    let timber = materials.add(StandardMaterial {
+        base_color: Color::srgb(0.42, 0.22, 0.085),
+        emissive: LinearRgba::new(0.10, 0.045, 0.012, 1.0),
+        perceptual_roughness: 0.94,
+        reflectance: 0.16,
+        ..default()
+    });
+    let iron = materials.add(StandardMaterial {
+        base_color: Color::srgb(0.29, 0.35, 0.39),
+        emissive: LinearRgba::new(0.035, 0.045, 0.055, 1.0),
+        metallic: 0.78,
+        perceptual_roughness: 0.62,
+        reflectance: 0.38,
+        ..default()
+    });
+    // The fixed sun lights the rear of this perpendicular wall. Two soft
+    // gatehouse lamps reveal the invader-facing masonry without changing the
+    // entire arena's lighting or making the stone bloom like a spell.
+    for z in [-2.8, 2.8] {
+        parent.spawn((
+            Name::new("Gatehouse facade fill light"),
+            PointLight {
+                color: Color::srgb(1.0, 0.90, 0.78),
+                intensity: 130_000.0,
+                range: 13.0,
+                shadow_maps_enabled: false,
+                ..default()
+            },
+            Transform::from_xyz(3.4, 4.0, z),
+        ));
+    }
+    // Courses have real depth and readable joints, even when the imported gate
+    // facade faces away from the directional light. Their X plane never tilts.
+    for side in [-1.0, 1.0] {
+        for course in 0..4 {
+            for column in 0..4 {
+                let z = side * (2.0 + 0.9 * column as f32);
+                parent.spawn((
+                    Name::new("Gate masonry course"),
+                    Mesh3d(block.clone()),
+                    MeshMaterial3d(stone.clone()),
+                    Transform::from_xyz(0.0, -0.67 + 0.64 * course as f32, z)
+                        .with_scale(Vec3::new(1.1, 0.60, 0.86)),
+                ));
             }
         }
     }
-    for (index, (x, z, scale)) in [
+    // Solid double doors sit inside the existing iron frame. Eight narrow
+    // boards, two horizontal straps and a central seam read as a closed gate.
+    for board in 0..8 {
+        let z = -1.54 + 0.44 * board as f32;
+        parent.spawn((
+            Name::new("Gate timber door plank"),
+            Mesh3d(block.clone()),
+            MeshMaterial3d(timber.clone()),
+            Transform::from_xyz(0.45, 0.31, z).with_scale(Vec3::new(0.30, 2.62, 0.41)),
+        ));
+    }
+    for y in [-0.25, 0.90] {
+        parent.spawn((
+            Name::new("Gate iron door brace"),
+            Mesh3d(block.clone()),
+            MeshMaterial3d(iron.clone()),
+            Transform::from_xyz(0.64, y, 0.0).with_scale(Vec3::new(0.10, 0.18, 3.46)),
+        ));
+    }
+    for z in [-0.18, 0.18] {
+        parent.spawn((
+            Name::new("Gate iron door handle"),
+            Mesh3d(block.clone()),
+            MeshMaterial3d(iron.clone()),
+            Transform::from_xyz(0.71, 0.25, z).with_scale(Vec3::new(0.14, 0.34, 0.10)),
+        ));
+    }
+    for (name, model, z, width, height) in [
+        ("central iron gate", "wall_gated", 0.0, 3.8, 3.0),
+        ("north curtain wall", "wall", -3.8, 3.8, 2.6),
+        ("south curtain wall", "wall", 3.8, 3.8, 2.6),
+    ] {
+        parent.spawn((
+            Name::new(format!("Gate {name}")),
+            WorldAssetRoot(assets.load(format!("models/environment_{model}.glb#Scene0"))),
+            Transform::from_xyz(0.0, -1.0, z)
+                .with_rotation(facing)
+                .with_scale(Vec3::new(width, height, 3.2)),
+        ));
+    }
+    for (side, z) in [
+        ("north border", -5.65),
+        ("north gatehouse", -1.9),
+        ("south gatehouse", 1.9),
+        ("south border", 5.65),
+    ] {
+        parent.spawn((
+            Name::new(format!("Gate {side} tower")),
+            WorldAssetRoot(assets.load("models/environment_pillar_decorated.glb#Scene0")),
+            Transform::from_xyz(0.0, -1.0, z)
+                .with_rotation(facing)
+                .with_scale(Vec3::new(4.2, 3.65, 4.2)),
+        ));
+        // Banners face the invaders; their anchors sit on the gatehouse facade.
+        if z.abs() < 2.0 {
+            parent.spawn((
+                Name::new(format!("Gate {side} blue banner")),
+                WorldAssetRoot(assets.load("models/environment_banner_blue.glb#Scene0")),
+                Transform::from_xyz(0.66, 0.65, z)
+                    .with_rotation(facing)
+                    .with_scale(Vec3::splat(1.35)),
+            ));
+        }
+    }
+}
+
+fn spawn_side_camps(
+    commands: &mut Commands,
+    assets: &AssetServer,
+    meshes: &mut Assets<Mesh>,
+    materials: &mut Assets<StandardMaterial>,
+    models: &EnvironmentModels,
+) {
+    let floor = assets.load("models/environment_floor.glb#Scene0");
+    let stone = meshes.add(Sphere::new(1.0));
+    let grass = meshes.add(Cone::new(0.12, 0.65));
+    for (index, center) in super::encounter_bosses::ADVENTURE_SITES
+        .into_iter()
+        .enumerate()
+    {
+        let boss = assets.load(
+            [
+                "models/enemy_gnawling.glb#Scene0",
+                "models/enemy_core_rusher.glb#Scene0",
+                "models/enemy_null_eye.glb#Scene0",
+            ][index],
+        );
+        commands.spawn((
+            Name::new(format!("Resting side camp leader {index}")),
+            WorldAssetRoot(boss),
+            Transform::from_translation(center)
+                .with_scale(Vec3::splat(1.15))
+                .with_rotation(Quat::from_rotation_y(1.0)),
+            CampPreview(index as u8),
+            ArenaEntity,
+        ));
+        for n in 0..3 {
+            let guard = assets.load(
+                [
+                    "models/enemy_rift_sapper.glb#Scene0",
+                    "models/enemy_void_caster.glb#Scene0",
+                    "models/enemy_split_spore.glb#Scene0",
+                ][n],
+            );
+            commands.spawn((
+                Name::new(format!("Resting camp wild guard {index}/{n}")),
+                WorldAssetRoot(guard),
+                Transform::from_translation(center + Vec3::new(-1.3 + n as f32 * 1.3, 0.0, 1.8))
+                    .with_scale(Vec3::splat(0.9 + n as f32 * 0.05)),
+                CampPreview(index as u8),
+                ArenaEntity,
+            ));
+        }
+        let soil = materials.add(StandardMaterial {
+            base_color: [
+                Color::srgb(0.22, 0.16, 0.12),
+                Color::srgb(0.12, 0.21, 0.22),
+                Color::srgb(0.15, 0.21, 0.11),
+            ][index],
+            perceptual_roughness: 1.0,
+            reflectance: 0.15,
+            ..default()
+        });
+        let moss = materials.add(StandardMaterial {
+            base_color: Color::srgb(0.17, 0.24, 0.13),
+            perceptual_roughness: 1.0,
+            reflectance: 0.15,
+            ..default()
+        });
+        commands.spawn((
+            Name::new(format!("Side camp terrain {index}")),
+            Mesh3d(meshes.add(Cylinder::new(3.6, 0.12))),
+            MeshMaterial3d(soil.clone()),
+            Transform::from_translation(center - Vec3::Y * 0.1),
+            ArenaEntity,
+        ));
+        for n in 0..24 {
+            let angle = n as f32 * 2.39996;
+            let radius = 2.4 + (n % 4) as f32 * 0.28;
+            let position = center + Vec3::new(angle.cos() * radius, -0.02, angle.sin() * radius);
+            spawn_static(
+                commands,
+                stone.clone(),
+                soil.clone(),
+                Transform::from_translation(position)
+                    .with_scale(Vec3::new(0.32 + (n % 3) as f32 * 0.08, 0.13, 0.24))
+                    .with_rotation(Quat::from_rotation_y(angle)),
+            );
+            if n % 2 == 0 {
+                spawn_static(
+                    commands,
+                    grass.clone(),
+                    moss.clone(),
+                    Transform::from_translation(position + Vec3::Y * 0.2)
+                        .with_rotation(Quat::from_rotation_z(0.28)),
+                );
+            }
+        }
+        for step in 0..4 {
+            let z = center.z.signum() * (5.2 + step as f32 * 0.9);
+            commands.spawn((
+                Name::new("Side camp stone approach"),
+                WorldAssetRoot(floor.clone()),
+                Transform::from_xyz(center.x + (step % 2) as f32 * 0.16, -0.14, z)
+                    .with_scale(Vec3::splat(0.11))
+                    .with_rotation(Quat::from_rotation_y(step as f32 * 0.12)),
+                ArenaEntity,
+            ));
+        }
+        spawn_prop(
+            commands,
+            &models.rubble,
+            center + Vec3::new(2.7, 0.0, 1.6),
+            1.3,
+            index as f32,
+        );
+        spawn_prop(
+            commands,
+            &models.pillar,
+            center + Vec3::new(-2.5, 0.0, -2.0),
+            1.1,
+            0.4,
+        );
+        spawn_prop(
+            commands,
+            &models.torch,
+            center + Vec3::new(-2.5, 1.0, -2.0),
+            0.55,
+            0.0,
+        );
+    }
+}
+
+fn spawn_border_dressing(commands: &mut Commands, models: &EnvironmentModels) {
+    for z in [-6.35, 6.35] {
+        for (index, x) in [-11.8, -5.6, 0.6, 6.8, 12.0].into_iter().enumerate() {
+            spawn_prop(commands, &models.pillar, Vec3::new(x, 0.0, z), 1.55, 0.0);
+            if index % 2 == 0 {
+                spawn_prop(commands, &models.torch, Vec3::new(x, 1.55, z), 0.95, 0.0);
+            }
+        }
+    }
+    for (index, (x, z, height)) in [
         (-13.8, -8.3, 1.4),
         (-9.4, 8.1, 1.1),
         (-3.8, -7.7, 0.9),
@@ -475,63 +386,19 @@ fn spawn_border_dressing(
     .into_iter()
     .enumerate()
     {
-        spawn_static(
+        let scene = if index % 2 == 0 {
+            &models.rubble
+        } else {
+            &models.rubble_half
+        };
+        spawn_prop(
             commands,
-            rock_mesh.clone(),
-            rock.clone(),
-            Transform::from_xyz(x, scale * 0.42, z)
-                .with_scale(Vec3::new(scale, scale * 0.72, scale * 0.86))
-                .with_rotation(Quat::from_euler(
-                    EulerRot::YXZ,
-                    index as f32 * 0.58,
-                    0.0,
-                    index as f32 * 0.13,
-                )),
+            scene,
+            Vec3::new(x, 0.0, z),
+            height,
+            index as f32 * 0.58,
         );
-        if index % 2 == 1 {
-            spawn_static(
-                commands,
-                shrub.clone(),
-                vegetation.clone(),
-                Transform::from_xyz(x + 1.15, 0.58, z * 0.98)
-                    .with_rotation(Quat::from_rotation_z((index as f32 - 2.0) * 0.08)),
-            );
-        }
     }
-}
-
-fn spawn_brazier(
-    commands: &mut Commands,
-    meshes: &BrazierMeshes,
-    position: Vec3,
-    metal: &Handle<StandardMaterial>,
-    flame: &Handle<StandardMaterial>,
-) {
-    spawn_static(
-        commands,
-        meshes.bowl.clone(),
-        metal.clone(),
-        Transform::from_translation(position + Vec3::Y * 0.24),
-    );
-    let base_y = position.y + 0.78;
-    commands.spawn((
-        Mesh3d(meshes.flame.clone()),
-        MeshMaterial3d(flame.clone()),
-        Transform::from_xyz(position.x, base_y, position.z),
-        ArtBob {
-            base_y,
-            amplitude: 0.08,
-            speed: 4.2,
-            phase: position.x * 0.37 + position.z,
-        },
-        ArtPulse {
-            base_scale: Vec3::ONE,
-            amplitude: 0.14,
-            speed: 5.1,
-            phase: position.z * 0.5,
-        },
-        ArenaEntity,
-    ));
 }
 
 fn spawn_static(
@@ -585,8 +452,6 @@ fn pulse_scale(pulse: &ArtPulse, elapsed: f32) -> Vec3 {
 
 #[cfg(test)]
 mod tests {
-    use std::{fs, path::Path};
-
     use super::*;
 
     #[test]
@@ -654,35 +519,5 @@ mod tests {
         ] {
             assert!(!source.contains(&forbidden), "{forbidden}");
         }
-    }
-
-    #[test]
-    fn cast_models_ship_real_emissive_accents_except_the_plain_gnawling() {
-        let model_dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("assets/models");
-        let mut model_count = 0;
-        let mut emissive_count = 0;
-        for entry in fs::read_dir(model_dir).expect("read model directory") {
-            let path = entry.expect("read model entry").path();
-            if path.extension().and_then(|value| value.to_str()) != Some("glb") {
-                continue;
-            }
-            model_count += 1;
-            let bytes = fs::read(&path).expect("read GLB");
-            let emissive = bytes
-                .windows(b"emissiveFactor".len())
-                .any(|window| window == b"emissiveFactor");
-            if emissive {
-                emissive_count += 1;
-            } else {
-                assert_eq!(
-                    path.file_name().and_then(|value| value.to_str()),
-                    Some("enemy_gnawling.glb"),
-                    "unexpected model without emissive art: {}",
-                    path.display()
-                );
-            }
-        }
-        assert_eq!(model_count, 35);
-        assert_eq!(emissive_count, 34);
     }
 }

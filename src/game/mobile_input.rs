@@ -5,29 +5,34 @@ use bevy::{
 
 use super::combat::{CombatSet, SurvivalSet};
 use super::market::MarketEffects;
-use super::mobile_layout::{HudMetrics, hud_metrics};
+use super::mobile_layout::{ControlScheme, HudMetrics, hud_metrics, update_control_scheme};
 use super::{
-    ActiveSkill, Autoplay, DODGE_COOLDOWN_SECONDS, DODGE_DISTANCE, DODGE_INVULNERABILITY,
-    DodgeButton, DodgeState, GameSession, Hero, HeroVitals, MoveIntent, PlayerBuild,
-    UltimateButton,
+    Autoplay, DODGE_COOLDOWN_SECONDS, DODGE_DISTANCE, DODGE_INVULNERABILITY, DodgeButton,
+    DodgeState, GameSession, Hero, HeroVitals, MoveIntent, PlayerBuild,
 };
 
 pub const HERO_MIN_X: f32 = -10.0;
 pub const HERO_MAX_X: f32 = 10.0;
-pub const HERO_MIN_Z: f32 = -6.0;
-pub const HERO_MAX_Z: f32 = 6.0;
+pub const HERO_MIN_Z: f32 = -12.0;
+pub const HERO_MAX_Z: f32 = 12.0;
 
 pub struct MobileInputPlugin;
 
 impl Plugin for MobileInputPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<TouchJoystickState>().add_systems(
-            Update,
-            (read_move_input, move_and_dodge_hero)
-                .chain()
-                .after(SurvivalSet)
-                .before(CombatSet),
-        );
+        app.init_resource::<ControlScheme>()
+            .add_systems(
+                PreUpdate,
+                update_control_scheme.after(bevy::input::InputSystems),
+            )
+            .init_resource::<TouchJoystickState>()
+            .add_systems(
+                Update,
+                (read_move_input, move_and_dodge_hero)
+                    .chain()
+                    .after(SurvivalSet)
+                    .before(CombatSet),
+            );
     }
 }
 
@@ -65,7 +70,6 @@ fn read_move_input(
     mut intent: ResMut<MoveIntent>,
     mut joystick: ResMut<TouchJoystickState>,
     mut dodge: ResMut<DodgeState>,
-    mut active: ResMut<ActiveSkill>,
     dodge_buttons: Query<
         (
             Ref<Interaction>,
@@ -75,15 +79,6 @@ fn read_move_input(
         ),
         With<DodgeButton>,
     >,
-    ultimate_buttons: Query<
-        (
-            Ref<Interaction>,
-            &ComputedNode,
-            &UiGlobalTransform,
-            &InheritedVisibility,
-        ),
-        With<UltimateButton>,
-    >,
     autoplay: Option<Res<Autoplay>>,
 ) {
     let primary_window = window_query.single().ok();
@@ -92,12 +87,12 @@ fn read_move_input(
             && primary_window.is_some_and(|(window_entity, _)| event.window == window_entity)
     });
     if lost_focus {
-        clear_transient_input(&mut intent, &mut joystick, &mut dodge, &mut active);
+        clear_transient_input(&mut intent, &mut joystick, &mut dodge);
         return;
     }
 
     if session.paused || session.finished || !vitals.can_act() {
-        clear_transient_input(&mut intent, &mut joystick, &mut dodge, &mut active);
+        clear_transient_input(&mut intent, &mut joystick, &mut dodge);
         return;
     }
 
@@ -106,9 +101,6 @@ fn read_move_input(
         // deterministic simulation clock so the capture bot keeps circling
         // instead of walking into one arena edge for the whole epilogue.
         intent.0 = autoplay_movement(time.elapsed_secs());
-        if active.remaining <= 0.0 && session.elapsed > 2.0 {
-            active.requested = true;
-        }
         if dodge.ready() && session.elapsed > 1.0 {
             dodge.request();
         }
@@ -146,16 +138,6 @@ fn read_move_input(
             .iter_just_pressed()
             .map(|touch| touch.position() * window.scale_factor())
             .collect::<Vec<_>>();
-        let ultimate_pressed =
-            ultimate_buttons
-                .iter()
-                .any(|(interaction, node, transform, visibility)| {
-                    (*interaction == Interaction::Pressed && interaction.is_changed())
-                        || (visibility.get()
-                            && pressed_touch_positions
-                                .iter()
-                                .any(|position| node.contains_point(*transform, *position)))
-                });
         let dodge_pressed =
             dodge_buttons
                 .iter()
@@ -166,9 +148,6 @@ fn read_move_input(
                                 .iter()
                                 .any(|position| node.contains_point(*transform, *position)))
                 });
-        if keyboard.just_pressed(KeyCode::Space) || ultimate_pressed {
-            active.requested = true;
-        }
         if keyboard.just_pressed(KeyCode::ShiftLeft)
             || keyboard.just_pressed(KeyCode::ShiftRight)
             || keyboard.just_pressed(KeyCode::ControlLeft)
@@ -218,12 +197,10 @@ fn clear_transient_input(
     intent: &mut MoveIntent,
     joystick: &mut TouchJoystickState,
     dodge: &mut DodgeState,
-    active: &mut ActiveSkill,
 ) {
     intent.0 = Vec2::ZERO;
     joystick.clear();
     dodge.requested = false;
-    active.requested = false;
 }
 
 fn joystick_contains(position: Vec2, metrics: HudMetrics) -> bool {
@@ -312,6 +289,10 @@ fn clamp_hero_position(position: &mut Vec3) {
     position.z = position.z.clamp(HERO_MIN_Z, HERO_MAX_Z);
 }
 
+pub(crate) fn reset_run(world: &mut World) {
+    world.insert_resource(TouchJoystickState::default());
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -391,7 +372,7 @@ mod tests {
         assert!((open.x - 3.2).abs() < 0.0001);
         assert_eq!(open.z, 0.0);
 
-        let clamped = dodge_destination(Vec3::new(9.0, 0.0, 5.5), Vec2::ONE);
+        let clamped = dodge_destination(Vec3::new(9.0, 0.0, 11.5), Vec2::ONE);
         assert_eq!(clamped.x, HERO_MAX_X);
         assert_eq!(clamped.z, HERO_MAX_Z);
     }
@@ -399,7 +380,7 @@ mod tests {
     #[test]
     fn arena_bounds_match_the_gameplay_spec() {
         assert_eq!((HERO_MIN_X, HERO_MAX_X), (-10.0, 10.0));
-        assert_eq!((HERO_MIN_Z, HERO_MAX_Z), (-6.0, 6.0));
+        assert_eq!((HERO_MIN_Z, HERO_MAX_Z), (-12.0, 12.0));
     }
 
     #[test]

@@ -1,0 +1,151 @@
+Optional adventure camp native validation
+Completed: 10 camp scenes / 10,000 full frames, plus two meteor (skill-identity-13-production) scenes / 760 frames. Total 12 scenes / 10,760 frames, English desktop and Chinese mobile.
+Library tests: 517 passed, 0 failed, 1 ignored.
+Strict checks and native build results are recorded in the adventure-bosses pipeline logs.
+
+Actual behavior exercised
+The fixture advances elapsed time to the real camp unlock prerequisite. AdventureBossState is never manually populated; all three actual world-entry Nodes are displayed, and clicking the selected entry opens the real choice UI. Real mouse events use each button's ComputedNode center and the native UI Focus handler. During Focus only, the capture image targets are routed to the existing virtual Window; they are restored before rendering. Camera transforms, lens and screenshot image targets retain the production view. No product-only harness hook is added.
+The safe choice's gold delta is at least the promised small_gold because legitimate passive income can accrue on the same frame. Its wood delta is exactly small_wood, fruit remains unchanged, and no relic is owned. It creates no boss or guards. A duplicate TakeReward event on the native input-message channel during a paused hold leaves the entire wallet unchanged, proving it cannot pay again.
+All three camp fights rent their actual boss and three guards. Real primary warnings, hazard damage, half-health phase and secondary hazards are observed. Warning timers and the remaining battle timer freeze during pause. Fixture HP thresholds expose phase and speed up finishing; actual ordinary attacks and the authoritative damage resolver defeat the boss and its guards before the victory reward is accepted.
+To isolate exposed-hero combat, the fixture holds the gate down with a long revival prerequisite and gives the hero high finite health; these values are not normal gameplay balance or the normal four-second gate-rebuild duration.
+Wood and fruit reward deltas are exact, gold includes any legitimate passive income while fighting. The wallet then remains unchanged during a paused hold, with owned hazards and guards removed. The loss fixture sets one remaining life and low hero HP, lets genuine enemy combat deliver fatal damage and uses the actual retry control to verify a fresh run. During hazard HP probes the real guards remain active; native HP loss does not attribute each point exclusively to a hazard, and authoritative hazard unit tests establish individual damage mechanisms.
+Each victory's unique BasicRelics ownership comes from the real award. Four durable ordinary enemies then receive actual ordinary attacks until RelicCast and casts_emitted appear. Ordinary firing stops before checking the named relic spectacle and subsequent off-axis target HP loss. Ice also changes actual Enemy.speed to zero. The safe choice grants none of these relics.
+Two existing real meteor fixtures exercise GameAssets.fx_mesh's new open energy halo and the cleared road surface; native signature/damage and ground-light pause/pool cleanup probes pass. Active samples include frames 5/20 and 24/26/28/30/32/34/36 around the short impact. Visual review confirms cleared road guides and an orange cast/ground glow; the open halo silhouette remains subtle at the production camera scale, so this report does not claim that its visual softness or every ultimate/shared aura has been verified.
+
+Evidence
+screenshots/adventure-*-final-{en-1280x720,zh-667x375}-*.png
+screenshots/adventure-energy-final-{en-1280x720,zh-667x375}-{5,20,24,26,28,30,32,34,36,40}.png
+Raw selected frames and native logs: target/verification/frames and target/verification/adventure-*-final-*.log.
+
+Runtime audit
+ERROR: 0; panics: 0; GPU validation errors: 0.
+Existing ICU4X diagnostics: 322217. These are retained honestly; no clean-console claim is made.
+Native behavior only. This does not validate browser builds, full-run balance, natural unlock progression or performance.
+
+Stage output
+adventure-small-final-en-1280x720: [capture] adventure-stage world-camp-entries frame=10
+adventure-small-final-en-1280x720: [capture] adventure-stage choice frame=35
+adventure-small-final-en-1280x720: [capture] adventure-stage safe-reward-no-battle frame=51
+adventure-small-final-en-1280x720: [capture] adventure-stage safe-reward-once frame=90
+adventure-small-final-en-1280x720: [capture] PASS adventure-small: real choice/combat/reward/cleanup across 1000 frames
+adventure-small-final-zh-667x375: [capture] adventure-stage world-camp-entries frame=10
+adventure-small-final-zh-667x375: [capture] adventure-stage choice frame=35
+adventure-small-final-zh-667x375: [capture] adventure-stage safe-reward-no-battle frame=51
+adventure-small-final-zh-667x375: [capture] adventure-stage safe-reward-once frame=90
+adventure-small-final-zh-667x375: [capture] PASS adventure-small: real choice/combat/reward/cleanup across 1000 frames
+adventure-boss-0-final-en-1280x720: [capture] adventure-stage world-camp-entries frame=10
+adventure-boss-0-final-en-1280x720: [capture] adventure-stage choice frame=35
+adventure-boss-0-final-en-1280x720: [capture] adventure-stage camp-battle frame=65
+adventure-boss-0-final-en-1280x720: [capture] adventure-stage primary-warning frame=141
+adventure-boss-0-final-en-1280x720: [capture] adventure-stage warning-paused frame=146
+adventure-boss-0-final-en-1280x720: [capture] adventure-stage actual-hazard-hit frame=183
+adventure-boss-0-final-en-1280x720: [capture] adventure-stage phase-two frame=184
+adventure-boss-0-final-en-1280x720: [capture] adventure-stage secondary-active frame=367
+adventure-boss-0-final-en-1280x720: [capture] adventure-stage native-attacks-finish-camp frame=370
+adventure-boss-0-final-en-1280x720: [capture] adventure-stage victory-reward frame=432
+adventure-boss-0-final-en-1280x720: [capture] adventure-stage paused-cleanup-reward-once frame=447
+adventure-boss-0-final-en-1280x720: [capture] adventure-stage awarded-relic-basic-attacks frame=462
+adventure-boss-0-final-en-1280x720: [capture] adventure-stage real-relic-cast frame=467
+adventure-boss-0-final-en-1280x720: [capture] adventure-stage relic-spectacle frame=481
+adventure-boss-0-final-en-1280x720: [capture] adventure-stage relic-area-damage frame=481
+adventure-boss-0-final-en-1280x720: [capture] PASS adventure-boss-0: real choice/combat/reward/cleanup across 1000 frames
+adventure-boss-0-final-zh-667x375: [capture] adventure-stage world-camp-entries frame=10
+adventure-boss-0-final-zh-667x375: [capture] adventure-stage choice frame=35
+adventure-boss-0-final-zh-667x375: [capture] adventure-stage camp-battle frame=65
+adventure-boss-0-final-zh-667x375: [capture] adventure-stage primary-warning frame=141
+adventure-boss-0-final-zh-667x375: [capture] adventure-stage warning-paused frame=146
+adventure-boss-0-final-zh-667x375: [capture] adventure-stage actual-hazard-hit frame=183
+adventure-boss-0-final-zh-667x375: [capture] adventure-stage phase-two frame=184
+adventure-boss-0-final-zh-667x375: [capture] adventure-stage secondary-active frame=367
+adventure-boss-0-final-zh-667x375: [capture] adventure-stage native-attacks-finish-camp frame=370
+adventure-boss-0-final-zh-667x375: [capture] adventure-stage victory-reward frame=442
+adventure-boss-0-final-zh-667x375: [capture] adventure-stage paused-cleanup-reward-once frame=457
+adventure-boss-0-final-zh-667x375: [capture] adventure-stage awarded-relic-basic-attacks frame=472
+adventure-boss-0-final-zh-667x375: [capture] adventure-stage real-relic-cast frame=477
+adventure-boss-0-final-zh-667x375: [capture] adventure-stage relic-spectacle frame=491
+adventure-boss-0-final-zh-667x375: [capture] adventure-stage relic-area-damage frame=491
+adventure-boss-0-final-zh-667x375: [capture] PASS adventure-boss-0: real choice/combat/reward/cleanup across 1000 frames
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage world-camp-entries frame=10
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage choice frame=35
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage camp-battle frame=65
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage primary-warning frame=171
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage warning-paused frame=176
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage actual-hazard-hit frame=219
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage phase-two frame=220
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage secondary-active frame=449
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage native-attacks-finish-camp frame=450
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage victory-reward frame=466
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage paused-cleanup-reward-once frame=481
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage awarded-relic-basic-attacks frame=496
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage real-relic-cast frame=500
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage relic-spectacle frame=513
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage relic-area-damage frame=513
+adventure-boss-1-final-en-1280x720: [capture] adventure-stage relic-actual-freeze frame=513
+adventure-boss-1-final-en-1280x720: [capture] PASS adventure-boss-1: real choice/combat/reward/cleanup across 1000 frames
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage world-camp-entries frame=10
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage choice frame=35
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage camp-battle frame=65
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage primary-warning frame=171
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage warning-paused frame=176
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage actual-hazard-hit frame=219
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage phase-two frame=220
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage secondary-active frame=449
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage native-attacks-finish-camp frame=450
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage victory-reward frame=466
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage paused-cleanup-reward-once frame=481
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage awarded-relic-basic-attacks frame=496
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage real-relic-cast frame=500
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage relic-spectacle frame=513
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage relic-area-damage frame=513
+adventure-boss-1-final-zh-667x375: [capture] adventure-stage relic-actual-freeze frame=513
+adventure-boss-1-final-zh-667x375: [capture] PASS adventure-boss-1: real choice/combat/reward/cleanup across 1000 frames
+adventure-boss-2-final-en-1280x720: [capture] adventure-stage world-camp-entries frame=10
+adventure-boss-2-final-en-1280x720: [capture] adventure-stage choice frame=35
+adventure-boss-2-final-en-1280x720: [capture] adventure-stage camp-battle frame=65
+adventure-boss-2-final-en-1280x720: [capture] adventure-stage primary-warning frame=141
+adventure-boss-2-final-en-1280x720: [capture] adventure-stage warning-paused frame=146
+adventure-boss-2-final-en-1280x720: [capture] adventure-stage actual-hazard-hit frame=186
+adventure-boss-2-final-en-1280x720: [capture] adventure-stage phase-two frame=187
+adventure-boss-2-final-en-1280x720: [capture] adventure-stage secondary-active frame=347
+adventure-boss-2-final-en-1280x720: [capture] adventure-stage native-attacks-finish-camp frame=350
+adventure-boss-2-final-en-1280x720: [capture] adventure-stage victory-reward frame=410
+adventure-boss-2-final-en-1280x720: [capture] adventure-stage paused-cleanup-reward-once frame=425
+adventure-boss-2-final-en-1280x720: [capture] adventure-stage awarded-relic-basic-attacks frame=440
+adventure-boss-2-final-en-1280x720: [capture] adventure-stage real-relic-cast frame=446
+adventure-boss-2-final-en-1280x720: [capture] adventure-stage relic-spectacle frame=459
+adventure-boss-2-final-en-1280x720: [capture] adventure-stage relic-area-damage frame=489
+adventure-boss-2-final-en-1280x720: [capture] PASS adventure-boss-2: real choice/combat/reward/cleanup across 1000 frames
+adventure-boss-2-final-zh-667x375: [capture] adventure-stage world-camp-entries frame=10
+adventure-boss-2-final-zh-667x375: [capture] adventure-stage choice frame=35
+adventure-boss-2-final-zh-667x375: [capture] adventure-stage camp-battle frame=65
+adventure-boss-2-final-zh-667x375: [capture] adventure-stage primary-warning frame=141
+adventure-boss-2-final-zh-667x375: [capture] adventure-stage warning-paused frame=146
+adventure-boss-2-final-zh-667x375: [capture] adventure-stage actual-hazard-hit frame=186
+adventure-boss-2-final-zh-667x375: [capture] adventure-stage phase-two frame=187
+adventure-boss-2-final-zh-667x375: [capture] adventure-stage secondary-active frame=347
+adventure-boss-2-final-zh-667x375: [capture] adventure-stage native-attacks-finish-camp frame=350
+adventure-boss-2-final-zh-667x375: [capture] adventure-stage victory-reward frame=408
+adventure-boss-2-final-zh-667x375: [capture] adventure-stage paused-cleanup-reward-once frame=423
+adventure-boss-2-final-zh-667x375: [capture] adventure-stage awarded-relic-basic-attacks frame=438
+adventure-boss-2-final-zh-667x375: [capture] adventure-stage real-relic-cast frame=444
+adventure-boss-2-final-zh-667x375: [capture] adventure-stage relic-spectacle frame=457
+adventure-boss-2-final-zh-667x375: [capture] adventure-stage relic-area-damage frame=487
+adventure-boss-2-final-zh-667x375: [capture] PASS adventure-boss-2: real choice/combat/reward/cleanup across 1000 frames
+adventure-loss-final-en-1280x720: [capture] adventure-stage world-camp-entries frame=10
+adventure-loss-final-en-1280x720: [capture] adventure-stage choice frame=35
+adventure-loss-final-en-1280x720: [capture] adventure-stage camp-battle frame=65
+adventure-loss-final-en-1280x720: [capture] adventure-stage primary-warning frame=141
+adventure-loss-final-en-1280x720: [capture] adventure-stage warning-paused frame=146
+adventure-loss-final-en-1280x720: [capture] adventure-stage last-life-failure frame=162
+adventure-loss-final-en-1280x720: [capture] adventure-stage paused-cleanup-reward-once frame=177
+adventure-loss-final-en-1280x720: [capture] adventure-stage real-retry-reset frame=197
+adventure-loss-final-en-1280x720: [capture] PASS adventure-loss: real choice/combat/reward/cleanup across 1000 frames
+adventure-loss-final-zh-667x375: [capture] adventure-stage world-camp-entries frame=10
+adventure-loss-final-zh-667x375: [capture] adventure-stage choice frame=35
+adventure-loss-final-zh-667x375: [capture] adventure-stage camp-battle frame=65
+adventure-loss-final-zh-667x375: [capture] adventure-stage primary-warning frame=141
+adventure-loss-final-zh-667x375: [capture] adventure-stage warning-paused frame=146
+adventure-loss-final-zh-667x375: [capture] adventure-stage last-life-failure frame=162
+adventure-loss-final-zh-667x375: [capture] adventure-stage paused-cleanup-reward-once frame=177
+adventure-loss-final-zh-667x375: [capture] adventure-stage real-retry-reset frame=197
+adventure-loss-final-zh-667x375: [capture] PASS adventure-loss: real choice/combat/reward/cleanup across 1000 frames

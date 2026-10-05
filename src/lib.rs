@@ -3,6 +3,7 @@ use bevy::asset::{AssetMetaCheck, AssetPlugin};
 use bevy::prelude::*;
 
 pub mod game;
+mod preferences;
 
 pub fn build_app() -> App {
     let run_seed = initial_run_seed();
@@ -58,6 +59,10 @@ fn initial_game_language() -> game::GameLanguage {
         warn!("Ignoring invalid ROGUE_COMMANDER_LANG={value:?}");
     }
 
+    if let Some(language) = preferences::load_language() {
+        return language;
+    }
+
     #[cfg(target_os = "android")]
     return game::GameLanguage::SimplifiedChinese;
 
@@ -70,7 +75,9 @@ fn initial_game_language() -> game::GameLanguage {
     let search = web_sys::window()
         .and_then(|window| window.location().search().ok())
         .unwrap_or_default();
-    language_from_search(&search).unwrap_or_default()
+    language_from_search(&search)
+        .or_else(preferences::load_language)
+        .unwrap_or_default()
 }
 
 #[cfg(not(target_arch = "wasm32"))]

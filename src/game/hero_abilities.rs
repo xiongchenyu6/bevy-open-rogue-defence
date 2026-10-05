@@ -4,14 +4,21 @@ use bevy::prelude::*;
 
 use super::bonds::{DamageClass, DamageElement, DamageProfile, summon_cap};
 use super::combat::CombatSet;
+use super::combat::EliteAffix;
 use super::content::HEROES;
 use super::market::MarketEffects;
 use super::pooling::{CombatPools, SummonVisual};
+use super::ultimate_vfx::{UltimateCues, UltimatePhase};
 use super::{
-    ActiveSkill, BondId, BossEnemy, Core, Enemy, GameAssets, GameSession, Hero, HeroIdentity,
-    HeroKind, HeroVitals, ImpactFx, MoveIntent, PlayerBuild, PlayerSummon, Projectile,
-    SelectedHero,
+    ActiveSkill, BossEnemy, Core, Enemy, GameAssets, GameSession, Hero, HeroIdentity, HeroKind,
+    HeroVitals, ImpactFx, MoveIntent, PlayerBuild, PlayerSummon, Projectile, SelectedHero,
 };
+
+#[path = "hero_abilities/ultimates.rs"]
+mod ultimates;
+#[cfg(test)]
+use ultimates::automatic_ultimate_useful;
+use ultimates::{observe_ultimate_cast, tick_ultimate_sequence};
 
 pub struct HeroAbilitiesPlugin;
 
@@ -21,13 +28,14 @@ impl Plugin for HeroAbilitiesPlugin {
             .init_resource::<HeroAttackSpeedModifier>()
             .init_resource::<BasicAttackCounter>()
             .add_systems(PostStartup, attach_default_identity)
-            .add_systems(PreUpdate, configure_ultimate)
+            .add_systems(PreUpdate, tick_inherited_cooldowns)
             .add_systems(
                 Update,
                 (
                     synchronize_identity,
                     tick_speed_effects,
                     tick_wet_marks,
+                    tick_void_pull,
                     tick_ultimate_sequence,
                     cleanup_spirit_summons,
                     update_spirit_companions,
@@ -38,6 +46,7 @@ impl Plugin for HeroAbilitiesPlugin {
             .add_systems(
                 PostUpdate,
                 (
+                    configure_ultimate,
                     observe_basic_attack_passives,
                     observe_projectile_passives,
                     maintain_passive_state,
@@ -116,23 +125,27 @@ pub(crate) fn effective_ultimate_cooldown(kind: HeroKind) -> f32 {
 struct UltimateSequence {
     kind: HeroKind,
     pulses_left: u8,
+    target: Vec3,
     pulse_timer: f32,
     pulse_interval: f32,
 }
 
 #[derive(Resource)]
 struct HeroAbilityRuntime {
-    observed_kind: HeroKind,
-    previous_ultimate_remaining: f32,
+    observed_kind: Option<HeroKind>,
+    inherited: [bool; HeroKind::COUNT],
+    inherited_ultimate_remaining: [f32; HeroKind::COUNT],
+    ultimate_gap: f32,
+    ultimate_cursor: usize,
     sequence: Option<UltimateSequence>,
     storm_spell_signals: u8,
     frost_spell_signals: u8,
     void_attack_signals: u8,
     ember_stacks: u8,
     ember_decay_timer: f32,
-    passive_timer: f32,
+    passive_timer: [f32; HeroKind::COUNT],
     star_kill_progress: u32,
-    hero_kill_progress: u32,
+    hero_kill_progress: [u32; HeroKind::COUNT],
     last_total_kills: u32,
     last_core_hp: f32,
     last_basic_attacks: u64,
@@ -141,21 +154,36 @@ struct HeroAbilityRuntime {
 impl Default for HeroAbilityRuntime {
     fn default() -> Self {
         Self {
-            observed_kind: HeroKind::StormSavant,
-            previous_ultimate_remaining: 0.0,
+            observed_kind: None,
+            inherited: [false; HeroKind::COUNT],
+            inherited_ultimate_remaining: [0.; HeroKind::COUNT],
+            ultimate_gap: 0.,
+            ultimate_cursor: 0,
             sequence: None,
             storm_spell_signals: 0,
             frost_spell_signals: 0,
             void_attack_signals: 0,
             ember_stacks: 0,
             ember_decay_timer: 0.0,
-            passive_timer: 0.0,
+            passive_timer: [0.; HeroKind::COUNT],
             star_kill_progress: 0,
-            hero_kill_progress: 0,
+            hero_kill_progress: [0; HeroKind::COUNT],
             last_total_kills: 0,
             last_core_hp: GameSession::default().core_hp,
             last_basic_attacks: 0,
         }
+    }
+}
+
+impl HeroAbilityRuntime {
+    fn has(&self, current: HeroKind, kind: HeroKind) -> bool {
+        current == kind || self.inherited[kind.index()]
+    }
+    fn kinds(&self, current: HeroKind) -> Vec<HeroKind> {
+        HeroKind::ALL
+            .into_iter()
+            .filter(|kind| self.has(current, *kind))
+            .collect()
     }
 }
 
@@ -181,6 +209,34 @@ impl Default for HeroAttackSpeedModifier {
 pub(crate) struct TimedSpeedEffect {
     pub(crate) multiplier: f32,
     pub(crate) remaining: f32,
+}
+
+#[derive(Component)]
+pub(crate) struct VoidPull {
+    pub(crate) center: Vec3,
+    pub(crate) remaining: f32,
+    pub(crate) speed: f32,
+}
+
+fn tick_void_pull(
+    mut commands: Commands,
+    time: Res<Time>,
+    session: Res<GameSession>,
+    mut enemies: Query<(Entity, &mut Transform, &mut VoidPull), With<Enemy>>,
+) {
+    if session.paused || session.finished {
+        return;
+    }
+    for (entity, mut transform, mut pull) in &mut enemies {
+        let delta = pull.remaining.min(time.delta_secs());
+        let offset = pull.center - transform.translation;
+        let movement = offset.normalize_or_zero() * (pull.speed * delta).min(offset.length());
+        transform.translation += movement;
+        pull.remaining -= delta;
+        if pull.remaining <= 0.0 {
+            commands.entity(entity).remove::<VoidPull>();
+        }
+    }
 }
 
 #[derive(Component)]
@@ -224,8 +280,45 @@ fn synchronize_identity(
     }
 }
 
-fn configure_ultimate(selected: Res<SelectedHero>, mut active: ResMut<ActiveSkill>) {
+fn configure_ultimate(
+    selected: Res<SelectedHero>,
+    mut active: ResMut<ActiveSkill>,
+    fusion: Option<Res<super::HeroFusion>>,
+    mut runtime: ResMut<HeroAbilityRuntime>,
+) {
+    if let Some(previous) = runtime
+        .observed_kind
+        .filter(|previous| *previous != selected.kind)
+    {
+        runtime.inherited_ultimate_remaining[previous.index()] = active.remaining;
+        active.remaining = runtime.inherited_ultimate_remaining[selected.kind.index()].max(3.);
+    }
+    let previous_kind = runtime.observed_kind;
+    runtime.observed_kind = Some(selected.kind);
     active.cooldown = effective_ultimate_cooldown(selected.kind);
+    if let Some(fusion) = fusion {
+        for kind in HeroKind::ALL {
+            if fusion.has(kind) && !runtime.inherited[kind.index()] && previous_kind != Some(kind) {
+                // New inheritances enter the rotation after a short readable delay.
+                runtime.inherited_ultimate_remaining[kind.index()] = 3.;
+            }
+            runtime.inherited[kind.index()] = fusion.has(kind);
+        }
+    }
+}
+
+fn tick_inherited_cooldowns(
+    time: Res<Time>,
+    session: Res<GameSession>,
+    vitals: Res<HeroVitals>,
+    mut runtime: ResMut<HeroAbilityRuntime>,
+) {
+    if !session.paused && !session.finished && vitals.can_act() {
+        runtime.ultimate_gap = (runtime.ultimate_gap - time.delta_secs()).max(0.);
+        for remaining in &mut runtime.inherited_ultimate_remaining {
+            *remaining = (*remaining - time.delta_secs()).max(0.);
+        }
+    }
 }
 
 fn tick_speed_effects(
@@ -276,61 +369,58 @@ fn observe_basic_attack_passives(
     mut runtime: ResMut<HeroAbilityRuntime>,
     mut pools: ResMut<CombatPools>,
 ) {
-    if runtime.observed_kind != selected.kind {
-        runtime.last_basic_attacks = attacks.0;
-        return;
-    }
-
     let basic_attacks = attacks.0.wrapping_sub(runtime.last_basic_attacks);
     runtime.last_basic_attacks = attacks.0;
     if basic_attacks == 0 || !vitals.can_act() {
         return;
     }
 
-    match selected.kind {
-        HeroKind::EmberRanger => {
-            let gained = basic_attacks.min(u8::MAX as u64) as u8;
-            runtime.ember_stacks = runtime.ember_stacks.saturating_add(gained).min(12);
-            runtime.ember_decay_timer = 0.0;
-            attack_speed.0 = ember_attack_speed_multiplier(runtime.ember_stacks);
-            if let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) {
-                spawn_ability_fx(
-                    &mut commands,
-                    &mut pools,
-                    assets,
-                    HeroKind::EmberRanger,
-                    hero.translation,
-                    0.7 + runtime.ember_stacks as f32 * 0.04,
-                    0.18,
-                );
+    for kind in runtime.kinds(selected.kind) {
+        match kind {
+            HeroKind::EmberRanger => {
+                let gained = basic_attacks.min(u8::MAX as u64) as u8;
+                runtime.ember_stacks = runtime.ember_stacks.saturating_add(gained).min(12);
+                runtime.ember_decay_timer = 0.0;
+                attack_speed.0 = ember_attack_speed_multiplier(runtime.ember_stacks);
+                if let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) {
+                    spawn_ability_fx(
+                        &mut commands,
+                        &mut pools,
+                        assets,
+                        HeroKind::EmberRanger,
+                        hero.translation,
+                        0.7 + runtime.ember_stacks as f32 * 0.04,
+                        0.18,
+                    );
+                }
             }
-        }
-        HeroKind::VoidReaper => {
-            let gained = basic_attacks.min(u8::MAX as u64) as u8;
-            runtime.void_attack_signals = runtime.void_attack_signals.saturating_add(gained);
-            while runtime.void_attack_signals >= 5 {
-                runtime.void_attack_signals -= 5;
-                let (Some(assets), Ok(hero), Some(target)) = (
-                    assets.as_deref(),
-                    hero.single(),
-                    preferred_target(hero.single().ok(), &enemies),
-                ) else {
-                    continue;
-                };
-                spawn_projectile_fan(
-                    &mut commands,
-                    &mut pools,
-                    assets,
-                    HeroKind::VoidReaper,
-                    hero.translation,
-                    target,
-                    2,
-                    build.attack_damage * 0.45,
-                    &build,
-                );
+            HeroKind::VoidReaper => {
+                let gained = basic_attacks.min(u8::MAX as u64) as u8;
+                runtime.void_attack_signals = runtime.void_attack_signals.saturating_add(gained);
+                while runtime.void_attack_signals >= 5 {
+                    runtime.void_attack_signals -= 5;
+                    let (Some(assets), Ok(hero), Some(target)) = (
+                        assets.as_deref(),
+                        hero.single(),
+                        preferred_target(hero.single().ok(), &enemies),
+                    ) else {
+                        continue;
+                    };
+                    spawn_projectile_fan(
+                        &mut commands,
+                        &mut pools,
+                        assets,
+                        HeroKind::VoidReaper,
+                        hero.translation,
+                        target,
+                        2,
+                        build.attack_damage * 0.45,
+                        &build,
+                    );
+                }
             }
+            _ => {}
         }
-        _ => {}
     }
 }
 
@@ -362,67 +452,71 @@ fn observe_projectile_passives(
         return;
     }
 
-    match selected.kind {
-        HeroKind::StormSavant => {
-            if spell_signals == 0 {
-                return;
+    for kind in runtime.kinds(selected.kind) {
+        match kind {
+            HeroKind::StormSavant => {
+                if spell_signals == 0 {
+                    continue;
+                }
+                runtime.storm_spell_signals =
+                    runtime.storm_spell_signals.saturating_add(spell_signals);
+                if runtime.storm_spell_signals < 6 {
+                    continue;
+                }
+                runtime.storm_spell_signals -= 6;
+                let (Some(assets), Ok(hero), Some(target)) = (
+                    assets.as_deref(),
+                    hero.single(),
+                    preferred_target(hero.single().ok(), &enemies),
+                ) else {
+                    continue;
+                };
+                spawn_projectile_fan(
+                    &mut commands,
+                    &mut pools,
+                    assets,
+                    HeroKind::StormSavant,
+                    hero.translation,
+                    target,
+                    1,
+                    build.attack_damage * 0.4,
+                    &build,
+                );
+                spawn_ability_fx(
+                    &mut commands,
+                    &mut pools,
+                    assets,
+                    HeroKind::StormSavant,
+                    target,
+                    1.4,
+                    0.26,
+                );
             }
-            runtime.storm_spell_signals = runtime.storm_spell_signals.saturating_add(spell_signals);
-            if runtime.storm_spell_signals < 6 {
-                return;
+            HeroKind::FrostOracle => {
+                runtime.frost_spell_signals =
+                    runtime.frost_spell_signals.saturating_add(spell_signals);
+                if runtime.frost_spell_signals < 5 {
+                    continue;
+                }
+                runtime.frost_spell_signals -= 5;
+                let (Some(assets), Some(target)) = (
+                    assets.as_deref(),
+                    preferred_target(hero.single().ok(), &enemies),
+                ) else {
+                    continue;
+                };
+                spawn_damage_zone(
+                    &mut commands,
+                    &mut pools,
+                    assets,
+                    HeroKind::FrostOracle,
+                    target,
+                    build.attack_damage * 0.55,
+                    2.4,
+                );
             }
-            runtime.storm_spell_signals -= 6;
-            let (Some(assets), Ok(hero), Some(target)) = (
-                assets.as_deref(),
-                hero.single(),
-                preferred_target(hero.single().ok(), &enemies),
-            ) else {
-                return;
-            };
-            spawn_projectile_fan(
-                &mut commands,
-                &mut pools,
-                assets,
-                HeroKind::StormSavant,
-                hero.translation,
-                target,
-                1,
-                build.attack_damage * 0.4,
-                &build,
-            );
-            spawn_ability_fx(
-                &mut commands,
-                &mut pools,
-                assets,
-                HeroKind::StormSavant,
-                target,
-                1.4,
-                0.26,
-            );
+            _ => {}
         }
-        HeroKind::FrostOracle => {
-            runtime.frost_spell_signals = runtime.frost_spell_signals.saturating_add(spell_signals);
-            if runtime.frost_spell_signals < 5 {
-                return;
-            }
-            runtime.frost_spell_signals -= 5;
-            let (Some(assets), Some(target)) = (
-                assets.as_deref(),
-                preferred_target(hero.single().ok(), &enemies),
-            ) else {
-                return;
-            };
-            spawn_damage_zone(
-                &mut commands,
-                &mut pools,
-                assets,
-                HeroKind::FrostOracle,
-                target,
-                build.attack_damage * 0.55,
-                2.4,
-            );
-        }
-        _ => {}
     }
 }
 
@@ -434,7 +528,6 @@ fn maintain_passive_state(
     assets: Option<Res<GameAssets>>,
     intent: Res<MoveIntent>,
     mut session: ResMut<GameSession>,
-    build: Res<PlayerBuild>,
     mut attack_speed: ResMut<HeroAttackSpeedModifier>,
     hero: Query<&Transform, With<Hero>>,
     core: Query<&Transform, (With<Core>, Without<Hero>)>,
@@ -444,31 +537,18 @@ fn maintain_passive_state(
     mut runtime: ResMut<HeroAbilityRuntime>,
     mut pools: ResMut<CombatPools>,
 ) {
-    if runtime.observed_kind != selected.kind {
-        attack_speed.0 = 1.0;
-        runtime.observed_kind = selected.kind;
-        runtime.sequence = None;
-        runtime.storm_spell_signals = 0;
-        runtime.frost_spell_signals = 0;
-        runtime.void_attack_signals = 0;
-        runtime.ember_stacks = 0;
-        runtime.ember_decay_timer = 0.0;
-        runtime.passive_timer = 0.0;
-        runtime.star_kill_progress = 0;
-        runtime.hero_kill_progress = 0;
-        runtime.last_total_kills = session.total_kills;
-        runtime.last_core_hp = session.core_hp;
-    }
-
     let gained = session.total_kills.saturating_sub(runtime.last_total_kills);
-    match selected.kind {
-        HeroKind::StarWagerer => {
-            runtime.star_kill_progress = runtime.star_kill_progress.saturating_add(gained);
+    for kind in runtime.kinds(selected.kind) {
+        match kind {
+            HeroKind::StarWagerer => {
+                runtime.star_kill_progress = runtime.star_kill_progress.saturating_add(gained);
+            }
+            HeroKind::IronBerserker | HeroKind::SolarVanguard => {
+                runtime.hero_kill_progress[kind.index()] =
+                    runtime.hero_kill_progress[kind.index()].saturating_add(gained);
+            }
+            _ => {}
         }
-        HeroKind::IronBerserker | HeroKind::SolarVanguard => {
-            runtime.hero_kill_progress = runtime.hero_kill_progress.saturating_add(gained);
-        }
-        _ => {}
     }
     runtime.last_total_kills = session.total_kills;
 
@@ -477,163 +557,166 @@ fn maintain_passive_state(
         return;
     }
 
-    let ability_scale = selected.rarity().hero_ability_multiplier();
-
-    match selected.kind {
-        HeroKind::EmberRanger => {
-            if intent.0.length_squared() > 0.04 && runtime.ember_stacks > 0 {
-                runtime.ember_decay_timer += time.delta_secs();
-                if runtime.ember_decay_timer >= 0.55 {
-                    runtime.ember_decay_timer -= 0.55;
-                    runtime.ember_stacks -= 1;
-                    attack_speed.0 = ember_attack_speed_multiplier(runtime.ember_stacks);
+    attack_speed.0 = if runtime.has(selected.kind, HeroKind::EmberRanger) {
+        ember_attack_speed_multiplier(runtime.ember_stacks)
+    } else {
+        1.
+    };
+    for kind in runtime.kinds(selected.kind) {
+        let ability_scale = HEROES[kind.index()].rarity.hero_ability_multiplier();
+        match kind {
+            HeroKind::EmberRanger => {
+                if intent.0.length_squared() > 0.04 && runtime.ember_stacks > 0 {
+                    runtime.ember_decay_timer += time.delta_secs();
+                    if runtime.ember_decay_timer >= 0.55 {
+                        runtime.ember_decay_timer -= 0.55;
+                        runtime.ember_stacks -= 1;
+                        attack_speed.0 = ember_attack_speed_multiplier(runtime.ember_stacks);
+                    }
                 }
             }
-        }
-        HeroKind::StoneWarden => {
-            runtime.passive_timer -= time.delta_secs();
-            let loss = (runtime.last_core_hp - session.core_hp).max(0.0);
-            let in_guard_range = hero
-                .single()
-                .ok()
-                .zip(core.single().ok())
-                .is_some_and(|(hero, core)| hero.translation.distance(core.translation) <= 8.0);
-            if in_guard_range && loss > 0.0 {
-                session.core_hp = (session.core_hp + stone_guard_refund(loss) * ability_scale)
-                    .min(session.core_max_hp);
+            HeroKind::StoneWarden => {
+                runtime.passive_timer[kind.index()] -= time.delta_secs();
+                let loss = (runtime.last_core_hp - session.core_hp).max(0.0);
+                let in_guard_range = hero
+                    .single()
+                    .ok()
+                    .zip(core.single().ok())
+                    .is_some_and(|(hero, core)| hero.translation.distance(core.translation) <= 8.0);
+                if in_guard_range && loss > 0.0 {
+                    session.heal_gate(stone_guard_refund(loss) * ability_scale);
+                }
+                if in_guard_range && runtime.passive_timer[kind.index()] <= 0.0 {
+                    if let (Some(assets), Ok(core)) = (assets.as_deref(), core.single()) {
+                        spawn_ability_fx(
+                            &mut commands,
+                            &mut pools,
+                            assets,
+                            HeroKind::StoneWarden,
+                            core.translation,
+                            2.3,
+                            0.38,
+                        );
+                    }
+                    runtime.passive_timer[kind.index()] = 2.4;
+                }
             }
-            if in_guard_range && runtime.passive_timer <= 0.0 {
-                if let (Some(assets), Ok(core)) = (assets.as_deref(), core.single()) {
-                    spawn_ability_fx(
+            HeroKind::SpiritKeeper => {
+                if passive_spirits.is_empty()
+                    && player_summon_slots(
+                        player_summons
+                            .iter()
+                            .count()
+                            .max(pools.summon_active_count()),
+                        market_effects.summon_cap_bonus(),
+                    ) > 0
+                    && let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single())
+                {
+                    spawn_spirit(
                         &mut commands,
                         &mut pools,
                         assets,
-                        HeroKind::StoneWarden,
-                        core.translation,
-                        2.3,
-                        0.38,
-                    );
-                }
-                runtime.passive_timer = 2.4;
-            }
-        }
-        HeroKind::SpiritKeeper => {
-            if passive_spirits.is_empty()
-                && player_summon_slots(
-                    player_summons
-                        .iter()
-                        .count()
-                        .max(pools.summon_active_count()),
-                    build.bond(BondId::Spirits),
-                    market_effects.summon_cap_bonus(),
-                ) > 0
-                && let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single())
-            {
-                spawn_spirit(
-                    &mut commands,
-                    &mut pools,
-                    assets,
-                    hero.translation,
-                    0.0,
-                    1.35,
-                    None,
-                    1.10,
-                    true,
-                );
-            }
-        }
-        HeroKind::StarWagerer => {
-            while runtime.star_kill_progress >= 12 {
-                runtime.star_kill_progress -= 12;
-                session.gold = session
-                    .gold
-                    .saturating_add((18.0 * ability_scale).round() as u32);
-                session.wood = session.wood.saturating_add((ability_scale).ceil() as u32);
-                if let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) {
-                    spawn_ability_fx(
-                        &mut commands,
-                        &mut pools,
-                        assets,
-                        HeroKind::StarWagerer,
                         hero.translation,
-                        1.5,
-                        0.3,
+                        0.0,
+                        1.35,
+                        None,
+                        1.10,
+                        true,
                     );
                 }
             }
-        }
-        HeroKind::IronBerserker => {
-            while runtime.hero_kill_progress >= 8 {
-                runtime.hero_kill_progress -= 8;
-                vitals.health = (vitals.health
-                    + iron_berserker_kill_heal(vitals.max_health) * ability_scale)
-                    .min(vitals.max_health);
-                if let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) {
-                    spawn_ability_fx(
-                        &mut commands,
-                        &mut pools,
-                        assets,
-                        HeroKind::IronBerserker,
-                        hero.translation,
-                        1.8,
-                        0.32,
-                    );
+            HeroKind::StarWagerer => {
+                while runtime.star_kill_progress >= 12 {
+                    runtime.star_kill_progress -= 12;
+                    session.gold = session
+                        .gold
+                        .saturating_add((18.0 * ability_scale).round() as u32);
+                    session.wood = session.wood.saturating_add((ability_scale).ceil() as u32);
+                    if let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) {
+                        spawn_ability_fx(
+                            &mut commands,
+                            &mut pools,
+                            assets,
+                            HeroKind::StarWagerer,
+                            hero.translation,
+                            1.5,
+                            0.3,
+                        );
+                    }
                 }
             }
-        }
-        HeroKind::RiftDancer => {
-            attack_speed.0 = rift_dancer_attack_speed_multiplier(intent.0.length_squared());
-        }
-        HeroKind::GroveArtificer => {
-            let in_repair_range = hero
-                .single()
-                .ok()
-                .zip(core.single().ok())
-                .is_some_and(|(hero, core)| hero.translation.distance(core.translation) <= 9.0);
-            if in_repair_range {
-                runtime.passive_timer += time.delta_secs();
-            } else {
-                runtime.passive_timer = 0.0;
-            }
-            if runtime.passive_timer >= 6.0 {
-                session.core_hp = (session.core_hp + 12.0 * ability_scale).min(session.core_max_hp);
-                runtime.passive_timer -= 6.0;
-                if let (Some(assets), Ok(core)) = (assets.as_deref(), core.single()) {
-                    spawn_ability_fx(
-                        &mut commands,
-                        &mut pools,
-                        assets,
-                        HeroKind::GroveArtificer,
-                        core.translation,
-                        2.0,
-                        0.38,
-                    );
+            HeroKind::IronBerserker => {
+                while runtime.hero_kill_progress[kind.index()] >= 8 {
+                    runtime.hero_kill_progress[kind.index()] -= 8;
+                    vitals.health = (vitals.health
+                        + iron_berserker_kill_heal(vitals.max_health) * ability_scale)
+                        .min(vitals.max_health);
+                    if let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) {
+                        spawn_ability_fx(
+                            &mut commands,
+                            &mut pools,
+                            assets,
+                            HeroKind::IronBerserker,
+                            hero.translation,
+                            1.8,
+                            0.32,
+                        );
+                    }
                 }
             }
-        }
-        HeroKind::SolarVanguard => {
-            while runtime.hero_kill_progress >= 10 {
-                runtime.hero_kill_progress -= 10;
-                session.core_hp = (session.core_hp + 24.0 * ability_scale).min(session.core_max_hp);
-                if let (Some(assets), Ok(core)) = (assets.as_deref(), core.single()) {
-                    spawn_ability_fx(
-                        &mut commands,
-                        &mut pools,
-                        assets,
-                        HeroKind::SolarVanguard,
-                        core.translation,
-                        2.2,
-                        0.4,
-                    );
+            HeroKind::RiftDancer => {
+                attack_speed.0 *= rift_dancer_attack_speed_multiplier(intent.0.length_squared());
+            }
+            HeroKind::GroveArtificer => {
+                let in_repair_range = hero
+                    .single()
+                    .ok()
+                    .zip(core.single().ok())
+                    .is_some_and(|(hero, core)| hero.translation.distance(core.translation) <= 9.0);
+                if in_repair_range {
+                    runtime.passive_timer[kind.index()] += time.delta_secs();
+                } else {
+                    runtime.passive_timer[kind.index()] = 0.0;
+                }
+                if runtime.passive_timer[kind.index()] >= 6.0 {
+                    session.heal_gate(12.0 * ability_scale);
+                    runtime.passive_timer[kind.index()] -= 6.0;
+                    if let (Some(assets), Ok(core)) = (assets.as_deref(), core.single()) {
+                        spawn_ability_fx(
+                            &mut commands,
+                            &mut pools,
+                            assets,
+                            HeroKind::GroveArtificer,
+                            core.translation,
+                            2.0,
+                            0.38,
+                        );
+                    }
                 }
             }
+            HeroKind::SolarVanguard => {
+                while runtime.hero_kill_progress[kind.index()] >= 10 {
+                    runtime.hero_kill_progress[kind.index()] -= 10;
+                    session.heal_gate(24.0 * ability_scale);
+                    if let (Some(assets), Ok(core)) = (assets.as_deref(), core.single()) {
+                        spawn_ability_fx(
+                            &mut commands,
+                            &mut pools,
+                            assets,
+                            HeroKind::SolarVanguard,
+                            core.translation,
+                            2.2,
+                            0.4,
+                        );
+                    }
+                }
+            }
+            HeroKind::StormSavant
+            | HeroKind::TideWalker
+            | HeroKind::FrostOracle
+            | HeroKind::VoidReaper => {}
         }
-        HeroKind::StormSavant
-        | HeroKind::TideWalker
-        | HeroKind::FrostOracle
-        | HeroKind::VoidReaper => {}
     }
-
     runtime.last_core_hp = session.core_hp;
 }
 
@@ -662,18 +745,18 @@ fn tick_tide_passive(
     mut runtime: ResMut<HeroAbilityRuntime>,
     mut pools: ResMut<CombatPools>,
 ) {
-    if selected.kind != HeroKind::TideWalker
+    if !runtime.has(selected.kind, HeroKind::TideWalker)
         || session.paused
         || session.finished
         || !vitals.can_act()
     {
         return;
     }
-    runtime.passive_timer -= time.delta_secs();
-    if runtime.passive_timer > 0.0 {
+    runtime.passive_timer[HeroKind::TideWalker.index()] -= time.delta_secs();
+    if runtime.passive_timer[HeroKind::TideWalker.index()] > 0.0 {
         return;
     }
-    runtime.passive_timer = 3.2;
+    runtime.passive_timer[HeroKind::TideWalker.index()] = 3.2;
 
     let Ok(hero) = hero.single() else {
         return;
@@ -731,445 +814,13 @@ fn tick_tide_passive(
     }
 }
 
-fn observe_ultimate_cast(
-    mut commands: Commands,
-    selected: Res<SelectedHero>,
-    mut vitals: ResMut<HeroVitals>,
-    active: Res<ActiveSkill>,
-    assets: Option<Res<GameAssets>>,
-    mut session: ResMut<GameSession>,
-    build: Res<PlayerBuild>,
-    market_effects: Res<MarketEffects>,
-    hero: Query<&Transform, With<Hero>>,
-    player_summons: Query<(), With<PlayerSummon>>,
-    mut enemies: Query<
-        (
-            Entity,
-            &mut Enemy,
-            &Transform,
-            Option<&BossEnemy>,
-            Option<&TimedSpeedEffect>,
-        ),
-        With<Enemy>,
-    >,
-    mut runtime: ResMut<HeroAbilityRuntime>,
-    mut pools: ResMut<CombatPools>,
-) {
-    let cast_started = did_ultimate_start(runtime.previous_ultimate_remaining, active.remaining);
-    runtime.previous_ultimate_remaining = active.remaining;
-    if !cast_started || session.paused || session.finished || !vitals.can_act() {
-        return;
-    }
-    let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) else {
-        return;
-    };
-    let ability_scale = selected.rarity().hero_ability_multiplier();
-    let control_scale = selected.rarity().hero_stat_multiplier();
-
-    spawn_ability_fx(
-        &mut commands,
-        &mut pools,
-        assets,
-        selected.kind,
-        hero.translation,
-        4.5,
-        0.55,
-    );
-
-    match selected.kind {
-        HeroKind::StormSavant => {
-            runtime.sequence = Some(UltimateSequence {
-                kind: selected.kind,
-                pulses_left: 10,
-                pulse_timer: 0.0,
-                pulse_interval: 0.6,
-            });
-        }
-        HeroKind::EmberRanger => {
-            runtime.sequence = Some(UltimateSequence {
-                kind: selected.kind,
-                pulses_left: 5,
-                pulse_timer: 0.0,
-                pulse_interval: 0.34,
-            });
-        }
-        HeroKind::StoneWarden => {
-            for (entity, _enemy, transform, _, speed_effect) in &mut enemies {
-                if hero.translation.distance(transform.translation) > 7.5 {
-                    continue;
-                }
-                commands.entity(entity).insert(merged_speed_effect(
-                    speed_effect,
-                    0.28,
-                    6.0 * control_scale,
-                ));
-            }
-            session.core_hp = (session.core_hp + 90.0 * ability_scale).min(session.core_max_hp);
-            runtime.sequence = Some(UltimateSequence {
-                kind: selected.kind,
-                pulses_left: 6,
-                pulse_timer: 0.0,
-                pulse_interval: 1.0,
-            });
-        }
-        HeroKind::SpiritKeeper => {
-            let available = player_summon_slots(
-                player_summons
-                    .iter()
-                    .count()
-                    .max(pools.summon_active_count()),
-                build.bond(BondId::Spirits),
-                market_effects.summon_cap_bonus(),
-            );
-            for spirit in 0..6.min(available) {
-                let angle = spirit as f32 / 6.0 * std::f32::consts::TAU;
-                spawn_spirit(
-                    &mut commands,
-                    &mut pools,
-                    assets,
-                    hero.translation,
-                    angle,
-                    2.0,
-                    Some(12.0),
-                    0.72,
-                    false,
-                );
-            }
-        }
-        HeroKind::TideWalker => {
-            for (entity, _enemy, _, boss, speed_effect) in &mut enemies {
-                let (multiplier, remaining) = if boss.is_some() {
-                    (0.4, 5.0)
-                } else {
-                    (0.0, 3.0)
-                };
-                commands.entity(entity).insert(merged_speed_effect(
-                    speed_effect,
-                    multiplier,
-                    remaining * control_scale,
-                ));
-            }
-        }
-        HeroKind::StarWagerer => {
-            let enemy_count = enemies.iter().count();
-            let core_ratio = session.core_hp / session.core_max_hp.max(1.0);
-            match choose_fate_outcome(core_ratio, enemy_count) {
-                FateOutcome::Damage => {
-                    let target = enemies
-                        .iter()
-                        .map(|(_, _, transform, boss, _)| {
-                            (
-                                transform.translation,
-                                boss.is_some(),
-                                hero.translation.distance_squared(transform.translation),
-                            )
-                        })
-                        .min_by(|left, right| {
-                            right.1.cmp(&left.1).then_with(|| {
-                                left.2.partial_cmp(&right.2).unwrap_or(Ordering::Equal)
-                            })
-                        })
-                        .map(|(position, _, _)| position)
-                        .unwrap_or(hero.translation);
-                    spawn_damage_zone(
-                        &mut commands,
-                        &mut pools,
-                        assets,
-                        HeroKind::StarWagerer,
-                        target,
-                        build.attack_damage * 6.0 + session.level as f32 * 20.0,
-                        7.0,
-                    );
-                }
-                FateOutcome::Healing => {
-                    session.core_hp = (session.core_hp
-                        + (240.0 + session.level as f32 * 10.0) * ability_scale)
-                        .min(session.core_max_hp);
-                    spawn_ability_fx(
-                        &mut commands,
-                        &mut pools,
-                        assets,
-                        HeroKind::StarWagerer,
-                        hero.translation,
-                        5.5,
-                        0.8,
-                    );
-                }
-                FateOutcome::Resources => {
-                    session.gold = session
-                        .gold
-                        .saturating_add((180.0 * ability_scale).round() as u32);
-                    session.wood = session
-                        .wood
-                        .saturating_add((15.0 * ability_scale).round() as u32);
-                    session.kills = session
-                        .kills
-                        .saturating_add((30.0 * ability_scale).round() as u32);
-                    spawn_ability_fx(
-                        &mut commands,
-                        &mut pools,
-                        assets,
-                        HeroKind::StarWagerer,
-                        hero.translation,
-                        3.4,
-                        0.8,
-                    );
-                }
-            }
-        }
-        HeroKind::FrostOracle => {
-            for (entity, _enemy, _, boss, speed_effect) in &mut enemies {
-                let (multiplier, remaining) = if boss.is_some() {
-                    (0.5, 4.0)
-                } else {
-                    (0.0, 2.5)
-                };
-                commands.entity(entity).insert(merged_speed_effect(
-                    speed_effect,
-                    multiplier,
-                    remaining * control_scale,
-                ));
-            }
-            runtime.sequence = Some(UltimateSequence {
-                kind: selected.kind,
-                pulses_left: 4,
-                pulse_timer: 0.0,
-                pulse_interval: 0.55,
-            });
-        }
-        HeroKind::IronBerserker => {
-            let missing_health = (vitals.max_health - vitals.health).max(0.0);
-            vitals.health =
-                (vitals.health + missing_health * 0.25 * ability_scale).min(vitals.max_health);
-            runtime.sequence = Some(UltimateSequence {
-                kind: selected.kind,
-                pulses_left: 6,
-                pulse_timer: 0.0,
-                pulse_interval: 0.32,
-            });
-        }
-        HeroKind::RiftDancer => {
-            runtime.sequence = Some(UltimateSequence {
-                kind: selected.kind,
-                pulses_left: 8,
-                pulse_timer: 0.0,
-                pulse_interval: 0.22,
-            });
-        }
-        HeroKind::GroveArtificer => {
-            session.core_hp = (session.core_hp + 160.0 * ability_scale).min(session.core_max_hp);
-            runtime.sequence = Some(UltimateSequence {
-                kind: selected.kind,
-                pulses_left: 6,
-                pulse_timer: 0.0,
-                pulse_interval: 0.75,
-            });
-        }
-        HeroKind::SolarVanguard => {
-            session.core_hp = (session.core_hp + 120.0 * ability_scale).min(session.core_max_hp);
-            vitals.health =
-                (vitals.health + vitals.max_health * 0.25 * ability_scale).min(vitals.max_health);
-            for (entity, _enemy, _, _, speed_effect) in &mut enemies {
-                commands.entity(entity).insert(merged_speed_effect(
-                    speed_effect,
-                    0.75,
-                    2.0 * control_scale,
-                ));
-            }
-            runtime.sequence = Some(UltimateSequence {
-                kind: selected.kind,
-                pulses_left: 5,
-                pulse_timer: 0.0,
-                pulse_interval: 0.6,
-            });
-        }
-        HeroKind::VoidReaper => {
-            for (entity, _enemy, _, _, speed_effect) in &mut enemies {
-                commands.entity(entity).insert(merged_speed_effect(
-                    speed_effect,
-                    0.55,
-                    4.0 * control_scale,
-                ));
-            }
-            runtime.sequence = Some(UltimateSequence {
-                kind: selected.kind,
-                pulses_left: 5,
-                pulse_timer: 0.0,
-                pulse_interval: 0.5,
-            });
-        }
-    }
-}
-
-fn tick_ultimate_sequence(
-    mut commands: Commands,
-    time: Res<Time>,
-    session: Res<GameSession>,
-    vitals: Res<HeroVitals>,
-    build: Res<PlayerBuild>,
-    assets: Option<Res<GameAssets>>,
-    hero: Query<&Transform, With<Hero>>,
-    core: Query<&Transform, (With<Core>, Without<Hero>)>,
-    enemies: Query<(&Transform, Option<&BossEnemy>), With<Enemy>>,
-    mut runtime: ResMut<HeroAbilityRuntime>,
-    mut pools: ResMut<CombatPools>,
-) {
-    if session.paused || session.finished {
-        return;
-    }
-    if !vitals.can_act() {
-        runtime.sequence = None;
-        return;
-    }
-    let Some(mut sequence) = runtime.sequence else {
-        return;
-    };
-    let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) else {
-        return;
-    };
-
-    sequence.pulse_timer -= time.delta_secs();
-    if sequence.pulse_timer > 0.0 {
-        runtime.sequence = Some(sequence);
-        return;
-    }
-
-    match sequence.kind {
-        HeroKind::StormSavant => {
-            if let Some(target) = preferred_target(Some(hero), &enemies) {
-                spawn_damage_zone(
-                    &mut commands,
-                    &mut pools,
-                    assets,
-                    sequence.kind,
-                    target,
-                    45.0 + session.level as f32 * 5.0 + build.attack_damage * 0.45,
-                    2.5,
-                );
-            }
-        }
-        HeroKind::EmberRanger => {
-            if let Some(target) = preferred_target(Some(hero), &enemies) {
-                spawn_projectile_fan(
-                    &mut commands,
-                    &mut pools,
-                    assets,
-                    sequence.kind,
-                    hero.translation,
-                    target,
-                    5,
-                    build.attack_damage * 0.72,
-                    &build,
-                );
-            }
-        }
-        HeroKind::StoneWarden => {
-            spawn_ability_fx(
-                &mut commands,
-                &mut pools,
-                assets,
-                sequence.kind,
-                hero.translation,
-                4.2,
-                0.72,
-            );
-        }
-        HeroKind::FrostOracle => {
-            if let Some(target) = preferred_target(Some(hero), &enemies) {
-                spawn_damage_zone(
-                    &mut commands,
-                    &mut pools,
-                    assets,
-                    sequence.kind,
-                    target,
-                    build.attack_damage * 0.6 + session.level as f32 * 5.0,
-                    3.0,
-                );
-            }
-        }
-        HeroKind::IronBerserker => {
-            spawn_damage_zone(
-                &mut commands,
-                &mut pools,
-                assets,
-                sequence.kind,
-                hero.translation,
-                build.attack_damage * 0.75,
-                2.8,
-            );
-        }
-        HeroKind::RiftDancer => {
-            if let Some(target) = preferred_target(Some(hero), &enemies) {
-                spawn_projectile_fan(
-                    &mut commands,
-                    &mut pools,
-                    assets,
-                    sequence.kind,
-                    hero.translation,
-                    target,
-                    3,
-                    build.attack_damage * 0.55,
-                    &build,
-                );
-            }
-        }
-        HeroKind::GroveArtificer => {
-            let center = core
-                .single()
-                .map(|core| core.translation)
-                .unwrap_or(hero.translation);
-            spawn_damage_zone(
-                &mut commands,
-                &mut pools,
-                assets,
-                sequence.kind,
-                center,
-                build.attack_damage * 0.65,
-                5.0,
-            );
-        }
-        HeroKind::SolarVanguard => {
-            if let Some(target) = preferred_target(Some(hero), &enemies) {
-                spawn_damage_zone(
-                    &mut commands,
-                    &mut pools,
-                    assets,
-                    sequence.kind,
-                    target,
-                    build.attack_damage * 0.8,
-                    3.2,
-                );
-            }
-        }
-        HeroKind::VoidReaper => {
-            if let Some(target) = preferred_target(Some(hero), &enemies) {
-                spawn_damage_zone(
-                    &mut commands,
-                    &mut pools,
-                    assets,
-                    sequence.kind,
-                    target,
-                    build.attack_damage * 1.15,
-                    4.0,
-                );
-            }
-        }
-        HeroKind::SpiritKeeper | HeroKind::TideWalker | HeroKind::StarWagerer => {}
-    }
-
-    sequence.pulses_left = sequence.pulses_left.saturating_sub(1);
-    sequence.pulse_timer += sequence.pulse_interval;
-    runtime.sequence = (sequence.pulses_left > 0).then_some(sequence);
-}
-
 fn cleanup_spirit_summons(
     mut commands: Commands,
     session: Res<GameSession>,
-    selected: Res<SelectedHero>,
     spirits: Query<Entity, With<SpiritOrbit>>,
     mut pools: ResMut<CombatPools>,
 ) {
-    if !session.finished && !selected.is_changed() {
+    if !session.finished {
         return;
     }
     for entity in &spirits {
@@ -1181,18 +832,16 @@ fn update_spirit_companions(
     mut commands: Commands,
     time: Res<Time>,
     session: Res<GameSession>,
-    vitals: Res<HeroVitals>,
     build: Res<PlayerBuild>,
     assets: Option<Res<GameAssets>>,
-    hero: Query<&Transform, (With<Hero>, Without<SpiritOrbit>)>,
-    enemies: Query<&Transform, (With<Enemy>, Without<SpiritOrbit>)>,
+    enemies: Query<(&Enemy, &Transform, Option<&EliteAffix>), Without<SpiritOrbit>>,
     mut spirits: Query<(Entity, &mut Transform, &mut SpiritOrbit), Without<Hero>>,
     mut pools: ResMut<CombatPools>,
 ) {
-    if session.paused || session.finished || !vitals.can_act() {
+    if session.paused || session.finished {
         return;
     }
-    let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) else {
+    let Some(assets) = assets.as_deref() else {
         return;
     };
 
@@ -1205,27 +854,42 @@ fn update_spirit_companions(
             }
         }
         spirit.angle = (spirit.angle + time.delta_secs() * 1.7) % std::f32::consts::TAU;
-        transform.translation = hero.translation
-            + Vec3::new(
-                spirit.angle.cos() * spirit.radius,
-                0.75 + (spirit.angle * 2.0).sin() * 0.16,
-                spirit.angle.sin() * spirit.radius,
-            );
-        spirit.shot_timer -= time.delta_secs();
-        if spirit.shot_timer > 0.0 {
-            continue;
-        }
+        // Float vertically, but pursuit owns horizontal movement. The old
+        // orbital radius now sets a readable ranged engagement distance.
+        transform.translation.y = 0.75 + (spirit.angle * 2.).sin() * 0.16;
+        spirit.shot_timer = (spirit.shot_timer - time.delta_secs()).max(0.);
         let target = enemies
             .iter()
-            .min_by(|left, right| {
+            .filter(|(enemy, _, affix)| {
+                enemy.hp > 0. && !affix.is_some_and(|affix| affix.is_volatile_pending())
+            })
+            .min_by(|(_, left, _), (_, right, _)| {
                 transform
                     .translation
                     .distance_squared(left.translation)
-                    .partial_cmp(&transform.translation.distance_squared(right.translation))
-                    .unwrap_or(Ordering::Equal)
+                    .total_cmp(&transform.translation.distance_squared(right.translation))
             })
-            .map(|target| target.translation);
-        if let Some(target) = target {
+            .map(|(_, target, _)| target.translation);
+        let Some(target) = target else {
+            super::summon_movement::follow(
+                &mut transform,
+                entity.to_bits(),
+                5.2,
+                time.delta_secs(),
+            );
+            continue;
+        };
+        let ready = super::summon_movement::advance(
+            &mut transform,
+            target,
+            5.2,
+            (4. + spirit.radius).clamp(4., 6.),
+            time.delta_secs(),
+        );
+        if !ready || spirit.shot_timer > 0. {
+            continue;
+        }
+        {
             spawn_projectile_fan(
                 &mut commands,
                 &mut pools,
@@ -1238,8 +902,6 @@ fn update_spirit_companions(
                 &build,
             );
             spirit.shot_timer = 2.2 + spirit.angle.rem_euclid(0.35);
-        } else {
-            spirit.shot_timer = 0.3;
         }
     }
 }
@@ -1315,6 +977,19 @@ fn spawn_damage_zone(
     damage: f32,
     radius: f32,
 ) {
+    spawn_ultimate_zone(commands, pools, assets, kind, center, damage, radius);
+    spawn_ability_fx(commands, pools, assets, kind, center, radius, 0.38);
+}
+
+fn spawn_ultimate_zone(
+    commands: &mut Commands,
+    pools: &mut CombatPools,
+    assets: &GameAssets,
+    kind: HeroKind,
+    center: Vec3,
+    damage: f32,
+    radius: f32,
+) {
     let damage = scaled_hero_ability_damage(kind, damage);
     let Some(entity) = pools.rent_projectile(
         commands,
@@ -1334,7 +1009,6 @@ fn spawn_damage_zone(
     commands
         .entity(entity)
         .insert((AbilityGenerated, ability_damage_profile(kind)));
-    spawn_ability_fx(commands, pools, assets, kind, center, radius, 0.38);
 }
 
 fn scaled_hero_ability_damage(kind: HeroKind, damage: f32) -> f32 {
@@ -1380,8 +1054,16 @@ fn spawn_spirit(
         SummonVisual::SpiritOrbit,
         assets.projectile_mesh.clone(),
         assets.hero_materials[HeroKind::SpiritKeeper.index()].clone(),
-        Transform::from_translation(origin + Vec3::Y * 0.75).with_scale(Vec3::splat(2.3)),
+        Transform::from_translation(
+            origin.with_x(origin.x.max(crate::game::resources::GATE_POSITION.x + 2.3))
+                + Vec3::Y * 0.75,
+        )
+        .with_rotation(Quat::from_rotation_arc(Vec3::NEG_Z, Vec3::X))
+        .with_scale(Vec3::splat(2.3)),
     )?;
+    commands
+        .entity(entity)
+        .insert(Name::new("Spirit companion"));
     commands.entity(entity).insert(SpiritOrbit {
         angle,
         radius,
@@ -1395,8 +1077,8 @@ fn spawn_spirit(
     Some(entity)
 }
 
-const fn player_summon_slots(existing: usize, spirit_points: u8, equipment_bonus: u8) -> usize {
-    summon_cap(spirit_points, equipment_bonus).saturating_sub(existing)
+const fn player_summon_slots(existing: usize, equipment_bonus: u8) -> usize {
+    summon_cap(equipment_bonus).saturating_sub(existing)
 }
 
 const fn ember_attack_speed_multiplier(stacks: u8) -> f32 {
@@ -1448,10 +1130,6 @@ const fn stone_guard_refund(incoming_damage: f32) -> f32 {
     incoming_damage * 0.15
 }
 
-fn did_ultimate_start(previous_remaining: f32, current_remaining: f32) -> bool {
-    current_remaining > previous_remaining + 0.25
-}
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum FateOutcome {
     Damage,
@@ -1469,6 +1147,12 @@ const fn choose_fate_outcome(core_ratio: f32, enemy_count: usize) -> FateOutcome
     }
 }
 
+pub(crate) fn reset_run(world: &mut World) {
+    world.insert_resource(HeroAbilityRuntime::default());
+    world.insert_resource(BasicAttackCounter::default());
+    world.insert_resource(HeroAttackSpeedModifier::default());
+}
+
 #[cfg(test)]
 mod tests {
     use std::collections::HashSet;
@@ -1476,6 +1160,420 @@ mod tests {
     use super::*;
     use crate::game::content::HEROES;
 
+    fn test_game_assets() -> GameAssets {
+        GameAssets {
+            hero_scenes: std::array::from_fn(|_| Handle::default()),
+            enemy_scenes: std::array::from_fn(|_| Handle::default()),
+            boss_scenes: std::array::from_fn(|_| Handle::default()),
+            summon_scenes: std::array::from_fn(|_| Handle::default()),
+            projectile_mesh: Handle::default(),
+            fx_mesh: Handle::default(),
+            enemy_material: Handle::default(),
+            enemy_materials: std::array::from_fn(|_| Handle::default()),
+            elite_material: Handle::default(),
+            boss_materials: std::array::from_fn(|_| Handle::default()),
+            hero_materials: std::array::from_fn(|_| Handle::default()),
+            projectile_material: Handle::default(),
+            storm_material: Handle::default(),
+        }
+    }
+
+    fn auto_test_app(kind: HeroKind) -> App {
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<HeroAbilityRuntime>()
+            .init_resource::<UltimateCues>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<ActiveSkill>()
+            .init_resource::<PlayerBuild>()
+            .init_resource::<MarketEffects>()
+            .init_resource::<CombatPools>()
+            .insert_resource(GameSession {
+                paused: false,
+                ..default()
+            })
+            .insert_resource(SelectedHero { kind, locked: true })
+            .insert_resource(test_game_assets())
+            .add_systems(Update, observe_ultimate_cast);
+        app.world_mut().spawn((Hero, Transform::default()));
+        app.world_mut().spawn((
+            Enemy {
+                hp: 1000.0,
+                max_hp: 1000.0,
+                speed: 0.0,
+                damage: 0.0,
+                xp: 0,
+                wood: 0,
+                gold: 0,
+                kill_credit: 1,
+                elite: false,
+            },
+            Transform::from_xyz(1.0, 0.0, 0.0),
+        ));
+        app
+    }
+
+    fn companion_test_app(remaining: Option<f32>) -> (App, Entity, Entity) {
+        use bevy::ecs::system::RunSystemOnce;
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .insert_resource(bevy::time::TimeUpdateStrategy::ManualDuration(
+                std::time::Duration::from_millis(100),
+            ))
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<PlayerBuild>()
+            .init_resource::<CombatPools>()
+            .insert_resource(test_game_assets())
+            .add_systems(Update, update_spirit_companions);
+        let hero = app.world_mut().spawn((Hero, Transform::default())).id();
+        let spirit = app
+            .world_mut()
+            .run_system_once(
+                move |mut commands: Commands,
+                      mut pools: ResMut<CombatPools>,
+                      assets: Res<GameAssets>| {
+                    spawn_spirit(
+                        &mut commands,
+                        &mut pools,
+                        &assets,
+                        Vec3::ZERO,
+                        0.,
+                        1.35,
+                        remaining,
+                        1.1,
+                        true,
+                    )
+                    .unwrap()
+                },
+            )
+            .unwrap();
+        (app, hero, spirit)
+    }
+    fn companion_enemy(app: &mut App, position: Vec3) -> Entity {
+        app.world_mut()
+            .spawn((
+                Enemy {
+                    hp: 1000.,
+                    max_hp: 1000.,
+                    speed: 0.,
+                    damage: 0.,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+                Transform::from_translation(position),
+            ))
+            .id()
+    }
+    #[test]
+    fn spirit_companion_pursues_then_fires_and_retargets_after_death() {
+        let (mut app, _, spirit) = companion_test_app(None);
+        let enemy = companion_enemy(&mut app, Vec3::new(20., 0., 0.));
+        for _ in 0..10 {
+            app.update();
+        }
+        let moving = app.world().get::<Transform>(spirit).unwrap().translation;
+        assert!(moving.x > 3. && moving.x < 14.);
+        assert_eq!(
+            app.world_mut()
+                .query::<&Projectile>()
+                .iter(app.world())
+                .count(),
+            0,
+            "no ranged attacks from outside engagement range"
+        );
+        for _ in 0..40 {
+            app.update();
+        }
+        let transform = app.world().get::<Transform>(spirit).unwrap();
+        assert!((transform.translation.x - 14.65).abs() < 0.01);
+        assert!((transform.rotation * Vec3::NEG_Z).dot(Vec3::X) > 0.99);
+        assert!(
+            app.world_mut()
+                .query::<&Projectile>()
+                .iter(app.world())
+                .count()
+                > 0
+        );
+        app.world_mut().get_mut::<Enemy>(enemy).unwrap().hp = 0.;
+        companion_enemy(&mut app, Vec3::new(0., 0., 0.));
+        for _ in 0..10 {
+            app.update();
+        }
+        let transform = app.world().get::<Transform>(spirit).unwrap();
+        assert!(transform.translation.x < 10.);
+        assert!((transform.rotation * Vec3::NEG_Z).dot(Vec3::NEG_X) > 0.99);
+    }
+    #[test]
+    fn spirit_companion_pause_freezes_movement_lifetime_and_fire_then_returns_outside_gate() {
+        let (mut app, hero, spirit) = companion_test_app(Some(20.));
+        let enemy = companion_enemy(&mut app, Vec3::new(20., 0., 0.));
+        for _ in 0..10 {
+            app.update();
+        }
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        let before = *app.world().get::<Transform>(spirit).unwrap();
+        let lifetime = app.world().get::<SpiritOrbit>(spirit).unwrap().remaining;
+        let timer = app.world().get::<SpiritOrbit>(spirit).unwrap().shot_timer;
+        for _ in 0..10 {
+            app.update();
+        }
+        assert_eq!(*app.world().get::<Transform>(spirit).unwrap(), before);
+        assert_eq!(
+            app.world().get::<SpiritOrbit>(spirit).unwrap().remaining,
+            lifetime
+        );
+        assert_eq!(
+            app.world().get::<SpiritOrbit>(spirit).unwrap().shot_timer,
+            timer
+        );
+        app.world_mut().resource_mut::<GameSession>().paused = false;
+        app.world_mut().get_mut::<Enemy>(enemy).unwrap().hp = 0.;
+        app.world_mut()
+            .get_mut::<Transform>(hero)
+            .unwrap()
+            .translation = Vec3::new(-10., 0., 0.);
+        for _ in 0..40 {
+            app.update();
+        }
+        let transform = app.world().get::<Transform>(spirit).unwrap();
+        assert!(transform.translation.x >= crate::game::resources::GATE_POSITION.x + 1.8);
+        assert!(transform.translation.x < crate::game::resources::GATE_POSITION.x + 5.0);
+        assert!((transform.rotation * Vec3::NEG_Z).dot(Vec3::X) > 0.99);
+        assert!((transform.translation.z).abs() <= 4.1);
+        assert!(app.world().get::<PassiveSpirit>(spirit).is_some());
+        app.world_mut()
+            .get_mut::<SpiritOrbit>(spirit)
+            .unwrap()
+            .remaining = Some(0.05);
+        app.update();
+        assert!(
+            app.world().get::<SpiritOrbit>(spirit).is_none(),
+            "expired summon returns to its pool"
+        );
+    }
+
+    #[test]
+    fn recruitment_preserves_old_cooldown_and_passive_progress() {
+        let mut app = auto_test_app(HeroKind::EmberRanger);
+        app.init_resource::<super::super::HeroFusion>().add_systems(
+            PreUpdate,
+            (tick_inherited_cooldowns, configure_ultimate).chain(),
+        );
+        app.world_mut().resource_mut::<ActiveSkill>().remaining = 23.;
+        app.update();
+        {
+            let mut runtime = app.world_mut().resource_mut::<HeroAbilityRuntime>();
+            runtime.ember_stacks = 9;
+            runtime.storm_spell_signals = 4;
+            runtime.passive_timer[HeroKind::TideWalker.index()] = 2.;
+        }
+        app.world_mut()
+            .resource_mut::<super::super::HeroFusion>()
+            .record_absorbed(HeroKind::EmberRanger);
+        app.world_mut().resource_mut::<SelectedHero>().kind = HeroKind::StarWagerer;
+        app.update();
+        let runtime = app.world().resource::<HeroAbilityRuntime>();
+        assert!(runtime.inherited_ultimate_remaining[HeroKind::EmberRanger.index()] > 22.);
+        assert_eq!(runtime.ember_stacks, 9);
+        assert_eq!(runtime.storm_spell_signals, 4);
+        assert_eq!(runtime.passive_timer[HeroKind::TideWalker.index()], 2.);
+        assert!(runtime.has(HeroKind::StarWagerer, HeroKind::EmberRanger));
+        assert_eq!(app.world().resource::<UltimateCues>().serial, 0);
+    }
+
+    #[test]
+    fn inherited_ultimates_really_auto_cast_in_separate_bounded_sequences() {
+        let mut app = auto_test_app(HeroKind::StoneWarden);
+        app.init_resource::<super::super::HeroFusion>()
+            .insert_resource(bevy::time::TimeUpdateStrategy::ManualDuration(
+                std::time::Duration::from_millis(100),
+            ))
+            .add_systems(
+                PreUpdate,
+                (tick_inherited_cooldowns, configure_ultimate).chain(),
+            )
+            .add_systems(Update, tick_ultimate_sequence.before(observe_ultimate_cast));
+        app.world_mut().resource_mut::<ActiveSkill>().remaining = 1000.;
+        for kind in [HeroKind::StormSavant, HeroKind::FrostOracle] {
+            app.world_mut()
+                .resource_mut::<super::super::HeroFusion>()
+                .record_absorbed(kind);
+        }
+        let mut casts = Vec::new();
+        let mut previous = 0;
+        for frame in 0..200 {
+            app.update();
+            let serial = app.world().resource::<UltimateCues>().serial;
+            assert!(
+                serial <= previous + 1,
+                "at most one ultimate starts per frame"
+            );
+            if serial > previous {
+                let kind = app
+                    .world()
+                    .resource::<HeroAbilityRuntime>()
+                    .sequence
+                    .unwrap()
+                    .kind;
+                casts.push((frame, kind));
+            }
+            previous = serial;
+        }
+        assert_eq!(casts.len(), 2, "both inherited heroes must cast: {casts:?}");
+        assert_eq!(casts[0].1, HeroKind::StormSavant);
+        assert_eq!(casts[1].1, HeroKind::FrostOracle);
+        assert!(casts[1].0 - casts[0].0 >= 30);
+        assert_eq!(app.world().resource::<ActiveSkill>().remaining, 1000.);
+    }
+
+    #[test]
+    fn inherited_kill_passives_all_apply_to_the_same_real_kills() {
+        let mut app = auto_test_app(HeroKind::StormSavant);
+        app.init_resource::<HeroAttackSpeedModifier>()
+            .init_resource::<MoveIntent>()
+            .add_systems(Update, maintain_passive_state.after(observe_ultimate_cast));
+        app.world_mut().resource_mut::<ActiveSkill>().remaining = 1000.;
+        {
+            let mut runtime = app.world_mut().resource_mut::<HeroAbilityRuntime>();
+            for kind in [
+                HeroKind::StarWagerer,
+                HeroKind::IronBerserker,
+                HeroKind::SolarVanguard,
+            ] {
+                runtime.inherited[kind.index()] = true;
+                runtime.inherited_ultimate_remaining[kind.index()] = 1000.;
+            }
+        }
+        app.world_mut().resource_mut::<GameSession>().core_hp = 50.;
+        app.world_mut().resource_mut::<HeroVitals>().health = 100.;
+        app.world_mut().resource_mut::<GameSession>().total_kills = 24;
+        let gold = app.world().resource::<GameSession>().gold;
+        app.update();
+        assert!(app.world().resource::<GameSession>().gold > gold);
+        assert!(app.world().resource::<GameSession>().core_hp > 50.);
+        assert!(app.world().resource::<HeroVitals>().health > 100.);
+        let after = app.world().resource::<GameSession>().gold;
+        app.update();
+        assert_eq!(
+            app.world().resource::<GameSession>().gold,
+            after,
+            "same kills cannot reward twice"
+        );
+    }
+
+    #[test]
+    fn all_twelve_heroes_auto_cast_once_without_input() {
+        for kind in HeroKind::ALL {
+            let mut app = auto_test_app(kind);
+            app.update();
+            assert!(
+                app.world().resource::<ActiveSkill>().remaining > 0.0,
+                "{kind:?}"
+            );
+            let sequences = app
+                .world()
+                .resource::<HeroAbilityRuntime>()
+                .sequence
+                .map(|s| s.pulses_left);
+            let expected = match kind {
+                HeroKind::StormSavant => Some(10),
+                HeroKind::EmberRanger => Some(5),
+                HeroKind::StoneWarden => Some(6),
+                HeroKind::SpiritKeeper => None,
+                HeroKind::TideWalker => Some(3),
+                HeroKind::StarWagerer => None,
+                HeroKind::FrostOracle => Some(4),
+                HeroKind::IronBerserker => Some(6),
+                HeroKind::RiftDancer => Some(8),
+                HeroKind::GroveArtificer => Some(6),
+                HeroKind::SolarVanguard => Some(5),
+                HeroKind::VoidReaper => Some(5),
+            };
+            assert_eq!(sequences, expected);
+            let gold = app.world().resource::<GameSession>().gold;
+            let summon_count = app
+                .world_mut()
+                .query::<&SpiritOrbit>()
+                .iter(app.world())
+                .count();
+            if kind == HeroKind::SpiritKeeper {
+                assert_eq!(summon_count, 6);
+            }
+            app.update();
+            assert_eq!(gold, app.world().resource::<GameSession>().gold);
+            assert_eq!(app.world().resource::<UltimateCues>().serial, 1);
+            assert_eq!(
+                summon_count,
+                app.world_mut()
+                    .query::<&SpiritOrbit>()
+                    .iter(app.world())
+                    .count()
+            );
+        }
+    }
+
+    #[test]
+    fn automatic_cast_targets_living_archive_echo_but_not_dead_enemies() {
+        for living in [false, true] {
+            let mut app = auto_test_app(HeroKind::StormSavant);
+            let enemy = app
+                .world_mut()
+                .query_filtered::<Entity, With<Enemy>>()
+                .single(app.world())
+                .expect("fixture enemy");
+            app.world_mut()
+                .entity_mut(enemy)
+                .insert(crate::game::archive::ArchiveEcho);
+            if !living {
+                app.world_mut().get_mut::<Enemy>(enemy).unwrap().hp = 0.0;
+            }
+            app.update();
+            assert_eq!(
+                app.world().resource::<UltimateCues>().serial,
+                u64::from(living)
+            );
+            assert_eq!(
+                app.world().resource::<ActiveSkill>().remaining > 0.0,
+                living
+            );
+        }
+    }
+
+    #[test]
+    fn automatic_cast_does_not_spend_cooldown_when_blocked() {
+        for blocker in 0..6 {
+            let mut app = auto_test_app(HeroKind::StormSavant);
+            match blocker {
+                0 => app.world_mut().resource_mut::<GameSession>().paused = true,
+                1 => app.world_mut().resource_mut::<GameSession>().finished = true,
+                2 => app.world_mut().resource_mut::<HeroVitals>().alive = false,
+                3 => app.world_mut().resource_mut::<SelectedHero>().locked = false,
+                4 => {
+                    app.world_mut().remove_resource::<GameAssets>();
+                }
+                _ => {
+                    let entities: Vec<_> = app
+                        .world_mut()
+                        .query_filtered::<Entity, With<Enemy>>()
+                        .iter(app.world())
+                        .collect();
+                    for entity in entities {
+                        app.world_mut().despawn(entity);
+                    }
+                }
+            }
+            app.update();
+            assert_eq!(
+                app.world().resource::<ActiveSkill>().remaining,
+                0.0,
+                "blocker {blocker}"
+            );
+        }
+    }
     #[test]
     fn hero_identity_matches_catalog_order() {
         let expected = [
@@ -1539,20 +1637,54 @@ mod tests {
     }
 
     #[test]
-    fn active_cast_edge_is_detected_once() {
-        assert!(did_ultimate_start(0.0, 50.0));
-        assert!(!did_ultimate_start(50.0, 49.98));
-        assert!(!did_ultimate_start(0.0, 0.0));
+    fn automatic_casts_wait_for_useful_targets() {
+        for kind in HeroKind::ALL {
+            assert!(!automatic_ultimate_useful(
+                kind,
+                Vec3::ZERO,
+                None,
+                false,
+                18
+            ));
+            assert!(automatic_ultimate_useful(
+                kind,
+                Vec3::ZERO,
+                Some(Vec3::X),
+                false,
+                18
+            ));
+        }
+        assert!(!automatic_ultimate_useful(
+            HeroKind::IronBerserker,
+            Vec3::ZERO,
+            Some(Vec3::X * 3.0),
+            false,
+            18
+        ));
+        assert!(!automatic_ultimate_useful(
+            HeroKind::SpiritKeeper,
+            Vec3::ZERO,
+            Some(Vec3::X),
+            false,
+            0
+        ));
+        assert!(automatic_ultimate_useful(
+            HeroKind::StoneWarden,
+            Vec3::ZERO,
+            None,
+            true,
+            0
+        ));
     }
 
     #[test]
     fn spirit_keeper_passive_and_ultimate_share_the_global_summon_slots() {
-        assert_eq!(player_summon_slots(17, 0, 0), 1);
-        assert_eq!(player_summon_slots(18, 0, 0), 0);
-        assert_eq!(player_summon_slots(18, 2, 0), 2);
-        assert_eq!(player_summon_slots(18, 0, 1), 1);
-        assert_eq!(player_summon_slots(18, 2, 1), 2);
-        assert_eq!(player_summon_slots(20, 2, 1), 0);
+        assert_eq!(player_summon_slots(17, 0), 1);
+        assert_eq!(player_summon_slots(18, 0), 0);
+        assert_eq!(player_summon_slots(18, 2), 2);
+        assert_eq!(player_summon_slots(18, 1), 1);
+        assert_eq!(player_summon_slots(18, 3), 2);
+        assert_eq!(player_summon_slots(20, 3), 0);
     }
 
     #[test]
