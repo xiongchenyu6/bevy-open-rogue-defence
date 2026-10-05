@@ -183,7 +183,8 @@ fn request_skill_draft(
         || interactions
             .iter()
             .any(|interaction| *interaction == Interaction::Pressed);
-    let pressed = continuation.queued == Some(DraftKind::Skill) && session.skill_points > 0
+    let pressed = continuation.queued == Some(DraftKind::Skill)
+        && (session.skill_points > 0 || session.gold >= skill_cost(&economy))
         || keyboard.just_pressed(KeyCode::KeyG)
         || interactions
             .iter()
@@ -1020,11 +1021,6 @@ fn handle_draft_actions(
         let Some(kind) = draft.kind else {
             return;
         };
-        commands.queue(|world: &mut World| {
-            let mut continuation = world.resource_mut::<DraftContinuation>();
-            continuation.queued = None;
-            continuation.enabled = false;
-        });
         match button.0 {
             DraftAction::Refresh => {
                 if session.skill_rerolls == 0
@@ -1077,6 +1073,7 @@ fn handle_draft_actions(
                 if kind == DraftKind::Encounter {
                     return;
                 }
+                stop_draft_continuation(&mut commands);
                 session.skill_rerolls = session.skill_rerolls.saturating_add(1);
                 clear_draft(
                     &mut commands,
@@ -1088,6 +1085,7 @@ fn handle_draft_actions(
             }
             DraftAction::Later => {
                 if let Some(root) = draft.root.take() {
+                    stop_draft_continuation(&mut commands);
                     commands.entity(root).despawn();
                 }
                 draft.opened_for = 0.0;
@@ -1096,6 +1094,14 @@ fn handle_draft_actions(
         }
         break;
     }
+}
+
+fn stop_draft_continuation(commands: &mut Commands) {
+    commands.queue(|world: &mut World| {
+        let mut continuation = world.resource_mut::<DraftContinuation>();
+        continuation.queued = None;
+        continuation.enabled = false;
+    });
 }
 
 fn handle_draft_keys(
@@ -1337,8 +1343,7 @@ fn choose(
     }
     let next = match draft.kind {
         Some(DraftKind::Skill)
-            if skill_economy.pending_payment == Some(SkillDrawPayment::Free)
-                && session.skill_points > 0 =>
+            if session.skill_points > 0 || session.gold >= skill_cost(skill_economy) =>
         {
             Some(DraftKind::Skill)
         }
@@ -3051,19 +3056,12 @@ mod tests {
         assert!(app.world().resource::<DraftContinuation>().queued.is_none());
     }
     #[test]
-    fn bond_later_abandon_and_refresh_stop_continuation_without_another_charge() {
-        for action in [
-            DraftAction::Later,
-            DraftAction::Abandon,
-            DraftAction::Refresh,
-        ] {
+    fn successful_later_and_abandon_stop_continuation_without_another_charge() {
+        for action in [DraftAction::Later, DraftAction::Abandon] {
             let mut app = three_remaining_bond_app(100);
             tap_f(&mut app);
             press_action(&mut app, action);
             assert!(!app.world().resource::<DraftContinuation>().enabled);
-            if action == DraftAction::Refresh {
-                press_first_choice(&mut app);
-            }
             let wood = app.world().resource::<GameSession>().wood;
             for _ in 0..3 {
                 app.update();
@@ -3120,6 +3118,107 @@ mod tests {
         assert!(app.world().resource::<DraftState>().root.is_none());
         assert!(!app.world().resource::<EncounterState>().pending());
         assert_eq!(app.world().resource::<EncounterState>().banked, 0);
+    }
+    #[test]
+    fn one_g_entry_consumes_free_first_then_two_paid_draws_until_gold_is_exhausted() {
+        let mut app = test_app();
+        {
+            let mut session = app.world_mut().resource_mut::<GameSession>();
+            session.skill_points = 1;
+            session.gold = 175;
+        }
+        let ranks = app
+            .world()
+            .resource::<PlayerBuild>()
+            .skills
+            .iter()
+            .map(|rank| u32::from(*rank))
+            .sum::<u32>();
+        tap_g(&mut app);
+        for gold in [175, 95, 0] {
+            assert_eq!(app.world().resource::<GameSession>().gold, gold);
+            press_first_choice(&mut app);
+            app.update();
+        }
+        assert_eq!(app.world().resource::<SkillEconomy>().paid_draws, 2);
+        assert_eq!(app.world().resource::<GameSession>().skill_points, 0);
+        assert!(app.world().resource::<DraftState>().root.is_none());
+        assert_eq!(
+            app.world()
+                .resource::<PlayerBuild>()
+                .skills
+                .iter()
+                .map(|rank| u32::from(*rank))
+                .sum::<u32>(),
+            ranks + 3
+        );
+        assert!(app.world().resource::<DraftContinuation>().queued.is_none());
+    }
+    #[test]
+    fn successful_refresh_and_failed_refresh_preserve_paid_skill_continuation() {
+        for rerolls in [0, 1] {
+            let mut app = test_app();
+            {
+                let mut session = app.world_mut().resource_mut::<GameSession>();
+                session.gold = 175;
+                session.skill_rerolls = rerolls;
+            }
+            tap_g(&mut app);
+            assert_eq!(app.world().resource::<GameSession>().gold, 95);
+            press_action(&mut app, DraftAction::Refresh);
+            assert!(app.world().resource::<DraftContinuation>().enabled);
+            assert_eq!(app.world().resource::<GameSession>().gold, 95);
+            assert_eq!(app.world().resource::<SkillEconomy>().paid_draws, 1);
+            press_first_choice(&mut app);
+            app.update();
+            assert_eq!(app.world().resource::<GameSession>().gold, 0);
+            assert_eq!(app.world().resource::<SkillEconomy>().paid_draws, 2);
+            assert!(app.world().resource::<DraftState>().root.is_some());
+            press_first_choice(&mut app);
+            app.update();
+            assert!(app.world().resource::<DraftState>().root.is_none());
+        }
+    }
+    #[test]
+    fn bond_refresh_preserves_chain_and_failed_encounter_abandon_does_not_cancel_banked_claims() {
+        let mut app = three_remaining_bond_app(45);
+        tap_f(&mut app);
+        press_action(&mut app, DraftAction::Refresh);
+        assert!(app.world().resource::<DraftContinuation>().enabled);
+        press_first_choice(&mut app);
+        app.update();
+        assert_eq!(app.world().resource::<GameSession>().wood, 20);
+        assert_eq!(app.world().resource::<GameSession>().bond_draws, 2);
+        let mut app = test_app();
+        {
+            let mut encounters = app.world_mut().resource_mut::<EncounterState>();
+            encounters.bank_for_boss(0);
+            encounters.bank_for_boss(1);
+        }
+        app.world_mut().resource_mut::<GameSession>().gold = 100_000;
+        app.world_mut().resource_mut::<GameSession>().wood = 100_000;
+        app.world_mut()
+            .resource_mut::<ButtonInput<KeyCode>>()
+            .press(KeyCode::KeyE);
+        app.update();
+        app.world_mut()
+            .resource_mut::<ButtonInput<KeyCode>>()
+            .reset_all();
+        let action = app
+            .world_mut()
+            .spawn((
+                DraftActionButton(DraftAction::Abandon),
+                Interaction::Pressed,
+            ))
+            .id();
+        app.update();
+        assert!(app.world().resource::<DraftContinuation>().enabled);
+        assert_eq!(app.world().resource::<EncounterState>().banked, 1);
+        app.world_mut().entity_mut(action).despawn();
+        press_first_choice(&mut app);
+        app.update();
+        assert_eq!(app.world().resource::<EncounterState>().banked, 0);
+        assert!(app.world().resource::<DraftState>().root.is_some());
     }
 }
 

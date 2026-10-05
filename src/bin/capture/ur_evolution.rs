@@ -204,18 +204,19 @@ fn controls(
     let mut pressed = false;
     for (name, mut interaction, skill, draft_action) in &mut buttons {
         if (matches!(frame, 10 | 330) && skill)
-            || (frame == 350 && draft_action.is_some_and(|a| a.0 == DraftAction::Later))
+            || (matches!(frame, 46 | 350)
+                && draft_action.is_some_and(|a| a.0 == DraftAction::Later))
             || action
                 .as_ref()
                 .is_some_and(|a| name.is_some_and(|n| n.as_str() == a))
         {
             *interaction = Interaction::Pressed;
             pressed = true;
-        } else if matches!(frame, 11 | 36 | 46 | 331 | 351) {
+        } else if matches!(frame, 11 | 36 | 47 | 331 | 351) {
             *interaction = Interaction::None;
         }
     }
-    if matches!(frame, 10 | 35 | 330 | 350) {
+    if matches!(frame, 10 | 35 | 46 | 330 | 350) {
         assert!(pressed, "UR UI action missing at frame {frame}");
     }
     if frame == 60 {

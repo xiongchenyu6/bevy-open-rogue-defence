@@ -1,0 +1,27 @@
+Skill continuous selection verification — 2026-10-05
+
+Production logic: one entry chains free skill points first, then affordable gold draws. Refresh preserves the chain; successful Later/Abandon stops it. Fresh pointer/number input is required for every hand.
+
+Strict cargo clippy --all-targets -- -D warnings: passed (final 6.53s).
+Cargo test --lib: 531 passed; 0 failed; 1 ignored.
+Cargo build --bins: passed (8m19s).
+Final capture-only rebuild after updating UR fixture exit input: passed (1m28s).
+
+PASS 1/13 immediate-skill-paid-skill-final-en-1280x720
+PASS 2/13 immediate-skill-paid-skill-final-zh-667x375
+PASS 3/13 immediate-bond-paid-skill-final-en-1280x720
+PASS 4/13 immediate-bond-paid-skill-final-zh-667x375
+PASS 5/13 immediate-skill-paid-paid-skill-final-en-1280x720
+PASS 6/13 immediate-skill-paid-paid-skill-final-zh-667x375
+PASS 7/13 ur26-surge-paid-skill-final-en-1280x720
+PASS 8/13 ur26-control-paid-skill-final-en-1280x720
+PASS 9/13 ur26-sustain-paid-skill-final-en-1280x720
+PASS 10/13 ur26-surge-paid-skill-final-zh-667x375
+PASS 11/13 recruit-fruit-confirm-paid-skill-final-en-1280x720
+PASS 12/13 recruit-fruit-confirm-paid-skill-final-zh-667x375
+PASS 13/13 draft-confirm-paid-skill-final-en-1280x720
+ALL_CONTINUOUS_CHOICES_CAPTURES_PASS 13 scenes 4110 frames
+
+Paid-skill real-pointer checks, both EN1280x720 and ZH667x375:
+One entry, free1 then gold80/95/110, four fresh card clicks2/1/0/2. Gold285→205→110→0; paid_draws0→1→2→3. Next price125 cannot be paid: draft closes and battle resumes. Held mouse does not duplicate selection/payment.
+All13 native logs checked: no panic or render ERROR. Screenshots reviewed: fourth hand240 and stopped battle255, desktop/mobile.

@@ -6,4 +6,4 @@ The battlefield uses a warm shadowed sun and a weaker cool sky fill. Stone, timb
 
 Many characters use a single color atlas for skin, cloth and armor. This pass reduces the shared plastic highlight; separate material masks and authored normal/roughness maps would allow better surface differentiation in a later asset pass. Baked highlights in UI portraits and icons are not removed by world material changes.
 
-Selection chains consume available free skill points, affordable bond draws and banked encounters after an initial entry. Every card still requires a fresh click or number press. Refresh, abandon and later stop the chain; later preserves the already paid hand. Skill chains do not start additional gold purchases.
+Selection chains consume free skill points first, then affordable gold draws, affordable bond draws and banked encounters after an initial entry. Every card still requires a fresh click or number press. Refresh preserves the chain; abandon and later stop it. Later preserves the already paid hand.
