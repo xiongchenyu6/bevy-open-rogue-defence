@@ -1,0 +1,19 @@
+Archer single-arrow verification — 2026-10-05
+
+Starter native arrows1, ricochets0; level10/20/40 unlock basearrows2/3/4 and ricochets1/2/3. Acquired equipmentbonuses preserved. Bothnative and inherited volleys capped by unique living in-range enemies; one enemy receives one initial arrow. Bamboo extra-attack reward still generates a separate nonrecursive bonusvolley.
+
+Strictalltargetclippy PASS32.11s.
+Cargotestlib534passed0failed1ignored.
+CargobuildbinsPASS8m29s.
+
+PASS 1/8 weapon-growth-archer-starter-final-en-1280x720
+PASS 2/8 weapon-growth-archer-starter-final-zh-667x375
+PASS 3/8 weapon-growth-archer-starter-single-final-en-1280x720
+PASS 4/8 weapon-growth-archer-starter-single-final-zh-667x375
+PASS 5/8 weapon-growth-archer-upgraded-final-en-1280x720
+PASS 6/8 weapon-growth-archer-upgraded-final-zh-667x375
+PASS 7/8 weapon-growth-archer-upgraded-single-final-en-1280x720
+PASS 8/8 weapon-growth-archer-upgraded-single-final-zh-667x375
+ALL_ARCHER_SINGLE_ARROW_CAPTURES_PASS 8 scenes 1920 full frames
+
+All8 native scenarios assert actual firstvolley Projectile count: starter1 withone/threeenemies; upgraded1 withoneenemy and3 withthreeenemies. RealEnemyHP damage verified, skills/ultimate suppressed, productioncamera retained. No panic/renderERROR. Reviewed desktopstarter-single and mobileupgraded-single firstflight screenshots.

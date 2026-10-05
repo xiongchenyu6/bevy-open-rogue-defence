@@ -198,7 +198,14 @@ fn emit(
                 a.distance_squared(target.translation)
                     .total_cmp(&b.distance_squared(target.translation))
             });
-            for shot in 0..class_stats.shots {
+            let shots = if weapon == basic_attacks::BasicWeapon::Crossbow {
+                class_stats
+                    .shots
+                    .min(targets.len().min(usize::from(u8::MAX)) as u8)
+            } else {
+                class_stats.shots
+            };
+            for shot in 0..shots {
                 let direction = if weapon == basic_attacks::BasicWeapon::Crossbow {
                     targets
                         .get(usize::from(shot))

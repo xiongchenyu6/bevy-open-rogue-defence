@@ -21,6 +21,8 @@ struct WeaponGrowthProbe {
 
 pub fn configure_growth(world: &mut World, scenario: &str) {
     let (class, tier) = scenario
+        .strip_suffix("-single")
+        .unwrap_or(scenario)
         .strip_prefix("weapon-growth-")
         .unwrap()
         .rsplit_once('-')
@@ -121,7 +123,7 @@ pub fn install(app: &mut bevy::app::SubApp, scenario: &str) {
     let scene = world.resource::<GameAssets>().enemy_scenes[0].clone();
     let fragile = scenario.ends_with("-fragile");
     let target_hp = if fragile { FRAGILE_HP } else { 100_000.0 };
-    for index in 0..3 {
+    for index in 0..if scenario.ends_with("-single") { 1 } else { 3 } {
         let position = Vec3::new(
             if melee { -0.7 } else { 3.0 },
             0.0,
@@ -265,6 +267,24 @@ fn audit_growth(world: &mut World) {
         .iter(world)
         .any(|name| name.as_str() == "Weapon swing trail");
     if !world.resource::<WeaponGrowthProbe>().flight && (swing || !projectile_rows.is_empty()) {
+        if world.resource::<SelectedHero>().kind == HeroKind::EmberRanger {
+            let expected = if !advanced
+                || world
+                    .resource::<WeaponGrowthProbe>()
+                    .scenario
+                    .ends_with("-single")
+            {
+                1
+            } else {
+                3
+            };
+            assert_eq!(
+                projectile_rows.len(),
+                expected,
+                "initial volley uses one arrow per distinct target; starter has one arrow"
+            );
+            println!("[capture] PASS archer-first-volley arrows={expected}");
+        }
         world.resource_mut::<WeaponGrowthProbe>().flight = true;
         println!("[capture] weapon-growth-stage actual-flight frame={frame}");
     }

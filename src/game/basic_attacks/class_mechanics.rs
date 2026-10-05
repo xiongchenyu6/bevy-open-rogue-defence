@@ -26,14 +26,14 @@ pub fn class_basic_stats(kind: HeroKind, level: u32, build: &PlayerBuild) -> Cla
     let warrior = matches!(weapon, BasicWeapon::Sword | BasicWeapon::Axe);
     ClassBasicStats {
         shots: if archer {
-            (2 + tier)
+            (1 + tier)
                 .saturating_add(build.multishot.saturating_sub(1))
                 .min(8)
         } else {
             build.multishot.max(1)
         },
         bounces: if archer {
-            (1 + tier).saturating_add(build.ricochet).min(4)
+            tier.saturating_add(build.ricochet).min(4)
         } else {
             0
         },
@@ -100,10 +100,10 @@ mod tests {
     fn class_milestones_and_bounded_equipment_feed_real_attack_profiles() {
         let build = PlayerBuild::default();
         for (level, shots, bounces, ratio) in [
-            (1, 2, 1, 0.6),
-            (10, 3, 2, 0.7),
-            (20, 4, 3, 0.8),
-            (40, 5, 4, 0.9),
+            (1, 1, 0, 0.6),
+            (10, 2, 1, 0.7),
+            (20, 3, 2, 0.8),
+            (40, 4, 3, 0.9),
         ] {
             let archer = class_basic_stats(HeroKind::EmberRanger, level, &build);
             assert_eq!((archer.shots, archer.bounces), (shots, bounces));

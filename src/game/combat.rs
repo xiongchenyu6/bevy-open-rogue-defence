@@ -1961,7 +1961,13 @@ fn auto_attack(
             }
 
             let base_direction = (target - hero.translation).normalize_or_zero();
-            let shot_count = class_stats.shots;
+            let shot_count = if weapon == basic_attacks::BasicWeapon::Crossbow {
+                class_stats
+                    .shots
+                    .min(archer_targets.len().min(usize::from(u8::MAX)) as u8)
+            } else {
+                class_stats.shots
+            };
             let mut fired = false;
             if weapon.melee() {
                 commands.spawn(PendingSwing {
@@ -3974,6 +3980,7 @@ mod tests {
         app.init_resource::<AttackClock>()
             .init_resource::<AttackVolleyRuntime>();
         app.world_mut().resource_mut::<HeroVitals>().kind = HeroKind::EmberRanger;
+        app.world_mut().resource_mut::<HeroVitals>().level = 10;
         app.world_mut()
             .resource_mut::<PlayerBuild>()
             .attacks_per_second = 1.0;
@@ -3994,6 +4001,42 @@ mod tests {
         assert!(arrows.iter().all(|(_, bounce)| bounce.remaining == 1));
         assert!(arrows[0].0.velocity.z * arrows[1].0.velocity.z < 0.0);
         assert_eq!(arrows[0].0.damage, arrows[1].0.damage);
+    }
+
+    #[test]
+    fn archer_single_enemy_never_receives_duplicate_initial_arrows() {
+        for level in [1, 10, 40] {
+            let mut app = projectile_test_app();
+            app.init_resource::<AttackClock>()
+                .init_resource::<AttackVolleyRuntime>();
+            {
+                let mut vitals = app.world_mut().resource_mut::<HeroVitals>();
+                vitals.kind = HeroKind::EmberRanger;
+                vitals.level = level;
+            }
+            app.world_mut()
+                .resource_mut::<PlayerBuild>()
+                .attacks_per_second = 1.0;
+            app.world_mut().spawn((Hero, Transform::default()));
+            app.world_mut()
+                .spawn((test_enemy(1000.0), Transform::from_xyz(3.0, 0.0, 0.0)));
+            app.world_mut()
+                .spawn((test_enemy(0.0), Transform::from_xyz(3.0, 0.0, 1.0)));
+            app.world_mut()
+                .resource_mut::<Time>()
+                .advance_by(std::time::Duration::from_secs(1));
+            app.world_mut().run_system_once(auto_attack).unwrap();
+            let mut arrows = app
+                .world_mut()
+                .query::<(&Projectile, Option<&basic_attacks::Ricochet>)>();
+            let arrows: Vec<_> = arrows.iter(app.world()).collect();
+            assert_eq!(arrows.len(), 1, "level {level}");
+            assert_eq!(arrows[0].1.is_some(), level >= 10);
+            assert_eq!(
+                arrows[0].0.damage,
+                app.world().resource::<PlayerBuild>().attack_damage
+            );
+        }
     }
 
     #[test]
@@ -4198,8 +4241,8 @@ mod tests {
         app.update();
         let mut arrows=app.world_mut().query_filtered::<(&Projectile,&basic_attacks::Ricochet),With<super::super::hero_fusion::FusionAttack>>();
         let arrows: Vec<_> = arrows.iter(app.world()).collect();
-        assert_eq!(arrows.len(), 5);
-        assert!(arrows.iter().all(|(_, bounce)| bounce.remaining == 4));
+        assert_eq!(arrows.len(), 1);
+        assert!(arrows.iter().all(|(_, bounce)| bounce.remaining == 3));
         let base = app.world().resource::<PlayerBuild>().attack_damage;
         assert!(
             arrows
@@ -4639,8 +4682,8 @@ mod tests {
             .collect();
         assert_eq!(
             flights.len(),
-            4,
-            "two native arrows plus two arrows in exactly one nonrecursive bonus volley"
+            2,
+            "one native arrow plus one arrow in exactly one nonrecursive bonus volley"
         );
         assert!(
             flights
