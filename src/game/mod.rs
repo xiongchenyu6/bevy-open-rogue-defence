@@ -102,7 +102,7 @@ pub use mobile_layout::ControlScheme;
 pub use pooling::{CombatPoolSnapshot, CombatPools, DamageNumberPoolMetrics, PoolMetrics};
 pub use progression::{SkillEconomy, available_bond_cards, available_bond_cards_at};
 pub use resources::*;
-pub use settings::SettingsInputSet;
+pub use settings::{SettingsDepartureInputSet, SettingsInputSet};
 pub use skills::SkillCastTelemetry;
 pub use skills::tidal_wave::TidalWave;
 

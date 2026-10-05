@@ -729,6 +729,19 @@ fn result_actions(
         });
 }
 
+/// Discard the current run before presenting an unambiguous chapter page.
+pub(crate) fn open_chapters(world: &mut World) {
+    let stage = world.resource::<CampaignRun>().stage;
+    super::run_reset::reset_run(world, stage);
+    let root = world.resource_mut::<MenuView>().root.take();
+    if let Some(root) = root {
+        let _ = world.despawn(root);
+    }
+    world.insert_resource(MenuView::default());
+    world.resource_mut::<CampaignMenu>().0 = true;
+    world.resource_mut::<GameSession>().paused = true;
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

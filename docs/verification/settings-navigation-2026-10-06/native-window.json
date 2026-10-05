@@ -1,0 +1,29 @@
+{
+  "windowed": {
+    "WINDOW": "4194306",
+    "X": "160",
+    "Y": "97",
+    "WIDTH": "1280",
+    "HEIGHT": "720",
+    "SCREEN": "0"
+  },
+  "fullscreen": {
+    "WINDOW": "4194306",
+    "X": "0",
+    "Y": "0",
+    "WIDTH": "1600",
+    "HEIGHT": "900",
+    "SCREEN": "0"
+  },
+  "restored": {
+    "WINDOW": "4194306",
+    "X": "160",
+    "Y": "97",
+    "WIDTH": "1280",
+    "HEIGHT": "720",
+    "SCREEN": "0"
+  },
+  "native_winit": true,
+  "backend": "X11 / Xvfb / Openbox",
+  "preference_files_verified": true
+}

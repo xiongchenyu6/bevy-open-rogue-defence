@@ -1,0 +1,51 @@
+Settings navigation and native display verification — 2026-10-06
+Final source frozen for r5 pipeline; all five capture processes exited 0.
+Library tests: 558 passed / 0 failed / 1 ignored.
+Captures: navigation desktop 100 + navigation mobile 100 + audio 120 + bond 120 + recruitment 120 = 560 frames.
+
+clippy
+    Finished `dev` profile [optimized + debuginfo] target(s) in 15.71s
+
+tests
+    Finished `test` profile [optimized + debuginfo] target(s) in 4m 56s
+test result: ok. 558 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.23s
+
+build
+    Finished `dev` profile [optimized + debuginfo] target(s) in 8m 06s
+
+desktop
+SETTINGS_NAVIGATION_PASS
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+
+mobile
+SETTINGS_NAVIGATION_PASS
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+
+audio
+AUDIO_SETTINGS_PASS music=40 effects=80 mute_restore=true actual_music_gain=true controls_fit=true pause_restored=true save_status_verified=true
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+
+bond
+[settings capture] language applied; seed/build/offers/cards preserved; pause restored correctly
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+
+recruit
+[settings capture] language applied; seed/build/offers/cards preserved; pause restored correctly
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+
+real Winit window
+NATIVE_DISPLAY_PASS {"windowed": {"WINDOW": "4194306", "X": "160", "Y": "97", "WIDTH": "1280", "HEIGHT": "720", "SCREEN": "0"}, "fullscreen": {"WINDOW": "4194306", "X": "0", "Y": "0", "WIDTH": "1600", "HEIGHT": "900", "SCREEN": "0"}, "restored": {"WINDOW": "4194306", "X": "160", "Y": "97", "WIDTH": "1280", "HEIGHT": "720", "SCREEN": "0"}, "native_winit": true, "backend": "X11 / Xvfb / Openbox", "preference_files_verified": true}
+NATIVE_UI_QUIT_PASS exit=0
+NATIVE_DISPLAY_RELOAD_PASS fresh_process_fullscreen=true restored_window=1280x720
+
+real Winit save failure
+NATIVE_DISPLAY_PASS {"windowed": {"WINDOW": "4194306", "X": "160", "Y": "97", "WIDTH": "1280", "HEIGHT": "720", "SCREEN": "0"}, "fullscreen": {"WINDOW": "4194306", "X": "0", "Y": "0", "WIDTH": "1600", "HEIGHT": "900", "SCREEN": "0"}, "restored": {"WINDOW": "4194306", "X": "160", "Y": "97", "WIDTH": "1280", "HEIGHT": "720", "SCREEN": "0"}, "native_winit": true, "backend": "X11 / Xvfb / Openbox", "save_destination_is_directory": true}
+NATIVE_DISPLAY_FAILURE_PASS mode_changes=true directory_preserved=true exit=0
+
+Format check: final r5 exit 0.
+Real window scope: Linux / X11 / isolated Xvfb 1600x900 / Openbox / Winit.
+Development assets supplied through BEVY_ASSET_ROOT; this is not a standalone package test.
+Real pointer opened settings from initial chapters; real F11 changed geometry and persisted preference; real pointer confirmed Quit game, process exited 0.
+Display failure screenshot inspected: settings shows could-not-save notice while actual fullscreen remains active and invalid directory destination is preserved.
+ICU4X segmentation warnings and Xvfb XRandR size warnings remain; no zero-warning claim.
+Windows, macOS, browser runtime, multi-monitor, high-DPI and clean-machine release package remain unverified.

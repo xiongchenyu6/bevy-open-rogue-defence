@@ -1,5 +1,9 @@
 //! Settings restores the prior pause and edits persisted player preferences.
 mod audio_controls;
+mod run_actions;
+pub use run_actions::SettingsDepartureInputSet;
+#[cfg(not(target_arch = "wasm32"))]
+mod display_controls;
 use bevy::{prelude::*, ui::UiSystems, window::PrimaryWindow};
 
 use super::{CaptureTarget, GameLanguage, GameSession};
@@ -18,6 +22,9 @@ pub struct SettingsInputSet;
 impl Plugin for SettingsPlugin {
     fn build(&self, app: &mut App) {
         audio_controls::install(app);
+        run_actions::install(app);
+        #[cfg(not(target_arch = "wasm32"))]
+        app.add_plugins(display_controls::DisplayControlsPlugin);
         app.init_resource::<SettingsState>()
             .add_systems(Startup, setup_entry)
             .add_systems(
@@ -36,6 +43,7 @@ pub(crate) struct SettingsState {
     root: Option<Entity>,
     prior_paused: bool,
     save_failed: bool,
+    confirmation: Option<Entity>,
 }
 
 impl SettingsState {
@@ -110,7 +118,7 @@ fn setup_entry(mut commands: Commands) {
                 border: UiRect::all(px(1)),
                 ..default()
             },
-            GlobalZIndex(310),
+            GlobalZIndex(510),
             BackgroundColor(Color::srgba(0.025, 0.045, 0.052, 0.98)),
             BorderColor::all(GOLD),
         ))
@@ -132,7 +140,7 @@ fn spawn_settings(commands: &mut Commands) -> Entity {
                 ..default()
             },
             bevy::ui::FocusPolicy::Block,
-            GlobalZIndex(300),
+            GlobalZIndex(500),
             BackgroundColor(Color::srgb(0.014, 0.025, 0.032)),
         ))
         .with_children(|root| {
@@ -227,26 +235,39 @@ fn spawn_settings(commands: &mut Commands) -> Entity {
                     },
                 ));
                 panel
-                    .spawn((
-                        Button,
-                        SettingsClose,
-                        Name::new("Settings close"),
-                        Node {
-                            width: percent(100),
-                            height: px(48),
-                            min_height: px(48),
-                            flex_shrink: 0.0,
-                            align_items: AlignItems::Center,
-                            justify_content: JustifyContent::Center,
-                            ..default()
-                        },
-                        BackgroundColor(GOLD),
-                    ))
-                    .with_children(|button| {
-                        button.spawn((
-                            SettingsCopy(CopyKind::Back),
-                            label("", 16.0, Color::srgb(0.035, 0.055, 0.055)),
-                        ));
+                    .spawn(Node {
+                        width: percent(100),
+                        column_gap: px(6),
+                        flex_shrink: 0.0,
+                        ..default()
+                    })
+                    .with_children(|row| {
+                        row.spawn((
+                            Button,
+                            SettingsClose,
+                            Name::new("Settings close"),
+                            Node {
+                                flex_basis: px(0),
+                                flex_grow: 1.0,
+                                min_width: px(0),
+                                height: px(48),
+                                min_height: px(48),
+                                flex_shrink: 0.0,
+                                align_items: AlignItems::Center,
+                                justify_content: JustifyContent::Center,
+                                ..default()
+                            },
+                            BackgroundColor(GOLD),
+                        ))
+                        .with_children(|button| {
+                            button.spawn((
+                                SettingsCopy(CopyKind::Back),
+                                label("", 13.0, Color::srgb(0.035, 0.055, 0.055)),
+                            ));
+                        });
+                        run_actions::spawn(row);
+                        #[cfg(not(target_arch = "wasm32"))]
+                        display_controls::spawn(row);
                     });
             });
         })
@@ -276,6 +297,10 @@ fn handle_settings_input(
         }
         state.begin(&mut session);
         state.root = Some(spawn_settings(&mut commands));
+        keyboard.clear();
+        return;
+    }
+    if state.confirmation.is_some() {
         keyboard.clear();
         return;
     }
@@ -328,7 +353,7 @@ fn copy(kind: CopyKind, language: GameLanguage, failed: bool) -> &'static str {
                 language.pick("Your choice is saved immediately. Your expedition stays paused while settings are open.", "选择后立即保存。设置页面打开期间，远征将保持暂停。")
             }
         }
-        CopyKind::Back => language.pick("Back to expedition", "返回远征"),
+        CopyKind::Back => language.pick("Back", "返回"),
     }
 }
 
@@ -336,6 +361,9 @@ fn update_settings_copy(
     language: Res<GameLanguage>,
     state: Res<SettingsState>,
     audio_save: Option<Res<super::AudioSaveStatus>>,
+    #[cfg(not(target_arch = "wasm32"))] display_save: Option<
+        Res<display_controls::DisplaySaveStatus>,
+    >,
     mut labels: Query<(&mut Text, &SettingsCopy)>,
     mut selected: Query<(&SettingsSelected, &mut Visibility)>,
     mut launcher: Query<
@@ -365,11 +393,17 @@ fn update_settings_copy(
         ),
     >,
 ) {
+    #[cfg(not(target_arch = "wasm32"))]
+    let display_failed = display_save.as_ref().is_some_and(|save| save.failed);
+    #[cfg(target_arch = "wasm32")]
+    let display_failed = false;
     for (mut text, key) in &mut labels {
         **text = copy(
             key.0,
             *language,
-            state.save_failed || audio_save.as_ref().is_some_and(|save| save.failed),
+            state.save_failed
+                || audio_save.as_ref().is_some_and(|save| save.failed)
+                || display_failed,
         )
         .into();
     }
@@ -448,11 +482,18 @@ fn update_settings_layout(
         Option<&SettingsCopy>,
     )>,
     audio_save: Option<Res<super::AudioSaveStatus>>,
+    #[cfg(not(target_arch = "wasm32"))] display_save: Option<
+        Res<display_controls::DisplaySaveStatus>,
+    >,
     mut headings: Query<&mut TextFont, With<SettingsHeading>>,
 ) {
     if !state.open {
         return;
     }
+    #[cfg(not(target_arch = "wasm32"))]
+    let display_failed = display_save.as_ref().is_some_and(|save| save.failed);
+    #[cfg(target_arch = "wasm32")]
+    let display_failed = false;
     let (width, height) = windows
         .single()
         .map(|window| (window.width(), window.height()))
@@ -478,7 +519,9 @@ fn update_settings_layout(
         if let Some(copy) = copy
             && matches!(copy.0, CopyKind::Intro | CopyKind::SaveNotice)
         {
-            let failed = state.save_failed || audio_save.as_ref().is_some_and(|save| save.failed);
+            let failed = state.save_failed
+                || audio_save.as_ref().is_some_and(|save| save.failed)
+                || display_failed;
             let hide = m.compact && (matches!(copy.0, CopyKind::Intro) || !failed);
             node.display = if hide { Display::None } else { Display::Flex };
         }

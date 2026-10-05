@@ -146,6 +146,8 @@ adb logcat | grep 'RustStdoutStderr\|bevy\|wgpu'
 
 最新平衡验证使用完整生产系统：普通第一章、两种种子、五种职业／站位组合、两种成长策略，修改前后40局均实际结束。新版不选可选成长的10局在第5–13波失败，持续选卡的10局通过25波。544项库测试通过（1项忽略），桌面及窄屏技能节奏、城墙重建原生场景共1,600帧通过。实际数据、截图、重放边界及复现命令见[战斗平衡报告](docs/combat-balance.md)。这些证据不代表其余章节、全部英雄或真实手机性能已经验收。
 
+设置页支持独立音乐／效果音、静音保存，以及原生窗口／全屏、F11、返回章节和退出。558项库测试、560帧最终交互场景及Linux/X11真实窗口切换、重启恢复和退出通过；范围与截图见[设置和导航](docs/settings-navigation.md)。其他平台与独立发行包仍待验证。
+
 上架品质的剩余验收按[发售体验清单](docs/release-readiness.md)推进；当前仍处于开发阶段。素材来源见[模型来源](assets/models/SOURCES.md)，素材验证工具为 `tools/verify_models.py` 和 `tools/verify_ui_assets.py`。此前截图与影片用于历史回看，不作为当前版本的平衡、帧率或确定性证明。
 
 ## 素材表
@@ -162,7 +164,7 @@ adb logcat | grep 'RustStdoutStderr\|bevy\|wgpu'
 | 造型素材匯入 | 已接入 | 35 個動畫角色＋12 個場景 GLB | `tools/import_cast.py`、`tools/import_environment_models.py`、`tools/verify_models.py`；保留造型、紋理與骨骼，四組動作與嵌入資源校驗 | 0 |
 | 貼圖／骨骼動畫 | 已接入 | 35 個角色 | CC0 模型內嵌貼圖與 Idle／Walk／Attack／Hit 動作 | 0 |
 | 英雄立繪／征募背景 | 已接入 | 12 張 384×480／1600×1000 | `assets/ui/`；由遊戲模型離線渲染，來源與重建命令見 `assets/ui/SOURCES.md` | 0 |
-| 簡中 UI 字體 | 已接入 | 369 KB／隨 UI 文案產生子集 | `assets/fonts/rogue_commander_ui.ttf`；Noto Sans SC 子集，SIL OFL 1.1 | 0 |
+| 簡中 UI 字體 | 已接入 | 約463 KiB／隨 UI 文案產生子集 | `assets/fonts/rogue_commander_ui.ttf`；Noto Sans SC 子集，SIL OFL 1.1 | 0 |
 | 技能／羈絆／操作圖示 | 已接入 | 56 張 256×256 RGBA | `assets/ui/icons/`；Blender 造型渲染，`tools/verify_ui_assets.py` 依內容表校驗 | 0 |
 | 音效與環境循環 | 已接入 | 0.16–24 秒 | `assets/audio/`；1 OGG＋13 WAV（含命中、暴擊、擊殺、重擊殺、英雄受擊、城門受擊），含 Web 解碼回歸測試 | 0 |
 

@@ -1,0 +1,18 @@
+{
+  "base_commit": "f50dbbf90d63048720d284cef81dcae567d0cc58",
+  "source_sha256": {
+    "src/game/settings.rs": "c7dff775f2c9728a7436b3711a90d846f0eb09264926bd446a6599df2ffe3cdc",
+    "src/game/settings/run_actions.rs": "3839168123ce602123be785253a1aa8584b70081529509dc232835e1299135d5",
+    "src/game/settings/display_controls.rs": "f6bb0eefb3d035ddcbce0564b25ceb4dd238c1d484aaecedc615871cced85ac9",
+    "src/game/settings/display_preferences.rs": "21cd32678b863e7711096e25f6765a3c6ef3009e934a787f123b1fad0097bde5",
+    "src/game/campaign_ui.rs": "e95abb0c38eaca294abd779eb012262febd2d1b47a6bf2a44255daa16e868913",
+    "src/game/run_reset.rs": "12a667f6e08a48d2b6f53ad53e20ad0b61353f9968f03f9f65963ce32bc9f642",
+    "src/bin/capture/settings_navigation.rs": "e477e4e3404f97bb871d14a95ea1f0eec2202dd685173346971821de11d99c51",
+    "assets/fonts/rogue_commander_ui.ttf": "2a6054178f20de9ce1d69b076a0aafcec7b297f6aadc429cc67edde5879fc6ca"
+  },
+  "binary_sha256": {
+    "target/debug/capture": "ac3526c369bd3c172b91d253475632d7612b02891b7ab55e5b527bb22229d9bb",
+    "target/debug/rogue_commander": "efcdab00c8b5f501d5bc51e7c99b6ae03a86b98a50beb0be20aebbb0dd1eab5a"
+  },
+  "native_scope": "Linux/X11/Xvfb/Openbox; explicit development asset root"
+}

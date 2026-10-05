@@ -140,6 +140,42 @@ pub fn reset_run(world: &mut World, stage: usize) {
 mod tests {
     use super::*;
     #[test]
+    fn return_to_chapters_discards_run_without_awarding_or_losing_permanent_progress() {
+        let mut app = App::new();
+        app.init_resource::<CampaignProgress>()
+            .add_plugins((RunResetPlugin, campaign_ui::CampaignUiPlugin));
+        let world = app.world_mut();
+        world.insert_resource(CampaignRun {
+            stage: 0,
+            run_id: 9,
+        });
+        world.insert_resource(RunSeed(88));
+        world.resource_mut::<CampaignProgress>().currency = 123;
+        world.resource_mut::<CampaignProgress>().upgrades[2] = 2;
+        world.insert_resource(GameSession {
+            gold: 999,
+            kills: 600,
+            ..default()
+        });
+        let scene = world
+            .spawn((ArenaEntity, Name::new("Persistent scene")))
+            .id();
+        remember_scene(world);
+        let enemy = world.spawn(Name::new("Transient enemy")).id();
+        campaign_ui::open_chapters(world);
+        assert!(world.get_entity(enemy).is_err());
+        assert!(world.get_entity(scene).is_ok());
+        assert!(world.resource::<campaign_ui::CampaignMenu>().0);
+        assert!(world.resource::<GameSession>().paused);
+        assert_eq!(world.resource::<CampaignRun>().run_id, 10);
+        assert_eq!(world.resource::<CampaignProgress>().currency, 123);
+        assert_eq!(world.resource::<CampaignProgress>().upgrades[2], 2);
+        assert!(!world.resource::<SelectedHero>().locked);
+        assert!(!world.resource::<GameSession>().finished);
+        assert_eq!(world.resource::<GameSession>().kills, 0);
+    }
+
+    #[test]
     fn two_in_app_restarts_preserve_scene_and_progress_but_remove_run_entities_and_bonuses() {
         let mut world = World::new();
         world.insert_resource(PersistentRoots::default());

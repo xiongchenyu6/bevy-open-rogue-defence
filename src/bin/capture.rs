@@ -89,6 +89,9 @@ mod skill_spectacle_capture;
 #[path = "capture/audio_settings.rs"]
 mod audio_settings_capture;
 
+#[path = "capture/settings_navigation.rs"]
+mod settings_navigation_capture;
+
 #[path = "capture/settings.rs"]
 mod settings_capture;
 
@@ -556,7 +559,9 @@ fn main() {
     if scenario.starts_with("trials-") {
         trial_capture::install(&mut apps.main);
     }
-    if scenario.starts_with("settings-audio") {
+    if scenario == "settings-navigation" {
+        settings_navigation_capture::install(&mut apps.main);
+    } else if scenario.starts_with("settings-audio") {
         audio_settings_capture::install(
             &mut apps.main,
             scenario == "settings-audio-reload",
