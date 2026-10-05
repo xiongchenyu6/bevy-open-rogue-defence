@@ -72,16 +72,18 @@ fn update_copy(
     mut labels: Query<(&mut Text, &ActionCopy)>,
 ) {
     for (mut label, key) in &mut labels {
-        **label = if key.0 == Action::Confirm {
-            if departure.choice == Some(Action::Quit) {
-                language.pick("Quit game", "退出游戏")
+        label.set_if_neq(Text(
+            if key.0 == Action::Confirm {
+                if departure.choice == Some(Action::Quit) {
+                    language.pick("Quit game", "退出游戏")
+                } else {
+                    language.pick("Return to chapters", "返回章节")
+                }
             } else {
-                language.pick("Return to chapters", "返回章节")
+                text(key.0, *language)
             }
-        } else {
-            text(key.0, *language)
-        }
-        .into();
+            .into(),
+        ));
     }
 }
 fn input(
@@ -168,6 +170,35 @@ fn apply(world: &mut World) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn departure_labels_refresh_only_for_changed_choice_or_language() {
+        use crate::game::settings::{TextRefreshProbe, count_text_refreshes};
+        let mut app = App::new();
+        app.init_resource::<Departure>()
+            .init_resource::<GameLanguage>()
+            .init_resource::<TextRefreshProbe>()
+            .add_systems(Update, update_copy)
+            .add_systems(Last, count_text_refreshes);
+        let label = app
+            .world_mut()
+            .spawn((ActionCopy(Action::Confirm), Text::default()))
+            .id();
+        app.update();
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 0);
+        app.world_mut().resource_mut::<Departure>().choice = Some(Action::Quit);
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 1);
+        assert_eq!(app.world().get::<Text>(label).unwrap().0, "Quit game");
+        app.world_mut()
+            .insert_resource(GameLanguage::SimplifiedChinese);
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 1);
+        assert_eq!(app.world().get::<Text>(label).unwrap().0, "退出游戏");
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 0);
+    }
+
     #[test]
     fn departure_requires_confirmation_and_escape_preserves_paused_run() {
         let mut app = App::new();

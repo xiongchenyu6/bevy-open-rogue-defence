@@ -194,7 +194,7 @@ fn update(
     )>,
 ) {
     for (copy, mut text) in &mut texts {
-        **text = match copy {
+        text.set_if_neq(Text(match copy {
             Copy::Music => language.pick("MUSIC", "音乐").into(),
             Copy::Effects => language.pick("EFFECTS", "效果音").into(),
             Copy::Sound => language.pick("SOUND", "声音").into(),
@@ -206,30 +206,67 @@ fn update(
                 language.pick("Mute", "静音")
             }
             .into(),
-        };
+        }));
     }
     for (control, interaction, mut border, mut background) in &mut buttons {
         let active = matches!(control, Control::Mute) && audio.muted;
-        border.set_all(if active {
+        border.set_if_neq(BorderColor::all(if active {
             GOLD
         } else if *interaction != Interaction::None {
             IVORY
         } else {
             EDGE
-        });
-        background.0 = if active {
-            Color::srgb(0.18, 0.14, 0.07)
-        } else if *interaction != Interaction::None {
-            Color::srgb(0.11, 0.16, 0.15)
-        } else {
-            PANEL
-        };
+        }));
+        background
+            .reborrow()
+            .map_unchanged(|color| &mut color.0)
+            .set_if_neq(if active {
+                Color::srgb(0.18, 0.14, 0.07)
+            } else if *interaction != Interaction::None {
+                Color::srgb(0.11, 0.16, 0.15)
+            } else {
+                PANEL
+            });
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn unchanged_audio_labels_are_clean_and_volume_language_changes_refresh() {
+        use crate::game::settings::{TextRefreshProbe, count_text_refreshes};
+        let mut app = App::new();
+        app.insert_resource(AudioPreferences {
+            music: 30,
+            effects: 50,
+            muted: false,
+        })
+        .init_resource::<GameLanguage>()
+        .init_resource::<TextRefreshProbe>()
+        .add_systems(Update, update)
+        .add_systems(Last, count_text_refreshes);
+        let volume = app
+            .world_mut()
+            .spawn((Copy::MusicValue, Text::default()))
+            .id();
+        let sound = app.world_mut().spawn((Copy::Sound, Text::default())).id();
+        app.update();
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 0);
+        app.world_mut().resource_mut::<AudioPreferences>().music = 40;
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 1);
+        assert_eq!(app.world().get::<Text>(volume).unwrap().0, "40%");
+        app.world_mut()
+            .insert_resource(GameLanguage::SimplifiedChinese);
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 1);
+        assert_eq!(app.world().get::<Text>(sound).unwrap().0, "声音");
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 0);
+    }
+
     #[test]
     fn actual_settings_buttons_adjust_channels_independently_and_preserve_levels_when_muted() {
         let mut app = App::new();

@@ -1,0 +1,40 @@
+{
+  "baseline_commit": "d9928e5",
+  "baseline_capture_sha256": "ac3526c369bd3c172b91d253475632d7612b02891b7ab55e5b527bb22229d9bb",
+  "source_sha256": {
+    "Cargo.lock": "0aafd492a3925afac179f958641ae58e766f3dc5deb0fab83dc2315a019bcfe9",
+    "Cargo.toml": "f957d643b1234e7ced1a595521015f3d76696368d2e7cf13b653423f72df15fc",
+    "src/bin/capture.rs": "639e9c29accab9a10cd96550164160274adf25cbce2798e9c751ddb9b50dca0f",
+    "src/game/adventure_vfx.rs": "f91adc9652f0585653a952abe5d84b898e1a5ef6cb3a85735ab00654b215a2c2",
+    "src/game/bond_feedback.rs": "f1af778f5b360eb0385f485029cac53953731d226c970a569446872ff63e2994",
+    "src/game/boss_status.rs": "d495c162e449347d663498e9333e87079d8e5d44be15c35bb4d3291af045ed43",
+    "src/game/campaign_ui.rs": "1d257f37b1107ac7ac7c49ea91db380b46fb7a38f26805f9b5c7ec7166f452c6",
+    "src/game/debug_menu.rs": "80754c6d92abe797f1f8642994cefcdcf0faeab84567dd226ff51e845885948c",
+    "src/game/encounter_boss_ui.rs": "0e8e80cc1a4c28404245d5bf77532269c922768c9fc27122dbffc8a44c002a4f",
+    "src/game/equipment_ui.rs": "4915c5f4865ee3aee2344befc1a941e1f85d8a1835580cc77219bf1e10d78579",
+    "src/game/hero.rs": "0db4e0e375632f46e288863e29abdbc51174b4b18ead52aa8e88fdca4c3d1f2b",
+    "src/game/hero_draft.rs": "2f3dd1acd402a2ba1e166365cadef64e3eb17f8c0f4bcd482165409c74b5035b",
+    "src/game/hero_stats_ui.rs": "8998b89f2d3bfef9f7503cd6ecce14b34d0ad0b36ce112406915c8506f1f6753",
+    "src/game/market.rs": "6bd7319bd8700ed2dfc5e5cd03b5204adab645863f414314f97b71678c9f5654",
+    "src/game/progression_ui.rs": "f578a8e2f5c1b3cca21995c31a84164d907f248f7f65b80872f923f8147d693d",
+    "src/game/selection_detail.rs": "970e6c9f54adfb6a9d8692132931150e833c5f097e2896b5db115adb6820272a",
+    "src/game/settings.rs": "56f34eb177558661df4165aa77a7472ddcb9907028dbbba7645c9dc637ee0537",
+    "src/game/settings/audio_controls.rs": "863737e17a98c2889db66d2f7e7a577dfbd6b4572a950829d707bce0632e1481",
+    "src/game/settings/display_controls.rs": "75010e46610c6f31fcf2084cd4ab8daeff0fd159ae7cfbbe2f0a12930bff6cd6",
+    "src/game/settings/run_actions.rs": "b0613297202eef8c89fd421c06c4d077bde75a22186cb827b41f9891dee7465a",
+    "src/game/skill_feedback.rs": "51b37bb7cb0e81cd3391f585eefa954b3e298cc9c1560bd23e7156919fe8e1a4",
+    "src/game/survival_ui.rs": "847dfaf2e79ad7fdd85bc91fbc25199a512bd4b879b8bad028a7cbcc15334d11",
+    "src/game/ui.rs": "967ecbcbf580bef30e8f28e1537079812728e7c2b28534bedbdb500dbed16f4a",
+    "src/game/ui_art.rs": "afa457a306417309940df3ce78618c006bb521016dd7a52b106aeb5f2806607f",
+    "src/bin/capture/text_idle.rs": "9cc99ac9b1621c00249fb660413ca05d836ff0540b67c4c0270b960a8fc01ae7",
+    "vendor/parley/src/analysis/mod.rs": "f2fbf038d185cea320b7769902063146e890daf87c4ffed757f80a9c167c48cd",
+    "vendor/parley/Cargo.toml": "fbc108e5f1253e3893bc97a2ed6fd714154aec0675a29c205becc33a55e80971"
+  },
+  "binary_sha256": {
+    "target/debug/capture": "cdda8e0c933f9c156db5ae4b70e553ed9f135b2b78447e2f164915ee898c075f",
+    "target/debug/rogue_commander": "100d32d72aaaf3a95d1ab8e14971506a600aabc65f4b083825a2bdf63a6c2f2d",
+    "target/debug/balance_sim": "b0c38cc892d10550a1891b261e080752f443a4973d7d90e31d065a4ee8db760d"
+  },
+  "static_measurement": "3 phases x 61 frames x 2 viewports; actual Changed<Text>, Changed<TextFont>, Changed<TextLayoutInfo>; real volume and language button inputs",
+  "limits": "No FPS uplift claim; Linux/X11 native window; explicit development asset root; no clean-machine package test"
+}

@@ -398,55 +398,66 @@ fn update_settings_copy(
     #[cfg(target_arch = "wasm32")]
     let display_failed = false;
     for (mut text, key) in &mut labels {
-        **text = copy(
-            key.0,
-            *language,
-            state.save_failed
-                || audio_save.as_ref().is_some_and(|save| save.failed)
-                || display_failed,
-        )
-        .into();
+        text.set_if_neq(Text(
+            copy(
+                key.0,
+                *language,
+                state.save_failed
+                    || audio_save.as_ref().is_some_and(|save| save.failed)
+                    || display_failed,
+            )
+            .into(),
+        ));
     }
     for (choice, mut visibility) in &mut selected {
-        *visibility = if choice.0 == *language {
+        visibility.set_if_neq(if choice.0 == *language {
             Visibility::Inherited
         } else {
             Visibility::Hidden
-        };
+        });
     }
     for (mut visibility, interaction, mut background) in &mut launcher {
-        *visibility = if state.open {
+        visibility.set_if_neq(if state.open {
             Visibility::Hidden
         } else {
             Visibility::Inherited
-        };
-        background.0 = if *interaction == Interaction::None {
-            PANEL
-        } else {
-            Color::srgb(0.13, 0.18, 0.17)
-        };
+        });
+        background
+            .reborrow()
+            .map_unchanged(|color| &mut color.0)
+            .set_if_neq(if *interaction == Interaction::None {
+                PANEL
+            } else {
+                Color::srgb(0.13, 0.18, 0.17)
+            });
     }
     for (choice, interaction, mut background, mut border) in &mut choices {
         let selected = choice.0 == *language;
-        border.set_all(if selected {
+        border.set_if_neq(BorderColor::all(if selected {
             GOLD
         } else if *interaction != Interaction::None {
             IVORY
         } else {
             EDGE
-        });
-        background.0 = if selected {
-            Color::srgb(0.11, 0.16, 0.15)
-        } else {
-            Color::srgb(0.055, 0.085, 0.095)
-        };
+        }));
+        background
+            .reborrow()
+            .map_unchanged(|color| &mut color.0)
+            .set_if_neq(if selected {
+                Color::srgb(0.11, 0.16, 0.15)
+            } else {
+                Color::srgb(0.055, 0.085, 0.095)
+            });
     }
     for (interaction, mut background) in &mut close {
-        background.0 = if *interaction == Interaction::None {
-            GOLD
-        } else {
-            Color::srgb(1.0, 0.85, 0.55)
-        };
+        background
+            .reborrow()
+            .map_unchanged(|color| &mut color.0)
+            .set_if_neq(if *interaction == Interaction::None {
+                GOLD
+            } else {
+                Color::srgb(1.0, 0.85, 0.55)
+            });
     }
 }
 
@@ -507,14 +518,26 @@ fn update_settings_layout(
     let m = layout(width, height);
     for (mut node, panel, header, row, copy) in &mut nodes {
         if panel {
-            node.width = px(m.width);
-            node.height = Val::Auto;
-            node.max_height = px(m.height);
-            node.padding = UiRect::all(px(m.padding));
-            node.row_gap = px(m.gap);
+            node.reborrow()
+                .map_unchanged(|node| &mut node.width)
+                .set_if_neq(px(m.width));
+            node.reborrow()
+                .map_unchanged(|node| &mut node.height)
+                .set_if_neq(Val::Auto);
+            node.reborrow()
+                .map_unchanged(|node| &mut node.max_height)
+                .set_if_neq(px(m.height));
+            node.reborrow()
+                .map_unchanged(|node| &mut node.padding)
+                .set_if_neq(UiRect::all(px(m.padding)));
+            node.reborrow()
+                .map_unchanged(|node| &mut node.row_gap)
+                .set_if_neq(px(m.gap));
         }
         if header {
-            node.height = px(if m.compact { 28 } else { 60 });
+            node.reborrow()
+                .map_unchanged(|node| &mut node.height)
+                .set_if_neq(px(if m.compact { 28 } else { 60 }));
         }
         if let Some(copy) = copy
             && matches!(copy.0, CopyKind::Intro | CopyKind::SaveNotice)
@@ -523,14 +546,20 @@ fn update_settings_layout(
                 || audio_save.as_ref().is_some_and(|save| save.failed)
                 || display_failed;
             let hide = m.compact && (matches!(copy.0, CopyKind::Intro) || !failed);
-            node.display = if hide { Display::None } else { Display::Flex };
+            node.reborrow()
+                .map_unchanged(|node| &mut node.display)
+                .set_if_neq(if hide { Display::None } else { Display::Flex });
         }
         if row {
-            node.height = px(if m.compact { 72 } else { 90 });
+            node.reborrow()
+                .map_unchanged(|node| &mut node.height)
+                .set_if_neq(px(if m.compact { 72 } else { 90 }));
         }
     }
-    for mut heading in &mut headings {
-        heading.font_size = FontSize::Px(if m.compact { 24.0 } else { 34.0 });
+    for heading in &mut headings {
+        heading
+            .map_unchanged(|font| &mut font.font_size)
+            .set_if_neq(FontSize::Px(if m.compact { 24.0 } else { 34.0 }));
     }
 }
 
@@ -539,8 +568,79 @@ pub(crate) fn reset_run(world: &mut World) {
 }
 
 #[cfg(test)]
+#[derive(Resource, Default)]
+pub(super) struct TextRefreshProbe(pub usize);
+#[cfg(test)]
+pub(super) fn count_text_refreshes(
+    changed: Query<Entity, Changed<Text>>,
+    mut count: ResMut<TextRefreshProbe>,
+) {
+    count.0 = changed.iter().count();
+}
+
+#[cfg(test)]
 mod tests {
     use super::*;
+    #[derive(Resource, Default)]
+    struct LayoutRefreshProbe(usize);
+    fn count_layout_refreshes(
+        nodes: Query<Entity, Changed<Node>>,
+        fonts: Query<Entity, Changed<TextFont>>,
+        visibility: Query<Entity, Changed<Visibility>>,
+        mut count: ResMut<LayoutRefreshProbe>,
+    ) {
+        count.0 = nodes.iter().count() + fonts.iter().count() + visibility.iter().count();
+    }
+    #[test]
+    fn static_settings_do_not_dirty_text_layout_or_visibility() {
+        let mut app = App::new();
+        app.init_resource::<GameLanguage>()
+            .insert_resource(SettingsState {
+                open: true,
+                ..default()
+            })
+            .init_resource::<TextRefreshProbe>()
+            .init_resource::<LayoutRefreshProbe>()
+            .add_systems(Update, (update_settings_copy, update_settings_layout))
+            .add_systems(Last, (count_text_refreshes, count_layout_refreshes));
+        app.world_mut().spawn((
+            PrimaryWindow,
+            Window {
+                resolution: (1280, 720).into(),
+                ..default()
+            },
+        ));
+        let title = app
+            .world_mut()
+            .spawn((SettingsCopy(CopyKind::Title), Text::default()))
+            .id();
+        app.world_mut().spawn((SettingsPanel, Node::default()));
+        app.world_mut()
+            .spawn((SettingsHeading, TextFont::default()));
+        let selected = app
+            .world_mut()
+            .spawn((SettingsSelected(GameLanguage::English), Visibility::Hidden))
+            .id();
+        app.update();
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 0);
+        assert_eq!(app.world().resource::<LayoutRefreshProbe>().0, 0);
+        app.world_mut()
+            .insert_resource(GameLanguage::SimplifiedChinese);
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 1);
+        assert_eq!(
+            app.world().get::<Text>(title).unwrap().0,
+            copy(CopyKind::Title, GameLanguage::SimplifiedChinese, false)
+        );
+        assert_eq!(
+            *app.world().get::<Visibility>(selected).unwrap(),
+            Visibility::Hidden
+        );
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 0);
+        assert_eq!(app.world().resource::<LayoutRefreshProbe>().0, 0);
+    }
 
     #[test]
     fn settings_restores_battle_and_existing_modal_pause_ownership() {

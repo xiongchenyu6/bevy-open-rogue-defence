@@ -661,7 +661,9 @@ fn tooltips(hints: Query<(&Hint, &Interaction)>, mut texts: Query<(&HintText, &m
         .find(|(_, interaction)| **interaction != Interaction::None)
         .map(|(hint, _)| hint.0.as_str());
     for (default, mut text) in &mut texts {
-        text.0 = hovered.unwrap_or(&default.0).to_string();
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(hovered.unwrap_or(&default.0).to_string());
     }
 }
 

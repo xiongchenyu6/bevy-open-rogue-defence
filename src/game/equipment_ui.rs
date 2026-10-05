@@ -350,7 +350,9 @@ fn feedback(
         state.notice_remaining = (state.notice_remaining - time.delta_secs()).max(0.0);
     }
     for mut count in &mut counts {
-        **count = (state.known.len() + state.known_crafted.len()).to_string();
+        count.set_if_neq(Text::new(
+            (state.known.len() + state.known_crafted.len()).to_string(),
+        ));
     }
     let hovered = entries
         .iter()
@@ -363,44 +365,56 @@ fn feedback(
         });
     }
     for (mut node, children) in &mut hints {
-        node.display = if hovered {
-            Display::Flex
-        } else {
-            Display::None
-        };
+        node.reborrow()
+            .map_unchanged(|value| &mut value.display)
+            .set_if_neq(if hovered {
+                Display::Flex
+            } else {
+                Display::None
+            });
         for child in children.iter() {
             if let Ok(mut text) = texts.get_mut(child) {
-                **text = language.pick("Equipment · I", "装备 · I").into();
+                text.reborrow()
+                    .map_unchanged(|value| &mut value.0)
+                    .set_if_neq(language.pick("Equipment · I", "装备 · I").into());
             }
         }
     }
     for (mut node, children) in &mut notices {
-        node.display = if state.notice_remaining > 0.0 && !state.open() && !session.paused {
-            Display::Flex
-        } else {
-            Display::None
-        };
+        node.reborrow()
+            .map_unchanged(|value| &mut value.display)
+            .set_if_neq(
+                if state.notice_remaining > 0.0 && !state.open() && !session.paused {
+                    Display::Flex
+                } else {
+                    Display::None
+                },
+            );
         for child in children.iter() {
             if let Ok(mut text) = texts.get_mut(child) {
-                **text = state
-                    .latest
-                    .map(|item| {
-                        format!(
-                            "{} {}",
-                            language.pick("Equipped:", "获得装备："),
-                            item.name(*language)
-                        )
-                    })
-                    .or_else(|| {
-                        state.latest_crafted.map(|recipe| {
-                            format!(
-                                "{} {}",
-                                language.pick("Forged:", "合成成功："),
-                                recipe.name(*language)
-                            )
-                        })
-                    })
-                    .unwrap_or_default();
+                text.reborrow()
+                    .map_unchanged(|value| &mut value.0)
+                    .set_if_neq(
+                        state
+                            .latest
+                            .map(|item| {
+                                format!(
+                                    "{} {}",
+                                    language.pick("Equipped:", "获得装备："),
+                                    item.name(*language)
+                                )
+                            })
+                            .or_else(|| {
+                                state.latest_crafted.map(|recipe| {
+                                    format!(
+                                        "{} {}",
+                                        language.pick("Forged:", "合成成功："),
+                                        recipe.name(*language)
+                                    )
+                                })
+                            })
+                            .unwrap_or_default(),
+                    );
             }
         }
     }
@@ -462,7 +476,9 @@ fn details(
             "Crafting result" => action.into(),
             _ => continue,
         };
-        **text = value;
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(value);
     }
     for (item, crafted, choice, confirm, mut background) in &mut cards {
         if item.is_none() && crafted.is_none() && choice.is_none() && confirm.is_none() {

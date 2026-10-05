@@ -1,0 +1,26 @@
+[
+  {
+    "case": "desktop",
+    "frames": 100,
+    "before_icu_errors": 8012,
+    "after_icu_errors": 0,
+    "settings_pixels_identical": true,
+    "diff_bbox": null
+  },
+  {
+    "case": "mobile",
+    "frames": 100,
+    "before_icu_errors": 8012,
+    "after_icu_errors": 0,
+    "settings_pixels_identical": true,
+    "diff_bbox": null
+  },
+  {
+    "case": "english",
+    "frames": 100,
+    "before_icu_errors": 3,
+    "after_icu_errors": 0,
+    "settings_pixels_identical": true,
+    "diff_bbox": null
+  }
+]

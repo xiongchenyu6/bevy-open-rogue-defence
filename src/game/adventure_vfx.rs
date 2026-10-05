@@ -317,14 +317,16 @@ fn status(
     };
     let def = &ADVENTURE_BOSSES[boss.index as usize];
     *visibility = Visibility::Visible;
-    text.0 = format!(
-        "{}  {:.0}%{}",
-        language.pick(def.name_en, def.name_zh),
-        100.0 * enemy.hp.max(0.0) / enemy.max_hp.max(1.0),
-        if phase.enraged {
-            language.pick(" · ENRAGED", " · 狂暴")
-        } else {
-            ""
-        }
-    );
+    text.reborrow()
+        .map_unchanged(|value| &mut value.0)
+        .set_if_neq(format!(
+            "{}  {:.0}%{}",
+            language.pick(def.name_en, def.name_zh),
+            100.0 * enemy.hp.max(0.0) / enemy.max_hp.max(1.0),
+            if phase.enraged {
+                language.pick(" · ENRAGED", " · 狂暴")
+            } else {
+                ""
+            }
+        ));
 }

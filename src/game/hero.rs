@@ -534,13 +534,15 @@ fn update_hero_status(
     mut text: Query<&mut Text, With<HeroStatusText>>,
 ) {
     if let Ok(mut text) = text.single_mut() {
-        **text = format!(
-            "[{}] {} · {} {}/3",
-            HEROES[selected.kind.index()].rarity.label(),
-            hero_name(*language, selected.kind),
-            language.pick("RECRUIT", "招募"),
-            progress.claimed_milestones.count_ones()
-        );
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(format!(
+                "[{}] {} · {} {}/3",
+                HEROES[selected.kind.index()].rarity.label(),
+                hero_name(*language, selected.kind),
+                language.pick("RECRUIT", "招募"),
+                progress.claimed_milestones.count_ones()
+            ));
     }
 }
 
@@ -1104,7 +1106,9 @@ fn refresh_hero_language(
         return;
     }
     for (_, mut text) in &mut labels {
-        **text = language.pick("CHOOSE HERO", "选择英雄").into();
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(language.pick("CHOOSE HERO", "选择英雄").into());
     }
 }
 

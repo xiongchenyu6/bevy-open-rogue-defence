@@ -134,34 +134,44 @@ fn update(
         .next()
         .is_some_and(|window| hud_metrics(window.width(), window.height()).compact);
     for mut node in &mut roots {
-        node.display = if boss.is_some() {
-            Display::Flex
-        } else {
-            Display::None
-        };
-        node.top = px(if compact { 120 } else { 78 });
-        node.padding = UiRect::left(px(if compact { 72 } else { 0 }));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.display)
+            .set_if_neq(if boss.is_some() {
+                Display::Flex
+            } else {
+                Display::None
+            });
+        node.reborrow()
+            .map_unchanged(|value| &mut value.top)
+            .set_if_neq(px(if compact { 120 } else { 78 }));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.padding)
+            .set_if_neq(UiRect::left(px(if compact { 72 } else { 0 })));
     }
     for mut node in &mut panels {
-        node.width = px(if compact { 190 } else { 260 });
+        node.reborrow()
+            .map_unchanged(|value| &mut value.width)
+            .set_if_neq(px(if compact { 190 } else { 260 }));
     }
     if let Some((entity, boss, enemy, adventure)) = boss {
         for (mut text, mut font) in &mut labels {
-            **text = title(
-                *language,
-                adventure
-                    .map_or_else(
-                        || boss_name(*language, boss.index as usize),
-                        |adventure| {
-                            let def = &ADVENTURE_BOSSES[usize::from(adventure.index)];
-                            language.pick(def.name_en, def.name_zh).to_string()
-                        },
-                    )
-                    .as_str(),
-                enemy.hp,
-                enemy.max_hp,
-                runtime.is_enraged(entity),
-            );
+            text.reborrow()
+                .map_unchanged(|value| &mut value.0)
+                .set_if_neq(title(
+                    *language,
+                    adventure
+                        .map_or_else(
+                            || boss_name(*language, boss.index as usize),
+                            |adventure| {
+                                let def = &ADVENTURE_BOSSES[usize::from(adventure.index)];
+                                language.pick(def.name_en, def.name_zh).to_string()
+                            },
+                        )
+                        .as_str(),
+                    enemy.hp,
+                    enemy.max_hp,
+                    runtime.is_enraged(entity),
+                ));
             if adventure.is_some()
                 && let Some(state) = adventures.as_ref()
             {
@@ -171,10 +181,16 @@ fn update(
                     language.pick("s", "秒")
                 ));
             }
-            font.font_size = FontSize::Px(if compact { 11.0 } else { 14.0 });
+            font.reborrow()
+                .map_unchanged(|value| &mut value.font_size)
+                .set_if_neq(FontSize::Px(if compact { 11.0 } else { 14.0 }));
         }
         for mut node in &mut bars {
-            node.width = percent((enemy.hp / enemy.max_hp.max(1.0) * 100.0).clamp(0.0, 100.0));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(percent(
+                    (enemy.hp / enemy.max_hp.max(1.0) * 100.0).clamp(0.0, 100.0),
+                ));
         }
     }
 }

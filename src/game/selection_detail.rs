@@ -64,11 +64,49 @@ pub(crate) fn update_labels(
     mut labels: Query<&mut Text, With<SelectionDetailLabel>>,
 ) {
     for mut text in &mut labels {
-        **text = if preference.0 {
-            language.pick("Detailed · switch to simple", "详细 · 切换简洁")
-        } else {
-            language.pick("Simple · switch to detailed", "简洁 · 切换详细")
-        }
-        .into();
+        text.set_if_neq(Text(
+            if preference.0 {
+                language.pick("Detailed · switch to simple", "详细 · 切换简洁")
+            } else {
+                language.pick("Simple · switch to detailed", "简洁 · 切换详细")
+            }
+            .into(),
+        ));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn detail_mode_labels_only_change_with_their_displayed_content() {
+        use crate::game::settings::{TextRefreshProbe, count_text_refreshes};
+        let mut app = App::new();
+        app.insert_resource(SelectionDetail(true))
+            .init_resource::<GameLanguage>()
+            .init_resource::<TextRefreshProbe>()
+            .add_systems(Update, update_labels)
+            .add_systems(Last, count_text_refreshes);
+        let label = app
+            .world_mut()
+            .spawn((SelectionDetailLabel, Text::default()))
+            .id();
+        app.update();
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 0);
+        app.world_mut().resource_mut::<SelectionDetail>().0 = false;
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 1);
+        assert_eq!(
+            app.world().get::<Text>(label).unwrap().0,
+            "Simple · switch to detailed"
+        );
+        app.world_mut()
+            .insert_resource(GameLanguage::SimplifiedChinese);
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 1);
+        assert_eq!(app.world().get::<Text>(label).unwrap().0, "简洁 · 切换详细");
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 0);
     }
 }

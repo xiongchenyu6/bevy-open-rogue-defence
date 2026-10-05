@@ -947,171 +947,281 @@ fn apply_hud_layout(
     ) in &mut nodes
     {
         if root.is_some() {
-            node.padding = UiRect {
-                left: px(layout.safe_x),
-                right: px(layout.safe_x),
-                top: px(layout.safe_y),
-                bottom: px(layout.safe_y),
-            };
+            node.reborrow()
+                .map_unchanged(|value| &mut value.padding)
+                .set_if_neq(UiRect {
+                    left: px(layout.safe_x),
+                    right: px(layout.safe_x),
+                    top: px(layout.safe_y),
+                    bottom: px(layout.safe_y),
+                });
         } else if left.is_some() {
-            node.width = px(220);
-            node.row_gap = px(if compact { 1 } else { 4 });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(220));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.row_gap)
+                .set_if_neq(px(if compact { 1 } else { 4 }));
         } else if core_track.is_some() {
-            node.width = px(206);
-            node.height = px(8);
-            node.padding = UiRect::all(px(if compact { 2 } else { 3 }));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(206));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(8));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.padding)
+                .set_if_neq(UiRect::all(px(if compact { 2 } else { 3 })));
         } else if movement_pad.is_some() {
-            node.display = if scheme.touch {
-                Display::Flex
-            } else {
-                Display::None
-            };
-            node.width = px(layout.joystick_size);
-            node.height = px(layout.joystick_size);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.display)
+                .set_if_neq(if scheme.touch {
+                    Display::Flex
+                } else {
+                    Display::None
+                });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(layout.joystick_size));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(layout.joystick_size));
         } else if xp_panel.is_some() {
-            node.height = if scheme.touch { Val::Auto } else { px(40) };
-            node.width = px(if !scheme.touch {
-                desktop_xp_width
-            } else if compact {
-                xp_width
-            } else {
-                180.0
-            });
-            node.flex_direction = if scheme.touch {
-                FlexDirection::Column
-            } else {
-                FlexDirection::Row
-            };
-            node.column_gap = px(10);
-            node.row_gap = px(if compact { 5 } else { 7 });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(if scheme.touch { Val::Auto } else { px(40) });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(if !scheme.touch {
+                    desktop_xp_width
+                } else if compact {
+                    xp_width
+                } else {
+                    180.0
+                }));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.flex_direction)
+                .set_if_neq(if scheme.touch {
+                    FlexDirection::Column
+                } else {
+                    FlexDirection::Row
+                });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.column_gap)
+                .set_if_neq(px(10));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.row_gap)
+                .set_if_neq(px(if compact { 5 } else { 7 }));
         } else if xp_readout.is_some() {
-            node.height = if scheme.touch { Val::Auto } else { px(28) };
-            node.justify_content = if scheme.touch {
-                JustifyContent::FlexStart
-            } else {
-                JustifyContent::Center
-            };
-            node.width = if scheme.touch {
-                percent(100)
-            } else {
-                px(desktop_readout_width)
-            };
-            node.row_gap = px(if scheme.touch { 7 } else { 4 });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(if scheme.touch { Val::Auto } else { px(28) });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.justify_content)
+                .set_if_neq(if scheme.touch {
+                    JustifyContent::FlexStart
+                } else {
+                    JustifyContent::Center
+                });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(if scheme.touch {
+                    percent(100)
+                } else {
+                    px(desktop_readout_width)
+                });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.row_gap)
+                .set_if_neq(px(if scheme.touch { 7 } else { 4 }));
         } else if xp_track.is_some() {
-            node.width = px(if !scheme.touch {
-                desktop_readout_width
-            } else if compact {
-                xp_width - 16.0
-            } else {
-                170.0
-            });
-            node.height = px(if scheme.touch { 13 } else { 8 });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(if !scheme.touch {
+                    desktop_readout_width
+                } else if compact {
+                    xp_width - 16.0
+                } else {
+                    170.0
+                }));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(if scheme.touch { 13 } else { 8 }));
         } else if skill_button.is_some() {
-            node.width = px(if scheme.touch { 112 } else { 92 });
-            node.height = px(if scheme.touch { 48 } else { 40 });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(if scheme.touch { 112 } else { 92 }));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(if scheme.touch { 48 } else { 40 }));
         } else if action_panel.is_some() {
-            node.width = px(if !scheme.touch {
-                88.0
-            } else if compact {
-                action_width
-            } else {
-                76.0
-            });
-            node.height = px(if !scheme.touch {
-                40.0
-            } else if compact {
-                layout.joystick_size
-            } else {
-                94.0
-            });
-            node.margin = UiRect::right(px(if scheme.touch {
-                action_panel_margin_right(compact)
-            } else {
-                0.0
-            }));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(if !scheme.touch {
+                    88.0
+                } else if compact {
+                    action_width
+                } else {
+                    76.0
+                }));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(if !scheme.touch {
+                    40.0
+                } else if compact {
+                    layout.joystick_size
+                } else {
+                    94.0
+                }));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.margin)
+                .set_if_neq(UiRect::right(px(if scheme.touch {
+                    action_panel_margin_right(compact)
+                } else {
+                    0.0
+                })));
         } else if dodge_button.is_some() {
             let size = if compact { compact_dodge_size } else { 76.0 };
-            node.width = px(if scheme.touch { size } else { 88.0 });
-            node.height = px(if scheme.touch { size } else { 40.0 });
-            node.flex_direction = if scheme.touch {
-                FlexDirection::Column
-            } else {
-                FlexDirection::Row
-            };
-            node.column_gap = px(6);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(if scheme.touch { size } else { 88.0 }));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(if scheme.touch { size } else { 40.0 }));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.flex_direction)
+                .set_if_neq(if scheme.touch {
+                    FlexDirection::Column
+                } else {
+                    FlexDirection::Row
+                });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.column_gap)
+                .set_if_neq(px(6));
         } else if trial_panel.is_some() {
-            node.display = if !drawer.open {
-                Display::None
-            } else {
-                Display::Flex
-            };
-            node.right = px(if compact { layout.safe_x } else { 22.0 });
-            node.top = px(if compact { 118 } else { 112 });
-            node.width = px(if compact { 205 } else { 225 });
-            node.padding = UiRect::all(px(if compact { 8 } else { 12 }));
-            node.row_gap = px(if compact { 4 } else { 8 });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.display)
+                .set_if_neq(if !drawer.open {
+                    Display::None
+                } else {
+                    Display::Flex
+                });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.right)
+                .set_if_neq(px(if compact { layout.safe_x } else { 22.0 }));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.top)
+                .set_if_neq(px(if compact { 118 } else { 112 }));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(if compact { 205 } else { 225 }));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.padding)
+                .set_if_neq(UiRect::all(px(if compact { 8 } else { 12 })));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.row_gap)
+                .set_if_neq(px(if compact { 4 } else { 8 }));
         } else if trial_row.is_some() {
-            node.height = px(if compact { 48 } else { 54 });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(if compact { 48 } else { 54 }));
         } else if let Some(button) = trial_button {
-            node.height = px(48);
-            node.width = px(match (compact, button.0) {
-                (true, TrialAction::StartTower | TrialAction::StartGold) => 102.0,
-                (true, TrialAction::ToggleTowerAuto | TrialAction::ToggleGoldAuto) => 81.0,
-                (true, TrialAction::CancelAll) => 189.0,
-                (false, TrialAction::StartTower | TrialAction::StartGold) => 102.0,
-                (false, TrialAction::ToggleTowerAuto | TrialAction::ToggleGoldAuto) => 82.0,
-                (false, TrialAction::CancelAll) => 196.0,
-            });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(48));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(match (compact, button.0) {
+                    (true, TrialAction::StartTower | TrialAction::StartGold) => 102.0,
+                    (true, TrialAction::ToggleTowerAuto | TrialAction::ToggleGoldAuto) => 81.0,
+                    (true, TrialAction::CancelAll) => 189.0,
+                    (false, TrialAction::StartTower | TrialAction::StartGold) => 102.0,
+                    (false, TrialAction::ToggleTowerAuto | TrialAction::ToggleGoldAuto) => 82.0,
+                    (false, TrialAction::CancelAll) => 196.0,
+                }));
         } else if trial_toggle.is_some() {
-            node.display = Display::Flex;
-            node.right = px(layout.safe_x);
-            node.top = px(64);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.display)
+                .set_if_neq(Display::Flex);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.right)
+                .set_if_neq(px(layout.safe_x));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.top)
+                .set_if_neq(px(64));
         } else if pause_button.is_some() {
-            node.right = px(if compact {
-                layout.safe_x + 104.0
-            } else {
-                150.0
-            });
-            node.top = px(layout.safe_y);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.right)
+                .set_if_neq(px(if compact {
+                    layout.safe_x + 104.0
+                } else {
+                    150.0
+                }));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.top)
+                .set_if_neq(px(layout.safe_y));
         }
     }
     for mut node in &mut bottom_rows {
-        node.height = if scheme.touch { Val::Auto } else { px(40) };
-        node.left = if scheme.touch {
-            px(layout.safe_x)
-        } else {
-            px((window.width() - desktop_width) * 0.5)
-        };
-        node.right = if scheme.touch {
-            px(layout.safe_x)
-        } else {
-            Val::Auto
-        };
-        node.width = if scheme.touch {
-            Val::Auto
-        } else {
-            px(desktop_width)
-        };
-        node.bottom = px(layout.safe_y);
-        node.align_items = if scheme.touch {
-            AlignItems::FlexEnd
-        } else {
-            AlignItems::Center
-        };
-        node.justify_content = if scheme.touch {
-            JustifyContent::SpaceBetween
-        } else {
-            JustifyContent::FlexStart
-        };
-        node.column_gap = px(if scheme.touch { 0 } else { 12 });
+        node.reborrow()
+            .map_unchanged(|value| &mut value.height)
+            .set_if_neq(if scheme.touch { Val::Auto } else { px(40) });
+        node.reborrow()
+            .map_unchanged(|value| &mut value.left)
+            .set_if_neq(if scheme.touch {
+                px(layout.safe_x)
+            } else {
+                px((window.width() - desktop_width) * 0.5)
+            });
+        node.reborrow()
+            .map_unchanged(|value| &mut value.right)
+            .set_if_neq(if scheme.touch {
+                px(layout.safe_x)
+            } else {
+                Val::Auto
+            });
+        node.reborrow()
+            .map_unchanged(|value| &mut value.width)
+            .set_if_neq(if scheme.touch {
+                Val::Auto
+            } else {
+                px(desktop_width)
+            });
+        node.reborrow()
+            .map_unchanged(|value| &mut value.bottom)
+            .set_if_neq(px(layout.safe_y));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.align_items)
+            .set_if_neq(if scheme.touch {
+                AlignItems::FlexEnd
+            } else {
+                AlignItems::Center
+            });
+        node.reborrow()
+            .map_unchanged(|value| &mut value.justify_content)
+            .set_if_neq(if scheme.touch {
+                JustifyContent::SpaceBetween
+            } else {
+                JustifyContent::FlexStart
+            });
+        node.reborrow()
+            .map_unchanged(|value| &mut value.column_gap)
+            .set_if_neq(px(if scheme.touch { 0 } else { 12 }));
     }
     for mut node in &mut dodge_art {
-        node.width = px(if scheme.touch { 44 } else { 22 });
-        node.height = px(if scheme.touch { 44 } else { 22 });
+        node.reborrow()
+            .map_unchanged(|value| &mut value.width)
+            .set_if_neq(px(if scheme.touch { 44 } else { 22 }));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.height)
+            .set_if_neq(px(if scheme.touch { 44 } else { 22 }));
     }
     for mut node in &mut speed_controls {
-        node.right = px(speed_control_right(layout.safe_x, compact));
-        node.top = px(speed_control_top(layout.safe_y, compact));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.right)
+            .set_if_neq(px(speed_control_right(layout.safe_x, compact)));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.top)
+            .set_if_neq(px(speed_control_top(layout.safe_y, compact)));
     }
 }
 
@@ -1152,11 +1262,14 @@ fn handle_trial_drawer(
         drawer.open = !drawer.open;
     }
     for mut label in &mut labels {
-        **label = if drawer.open {
-            language.pick("CLOSE", "关闭").to_string()
-        } else {
-            language.pick("CHALLENGES", "挑战").to_string()
-        };
+        label
+            .reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(if drawer.open {
+                language.pick("CLOSE", "关闭").to_string()
+            } else {
+                language.pick("CHALLENGES", "挑战").to_string()
+            });
     }
 }
 
@@ -1190,11 +1303,13 @@ fn update_battle_speed_ui(
     mut labels: Query<(&SpeedLabel, &mut Text)>,
 ) {
     for (label, mut text) in &mut labels {
-        **text = match label.0 {
-            SpeedAction::Decrease => "−".into(),
-            SpeedAction::Increase => "+".into(),
-            SpeedAction::Reset => format!("{}×", battle_speed.multiplier() as u8),
-        };
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(match label.0 {
+                SpeedAction::Decrease => "−".into(),
+                SpeedAction::Increase => "+".into(),
+                SpeedAction::Reset => format!("{}×", battle_speed.multiplier() as u8),
+            });
     }
     for (button, interaction, mut background, mut border) in &mut buttons {
         let selected = button.0 == SpeedAction::Reset || *interaction != Interaction::None;
@@ -1252,23 +1367,33 @@ fn update_static_ui_language(
         return;
     }
     for mut text in &mut core_labels {
-        **text = language.pick("GATE · ∞", "城门 · ∞").to_string();
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(language.pick("GATE · ∞", "城门 · ∞").to_string());
     }
     for mut text in &mut movement_labels {
-        **text = language.pick("MOVE", "移动").to_string();
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(language.pick("MOVE", "移动").to_string());
     }
     for (label, mut text) in &mut trial_labels {
-        **text = trial_action_label(*language, label.0).to_string();
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(trial_action_label(*language, label.0).to_string());
     }
     for (label, mut text) in &mut pause_labels {
-        **text = match label {
-            PauseCopyLabel::Title => language.pick("PAUSED", "已暂停"),
-            PauseCopyLabel::Description => {
-                language.pick("The battlefield is frozen.", "战场已冻结。")
-            }
-            PauseCopyLabel::Resume => language.pick("RESUME", "继续战斗"),
-        }
-        .to_string();
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(
+                match label {
+                    PauseCopyLabel::Title => language.pick("PAUSED", "已暂停"),
+                    PauseCopyLabel::Description => {
+                        language.pick("The battlefield is frozen.", "战场已冻结。")
+                    }
+                    PauseCopyLabel::Resume => language.pick("RESUME", "继续战斗"),
+                }
+                .to_string(),
+            );
     }
 }
 
@@ -1416,10 +1541,18 @@ fn update_joystick_visual(
     let center = (layout.joystick_size - knob_size) * 0.5;
     let travel = (center - 6.0).max(0.0);
     for mut node in &mut knobs {
-        node.width = px(knob_size);
-        node.height = px(knob_size);
-        node.left = px(center + intent.0.x * travel);
-        node.top = px(center + intent.0.y * travel);
+        node.reborrow()
+            .map_unchanged(|value| &mut value.width)
+            .set_if_neq(px(knob_size));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.height)
+            .set_if_neq(px(knob_size));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.left)
+            .set_if_neq(px(center + intent.0.x * travel));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.top)
+            .set_if_neq(px(center + intent.0.y * travel));
     }
 }
 
@@ -1582,107 +1715,116 @@ fn update_hud(
     for (mut text, timer, level, trial_marker, gold_marker, bond_button, skill_draw, dodge_label) in
         &mut text_nodes
     {
-        **text = if dodge_label.is_some() {
-            if !vitals.alive || vitals.stunned_remaining > 0.0 {
-                "—".to_string()
-            } else if dodge.cooldown_remaining > 0.0 {
-                format!(
-                    "{:.1}{}",
-                    dodge.cooldown_remaining,
-                    language.pick("s", "秒")
-                )
-            } else {
-                if scheme.touch {
-                    language.pick("DODGE", "闪避").to_string()
-                } else {
-                    "Shift".to_string()
-                }
-            }
-        } else if timer.is_some() {
-            if session.save_active {
-                if language.is_chinese() {
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(if dodge_label.is_some() {
+                if !vitals.alive || vitals.stunned_remaining > 0.0 {
+                    "—".to_string()
+                } else if dodge.cooldown_remaining > 0.0 {
                     format!(
-                        "刻印 {:02}秒\n回响 {:03.0}%  英雄 {:03.0}%",
-                        session.save_remaining.ceil() as u32,
-                        archive_hp,
-                        hero_hp
+                        "{:.1}{}",
+                        dodge.cooldown_remaining,
+                        language.pick("s", "秒")
+                    )
+                } else {
+                    if scheme.touch {
+                        language.pick("DODGE", "闪避").to_string()
+                    } else {
+                        "Shift".to_string()
+                    }
+                }
+            } else if timer.is_some() {
+                if session.save_active {
+                    if language.is_chinese() {
+                        format!(
+                            "刻印 {:02}秒\n回响 {:03.0}%  英雄 {:03.0}%",
+                            session.save_remaining.ceil() as u32,
+                            archive_hp,
+                            hero_hp
+                        )
+                    } else {
+                        format!(
+                            "ARCHIVE {:02}s\nECHO {:03.0}%  HERO {:03.0}%",
+                            session.save_remaining.ceil() as u32,
+                            archive_hp,
+                            hero_hp
+                        )
+                    }
+                } else if language.is_chinese() {
+                    format!(
+                        "{:02}:{:02}\n首领 {}/5",
+                        remaining / 60,
+                        remaining % 60,
+                        session.bosses_defeated
                     )
                 } else {
                     format!(
-                        "ARCHIVE {:02}s\nECHO {:03.0}%  HERO {:03.0}%",
-                        session.save_remaining.ceil() as u32,
-                        archive_hp,
-                        hero_hp
+                        "{:02}:{:02}\nROUND {}/5",
+                        remaining / 60,
+                        remaining % 60,
+                        session.bosses_defeated
                     )
                 }
-            } else if language.is_chinese() {
-                format!(
-                    "{:02}:{:02}\n首领 {}/5",
-                    remaining / 60,
-                    remaining % 60,
-                    session.bosses_defeated
-                )
-            } else {
-                format!(
-                    "{:02}:{:02}\nROUND {}/5",
-                    remaining / 60,
-                    remaining % 60,
-                    session.bosses_defeated
-                )
-            }
-        } else if level.is_some() {
-            if session.xp_next == u32::MAX {
-                if language.is_chinese() {
-                    format!("等级 {}   已满", session.level)
+            } else if level.is_some() {
+                if session.xp_next == u32::MAX {
+                    if language.is_chinese() {
+                        format!("等级 {}   已满", session.level)
+                    } else {
+                        format!("LEVEL {}   MAX", session.level)
+                    }
+                } else if language.is_chinese() {
+                    format!(
+                        "等级 {}   {}/{} 经验",
+                        session.level, session.xp, session.xp_next
+                    )
                 } else {
-                    format!("LEVEL {}   MAX", session.level)
+                    format!(
+                        "LEVEL {}   {}/{} XP",
+                        session.level, session.xp, session.xp_next
+                    )
                 }
-            } else if language.is_chinese() {
-                format!(
-                    "等级 {}   {}/{} 经验",
-                    session.level, session.xp, session.xp_next
-                )
-            } else {
-                format!(
-                    "LEVEL {}   {}/{} XP",
-                    session.level, session.xp, session.xp_next
-                )
-            }
-        } else if trial_marker.is_some() {
-            trial_status.clone()
-        } else if gold_marker.is_some() {
-            gold_status.clone()
-        } else if bond_button.is_some() {
-            if super::available_bond_cards_at(&build, &session).is_empty() {
-                if super::available_bond_cards(&build).is_empty() {
-                    language.pick("DONE", "集齐").to_string()
+            } else if trial_marker.is_some() {
+                trial_status.clone()
+            } else if gold_marker.is_some() {
+                gold_status.clone()
+            } else if bond_button.is_some() {
+                if super::available_bond_cards_at(&build, &session).is_empty() {
+                    if super::available_bond_cards(&build).is_empty() {
+                        language.pick("DONE", "集齐").to_string()
+                    } else {
+                        language.pick("LOCKED", "待解锁").to_string()
+                    }
+                } else if session.save_active {
+                    "—".to_string()
                 } else {
-                    language.pick("LOCKED", "待解锁").to_string()
+                    format!("{}", bond_cost(&session, &encounters))
                 }
-            } else if session.save_active {
-                "—".to_string()
+            } else if skill_draw.is_some() {
+                if session.save_active {
+                    "—".to_string()
+                } else if session.skill_points > 0 {
+                    format!("+{}", session.skill_points)
+                } else {
+                    format!("{}", skill_cost(&skill_economy))
+                }
             } else {
-                format!("{}", bond_cost(&session, &encounters))
-            }
-        } else if skill_draw.is_some() {
-            if session.save_active {
-                "—".to_string()
-            } else if session.skill_points > 0 {
-                format!("+{}", session.skill_points)
-            } else {
-                format!("{}", skill_cost(&skill_economy))
-            }
-        } else {
-            continue;
-        };
+                continue;
+            });
     }
 
     if let Ok(mut node) = bars.p0().single_mut() {
-        node.width = percent((session.core_hp / session.core_max_hp * 100.0).clamp(0.0, 100.0));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.width)
+            .set_if_neq(percent(
+                (session.core_hp / session.core_max_hp * 100.0).clamp(0.0, 100.0),
+            ));
     }
     if let Ok(mut node) = bars.p1().single_mut() {
-        node.width =
-            percent((session.xp as f32 / session.xp_next as f32 * 100.0).clamp(0.0, 100.0));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.width)
+            .set_if_neq(percent(
+                (session.xp as f32 / session.xp_next as f32 * 100.0).clamp(0.0, 100.0),
+            ));
     }
 }
 
@@ -1694,11 +1836,13 @@ fn update_seed_language(
     mut labels: Query<(&RunSeedLabel, &mut Text)>,
 ) {
     for (seed, mut text) in &mut labels {
-        **text = if language.is_chinese() {
-            format!("种子 0x{:016X}", seed.0)
-        } else {
-            format_run_seed(seed.0)
-        };
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(if language.is_chinese() {
+                format!("种子 0x{:016X}", seed.0)
+            } else {
+                format_run_seed(seed.0)
+            });
     }
 }
 
@@ -1729,12 +1873,16 @@ fn update_trial_auto_feedback(
     }
     for (label, mut text) in &mut labels {
         if let Some(on) = enabled(label.0) {
-            **text = if on {
-                language.pick("AUTO ON", "自动开启")
-            } else {
-                language.pick("AUTO OFF", "自动关闭")
-            }
-            .to_string();
+            text.reborrow()
+                .map_unchanged(|value| &mut value.0)
+                .set_if_neq(
+                    if on {
+                        language.pick("AUTO ON", "自动开启")
+                    } else {
+                        language.pick("AUTO OFF", "自动关闭")
+                    }
+                    .to_string(),
+                );
         }
     }
 }

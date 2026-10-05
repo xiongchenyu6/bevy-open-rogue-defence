@@ -238,7 +238,9 @@ fn tick_celebration(
             }
         }
         for (kind, mut text, mut visibility) in &mut labels {
-            **text = copy(*language, celebration.family, kind);
+            text.reborrow()
+                .map_unchanged(|value| &mut value.0)
+                .set_if_neq(copy(*language, celebration.family, kind));
             *visibility = if matches!(kind, CelebrationCopy::Reward) && celebration.age < 0.7 {
                 Visibility::Hidden
             } else {

@@ -557,7 +557,12 @@ fn position_entries(
                 (ADVENTURE_OFFER_TIMES[index] % 60.0) as u32
             )
         };
-        **text = format!("{}\n{suffix}", language.pick(def.name_en, def.name_zh));
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(format!(
+                "{}\n{suffix}",
+                language.pick(def.name_en, def.name_zh)
+            ));
     }
 }
 

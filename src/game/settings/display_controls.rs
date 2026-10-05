@@ -113,16 +113,19 @@ fn button(
     >,
 ) {
     for (interaction, mut background, mut border) in &mut buttons {
-        background.0 = if *interaction == Interaction::None {
-            PANEL
-        } else {
-            Color::srgb(0.15, 0.12, 0.07)
-        };
-        border.set_all(if *interaction == Interaction::None {
+        background
+            .reborrow()
+            .map_unchanged(|color| &mut color.0)
+            .set_if_neq(if *interaction == Interaction::None {
+                PANEL
+            } else {
+                Color::srgb(0.15, 0.12, 0.07)
+            });
+        border.set_if_neq(BorderColor::all(if *interaction == Interaction::None {
             EDGE
         } else {
             GOLD
-        });
+        }));
         if state.open && *interaction == Interaction::Pressed {
             prefs.fullscreen = !prefs.fullscreen;
             break;
@@ -179,17 +182,47 @@ fn update_copy(
     mut copy: Query<&mut Text, With<DisplayCopy>>,
 ) {
     for mut text in &mut copy {
-        **text = if prefs.fullscreen {
-            language.pick("Fullscreen", "全屏")
-        } else {
-            language.pick("Windowed", "窗口")
-        }
-        .to_string();
+        text.set_if_neq(Text(
+            if prefs.fullscreen {
+                language.pick("Fullscreen", "全屏")
+            } else {
+                language.pick("Windowed", "窗口")
+            }
+            .to_string(),
+        ));
     }
 }
 #[cfg(all(test, not(target_arch = "wasm32")))]
 mod tests {
     use super::*;
+    #[test]
+    fn display_labels_stay_clean_until_mode_or_language_changes() {
+        use crate::game::settings::{TextRefreshProbe, count_text_refreshes};
+        let mut app = App::new();
+        app.insert_resource(DisplayPreferences { fullscreen: false })
+            .init_resource::<GameLanguage>()
+            .init_resource::<TextRefreshProbe>()
+            .add_systems(Update, update_copy)
+            .add_systems(Last, count_text_refreshes);
+        let label = app.world_mut().spawn((DisplayCopy, Text::default())).id();
+        app.update();
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 0);
+        app.world_mut()
+            .resource_mut::<DisplayPreferences>()
+            .fullscreen = true;
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 1);
+        assert_eq!(app.world().get::<Text>(label).unwrap().0, "Fullscreen");
+        app.world_mut()
+            .insert_resource(GameLanguage::SimplifiedChinese);
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 1);
+        assert_eq!(app.world().get::<Text>(label).unwrap().0, "全屏");
+        app.update();
+        assert_eq!(app.world().resource::<TextRefreshProbe>().0, 0);
+    }
+
     fn app(path: std::path::PathBuf) -> (App, Entity) {
         let mut app = App::new();
         app.insert_resource(DisplayPreferences { fullscreen: false })

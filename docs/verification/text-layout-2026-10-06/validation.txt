@@ -1,0 +1,48 @@
+Text layout and CJK verification — 2026-10-06
+Baseline d9928e5 capture binary verified against previously archived SHA256.
+Final source: strict Clippy r2, native build r2, library tests r3 (test process r2 was terminated before results), final fmt check.
+563 passed / 0 failed / 1 ignored.
+Final captures: 2 x 320 idle probes + 3 x 100 matched navigation + 600 live combat = 1540 frames; every process exited 0.
+
+clippy
+    Finished `dev` profile [optimized + debuginfo] target(s) in 16.71s
+
+build
+    Finished `dev` profile [optimized + debuginfo] target(s) in 9m 28s
+
+tests
+    Finished `test` profile [optimized + debuginfo] target(s) in 5m 14s
+test result: ok. 563 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.27s
+
+desktop
+TEXT_IDLE_VOLUME_CHANGED
+TEXT_IDLE_LANGUAGE_CHANGED
+TEXT_IDLE_STEADY phase=0 frames=61 changed_text=0 changed_font=0 changed_layout=0
+TEXT_IDLE_STEADY phase=1 frames=61 changed_text=0 changed_font=0 changed_layout=0
+TEXT_IDLE_STEADY phase=2 frames=61 changed_text=0 changed_font=0 changed_layout=0
+TEXT_IDLE_PASS steady_text_font_layout=0 volume_changes=true language_changes=true
+
+mobile
+TEXT_IDLE_VOLUME_CHANGED
+TEXT_IDLE_LANGUAGE_CHANGED
+TEXT_IDLE_STEADY phase=0 frames=61 changed_text=0 changed_font=0 changed_layout=0
+TEXT_IDLE_STEADY phase=1 frames=61 changed_text=0 changed_font=0 changed_layout=0
+TEXT_IDLE_STEADY phase=2 frames=61 changed_text=0 changed_font=0 changed_layout=0
+TEXT_IDLE_PASS steady_text_font_layout=0 volume_changes=true language_changes=true
+
+live combat
+BALANCE_CADENCE_PASS early_casts=4 late_casts=7 early_volleys=18 late_volleys=41 spacing>=0.16s initial_ultimate_wait=true pause_frozen=true damage=true
+
+native Winit
+NATIVE_DISPLAY_PASS {"windowed": {"WINDOW": "4194306", "X": "160", "Y": "97", "WIDTH": "1280", "HEIGHT": "720", "SCREEN": "0"}, "fullscreen": {"WINDOW": "4194306", "X": "0", "Y": "0", "WIDTH": "1600", "HEIGHT": "900", "SCREEN": "0"}, "restored": {"WINDOW": "4194306", "X": "160", "Y": "97", "WIDTH": "1280", "HEIGHT": "720", "SCREEN": "0"}, "native_winit": true, "backend": "X11 / Xvfb / Openbox", "preference_files_verified": true}
+NATIVE_UI_QUIT_PASS exit=0
+NATIVE_DISPLAY_RELOAD_PASS fresh_process_fullscreen=true restored_window=1280x720
+
+Baseline/matched ICU and image comparison:
+See comparison.json: zh desktop 8012 -> 0, zh mobile 8012 -> 0, English 3 -> 0; all three frame89 images pixel-identical.
+Final static and live captures: ICU errors 0, missing asset errors 0.
+Native Winit startup and restart logs: ICU errors 0, missing asset errors 0.
+Format: final check exit 0.
+Vendor source/metadata/license hashes: only src/analysis/mod.rs differs from published Parley 0.9.0; documented dictionary constructor change.
+Scope: 3 paused contexts, 2 viewports; dynamic real volume/language changes, controlled live battle, Linux/X11 window regression.
+No FPS percentage, long-session GPU, clean-machine package, Windows/macOS or browser runtime claim.

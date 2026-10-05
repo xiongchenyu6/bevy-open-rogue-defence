@@ -539,54 +539,90 @@ pub(super) fn update_layout(
     };
     for (mut node, content, header, gallery, card, footer, art) in &mut nodes {
         if content {
-            node.width = px(m.width);
-            node.height = px(m.height);
-            node.row_gap = px(m.gap);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(m.width));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(m.height));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.row_gap)
+                .set_if_neq(px(m.gap));
         }
         if header {
-            node.height = px(m.header);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(m.header));
         }
         if gallery {
-            node.height = px(m.card_height);
-            node.column_gap = px(m.gap);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(m.card_height));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.column_gap)
+                .set_if_neq(px(m.gap));
         }
         if card {
-            node.width = px(m.card_width);
-            node.height = px(m.card_height);
-            node.row_gap = px(if m.compact { 7 } else { 14 });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(m.card_width));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(m.card_height));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.row_gap)
+                .set_if_neq(px(if m.compact { 7 } else { 14 }));
         }
         if footer {
-            node.height = px(m.footer);
-            node.padding = UiRect::axes(px(if m.compact { 12 } else { 20 }), px(10));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(m.footer));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.padding)
+                .set_if_neq(UiRect::axes(px(if m.compact { 12 } else { 20 }), px(10)));
         }
         if art {
-            node.width = px(icon);
-            node.height = px(icon);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(icon));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(icon));
         }
     }
     for (mut font, heading, title, detail_title, detail, trade) in &mut fonts {
         if heading {
-            font.font_size = FontSize::Px(if m.compact { 22.0 } else { 32.0 });
+            font.reborrow()
+                .map_unchanged(|value| &mut value.font_size)
+                .set_if_neq(FontSize::Px(if m.compact { 22.0 } else { 32.0 }));
         }
         if title {
-            font.font_size = FontSize::Px(if m.compact && m.count > 3 {
-                11.0
-            } else if m.compact {
-                16.0
-            } else if m.count > 3 {
-                17.0
-            } else {
-                23.0
-            });
+            font.reborrow()
+                .map_unchanged(|value| &mut value.font_size)
+                .set_if_neq(FontSize::Px(if m.compact && m.count > 3 {
+                    11.0
+                } else if m.compact {
+                    16.0
+                } else if m.count > 3 {
+                    17.0
+                } else {
+                    23.0
+                }));
         }
         if detail_title {
-            font.font_size = FontSize::Px(if m.compact { 16.0 } else { 22.0 });
+            font.reborrow()
+                .map_unchanged(|value| &mut value.font_size)
+                .set_if_neq(FontSize::Px(if m.compact { 16.0 } else { 22.0 }));
         }
         if detail {
-            font.font_size = FontSize::Px(if m.compact { 11.0 } else { 13.0 });
+            font.reborrow()
+                .map_unchanged(|value| &mut value.font_size)
+                .set_if_neq(FontSize::Px(if m.compact { 11.0 } else { 13.0 }));
         }
         if trade {
-            font.font_size = FontSize::Px(if m.compact { 10.0 } else { 13.0 });
+            font.reborrow()
+                .map_unchanged(|value| &mut value.font_size)
+                .set_if_neq(FontSize::Px(if m.compact { 10.0 } else { 13.0 }));
         }
     }
 }
@@ -784,12 +820,16 @@ pub(super) fn update_feedback(
         border.set_all(if projected { GOLD } else { MUTED });
     }
     for (mut text, mut node) in &mut hints {
-        node.display = if help.is_some() {
-            Display::Flex
-        } else {
-            Display::None
-        };
-        **text = help.clone().unwrap_or_default();
+        node.reborrow()
+            .map_unchanged(|value| &mut value.display)
+            .set_if_neq(if help.is_some() {
+                Display::Flex
+            } else {
+                Display::None
+            });
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(help.clone().unwrap_or_default());
     }
     if let Some(choice) = hovered_index
         .or(preview.index)
@@ -866,10 +906,14 @@ pub(super) fn update_feedback(
         };
         for (mut text, is_title, is_detail) in &mut labels {
             if is_title {
-                **text = title.clone();
+                text.reborrow()
+                    .map_unchanged(|value| &mut value.0)
+                    .set_if_neq(title.clone());
             }
             if is_detail {
-                **text = description.clone();
+                text.reborrow()
+                    .map_unchanged(|value| &mut value.0)
+                    .set_if_neq(description.clone());
             }
         }
     }
@@ -1070,23 +1114,25 @@ pub(super) fn refresh_language(
         return;
     }
     for (copy, mut text) in &mut labels {
-        **text = match copy {
-            BuildCopy::Card(choice) => short_name(*language, *choice),
-            BuildCopy::Trade(event) => trade_line(*language, *event),
-            BuildCopy::Heading(_)
-                if matches!(draft.choices.first(), Some(DraftChoice::EvolveUr { .. })) =>
-            {
-                let Some(DraftChoice::EvolveUr { skill, .. }) = draft.choices.first() else {
-                    unreachable!()
-                };
-                format!(
-                    "{} · {}",
-                    skill_name(*language, *skill),
-                    language.pick("Choose an evolution", "选择进化方向")
-                )
-            }
-            BuildCopy::Heading(kind) => heading_copy(*language, *kind).into(),
-        };
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(match copy {
+                BuildCopy::Card(choice) => short_name(*language, *choice),
+                BuildCopy::Trade(event) => trade_line(*language, *event),
+                BuildCopy::Heading(_)
+                    if matches!(draft.choices.first(), Some(DraftChoice::EvolveUr { .. })) =>
+                {
+                    let Some(DraftChoice::EvolveUr { skill, .. }) = draft.choices.first() else {
+                        unreachable!()
+                    };
+                    format!(
+                        "{} · {}",
+                        skill_name(*language, *skill),
+                        language.pick("Choose an evolution", "选择进化方向")
+                    )
+                }
+                BuildCopy::Heading(kind) => heading_copy(*language, *kind).into(),
+            });
     }
 }
 

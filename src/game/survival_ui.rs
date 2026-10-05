@@ -101,30 +101,41 @@ fn update(
     }
     for (mut text, mut color, lives, gate) in &mut labels {
         if let Some(lives) = lives {
-            **text = lives_copy(*language, vitals.lives_remaining(), lives.0);
-            color.0 = if vitals.lives_remaining() <= 1 {
-                Color::srgb(1.0, 0.36, 0.28)
-            } else {
-                Color::srgb(0.96, 0.79, 0.48)
-            };
+            text.reborrow()
+                .map_unchanged(|value| &mut value.0)
+                .set_if_neq(lives_copy(*language, vitals.lives_remaining(), lives.0));
+            color
+                .reborrow()
+                .map_unchanged(|value| &mut value.0)
+                .set_if_neq(if vitals.lives_remaining() <= 1 {
+                    Color::srgb(1.0, 0.36, 0.28)
+                } else {
+                    Color::srgb(0.96, 0.79, 0.48)
+                });
         } else if gate.is_some() {
-            **text = gate_copy(
+            let mut value = gate_copy(
                 *language,
                 down,
                 session.gate_revive_remaining,
                 gate_state.1 > 0.0,
             );
             if !down {
-                text.0.push_str(&format!(
+                value.push_str(&format!(
                     "  {:.0} / {:.0}",
                     session.core_hp, session.core_max_hp
                 ));
             }
-            color.0 = if down {
-                Color::srgb(1.0, 0.57, 0.25)
-            } else {
-                Color::srgb(0.5, 0.94, 0.77)
-            };
+            text.reborrow()
+                .map_unchanged(|text| &mut text.0)
+                .set_if_neq(value);
+            color
+                .reborrow()
+                .map_unchanged(|value| &mut value.0)
+                .set_if_neq(if down {
+                    Color::srgb(1.0, 0.57, 0.25)
+                } else {
+                    Color::srgb(0.5, 0.94, 0.77)
+                });
         }
     }
 }
@@ -204,25 +215,37 @@ fn update_gate_countdown(
             .ok()
     });
     for mut node in &mut roots {
-        node.display = if down && position.is_some() {
-            Display::Flex
-        } else {
-            Display::None
-        };
+        node.reborrow()
+            .map_unchanged(|value| &mut value.display)
+            .set_if_neq(if down && position.is_some() {
+                Display::Flex
+            } else {
+                Display::None
+            });
         if let Some(position) = position {
-            node.left = px(position.x - 60.0);
-            node.top = px(position.y - 60.0);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.left)
+                .set_if_neq(px(position.x - 60.0));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.top)
+                .set_if_neq(px(position.y - 60.0));
         }
     }
     for mut digit in &mut digits {
-        digit.0 = countdown_digit(if session.gate_revive_remaining > 0.0 {
-            session.gate_revive_remaining
-        } else {
-            crate::game::resources::GATE_REBUILD_SECONDS
-        });
+        digit
+            .reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(countdown_digit(if session.gate_revive_remaining > 0.0 {
+                session.gate_revive_remaining
+            } else {
+                crate::game::resources::GATE_REBUILD_SECONDS
+            }));
     }
     for mut caption in &mut captions {
-        caption.0 = language.pick("REBUILDING", "重建中").into();
+        caption
+            .reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(language.pick("REBUILDING", "重建中").into());
     }
 }
 

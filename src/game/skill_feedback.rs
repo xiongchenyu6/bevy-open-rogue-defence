@@ -186,7 +186,9 @@ fn tick_notice(
             .map_or(66.0, |window| notice_top(window.width(), window.height()));
         node.top = px(top + 10.0 * (1.0 - intro).powi(2));
         for mut text in &mut texts {
-            **text = notice_copy(*language, notice.upgrade);
+            text.reborrow()
+                .map_unchanged(|value| &mut value.0)
+                .set_if_neq(notice_copy(*language, notice.upgrade));
         }
     }
 }

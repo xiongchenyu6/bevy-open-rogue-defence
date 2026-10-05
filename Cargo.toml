@@ -34,3 +34,7 @@ opt-level = "z"
 lto = "fat"
 codegen-units = 1
 strip = "debuginfo"
+
+# Parley 0.9 lacks the later complex-scripts feature; enable CJK dictionary segmentation.
+[patch.crates-io]
+parley = { path = "vendor/parley" }

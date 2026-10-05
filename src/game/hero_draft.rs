@@ -471,78 +471,140 @@ pub(super) fn update_layout(
     ) in &mut nodes
     {
         if content {
-            node.width = px(m.width);
-            node.height = px(m.height);
-            node.row_gap = px(m.gap);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(m.width));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(m.height));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.row_gap)
+                .set_if_neq(px(m.gap));
         }
         if header {
-            node.height = px(m.header);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(m.header));
         }
         if gallery {
-            node.flex_wrap = if m.portrait {
-                FlexWrap::Wrap
-            } else {
-                FlexWrap::NoWrap
-            };
-            node.height = px(m.height - m.header - m.footer - m.gap * 2.0);
-            node.column_gap = px(m.gap);
-            node.row_gap = px(m.gap);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.flex_wrap)
+                .set_if_neq(if m.portrait {
+                    FlexWrap::Wrap
+                } else {
+                    FlexWrap::NoWrap
+                });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(m.height - m.header - m.footer - m.gap * 2.0));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.column_gap)
+                .set_if_neq(px(m.gap));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.row_gap)
+                .set_if_neq(px(m.gap));
         }
         if card {
-            node.width = px(m.card_width);
-            node.height = px(m.card_height);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(m.card_width));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(m.card_height));
         }
         if portrait {
             let art_height = m.card_height - if m.compact || m.portrait { 60.0 } else { 74.0 };
             let h = (m.card_width * 1.65).min(art_height + 12.0);
-            node.width = px(h * 0.8);
-            node.height = px(h);
-            node.flex_shrink = 0.0;
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(h * 0.8));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(h));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.flex_shrink)
+                .set_if_neq(0.0);
         }
         if caption {
-            node.height = px(if m.compact || m.portrait { 60.0 } else { 74.0 });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(if m.compact || m.portrait { 60.0 } else { 74.0 }));
         }
         if footer {
-            node.height = px(m.footer);
-            node.padding = UiRect::axes(
-                px(if m.compact { 12 } else { 22 }),
-                px(if m.compact { 8 } else { 14 }),
-            );
-            node.flex_direction = if m.portrait {
-                FlexDirection::Column
-            } else {
-                FlexDirection::Row
-            };
-            node.align_items = if m.portrait {
-                AlignItems::Stretch
-            } else {
-                AlignItems::Center
-            };
-            node.row_gap = px(10);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(m.footer));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.padding)
+                .set_if_neq(UiRect::axes(
+                    px(if m.compact { 12 } else { 22 }),
+                    px(if m.compact { 8 } else { 14 }),
+                ));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.flex_direction)
+                .set_if_neq(if m.portrait {
+                    FlexDirection::Column
+                } else {
+                    FlexDirection::Row
+                });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.align_items)
+                .set_if_neq(if m.portrait {
+                    AlignItems::Stretch
+                } else {
+                    AlignItems::Center
+                });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.row_gap)
+                .set_if_neq(px(10));
         }
         if eyebrow {
-            node.display = if m.compact {
-                Display::None
-            } else {
-                Display::Flex
-            };
+            node.reborrow()
+                .map_unchanged(|value| &mut value.display)
+                .set_if_neq(if m.compact {
+                    Display::None
+                } else {
+                    Display::Flex
+                });
         }
         if detail_role {
-            node.display = Display::Flex;
+            node.reborrow()
+                .map_unchanged(|value| &mut value.display)
+                .set_if_neq(Display::Flex);
         }
     }
     for (mut font, heading, card, title, skill) in &mut fonts {
         if heading {
-            font.font_size = FontSize::Px(if m.compact || m.portrait { 22.0 } else { 36.0 });
+            font.reborrow()
+                .map_unchanged(|value| &mut value.font_size)
+                .set_if_neq(FontSize::Px(if m.compact || m.portrait {
+                    22.0
+                } else {
+                    36.0
+                }));
         }
         if card {
-            font.font_size = FontSize::Px(if m.compact || m.portrait { 12.0 } else { 17.0 });
+            font.reborrow()
+                .map_unchanged(|value| &mut value.font_size)
+                .set_if_neq(FontSize::Px(if m.compact || m.portrait {
+                    12.0
+                } else {
+                    17.0
+                }));
         }
         if title {
-            font.font_size = FontSize::Px(if m.compact || m.portrait { 18.0 } else { 24.0 });
+            font.reborrow()
+                .map_unchanged(|value| &mut value.font_size)
+                .set_if_neq(FontSize::Px(if m.compact || m.portrait {
+                    18.0
+                } else {
+                    24.0
+                }));
         }
         if skill {
-            font.font_size = FontSize::Px(if m.compact { 11.0 } else { 13.0 });
+            font.reborrow()
+                .map_unchanged(|value| &mut value.font_size)
+                .set_if_neq(FontSize::Px(if m.compact { 11.0 } else { 13.0 }));
         }
     }
 }
@@ -576,7 +638,9 @@ pub(super) fn update_feedback(
     let preview = state.preview;
     let fusing = recruitment.as_ref().is_some_and(|r| r.pending.is_some());
     for (portrait, mut image, mut node) in &mut fusion_portraits {
-        node.display = if fusing { Display::Flex } else { Display::None };
+        node.reborrow()
+            .map_unchanged(|value| &mut value.display)
+            .set_if_neq(if fusing { Display::Flex } else { Display::None });
         let kind = if portrait.0 {
             preview.map_or(selected.kind, |offer| offer.kind)
         } else {
@@ -585,7 +649,9 @@ pub(super) fn update_feedback(
         image.image = art.portraits[kind.index()].clone();
     }
     for mut node in &mut fusion_arrows {
-        node.display = if fusing { Display::Flex } else { Display::None };
+        node.reborrow()
+            .map_unchanged(|value| &mut value.display)
+            .set_if_neq(if fusing { Display::Flex } else { Display::None });
     }
     for (choice, interaction, mut border, mut background) in &mut cards {
         let selected = preview == Some(choice.0);
@@ -622,39 +688,47 @@ pub(super) fn update_feedback(
         );
         for (mut text, title, starting, role) in &mut labels {
             if title {
-                **text = hero_name(*language, offer.kind);
+                text.reborrow()
+                    .map_unchanged(|value| &mut value.0)
+                    .set_if_neq(hero_name(*language, offer.kind));
             }
             if starting {
-                **text = if recruitment.as_ref().is_some_and(|r| r.pending.is_some()) {
-                    format!(
-                        "{}  {} · {} {}",
-                        language.pick("Inherited skill", "继承技能"),
-                        skill_name(*language, skill),
-                        language.pick("Rank", "等级"),
-                        hero.rarity.starting_skill_rank()
-                    )
-                } else if language.is_chinese() {
-                    format!(
-                        "初始技能  {} · 等级 {}",
-                        skill_name(*language, skill),
-                        hero.rarity.starting_skill_rank()
-                    )
-                } else {
-                    format!(
-                        "Starting skill  {} · Rank {}",
-                        skill_name(*language, skill),
-                        hero.rarity.starting_skill_rank()
-                    )
-                };
+                text.reborrow()
+                    .map_unchanged(|value| &mut value.0)
+                    .set_if_neq(
+                        if recruitment.as_ref().is_some_and(|r| r.pending.is_some()) {
+                            format!(
+                                "{}  {} · {} {}",
+                                language.pick("Inherited skill", "继承技能"),
+                                skill_name(*language, skill),
+                                language.pick("Rank", "等级"),
+                                hero.rarity.starting_skill_rank()
+                            )
+                        } else if language.is_chinese() {
+                            format!(
+                                "初始技能  {} · 等级 {}",
+                                skill_name(*language, skill),
+                                hero.rarity.starting_skill_rank()
+                            )
+                        } else {
+                            format!(
+                                "Starting skill  {} · Rank {}",
+                                skill_name(*language, skill),
+                                hero.rarity.starting_skill_rank()
+                            )
+                        },
+                    );
             }
             if role {
-                **text = crate::game::basic_attack_details::summary(
-                    *language,
-                    offer.kind,
-                    if fusing { vitals.level } else { 1 },
-                    &build,
-                    bonds.as_ref().map_or(0, |bonds| bonds.melee_cleave()),
-                );
+                text.reborrow()
+                    .map_unchanged(|value| &mut value.0)
+                    .set_if_neq(crate::game::basic_attack_details::summary(
+                        *language,
+                        offer.kind,
+                        if fusing { vitals.level } else { 1 },
+                        &build,
+                        bonds.as_ref().map_or(0, |bonds| bonds.melee_cleave()),
+                    ));
             }
         }
     }
@@ -699,25 +773,27 @@ pub(super) fn refresh_language(
 ) {
     let context = recruitment.as_ref().and_then(|r| r.pending);
     for (copy, mut text) in &mut labels {
-        **text = match copy {
-            DraftCopy::Eyebrow => language
-                .pick("THE LAST BASTION", "最后的堡垒 · 指挥官征募")
-                .into(),
-            DraftCopy::Heading => match context {
-                Some(crate::game::RecruitmentSource::Milestone(level)) => format!(
-                    "{} {level} · {}",
-                    language.pick("Level", "等级"),
-                    language.pick("Recruit a hero", "英雄征募")
-                ),
-                Some(crate::game::RecruitmentSource::Fruit) => language
-                    .pick("Bond fruit · Recruit", "羁绊果实 · 英雄征募")
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(match copy {
+                DraftCopy::Eyebrow => language
+                    .pick("THE LAST BASTION", "最后的堡垒 · 指挥官征募")
                     .into(),
-                None => language
-                    .pick("Click a basic commander to begin", "点击基础指挥官开始远征")
-                    .into(),
-            },
-            DraftCopy::Name(kind) => hero_name(*language, *kind),
-            DraftCopy::Role(primary) => role_name(*language, *primary).into(),
-        };
+                DraftCopy::Heading => match context {
+                    Some(crate::game::RecruitmentSource::Milestone(level)) => format!(
+                        "{} {level} · {}",
+                        language.pick("Level", "等级"),
+                        language.pick("Recruit a hero", "英雄征募")
+                    ),
+                    Some(crate::game::RecruitmentSource::Fruit) => language
+                        .pick("Bond fruit · Recruit", "羁绊果实 · 英雄征募")
+                        .into(),
+                    None => language
+                        .pick("Click a basic commander to begin", "点击基础指挥官开始远征")
+                        .into(),
+                },
+                DraftCopy::Name(kind) => hero_name(*language, *kind),
+                DraftCopy::Role(primary) => role_name(*language, *primary).into(),
+            });
     }
 }

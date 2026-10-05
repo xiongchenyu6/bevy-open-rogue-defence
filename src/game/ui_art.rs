@@ -89,22 +89,24 @@ pub(super) fn update_icon_hud(
     mut tip_text: Query<&mut Text, (With<HudTooltipText>, Without<HudValue>)>,
 ) {
     for (value, mut text) in &mut values {
-        **text = match value {
-            HudValue::Gold => session.gold.to_string(),
-            HudValue::Wood => session.wood.to_string(),
-            HudValue::Kills => session.kills.to_string(),
-            HudValue::Health if vitals.lives_remaining() == 0 => {
-                language.pick("NO LIVES LEFT", "生命已耗尽").into()
-            }
-            HudValue::Health if !vitals.alive => format!(
-                "{} {:.1}{}",
-                language.pick("Revive", "复活"),
-                vitals.revive_remaining,
-                language.pick("s", "秒")
-            ),
-            HudValue::Health => format!("{:.0} / {:.0}", vitals.health, vitals.max_health),
-            HudValue::Energy => format!("{:.0} / {:.0}", vitals.energy, vitals.max_energy),
-        };
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(match value {
+                HudValue::Gold => session.gold.to_string(),
+                HudValue::Wood => session.wood.to_string(),
+                HudValue::Kills => session.kills.to_string(),
+                HudValue::Health if vitals.lives_remaining() == 0 => {
+                    language.pick("NO LIVES LEFT", "生命已耗尽").into()
+                }
+                HudValue::Health if !vitals.alive => format!(
+                    "{} {:.1}{}",
+                    language.pick("Revive", "复活"),
+                    vitals.revive_remaining,
+                    language.pick("s", "秒")
+                ),
+                HudValue::Health => format!("{:.0} / {:.0}", vitals.health, vitals.max_health),
+                HudValue::Energy => format!("{:.0} / {:.0}", vitals.energy, vitals.max_energy),
+            });
     }
     for (gauge, mut node) in &mut gauges {
         let fraction = match gauge.0 {
@@ -112,7 +114,9 @@ pub(super) fn update_icon_hud(
             HudValue::Energy => vitals.energy / vitals.max_energy.max(1.0),
             _ => 0.0,
         };
-        node.width = percent(fraction.clamp(0.0, 1.0) * 100.0);
+        node.reborrow()
+            .map_unchanged(|value| &mut value.width)
+            .set_if_neq(percent(fraction.clamp(0.0, 1.0) * 100.0));
     }
     let pressed = hints.iter().find_map(|(interaction, hint)| {
         (*interaction == Interaction::Pressed && interaction.is_changed()).then_some(*hint)
@@ -151,11 +155,13 @@ pub(super) fn update_icon_hud(
         .then_some(hovered.or(review.pinned.map(HudHint::BondProgress)))
         .flatten();
     for mut node in &mut tips {
-        node.display = if hint.is_some() {
-            Display::Flex
-        } else {
-            Display::None
-        };
+        node.reborrow()
+            .map_unchanged(|value| &mut value.display)
+            .set_if_neq(if hint.is_some() {
+                Display::Flex
+            } else {
+                Display::None
+            });
     }
     let Some(hint) = hint else {
         return;
@@ -205,7 +211,9 @@ pub(super) fn update_icon_hud(
         }.into(),
     };
     for mut text in &mut tip_text {
-        **text = copy.clone();
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(copy.clone());
     }
 }
 
@@ -304,12 +312,16 @@ pub(super) fn update_bond_strip(
         .iter()
         .any(|id| build.bond(*id) > 0 || build.bond_complete(*id));
     for mut node in &mut strips {
-        node.row_gap = px(if compact { 1 } else { 3 });
-        node.display = if visible {
-            Display::Flex
-        } else {
-            Display::None
-        };
+        node.reborrow()
+            .map_unchanged(|value| &mut value.row_gap)
+            .set_if_neq(px(if compact { 1 } else { 3 }));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.display)
+            .set_if_neq(if visible {
+                Display::Flex
+            } else {
+                Display::None
+            });
     }
     // The battle HUD stays one row tall; the collection panel preserves the full list.
     for id in BondId::ALL {
@@ -340,7 +352,9 @@ pub(super) fn update_bond_strip(
     });
     focused.truncate(6);
     for (badge, mut node, mut border, mut background) in &mut badges {
-        node.height = px(if compact { 36 } else { 38 });
+        node.reborrow()
+            .map_unchanged(|value| &mut value.height)
+            .set_if_neq(px(if compact { 36 } else { 38 }));
         let index = badge.0.index();
         let complete = build.bond_complete(badge.0);
         let glow = if pulse.remaining[index] > 0.0 {
@@ -353,11 +367,13 @@ pub(super) fn update_bond_strip(
         } else {
             Color::srgba(0.025, 0.035, 0.055, 0.9)
         };
-        node.display = if focused.contains(&badge.0) {
-            Display::Flex
-        } else {
-            Display::None
-        };
+        node.reborrow()
+            .map_unchanged(|value| &mut value.display)
+            .set_if_neq(if focused.contains(&badge.0) {
+                Display::Flex
+            } else {
+                Display::None
+            });
         *border = BorderColor::all(if complete {
             Color::srgb(0.91, 0.69, 0.25)
         } else {
@@ -366,11 +382,13 @@ pub(super) fn update_bond_strip(
     }
     pulse.initialized = true;
     for (progress, mut text) in &mut labels {
-        **text = if build.bond_complete(progress.0) {
-            "✓".to_string()
-        } else {
-            format!("{}/{}", build.bond(progress.0), progress.0.required())
-        };
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(if build.bond_complete(progress.0) {
+                "✓".to_string()
+            } else {
+                format!("{}/{}", build.bond(progress.0), progress.0.required())
+            });
     }
 }
 
@@ -525,12 +543,17 @@ pub(super) fn update_encounter_button(
         });
     }
     for (mut text, mut color) in &mut labels {
-        **text = encounters.banked.to_string();
-        color.0 = if ready {
-            Color::WHITE
-        } else {
-            Color::srgba(1.0, 1.0, 1.0, 0.4)
-        };
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(encounters.banked.to_string());
+        color
+            .reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(if ready {
+                Color::WHITE
+            } else {
+                Color::srgba(1.0, 1.0, 1.0, 0.4)
+            });
     }
 }
 
@@ -541,17 +564,21 @@ pub(super) fn update_fruit_button(
     mut labels: Query<&mut Text, With<FruitCount>>,
 ) {
     for (interaction, mut node) in &mut buttons {
-        node.display = if recruitment.fruit_count > 0 {
-            Display::Flex
-        } else {
-            Display::None
-        };
+        node.reborrow()
+            .map_unchanged(|value| &mut value.display)
+            .set_if_neq(if recruitment.fruit_count > 0 {
+                Display::Flex
+            } else {
+                Display::None
+            });
         if *interaction == Interaction::Pressed && !session.paused && recruitment.pending.is_none()
         {
             recruitment.requested = true;
         }
     }
     for mut text in &mut labels {
-        **text = recruitment.fruit_count.to_string();
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(recruitment.fruit_count.to_string());
     }
 }

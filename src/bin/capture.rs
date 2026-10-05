@@ -89,6 +89,9 @@ mod skill_spectacle_capture;
 #[path = "capture/audio_settings.rs"]
 mod audio_settings_capture;
 
+#[path = "capture/text_idle.rs"]
+mod text_idle_capture;
+
 #[path = "capture/settings_navigation.rs"]
 mod settings_navigation_capture;
 
@@ -559,7 +562,9 @@ fn main() {
     if scenario.starts_with("trials-") {
         trial_capture::install(&mut apps.main);
     }
-    if scenario == "settings-navigation" {
+    if scenario == "text-idle" {
+        text_idle_capture::install(&mut apps.main);
+    } else if scenario == "settings-navigation" {
         settings_navigation_capture::install(&mut apps.main);
     } else if scenario.starts_with("settings-audio") {
         audio_settings_capture::install(

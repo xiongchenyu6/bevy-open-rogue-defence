@@ -262,7 +262,10 @@ fn update_label(
 ) {
     let text = menu_text(state, language);
     for mut label in labels {
-        **label = text.clone();
+        label
+            .reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(text.clone());
     }
 }
 

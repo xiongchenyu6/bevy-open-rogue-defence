@@ -421,14 +421,16 @@ fn update_values(
     mut texts: Query<(&StatValue, &mut Text), Without<BasicAbilityText>>,
 ) {
     for mut text in &mut ability_text {
-        **text = crate::game::basic_attack_details::detail(
-            *language,
-            selected.kind,
-            snapshot.level,
-            &build,
-            snapshot.basic_hit_damage,
-            snapshot.cleave_target_bonus,
-        );
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(crate::game::basic_attack_details::detail(
+                *language,
+                selected.kind,
+                snapshot.level,
+                &build,
+                snapshot.basic_hit_damage,
+                snapshot.cleave_target_bonus,
+            ));
         if let Some(relics) = relics.as_ref() {
             for index in 0..3 {
                 if relics.owns(index) {
@@ -447,7 +449,9 @@ fn update_values(
     let values = rows(*language, &snapshot);
     for (field, mut text) in &mut texts {
         if let Some(row) = values.iter().flatten().find(|row| row.field == field.0) {
-            **text = row.value.clone();
+            text.reborrow()
+                .map_unchanged(|value| &mut value.0)
+                .set_if_neq(row.value.clone());
         }
     }
 }
@@ -480,7 +484,9 @@ fn update_close_hint(
         .iter()
         .any(|interaction| *interaction != Interaction::None);
     for mut node in &mut hints {
-        node.display = if show { Display::Flex } else { Display::None };
+        node.reborrow()
+            .map_unchanged(|value| &mut value.display)
+            .set_if_neq(if show { Display::Flex } else { Display::None });
     }
 }
 

@@ -1787,100 +1787,192 @@ fn apply_market_layout(
 
     for (mut node, panel, header, grid, row, offer, mark, refresh, toggle) in &mut nodes {
         if panel.is_some() {
-            node.padding = UiRect::all(px(if layout.compact {
-                MARKET_COMPACT_PANEL_PADDING
-            } else {
-                10.0
-            }));
-            node.row_gap = px(MARKET_PANEL_GAP);
-            node.height = Val::Auto;
-            node.min_height = px(if layout.compact {
-                layout.minimum_compact_panel_height()
-            } else {
-                0.0
-            });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.padding)
+                .set_if_neq(UiRect::all(px(if layout.compact {
+                    MARKET_COMPACT_PANEL_PADDING
+                } else {
+                    10.0
+                })));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.row_gap)
+                .set_if_neq(px(MARKET_PANEL_GAP));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(Val::Auto);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.min_height)
+                .set_if_neq(px(if layout.compact {
+                    layout.minimum_compact_panel_height()
+                } else {
+                    0.0
+                }));
             if layout.compact {
-                node.left = px(layout.safe_x);
-                node.right = px(layout.safe_x);
-                node.top = px(layout.panel_top);
-                node.bottom = px(layout.safe_y);
-                node.width = Val::Auto;
+                node.reborrow()
+                    .map_unchanged(|value| &mut value.left)
+                    .set_if_neq(px(layout.safe_x));
+                node.reborrow()
+                    .map_unchanged(|value| &mut value.right)
+                    .set_if_neq(px(layout.safe_x));
+                node.reborrow()
+                    .map_unchanged(|value| &mut value.top)
+                    .set_if_neq(px(layout.panel_top));
+                node.reborrow()
+                    .map_unchanged(|value| &mut value.bottom)
+                    .set_if_neq(px(layout.safe_y));
+                node.reborrow()
+                    .map_unchanged(|value| &mut value.width)
+                    .set_if_neq(Val::Auto);
             } else {
-                node.left = Val::Auto;
-                node.right = px(18);
-                node.top = Val::Auto;
-                node.bottom = px(70);
-                node.width = px(360);
+                node.reborrow()
+                    .map_unchanged(|value| &mut value.left)
+                    .set_if_neq(Val::Auto);
+                node.reborrow()
+                    .map_unchanged(|value| &mut value.right)
+                    .set_if_neq(px(18));
+                node.reborrow()
+                    .map_unchanged(|value| &mut value.top)
+                    .set_if_neq(Val::Auto);
+                node.reborrow()
+                    .map_unchanged(|value| &mut value.bottom)
+                    .set_if_neq(px(70));
+                node.reborrow()
+                    .map_unchanged(|value| &mut value.width)
+                    .set_if_neq(px(360));
             }
         } else if header.is_some() {
-            node.width = percent(100);
-            node.min_height = px(if layout.compact {
-                MARKET_COMPACT_HEADER_HEIGHT
-            } else {
-                0.0
-            });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(percent(100));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.min_height)
+                .set_if_neq(px(if layout.compact {
+                    MARKET_COMPACT_HEADER_HEIGHT
+                } else {
+                    0.0
+                }));
         } else if grid.is_some() {
-            node.width = percent(100);
-            node.height = Val::Auto;
-            node.flex_direction = if layout.compact {
-                FlexDirection::Row
-            } else {
-                FlexDirection::Column
-            };
-            node.flex_wrap = if layout.compact {
-                FlexWrap::Wrap
-            } else {
-                FlexWrap::NoWrap
-            };
-            node.justify_content = JustifyContent::FlexStart;
-            node.align_items = AlignItems::Stretch;
-            node.column_gap = px(if layout.compact {
-                MARKET_PANEL_GAP
-            } else {
-                0.0
-            });
-            node.row_gap = px(MARKET_PANEL_GAP);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(percent(100));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(Val::Auto);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.flex_direction)
+                .set_if_neq(if layout.compact {
+                    FlexDirection::Row
+                } else {
+                    FlexDirection::Column
+                });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.flex_wrap)
+                .set_if_neq(if layout.compact {
+                    FlexWrap::Wrap
+                } else {
+                    FlexWrap::NoWrap
+                });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.justify_content)
+                .set_if_neq(JustifyContent::FlexStart);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.align_items)
+                .set_if_neq(AlignItems::Stretch);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.column_gap)
+                .set_if_neq(px(if layout.compact {
+                    MARKET_PANEL_GAP
+                } else {
+                    0.0
+                }));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.row_gap)
+                .set_if_neq(px(MARKET_PANEL_GAP));
         } else if row.is_some() {
-            node.width = percent(layout.row_width_percent);
-            node.height = if layout.compact {
-                px(layout.row_height)
-            } else {
-                Val::Auto
-            };
-            node.min_height = px(layout.row_height);
-            node.flex_grow = 0.0;
-            node.flex_shrink = 0.0;
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(percent(layout.row_width_percent));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(if layout.compact {
+                    px(layout.row_height)
+                } else {
+                    Val::Auto
+                });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.min_height)
+                .set_if_neq(px(layout.row_height));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.flex_grow)
+                .set_if_neq(0.0);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.flex_shrink)
+                .set_if_neq(0.0);
         } else if offer.is_some() {
-            node.height = if layout.compact {
-                px(layout.row_height)
-            } else {
-                Val::Auto
-            };
-            node.min_height = px(layout.row_height);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(if layout.compact {
+                    px(layout.row_height)
+                } else {
+                    Val::Auto
+                });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.min_height)
+                .set_if_neq(px(layout.row_height));
         } else if mark.is_some() {
-            node.width = px(layout.mark_width);
-            node.height = if layout.compact {
-                px(layout.row_height)
-            } else {
-                Val::Auto
-            };
-            node.min_height = px(layout.row_height);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(layout.mark_width));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(if layout.compact {
+                    px(layout.row_height)
+                } else {
+                    Val::Auto
+                });
+            node.reborrow()
+                .map_unchanged(|value| &mut value.min_height)
+                .set_if_neq(px(layout.row_height));
         } else if refresh.is_some() {
-            node.width = percent(100);
-            node.height = px(MARKET_REFRESH_HEIGHT);
-            node.min_height = px(MARKET_REFRESH_HEIGHT);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(percent(100));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(MARKET_REFRESH_HEIGHT));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.min_height)
+                .set_if_neq(px(MARKET_REFRESH_HEIGHT));
         } else if toggle.is_some() {
-            node.left = Val::Auto;
-            node.right = px(layout.toggle_right);
-            node.width = px(layout.toggle_width);
-            node.height = px(layout.toggle_height);
-            node.min_height = px(layout.toggle_height);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.left)
+                .set_if_neq(Val::Auto);
+            node.reborrow()
+                .map_unchanged(|value| &mut value.right)
+                .set_if_neq(px(layout.toggle_right));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.width)
+                .set_if_neq(px(layout.toggle_width));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.height)
+                .set_if_neq(px(layout.toggle_height));
+            node.reborrow()
+                .map_unchanged(|value| &mut value.min_height)
+                .set_if_neq(px(layout.toggle_height));
             if layout.compact {
-                node.top = px(layout.safe_y);
-                node.bottom = Val::Auto;
+                node.reborrow()
+                    .map_unchanged(|value| &mut value.top)
+                    .set_if_neq(px(layout.safe_y));
+                node.reborrow()
+                    .map_unchanged(|value| &mut value.bottom)
+                    .set_if_neq(Val::Auto);
             } else {
-                node.top = Val::Auto;
-                node.bottom = px(layout.safe_y);
+                node.reborrow()
+                    .map_unchanged(|value| &mut value.top)
+                    .set_if_neq(Val::Auto);
+                node.reborrow()
+                    .map_unchanged(|value| &mut value.bottom)
+                    .set_if_neq(px(layout.safe_y));
             }
         }
     }
@@ -1975,19 +2067,26 @@ fn update_market_ui(
         };
     }
     if let Ok((mut label, mut font)) = toggle_labels.single_mut() {
-        **label = if session.elapsed < MARKET_UNLOCK_AT {
-            let remaining = (MARKET_UNLOCK_AT - session.elapsed).ceil() as u32;
-            format!("{:02}:{:02}", remaining / 60, remaining % 60)
-        } else if state.open {
-            "×".to_string()
-        } else {
-            "B".to_string()
-        };
-        font.font_size = FontSize::Px(13.0);
+        label
+            .reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(if session.elapsed < MARKET_UNLOCK_AT {
+                let remaining = (MARKET_UNLOCK_AT - session.elapsed).ceil() as u32;
+                format!("{:02}:{:02}", remaining / 60, remaining % 60)
+            } else if state.open {
+                "×".to_string()
+            } else {
+                "B".to_string()
+            });
+        font.reborrow()
+            .map_unchanged(|value| &mut value.font_size)
+            .set_if_neq(FontSize::Px(13.0));
     }
 
     for (offer_label, mark_label, mut text, mut color, mut font) in &mut item_labels {
-        font.font_size = FontSize::Px(if layout.compact { 12.0 } else { 11.0 });
+        font.reborrow()
+            .map_unchanged(|value| &mut value.font_size)
+            .set_if_neq(FontSize::Px(if layout.compact { 12.0 } else { 11.0 }));
         if let Some(label) = offer_label {
             let item = state.offers[label.0].item;
             let price = discounted_cost(item.price(), &effects);
@@ -1996,148 +2095,166 @@ fn update_market_ui(
             } else {
                 language.pick("GEAR", "装备")
             };
-            **text = if language.is_chinese() && layout.compact {
-                format!(
-                    "{}   {} 击杀\n[{} / {}] {}",
-                    item.name(language),
-                    price,
-                    item.tag(),
-                    kind,
-                    item.effect_text(language)
-                )
-            } else if language.is_chinese() {
-                format!(
-                    "[{} / {}] {}   {} 击杀\n{}",
-                    item.tag(),
-                    kind,
-                    item.name(language),
-                    price,
-                    item.effect_text(language)
-                )
-            } else if layout.compact {
-                format!(
-                    "{}   {} K\n[{} / {}] {}",
-                    item.name(language),
-                    price,
-                    item.tag(),
-                    kind,
-                    item.effect_text(language)
-                )
-            } else {
-                format!(
-                    "[{} / {}] {}   {} KILLS\n{}",
-                    item.tag(),
-                    kind,
-                    item.name(language),
-                    price,
-                    item.effect_text(language)
-                )
-            };
-            color.0 = item.color();
+            text.reborrow()
+                .map_unchanged(|value| &mut value.0)
+                .set_if_neq(if language.is_chinese() && layout.compact {
+                    format!(
+                        "{}   {} 击杀\n[{} / {}] {}",
+                        item.name(language),
+                        price,
+                        item.tag(),
+                        kind,
+                        item.effect_text(language)
+                    )
+                } else if language.is_chinese() {
+                    format!(
+                        "[{} / {}] {}   {} 击杀\n{}",
+                        item.tag(),
+                        kind,
+                        item.name(language),
+                        price,
+                        item.effect_text(language)
+                    )
+                } else if layout.compact {
+                    format!(
+                        "{}   {} K\n[{} / {}] {}",
+                        item.name(language),
+                        price,
+                        item.tag(),
+                        kind,
+                        item.effect_text(language)
+                    )
+                } else {
+                    format!(
+                        "[{} / {}] {}   {} KILLS\n{}",
+                        item.tag(),
+                        kind,
+                        item.name(language),
+                        price,
+                        item.effect_text(language)
+                    )
+                });
+            color
+                .reborrow()
+                .map_unchanged(|value| &mut value.0)
+                .set_if_neq(item.color());
         } else if let Some(label) = mark_label {
             let item = state.offers[label.0].item;
             let marked = state.marked[label.0] == Some(item);
-            **text = if marked {
-                language.pick("AUTO\nON", "自动\n开启").to_string()
-            } else {
-                language.pick("AUTO", "自动").to_string()
-            };
-            color.0 = if marked {
-                Color::srgb(0.30, 1.0, 0.68)
-            } else {
-                Color::srgb(0.68, 0.84, 0.92)
-            };
+            text.reborrow()
+                .map_unchanged(|value| &mut value.0)
+                .set_if_neq(if marked {
+                    language.pick("AUTO\nON", "自动\n开启").to_string()
+                } else {
+                    language.pick("AUTO", "自动").to_string()
+                });
+            color
+                .reborrow()
+                .map_unchanged(|value| &mut value.0)
+                .set_if_neq(if marked {
+                    Color::srgb(0.30, 1.0, 0.68)
+                } else {
+                    Color::srgb(0.68, 0.84, 0.92)
+                });
         }
     }
 
     let next_stock = (state.next_stock_at - session.elapsed).max(0.0).ceil() as u32;
     for (mut text, mut font) in &mut wallet_labels {
-        font.font_size = FontSize::Px(if layout.compact { 12.0 } else { 11.0 });
-        **text = if state.notice_timer > 0.0 {
-            if language.is_chinese() && layout.compact {
+        font.reborrow()
+            .map_unchanged(|value| &mut value.font_size)
+            .set_if_neq(FontSize::Px(if layout.compact { 12.0 } else { 11.0 }));
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(if state.notice_timer > 0.0 {
+                if language.is_chinese() && layout.compact {
+                    format!(
+                        "等级{}｜{}",
+                        state.level,
+                        state.notice[usize::from(language.is_chinese())]
+                    )
+                } else if language.is_chinese() {
+                    format!(
+                        "等级{}  {}",
+                        state.level,
+                        state.notice[usize::from(language.is_chinese())]
+                    )
+                } else if layout.compact {
+                    format!(
+                        "LV{} | {}",
+                        state.level,
+                        state.notice[usize::from(language.is_chinese())]
+                    )
+                } else {
+                    format!(
+                        "LV{}  {}",
+                        state.level,
+                        state.notice[usize::from(language.is_chinese())]
+                    )
+                }
+            } else if language.is_chinese() && layout.compact {
                 format!(
-                    "等级{}｜{}",
+                    "等级{}｜击杀 {}｜补货 {:02}:{:02}",
                     state.level,
-                    state.notice[usize::from(language.is_chinese())]
+                    session.kills,
+                    next_stock / 60,
+                    next_stock % 60
                 )
             } else if language.is_chinese() {
                 format!(
-                    "等级{}  {}",
+                    "等级{}  击杀 {:04}\n补货 {:02}:{:02}",
                     state.level,
-                    state.notice[usize::from(language.is_chinese())]
+                    session.kills,
+                    next_stock / 60,
+                    next_stock % 60
                 )
             } else if layout.compact {
                 format!(
-                    "LV{} | {}",
+                    "LV{} | KILLS {} | STOCK {:02}:{:02}",
                     state.level,
-                    state.notice[usize::from(language.is_chinese())]
+                    session.kills,
+                    next_stock / 60,
+                    next_stock % 60
                 )
             } else {
                 format!(
-                    "LV{}  {}",
+                    "LV{}  KILLS {:04}\nRESTOCK {:02}:{:02}",
                     state.level,
-                    state.notice[usize::from(language.is_chinese())]
+                    session.kills,
+                    next_stock / 60,
+                    next_stock % 60
                 )
-            }
-        } else if language.is_chinese() && layout.compact {
-            format!(
-                "等级{}｜击杀 {}｜补货 {:02}:{:02}",
-                state.level,
-                session.kills,
-                next_stock / 60,
-                next_stock % 60
-            )
-        } else if language.is_chinese() {
-            format!(
-                "等级{}  击杀 {:04}\n补货 {:02}:{:02}",
-                state.level,
-                session.kills,
-                next_stock / 60,
-                next_stock % 60
-            )
-        } else if layout.compact {
-            format!(
-                "LV{} | KILLS {} | STOCK {:02}:{:02}",
-                state.level,
-                session.kills,
-                next_stock / 60,
-                next_stock % 60
-            )
-        } else {
-            format!(
-                "LV{}  KILLS {:04}\nRESTOCK {:02}:{:02}",
-                state.level,
-                session.kills,
-                next_stock / 60,
-                next_stock % 60
-            )
-        };
+            });
     }
 
     for (mut text, mut font) in &mut refresh_labels {
-        font.font_size = FontSize::Px(if layout.compact { 13.0 } else { 12.0 });
+        font.reborrow()
+            .map_unchanged(|value| &mut value.font_size)
+            .set_if_neq(FontSize::Px(if layout.compact { 13.0 } else { 12.0 }));
         let price = state.refresh_price(&effects);
-        **text = if language.is_chinese() && price == 0 {
-            if layout.compact {
-                "刷新｜免费".to_string()
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(if language.is_chinese() && price == 0 {
+                if layout.compact {
+                    "刷新｜免费".to_string()
+                } else {
+                    "刷新货品   免费".to_string()
+                }
+            } else if language.is_chinese() {
+                if layout.compact {
+                    format!("刷新｜{price} 击杀")
+                } else {
+                    format!("刷新货品   {price} 击杀")
+                }
+            } else if layout.compact && price == 0 {
+                "REFRESH | FREE".to_string()
+            } else if layout.compact {
+                format!("REFRESH | {price} K")
+            } else if price == 0 {
+                "REFRESH STOCK   FREE".to_string()
             } else {
-                "刷新货品   免费".to_string()
-            }
-        } else if language.is_chinese() {
-            if layout.compact {
-                format!("刷新｜{price} 击杀")
-            } else {
-                format!("刷新货品   {price} 击杀")
-            }
-        } else if layout.compact && price == 0 {
-            "REFRESH | FREE".to_string()
-        } else if layout.compact {
-            format!("REFRESH | {price} K")
-        } else if price == 0 {
-            "REFRESH STOCK   FREE".to_string()
-        } else {
-            format!("REFRESH STOCK   {price} KILLS")
-        };
+                format!("REFRESH STOCK   {price} KILLS")
+            });
     }
 
     for (offer_button, mark_button, mut background) in &mut action_buttons {
@@ -2179,37 +2296,47 @@ fn update_market_tooltip(
         .unwrap_or_else(|_| market_layout(1280.0, 720.0));
     let visible = !state.open && buttons.iter().any(|i| *i != Interaction::None);
     for mut node in &mut tips {
-        node.display = if visible {
-            Display::Flex
-        } else {
-            Display::None
-        };
-        node.right = px(layout.safe_x);
-        node.top = if layout.compact {
-            px(layout.safe_y + 60.0)
-        } else {
-            Val::Auto
-        };
-        node.bottom = if layout.compact { Val::Auto } else { px(76) };
+        node.reborrow()
+            .map_unchanged(|value| &mut value.display)
+            .set_if_neq(if visible {
+                Display::Flex
+            } else {
+                Display::None
+            });
+        node.reborrow()
+            .map_unchanged(|value| &mut value.right)
+            .set_if_neq(px(layout.safe_x));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.top)
+            .set_if_neq(if layout.compact {
+                px(layout.safe_y + 60.0)
+            } else {
+                Val::Auto
+            });
+        node.reborrow()
+            .map_unchanged(|value| &mut value.bottom)
+            .set_if_neq(if layout.compact { Val::Auto } else { px(76) });
     }
     if !visible {
         return;
     }
     for mut text in &mut labels {
-        **text = format!(
-            "{}\n{}",
-            market_toggle_label(
-                *language,
-                layout.compact,
-                session.elapsed,
-                state.open,
-                state.level
-            ),
-            language.pick(
-                "Spend kills on equipment and supplies. Preview each offer before buying.",
-                "使用击杀数兑换装备与补给，购买前可查看商品详情。"
-            )
-        );
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(format!(
+                "{}\n{}",
+                market_toggle_label(
+                    *language,
+                    layout.compact,
+                    session.elapsed,
+                    state.open,
+                    state.level
+                ),
+                language.pick(
+                    "Spend kills on equipment and supplies. Preview each offer before buying.",
+                    "使用击杀数兑换装备与补给，购买前可查看商品详情。"
+                )
+            ));
     }
 }
 
@@ -3505,6 +3632,6 @@ fn refresh_market_language(
         return;
     }
     for mut title in &mut titles {
-        **title = language.pick("BLACK MARKET", "黑市").into();
+        title.set_if_neq(Text::new(language.pick("BLACK MARKET", "黑市")));
     }
 }
