@@ -111,6 +111,11 @@ def analyze(batches, destination, plot=False):
                 "initial_hero_id": first.get("actual_hero_id"),
                 "initial_hero": HERO_NAMES.get(first.get("actual_hero_id"), "unknown"),
                 "position": "forward" if metadata.get("forward") else "behind",
+                "chapter": first.get(
+                    "actual_chapter", metadata.get("chapter", receipt.get("chapter"))
+                ),
+                "training": metadata.get("training", receipt.get("training")),
+                "permanent_upgrades": first.get("permanent_upgrades"),
             }
             valid = receipt.get("valid", True)
             row = dict(
@@ -135,6 +140,8 @@ def analyze(batches, destination, plot=False):
                     identity["policy"],
                     identity["position"],
                     identity["starter_class"],
+                    identity["chapter"],
+                    identity["training"],
                 ].append(row)
             previous = None
             for checkpoint in checkpoints:
@@ -155,7 +162,9 @@ def analyze(batches, destination, plot=False):
     write_csv(destination / "cases.csv", cases)
     write_csv(destination / "curves-30s.csv", curves)
     aggregates = []
-    for (batch, policy, position, starter), rows in sorted(groups.items()):
+    for (batch, policy, position, starter, chapter, training), rows in sorted(
+        groups.items(), key=lambda item: tuple(str(value) for value in item[0])
+    ):
         wins = sum((r["outcome"] == "win" for r in rows))
         losses = sum((r["outcome"] == "loss" for r in rows))
         aggregates.append(
@@ -164,6 +173,8 @@ def analyze(batches, destination, plot=False):
                 "policy": policy,
                 "position": position,
                 "starter_class": starter,
+                "chapter": chapter,
+                "training": training,
                 "cases": len(rows),
                 "wins": wins,
                 "losses": losses,

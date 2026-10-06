@@ -18,6 +18,8 @@ use std::{env, time::Duration};
 
 #[derive(Resource)]
 struct Policy {
+    chapter: usize,
+    training: u8,
     active: bool,
     starter: usize,
     forward: bool,
@@ -49,14 +51,24 @@ fn policy(world: &mut World) {
     for e in entities {
         *world.get_mut::<Interaction>(e).unwrap() = Interaction::None;
     }
+    if frame == 1 {
+        let requested = world.resource::<Policy>();
+        let (chapter, training) = (requested.chapter, requested.training);
+        let mut progress = world.resource_mut::<rogue_commander::game::CampaignProgress>();
+        // Isolated chapter fixture, not a claim that this strategy earned prior clears.
+        progress.unlocked = (chapter + 1) as u8;
+        progress.cleared = std::array::from_fn(|index| index < chapter);
+        progress.upgrades = [training; 6];
+    }
     if frame < 10 || !frame.is_multiple_of(8) {
         return;
     }
     if world.resource::<rogue_commander::game::CampaignMenu>().0 {
+        let wanted = format!("Campaign chapter {}", world.resource::<Policy>().chapter);
         let e = world
             .query::<(Entity, &Name)>()
             .iter(world)
-            .find_map(|(e, n)| (n.as_str() == "Campaign chapter 0").then_some(e));
+            .find_map(|(e, n)| (n.as_str() == wanted).then_some(e));
         if let Some(e) = e {
             press(world, e);
         }
@@ -209,6 +221,10 @@ impl Metrics {
 fn checkpoint(world: &mut World, frame: u32, metrics: &Metrics) {
     let s = world.resource::<GameSession>();
     let h = world.resource::<HeroVitals>();
+    let actual_chapter = world.resource::<rogue_commander::game::CampaignRun>().stage;
+    let permanent_upgrades = world
+        .resource::<rogue_commander::game::CampaignProgress>()
+        .upgrades;
     let actual_seed = world.resource::<RunSeed>().0;
     let actual_hero = h.kind.index();
     let absorbed_strength = world.resource::<RecruitmentProgress>().absorbed_strength;
@@ -238,7 +254,7 @@ fn checkpoint(world: &mut World, frame: u32, metrics: &Metrics) {
     let min_gate_hp = metrics.min_gate_hp;
     let min_hero_hp = metrics.min_hero_hp;
     println!(
-        "{{\"type\":\"checkpoint\",\"frame\":{frame},\"actual_run_seed\":{actual_seed},\"actual_hero_id\":{actual_hero},\"owned_bond_ids\":[{owned_bond_ids}],\"absorbed_strength\":{absorbed_strength},\"command_health_multiplier\":{command_health_multiplier},\"max_hero_hp\":{max_hero_hp},\"elapsed\":{:.3},\"wave\":{},\"level\":{},\"kills\":{},\"gate_hp\":{:.2},\"gate_breaks\":{gate_breaks},\"exposed_secs\":{exposed_secs:.3},\"min_gate_hp\":{min_gate_hp:.2},\"min_hero_hp\":{min_hero_hp:.2},\"hero_hp\":{:.2},\"deaths\":{},\"gold\":{},\"wood\":{},\"bosses\":{},\"attacks\":{attacks},\"damage_skill_casts\":{casts},\"skill_ranks\":{skills},\"enemy_peak\":{},\"enemy_rejected\":{},\"paused\":{},\"finished\":{},\"victory\":{}}}",
+        "{{\"type\":\"checkpoint\",\"frame\":{frame},\"actual_chapter\":{actual_chapter},\"permanent_upgrades\":{permanent_upgrades:?},\"actual_run_seed\":{actual_seed},\"actual_hero_id\":{actual_hero},\"owned_bond_ids\":[{owned_bond_ids}],\"absorbed_strength\":{absorbed_strength},\"command_health_multiplier\":{command_health_multiplier},\"max_hero_hp\":{max_hero_hp},\"elapsed\":{:.3},\"wave\":{},\"level\":{},\"kills\":{},\"gate_hp\":{:.2},\"gate_breaks\":{gate_breaks},\"exposed_secs\":{exposed_secs:.3},\"min_gate_hp\":{min_gate_hp:.2},\"min_hero_hp\":{min_hero_hp:.2},\"hero_hp\":{:.2},\"deaths\":{},\"gold\":{},\"wood\":{},\"bosses\":{},\"attacks\":{attacks},\"damage_skill_casts\":{casts},\"skill_ranks\":{skills},\"enemy_peak\":{},\"enemy_rejected\":{},\"paused\":{},\"finished\":{},\"victory\":{}}}",
         s.elapsed,
         s.wave,
         s.level,
@@ -258,10 +274,27 @@ fn checkpoint(world: &mut World, frame: u32, metrics: &Metrics) {
 }
 fn main() {
     let args: Vec<String> = env::args().collect();
+    let chapter: usize = env::var("ROGUE_SIM_CHAPTER")
+        .unwrap_or_else(|_| "0".into())
+        .parse()
+        .expect("chapter must be an integer");
+    let training: u8 = env::var("ROGUE_SIM_TRAINING")
+        .unwrap_or_else(|_| "0".into())
+        .parse()
+        .expect("training must be an integer");
+    assert!(
+        chapter < rogue_commander::game::CHAPTER_COUNT,
+        "invalid chapter"
+    );
+    assert!(
+        training <= rogue_commander::game::MAX_UPGRADE_LEVEL,
+        "invalid training"
+    );
     let active = args.get(1).is_some_and(|s| s == "active");
     let seed = u64::from_str_radix(args.get(2).map_or("1", |s| s.trim_start_matches("0x")), 16)
         .expect("hex seed");
     let starter: usize = args.get(3).map_or("2", String::as_str).parse().unwrap();
+    assert!(starter < 3, "invalid starter");
     let forward = args.get(4).is_some_and(|s| s == "forward");
     let frames: u32 = args.get(5).map_or("90000", String::as_str).parse().unwrap();
     assert!(
@@ -324,6 +357,8 @@ fn main() {
     .insert_resource(RunSeed(seed))
     .insert_resource(RunRng::from_seed(seed))
     .insert_resource(Policy {
+        chapter,
+        training,
         active,
         starter,
         forward,
@@ -350,7 +385,7 @@ fn main() {
     app.finish();
     app.cleanup();
     println!(
-        "{{\"type\":\"metadata\",\"policy\":\"{}\",\"seed\":{seed},\"starter\":{starter},\"forward\":{forward},\"frame_cap\":{frames},\"renderer\":false,\"executor\":\"single-threaded\",\"fixed_step_secs\":0.016666666666666666}}",
+        "{{\"type\":\"metadata\",\"policy\":\"{}\",\"seed\":{seed},\"chapter\":{chapter},\"training\":{training},\"profile_fixture\":\"prior-chapters-cleared-six-equal-upgrades\",\"starter\":{starter},\"forward\":{forward},\"frame_cap\":{frames},\"renderer\":false,\"executor\":\"single-threaded\",\"fixed_step_secs\":0.016666666666666666}}",
         if active {
             "greedy-card-zero"
         } else {
