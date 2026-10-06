@@ -200,6 +200,9 @@ struct Metrics {
     last_elapsed: f32,
     min_gate_hp: f32,
     min_hero_hp: f32,
+    min_alive_health_fraction: f32,
+    max_health_deficit: f32,
+    injured_secs: f32,
 }
 impl Metrics {
     fn observe(&mut self, world: &World) {
@@ -209,8 +212,19 @@ impl Metrics {
         if down && !self.gate_down {
             self.gate_breaks += 1;
         }
+        let seconds = (s.elapsed - self.last_elapsed).max(0.0);
         if down {
-            self.exposed_secs += (s.elapsed - self.last_elapsed).max(0.0);
+            self.exposed_secs += seconds;
+        }
+        if h.alive && h.max_health > 0.0 {
+            self.min_alive_health_fraction = self
+                .min_alive_health_fraction
+                .min((h.health / h.max_health).clamp(0.0, 1.0));
+            let deficit = (h.max_health - h.health).max(0.0);
+            self.max_health_deficit = self.max_health_deficit.max(deficit);
+            if deficit > 0.01 {
+                self.injured_secs += seconds;
+            }
         }
         self.gate_down = down;
         self.last_elapsed = s.elapsed;
@@ -253,8 +267,11 @@ fn checkpoint(world: &mut World, frame: u32, metrics: &Metrics) {
     let exposed_secs = metrics.exposed_secs;
     let min_gate_hp = metrics.min_gate_hp;
     let min_hero_hp = metrics.min_hero_hp;
+    let min_alive_health_fraction = metrics.min_alive_health_fraction;
+    let max_health_deficit = metrics.max_health_deficit;
+    let injured_secs = metrics.injured_secs;
     println!(
-        "{{\"type\":\"checkpoint\",\"frame\":{frame},\"actual_chapter\":{actual_chapter},\"permanent_upgrades\":{permanent_upgrades:?},\"actual_run_seed\":{actual_seed},\"actual_hero_id\":{actual_hero},\"owned_bond_ids\":[{owned_bond_ids}],\"absorbed_strength\":{absorbed_strength},\"command_health_multiplier\":{command_health_multiplier},\"max_hero_hp\":{max_hero_hp},\"elapsed\":{:.3},\"wave\":{},\"level\":{},\"kills\":{},\"gate_hp\":{:.2},\"gate_breaks\":{gate_breaks},\"exposed_secs\":{exposed_secs:.3},\"min_gate_hp\":{min_gate_hp:.2},\"min_hero_hp\":{min_hero_hp:.2},\"hero_hp\":{:.2},\"deaths\":{},\"gold\":{},\"wood\":{},\"bosses\":{},\"attacks\":{attacks},\"damage_skill_casts\":{casts},\"skill_ranks\":{skills},\"enemy_peak\":{},\"enemy_rejected\":{},\"paused\":{},\"finished\":{},\"victory\":{}}}",
+        "{{\"type\":\"checkpoint\",\"frame\":{frame},\"actual_chapter\":{actual_chapter},\"permanent_upgrades\":{permanent_upgrades:?},\"actual_run_seed\":{actual_seed},\"actual_hero_id\":{actual_hero},\"owned_bond_ids\":[{owned_bond_ids}],\"absorbed_strength\":{absorbed_strength},\"command_health_multiplier\":{command_health_multiplier},\"max_hero_hp\":{max_hero_hp},\"elapsed\":{:.3},\"wave\":{},\"level\":{},\"kills\":{},\"gate_hp\":{:.2},\"gate_breaks\":{gate_breaks},\"exposed_secs\":{exposed_secs:.3},\"min_gate_hp\":{min_gate_hp:.2},\"min_hero_hp\":{min_hero_hp:.2},\"min_alive_health_fraction\":{min_alive_health_fraction:.6},\"max_health_deficit\":{max_health_deficit:.3},\"injured_secs\":{injured_secs:.3},\"hero_hp\":{:.2},\"deaths\":{},\"gold\":{},\"wood\":{},\"bosses\":{},\"attacks\":{attacks},\"damage_skill_casts\":{casts},\"skill_ranks\":{skills},\"enemy_peak\":{},\"enemy_rejected\":{},\"paused\":{},\"finished\":{},\"victory\":{}}}",
         s.elapsed,
         s.wave,
         s.level,
@@ -408,6 +425,9 @@ fn main() {
         last_elapsed: 0.0,
         min_gate_hp: f32::MAX,
         min_hero_hp: f32::MAX,
+        min_alive_health_fraction: 1.0,
+        max_health_deficit: 0.0,
+        injured_secs: 0.0,
     };
     for frame in 1..=frames {
         app.update();
@@ -422,5 +442,49 @@ fn main() {
         if app.world().resource::<GameSession>().finished {
             break;
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn health_pressure_tracks_fraction_after_growth_and_excludes_dead_time() {
+        let mut world = World::new();
+        world.insert_resource(GameSession::default());
+        world.insert_resource(HeroVitals::default());
+        let mut metrics = Metrics {
+            gate_breaks: 0,
+            gate_down: false,
+            exposed_secs: 0.0,
+            last_elapsed: 0.0,
+            min_gate_hp: f32::MAX,
+            min_hero_hp: f32::MAX,
+            min_alive_health_fraction: 1.0,
+            max_health_deficit: 0.0,
+            injured_secs: 0.0,
+        };
+        metrics.observe(&world);
+        world.resource_mut::<GameSession>().elapsed = 2.0;
+        {
+            let mut h = world.resource_mut::<HeroVitals>();
+            h.max_health = 10000.0;
+            h.health = 2500.0;
+        }
+        metrics.observe(&world);
+        assert_eq!(metrics.min_alive_health_fraction, 0.25);
+        assert_eq!(metrics.max_health_deficit, 7500.0);
+        assert_eq!(metrics.injured_secs, 2.0);
+        world.resource_mut::<GameSession>().elapsed = 5.0;
+        {
+            let mut h = world.resource_mut::<HeroVitals>();
+            h.alive = false;
+            h.health = 0.0;
+        }
+        metrics.observe(&world);
+        assert_eq!(metrics.min_alive_health_fraction, 0.25);
+        assert_eq!(metrics.injured_secs, 2.0);
+        assert_eq!(metrics.min_hero_hp, 0.0);
     }
 }

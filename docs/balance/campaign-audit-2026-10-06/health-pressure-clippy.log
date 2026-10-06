@@ -1,0 +1,5 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+    Checking bevy_internal v0.19.0
+    Checking bevy v0.19.0
+    Checking rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 28.32s
