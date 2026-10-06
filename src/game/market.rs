@@ -383,7 +383,7 @@ impl MarketItem {
         language.pick(english, chinese)
     }
 
-    fn apply(
+    pub(super) fn apply(
         self,
         session: &mut GameSession,
         build: &mut PlayerBuild,

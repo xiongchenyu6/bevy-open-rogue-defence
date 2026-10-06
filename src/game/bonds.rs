@@ -367,6 +367,7 @@ struct AppliedStats {
     agility: f32,
     intelligence: f32,
     health: f32,
+    command_health_multiplier: f32,
     energy: f32,
     attack: f32,
     speed: f32,
@@ -472,8 +473,15 @@ impl BondRuntime {
         vitals.strength -= a.strength;
         vitals.agility -= a.agility;
         vitals.intelligence -= a.intelligence;
-        vitals.max_health -= a.health;
-        vitals.health -= a.health;
+        // Equipment and encounter effects scale the whole current health pool.
+        // Remove our contribution in that same scale before recalculating it.
+        let health = if a.command_health_multiplier > 0.0 {
+            a.health * vitals.command_health_multiplier / a.command_health_multiplier
+        } else {
+            a.health
+        };
+        vitals.max_health -= health;
+        vitals.health -= health;
         vitals.max_energy -= a.energy;
         vitals.energy -= a.energy;
         build.attack_damage -= a.attack;
@@ -510,8 +518,7 @@ impl BondRuntime {
         vitals.intelligence += intelligence;
         let health = (vitals.max_health
             + strength * 14.0 * vitals.command_health_multiplier
-            + m.health
-            + p.health)
+            + (m.health + p.health) * vitals.command_health_multiplier)
             * (1.0 + m.health_amp + p.health_amp)
             - vitals.max_health;
         let energy = intelligence * 8.0;
@@ -524,6 +531,7 @@ impl BondRuntime {
             agility,
             intelligence,
             health,
+            command_health_multiplier: vitals.command_health_multiplier,
             energy,
             attack,
             speed,
@@ -789,6 +797,32 @@ mod tests {
     }
     fn close(left: f32, right: f32) {
         assert!((left - right).abs() < 0.005, "{left} != {right}");
+    }
+
+    #[test]
+    fn equipment_health_multiplier_remains_stable_through_bond_recalculation() {
+        let mut build = PlayerBuild::default();
+        let mut runtime = BondRuntime::default();
+        runtime.modifiers.health_amp = 0.20;
+        runtime.modifiers.health = 150.0;
+        let mut vitals = HeroVitals::default();
+        runtime.apply_stats(&mut build, &mut vitals);
+        vitals.health = vitals.max_health * 0.40;
+        let before = vitals.max_health;
+        super::super::market::MarketItem::HardenedPlate.apply(
+            &mut GameSession::default(),
+            &mut build,
+            &mut vitals,
+            &mut super::super::market::MarketEffects::default(),
+        );
+        let expected_max = before * 1.20;
+        let expected_health = expected_max * 0.40;
+        for _ in 0..10 {
+            runtime.remove_applied(&mut build, &mut vitals);
+            runtime.apply_stats(&mut build, &mut vitals);
+            close(vitals.max_health, expected_max);
+            close(vitals.health, expected_health);
+        }
     }
 
     #[test]

@@ -1,0 +1,41 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3m 40s
+     Running unittests src/lib.rs (target/debug/deps/rogue_commander-79a707246da25442)
+
+running 1 test
+game::bonds::tests::equipment_health_multiplier_remains_stable_through_bond_recalculation --- FAILED
+
+failures:
+
+---- game::bonds::tests::equipment_health_multiplier_remains_stable_through_bond_recalculation stdout ----
+
+thread 'game::bonds::tests::equipment_health_multiplier_remains_stable_through_bond_recalculation' (1484184) panicked at src/game/bonds.rs:791:9:
+1413.6001 != 1368
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: rogue_commander::game::bonds::tests::close
+             at ./src/game/bonds.rs:791:9
+   3: rogue_commander::game::bonds::tests::equipment_health_multiplier_remains_stable_through_bond_recalculation
+   4: rogue_commander::game::bonds::tests::equipment_health_multiplier_remains_stable_through_bond_recalculation::{closure#0}
+             at ./src/game/bonds.rs:795:79
+   5: <rogue_commander::game::bonds::tests::equipment_health_multiplier_remains_stable_through_bond_recalculation::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+
+failures:
+    game::bonds::tests::equipment_health_multiplier_remains_stable_through_bond_recalculation
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 564 filtered out; finished in 1.94s
+
+error: test failed, to rerun pass `--lib`
