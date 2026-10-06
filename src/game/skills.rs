@@ -2,7 +2,7 @@
 mod cadence;
 pub use cadence::SkillCastTelemetry;
 pub(crate) use cadence::{attack_charge_requirement, rank_cooldown};
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet};
 
 use bevy::prelude::*;
 
@@ -106,7 +106,7 @@ pub(crate) struct SkillRuntime {
     cadence: cadence::Cadence,
     evolution_tiers: [u8; SkillId::COUNT],
     attack_count: u64,
-    burns: HashMap<Entity, BurnState>,
+    burns: BTreeMap<Entity, BurnState>,
     controls: HashMap<Entity, ControlState>,
     seals: HashMap<Entity, u8>,
     orbit_hit_cooldowns: HashMap<Entity, f32>,
@@ -128,7 +128,7 @@ impl Default for SkillRuntime {
             cadence: cadence::Cadence::default(),
             evolution_tiers: [0; SkillId::COUNT],
             attack_count: 0,
-            burns: HashMap::new(),
+            burns: BTreeMap::new(),
             controls: HashMap::new(),
             seals: HashMap::new(),
             orbit_hit_cooldowns: HashMap::new(),
@@ -508,6 +508,7 @@ fn tick_skill_runtime(
         runtime.controls.remove(&entity);
     }
 
+    // Damage entity order determines hit/RNG order: never use a randomized hash traversal.
     let burning: Vec<Entity> = runtime.burns.keys().copied().collect();
     let mut expired_burns = Vec::new();
     for entity in burning {
@@ -2958,7 +2959,7 @@ fn apply_control(
     control.stunned_remaining = control.stunned_remaining.max(stun_seconds * duration_scale);
 }
 
-fn add_burn(burns: &mut HashMap<Entity, BurnState>, entity: Entity, total_damage: f32, cap: u8) {
+fn add_burn(burns: &mut BTreeMap<Entity, BurnState>, entity: Entity, total_damage: f32, cap: u8) {
     match burns.get_mut(&entity) {
         Some(burn) => add_burn_layer(burn, total_damage, cap),
         None => {
@@ -3398,6 +3399,71 @@ mod tests {
     use bevy::ecs::system::RunSystemOnce;
 
     use super::*;
+
+    #[test]
+    fn burn_damage_order_is_independent_of_status_insertion_order() {
+        fn strikes(reverse: bool) -> Vec<(Entity, f32)> {
+            let mut app = App::new();
+            app.init_resource::<Time>()
+                .init_resource::<PlayerBuild>()
+                .init_resource::<GameSession>()
+                .init_resource::<MarketEffects>()
+                .init_resource::<super::super::encounters::EncounterState>()
+                .init_resource::<SkillRuntime>();
+            let targets: Vec<_> = (0..32)
+                .map(|_| {
+                    app.world_mut()
+                        .spawn((
+                            Enemy {
+                                hp: 1000.0,
+                                max_hp: 1000.0,
+                                speed: 1.0,
+                                damage: 1.0,
+                                xp: 1,
+                                wood: 0,
+                                gold: 1,
+                                kill_credit: 1,
+                                elite: false,
+                            },
+                            Transform::default(),
+                        ))
+                        .id()
+                })
+                .collect();
+            let mut order = targets.clone();
+            if reverse {
+                order.reverse();
+            }
+            for target in order {
+                add_burn(
+                    &mut app.world_mut().resource_mut::<SkillRuntime>().burns,
+                    target,
+                    36.0,
+                    1,
+                );
+            }
+            app.world_mut()
+                .resource_mut::<Time>()
+                .advance_by(std::time::Duration::from_secs_f32(BURN_TICK_SECONDS));
+            app.world_mut().run_system_once(tick_skill_runtime).unwrap();
+            let mut spawned: Vec<_> = app
+                .world_mut()
+                .query::<(Entity, &SkillStrike)>()
+                .iter(app.world())
+                .map(|(entity, strike)| (entity, strike.target, strike.damage))
+                .collect();
+            spawned.sort_by_key(|(entity, _, _)| *entity);
+            spawned
+                .into_iter()
+                .map(|(_, target, damage)| (target, damage))
+                .collect()
+        }
+        let forward = strikes(false);
+        let reverse = strikes(true);
+        assert_eq!(forward.len(), 32);
+        assert!(forward.iter().all(|(_, damage)| *damage == 6.0));
+        assert_eq!(forward, reverse);
+    }
 
     #[test]
     fn yellow_sign_halves_real_skill_cooldown_recovery_and_releases_on_exit() {
