@@ -1,0 +1,20 @@
+{
+  "comparison_scope": "recorded checkpoints, not all internal simulation state",
+  "left": "left/active-h1-behind-sbeef-c5-t0.jsonl",
+  "right": "right/active-h1-behind-sbeef-c5-t0.jsonl",
+  "binary_sha256": "bb2bb4f46a17e935a975c648e51f869ee73e4d43745f031d956c0cd206e1d621",
+  "checkpoint_counts": [
+    55,
+    55
+  ],
+  "prefix_equal": false,
+  "complete_replay": false,
+  "first_divergence": {
+    "field": "checkpoint[18].attacks",
+    "left": 1229,
+    "right": 1202,
+    "reason": "value differs",
+    "frame": 32400,
+    "right_frame": 32400
+  }
+}

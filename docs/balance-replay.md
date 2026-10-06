@@ -12,7 +12,7 @@
 
 严格比较工具：`python3 tools/compare_balance_replays.py LEFT.jsonl RIGHT.jsonl`。校验同一二进制、身份、压力参数及全部记录的检查点序列，拒绝缺失核心字段、损坏 JSON、非有限数值和丢失检查点；报告首个分歧。相同截尾只算前缀相同，两份实际结束且记录相同才报告完整的已记录重放一致，不证明所有内部状态一致。7 项真实 CLI 测试通过；真实生产日志与自身比较只验证读取格式，不作独立重放证据。
 
-[完整库测试](verification/burn-order-2026-10-06/burn-order-tests-recovery.log) · [严格 Clippy](verification/burn-order-2026-10-06/burn-order-clippy.log) · [重放比较工具测试](verification/burn-order-2026-10-06/replay-comparison-tests.log)。独立进程重放尚未执行。
+[完整库测试](verification/burn-order-2026-10-06/burn-order-tests-recovery.log) · [严格 Clippy](verification/burn-order-2026-10-06/burn-order-clippy.log) · [重放比较工具测试](verification/burn-order-2026-10-06/replay-comparison-tests.log)。独立进程重放已执行，但仍有分歧，详见下节。
 
 ## 技能与随机状态观测
 
@@ -21,3 +21,11 @@
 真实 1200 帧短局读取了 32 项技能等级，两处检查点均满足等级总和与已有 `skill_ranks` 一致；随机状态是有效 uint64，随真实游戏推进改变。该局为截尾，不作通关证据。格式、模拟器严格 Clippy、构建及 5 项批次工具测试通过。正在运行的两次完整重放使用此前固定快照，不包含这两项新增观测；它们不能与此构建混作同一二进制比较。
 
 [真实探测收据](verification/replay-state-2026-10-06/summary.json) · [字段校验](verification/replay-state-2026-10-06/field-check.json) · [构建记录](verification/replay-state-2026-10-06/replay-state-build.log)。
+
+## 烧伤排序后的独立整局重放
+
+同一构建、BEEF 种子、射手基础角色、第六章、零强化，两次独立新存档整局均实际通关，收据有效且非截尾；但是已记录的检查点并不一致。第 32400 帧首次观测到分歧，普攻计数为 1229 与 1202。后续等级、击杀和构筑也不同。因此烧伤排序修正不能作为完整确定性已实现的证明。此旧快照不包含后续随机状态与逐技能等级观测，不能从旧数据反推第一次随机数消费分歧。
+
+正在修正另一个已查到的入口：召唤待命阵型由 ECS Entity 编号决定，视觉实体分配可影响站位；它是具体逻辑依赖，尚未证明是本次分歧的唯一原因。后续需验证视觉干扰测试和新版本独立重放。
+
+[严格比较报告](balance/burn-replay-before-formation-2026-10-06/comparison.json) · [左侧记录](balance/burn-replay-before-formation-2026-10-06/left/summary.json) · [右侧记录](balance/burn-replay-before-formation-2026-10-06/right/summary.json) · [原始校验](balance/burn-replay-before-formation-2026-10-06/raw-sha256.json)。
