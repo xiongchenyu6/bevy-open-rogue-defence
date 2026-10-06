@@ -1,0 +1,16 @@
+{
+  "reason": "host reboot; original process handles and processes no longer exist",
+  "original_batch": "campaign-health-multiplier-fixed",
+  "preserved_completed_cases": [
+    "active-h0-behind-sa11ce-c0-t0",
+    "active-h0-behind-sbeef-c0-t0",
+    "active-h1-behind-sa11ce-c0-t0",
+    "active-h2-behind-sa11ce-c0-t0"
+  ],
+  "source_binary_sha256": "bc7f353fb8c614cdfd72c702ee45b0774322185394f57a628b92c26e27f6c1c1",
+  "recovery_batches": [
+    "campaign-health-recovery-first",
+    "campaign-health-recovery-sixth"
+  ],
+  "unfinished_original_cases_are_not_outcomes": true
+}

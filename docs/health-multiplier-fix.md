@@ -9,3 +9,9 @@
 验证：旧实现失败已复现；修正后的完整库测试 564 项通过、0 失败、1 项既有忽略。格式检查、全目标严格 Clippy 通过。回归测试确认真实装备效果后连续十次羁绊重算保持预期上限及当前生命。血誓和试炼生命成长的共同路径另经代数与代码复核，未新增三条路径的独立原生验收；整局平衡复测尚未执行，不能据此称全章节平衡完成。
 
 [修改前失败输出](verification/health-multiplier-2026-10-06/health-multiplier-before.log) · [完整测试输出](verification/health-multiplier-2026-10-06/health-multiplier-after.log) · [严格 Clippy](verification/health-multiplier-2026-10-06/health-multiplier-clippy.log)。
+
+## 第一章整局复测
+
+修正生命账本后的同一构建，三种基础职业、两个种子、零永久强化，主动成长路线 6/6 实际通关、零死亡，无截尾或无效收据。因机器重启，保留原批次完成的四局，以独立快照补跑另外两局；两批二进制校验值一致。第六章六局仍在运行，尚不能称全章节平衡验收完成。
+
+[六局记录索引](balance/health-fixed-first-2026-10-06/summary.json) · [中断与恢复来源](balance/health-fixed-first-2026-10-06/recovery.json)。
