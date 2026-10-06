@@ -1,0 +1,27 @@
+{
+  "scenario": "summon-assault",
+  "frames": 680,
+  "size": [
+    1280,
+    720
+  ],
+  "seed": "0xBEEF",
+  "language": "zh-CN",
+  "driver": "software Vulkan lvp",
+  "scope": "real GPU rendering and gameplay assertions, not hardware FPS benchmarking",
+  "capture_binary_sha256": "bd34c474face48accea361f04f7b7a42981f8b499dd35bf12c3f9357e4166afc",
+  "checks": [
+    "all six summon types pursue and reach range",
+    "7 active summon transforms frozen for 29 frames",
+    "dead enemy replaced, all summons re-engage live target",
+    "PASS outside summon formation frame=510",
+    "PASS outside summon formation frame=650",
+    "PASS summon wall rebuild",
+    "wrote 680 simulation frames"
+  ],
+  "images": {
+    "frame00509.png": "09a288d208c0e9384cc40d228a84c8364015a2a978c5fa13ff13834d9ece81b3",
+    "frame00179.png": "4faed86fee70699d33b12fb02709c533a118b930f7bbee60c01981571cb2d0bc",
+    "frame00649.png": "22d33f62f5e847bdbf589c65d7b81214ffb8d638a0fa12df485da4f3dbaf0bba"
+  }
+}

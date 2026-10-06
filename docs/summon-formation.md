@@ -8,4 +8,12 @@
 
 该测试验证一个具体依赖，不证明完整游戏重放确定。战斗目标并列处理及其他共享随机数消费顺序仍需要独立重放审计。旧构建的两次完整通关在第 32400 帧已有记录分歧，见 [重放证据](balance-replay.md)。
 
-[完整库测试](verification/summon-formation-2026-10-06/summon-formation-tests-final.log) · [严格 Clippy](verification/summon-formation-2026-10-06/summon-formation-clippy.log)。包含修正的新模拟器正在构建，尚未取得新版本独立整局重放或原生画面验收结果。
+[完整库测试](verification/summon-formation-2026-10-06/summon-formation-tests-final.log) · [严格 Clippy](verification/summon-formation-2026-10-06/summon-formation-clippy.log)。修正后的模拟器、游戏和截图程序已构建。独立整局重放仍有观测分歧，尚未完成确定性验证。原生画面验收见下节。
+
+## 原生桌面验证
+
+1280×720、中文、软件 Vulkan、真实 GamePlugin 的 `summon-assault` 场景完成 680 帧并退出 0。真实技能施放生成六类移动召唤物，实际测试靶生命下降；五类模型的行走与攻击动画均被观测，替换存活测试靶后重新追击。暂停期间七个活动召唤物的位置与朝向冻结 29 帧。
+
+第 510 和 650 帧验证无存活测试靶时待在城墙外、面向入口，剑塔位于墙上；城墙倒塌后重建恢复有限生命，阵型仍在外侧。测试靶被场景脚本设置为死亡，尸体模型可能保留，不代表生产死亡清理行为。截图已人工查看；队伍仍有拥挤，需要继续做阵型视觉打磨。此结果不证明硬件帧率、手机真机或全章节平衡。
+
+[检查输出](verification/summon-formation-native-2026-10-06/capture.log) · [验证范围与校验值](verification/summon-formation-native-2026-10-06/verification.json) · [追击](verification/summon-formation-native-2026-10-06/frame00179.png) · [城墙外待命](verification/summon-formation-native-2026-10-06/frame00509.png) · [重建后](verification/summon-formation-native-2026-10-06/frame00649.png)。
