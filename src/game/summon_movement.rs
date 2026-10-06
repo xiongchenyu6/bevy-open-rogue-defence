@@ -1,5 +1,9 @@
 //! Shared planar pursuit for mobile summons. Stop at reach even at high battle speed.
 use bevy::prelude::*;
+
+/// Logical lease order, independent of model/visual ECS entity allocation.
+#[derive(Component, Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) struct FormationSlot(pub u64);
 pub(crate) fn advance(
     transform: &mut Transform,
     target: Vec3,

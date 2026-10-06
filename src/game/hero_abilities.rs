@@ -849,7 +849,15 @@ fn update_spirit_companions(
     build: Res<PlayerBuild>,
     assets: Option<Res<GameAssets>>,
     enemies: Query<(&Enemy, &Transform, Option<&EliteAffix>), Without<SpiritOrbit>>,
-    mut spirits: Query<(Entity, &mut Transform, &mut SpiritOrbit), Without<Hero>>,
+    mut spirits: Query<
+        (
+            Entity,
+            &mut Transform,
+            &mut SpiritOrbit,
+            &super::summon_movement::FormationSlot,
+        ),
+        Without<Hero>,
+    >,
     mut pools: ResMut<CombatPools>,
 ) {
     if session.paused || session.finished {
@@ -859,7 +867,7 @@ fn update_spirit_companions(
         return;
     };
 
-    for (entity, mut transform, mut spirit) in &mut spirits {
+    for (entity, mut transform, mut spirit, slot) in &mut spirits {
         if let Some(remaining) = &mut spirit.remaining {
             *remaining -= time.delta_secs();
             if *remaining <= 0.0 {
@@ -885,12 +893,7 @@ fn update_spirit_companions(
             })
             .map(|(_, target, _)| target.translation);
         let Some(target) = target else {
-            super::summon_movement::follow(
-                &mut transform,
-                entity.to_bits(),
-                5.2,
-                time.delta_secs(),
-            );
+            super::summon_movement::follow(&mut transform, slot.0, 5.2, time.delta_secs());
             continue;
         };
         let ready = super::summon_movement::advance(

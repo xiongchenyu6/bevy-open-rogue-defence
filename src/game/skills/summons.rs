@@ -1,5 +1,5 @@
 use super::*;
-use crate::game::summon_movement::{advance, follow};
+use crate::game::summon_movement::{FormationSlot, advance, follow};
 
 pub(super) fn update_skill_summons(
     mut commands: Commands,
@@ -7,11 +7,11 @@ pub(super) fn update_skill_summons(
     session: Res<GameSession>,
     build: Res<PlayerBuild>,
     mut sentries: Query<
-        (Entity, &mut Transform, &mut BoneSentry),
+        (Entity, &FormationSlot, &mut Transform, &mut BoneSentry),
         (With<SkillSummon>, Without<SpiritHound>, Without<Enemy>),
     >,
     mut hounds: Query<
-        (Entity, &mut Transform, &mut SpiritHound),
+        (Entity, &FormationSlot, &mut Transform, &mut SpiritHound),
         (With<SkillSummon>, Without<BoneSentry>, Without<Enemy>),
     >,
     enemies: Query<(Entity, &Transform, &Enemy), (Without<SkillSummon>, Without<OrbitBlade>)>,
@@ -28,11 +28,11 @@ pub(super) fn update_skill_summons(
         .filter(|(_, _, enemy)| enemy.hp > 0.0)
         .map(|(entity, transform, _)| (entity, transform.translation))
         .collect();
-    for (entity, mut transform, mut sentry) in &mut sentries {
+    for (_, slot, mut transform, mut sentry) in &mut sentries {
         sentry.attack_remaining = (sentry.attack_remaining - attack_delta).max(0.0);
         let Some((target_entity, target)) = nearest_position(transform.translation, &targets)
         else {
-            follow(&mut transform, entity.to_bits(), 3.8, delta);
+            follow(&mut transform, slot.0, 3.8, delta);
             continue;
         };
         if !advance(
@@ -58,7 +58,7 @@ pub(super) fn update_skill_summons(
         );
     }
 
-    for (entity, mut transform, mut hound) in &mut hounds {
+    for (entity, slot, mut transform, mut hound) in &mut hounds {
         hound.remaining -= delta;
         if hound.remaining <= 0.0 {
             pools.retire_summon(&mut commands, entity);
@@ -67,7 +67,7 @@ pub(super) fn update_skill_summons(
         hound.attack_remaining = (hound.attack_remaining - attack_delta).max(0.0);
         let Some((target_entity, target)) = nearest_position(transform.translation, &targets)
         else {
-            follow(&mut transform, entity.to_bits(), 5.2, delta);
+            follow(&mut transform, slot.0, 5.2, delta);
             continue;
         };
         if advance(
@@ -102,7 +102,7 @@ pub(super) fn update_rare_summons(
     assets: Option<Res<GameAssets>>,
     mut runtime: ResMut<SkillRuntime>,
     mut tide_elementals: Query<
-        (Entity, &mut Transform, &mut TideElemental),
+        (Entity, &FormationSlot, &mut Transform, &mut TideElemental),
         (With<SkillSummon>, Without<BoltTurret>, Without<Enemy>),
     >,
     mut bolt_turrets: Query<
@@ -126,7 +126,7 @@ pub(super) fn update_rare_summons(
         .filter(|(_, _, enemy)| enemy.hp > 0.0)
         .map(|(entity, transform, _)| (entity, transform.translation))
         .collect();
-    for (entity, mut transform, mut elemental) in &mut tide_elementals {
+    for (entity, slot, mut transform, mut elemental) in &mut tide_elementals {
         elemental.remaining -= delta;
         if elemental.remaining <= 0.0 {
             pools.retire_summon(&mut commands, entity);
@@ -135,7 +135,7 @@ pub(super) fn update_rare_summons(
         elemental.attack_remaining = (elemental.attack_remaining - attack_delta).max(0.0);
         let Some((target_entity, target)) = nearest_position(transform.translation, &targets)
         else {
-            follow(&mut transform, entity.to_bits(), 3.5, delta);
+            follow(&mut transform, slot.0, 3.5, delta);
             continue;
         };
         if !advance(
@@ -230,11 +230,16 @@ pub(super) fn update_epic_summons(
     assets: Option<Res<GameAssets>>,
     mut runtime: ResMut<SkillRuntime>,
     mut wyrms: Query<
-        (Entity, &mut Transform, &mut FrostWyrm),
+        (Entity, &FormationSlot, &mut Transform, &mut FrostWyrm),
         (With<SkillSummon>, Without<AncestorColossus>, Without<Enemy>),
     >,
     mut colossi: Query<
-        (Entity, &mut Transform, &mut AncestorColossus),
+        (
+            Entity,
+            &FormationSlot,
+            &mut Transform,
+            &mut AncestorColossus,
+        ),
         (With<SkillSummon>, Without<FrostWyrm>, Without<Enemy>),
     >,
     mut enemies: Query<
@@ -267,7 +272,7 @@ pub(super) fn update_epic_summons(
         })
         .collect();
 
-    for (entity, mut transform, mut wyrm) in &mut wyrms {
+    for (entity, slot, mut transform, mut wyrm) in &mut wyrms {
         wyrm.remaining -= delta;
         if wyrm.remaining <= 0.0 {
             pools.retire_summon(&mut commands, entity);
@@ -280,7 +285,7 @@ pub(super) fn update_epic_summons(
                 .distance_squared(left.position)
                 .total_cmp(&transform.translation.distance_squared(right.position))
         }) else {
-            follow(&mut transform, entity.to_bits(), 4.2, delta);
+            follow(&mut transform, slot.0, 4.2, delta);
             continue;
         };
         if !advance(
@@ -329,7 +334,7 @@ pub(super) fn update_epic_summons(
             .retain(|target, _| enemies.contains(*target));
     }
 
-    for (entity, mut transform, mut colossus) in &mut colossi {
+    for (entity, slot, mut transform, mut colossus) in &mut colossi {
         colossus.remaining -= delta;
         colossus.slam_remaining = (colossus.slam_remaining - attack_delta).max(0.0);
         if colossus.remaining <= 0.0 {
@@ -342,7 +347,7 @@ pub(super) fn update_epic_summons(
                 .distance_squared(a.position)
                 .total_cmp(&transform.translation.distance_squared(b.position))
         }) else {
-            follow(&mut transform, entity.to_bits(), 3.0, delta);
+            follow(&mut transform, slot.0, 3.0, delta);
             continue;
         };
         let in_reach = advance(
@@ -445,6 +450,66 @@ mod tests {
             .advance_by(std::time::Duration::from_secs_f32(delta));
     }
     #[test]
+    fn visual_entity_allocation_does_not_change_real_idle_formation() {
+        fn formation(dummy_count: usize) -> (Vec<Entity>, Vec<(u64, Vec3, Quat)>) {
+            let mut app = app();
+            let entities = app
+                .world_mut()
+                .run_system_once(
+                    move |mut commands: Commands, mut pools: ResMut<CombatPools>| {
+                        let mut entities = Vec::new();
+                        for _ in 0..3 {
+                            for _ in 0..dummy_count {
+                                commands.spawn_empty();
+                            }
+                            let entity = pools
+                                .rent_scene_summon(
+                                    &mut commands,
+                                    SummonVisual::BoneSentry,
+                                    Handle::default(),
+                                    Transform::from_xyz(-12.0, 0.5, 0.0),
+                                )
+                                .unwrap();
+                            commands.entity(entity).insert((
+                                SkillSummon,
+                                BoneSentry {
+                                    attack_remaining: 0.0,
+                                    damage: 20.0,
+                                },
+                            ));
+                            entities.push(entity);
+                        }
+                        entities
+                    },
+                )
+                .unwrap();
+            tick(&mut app, 30.0);
+            app.world_mut()
+                .run_system_once(update_skill_summons)
+                .unwrap();
+            let mut positions: Vec<_> = app
+                .world_mut()
+                .query_filtered::<(&FormationSlot, &Transform), With<BoneSentry>>()
+                .iter(app.world())
+                .map(|(slot, transform)| (slot.0, transform.translation, transform.rotation))
+                .collect();
+            positions.sort_by_key(|(slot, _, _)| *slot);
+            (entities, positions)
+        }
+        let (plain_entities, plain) = formation(0);
+        let (visual_entities, with_visuals) = formation(79);
+        assert_ne!(plain_entities, visual_entities);
+        assert_eq!(plain, with_visuals);
+        assert_eq!(
+            plain.iter().map(|(slot, _, _)| *slot).collect::<Vec<_>>(),
+            vec![0, 1, 2]
+        );
+        assert!(plain.iter().all(|(_, position, rotation)| position.x
+            > crate::game::resources::GATE_POSITION.x
+            && (*rotation * Vec3::NEG_Z).dot(Vec3::X) > 0.99));
+    }
+
+    #[test]
     fn wall_turret_stops_firing_while_gate_is_down_and_resumes_after_rebuild() {
         let mut app = app();
         enemy(&mut app, 3.0);
@@ -452,6 +517,7 @@ mod tests {
             .world_mut()
             .spawn((
                 SkillSummon,
+                FormationSlot(0),
                 Visibility::Visible,
                 BoltTurret {
                     remaining: 20.0,
@@ -516,6 +582,7 @@ mod tests {
             .world_mut()
             .spawn((
                 SkillSummon,
+                FormationSlot(0),
                 BoneSentry {
                     attack_remaining: 0.0,
                     damage: 50.0,
@@ -578,6 +645,7 @@ mod tests {
             .world_mut()
             .spawn((
                 SkillSummon,
+                FormationSlot(0),
                 SpiritHound {
                     source_skill: 5,
                     remaining: 100.0,
@@ -615,6 +683,7 @@ mod tests {
             .world_mut()
             .spawn((
                 SkillSummon,
+                FormationSlot(0),
                 TideElemental {
                     remaining: 50.0,
                     attack_remaining: 0.0,
@@ -627,6 +696,7 @@ mod tests {
             .world_mut()
             .spawn((
                 SkillSummon,
+                FormationSlot(0),
                 BoltTurret {
                     remaining: 50.0,
                     attack_remaining: 0.0,

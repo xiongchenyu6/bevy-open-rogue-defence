@@ -822,6 +822,7 @@ pub struct CombatPools {
     /// shells. Kept alongside the enemy pool so defeat resolution needs no
     /// extra Bevy system parameter and cannot silently lose pressure.
     pending_splitlings: VecDeque<(Vec3, usize)>,
+    next_summon_slot: u64,
     summon_peak: usize,
     summon_rejected: usize,
 }
@@ -838,6 +839,7 @@ impl Default for CombatPools {
             summons: std::array::from_fn(|_| EntityPool::new(PLAYER_SUMMON_HARD_CAP)),
             enemies: EnemyScenePool::default(),
             pending_splitlings: VecDeque::new(),
+            next_summon_slot: 0,
             summon_peak: 0,
             summon_rejected: 0,
         }
@@ -1065,6 +1067,10 @@ impl CombatPools {
             self.summon_rejected = self.summon_rejected.saturating_add(1);
             return None;
         };
+        let mut entity = commands.entity(lease.entity);
+        clear_summon_gameplay_components(&mut entity);
+        entity.insert(super::summon_movement::FormationSlot(self.next_summon_slot));
+        self.next_summon_slot = self.next_summon_slot.saturating_add(1);
         self.summon_peak = self.summon_peak.max(self.summon_active_count());
         Some(lease)
     }
@@ -1079,7 +1085,6 @@ impl CombatPools {
         debug_assert!(visual.uses_world_asset());
         let lease = self.rent_summon_shell(commands, visual)?;
         let mut entity = commands.entity(lease.entity);
-        clear_summon_gameplay_components(&mut entity);
         if lease.newly_created {
             entity.insert((PooledSummon { visual }, WorldAssetRoot(scene)));
         }
@@ -1103,7 +1108,6 @@ impl CombatPools {
         debug_assert!(!visual.uses_world_asset());
         let lease = self.rent_summon_shell(commands, visual)?;
         let mut entity = commands.entity(lease.entity);
-        clear_summon_gameplay_components(&mut entity);
         if lease.newly_created {
             entity.insert((
                 PooledSummon { visual },
@@ -1319,6 +1323,7 @@ fn clear_summon_gameplay_components(entity: &mut EntityCommands<'_>) {
     entity
         .remove::<(
             SkillSummon,
+            super::summon_movement::FormationSlot,
             BoneSentry,
             SpiritHound,
             TideElemental,
