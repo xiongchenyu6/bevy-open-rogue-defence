@@ -49,3 +49,20 @@ python3 -m unittest tools/test_balance_matrix.py
 新增逐帧 `min_alive_health_fraction`（存活期间的最低生命比例）、`max_health_deficit`（最大缺血量）和 `injured_secs`（存活且缺血超过 0.01 的游戏时间）。它们不把复活等待计为受伤时间，也不把成长后的数万生命与开局数百生命直接比较。数据仍为帧末观测，不能替代逐次受击、治疗或吸血来源统计；同帧受到伤害后立即回满可能不会记录为缺血。旧收据没有这些字段，分析结果保留空值，禁止从旧绝对最低生命补造比例。
 
 该观测改动的 Rust 测试通过（1 项），模拟器构建、格式检查及模拟器严格 Clippy 检查通过，Python 工具测试 4 项通过。第六章三职业、两种子、零强化的整局复测已启动，批次 `campaign-sixth-health-pressure`；完成前不将中间采样计为胜败结果。
+
+## 第六章逐帧复测结果
+
+六局全部实际通关、零死亡，身份与技能计数均有效，无截尾。此批次二进制 SHA256：`be51b3c68f161886674489cea1824f3cb4528f1b0d485cead5b5396fbf2be2ac`。
+
+| 路线 | 最低存活生命比例 | 最大缺血量 | 缺血游戏秒数 | 死亡 |
+| --- | --- | --- | --- | --- |
+| active-h0-behind-sa11ce-c5-t0 | 28.990% | 4058.1 | 789.5 | 0 |
+| active-h0-behind-sbeef-c5-t0 | 0.031% | 3396.3 | 853.9 | 0 |
+| active-h1-behind-sa11ce-c5-t0 | 97.804% | 1006.9 | 343.7 | 0 |
+| active-h1-behind-sbeef-c5-t0 | 93.739% | 745.6 | 569.4 | 0 |
+| active-h2-behind-sa11ce-c5-t0 | 87.305% | 1715.0 | 612.1 | 0 |
+| active-h2-behind-sbeef-c5-t0 | 73.897% | 2025.6 | 121.2 | 0 |
+
+战士可接近空血，射手和法师的压力较低；零死亡不能解释为从未受伤。此次只增加观测，但整局部分中间状态与此前不同，因此不将跨构建逐字段差异当作数值变化的因果证据，后续数值对照需要整局重放复核确定性。
+
+[六局原始索引](balance/campaign-sixth-health-2026-10-06/summary.json) · [逐局分析](balance/campaign-sixth-health-2026-10-06/analysis/cases.csv)。

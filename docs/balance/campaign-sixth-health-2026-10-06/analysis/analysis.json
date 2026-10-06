@@ -1,0 +1,58 @@
+{
+  "cases": 6,
+  "aggregates": [
+    {
+      "batch": "campaign-sixth-health-pressure",
+      "policy": "greedy-card-zero",
+      "position": "behind",
+      "starter_class": "archer",
+      "chapter": 5,
+      "training": 0,
+      "cases": 2,
+      "wins": 2,
+      "losses": 0,
+      "censored": 0,
+      "finished_only_win_fraction": 1.0,
+      "observed_wins_per_all_cases": 1.0,
+      "mean_observed_game_seconds": 1560.946
+    },
+    {
+      "batch": "campaign-sixth-health-pressure",
+      "policy": "greedy-card-zero",
+      "position": "behind",
+      "starter_class": "mage",
+      "chapter": 5,
+      "training": 0,
+      "cases": 2,
+      "wins": 2,
+      "losses": 0,
+      "censored": 0,
+      "finished_only_win_fraction": 1.0,
+      "observed_wins_per_all_cases": 1.0,
+      "mean_observed_game_seconds": 1536.049
+    },
+    {
+      "batch": "campaign-sixth-health-pressure",
+      "policy": "greedy-card-zero",
+      "position": "behind",
+      "starter_class": "warrior",
+      "chapter": 5,
+      "training": 0,
+      "cases": 2,
+      "wins": 2,
+      "losses": 0,
+      "censored": 0,
+      "finished_only_win_fraction": 1.0,
+      "observed_wins_per_all_cases": 1.0,
+      "mean_observed_game_seconds": 1531.7825
+    }
+  ],
+  "limitations": [
+    "Censored/frame-cap/input-blocked runs are not wins.",
+    "Finished-only fractions exclude censored runs and are not unconditional win rates.",
+    "Menu pauses consume frame budget: use actual elapsed time, not frame cap, for comparisons.",
+    "Old baseline damage-skill cast telemetry may be null; null is not zero.",
+    "Observed checkpoint minima are coarse; min_gate_hp/min_hero_hp fields use every simulation frame.",
+    "The active greedy-card-zero stationary policy is not an optimal player strategy."
+  ]
+}
