@@ -23,6 +23,8 @@ METRICS = [
     "attacks",
     "damage_skill_casts",
     "skill_ranks",
+    "skill_ranks_by_id",
+    "rng_state",
     "enemy_peak",
     "enemy_rejected",
     "gate_breaks",

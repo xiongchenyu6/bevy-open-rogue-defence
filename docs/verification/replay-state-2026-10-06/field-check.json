@@ -1,0 +1,7 @@
+{
+  "checkpoints": 2,
+  "skill_count": 32,
+  "all_rank_arrays_sum_to_recorded_total": true,
+  "rng_state_is_uint64_and_changes": true,
+  "censored_not_victory": true
+}

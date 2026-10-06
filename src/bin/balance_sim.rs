@@ -240,6 +240,8 @@ fn checkpoint(world: &mut World, frame: u32, metrics: &Metrics) {
         .resource::<rogue_commander::game::CampaignProgress>()
         .upgrades;
     let actual_seed = world.resource::<RunSeed>().0;
+    let rng_state = world.resource::<RunRng>().0;
+    let skill_ranks_by_id = world.resource::<PlayerBuild>().skills;
     let actual_hero = h.kind.index();
     let absorbed_strength = world.resource::<RecruitmentProgress>().absorbed_strength;
     let command_health_multiplier = h.command_health_multiplier;
@@ -271,7 +273,7 @@ fn checkpoint(world: &mut World, frame: u32, metrics: &Metrics) {
     let max_health_deficit = metrics.max_health_deficit;
     let injured_secs = metrics.injured_secs;
     println!(
-        "{{\"type\":\"checkpoint\",\"frame\":{frame},\"actual_chapter\":{actual_chapter},\"permanent_upgrades\":{permanent_upgrades:?},\"actual_run_seed\":{actual_seed},\"actual_hero_id\":{actual_hero},\"owned_bond_ids\":[{owned_bond_ids}],\"absorbed_strength\":{absorbed_strength},\"command_health_multiplier\":{command_health_multiplier},\"max_hero_hp\":{max_hero_hp},\"elapsed\":{:.3},\"wave\":{},\"level\":{},\"kills\":{},\"gate_hp\":{:.2},\"gate_breaks\":{gate_breaks},\"exposed_secs\":{exposed_secs:.3},\"min_gate_hp\":{min_gate_hp:.2},\"min_hero_hp\":{min_hero_hp:.2},\"min_alive_health_fraction\":{min_alive_health_fraction:.6},\"max_health_deficit\":{max_health_deficit:.3},\"injured_secs\":{injured_secs:.3},\"hero_hp\":{:.2},\"deaths\":{},\"gold\":{},\"wood\":{},\"bosses\":{},\"attacks\":{attacks},\"damage_skill_casts\":{casts},\"skill_ranks\":{skills},\"enemy_peak\":{},\"enemy_rejected\":{},\"paused\":{},\"finished\":{},\"victory\":{}}}",
+        "{{\"type\":\"checkpoint\",\"frame\":{frame},\"actual_chapter\":{actual_chapter},\"permanent_upgrades\":{permanent_upgrades:?},\"actual_run_seed\":{actual_seed},\"rng_state\":{rng_state},\"skill_ranks_by_id\":{skill_ranks_by_id:?},\"actual_hero_id\":{actual_hero},\"owned_bond_ids\":[{owned_bond_ids}],\"absorbed_strength\":{absorbed_strength},\"command_health_multiplier\":{command_health_multiplier},\"max_hero_hp\":{max_hero_hp},\"elapsed\":{:.3},\"wave\":{},\"level\":{},\"kills\":{},\"gate_hp\":{:.2},\"gate_breaks\":{gate_breaks},\"exposed_secs\":{exposed_secs:.3},\"min_gate_hp\":{min_gate_hp:.2},\"min_hero_hp\":{min_hero_hp:.2},\"min_alive_health_fraction\":{min_alive_health_fraction:.6},\"max_health_deficit\":{max_health_deficit:.3},\"injured_secs\":{injured_secs:.3},\"hero_hp\":{:.2},\"deaths\":{},\"gold\":{},\"wood\":{},\"bosses\":{},\"attacks\":{attacks},\"damage_skill_casts\":{casts},\"skill_ranks\":{skills},\"enemy_peak\":{},\"enemy_rejected\":{},\"paused\":{},\"finished\":{},\"victory\":{}}}",
         s.elapsed,
         s.wave,
         s.level,
