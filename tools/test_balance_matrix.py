@@ -2,6 +2,7 @@
 """Real subprocess tests of matrix orchestration; fake binaries do not simulate balance."""
 
 import csv
+import hashlib
 import json
 import os
 import shutil
@@ -66,6 +67,27 @@ print(json.dumps({'type':'checkpoint','frame':int(sys.argv[5]),'elapsed':1,'actu
         return json.loads(
             (self.root / "target/verification/test/summary.json").read_text()
         )
+
+    def test_batch_uses_snapshot_when_source_binary_is_replaced(self):
+        script = self.binary.read_text()
+        script = script.replace("import json,os,sys,time", "import json,os,sys,time\nfrom pathlib import Path\nPath(os.environ['REPLACE_SOURCE']).write_text('#!/usr/bin/env python3\\nraise SystemExit(73)\\n')")
+        self.binary.write_text(script)
+        original_hash = hashlib.sha256(self.binary.read_bytes()).hexdigest()
+        env = dict(os.environ, REPLACE_SOURCE=str(self.binary))
+        result = self.run_matrix("--chapters", "0,1", "--jobs", "1", env=env)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        summary = self.summary()
+        self.assertEqual(len(summary["cases"]), 2)
+        self.assertTrue(all(case["valid"] for case in summary["cases"]))
+        self.assertEqual(summary["binary_sha256"], original_hash)
+        self.assertEqual(hashlib.sha256(Path(summary["executed_binary"]).read_bytes()).hexdigest(), original_hash)
+        self.assertNotEqual(hashlib.sha256(self.binary.read_bytes()).hexdigest(), original_hash)
+        receipt = (self.root / "target/verification/test/summary.json")
+        original_receipt = receipt.read_bytes()
+        repeated = self.run_matrix(env=env)
+        self.assertNotEqual(repeated.returncode, 0)
+        self.assertIn("fresh directory", repeated.stderr)
+        self.assertEqual(receipt.read_bytes(), original_receipt)
 
     def test_parallel_dimensions_isolated_environment_and_censored_analysis(self):
         result = self.run_matrix(

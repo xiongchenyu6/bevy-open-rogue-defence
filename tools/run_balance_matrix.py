@@ -107,7 +107,14 @@ if pressure:
     ):
         parser.error("--pressure must contain six finite floats")
 output = ROOT / "target/verification" / args.batch
+if output.exists() and any(output.iterdir()):
+    parser.error("--batch must name a fresh directory; existing receipts are preserved")
 output.mkdir(parents=True, exist_ok=True)
+# Execute one captured build throughout the batch, even if Cargo replaces its source.
+source_binary = binary
+snapshot = output / "simulator-snapshot"
+shutil.copy2(source_binary, snapshot)
+binary = snapshot.resolve()
 digest = hashlib.sha256()
 with binary.open("rb") as handle:
     for chunk in iter(lambda: handle.read(8 * 1024 * 1024), b""):
@@ -115,6 +122,7 @@ with binary.open("rb") as handle:
 binary_sha256 = digest.hexdigest()
 manifest = {
     "binary": str(Path(args.binary).resolve()),
+    "executed_binary": str(binary),
     "binary_sha256": binary_sha256,
     "require_telemetry": args.require_telemetry,
     "pressure_override": pressure,
