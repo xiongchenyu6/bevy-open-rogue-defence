@@ -235,6 +235,7 @@ mod tests {
     const UI_FONT_BYTES: &[u8] = include_bytes!("../../assets/fonts/rogue_commander_ui.ttf");
     const PLAYER_FACING_SOURCES: &[&str] = &[
         include_str!("asset_readiness.rs"),
+        include_str!("onboarding.rs"),
         include_str!("content.rs"),
         include_str!("bond_catalog.rs"),
         include_str!("bond_catalog/expanded.rs"),

@@ -1,0 +1,49 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {19, 39, 59, 79, 114, 129}; all 190 simulation/render updates retained
+[2m2026-10-07T20:42:57.416031Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.8", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/zh-CN-1280x720-full/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/zh-CN-1280x720-full/runtime/wayland-1" plus null terminator exceeds 108 bytes
+[2m2026-10-07T20:42:57.452792Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "llvmpipe (LLVM 21.1.8, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, device_pci_bus_id: "", driver: "llvmpipe", driver_info: "Mesa 26.2.4 (LLVM 21.1.8)", backend: Vulkan, subgroup_min_size: 8, subgroup_max_size: 8, transient_saves_memory: false }
+[2m2026-10-07T20:42:57.452834Z[0m [33m WARN[0m [2mbevy_render::renderer[0m[2m:[0m The selected adapter is using a driver that only supports software rendering. This is likely to be very slow. See https://bevy.org/learn/errors/b0006/
+[2m2026-10-07T20:42:57.636900Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-07T20:42:57.637017Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-10-07T20:42:57.804446Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to true)
+[capture] render target warmed
+ONBOARDING_ACTION frame=10 Campaign chapter 0
+[2m2026-10-07T20:43:05.478641Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/zh-CN-1280x720-full/frames/frame00019.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/zh-CN-1280x720-full/frames/frame00019.png (622940 bytes)
+ONBOARDING_ILLUSTRATED_PAGE page=0 locale=zh
+ONBOARDING_ACTION frame=30 Tutorial next
+[2m2026-10-07T20:43:09.137781Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/zh-CN-1280x720-full/frames/frame00039.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/zh-CN-1280x720-full/frames/frame00039.png (623726 bytes)
+ONBOARDING_ILLUSTRATED_PAGE page=1 locale=zh
+ONBOARDING_ACTION frame=50 Tutorial next
+[2m2026-10-07T20:43:13.032685Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/zh-CN-1280x720-full/frames/frame00059.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/zh-CN-1280x720-full/frames/frame00059.png (626494 bytes)
+ONBOARDING_ILLUSTRATED_PAGE page=2 locale=zh
+ONBOARDING_ACTION frame=70 Tutorial next
+[2m2026-10-07T20:43:16.769829Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/zh-CN-1280x720-full/frames/frame00079.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/zh-CN-1280x720-full/frames/frame00079.png (625837 bytes)
+ONBOARDING_ILLUSTRATED_PAGE page=3 locale=zh
+ONBOARDING_ACTION frame=90 Tutorial next
+ONBOARDING_HELD_CLOSE_UNDERLYING_INPUT_ATTEMPT
+ONBOARDING_RELEASE_LATCH_HELD_PASS
+ONBOARDING_RELEASE_LATCH_RELEASED_PASS
+ONBOARDING_PICKER_PAUSE_PRESERVED frame=100 reload=false
+ONBOARDING_ACTION frame=110 Settings open
+ONBOARDING_SETTINGS_LAYOUT_PASS controls=13
+[2m2026-10-07T20:43:23.574649Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/zh-CN-1280x720-full/frames/frame00114.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/zh-CN-1280x720-full/frames/frame00114.png (48649 bytes)
+ONBOARDING_ACTION frame=120 Settings tutorial
+[2m2026-10-07T20:43:26.492895Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/zh-CN-1280x720-full/frames/frame00129.png
+[capture] saved 6/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/zh-CN-1280x720-full/frames/frame00129.png (198477 bytes)
+ONBOARDING_ILLUSTRATED_PAGE page=0 locale=zh
+ONBOARDING_ACTION frame=140 Tutorial skip
+ONBOARDING_PICKER_PAUSE_PRESERVED frame=150 reload=false
+ONBOARDING_ACTION frame=160 Commander card 0
+ONBOARDING_PASS reload=false skip=false actual first run, persistence, replay, blocked inputs and fresh choice
+[capture] all 6 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 190 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/zh-CN-1280x720-full/frames

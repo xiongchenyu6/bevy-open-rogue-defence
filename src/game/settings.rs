@@ -33,7 +33,14 @@ impl Plugin for SettingsPlugin {
                     .after(UiSystems::Focus)
                     .in_set(SettingsInputSet),
             )
-            .add_systems(Update, (update_settings_copy, update_settings_layout));
+            .add_systems(
+                Update,
+                (
+                    update_settings_copy,
+                    update_settings_layout,
+                    update_tutorial_entry,
+                ),
+            );
     }
 }
 
@@ -65,6 +72,8 @@ struct SettingsOpen;
 #[derive(Component)]
 struct SettingsClose;
 #[derive(Component)]
+struct SettingsTutorial;
+#[derive(Component)]
 struct SettingsPanel;
 #[derive(Component)]
 struct SettingsHeader;
@@ -87,6 +96,7 @@ enum CopyKind {
     Selected,
     SaveNotice,
     Back,
+    Tutorial,
 }
 
 fn label(value: impl Into<String>, size: f32, color: Color) -> impl Bundle {
@@ -235,6 +245,20 @@ fn spawn_settings(commands: &mut Commands) -> Entity {
                     },
                 ));
                 panel
+                    .spawn((
+                        Button,
+                        SettingsTutorial,
+                        Name::new("Settings tutorial"),
+                        Node {
+                            min_height: px(42),
+                            align_items: AlignItems::Center,
+                            justify_content: JustifyContent::Center,
+                            ..default()
+                        },
+                        BackgroundColor(PANEL),
+                    ))
+                    .with_child((SettingsCopy(CopyKind::Tutorial), label("", 14.0, IVORY)));
+                panel
                     .spawn(Node {
                         width: percent(100),
                         column_gap: px(6),
@@ -281,11 +305,16 @@ fn handle_settings_input(
     close_buttons: Query<&Interaction, (With<SettingsClose>, Changed<Interaction>)>,
     language_buttons: Query<(&Interaction, &SettingsLanguageButton), Changed<Interaction>>,
     mut state: ResMut<SettingsState>,
+    mut tutorial: Option<ResMut<super::OnboardingState>>,
+    tutorial_buttons: Query<&Interaction, (With<SettingsTutorial>, Changed<Interaction>)>,
     equipment: Option<Res<super::equipment_ui::EquipmentPanelState>>,
     mut session: ResMut<GameSession>,
     mut language: ResMut<GameLanguage>,
 ) {
     if !state.open {
+        if tutorial.as_ref().is_some_and(|guide| guide.input_blocked) {
+            return;
+        }
         if equipment.is_some_and(|panel| panel.open()) {
             return;
         }
@@ -301,6 +330,17 @@ fn handle_settings_input(
         return;
     }
     if state.confirmation.is_some() {
+        keyboard.clear();
+        return;
+    }
+    if tutorial_buttons.iter().any(|i| *i == Interaction::Pressed)
+        && let Some(tutorial) = tutorial.as_deref_mut()
+    {
+        if let Some(root) = state.root.take() {
+            commands.entity(root).despawn();
+        }
+        state.finish(&mut session);
+        tutorial.replay_requested = true;
         keyboard.clear();
         return;
     }
@@ -335,6 +375,19 @@ fn handle_settings_input(
     }
 }
 
+fn update_tutorial_entry(
+    tutorial: Option<Res<super::OnboardingState>>,
+    mut buttons: Query<&mut Node, With<SettingsTutorial>>,
+) {
+    for mut node in &mut buttons {
+        node.display = if tutorial.is_some() {
+            Display::Flex
+        } else {
+            Display::None
+        };
+    }
+}
+
 fn copy(kind: CopyKind, language: GameLanguage, failed: bool) -> &'static str {
     match kind {
         CopyKind::Title => language.pick("Settings", "设置"),
@@ -354,12 +407,14 @@ fn copy(kind: CopyKind, language: GameLanguage, failed: bool) -> &'static str {
             }
         }
         CopyKind::Back => language.pick("Back", "返回"),
+        CopyKind::Tutorial => language.pick("How to play", "玩法指引"),
     }
 }
 
 fn update_settings_copy(
     language: Res<GameLanguage>,
     state: Res<SettingsState>,
+    tutorial: Option<Res<super::OnboardingState>>,
     audio_save: Option<Res<super::AudioSaveStatus>>,
     #[cfg(not(target_arch = "wasm32"))] display_save: Option<
         Res<display_controls::DisplaySaveStatus>,
@@ -403,6 +458,7 @@ fn update_settings_copy(
                 key.0,
                 *language,
                 state.save_failed
+                    || tutorial.as_ref().is_some_and(|guide| guide.save_failed)
                     || audio_save.as_ref().is_some_and(|save| save.failed)
                     || display_failed,
             )
@@ -492,6 +548,7 @@ fn update_settings_layout(
         Has<SettingsLanguageRow>,
         Option<&SettingsCopy>,
     )>,
+    tutorial: Option<Res<super::OnboardingState>>,
     audio_save: Option<Res<super::AudioSaveStatus>>,
     #[cfg(not(target_arch = "wasm32"))] display_save: Option<
         Res<display_controls::DisplaySaveStatus>,
@@ -543,6 +600,7 @@ fn update_settings_layout(
             && matches!(copy.0, CopyKind::Intro | CopyKind::SaveNotice)
         {
             let failed = state.save_failed
+                || tutorial.as_ref().is_some_and(|guide| guide.save_failed)
                 || audio_save.as_ref().is_some_and(|save| save.failed)
                 || display_failed;
             let hide = m.compact && (matches!(copy.0, CopyKind::Intro) || !failed);
@@ -722,6 +780,112 @@ mod tests {
                 required <= content,
                 "settings content at {width}x{height}: {required}>{content}"
             );
+        }
+    }
+    #[test]
+    fn replay_entry_requires_plugin_and_restores_pause_before_requesting_guide() {
+        for plugin_present in [false, true] {
+            for prior_paused in [false, true] {
+                let mut app = App::new();
+                app.init_resource::<ButtonInput<KeyCode>>()
+                    .init_resource::<GameLanguage>()
+                    .insert_resource(GameSession {
+                        paused: true,
+                        ..default()
+                    })
+                    .insert_resource(SettingsState {
+                        open: true,
+                        prior_paused,
+                        ..default()
+                    })
+                    .add_systems(PreUpdate, handle_settings_input)
+                    .add_systems(Update, update_tutorial_entry);
+                if plugin_present {
+                    app.init_resource::<super::super::OnboardingState>();
+                }
+                let entry = app
+                    .world_mut()
+                    .spawn((SettingsTutorial, Interaction::Pressed, Node::default()))
+                    .id();
+                app.world_mut()
+                    .resource_mut::<ButtonInput<KeyCode>>()
+                    .press(KeyCode::Digit1);
+                app.update();
+                assert_eq!(
+                    app.world().resource::<SettingsState>().open,
+                    !plugin_present
+                );
+                assert_eq!(
+                    app.world().resource::<GameSession>().paused,
+                    if plugin_present { prior_paused } else { true }
+                );
+                assert_eq!(
+                    app.world().get::<Node>(entry).unwrap().display,
+                    if plugin_present {
+                        Display::Flex
+                    } else {
+                        Display::None
+                    }
+                );
+                assert!(
+                    !app.world()
+                        .resource::<ButtonInput<KeyCode>>()
+                        .just_pressed(KeyCode::Digit1)
+                );
+                if plugin_present {
+                    assert!(
+                        app.world()
+                            .resource::<super::super::OnboardingState>()
+                            .replay_requested
+                    );
+                }
+            }
+        }
+    }
+    #[test]
+    fn settings_replay_really_opens_over_chapters_and_results_and_stays_open() {
+        for finished in [false, true] {
+            let mut app = App::new();
+            app.init_resource::<ButtonInput<KeyCode>>()
+                .init_resource::<GameLanguage>()
+                .insert_resource(super::super::OnboardingState::default())
+                .insert_resource(super::super::CampaignRun::default())
+                .insert_resource(super::super::CampaignMenu(!finished))
+                .insert_resource(super::super::AssetReadiness::default())
+                .insert_resource(GameSession {
+                    paused: true,
+                    finished,
+                    ..default()
+                })
+                .insert_resource(SettingsState {
+                    open: true,
+                    prior_paused: true,
+                    ..default()
+                })
+                .add_systems(PreUpdate, handle_settings_input.in_set(SettingsInputSet));
+            app.world_mut()
+                .resource_mut::<super::super::AssetReadiness>()
+                .ready = true;
+            super::super::onboarding::install_input_test(&mut app);
+            app.world_mut()
+                .spawn((SettingsTutorial, Interaction::Pressed));
+            app.update();
+            assert!(!app.world().resource::<SettingsState>().open);
+            assert_eq!(
+                app.world().resource::<super::super::OnboardingState>().page,
+                Some(0)
+            );
+            app.update();
+            assert_eq!(
+                app.world().resource::<super::super::OnboardingState>().page,
+                Some(0)
+            );
+            assert!(app.world().resource::<GameSession>().paused);
+            assert_eq!(
+                app.world().resource::<super::super::CampaignMenu>().0,
+                !finished
+            );
+            assert_eq!(app.world().resource::<GameSession>().finished, finished);
         }
     }
 }

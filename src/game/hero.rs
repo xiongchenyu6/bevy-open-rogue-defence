@@ -217,6 +217,7 @@ struct HeroChoiceInput<'w> {
     mouse: Option<Res<'w, ButtonInput<MouseButton>>>,
     touches: Option<Res<'w, Touches>>,
     readiness: Option<Res<'w, super::AssetReadiness>>,
+    tutorial: Option<Res<'w, super::OnboardingState>>,
 }
 fn handle_hero_choice(
     mut commands: Commands,
@@ -236,6 +237,13 @@ fn handle_hero_choice(
     autoplay: Option<Res<Autoplay>>,
     mut inheritance: RecruitmentInheritance,
 ) {
+    if input
+        .tutorial
+        .as_ref()
+        .is_some_and(|guide| guide.input_blocked)
+    {
+        return;
+    }
     if state.root.is_none() || input.readiness.as_ref().is_some_and(|gate| !gate.ready) {
         return;
     }

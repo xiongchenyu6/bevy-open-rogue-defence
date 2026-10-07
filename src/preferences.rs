@@ -316,3 +316,82 @@ mod audio_tests {
         std::fs::remove_dir_all(dir).unwrap();
     }
 }
+
+#[cfg(not(target_arch = "wasm32"))]
+fn tutorial_path() -> Option<std::path::PathBuf> {
+    std::env::var_os("ROGUE_TUTORIAL_SAVE")
+        .filter(|v| !v.is_empty())
+        .map(std::path::PathBuf::from)
+        .or_else(|| preference_path("tutorial-dismissed"))
+}
+#[cfg(not(target_arch = "wasm32"))]
+pub(crate) fn load_tutorial_dismissed() -> bool {
+    tutorial_path().is_some_and(|path| read_tutorial_dismissed(&path))
+}
+#[cfg(not(target_arch = "wasm32"))]
+fn read_tutorial_dismissed(path: &std::path::Path) -> bool {
+    std::fs::read_to_string(path).is_ok_and(|value| value.trim() == "1")
+}
+#[cfg(not(target_arch = "wasm32"))]
+pub(crate) fn save_tutorial_dismissed() -> Result<(), String> {
+    let path = tutorial_path().ok_or("No user configuration directory")?;
+    write_tutorial_dismissed(&path).map_err(|error| error.to_string())
+}
+#[cfg(not(target_arch = "wasm32"))]
+fn write_tutorial_dismissed(path: &std::path::Path) -> std::io::Result<()> {
+    if let Some(parent) = path.parent() {
+        std::fs::create_dir_all(parent)?;
+    }
+    let temporary = path.with_extension("tmp");
+    std::fs::write(&temporary, "1")?;
+    if let Err(error) = std::fs::rename(&temporary, path) {
+        let _ = std::fs::remove_file(temporary);
+        return Err(error);
+    }
+    Ok(())
+}
+#[cfg(target_arch = "wasm32")]
+pub(crate) fn load_tutorial_dismissed() -> bool {
+    web_sys::window()
+        .and_then(|window| window.local_storage().ok().flatten())
+        .and_then(|storage| {
+            storage
+                .get_item("rogue-commander-tutorial-dismissed")
+                .ok()
+                .flatten()
+        })
+        .is_some_and(|value| value == "1")
+}
+#[cfg(target_arch = "wasm32")]
+pub(crate) fn save_tutorial_dismissed() -> Result<(), String> {
+    let storage = web_sys::window()
+        .and_then(|window| window.local_storage().ok().flatten())
+        .ok_or("Browser storage unavailable")?;
+    storage
+        .set_item("rogue-commander-tutorial-dismissed", "1")
+        .map_err(|_| "Could not save tutorial preference".into())
+}
+#[cfg(all(test, not(target_arch = "wasm32")))]
+mod tutorial_preference_tests {
+    use super::*;
+    #[test]
+    fn dismissal_survives_disk_reload_and_invalid_values_repeat_the_guide() {
+        let directory = std::env::temp_dir().join(format!(
+            "rogue-tutorial-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
+        let path = directory.join("nested/tutorial-dismissed");
+        assert!(!read_tutorial_dismissed(&path));
+        write_tutorial_dismissed(&path).unwrap();
+        assert!(read_tutorial_dismissed(&path));
+        assert!(!path.with_extension("tmp").exists());
+        std::fs::write(&path, "invalid").unwrap();
+        assert!(!read_tutorial_dismissed(&path));
+        assert!(write_tutorial_dismissed(&directory).is_err());
+        std::fs::remove_dir_all(directory).unwrap();
+    }
+}

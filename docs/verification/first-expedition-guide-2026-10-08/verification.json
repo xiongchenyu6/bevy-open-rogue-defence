@@ -1,0 +1,225 @@
+{
+  "source_base_commit": "001bb73",
+  "library": {
+    "passed": 592,
+    "failed": 0,
+    "ignored": 1
+  },
+  "strict_all_target_clippy": true,
+  "native_cases": [
+    {
+      "case": "en-1280x720-full",
+      "frames": 190,
+      "exit_code": 0,
+      "images": [
+        "frame00019.png",
+        "frame00039.png",
+        "frame00059.png",
+        "frame00079.png",
+        "frame00114.png",
+        "frame00129.png"
+      ]
+    },
+    {
+      "case": "en-1280x720-reload",
+      "frames": 110,
+      "exit_code": 0,
+      "images": [
+        "frame00029.png",
+        "frame00049.png",
+        "frame00069.png"
+      ]
+    },
+    {
+      "case": "en-667x375-full",
+      "frames": 190,
+      "exit_code": 0,
+      "images": [
+        "frame00019.png",
+        "frame00039.png",
+        "frame00059.png",
+        "frame00079.png",
+        "frame00114.png",
+        "frame00129.png"
+      ]
+    },
+    {
+      "case": "en-667x375-reload",
+      "frames": 110,
+      "exit_code": 0,
+      "images": [
+        "frame00029.png",
+        "frame00049.png",
+        "frame00069.png"
+      ]
+    },
+    {
+      "case": "en-menu",
+      "frames": 70,
+      "exit_code": 0,
+      "images": [
+        "frame00009.png",
+        "frame00029.png",
+        "frame00049.png"
+      ]
+    },
+    {
+      "case": "en-save-failure",
+      "frames": 130,
+      "exit_code": 0,
+      "images": [
+        "frame00019.png",
+        "frame00039.png",
+        "frame00054.png",
+        "frame00069.png",
+        "frame00089.png"
+      ]
+    },
+    {
+      "case": "en-skip",
+      "frames": 130,
+      "exit_code": 0,
+      "images": [
+        "frame00019.png",
+        "frame00039.png",
+        "frame00054.png",
+        "frame00069.png"
+      ]
+    },
+    {
+      "case": "zh-CN-1280x720-full",
+      "frames": 190,
+      "exit_code": 0,
+      "images": [
+        "frame00019.png",
+        "frame00039.png",
+        "frame00059.png",
+        "frame00079.png",
+        "frame00114.png",
+        "frame00129.png"
+      ]
+    },
+    {
+      "case": "zh-CN-1280x720-reload",
+      "frames": 110,
+      "exit_code": 0,
+      "images": [
+        "frame00029.png",
+        "frame00049.png",
+        "frame00069.png"
+      ]
+    },
+    {
+      "case": "zh-CN-667x375-full",
+      "frames": 190,
+      "exit_code": 0,
+      "images": [
+        "frame00019.png",
+        "frame00039.png",
+        "frame00059.png",
+        "frame00079.png",
+        "frame00114.png",
+        "frame00129.png"
+      ]
+    },
+    {
+      "case": "zh-CN-667x375-reload",
+      "frames": 110,
+      "exit_code": 0,
+      "images": [
+        "frame00029.png",
+        "frame00049.png",
+        "frame00069.png"
+      ]
+    },
+    {
+      "case": "zh-result",
+      "frames": 70,
+      "exit_code": 0,
+      "images": [
+        "frame00009.png",
+        "frame00029.png",
+        "frame00049.png"
+      ]
+    }
+  ],
+  "total_frames": 1600,
+  "reviewed_images": 51,
+  "reviewers": {
+    "root_desktop": 18,
+    "gate_capture_compact": 18,
+    "release_gap_audit_skip_menu_result_failure": 15
+  },
+  "known_issues": [
+    "English compact hero picker heading overlaps Settings launcher at667x375; guide and Settings layouts themselves fit. Evidence en-667x375-reload/frame00029.png."
+  ],
+  "scope": "Controlled offscreen native software Vulkan; real input/modal/persistence and file failure/recovery. Result scene uses a terminal-state UI prerequisite and real reward settlement, not an actually played victory. Not Steam client, GPU performance, human comprehension or browser storage verification.",
+  "source_sha256": {
+    "src/game/onboarding.rs": "f7fd8045f5799ae8cd0e436357b5229ac37925d0ae52525c9099ace454cc909e",
+    "src/preferences.rs": "e8fa5eba5fe21bb321d11d85de3eeac112d35b11ea576be07bc3c9532a055b1c",
+    "src/game/hero.rs": "42e8cb7f812c99680cd545f9b8124719c6a2f94917ba001748659ffff1a659f3",
+    "src/game/settings.rs": "c16d2ec8cb5f068869563112faf4f2516911a3fdf4b0a0a002bf7d016f8f85b1",
+    "src/game/localization.rs": "cad40dc82647e8d5e8bc401a9049d03b3e42bc229d5584ed2607654b8131575c",
+    "src/game/mod.rs": "20d33cc86d505e9fdfb16c8b74b01b54acdcc786fbcd65d2008e813ec44f60b5",
+    "src/game/run_reset.rs": "8d59a6e0accfacd99326fe6515aba81f4cbc23cdaf8d3285cff44bc86b38433d",
+    "src/lib.rs": "5ccb132cb9c7614575bfde27178b61608b02da99089369fb351cb288c140d5c8",
+    "src/bin/capture.rs": "7a9700a01d265222f9e0bb74702842e6f6573ed97bc934866e5910911e42e17d",
+    "src/bin/capture/onboarding.rs": "d04c672663d4ad0c9d409a1fd5f264447b2139e362e34fb01c7457c2ecd6acc1",
+    "assets/fonts/rogue_commander_ui.ttf": "bdab91e514165db0446a841bc4892b0d48c009638e6e609276a1cbbc85df8b99",
+    "assets/fonts/glyphs.txt": "9519faee3a2ecbe670950c36f0c1ebf9478b1ff75e906a38db2c612fe45bafc2",
+    "assets/fonts/SOURCE.md": "8bd082619a1ad029a2ab7de636b081526577b90c235b7c79432257c077a3a544"
+  },
+  "image_sha256": {
+    "en-667x375-reload/frame00029.png": "eb42c9be662e9a177d1cfc35325a660e5a938b9d1730d60a170add4d32d3f1e7",
+    "en-667x375-reload/frame00069.png": "5d50f8c1840c6c9197bfee0ec351d0f5a190386e824c3e792fc261b04f420926",
+    "en-667x375-reload/frame00049.png": "cfc7df21a456e346475885e543701b7862292359a24ad38787980fdc9280a5e3",
+    "en-667x375-full/frame00019.png": "e12a34ed6b0118f5695cca1127270003780d1715a77d7993b5895aca4ca89a98",
+    "en-667x375-full/frame00059.png": "05c41d8a3c6f281a7a7996f8d736500d1e5340f73cd063f32214a8447e4db314",
+    "en-667x375-full/frame00114.png": "cfc7df21a456e346475885e543701b7862292359a24ad38787980fdc9280a5e3",
+    "en-667x375-full/frame00079.png": "1443cf4f8a7fe66de8e02eb9ccdf26a31bd91acdbbb7f59a02ce75c9499710bd",
+    "en-667x375-full/frame00039.png": "9141b9f13813b93a059dbec3874dc25a48a3567ac6b837d60d9742f25690242c",
+    "en-667x375-full/frame00129.png": "5d50f8c1840c6c9197bfee0ec351d0f5a190386e824c3e792fc261b04f420926",
+    "en-1280x720-full/frame00019.png": "7736edfe1bcb8d9e1b3569893f744d2b1bbbbd647e3283d56f407a33e70e6426",
+    "en-1280x720-full/frame00059.png": "00d276704b94a4062e1156163b49210aeb6981d4973ad6b38f6791cee8c9c718",
+    "en-1280x720-full/frame00114.png": "1e29d9269c6f65624755a4b0d66655656f8cac0c28e42adb8ac3eca11368e133",
+    "en-1280x720-full/frame00079.png": "44c092ea01bdace2473dca733c13c959b2b0956594ea809b5fd6cbd1b769ac15",
+    "en-1280x720-full/frame00039.png": "d3945a23388b216bfdf2036992feaa7b4fa91c7fe560fd49a98a77ecd2758d99",
+    "en-1280x720-full/frame00129.png": "49fdba20c2ed4655e4e68595c7a167bf0acb6d2e2f1186715c80c5a203c2a29e",
+    "zh-CN-1280x720-full/frame00019.png": "2a0facab74a048d8921ee47d58e74e647f75fb6b0104c0f9d435a0794f6ba0ae",
+    "zh-CN-1280x720-full/frame00059.png": "ef8433618586e788d8f8eba1a1ea27df77df1254749c577a577be7761c2d613c",
+    "zh-CN-1280x720-full/frame00114.png": "84ddcff160c5bb41770b5aef24110be4c89d7d5467de54ccb0918160be162ab4",
+    "zh-CN-1280x720-full/frame00079.png": "699524fcf3d8a1704380f04ad456d010788b5fd0fef26935203ccf714096146f",
+    "zh-CN-1280x720-full/frame00039.png": "5697e29ff6ec1a029b4f091bf593afb2490a53c1faadc50dfe64c0b61f8e009b",
+    "zh-CN-1280x720-full/frame00129.png": "8e2bea4771f5a2a553ff51dbd80afde5097d38eea49fc552181dcdee24f5d0d0",
+    "en-save-failure/frame00019.png": "be7ee82dca1a4a8f49280602a8c0e68082625d9a2d267ae5a5beb255644c272a",
+    "en-save-failure/frame00054.png": "0ac8d2df3a9d970f4fff8b5bc87172f6e03c42a79cb7e52009a03c4da18443bf",
+    "en-save-failure/frame00039.png": "6128d0f9a56a1fa211191bec43bf7bfca50ad6f03953dabd8bf330f60692ae73",
+    "en-save-failure/frame00069.png": "49fdba20c2ed4655e4e68595c7a167bf0acb6d2e2f1186715c80c5a203c2a29e",
+    "en-save-failure/frame00089.png": "1e29d9269c6f65624755a4b0d66655656f8cac0c28e42adb8ac3eca11368e133",
+    "zh-CN-667x375-full/frame00019.png": "7c2759b110ee8dcce1fa28b94b07680cdd281ac90a923e96c6e421a14a2afd5c",
+    "zh-CN-667x375-full/frame00059.png": "1e3297d36bdc141a3bc076ee0c861bf72dc5f0fd761395998fde8d8d3f15aceb",
+    "zh-CN-667x375-full/frame00114.png": "014a0fd39faa8323d9e007dc8252b33b8753a119b9a29035b62f3ce44172135b",
+    "zh-CN-667x375-full/frame00079.png": "82741bbe29392abc542e8dea9972ff86e196de849503497f18ae6be1e75db336",
+    "zh-CN-667x375-full/frame00039.png": "640d4ddc684a78c932a96530714889ac3f0f16e63911d7c5e07a807577f73638",
+    "zh-CN-667x375-full/frame00129.png": "2b8e20bfd69b3dc28199dcfad2b4b684f77a8aa674f5d4c2d9365b92cb9eaa7e",
+    "en-1280x720-reload/frame00029.png": "6128d0f9a56a1fa211191bec43bf7bfca50ad6f03953dabd8bf330f60692ae73",
+    "en-1280x720-reload/frame00069.png": "49fdba20c2ed4655e4e68595c7a167bf0acb6d2e2f1186715c80c5a203c2a29e",
+    "en-1280x720-reload/frame00049.png": "1e29d9269c6f65624755a4b0d66655656f8cac0c28e42adb8ac3eca11368e133",
+    "en-menu/frame00029.png": "e47d352c4113309acbcdace413818c52b3ebb38276e16cac099b4b55ba945cb5",
+    "en-menu/frame00009.png": "1e29d9269c6f65624755a4b0d66655656f8cac0c28e42adb8ac3eca11368e133",
+    "en-menu/frame00049.png": "eca27c61db3e8f70dd566272f9fe52588fb4d4ff35367b288aec791cd1a428bf",
+    "zh-CN-667x375-reload/frame00029.png": "fcfca26645b1f172bc9a600431fe67c2fb707155396d31014f055125d7f11d2c",
+    "zh-CN-667x375-reload/frame00069.png": "2b8e20bfd69b3dc28199dcfad2b4b684f77a8aa674f5d4c2d9365b92cb9eaa7e",
+    "zh-CN-667x375-reload/frame00049.png": "746eca1c614319bc906b2880451c4386e68c6fd9539dc67c123867d4d4019bd1",
+    "zh-CN-1280x720-reload/frame00029.png": "df71357740104597e5e8a35a146ee2731dc14bbcd7ec217745772f3c9c2ac169",
+    "zh-CN-1280x720-reload/frame00069.png": "8e2bea4771f5a2a553ff51dbd80afde5097d38eea49fc552181dcdee24f5d0d0",
+    "zh-CN-1280x720-reload/frame00049.png": "7a86fc89ff535a0e5f958acd00dd85251808d3ef39fbbf4c544e2bd925b98b0a",
+    "en-skip/frame00019.png": "7736edfe1bcb8d9e1b3569893f744d2b1bbbbd647e3283d56f407a33e70e6426",
+    "en-skip/frame00054.png": "1e29d9269c6f65624755a4b0d66655656f8cac0c28e42adb8ac3eca11368e133",
+    "en-skip/frame00039.png": "420dbc5cc42f1bf9342866f39f2a32b8de14e070164958908581078c9b1a816c",
+    "en-skip/frame00069.png": "49fdba20c2ed4655e4e68595c7a167bf0acb6d2e2f1186715c80c5a203c2a29e",
+    "zh-result/frame00029.png": "a5389b4ffcd213c1d5c2b0db1fc83cb2fdd7d3bf5b49c026c17d10c8e54623ab",
+    "zh-result/frame00009.png": "b3187b70e36986c133ca650f13eec89a7812ed8f5d07b1c62535468cc7760f30",
+    "zh-result/frame00049.png": "f136cbadd9f25a721d552e317c817bcfa863ef1e44173494d4ad99aad73a332a"
+  }
+}

@@ -2,6 +2,8 @@
 
 use bevy::prelude::*;
 
+mod onboarding;
+pub use onboarding::{OnboardingInputSet, OnboardingPlugin, OnboardingState};
 mod asset_readiness;
 pub use asset_readiness::{AssetReadiness, AssetReadinessInputSet, AssetReadinessPlugin};
 mod adventure_vfx;

@@ -59,6 +59,7 @@ pub fn reset_run(world: &mut World, stage: usize) {
     // Bevy resources live on IsResource entities. They are excluded from scene
     // disposal and reset explicitly, preserving assets and permanent progress.
     // All transient pool roots have gone; their leases must never outlive a run.
+    onboarding::reset_run(world);
     world.insert_resource(CombatPools::default());
     world.insert_resource(campaign::fresh_session(stage));
     world.insert_resource(PlayerBuild::default());

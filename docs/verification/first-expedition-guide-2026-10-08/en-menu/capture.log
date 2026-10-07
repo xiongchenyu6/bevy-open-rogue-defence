@@ -1,0 +1,30 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {9, 29, 49}; all 70 simulation/render updates retained
+[2m2026-10-07T20:45:26.601197Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.8", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/en-menu/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/en-menu/runtime/wayland-1" plus null terminator exceeds 108 bytes
+[2m2026-10-07T20:45:26.642186Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "llvmpipe (LLVM 21.1.8, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, device_pci_bus_id: "", driver: "llvmpipe", driver_info: "Mesa 26.2.4 (LLVM 21.1.8)", backend: Vulkan, subgroup_min_size: 8, subgroup_max_size: 8, transient_saves_memory: false }
+[2m2026-10-07T20:45:26.642225Z[0m [33m WARN[0m [2mbevy_render::renderer[0m[2m:[0m The selected adapter is using a driver that only supports software rendering. This is likely to be very slow. See https://bevy.org/learn/errors/b0006/
+[2m2026-10-07T20:45:26.813456Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-07T20:45:26.813513Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-10-07T20:45:27.000950Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to true)
+[capture] render target warmed
+ONBOARDING_MENU_RESULT_ACTION frame=5 Settings open
+ONBOARDING_SETTINGS_LAYOUT_PASS controls=13
+[2m2026-10-07T20:45:32.081738Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/en-menu/frames/frame00009.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/en-menu/frames/frame00009.png (61053 bytes)
+ONBOARDING_MENU_RESULT_ACTION frame=15 Settings tutorial
+ONBOARDING_ILLUSTRATED_PAGE page=0 locale=en
+ONBOARDING_MENU_RESULT_ACTION frame=25 Campaign chapter 0
+ONBOARDING_ILLUSTRATED_PAGE page=0 locale=en
+[2m2026-10-07T20:45:35.756739Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/en-menu/frames/frame00029.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/en-menu/frames/frame00029.png (96714 bytes)
+ONBOARDING_MENU_RESULT_ACTION frame=40 Tutorial skip
+[2m2026-10-07T20:45:39.670058Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/en-menu/frames/frame00049.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/en-menu/frames/frame00049.png (114434 bytes)
+ONBOARDING_MENU_RESULT_PASS menu=true result=false pause/context/rewards preserved
+[capture] all 3 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 70 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/onboarding-native-oct8/en-menu/frames
