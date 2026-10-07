@@ -1,0 +1,24 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.62s
+     Running unittests src/lib.rs (target/debug/deps/bevy_audio-0d0a081b677cdaf1)
+
+running 17 tests
+test audio_recovery::tests::initial_device_absence_retries_without_a_fault_or_game_clock ... ok
+test volume::tests::test_decibel_math_properties ... ok
+test audio_recovery::tests::failure_drops_once_and_retries_after_five_real_seconds ... ok
+test volume::tests::test_increase_by_percentage ... ok
+test sinks::tests::test_audio_sink ... ok
+test volume::tests::test_fade_towards ... ok
+test volume::tests::test_scale_to_factor ... ok
+test volume::tests::test_decrease_by_percentage ... ok
+test volume::tests::volume_ops_div ... ok
+test volume::tests::volume_conversion ... ok
+test volume::tests::volume_conversion_special ... ok
+test volume::tests::volume_ops_div_assign ... ok
+test audio_recovery::tests::repeated_poll_errors_emit_one_warning_and_mark_output_failed ... ok
+test volume::tests::volume_ops_mul ... ok
+test volume::tests::volume_ops_mul_assign ... ok
+test audio_recovery::tests::device_maintenance_is_bound_to_the_main_thread ... ok
+test audio_recovery::tests::failed_sink_detachment_preserves_loop_sources_and_playback_preferences ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

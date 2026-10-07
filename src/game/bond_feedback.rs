@@ -250,6 +250,7 @@ fn tick_celebration(
     }
 }
 fn show_next(
+    output: Option<Res<bevy::audio::AudioOutputStatus>>,
     mut commands: Commands,
     session: Res<GameSession>,
     language: Res<GameLanguage>,
@@ -402,7 +403,7 @@ fn show_next(
             );
         }
     }
-    if autoplay.is_none() {
+    if autoplay.is_none() && output.as_ref().is_none_or(|status| status.is_available()) {
         commands.spawn((
             AudioPlayer::new(server.load("audio/bond_complete.wav")),
             AudioVoice::new(AudioChannel::Effects, 0.55),

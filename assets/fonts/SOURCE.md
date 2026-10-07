@@ -10,13 +10,13 @@ UI so Chinese text does not depend on fonts installed on the player's device.
 - Source SHA-256: `a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da`
 - License source SHA-256: `babcfe66c8a098b2fa279bc724a3a342f8124f77ce18941fbcc1bbb39823cded`
 - Subsetter: fontTools `4.63.0`
-- Glyph corpus SHA-256: `389a125e156cc024069a20f54a44ba3a372cd54223823a42f7dd51d43ef36006`
-- Subset SHA-256: `2a6054178f20de9ce1d69b076a0aafcec7b297f6aadc429cc67edde5879fc6ca`
-- Subset size: 474,108 bytes
+- Glyph corpus SHA-256: `2603033464d47c75acf7fbec4c60602438d8248ef584553c15c4e703dca4bb01`
+- Subset SHA-256: `1b613fd7797a3ce1ce6eeb826568b669934ad267bd7836b5f4a5aae7df5681bf`
+- Subset size: 475,336 bytes
 - License: SIL Open Font License 1.1; see `OFL.txt`
 
-`glyphs.txt` contains the non-ASCII characters currently present in the Rust
-game sources and web entry page. Basic printable ASCII and non-breaking space
+`glyphs.txt` contains the non-ASCII characters in the player-facing source catalog
+(`localization.rs` → `PLAYER_FACING_SOURCES`), including the web entry page. Basic printable ASCII and non-breaking space
 are added explicitly. Regenerate this file from the localization catalog after
 changing player-facing copy, then rebuild and run the font coverage tests.
 

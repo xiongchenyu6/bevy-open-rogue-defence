@@ -17,6 +17,7 @@ enum Copy {
     MusicValue,
     EffectsValue,
     Mute,
+    DeviceStatus,
 }
 
 pub(super) fn install(app: &mut App) {
@@ -131,6 +132,17 @@ pub(super) fn spawn(parent: &mut ChildSpawnerCommands) {
                 });
             });
         });
+    parent.spawn((
+        Copy::DeviceStatus,
+        label("", 12.0, GOLD),
+        Node {
+            display: Display::None,
+            width: percent(100),
+            max_width: percent(100),
+            flex_shrink: 0.0,
+            ..default()
+        },
+    ));
 }
 
 fn button(parent: &mut ChildSpawnerCommands, control: Control, name: &'static str, text: &str) {
@@ -185,7 +197,8 @@ fn handle(
 fn update(
     audio: Res<AudioPreferences>,
     language: Res<GameLanguage>,
-    mut texts: Query<(&Copy, &mut Text)>,
+    output: Option<Res<bevy::audio::AudioOutputStatus>>,
+    mut texts: Query<(&Copy, &mut Text, Option<&mut Node>)>,
     mut buttons: Query<(
         &Control,
         &Interaction,
@@ -193,13 +206,29 @@ fn update(
         &mut BackgroundColor,
     )>,
 ) {
-    for (copy, mut text) in &mut texts {
+    let disconnected = output.as_ref().is_some_and(|status| !status.is_available());
+    for (copy, mut text, node) in &mut texts {
+        if matches!(copy, Copy::DeviceStatus)
+            && let Some(mut node) = node
+        {
+            node.reborrow()
+                .map_unchanged(|node| &mut node.display)
+                .set_if_neq(if disconnected {
+                    Display::Flex
+                } else {
+                    Display::None
+                });
+        }
         text.set_if_neq(Text(match copy {
             Copy::Music => language.pick("MUSIC", "音乐").into(),
             Copy::Effects => language.pick("EFFECTS", "效果音").into(),
             Copy::Sound => language.pick("SOUND", "声音").into(),
             Copy::MusicValue => format!("{}%", audio.music),
             Copy::EffectsValue => format!("{}%", audio.effects),
+            Copy::DeviceStatus => language.pick(
+                "Sound device unavailable. Check your output device; reconnecting automatically.",
+                "声音设备暂不可用，请检查输出设备；正在自动重连。",
+            ).into(),
             Copy::Mute => if audio.muted {
                 language.pick("Unmute", "开启声音")
             } else {
@@ -233,6 +262,48 @@ fn update(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn device_notice_tracks_availability_and_language_without_changing_volume() {
+        let mut app = App::new();
+        app.init_resource::<AudioPreferences>()
+            .init_resource::<GameLanguage>()
+            .init_resource::<bevy::audio::AudioOutputStatus>()
+            .add_systems(Update, update);
+        let notice = app
+            .world_mut()
+            .spawn((Copy::DeviceStatus, Text::default(), Node::default()))
+            .id();
+        app.update();
+        assert_eq!(
+            app.world().get::<Node>(notice).unwrap().display,
+            Display::Flex
+        );
+        assert!(
+            app.world()
+                .get::<Text>(notice)
+                .unwrap()
+                .0
+                .starts_with("Sound device unavailable")
+        );
+        let audio = *app.world().resource::<AudioPreferences>();
+        app.insert_resource(GameLanguage::SimplifiedChinese);
+        app.update();
+        assert!(
+            app.world()
+                .get::<Text>(notice)
+                .unwrap()
+                .0
+                .starts_with("声音设备暂不可用")
+        );
+        app.world_mut()
+            .remove_resource::<bevy::audio::AudioOutputStatus>();
+        app.update();
+        assert_eq!(
+            app.world().get::<Node>(notice).unwrap().display,
+            Display::None
+        );
+        assert_eq!(*app.world().resource::<AudioPreferences>(), audio);
+    }
     #[test]
     fn unchanged_audio_labels_are_clean_and_volume_language_changes_refresh() {
         use crate::game::settings::{TextRefreshProbe, count_text_refreshes};

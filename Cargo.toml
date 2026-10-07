@@ -38,3 +38,5 @@ strip = "debuginfo"
 # Parley 0.9 lacks the later complex-scripts feature; enable CJK dictionary segmentation.
 [patch.crates-io]
 parley = { path = "vendor/parley" }
+# Stop failed audio streams and recover devices without an ALSA error loop.
+bevy_audio = { path = "vendor/bevy_audio" }

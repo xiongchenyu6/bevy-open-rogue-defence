@@ -194,6 +194,7 @@ fn tick_notice(
 }
 
 fn show_next_notice(
+    output: Option<Res<bevy::audio::AudioOutputStatus>>,
     celebration: Option<Res<super::bond_feedback::BondCelebrationState>>,
     mut commands: Commands,
     session: Res<GameSession>,
@@ -280,7 +281,7 @@ fn show_next_notice(
     if let (Some(cues), Ok(hero)) = (cues.as_deref_mut(), hero.single()) {
         cues.push(HeroKind::SolarVanguard, hero.translation, Vec3::X, true);
     }
-    if autoplay.is_none() {
+    if autoplay.is_none() && output.as_ref().is_none_or(|status| status.is_available()) {
         commands.spawn((
             AudioPlayer::new(server.load("audio/draft.wav")),
             AudioVoice::new(AudioChannel::Effects, 0.45),

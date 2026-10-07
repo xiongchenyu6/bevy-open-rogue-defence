@@ -7,6 +7,9 @@ use super::hit_feedback::{HitFeedback, HitFeedbackSet, HitWeight};
 use super::ultimate_vfx::UltimateCues;
 use super::{Autoplay, BossEnemy, DraftRoot, Projectile};
 
+#[path = "audio_output_health.rs"]
+mod output_health;
+
 pub struct GameAudioPlugin;
 
 impl Plugin for GameAudioPlugin {
@@ -14,6 +17,7 @@ impl Plugin for GameAudioPlugin {
         app.init_resource::<GameAudio>()
             .init_resource::<AudioThrottle>()
             .init_resource::<HitAudioThrottle>()
+            .add_systems(First, output_health::discard_unavailable_effects)
             .add_systems(Startup, start_ambient)
             .add_systems(
                 Update,
@@ -149,8 +153,13 @@ fn play_feedback(
     projectiles: Query<(), Added<Projectile>>,
     drafts: Query<(), Added<DraftRoot>>,
     mut throttle: ResMut<AudioThrottle>,
+    output: Option<Res<bevy::audio::AudioOutputStatus>>,
 ) {
-    if autoplay.is_some() {
+    let crafting_revision = crafting.as_ref().map_or(0, |state| state.revision);
+    if autoplay.is_some() || output.as_ref().is_some_and(|status| !status.is_available()) {
+        // Consume cues while disconnected so recovery cannot replay old ultimates.
+        throttle.previous_ultimate_serial = cues.serial;
+        throttle.previous_crafting_revision = crafting_revision;
         return;
     }
     let delta = time.delta_secs();
@@ -159,7 +168,6 @@ fn play_feedback(
     if !bosses.is_empty() && ready(&mut throttle.boss, 0.35) {
         play_once(&mut commands, &audio.boss_spawn, 0.72);
     }
-    let crafting_revision = crafting.as_ref().map_or(0, |state| state.revision);
     if crafting_revision != throttle.previous_crafting_revision {
         play_once(&mut commands, &audio.draft, 0.65);
     }
@@ -185,8 +193,9 @@ fn play_hit_feedback(
     gate: Option<Res<GateImpact>>,
     autoplay: Option<Res<Autoplay>>,
     mut throttle: ResMut<HitAudioThrottle>,
+    output: Option<Res<bevy::audio::AudioOutputStatus>>,
 ) {
-    if autoplay.is_some() {
+    if autoplay.is_some() || output.as_ref().is_some_and(|status| !status.is_available()) {
         return;
     }
     throttle.tick(time.delta_secs());
@@ -350,6 +359,47 @@ mod tests {
             let shot = app.world().resource::<GameAudio>().shot.clone();
             assert_eq!(voice_count(&mut app, shot), 100, "speed={speed}");
         }
+    }
+
+    #[test]
+    fn disconnected_output_does_not_queue_shots_or_old_ultimate_cues() {
+        let mut app = feedback_app();
+        app.insert_resource(bevy::audio::AudioOutputStatus::default());
+        app.world_mut().resource_mut::<UltimateCues>().serial = 5;
+        for _ in 0..100 {
+            app.world_mut().spawn(Projectile {
+                velocity: Vec3::X,
+                damage: 1.0,
+                radius: 0.1,
+                remaining_hits: 1,
+                lifetime: 1.0,
+            });
+            advance_feedback(&mut app, 32.0);
+        }
+        assert_eq!(
+            app.world_mut()
+                .query::<&AudioVoice>()
+                .iter(app.world())
+                .count(),
+            0
+        );
+        assert_eq!(
+            app.world()
+                .resource::<AudioThrottle>()
+                .previous_ultimate_serial,
+            5
+        );
+        // After output becomes usable, consumed cues must not replay.
+        app.world_mut()
+            .remove_resource::<bevy::audio::AudioOutputStatus>();
+        advance_feedback(&mut app, 1.0);
+        assert_eq!(
+            app.world_mut()
+                .query::<&AudioVoice>()
+                .iter(app.world())
+                .count(),
+            0
+        );
     }
 
     #[test]
