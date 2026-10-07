@@ -1,0 +1,13 @@
+batch,policy,position,starter_class,chapter,training,cases,wins,losses,censored,finished_only_win_fraction,observed_wins_per_all_cases,mean_observed_game_seconds
+chapter-xp-middle-oct8,greedy-card-zero,behind,archer,1,0,2,2,0,0,1.0,1.0,1547.4525
+chapter-xp-middle-oct8,greedy-card-zero,behind,archer,2,0,2,2,0,0,1.0,1.0,1533.542
+chapter-xp-middle-oct8,greedy-card-zero,behind,archer,3,0,2,2,0,0,1.0,1.0,1540.805
+chapter-xp-middle-oct8,greedy-card-zero,behind,archer,4,0,2,2,0,0,1.0,1.0,1548.0349999999999
+chapter-xp-middle-oct8,greedy-card-zero,behind,mage,1,0,2,2,0,0,1.0,1.0,1538.973
+chapter-xp-middle-oct8,greedy-card-zero,behind,mage,2,0,2,2,0,0,1.0,1.0,1535.0430000000001
+chapter-xp-middle-oct8,greedy-card-zero,behind,mage,3,0,2,2,0,0,1.0,1.0,1538.5520000000001
+chapter-xp-middle-oct8,greedy-card-zero,behind,mage,4,0,2,2,0,0,1.0,1.0,1541.9855
+chapter-xp-middle-oct8,greedy-card-zero,behind,warrior,1,0,2,2,0,0,1.0,1.0,1544.369
+chapter-xp-middle-oct8,greedy-card-zero,behind,warrior,2,0,2,2,0,0,1.0,1.0,1533.751
+chapter-xp-middle-oct8,greedy-card-zero,behind,warrior,3,0,2,2,0,0,1.0,1.0,1547.8975
+chapter-xp-middle-oct8,greedy-card-zero,behind,warrior,4,0,2,2,0,0,1.0,1.0,1544.2345
