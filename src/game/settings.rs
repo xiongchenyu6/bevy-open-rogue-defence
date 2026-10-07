@@ -1,5 +1,6 @@
 //! Settings restores the prior pause and edits persisted player preferences.
 mod audio_controls;
+mod entry_layout;
 mod run_actions;
 pub use run_actions::SettingsDepartureInputSet;
 #[cfg(not(target_arch = "wasm32"))]
@@ -23,6 +24,7 @@ impl Plugin for SettingsPlugin {
     fn build(&self, app: &mut App) {
         audio_controls::install(app);
         run_actions::install(app);
+        entry_layout::install(app);
         #[cfg(not(target_arch = "wasm32"))]
         app.add_plugins(display_controls::DisplayControlsPlugin);
         app.init_resource::<SettingsState>()

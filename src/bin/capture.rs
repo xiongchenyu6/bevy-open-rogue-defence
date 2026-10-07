@@ -45,6 +45,9 @@ mod skill_identity_capture;
 #[path = "capture/ur_evolution.rs"]
 mod ur_evolution_capture;
 
+#[path = "capture/picker_settings.rs"]
+mod picker_settings_capture;
+
 #[path = "capture/onboarding.rs"]
 mod onboarding_capture;
 
@@ -498,7 +501,9 @@ fn main() {
         println!("[capture] render target warmed");
     }
 
-    if scenario.starts_with("onboarding-") {
+    if scenario == "picker-settings-layout" {
+        picker_settings_capture::install(&mut apps.main);
+    } else if scenario.starts_with("onboarding-") {
         onboarding_capture::install(&mut apps.main);
     } else if scenario == "campaign-save-retry" {
         campaign_save_retry_capture::install(&mut apps.main);
@@ -874,6 +879,10 @@ fn wait_for_screenshots(apps: &mut SubApps) {
 }
 
 fn configure_scenario(world: &mut World, scenario: &str) {
+    if scenario == "picker-settings-layout" {
+        picker_settings_capture::configure(world);
+        return;
+    }
     if scenario.starts_with("onboarding-") {
         onboarding_capture::configure(world, scenario);
         return;

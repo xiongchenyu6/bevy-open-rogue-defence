@@ -43,7 +43,7 @@ pub(super) fn load_art(mut commands: Commands, server: Res<AssetServer>) {
 #[derive(Component)]
 pub(super) struct DraftContent;
 #[derive(Component)]
-pub(super) struct DraftHeader;
+pub(in crate::game) struct DraftHeader;
 #[derive(Component)]
 pub(super) struct DraftGallery;
 #[derive(Component)]
@@ -205,6 +205,7 @@ pub(super) fn spawn_hero_selector(
                         ));
                         titles.spawn((
                             DraftHeading,
+                            Name::new("Commander selection heading"),
                             DraftCopy::Heading,
                             label(
                                 language.pick("Choose your commander", "选择你的指挥官"),
@@ -339,6 +340,7 @@ pub(super) fn spawn_hero_selector(
                 content
                     .spawn((
                         DraftFooter,
+                        Name::new("Commander details footer"),
                         Node {
                             width: percent(100),
                             flex_shrink: 0.0,

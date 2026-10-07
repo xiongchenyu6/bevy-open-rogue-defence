@@ -1,0 +1,55 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {14, 34, 99, 139, 179, 224, 259}; all 270 simulation/render updates retained
+[2m2026-10-07T21:24:08.489060Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.8", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/runtime/wayland-1" plus null terminator exceeds 108 bytes
+[2m2026-10-07T21:24:08.524254Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "llvmpipe (LLVM 21.1.8, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, device_pci_bus_id: "", driver: "llvmpipe", driver_info: "Mesa 26.2.4 (LLVM 21.1.8)", backend: Vulkan, subgroup_min_size: 8, subgroup_max_size: 8, transient_saves_memory: false }
+[2m2026-10-07T21:24:08.524293Z[0m [33m WARN[0m [2mbevy_render::renderer[0m[2m:[0m The selected adapter is using a driver that only supports software rendering. This is likely to be very slow. See https://bevy.org/learn/errors/b0006/
+[2m2026-10-07T21:24:08.694365Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-07T21:24:08.694442Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-10-07T21:24:08.873718Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+PICKER_SETTINGS_MODAL_PASS frame=15 cards=3 viewport=Vec2(667.0, 375.0) heading=(Vec2(24.0, 25.0), Vec2(539.0, 52.0)) settings=(Vec2(563.0, 8.0), Vec2(643.0, 52.0))
+[2m2026-10-07T21:24:13.523909Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/frames/frame00014.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/frames/frame00014.png (105073 bytes)
+PICKER_SETTINGS_RESIZE 1280x720
+PICKER_SETTINGS_MODAL_PASS frame=35 cards=3 viewport=Vec2(1280.0, 720.0) heading=(Vec2(40.0, 71.0), Vec2(1240.0, 115.0)) settings=(Vec2(600.0, 8.0), Vec2(680.0, 52.0))
+[2m2026-10-07T21:24:17.279516Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/frames/frame00034.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/frames/frame00034.png (361515 bytes)
+PICKER_SETTINGS_RESIZE 667x375
+PICKER_SETTINGS_MODAL_PASS frame=60 cards=3 viewport=Vec2(667.0, 375.0) heading=(Vec2(24.0, 25.0), Vec2(539.0, 52.0)) settings=(Vec2(563.0, 8.0), Vec2(643.0, 52.0))
+PICKER_SETTINGS_REAL_CLICK frame=70 Commander card 0
+PICKER_SETTINGS_NORMAL_PLACEMENT_PASS frame=80
+PICKER_SETTINGS_MODAL_PASS frame=100 cards=6 viewport=Vec2(667.0, 375.0) heading=(Vec2(24.0, 25.0), Vec2(539.0, 52.0)) settings=(Vec2(563.0, 8.0), Vec2(643.0, 52.0))
+[2m2026-10-07T21:24:26.423764Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/frames/frame00099.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/frames/frame00099.png (147895 bytes)
+PICKER_SETTINGS_REAL_CLICK frame=115 Commander card 1
+PICKER_SETTINGS_NORMAL_PLACEMENT_PASS frame=120
+PICKER_SETTINGS_MODAL_PASS frame=140 cards=6 viewport=Vec2(667.0, 375.0) heading=(Vec2(24.0, 25.0), Vec2(539.0, 52.0)) settings=(Vec2(563.0, 8.0), Vec2(643.0, 52.0))
+[2m2026-10-07T21:24:31.596251Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/frames/frame00139.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/frames/frame00139.png (150225 bytes)
+PICKER_SETTINGS_REAL_CLICK frame=155 Commander card 2
+PICKER_SETTINGS_NORMAL_PLACEMENT_PASS frame=160
+PICKER_SETTINGS_MODAL_PASS frame=180 cards=6 viewport=Vec2(667.0, 375.0) heading=(Vec2(24.0, 25.0), Vec2(539.0, 52.0)) settings=(Vec2(563.0, 8.0), Vec2(643.0, 52.0))
+[2m2026-10-07T21:24:36.900805Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/frames/frame00179.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/frames/frame00179.png (147964 bytes)
+PICKER_SETTINGS_REAL_CLICK frame=195 Commander card 3
+PICKER_SETTINGS_NORMAL_PLACEMENT_PASS frame=200
+PICKER_SETTINGS_REAL_CLICK frame=210 Fruit recruit
+PICKER_SETTINGS_MODAL_PASS frame=225 cards=6 viewport=Vec2(667.0, 375.0) heading=(Vec2(24.0, 25.0), Vec2(539.0, 52.0)) settings=(Vec2(563.0, 8.0), Vec2(643.0, 52.0))
+[2m2026-10-07T21:24:42.687336Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/frames/frame00224.png
+[capture] saved 6/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/frames/frame00224.png (150480 bytes)
+PICKER_SETTINGS_REAL_CLICK frame=240 Commander card 5
+PICKER_SETTINGS_NORMAL_PLACEMENT_PASS frame=250
+PICKER_SETTINGS_REAL_CLICK frame=255 Settings open
+PICKER_SETTINGS_ACTUAL_OPEN_PASS
+[2m2026-10-07T21:24:47.401934Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/frames/frame00259.png
+[capture] saved 7/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/frames/frame00259.png (25169 bytes)
+PICKER_SETTINGS_REAL_CLICK frame=265 Settings close
+PICKER_SETTINGS_NORMAL_PLACEMENT_PASS frame=270
+PICKER_SETTINGS_LAYOUT_PASS actual initial/milestone/fruit choices, resize, footer and Settings restore
+[capture] all 7 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 270 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/picker-layout-native-oct8/zh-CN-667x375/frames

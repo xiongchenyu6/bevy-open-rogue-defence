@@ -78,7 +78,7 @@ struct HeroSelectButton;
 struct HeroSelectorStatusPanel;
 
 #[derive(Component)]
-struct HeroSelectorRoot;
+pub(super) struct HeroSelectorRoot;
 
 #[derive(Component)]
 pub(super) struct HeroChoiceButton(HeroOffer);
