@@ -1,0 +1,27 @@
+{
+  "current_frames": 1360,
+  "current_images_reviewed_by_root": 4,
+  "previous_full_tests": "593 passed,0 failed,1 ignored before equivalent collapsible-if syntax and material/spore size follow-up",
+  "final_targeted_tests": "dense infection bounded/pause/cleanup:1 passed",
+  "source_sha256": {
+    "src/game/skills/presentation.rs": "92cc3078488f0b80f0b90ada47f1e96f42b19e72cdfda21bee5e7a21600abfa5",
+    "src/game/skills/spectacle.rs": "65ef31721503e1c4743f824f14d9b56db409fb47c5ca203f02fa3a17e6739e1a"
+  },
+  "files": {
+    "before-frame00299.png": "87d12c71e4b43080ff4f06264563c578255b55bf1525063e28410c70cfacc291",
+    "before-frame00599.png": "4ef52e627cd39cebf29466706e8b36c1e01430cb5b329d2f99004249236e91b6",
+    "build.log": "772261b5241d879a809406123c2fa974d5816f66aeab744c4bebf6afd3eece4f",
+    "clippy.log": "abaad1f9773b6233b9ca184c7ca4e4b0c71e6040b2cacec38351f1b691ad2be2",
+    "format.log": "e36e1c53f56e344362938e79a430194927b1970a78b5c7ac77b25e960d4bc752",
+    "skill-spectacle-combo/capture.log": "c471db72145d23d619c626098bcb3ae1dac6f8eb7fc5c9417302a17f88b3fbbd",
+    "skill-spectacle-combo/frame00299.png": "025699b776904e463f05e8691f989285aa2b79005307aa275866fdfb5fa09ab2",
+    "skill-spectacle-combo/frame00599.png": "10934d66ff225c596dc198772e1a703f65d7f490cb4842751a9b2205b6f8f0b8",
+    "skill-spectacle-combo/timings.csv": "9bf2cc900c1a860fa750cfaed3e3ce6efe1867ffaaac440123a81c9e1f9bd9d8",
+    "skill-spectacle-virus/capture.log": "61cbb4d434c96a925c0aaed99faaba773e8fb67821404ef58556ccd8b0698799",
+    "skill-spectacle-virus/frame00299.png": "51e6a940bcf9eaf0127c95e92dfd1c8061ed1ef457b3e16909d1c07f71222d2d",
+    "skill-spectacle-virus/frame00599.png": "588721f5cf271a81575182640c2b0665484a1a5659e1e680a55e1ce8d3b491c4",
+    "skill-spectacle-virus/timings.csv": "7f37513e2021a79f103509808db272de1bff9ee3747343b7955fcca9e4f0ecdc",
+    "targeted-tests.log": "83536fb8d9e83f6b012b7978c6337a156db67c5d9157fba2d045a7c7fead63ba",
+    "tests.log": "eda33d60e4d174b2bf8474c5148c5f9a27487cfdba67c4ca85e11579c10d29bd"
+  }
+}

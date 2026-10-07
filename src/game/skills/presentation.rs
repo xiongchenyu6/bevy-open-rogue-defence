@@ -95,16 +95,19 @@ fn setup(
         (0.18, 0.8, 1.0),
         (0.65, 0.45, 1.0),
         (0.01, 0.95, 0.85),
-        (0.24, 1.0, 0.025),
+        (0.12, 0.82, 0.38),
         (1.0, 0.68, 0.12),
         (1.0, 0.13, 0.75),
         (0.75, 0.88, 1.0),
     ]
     .into_iter()
-    .map(|(r, g, b)| {
+    .enumerate()
+    .map(|(index, (r, g, b))| {
+        let infection = index == Motif::Virus.color();
+        let intensity = if infection { 6.0 } else { 10.0 };
         materials.add(StandardMaterial {
-            base_color: Color::srgb(r, g, b),
-            emissive: LinearRgba::new(r * 10.0, g * 10.0, b * 10.0, 1.0),
+            base_color: Color::srgba(r, g, b, if infection { 0.72 } else { 1.0 }),
+            emissive: LinearRgba::new(r * intensity, g * intensity, b * intensity, 1.0),
             unlit: true,
             alpha_mode: AlphaMode::Blend,
             cull_mode: None,
@@ -268,35 +271,24 @@ impl Painter<'_, '_, '_> {
                 }
             }
             Motif::Virus => {
+                // Spores move outside the actor silhouette, never through its face.
                 for i in 0..count {
                     let angle = phase + i as f32 * std::f32::consts::TAU / count as f32;
-                    let offset = radial(angle) * 0.65 * size;
-                    let end = position + offset + Vec3::Y * (0.4 + angle.sin() * 0.3);
-                    self.beam(
-                        motif,
-                        position + Vec3::Y * 0.3,
-                        position + offset * 0.45 + Vec3::Y * 0.7,
-                        0.045,
-                        0.30,
-                    );
-                    self.beam(
-                        motif,
-                        position + offset * 0.45 + Vec3::Y * 0.7,
-                        end,
-                        0.04,
-                        0.30,
-                    );
+                    let offset = radial(angle) * 0.75 * size;
                     self.emit(
                         motif,
-                        self.art.sphere.clone(),
-                        end,
-                        Vec3::splat(0.13 * size),
-                        Quat::IDENTITY,
-                        offset * 0.55 + Vec3::Y * 0.45,
-                        0.65,
-                        2.0,
-                        0.4,
+                        self.art.shard.clone(),
+                        position + offset + Vec3::Y * 0.18,
+                        Vec3::new(0.12, 0.35, 0.12) * size,
+                        Quat::from_rotation_z(angle.sin() * 0.4),
+                        radial(angle + std::f32::consts::FRAC_PI_2) * 0.35 + Vec3::Y * 0.65,
+                        0.42,
+                        1.0,
+                        -0.3,
                     );
+                }
+                if large {
+                    self.ring(motif, position.with_y(0.12), 0.85 * size, 0.35, 0.5);
                 }
             }
             Motif::Buff => {
@@ -563,19 +555,9 @@ fn present(
         {
             painter.burst(Motif::Water, position, 1, clock.phase, false);
         }
-        if let Some(infection) = infection.filter(|infection| infection.remaining() > 0.0) {
-            if clock.frame.is_multiple_of(4) {
-                spectacle::impact(
-                    &mut painter,
-                    18,
-                    position,
-                    position,
-                    0.8,
-                    infection.rank(),
-                    clock.phase,
-                    None,
-                );
-            }
+        if let Some(infection) = infection.filter(|infection| infection.remaining() > 0.0)
+            && clock.frame % 3 == 1
+        {
             painter.burst(
                 Motif::Virus,
                 position,

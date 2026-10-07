@@ -332,18 +332,8 @@ pub(super) fn impact(
             lightning(p, at + Vec3::Y * 1.3, at, Motif::Shock, 0.08);
         }
         18 => {
-            p.emit(
-                Motif::Virus,
-                p.art.helix.clone(),
-                at,
-                Vec3::new(0.65, 0.6, 0.65) * scale,
-                Quat::IDENTITY,
-                Vec3::Y * 0.15,
-                0.6,
-                -3.0,
-                0.2,
-            );
-            star(p, Motif::Virus, at + Vec3::Y * 0.3, 0.9, phase, 5);
+            p.ring(Motif::Virus, at.with_y(0.12), 0.7 * scale, 0.4, 0.7);
+            p.burst(Motif::Virus, at, rank, phase, true);
         }
         19 => {
             for i in 0..3 {
