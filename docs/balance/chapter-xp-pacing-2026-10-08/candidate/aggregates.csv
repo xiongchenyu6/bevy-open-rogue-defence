@@ -1,0 +1,7 @@
+batch,policy,position,starter_class,chapter,training,cases,wins,losses,censored,finished_only_win_fraction,observed_wins_per_all_cases,mean_observed_game_seconds
+chapter-xp-candidate-oct8,greedy-card-zero,behind,archer,0,0,2,2,0,0,1.0,1.0,1539.0605
+chapter-xp-candidate-oct8,greedy-card-zero,behind,archer,5,0,2,2,0,0,1.0,1.0,1539.2245
+chapter-xp-candidate-oct8,greedy-card-zero,behind,mage,0,0,2,2,0,0,1.0,1.0,1522.5805
+chapter-xp-candidate-oct8,greedy-card-zero,behind,mage,5,0,2,1,1,0,0.5,0.5,1154.063
+chapter-xp-candidate-oct8,greedy-card-zero,behind,warrior,0,0,2,2,0,0,1.0,1.0,1538.791
+chapter-xp-candidate-oct8,greedy-card-zero,behind,warrior,5,0,2,1,1,0,0.5,0.5,972.5604999999999

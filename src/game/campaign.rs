@@ -7,7 +7,7 @@ pub struct Chapter {
     pub duration: f32,
     pub health_scale: f32,
     pub damage_scale: f32,
-    pub reward_scale: f32,
+    pub gold_scale: f32,
 }
 pub fn chapter(stage: usize) -> Chapter {
     let n = stage.min(CHAPTER_COUNT - 1) as f32;
@@ -15,7 +15,7 @@ pub fn chapter(stage: usize) -> Chapter {
         duration: 1500.0,
         health_scale: 1.0 + n * 0.65 + n * n * 0.18,
         damage_scale: 1.0 + n * 0.25,
-        reward_scale: 1.0 + n * 0.2,
+        gold_scale: 1.0 + n * 0.2,
     }
 }
 #[derive(Resource, Default, Debug)]
@@ -39,6 +39,7 @@ impl Plugin for CampaignPlugin {
             );
     }
 }
+/// Chapter difficulty rewards more gold, not faster in-run stat growth.
 /// Tower and gold challenge enemies keep their fixed tables in every chapter:
 /// they are the DPS exam. Waves, bosses and the archive imprint scale.
 pub(super) fn scale_enemies(
@@ -56,8 +57,7 @@ pub(super) fn scale_enemies(
         enemy.hp *= difficulty.health_scale;
         enemy.max_hp *= difficulty.health_scale;
         enemy.damage *= difficulty.damage_scale;
-        enemy.xp = (enemy.xp as f32 * difficulty.reward_scale).round() as u32;
-        enemy.gold = (enemy.gold as f32 * difficulty.reward_scale).round() as u32;
+        enemy.gold = (enemy.gold as f32 * difficulty.gold_scale).round() as u32;
     }
 }
 #[cfg(test)]
@@ -80,7 +80,7 @@ mod tests {
             if stage > 0 {
                 assert!(chapter(stage).health_scale > chapter(stage - 1).health_scale);
                 assert!(chapter(stage).damage_scale > chapter(stage - 1).damage_scale);
-                assert!(chapter(stage).reward_scale > chapter(stage - 1).reward_scale);
+                assert!(chapter(stage).gold_scale > chapter(stage - 1).gold_scale);
             }
         }
     }
@@ -113,7 +113,7 @@ mod tests {
         let enemy = app.world().get::<Enemy>(entity).unwrap();
         assert!((enemy.hp - 302.0).abs() < 0.01);
         assert_eq!(enemy.damage, 15.0);
-        assert_eq!(enemy.xp, 14);
+        assert_eq!(enemy.xp, 10);
         assert_eq!(enemy.gold, 14);
         assert_eq!(
             app.world()
