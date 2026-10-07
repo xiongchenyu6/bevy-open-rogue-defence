@@ -131,6 +131,16 @@ fn metrics(width: f32, height: f32, count: usize) -> Metrics {
     }
 }
 
+// Portraits are authored at 384×480. Keep the complete image inside the
+// card's bordered art area, with four pixels of breathing room on every edge.
+fn portrait_size(m: &Metrics) -> Vec2 {
+    let caption = if m.compact || m.portrait { 60.0 } else { 74.0 };
+    let height = (m.card_height - caption - 12.0)
+        .max(0.0)
+        .min((m.card_width - 12.0).max(0.0) / 0.8);
+    Vec2::new(height * 0.8, height)
+}
+
 fn label(text: impl Into<String>, size: f32, color: Color) -> impl Bundle {
     (
         Text::new(text),
@@ -515,14 +525,13 @@ pub(super) fn update_layout(
                 .set_if_neq(px(m.card_height));
         }
         if portrait {
-            let art_height = m.card_height - if m.compact || m.portrait { 60.0 } else { 74.0 };
-            let h = (m.card_width * 1.65).min(art_height + 12.0);
+            let size = portrait_size(&m);
             node.reborrow()
                 .map_unchanged(|value| &mut value.width)
-                .set_if_neq(px(h * 0.8));
+                .set_if_neq(px(size.x));
             node.reborrow()
                 .map_unchanged(|value| &mut value.height)
-                .set_if_neq(px(h));
+                .set_if_neq(px(size.y));
             node.reborrow()
                 .map_unchanged(|value| &mut value.flex_shrink)
                 .set_if_neq(0.0);
@@ -755,6 +764,11 @@ mod tests {
                 assert!(m.card_height >= 160.0);
                 assert!(m.card_width * cols + m.gap * (cols - 1.0) <= m.width + 0.01);
                 assert!(m.height <= height);
+                let image = portrait_size(&m);
+                let caption = if m.compact || m.portrait { 60.0 } else { 74.0 };
+                assert!(image.min_element() > 0.0);
+                assert!(image.x <= m.card_width - 4.0);
+                assert!(image.y <= m.card_height - caption - 4.0);
             }
         }
     }

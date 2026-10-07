@@ -1,0 +1,53 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {14, 99, 224}; all 270 simulation/render updates retained
+[2m2026-10-07T22:22:14.578652Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.8", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/portrait-hardware-oct8/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/portrait-hardware-oct8/runtime/wayland-1" plus null terminator exceeds 108 bytes
+[2m2026-10-07T22:22:14.865896Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.71.09", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-10-07T22:22:15.264592Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-07T22:22:15.264669Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-10-07T22:22:15.423670Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+PICKER_SETTINGS_PORTRAIT_FIT_PASS frame=15 actual_images=3
+PICKER_SETTINGS_MODAL_PASS frame=15 cards=3 viewport=Vec2(390.0, 844.0) heading=(Vec2(16.0, 74.0), Vec2(374.0, 101.0)) settings=(Vec2(155.0, 8.0), Vec2(235.0, 52.0))
+[2m2026-10-07T22:22:16.356093Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/portrait-hardware-oct8/frames/frame00014.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/portrait-hardware-oct8/frames/frame00014.png (85198 bytes)
+PICKER_SETTINGS_RESIZE 640x360
+PICKER_SETTINGS_PORTRAIT_FIT_PASS frame=35 actual_images=3
+PICKER_SETTINGS_MODAL_PASS frame=35 cards=3 viewport=Vec2(640.0, 360.0) heading=(Vec2(24.0, 25.0), Vec2(512.0, 52.0)) settings=(Vec2(536.0, 8.0), Vec2(616.0, 52.0))
+PICKER_SETTINGS_RESIZE 390x844
+PICKER_SETTINGS_PORTRAIT_FIT_PASS frame=60 actual_images=3
+PICKER_SETTINGS_MODAL_PASS frame=60 cards=3 viewport=Vec2(390.0, 844.0) heading=(Vec2(16.0, 74.0), Vec2(374.0, 101.0)) settings=(Vec2(155.0, 8.0), Vec2(235.0, 52.0))
+PICKER_SETTINGS_REAL_CLICK frame=70 Commander card 0
+PICKER_SETTINGS_NORMAL_PLACEMENT_PASS frame=80
+PICKER_SETTINGS_PORTRAIT_FIT_PASS frame=100 actual_images=6
+PICKER_SETTINGS_MODAL_PASS frame=100 cards=6 viewport=Vec2(390.0, 844.0) heading=(Vec2(16.0, 74.0), Vec2(374.0, 101.0)) settings=(Vec2(155.0, 8.0), Vec2(235.0, 52.0))
+[2m2026-10-07T22:22:17.081607Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/portrait-hardware-oct8/frames/frame00099.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/portrait-hardware-oct8/frames/frame00099.png (133312 bytes)
+PICKER_SETTINGS_REAL_CLICK frame=115 Commander card 1
+PICKER_SETTINGS_NORMAL_PLACEMENT_PASS frame=120
+PICKER_SETTINGS_PORTRAIT_FIT_PASS frame=140 actual_images=6
+PICKER_SETTINGS_MODAL_PASS frame=140 cards=6 viewport=Vec2(390.0, 844.0) heading=(Vec2(16.0, 74.0), Vec2(374.0, 101.0)) settings=(Vec2(155.0, 8.0), Vec2(235.0, 52.0))
+PICKER_SETTINGS_REAL_CLICK frame=155 Commander card 2
+PICKER_SETTINGS_NORMAL_PLACEMENT_PASS frame=160
+PICKER_SETTINGS_PORTRAIT_FIT_PASS frame=180 actual_images=6
+PICKER_SETTINGS_MODAL_PASS frame=180 cards=6 viewport=Vec2(390.0, 844.0) heading=(Vec2(16.0, 74.0), Vec2(374.0, 101.0)) settings=(Vec2(155.0, 8.0), Vec2(235.0, 52.0))
+PICKER_SETTINGS_REAL_CLICK frame=195 Commander card 3
+PICKER_SETTINGS_NORMAL_PLACEMENT_PASS frame=200
+PICKER_SETTINGS_REAL_CLICK frame=210 Fruit recruit
+PICKER_SETTINGS_PORTRAIT_FIT_PASS frame=225 actual_images=6
+PICKER_SETTINGS_MODAL_PASS frame=225 cards=6 viewport=Vec2(390.0, 844.0) heading=(Vec2(16.0, 74.0), Vec2(374.0, 101.0)) settings=(Vec2(155.0, 8.0), Vec2(235.0, 52.0))
+[2m2026-10-07T22:22:18.065165Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/portrait-hardware-oct8/frames/frame00224.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/portrait-hardware-oct8/frames/frame00224.png (133789 bytes)
+PICKER_SETTINGS_REAL_CLICK frame=240 Commander card 5
+PICKER_SETTINGS_NORMAL_PLACEMENT_PASS frame=250
+PICKER_SETTINGS_REAL_CLICK frame=255 Settings open
+PICKER_SETTINGS_ACTUAL_OPEN_PASS
+PICKER_SETTINGS_REAL_CLICK frame=265 Settings close
+PICKER_SETTINGS_NORMAL_PLACEMENT_PASS frame=270
+PICKER_SETTINGS_LAYOUT_PASS actual initial/milestone/fruit choices, resize, footer and Settings restore
+[capture] all 3 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 270 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/portrait-hardware-oct8/frames

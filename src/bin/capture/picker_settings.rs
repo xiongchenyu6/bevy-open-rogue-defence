@@ -180,8 +180,34 @@ fn audit(world: &mut World) {
                 "real choice remains clickable"
             );
             inside(rect(world, e), viewport, name.as_str());
+            let art_area = *world
+                .get::<Children>(e)
+                .expect("actual card children")
+                .first()
+                .expect("actual art area");
+            let portrait = *world
+                .get::<Children>(art_area)
+                .expect("actual art area children")
+                .first()
+                .expect("actual portrait image");
+            assert!(
+                world.get::<ImageNode>(portrait).is_some(),
+                "first art child must be the real image"
+            );
+            let area = rect(world, art_area);
+            let image = rect(world, portrait);
+            assert!(
+                image.0.cmpge(area.0 - Vec2::ONE).all() && image.1.cmple(area.1 + Vec2::ONE).all(),
+                "{name} portrait clipped: image={image:?}, art_area={area:?}"
+            );
+            let size = world.get::<ComputedNode>(portrait).unwrap().size();
+            assert!(
+                size.y > 0.0 && (size.x / size.y - 0.8).abs() <= 0.02,
+                "{name} real portrait aspect ratio must remain .8, got {size:?}"
+            );
         }
         assert_eq!(cards, expected, "actual initial/late offer counts");
+        println!("PICKER_SETTINGS_PORTRAIT_FIT_PASS frame={frame} actual_images={cards}");
         assert!(world.resource::<GameSession>().paused);
         let center = (s.0 + s.1) * 0.5;
         let expected_x = if viewport.y < 540.0 {
