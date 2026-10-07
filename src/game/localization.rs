@@ -54,7 +54,7 @@ impl GameLanguage {
 }
 
 #[derive(Resource, Clone)]
-struct UiFont(Handle<Font>);
+pub(super) struct UiFont(pub(super) Handle<Font>);
 
 impl FromWorld for UiFont {
     fn from_world(world: &mut World) -> Self {
@@ -73,7 +73,11 @@ impl Plugin for LocalizationPlugin {
     }
 }
 
-fn apply_ui_font(added: On<Add, TextFont>, ui_font: Res<UiFont>, mut fonts: Query<&mut TextFont>) {
+fn apply_ui_font(
+    added: On<Add, TextFont>,
+    ui_font: Res<UiFont>,
+    mut fonts: Query<&mut TextFont, Without<super::asset_readiness::LoadingFallback>>,
+) {
     if let Ok(mut font) = fonts.get_mut(added.entity) {
         font.font = ui_font.0.clone().into();
     }
@@ -230,6 +234,7 @@ mod tests {
 
     const UI_FONT_BYTES: &[u8] = include_bytes!("../../assets/fonts/rogue_commander_ui.ttf");
     const PLAYER_FACING_SOURCES: &[&str] = &[
+        include_str!("asset_readiness.rs"),
         include_str!("content.rs"),
         include_str!("bond_catalog.rs"),
         include_str!("bond_catalog/expanded.rs"),

@@ -14,9 +14,9 @@ const EDGE: Color = Color::srgb(0.25, 0.30, 0.31);
 const PANEL: Color = Color::srgb(0.055, 0.078, 0.086);
 
 #[derive(Resource, Default)]
-pub(super) struct DraftArt {
-    portraits: [Handle<Image>; HeroKind::COUNT],
-    backdrop: Handle<Image>,
+pub(in crate::game) struct DraftArt {
+    pub(in crate::game) portraits: [Handle<Image>; HeroKind::COUNT],
+    pub(in crate::game) backdrop: Handle<Image>,
 }
 
 pub(super) fn load_art(mut commands: Commands, server: Res<AssetServer>) {

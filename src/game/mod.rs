@@ -2,6 +2,8 @@
 
 use bevy::prelude::*;
 
+mod asset_readiness;
+pub use asset_readiness::{AssetReadiness, AssetReadinessInputSet, AssetReadinessPlugin};
 mod adventure_vfx;
 mod archive;
 mod arena;

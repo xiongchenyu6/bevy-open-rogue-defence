@@ -1,0 +1,45 @@
+{
+  "source_base_commit": "f90f579",
+  "library": {
+    "passed": 585,
+    "failed": 0,
+    "ignored": 1
+  },
+  "strict_all_target_clippy": true,
+  "native_exit_codes": [
+    0,
+    0,
+    0
+  ],
+  "native_frames": 450,
+  "sizes": [
+    "1280x720 en",
+    "1280x720 zh-CN",
+    "640x360 en"
+  ],
+  "reviewed_images": 9,
+  "actual_required_handles": 24,
+  "actual_backdrop_reads": 2,
+  "scope": "CPU asset dependencies and actual initial recruitment gate; controlled offscreen software Vulkan. Native late recruitment, unavailable-font fallback, real hardware/GPU readiness and final Steam release are not proven.",
+  "source_sha256": {
+    "src/game/asset_readiness.rs": "45b824882ffb955e725f3198ce1ec25f57a92e45f876c4cb38dfa0d76dd6e957",
+    "src/game/hero.rs": "239f6bb82862b0a41ed10b1d0dbc3dfbcdd04782bfac088b7a70692df4c69f3c",
+    "src/game/hero_draft.rs": "905b19e2c0d2a403afae07957e522d02e38079b06402e5fc059dc1afae946ba4",
+    "src/game/localization.rs": "052d8ab20cec40ed3b81061f29e2b1b59eb12805afd8ba51863a37447346a52c",
+    "src/game/mod.rs": "ae78a9a1a515ccdae499329b8aadcfd4941022a67819bda31c5bad6b53023935",
+    "src/lib.rs": "640145016d82b0cfdd94fb6b687c9c3297005455a00199578859fd2805fac5f8",
+    "src/bin/capture.rs": "92b34349b9c84a4efd5571cb470a7a4a105c34c2084ac2edbfb9491348d42600",
+    "src/bin/capture/asset_readiness.rs": "2f467a6f388527cd9bbbe32a94c44ab89fe0c93a72a71dad9491de1bb776c60c"
+  },
+  "images_sha256": {
+    "en-pending.png": "03a883948deaa6c17608d70b958fc8e4685659a5b6ae4cc2decb4e6460c05104",
+    "en-retrying.png": "03a883948deaa6c17608d70b958fc8e4685659a5b6ae4cc2decb4e6460c05104",
+    "zh-CN-retrying.png": "b71966c2221df4200be885da57586431cc044783e5370c6f6e8db9421971ca9a",
+    "zh-CN-ready.png": "50a2f30606bf94e23c523b23683e298956bb38154305462ffc2b66fc67444276",
+    "en-failed.png": "1747e975434b665307052ec817468b106bae8f582871eefe643d9d98afd5a12f",
+    "zh-CN-failed.png": "8c0db78b4b737d1758e77276719f1c5adbe4740cbd74327148c096a17653e99e",
+    "zh-CN-pending.png": "b71966c2221df4200be885da57586431cc044783e5370c6f6e8db9421971ca9a",
+    "en-ready.png": "6c97288a719dc068f072c819e36726db1a440361a9c14631616834f81b05a5ee",
+    "compact-en-failed.png": "9eb9278069280c9fdbc21f3dbb44615eb1d8a76ecadfdfa788813fa26d138009"
+  }
+}

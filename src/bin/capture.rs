@@ -45,6 +45,9 @@ mod skill_identity_capture;
 #[path = "capture/ur_evolution.rs"]
 mod ur_evolution_capture;
 
+#[path = "capture/asset_readiness.rs"]
+mod asset_readiness_capture;
+
 #[path = "capture/campaign_save_retry.rs"]
 mod campaign_save_retry_capture;
 
@@ -403,6 +406,9 @@ fn main() {
     });
 
     let mut app = App::new();
+    if scenario == "asset-readiness" {
+        asset_readiness_capture::prepare(&mut app);
+    }
     app.insert_resource(ClearColor(Color::srgb(0.015, 0.025, 0.045)))
         .insert_resource(TimeUpdateStrategy::ManualDuration(Duration::from_secs_f64(
             1.0 / 30.0,
@@ -434,6 +440,10 @@ fn main() {
         )
         .add_plugins(GamePlugin)
         .add_systems(PostUpdate, suppress_final_drafts);
+
+    if scenario == "asset-readiness" {
+        asset_readiness_capture::plugin(&mut app);
+    }
 
     if let Some(seed) = requested_seed {
         app.insert_resource(RunSeed(seed));
@@ -472,8 +482,15 @@ fn main() {
     // Publish the render-target asset to the render world before a long
     // main-world-only simulation. Pause gameplay during this startup/render
     // frame so it cannot consume any of the requested simulation time.
-    warm_render_target(&mut apps);
-    println!("[capture] render target warmed");
+    if scenario == "asset-readiness" {
+        asset_readiness_capture::install(&mut apps.main);
+        println!(
+            "[capture] readiness scenario retains cold-start asset loading; no preload warm-up"
+        );
+    } else {
+        warm_render_target(&mut apps);
+        println!("[capture] render target warmed");
+    }
 
     if scenario == "campaign-save-retry" {
         campaign_save_retry_capture::install(&mut apps.main);
@@ -849,6 +866,10 @@ fn wait_for_screenshots(apps: &mut SubApps) {
 }
 
 fn configure_scenario(world: &mut World, scenario: &str) {
+    if scenario == "asset-readiness" {
+        asset_readiness_capture::configure(world);
+        return;
+    }
     if scenario == "campaign-save-retry" {
         campaign_save_retry_capture::configure(world);
         return;

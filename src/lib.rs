@@ -42,7 +42,8 @@ pub fn build_app() -> App {
         .insert_resource(game::RunRng::from_seed(run_seed))
         .insert_resource(language)
         .add_plugins(default_plugins)
-        .add_plugins(game::GamePlugin);
+        .add_plugins(game::GamePlugin)
+        .add_plugins(game::AssetReadinessPlugin);
 
     #[cfg(target_os = "android")]
     app.insert_resource(bevy::winit::WinitSettings::mobile());

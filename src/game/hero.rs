@@ -15,7 +15,7 @@ use super::{
 };
 
 #[path = "hero_draft.rs"]
-mod draft;
+pub(super) mod draft;
 use draft::spawn_hero_selector;
 
 pub struct HeroPlugin;
@@ -81,7 +81,12 @@ struct HeroSelectorStatusPanel;
 struct HeroSelectorRoot;
 
 #[derive(Component)]
-struct HeroChoiceButton(HeroOffer);
+pub(super) struct HeroChoiceButton(HeroOffer);
+impl HeroChoiceButton {
+    pub(super) fn kind(&self) -> HeroKind {
+        self.0.kind
+    }
+}
 #[derive(Component)]
 struct HeroChoiceOrdinal(usize);
 
@@ -211,6 +216,7 @@ struct HeroChoiceInput<'w> {
     keyboard: Option<ResMut<'w, ButtonInput<KeyCode>>>,
     mouse: Option<Res<'w, ButtonInput<MouseButton>>>,
     touches: Option<Res<'w, Touches>>,
+    readiness: Option<Res<'w, super::AssetReadiness>>,
 }
 fn handle_hero_choice(
     mut commands: Commands,
@@ -230,7 +236,14 @@ fn handle_hero_choice(
     autoplay: Option<Res<Autoplay>>,
     mut inheritance: RecruitmentInheritance,
 ) {
-    if state.root.is_none() {
+    if state.root.is_none() || input.readiness.as_ref().is_some_and(|gate| !gate.ready) {
+        return;
+    }
+    if input.readiness.as_ref().is_some_and(|gate| {
+        ordinals
+            .iter()
+            .any(|(button, _)| !gate.heroes.contains(&button.kind()))
+    }) {
         return;
     }
     let held = input
@@ -657,6 +670,38 @@ mod tests {
         app.update();
     }
 
+    #[test]
+    fn loading_gate_blocks_recruitment_button_and_keyboard_until_ready() {
+        let mut app = recruitment_app(10);
+        app.update();
+        let old = app.world().resource::<SelectedHero>().kind;
+        app.insert_resource(super::super::AssetReadiness::default());
+        let mut keys = ButtonInput::<KeyCode>::default();
+        keys.press(KeyCode::Digit1);
+        app.insert_resource(keys);
+        click_recruit(&mut app);
+        assert_eq!(app.world().resource::<SelectedHero>().kind, old);
+        assert!(app.world().resource::<HeroState>().root.is_some());
+        assert!(app.world().resource::<GameSession>().paused);
+        app.world_mut()
+            .resource_mut::<ButtonInput<KeyCode>>()
+            .clear();
+        let heroes: Vec<_> = app
+            .world_mut()
+            .query::<&HeroChoiceButton>()
+            .iter(app.world())
+            .map(|button| button.kind())
+            .collect();
+        {
+            let mut gate = app
+                .world_mut()
+                .resource_mut::<super::super::AssetReadiness>();
+            gate.ready = true;
+            gate.heroes = heroes;
+        }
+        click_recruit(&mut app);
+        assert_ne!(app.world().resource::<SelectedHero>().kind, old);
+    }
     #[test]
     fn milestone_recruitment_queues_ten_twenty_forty_once_each() {
         let mut app = recruitment_app(40);
@@ -1189,4 +1234,11 @@ mod live_language_tests {
             );
         }
     }
+}
+
+pub(super) fn initial_offer_kinds(seed: u64) -> Vec<HeroKind> {
+    roll_hero_offers(seed, 0)
+        .into_iter()
+        .map(|offer| offer.kind)
+        .collect()
 }
