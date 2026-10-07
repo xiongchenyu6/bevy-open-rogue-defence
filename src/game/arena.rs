@@ -248,6 +248,8 @@ fn setup_arena(
         adventure_scenes,
         summon_scenes,
         projectile_mesh,
+        spirit_mesh: meshes.add(super::spirit_art::companion_mesh()),
+        spirit_material: materials.add(super::spirit_art::companion_material()),
         fx_mesh,
         enemy_material,
         enemy_materials,

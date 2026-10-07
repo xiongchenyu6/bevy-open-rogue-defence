@@ -736,6 +736,8 @@ mod tests {
             adventure_scenes: default(),
             summon_scenes: std::array::from_fn(|_| Handle::default()),
             projectile_mesh: Handle::default(),
+            spirit_mesh: default(),
+            spirit_material: default(),
             fx_mesh: Handle::default(),
             enemy_material: Handle::default(),
             enemy_materials: std::array::from_fn(|_| Handle::default()),

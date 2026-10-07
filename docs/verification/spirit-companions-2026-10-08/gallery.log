@@ -1,0 +1,31 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+error (ignored): SQLite database '/home/freeman.xiong/.cache/nix/eval-cache-v6/cc19c853b0358a3bd09ab832296552e91c8a773952836e7b9ee3392af17f66c4.sqlite' is busy
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+[capture] selective PNG frames: {99, 249}; all 300 simulation/render updates retained
+2026-10-07T16:45:47.722057Z  INFO bevy_diagnostic::system_information_diagnostics_plugin::internal: SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.8", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/spirit-art-verified-oct8/state/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/spirit-art-verified-oct8/state/runtime/wayland-1" plus null terminator exceeds 108 bytes
+2026-10-07T16:45:47.826119Z  INFO bevy_render::renderer: AdapterInfo { name: "llvmpipe (LLVM 21.1.8, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, device_pci_bus_id: "", driver: "llvmpipe", driver_info: "Mesa 26.2.4 (LLVM 21.1.8)", backend: Vulkan, subgroup_min_size: 8, subgroup_max_size: 8, transient_saves_memory: false }
+2026-10-07T16:45:47.826143Z  WARN bevy_render::renderer: The selected adapter is using a driver that only supports software rendering. This is likely to be very slow. See https://bevy.org/learn/errors/b0006/
+2026-10-07T16:45:48.135349Z  INFO bevy_pbr::cluster: GPU clustering is supported on this device.
+2026-10-07T16:45:48.135402Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
+2026-10-07T16:45:48.340018Z  WARN bevy_light: Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] PASS: six or more authored spirits from real passive/ultimate; actual damage
+2026-10-07T16:46:16.887230Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/spirit-art-verified-oct8/frames/frame00099.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/spirit-art-verified-oct8/frames/frame00099.png (988957 bytes)
+[capture] spirit combat positions: [Vec3(-2.3999999, 0.76086444, 0.0), Vec3(-1.4999999, 0.76086444, 0.0), Vec3(-1.9499999, 0.60632336, 0.7794229), Vec3(-2.85, 0.8828118, 0.7794228), Vec3(-3.2999997, 0.76086384, -7.86805e-8), Vec3(-2.8499997, 0.6063243, -0.7794229), Vec3(-1.9499999, 0.8828127, -0.7794229)]
+2026-10-07T16:46:56.711519Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/spirit-art-verified-oct8/frames/frame00249.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/spirit-art-verified-oct8/frames/frame00249.png (983950 bytes)
+[capture] all 2 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 300 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/spirit-art-verified-oct8/frames

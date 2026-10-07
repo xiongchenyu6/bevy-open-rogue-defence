@@ -1,0 +1,34 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+[capture] selective PNG frames: {509, 649}; all 680 simulation/render updates retained
+2026-10-07T16:45:47.722057Z  INFO bevy_diagnostic::system_information_diagnostics_plugin::internal: SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.8", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/spirit-art-verified-assault-oct8/state/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/spirit-art-verified-assault-oct8/state/runtime/wayland-1" plus null terminator exceeds 108 bytes
+2026-10-07T16:45:47.826029Z  INFO bevy_render::renderer: AdapterInfo { name: "llvmpipe (LLVM 21.1.8, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, device_pci_bus_id: "", driver: "llvmpipe", driver_info: "Mesa 26.2.4 (LLVM 21.1.8)", backend: Vulkan, subgroup_min_size: 8, subgroup_max_size: 8, transient_saves_memory: false }
+2026-10-07T16:45:47.826054Z  WARN bevy_render::renderer: The selected adapter is using a driver that only supports software rendering. This is likely to be very slow. See https://bevy.org/learn/errors/b0006/
+2026-10-07T16:45:48.135349Z  INFO bevy_pbr::cluster: GPU clustering is supported on this device.
+2026-10-07T16:45:48.135402Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
+2026-10-07T16:45:48.340030Z  WARN bevy_light: Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] PASS: all six summon types pursue and reach range; actual enemy HP decreased; closest=[0.7195046, 0.019999027, 3.8547876, 4.8582463, 1.55, 3.1800008]
+[capture] PASS: 7 active summon transforms frozen for 29 frames
+[capture] PASS: dead enemy replaced, all summons re-engage live target; walk=[true, true, true, true, true], attack=[true, true, true, true, true]
+[capture] PASS outside summon formation frame=510: active families=[true, true, true, true, true, true], east of wall, face entry; bone turret above wall
+2026-10-07T16:47:57.519990Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/spirit-art-verified-assault-oct8/frames/frame00509.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/spirit-art-verified-assault-oct8/frames/frame00509.png (1027667 bytes)
+[capture] PASS outside summon formation frame=650: active families=[true, true, true, true, false, true], east of wall, face entry; bone turret above wall
+[capture] PASS summon wall rebuild: idle frontline persists, finite-health wall restored
+2026-10-07T16:48:21.390707Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/spirit-art-verified-assault-oct8/frames/frame00649.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/spirit-art-verified-assault-oct8/frames/frame00649.png (1023150 bytes)
+[capture] all 2 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 680 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/spirit-art-verified-assault-oct8/frames

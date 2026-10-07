@@ -1,0 +1,38 @@
+{
+  "scope": "Native software-Vulkan appearance and production summon behavior; not hardware FPS or Steam release readiness",
+  "library": {
+    "passed": 579,
+    "failed": 0,
+    "ignored": 1
+  },
+  "strict_all_target_clippy": true,
+  "gallery_frames": 300,
+  "assault_frames": 680,
+  "native_exit_codes": [
+    0,
+    0
+  ],
+  "min_spirit_horizontal_spacing": 0.8999998,
+  "reviewed_images": [
+    "battle.png",
+    "idle.png",
+    "formation.png",
+    "rebuilt-wall.png"
+  ],
+  "source_sha256": {
+    "src/game/spirit_art.rs": "102403d8b382274645f1f0e0b0325e7115679e6675bf480fdbe09700bd0d6de5",
+    "src/game/hero_abilities.rs": "df12b91382714bf5a7562bf783d30ed35b513d525d07d0ed02c3616acc133df5",
+    "src/game/skill_lighting.rs": "41418b5dff06db6d5b1a5c9cc2c7bac8abc3838aa87a6aee66068cc28fa65dfa",
+    "src/game/pooling.rs": "984de997be8e68a7bc5c3904e1e40db4b5481714b136e80937d93e6a54b51cfe",
+    "src/game/arena.rs": "5f6fa2b736c2ea9779f4eb95b9cb1d7102ac55174e063696663405671f41429f",
+    "src/game/resources.rs": "ad1486274f08d704e4c1ec242d97b051eff346b9f50d2f865846af9a1d3d7439",
+    "src/bin/capture/spirit_gallery.rs": "ec2e41d1fc2857c5802fc3cfd401760c7cc5ea639113b834327a6101ccb52c75"
+  },
+  "image_sha256": {
+    "battle.png": "4da2dbcc8015069846cdf746347bba395669c4a411d4179c5cfc3353ff5d1ec9",
+    "idle.png": "012cbbc5e8fbb1857d5ec79d48e721b4a2810b285c258f2ea2f5f02de579764c",
+    "formation.png": "594361eae06cd0bf6d840ab0a280fcc5b9f5cd3af100cd13b36ee7db699c8113",
+    "before.png": "4d7ed9cd5407cd5a89f0e4a177019a573ad5c4074e481e087e6cdd7975c94852",
+    "rebuilt-wall.png": "9da87d07af89d86f0401089071a75f28a257d3641b01c43371865ef58765adb6"
+  }
+}

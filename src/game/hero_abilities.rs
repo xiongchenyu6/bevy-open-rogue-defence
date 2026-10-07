@@ -963,12 +963,32 @@ fn spawn_projectile_fan(
     for shot in 0..count.max(1) {
         let offset = shot as f32 - (count.max(1) as f32 - 1.0) * 0.5;
         let shot_direction = Quat::from_rotation_y(offset * 0.115) * direction;
+        let soul = kind == HeroKind::SpiritKeeper;
         let Some(entity) = pools.rent_projectile(
             commands,
-            assets.projectile_mesh.clone(),
-            assets.hero_materials[kind.index()].clone(),
+            if soul {
+                assets.spirit_mesh.clone()
+            } else {
+                assets.projectile_mesh.clone()
+            },
+            if soul {
+                assets.spirit_material.clone()
+            } else {
+                assets.hero_materials[kind.index()].clone()
+            },
             Transform::from_translation(origin + Vec3::Y * 0.35)
-                .with_scale(Vec3::splat(if count > 1 { 0.9 } else { 1.25 })),
+                .with_rotation(if soul && shot_direction.length_squared() > 0.5 {
+                    Quat::from_rotation_arc(Vec3::NEG_Z, shot_direction)
+                } else {
+                    Quat::IDENTITY
+                })
+                .with_scale(Vec3::splat(if soul {
+                    0.24
+                } else if count > 1 {
+                    0.9
+                } else {
+                    1.25
+                })),
             Projectile {
                 velocity: shot_direction * build.projectile_speed * 1.05,
                 damage,
@@ -982,6 +1002,11 @@ fn spawn_projectile_fan(
         commands
             .entity(entity)
             .insert((AbilityGenerated, ability_damage_profile(kind)));
+        if soul {
+            commands
+                .entity(entity)
+                .insert(super::skill_lighting::NoGroundProjection);
+        }
     }
 }
 
@@ -1069,18 +1094,25 @@ fn spawn_spirit(
     let entity = pools.rent_mesh_summon(
         commands,
         SummonVisual::SpiritOrbit,
-        assets.projectile_mesh.clone(),
-        assets.hero_materials[HeroKind::SpiritKeeper.index()].clone(),
+        assets.spirit_mesh.clone(),
+        assets.spirit_material.clone(),
         Transform::from_translation(
-            origin.with_x(origin.x.max(crate::game::resources::GATE_POSITION.x + 2.3))
-                + Vec3::Y * 0.75,
+            origin.with_x(origin.x.max(crate::game::resources::GATE_POSITION.x + 2.8))
+                + Vec3::Y * 0.75
+                + if passive {
+                    Vec3::ZERO
+                } else {
+                    Vec3::new(angle.cos(), 0., angle.sin()) * 0.9
+                },
         )
         .with_rotation(Quat::from_rotation_arc(Vec3::NEG_Z, Vec3::X))
-        .with_scale(Vec3::splat(2.3)),
+        .with_scale(Vec3::splat(0.95)),
     )?;
-    commands
-        .entity(entity)
-        .insert(Name::new("Spirit companion"));
+    commands.entity(entity).insert((
+        Name::new("Spirit companion"),
+        bevy::light::NotShadowCaster,
+        super::skill_lighting::NoGroundProjection,
+    ));
     commands.entity(entity).insert(SpiritOrbit {
         angle,
         radius,
@@ -1185,6 +1217,8 @@ mod tests {
             adventure_scenes: default(),
             summon_scenes: std::array::from_fn(|_| Handle::default()),
             projectile_mesh: Handle::default(),
+            spirit_mesh: default(),
+            spirit_material: default(),
             fx_mesh: Handle::default(),
             enemy_material: Handle::default(),
             enemy_materials: std::array::from_fn(|_| Handle::default()),
@@ -1244,6 +1278,18 @@ mod tests {
             .init_resource::<CombatPools>()
             .insert_resource(test_game_assets())
             .add_systems(Update, update_spirit_companions);
+        let mut meshes = Assets::<Mesh>::default();
+        let projectile = meshes.add(Sphere::new(0.16));
+        let companion = meshes.add(super::super::spirit_art::companion_mesh());
+        let mut materials = Assets::<StandardMaterial>::default();
+        let cloth = materials.add(super::super::spirit_art::companion_material());
+        {
+            let mut assets = app.world_mut().resource_mut::<GameAssets>();
+            assets.projectile_mesh = projectile;
+            assets.spirit_mesh = companion;
+            assets.spirit_material = cloth;
+        }
+        app.insert_resource(meshes).insert_resource(materials);
         let hero = app.world_mut().spawn((Hero, Transform::default())).id();
         let spirit = app
             .world_mut()
@@ -1267,6 +1313,35 @@ mod tests {
             )
             .unwrap();
         (app, hero, spirit)
+    }
+    #[test]
+    fn spirit_companions_use_their_own_mesh_material_and_no_solid_shadow() {
+        let (app, _, spirit) = companion_test_app(None);
+        let assets = app.world().resource::<GameAssets>();
+        let mesh = &app.world().get::<Mesh3d>(spirit).unwrap().0;
+        assert_eq!(mesh, &assets.spirit_mesh);
+        assert_ne!(mesh, &assets.projectile_mesh);
+        assert!(
+            app.world()
+                .get::<super::super::skill_lighting::NoGroundProjection>(spirit)
+                .is_some()
+        );
+        assert_eq!(
+            app.world()
+                .get::<MeshMaterial3d<StandardMaterial>>(spirit)
+                .unwrap()
+                .0,
+            assets.spirit_material
+        );
+        assert!(
+            app.world()
+                .get::<bevy::light::NotShadowCaster>(spirit)
+                .is_some()
+        );
+        assert_eq!(
+            app.world().get::<Transform>(spirit).unwrap().scale,
+            Vec3::splat(0.95)
+        );
     }
     fn companion_enemy(app: &mut App, position: Vec3) -> Entity {
         app.world_mut()

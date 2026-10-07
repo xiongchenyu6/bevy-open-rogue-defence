@@ -14,6 +14,7 @@ mod basic_relics;
 mod encounter_boss_ui;
 mod encounter_bosses;
 mod energy_art;
+mod spirit_art;
 pub use basic_attacks::{ClassBasicStats, Ricochet, class_basic_stats};
 pub use basic_relics::{BasicRelics, RelicCast};
 pub use encounter_bosses::{

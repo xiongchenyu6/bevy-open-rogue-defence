@@ -1147,6 +1147,7 @@ impl CombatPools {
                 ProjectileFirstFrameTravel,
                 super::attack_vfx::WeaponFlight,
                 super::hero_fusion::FusionAttack,
+                super::skill_lighting::NoGroundProjection,
                 Name,
                 AbilityGenerated,
                 DamageProfile,
@@ -1441,6 +1442,24 @@ mod tests {
             )
             .expect("rent system should run")
             .expect("projectile capacity should be available")
+    }
+
+    #[test]
+    fn reusing_a_soul_projectile_does_not_hide_a_later_physical_ground_projection() {
+        let mut app = test_app();
+        let first = rent_one_projectile(app.world_mut(), 1.0);
+        app.world_mut()
+            .entity_mut(first)
+            .insert(super::super::skill_lighting::NoGroundProjection);
+        retire_one_projectile(app.world_mut(), first);
+        finalize(app.world_mut());
+        let reused = rent_one_projectile(app.world_mut(), 2.0);
+        assert_eq!(first, reused);
+        assert!(
+            app.world()
+                .get::<super::super::skill_lighting::NoGroundProjection>(reused)
+                .is_none()
+        );
     }
 
     fn retire_one_projectile(world: &mut World, entity: Entity) {

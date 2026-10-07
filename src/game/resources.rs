@@ -887,6 +887,8 @@ pub struct GameAssets {
     pub adventure_scenes: [Handle<WorldAsset>; 3],
     pub summon_scenes: [Handle<WorldAsset>; 6],
     pub projectile_mesh: Handle<Mesh>,
+    pub spirit_mesh: Handle<Mesh>,
+    pub spirit_material: Handle<StandardMaterial>,
     pub fx_mesh: Handle<Mesh>,
     pub enemy_material: Handle<StandardMaterial>,
     pub enemy_materials: [Handle<StandardMaterial>; 4],

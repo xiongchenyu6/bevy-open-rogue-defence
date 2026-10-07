@@ -56,6 +56,9 @@ mod cultivation_combat_capture;
 
 #[path = "capture/bond_collection.rs"]
 mod bond_collection_capture;
+#[path = "capture/spirit_gallery.rs"]
+mod spirit_gallery_capture;
+
 #[path = "capture/summon_assault.rs"]
 mod summon_assault_capture;
 
@@ -496,6 +499,9 @@ fn main() {
     if scenario == "bond-collection" {
         bond_collection_capture::install(&mut apps.main);
     }
+    if scenario == "spirit-gallery" {
+        spirit_gallery_capture::install(&mut apps.main);
+    }
     if scenario == "summon-assault" {
         summon_assault_capture::install(&mut apps.main);
     }
@@ -880,6 +886,10 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     }
     if scenario == "tidal-wave" {
         tidal_wave_capture::configure(world);
+        return;
+    }
+    if scenario == "spirit-gallery" {
+        spirit_gallery_capture::configure(world);
         return;
     }
     if scenario == "summon-assault" {

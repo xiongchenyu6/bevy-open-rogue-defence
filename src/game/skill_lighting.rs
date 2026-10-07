@@ -1,4 +1,7 @@
 //! Bounded ground projections: solid companions cast shadows, energy casts light.
+/// Floating souls do not leave a solid footprint or a giant bullet ground glow.
+#[derive(bevy::prelude::Component)]
+pub(crate) struct NoGroundProjection;
 use bevy::{
     light::{NotShadowCaster, NotShadowReceiver},
     prelude::*,
@@ -262,6 +265,7 @@ fn project(
         ),
         (
             Without<GroundProjection>,
+            Without<NoGroundProjection>,
             Without<ProjectionSurface>,
             Or<(
                 With<PlayerSummon>,

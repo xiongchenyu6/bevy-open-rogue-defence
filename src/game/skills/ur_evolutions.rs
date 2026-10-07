@@ -582,6 +582,8 @@ mod tests {
             adventure_scenes: default(),
             summon_scenes: default(),
             projectile_mesh: default(),
+            spirit_mesh: default(),
+            spirit_material: default(),
             fx_mesh: default(),
             enemy_material: default(),
             enemy_materials: default(),
