@@ -1,0 +1,43 @@
+{
+  "game_source_commit": "649e83b0940f86a4970f1ab6fb6618b2c76c6a07",
+  "binary_sha256": "2af2362939f8b0936b2901ae94c924389225b6f14f0cfd86c932ea8dbac0538e",
+  "archive_sha256": "1af49443bc0f1ace555f98316338807e26c38a0a07f6f37c2800d1f3ad94aaef",
+  "archive_bytes": 56905934,
+  "files_verified": 875,
+  "dependencies": 383,
+  "vendor_bevy_audio": true,
+  "runtime_exit_code": 0,
+  "normal_game_exit_codes": [
+    0,
+    0
+  ],
+  "images_reviewed": 11,
+  "scope": "Ubuntu 24.04 / X11 / software Vulkan; no Steam client or hardware performance claim",
+  "audio": "No audible device in container: unavailable/retry notice remains readable and game stays playable. Real audio output/reconnection not proven.",
+  "not_proven": [
+    "Full packaged campaign",
+    "Steam client",
+    "Steam Deck",
+    "Hardware performance",
+    "Windows/macOS",
+    "Human first-play comprehension"
+  ],
+  "tool_sha256": {
+    "tools/desktop/smoke_runtime.py": "10466f2c733c3d8a878f8e710f0bcbf0b0ff829c218314c621bb95568b43f4fc",
+    "tools/desktop/test_smoke_runtime.py": "18e63b7269ba46bf16d97491f23e55a4ac5cb60ba7cc17450f989fe634b35dfd",
+    "tools/desktop/Dockerfile.smoke-modern": "54b2b7719e0704df13520e1d946737ba6aae27e9249a583a029422b4871dd2c6"
+  },
+  "images_sha256": {
+    "startup.png": "c2eb721c8f41eef5c0ccb646319ad20bd094e6807b0701124131a88f9f0c713a",
+    "guide.png": "d06877010e7895b0b1d6bb0a9de145a3cd8696aa724a9b9719a01a5f0c195931",
+    "recruit.png": "1d5e089724396dd4596d680adf4de5adb28f2d3d24b6a8aa94019bdb9e743af3",
+    "battle.png": "0c5c52d21704400719d9e9fc9140545854b2fb55bd38aa695c267a53f034932e",
+    "fullscreen-chinese.png": "1a1b8d78ff30cffcf049839319a724e6f75d1b85bb37ecedb9199e2e06b743f7",
+    "settings-chinese.png": "6e2af4811f3b43c94b5dd501dce56d865a990c0f59b647a295cb05c34897b2d7",
+    "quit-chinese.png": "3cab092d0229650e07584e73b69af90a6138cc10610313303ce17b6b08693089",
+    "restart-chinese.png": "5e1de05db88e926f19da2e74bffa647c98932f86da3a1630f08e182d0c82d807",
+    "restart-recruit-chinese.png": "7101613a0fa1c97371964674d2eba36c8fc51943a6d446218352ab1e5681c860",
+    "restart-battle-chinese.png": "961d85af0e43b1581793f9223dbb9eb97ca9487c2911b7e95f02e49243324120",
+    "restart-quit-chinese.png": "b8328ef930126e76e7cf1a4acf1c44ee4b0f1a9fca0beb9718715dbbc32d1bae"
+  }
+}

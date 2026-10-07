@@ -36,6 +36,29 @@ def ocr_lines(tsv):
                        max(word[3] for word in words), max(word[4] for word in words)))
     return result
 
+def ocr_screenshot(path, env=None):
+    """Read both contrast polarities without moving any screenshot pixels.
+
+    The guide's light labels on dark buttons need inverted grayscale, while
+    other widget labels can be clearer in the original RGB screenshot.
+    """
+    path = Path(path)
+    with tempfile.TemporaryDirectory(prefix='rogue-smoke-ocr-') as directory:
+        inverted = Path(directory) / 'inverted.png'
+        subprocess.run(['convert', str(path), '-colorspace', 'Gray', '-negate', str(inverted)],
+                       env=env, check=True, capture_output=True)
+        lines = []
+        for image in (path, inverted):
+            # Sparse layout reads separate buttons; block layout preserves the
+            # Chinese chapter heading that sparse segmentation splits apart.
+            for mode in ('11', '6'):
+                tsv = subprocess.check_output(
+                    ['tesseract', str(image), 'stdout', '-l', 'eng+chi_sim', '--psm', mode, 'tsv'],
+                    env=env, text=True, stderr=subprocess.PIPE)
+                lines.extend(ocr_lines(tsv))
+    # Matching results from both passes need only one click rectangle.
+    return list(dict.fromkeys(lines))
+
 def find_text(lines, text):
     """Exact line match; choose the bottom action if title and button repeat."""
     matches = [line for line in lines if normalized(line[0]) == normalized(text)]
@@ -85,7 +108,7 @@ def main():
         call(['import', '-window', win, str(OUT / name)])
     def visible_lines(win):
         screenshot(win, 'current-ui.png')
-        return ocr_lines(call(['tesseract', str(OUT / 'current-ui.png'), 'stdout', '-l', 'eng+chi_sim', '--psm', '11', 'tsv']))
+        return ocr_screenshot(OUT / 'current-ui.png', env)
     def wait_text(win, process, text):
         return wait(lambda: find_text(visible_lines(win), text), process)
     def click_text(win, process, text):
@@ -97,7 +120,11 @@ def main():
         wait(lambda: any(re.search(r'24\s*:\s*\d{2}', line[0]) for line in visible_lines(win))
              and find_text(visible_lines(win), '1 / 4 · MOVE & DODGE') is None, process)
     def quit_game(win, process, name):
-        click_text(win, process, '设置')
+        # The battle's 12px launcher is not reliably OCR-readable in Chinese.
+        # Use its actual centered toolbar position, then require the visible
+        # large Settings title before locating the quit action through OCR.
+        click(win, int(geometry(win)['WIDTH']) // 2, 30)
+        wait_text(win, process, '设置')
         click_text(win, process, '退出')
         wait_text(win, process, '退出游戏？')
         screenshot(win, name)

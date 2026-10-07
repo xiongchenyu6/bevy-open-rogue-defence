@@ -1,0 +1,7 @@
+{"file": "first-expedition-guide-2026-10-08/en-1280x720-full/frame00019.png", "expected": "1 / 4 · MOVE & DODGE", "actual": ["1/4 + MOVE & DODGE", 520, 330, 761, 353]}
+{"file": "first-expedition-guide-2026-10-08/en-1280x720-full/frame00019.png", "expected": "Skip", "actual": ["Skip", 476, 446, 507, 463]}
+{"file": "commander-layout-2026-10-08/en-1280x720/frame00014.png", "expected": "Click a basic commander to begin", "actual": ["Click a basic commander to begin", 42, 79, 599, 117]}
+{"file": "commander-layout-2026-10-08/en-1280x720/frame00014.png", "expected": "Settings", "actual": ["Settings", 615, 25, 664, 39]}
+{"file": "first-expedition-guide-2026-10-08/zh-CN-1280x720-full/frame00114.png", "expected": "设置", "actual": ["设置", 306, 137, 372, 168]}
+{"file": "first-expedition-guide-2026-10-08/zh-CN-1280x720-full/frame00114.png", "expected": "退出", "actual": ["退出", 711, 559, 736, 571]}
+SMOKE_REAL_OCR_PREFLIGHT_PASS
