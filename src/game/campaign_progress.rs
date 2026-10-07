@@ -67,6 +67,21 @@ impl CampaignProgress {
                 .map_err(|_| "Could not save campaign progress in browser storage".into()),
         }
     }
+    /// Loading errors keep storage detached, so retry cannot overwrite an unread save.
+    pub fn can_retry_save(&self) -> bool {
+        self.last_error.is_some() && !matches!(self.storage, Storage::Memory)
+    }
+    pub fn persist(&mut self) -> Result<(), String> {
+        let result = self.save();
+        self.last_error = result.as_ref().err().cloned();
+        result
+    }
+    pub fn retry_save(&mut self) -> Result<(), String> {
+        if !self.can_retry_save() {
+            return Err("Campaign progress is temporary for this session".into());
+        }
+        self.persist()
+    }
     fn encode(&self) -> String {
         let body = format!(
             "RCAMPAIGN1\n{}\n{}\n{}\n{}\n",
@@ -282,7 +297,7 @@ fn settle_finished_run(
             archive.outcome,
         )
         .is_some()
-        && let Err(error) = progress.save()
+        && let Err(error) = progress.persist()
     {
         warn!("{error}");
         progress.last_error = Some(error);

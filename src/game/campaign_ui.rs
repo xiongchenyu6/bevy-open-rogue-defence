@@ -33,6 +33,7 @@ enum Action {
     Training,
     Language,
     Buy(usize),
+    RetrySave,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Default)]
 enum Page {
@@ -166,9 +167,20 @@ fn input(
                     );
                 }
             }
+            Action::RetrySave => {
+                view.notice = match progress.retry_save() {
+                    Ok(()) => language.pick("Progress saved.", "进度已保存。").into(),
+                    Err(_) => language
+                        .pick(
+                            "Saving failed. Keep the game open and retry saving.",
+                            "保存失败。请保持游戏开启并重试保存。",
+                        )
+                        .into(),
+                };
+            }
             Action::Buy(index) => {
                 if progress.purchase(index) {
-                    view.notice=match progress.save() {Ok(())=>language.pick("Saved · Applies to your next expedition.","已保存 · 下次远征生效。").into(),Err(_)=>language.pick("Upgrade purchased, but saving failed. Keep the game open and try again.","强化已购买，但保存失败。请保持游戏开启并重试。").into()};
+                    view.notice=match progress.persist() {Ok(())=>language.pick("Saved · Applies to your next expedition.","已保存 · 下次远征生效。").into(),Err(_)=>language.pick("Upgrade purchased, but saving failed. Keep the game open and try again.","强化已购买，但保存失败。请保持游戏开启并重试。").into()};
                 } else {
                     view.notice = language
                         .pick(
@@ -303,7 +315,8 @@ fn render(
             });
             if page==Page::Result {result_actions(panel,*language,&session,&run,&progress);}
             if page==Page::Training&&session.finished {panel.spawn(Node {column_gap:px(8),flex_wrap:FlexWrap::Wrap,..default()}).with_children(|footer| {button(footer,"Campaign retry",language.pick("Retry chapter","重试本关"),Action::Start(run.stage),true);});}
-            let footer_copy = if progress.last_error.is_some() { language.pick("Progress could not be loaded or saved. Existing save data was preserved.","进度读取或保存失败，原存档已保留。") } else if view.notice.is_empty() {match page {Page::Chapters=>language.pick("Select a chapter. Every expedition starts with a new commander.","选择章节，每次远征从新的基础指挥官开始。"),Page::Training=>language.pick("Permanent bonuses apply to every new expedition. Scroll for more upgrades.","永久加成应用于每次新远征，可滚动查看全部强化。"),Page::Result=>language.pick("Your shards and unlocked chapters are saved between expeditions.","碎片与已解锁章节将在远征之间保留。")}}else{&view.notice}.to_string();
+            if progress.can_retry_save() { button(panel,"Campaign retry save",language.pick("Retry save","重试保存"),Action::RetrySave,true); }
+            let footer_copy = if progress.can_retry_save() { language.pick("Saving failed. Your rewards and upgrades are kept while the game stays open. Retry saving.","保存失败。保持游戏开启可保留奖励和强化，请重试保存。") } else if progress.last_error.is_some() { language.pick("Progress could not be loaded. This session is temporary and cannot be saved. Existing save data was preserved.","进度读取失败。本局为临时模式，无法保存。原存档已保留。") } else if view.notice.is_empty() {match page {Page::Chapters=>language.pick("Select a chapter. Every expedition starts with a new commander.","选择章节，每次远征从新的基础指挥官开始。"),Page::Training=>language.pick("Permanent bonuses apply to every new expedition. Scroll for more upgrades.","永久加成应用于每次新远征，可滚动查看全部强化。"),Page::Result=>language.pick("Your shards and unlocked chapters are saved between expeditions.","碎片与已解锁章节将在远征之间保留。")}}else{&view.notice}.to_string();
             panel.spawn((Name::new("Campaign hint"),HintText(footer_copy.clone()),label(footer_copy,if compact {10.0}else{12.0},MUTED),Node {min_height:px(if compact {25}else{32}),flex_shrink:0.0,..default()}));
         });
     }).id();
@@ -757,6 +770,114 @@ mod tests {
             .init_resource::<GameLanguage>()
             .add_systems(Update, input);
         app
+    }
+    #[cfg(not(target_arch = "wasm32"))]
+    #[test]
+    fn retry_save_button_persists_rewards_and_upgrade_without_repeating_either() {
+        use super::super::ArchiveOutcome;
+        let dir =
+            std::env::temp_dir().join(format!("campaign-retry-button-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("progress.save");
+        let mut progress = CampaignProgress::load_from_path(&path).unwrap();
+        progress.persist().unwrap();
+        let original = std::fs::read(&path).unwrap();
+        let backup = dir.with_extension("backup");
+        let _ = std::fs::remove_dir_all(&backup);
+        std::fs::rename(&dir, &backup).unwrap();
+        std::fs::write(&dir, "temporarily blocked directory").unwrap();
+        let mut reward = CampaignReward::default();
+        reward
+            .settle(&mut progress, 0, true, 200, ArchiveOutcome::TimedOut)
+            .unwrap();
+        assert!(progress.purchase(0));
+        assert!(progress.persist().is_err());
+        assert!(progress.can_retry_save());
+        assert_eq!(
+            std::fs::read(backup.join("progress.save")).unwrap(),
+            original
+        );
+        let currency = progress.currency;
+        let upgrades = progress.upgrades;
+        let mut app = app();
+        app.insert_resource(progress);
+        let button = app
+            .world_mut()
+            .spawn((Action::RetrySave, Interaction::Pressed))
+            .id();
+        app.update();
+        assert!(app.world().resource::<CampaignProgress>().can_retry_save());
+        std::fs::remove_file(&dir).unwrap();
+        std::fs::rename(&backup, &dir).unwrap();
+        app.world_mut().entity_mut(button).insert(Interaction::None);
+        app.update();
+        app.world_mut()
+            .entity_mut(button)
+            .insert(Interaction::Pressed);
+        app.update();
+        {
+            let progress = app.world().resource::<CampaignProgress>();
+            assert_eq!(progress.currency, currency);
+            assert_eq!(progress.upgrades, upgrades);
+            assert!(progress.last_error.is_none());
+        }
+        assert!(
+            reward
+                .settle(
+                    &mut app.world_mut().resource_mut::<CampaignProgress>(),
+                    0,
+                    true,
+                    200,
+                    ArchiveOutcome::TimedOut
+                )
+                .is_none()
+        );
+        let saved = CampaignProgress::load_from_path(&path).unwrap();
+        assert_eq!(saved.currency, currency);
+        assert_eq!(saved.upgrades, upgrades);
+        std::fs::remove_dir_all(dir).unwrap();
+    }
+    #[cfg(not(target_arch = "wasm32"))]
+    #[test]
+    fn retry_button_cannot_overwrite_an_unread_save_even_after_it_is_repaired() {
+        let dir =
+            std::env::temp_dir().join(format!("campaign-unread-button-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("progress.save");
+        std::fs::write(&path, "broken save").unwrap();
+        let error = CampaignProgress::load_from_path(&path).unwrap_err();
+        let mut app = app();
+        app.world_mut()
+            .resource_mut::<CampaignProgress>()
+            .last_error = Some(error);
+        let button = app
+            .world_mut()
+            .spawn((Action::RetrySave, Interaction::Pressed))
+            .id();
+        app.update();
+        assert!(!app.world().resource::<CampaignProgress>().can_retry_save());
+        assert_eq!(std::fs::read_to_string(&path).unwrap(), "broken save");
+        std::fs::remove_file(&path).unwrap();
+        let mut repaired = CampaignProgress::load_from_path(&path).unwrap();
+        repaired.currency = 123;
+        repaired.persist().unwrap();
+        let original = std::fs::read(&path).unwrap();
+        app.world_mut().entity_mut(button).insert(Interaction::None);
+        app.update();
+        app.world_mut()
+            .entity_mut(button)
+            .insert(Interaction::Pressed);
+        app.update();
+        assert_eq!(std::fs::read(&path).unwrap(), original);
+        assert!(
+            app.world()
+                .resource::<CampaignProgress>()
+                .last_error
+                .is_some()
+        );
+        std::fs::remove_dir_all(dir).unwrap();
     }
     #[test]
     fn result_retry_and_chapter_controls_issue_real_requests_without_spending_shards() {

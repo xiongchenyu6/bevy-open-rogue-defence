@@ -45,6 +45,9 @@ mod skill_identity_capture;
 #[path = "capture/ur_evolution.rs"]
 mod ur_evolution_capture;
 
+#[path = "capture/campaign_save_retry.rs"]
+mod campaign_save_retry_capture;
+
 #[path = "capture/campaign.rs"]
 mod campaign_capture;
 
@@ -472,7 +475,9 @@ fn main() {
     warm_render_target(&mut apps);
     println!("[capture] render target warmed");
 
-    if matches!(scenario, "campaign" | "campaign-reload") {
+    if scenario == "campaign-save-retry" {
+        campaign_save_retry_capture::install(&mut apps.main);
+    } else if matches!(scenario, "campaign" | "campaign-reload") {
         campaign_capture::install(&mut apps.main);
     }
     if scenario.starts_with("immediate-") {
@@ -844,6 +849,10 @@ fn wait_for_screenshots(apps: &mut SubApps) {
 }
 
 fn configure_scenario(world: &mut World, scenario: &str) {
+    if scenario == "campaign-save-retry" {
+        campaign_save_retry_capture::configure(world);
+        return;
+    }
     if matches!(scenario, "campaign" | "campaign-reload") {
         campaign_capture::configure(world, scenario == "campaign-reload");
         return;

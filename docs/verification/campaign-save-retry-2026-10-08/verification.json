@@ -1,0 +1,31 @@
+{
+  "library": {
+    "passed": 581,
+    "failed": 0,
+    "ignored": 1
+  },
+  "strict_all_target_clippy": true,
+  "native_frames": 200,
+  "locales": [
+    "en",
+    "zh-CN"
+  ],
+  "native_exit_codes": [
+    0,
+    0
+  ],
+  "scope": "Real filesystem write failure and actual retry button; software Vulkan, not hardware performance or full Steam release validation. Library suite preceded a lexical test-borrow cleanup; strict Clippy checked final source.",
+  "capture_environment": "ROGUE_CAMPAIGN_SAVE unset: fixture owns unique temporary path; isolated XDG directories; software Vulkan",
+  "source_sha256": {
+    "src/game/campaign_progress.rs": "6cd722aa53e900dd0d447c47f2b3cab56b7fc98f81da5298d91287e668a2cc73",
+    "src/game/campaign_ui.rs": "c4d95c723e4e767ec885b131ecaf78e91863b915279b0ca9a9c316ece99c4210",
+    "src/bin/capture.rs": "1872a2b50937352cff1e7c613908e22a71a47ef7478034583ad6eb64005242dd",
+    "src/bin/capture/campaign_save_retry.rs": "a572b59b422e1f7d2ef29142536c74f1312bdc910bdbf58599e74183e9dcda93"
+  },
+  "images_sha256": {
+    "en-saved.png": "1cd41c05cee4fe1e9bd953997705a105e464aa8a852c5992bf00206625808205",
+    "en-failure.png": "ad463567aedff57376474290e02d3eecf7a781172d8ea2e0ad3b35f7488644cb",
+    "zh-CN-saved.png": "eb428765a0f3e6e414737213c9f9539665bac037c2e4552db6362a4c1fa16ac9",
+    "zh-CN-failure.png": "b1bca3b355737a0d0c55acdaf4fd9a641cd4235710a003eb88ec52414b271333"
+  }
+}

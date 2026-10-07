@@ -1,0 +1,35 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+[capture] selective PNG frames: {19, 49, 79}; all 100 simulation/render updates retained
+2026-10-07T19:06:36.241690Z  INFO bevy_diagnostic::system_information_diagnostics_plugin::internal: SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.8", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/save-retry-native-oct8/en/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/save-retry-native-oct8/en/runtime/wayland-1" plus null terminator exceeds 108 bytes
+2026-10-07T19:06:36.283544Z  INFO bevy_render::renderer: AdapterInfo { name: "llvmpipe (LLVM 21.1.8, 256 bits)", vendor: 65541, device: 0, device_type: Cpu, device_pci_bus_id: "", driver: "llvmpipe", driver_info: "Mesa 26.2.4 (LLVM 21.1.8)", backend: Vulkan, subgroup_min_size: 8, subgroup_max_size: 8, transient_saves_memory: false }
+2026-10-07T19:06:36.283575Z  WARN bevy_render::renderer: The selected adapter is using a driver that only supports software rendering. This is likely to be very slow. See https://bevy.org/learn/errors/b0006/
+2026-10-07T19:06:36.500295Z  INFO bevy_pbr::cluster: GPU clustering is supported on this device.
+2026-10-07T19:06:36.500357Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
+2026-10-07T19:06:36.708041Z  WARN bevy_light: Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to true)
+[capture] render target warmed
+CAMPAIGN_SAVE_RETRY_FAILURE_VISIBLE locale=en currency=60
+2026-10-07T19:06:44.014999Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/save-retry-native-oct8/en/frames/frame00019.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/save-retry-native-oct8/en/frames/frame00019.png (121161 bytes)
+CAMPAIGN_SAVE_RETRY_REAL_CLICK
+CAMPAIGN_SAVE_RETRY_PERSISTED frame=50 currency=60 upgrades=[1, 0, 0, 0, 0, 0]
+2026-10-07T19:06:49.455464Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/save-retry-native-oct8/en/frames/frame00049.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/save-retry-native-oct8/en/frames/frame00049.png (110185 bytes)
+CAMPAIGN_SAVE_RETRY_PERSISTED frame=80 currency=60 upgrades=[1, 0, 0, 0, 0, 0]
+CAMPAIGN_SAVE_RETRY_PASS no duplicate rewards; isolated path=/tmp/nix-shell.L1f9ZU/rogue-save-retry-1642172-1791399996501360573/save/progress.save
+2026-10-07T19:06:55.235271Z  INFO bevy_render::view::window::screenshot: Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/save-retry-native-oct8/en/frames/frame00079.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/save-retry-native-oct8/en/frames/frame00079.png (110185 bytes)
+[capture] all 3 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 100 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/save-retry-native-oct8/en/frames
