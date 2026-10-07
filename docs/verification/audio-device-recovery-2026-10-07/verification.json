@@ -30,5 +30,10 @@
     "vendor/bevy_audio/src/lib.rs": "e8eab4b36c15f162f7a526774f52c7054f40ab4aad8d1d86a6fb5f65a7b29e73",
     "assets/fonts/rogue_commander_ui.ttf": "1b613fd7797a3ce1ce6eeb826568b669934ad267bd7836b5f4a5aae7df5681bf",
     "assets/fonts/glyphs.txt": "2603033464d47c75acf7fbec4c60602438d8248ef584553c15c4e703dca4bb01"
+  },
+  "backend_all": {
+    "passed": 17,
+    "failed": 0,
+    "ignored": 0
   }
 }

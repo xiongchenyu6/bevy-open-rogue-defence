@@ -586,4 +586,3 @@ DRAFT_AUDIT budget=10000 seeds=32 draws=608 mastered=89 full_mastery=0 distinct_
 test game::progression::draft_tests::audit_seeded_skill_purchase_budgets_through_real_card_clicks ... ok
 
 test result: ok. 575 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 1.17s
-
