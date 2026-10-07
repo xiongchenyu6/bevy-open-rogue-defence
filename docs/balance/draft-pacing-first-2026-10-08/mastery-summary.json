@@ -1,0 +1,110 @@
+[
+  {
+    "name": "active-h0-behind-sa11ce-c0-t0",
+    "outcome": "win",
+    "deaths": 0,
+    "skills": 9,
+    "mastered": 1,
+    "total_ranks": 27,
+    "min_alive_fraction": 0.96106
+  },
+  {
+    "name": "active-h0-behind-sbeef-c0-t0",
+    "outcome": "win",
+    "deaths": 0,
+    "skills": 8,
+    "mastered": 2,
+    "total_ranks": 27,
+    "min_alive_fraction": 0.844841
+  },
+  {
+    "name": "active-h1-behind-sa11ce-c0-t0",
+    "outcome": "win",
+    "deaths": 0,
+    "skills": 9,
+    "mastered": 0,
+    "total_ranks": 26,
+    "min_alive_fraction": 0.969161
+  },
+  {
+    "name": "active-h1-behind-sbeef-c0-t0",
+    "outcome": "win",
+    "deaths": 0,
+    "skills": 8,
+    "mastered": 3,
+    "total_ranks": 27,
+    "min_alive_fraction": 0.969427
+  },
+  {
+    "name": "active-h2-behind-sa11ce-c0-t0",
+    "outcome": "win",
+    "deaths": 0,
+    "skills": 8,
+    "mastered": 1,
+    "total_ranks": 27,
+    "min_alive_fraction": 0.991773
+  },
+  {
+    "name": "active-h2-behind-sbeef-c0-t0",
+    "outcome": "win",
+    "deaths": 0,
+    "skills": 9,
+    "mastered": 2,
+    "total_ranks": 26,
+    "min_alive_fraction": 0.971198
+  },
+  {
+    "name": "passive-h0-behind-sa11ce-c0-t0",
+    "outcome": "loss",
+    "deaths": 3,
+    "skills": 1,
+    "mastered": 0,
+    "total_ranks": 1,
+    "min_alive_fraction": 0.000574
+  },
+  {
+    "name": "passive-h0-behind-sbeef-c0-t0",
+    "outcome": "loss",
+    "deaths": 3,
+    "skills": 1,
+    "mastered": 0,
+    "total_ranks": 1,
+    "min_alive_fraction": 0.000324
+  },
+  {
+    "name": "passive-h1-behind-sa11ce-c0-t0",
+    "outcome": "loss",
+    "deaths": 3,
+    "skills": 1,
+    "mastered": 0,
+    "total_ranks": 1,
+    "min_alive_fraction": 0.00211
+  },
+  {
+    "name": "passive-h1-behind-sbeef-c0-t0",
+    "outcome": "loss",
+    "deaths": 3,
+    "skills": 2,
+    "mastered": 0,
+    "total_ranks": 4,
+    "min_alive_fraction": 0.000297
+  },
+  {
+    "name": "passive-h2-behind-sa11ce-c0-t0",
+    "outcome": "loss",
+    "deaths": 3,
+    "skills": 1,
+    "mastered": 0,
+    "total_ranks": 1,
+    "min_alive_fraction": 0.005
+  },
+  {
+    "name": "passive-h2-behind-sbeef-c0-t0",
+    "outcome": "loss",
+    "deaths": 3,
+    "skills": 2,
+    "mastered": 0,
+    "total_ranks": 4,
+    "min_alive_fraction": 0.001033
+  }
+]

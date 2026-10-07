@@ -1,0 +1,7 @@
+batch,policy,position,starter_class,chapter,training,cases,wins,losses,censored,finished_only_win_fraction,observed_wins_per_all_cases,mean_observed_game_seconds
+draft-pacing-first-oct8,greedy-card-zero,behind,archer,0,0,2,2,0,0,1.0,1.0,1538.0715
+draft-pacing-first-oct8,greedy-card-zero,behind,mage,0,0,2,2,0,0,1.0,1.0,1516.404
+draft-pacing-first-oct8,greedy-card-zero,behind,warrior,0,0,2,2,0,0,1.0,1.0,1538.1455
+draft-pacing-first-oct8,passive,behind,archer,0,0,2,0,2,0,0.0,0.0,545.8915
+draft-pacing-first-oct8,passive,behind,mage,0,0,2,0,2,0,0.0,0.0,482.6015
+draft-pacing-first-oct8,passive,behind,warrior,0,0,2,0,2,0,0.0,0.0,273.096
