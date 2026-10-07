@@ -1,0 +1,20 @@
+{
+  "frames": 1360,
+  "reviewed_images": 4,
+  "source_sha256": "e3c3f3cced3d5c7638247384c1fb51883287b4a3429f72265fd09d8238b9592f",
+  "files": {
+    "build.log": "dd6d03acefbd635ac2b7161b7a00967f08757990bb26acae7d1623e7eb8d5617",
+    "clippy.log": "4ebe4725704c31b4243c01596708eab2fb575de001364a65221d7becb9293d91",
+    "runner.sh": "49b6e836f4b58fe0c58316286e2c11cbb18bd9c6d460746c8cbc8ee0373cdd91",
+    "skill-spectacle-combo/capture.log": "bec35a8697e26df2986eadca82cac4286161e04c19ff3d0818b85c4607506f2c",
+    "skill-spectacle-combo/frame00299.png": "87d12c71e4b43080ff4f06264563c578255b55bf1525063e28410c70cfacc291",
+    "skill-spectacle-combo/frame00599.png": "4ef52e627cd39cebf29466706e8b36c1e01430cb5b329d2f99004249236e91b6",
+    "skill-spectacle-combo/summary.json": "3f3ef689c52ea5a2536e1c7d65830d243a797d4e424e965cf44ea1f4ec05b4a4",
+    "skill-spectacle-combo/timings.csv": "b0f009ee4d86a311f16252681a22ccc835b02c090b73102fa72cd10e4ab0e3db",
+    "summon-assault/capture.log": "483717269c9c1666c38e4bccd783d191f60ec1ea0f34ee1a760852a9007d9d64",
+    "summon-assault/frame00299.png": "db2ef747589211bcda12ebe0565c41524d80cfa2444d810ae7bd08b9b001e355",
+    "summon-assault/frame00599.png": "d035ae0180a5eed4aa59faf1b4656f59399f19691285679e8a566a8c10007b77",
+    "summon-assault/summary.json": "58da58129ca172dc075fd46074a19b9592943a5a8fe5082465a9cdb71f2f3d0a",
+    "summon-assault/timings.csv": "752801a7ccd818e118120495a9a9940be6f8295e7b7023b7cc30ce92c611e65b"
+  }
+}

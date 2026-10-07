@@ -1,0 +1,12 @@
+{
+  "rows": 680,
+  "measured_rows": 525,
+  "median_ms": 7.160121,
+  "p95_ms": 9.494237,
+  "p99_ms": 11.850982,
+  "max_ms": 26.886406,
+  "max_enemies": 2,
+  "max_projectiles": 9,
+  "max_entities": 5664,
+  "excluded": "first120; screenshot frames299/599 and following300/600; summon pause249..279"
+}

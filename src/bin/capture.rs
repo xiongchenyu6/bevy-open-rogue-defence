@@ -681,6 +681,9 @@ fn main() {
         queue_screenshot(apps.main.world_mut(), target.clone(), output.clone());
         wait_for_screenshots(&mut apps);
     } else {
+        let timing_path = env::var_os("ROGUE_CAPTURE_TIMINGS").map(PathBuf::from);
+        let mut timings =
+            String::from("frame,update_and_gpu_wait_ms,entities,enemies,projectiles\n");
         for frame in 0..frame_count {
             let should_save = if mode == "frames" {
                 selected_frames
@@ -697,7 +700,34 @@ fn main() {
                 };
                 queue_screenshot(apps.main.world_mut(), target.clone(), path);
             }
+            let started = std::time::Instant::now();
             update_and_wait(&mut apps);
+            let elapsed_ms = started.elapsed().as_secs_f64() * 1_000.0;
+            if timing_path.is_some() {
+                use std::fmt::Write;
+                let world = apps.main.world_mut();
+                let entities = world.entities().len();
+                let enemies = world
+                    .query_filtered::<Entity, With<Enemy>>()
+                    .iter(world)
+                    .count();
+                let projectiles = world
+                    .query_filtered::<Entity, With<Projectile>>()
+                    .iter(world)
+                    .count();
+                writeln!(
+                    timings,
+                    "{frame},{elapsed_ms:.6},{entities},{enemies},{projectiles}"
+                )
+                .expect("format capture timing");
+            }
+        }
+        if let Some(path) = timing_path {
+            fs::write(&path, timings).expect("write capture timings");
+            println!(
+                "[capture] serialized update + GPU wait timings: {} (not windowed FPS)",
+                path.display()
+            );
         }
         wait_for_screenshots(&mut apps);
     }
