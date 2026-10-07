@@ -119,9 +119,10 @@ struct DraftAntiDrought {
 }
 
 pub fn skill_cost(economy: &SkillEconomy) -> u32 {
+    let late_draws = economy.paid_draws.saturating_sub(2);
     80_u32
         .saturating_add(economy.paid_draws.saturating_mul(15))
-        .min(260)
+        .saturating_add(late_draws.saturating_mul(late_draws).saturating_mul(20))
 }
 
 fn check_level_up(mut session: ResMut<GameSession>) {
@@ -476,7 +477,7 @@ fn pick_skill_choices(
     capacity: usize,
 ) -> Vec<DraftChoice> {
     let slots_full = active_skill_slots(build) >= capacity;
-    let mut pool: Vec<SkillId> = (0..SKILLS.len())
+    let pool: Vec<SkillId> = (0..SKILLS.len())
         .map(|index| SkillId(index as u8))
         .filter(|id| {
             let def = id.definition();
@@ -488,18 +489,9 @@ fn pick_skill_choices(
     if pool.is_empty() {
         return Vec::new();
     }
-    pool.sort_by_key(|id| std::cmp::Reverse(build.skill_rank(*id)));
-    let guaranteed = if build.skill_rank(pool[0]) > 0 {
-        pool[0]
-    } else {
-        choose_weighted_skill(&pool, rng).expect("the skill pool is not empty")
-    };
-    let mut choices = vec![guaranteed];
-    let mut remaining: Vec<SkillId> = pool
-        .iter()
-        .copied()
-        .filter(|candidate| *candidate != guaranteed)
-        .collect();
+    let mut choices: Vec<SkillId> = Vec::new();
+    let mut remaining = pool.clone();
+    // Every slot is seeded and rarity-weighted; owned high ranks receive no guarantee.
     while choices.len() < 3 && !remaining.is_empty() {
         let has_ur = choices
             .iter()
@@ -560,31 +552,41 @@ fn late_skill_choices(
     elapsed: f32,
     rng: &mut RunRng,
 ) -> Vec<DraftChoice> {
-    if let Some(skill) = (0..SKILLS.len())
+    let ready: Vec<_> = (0..SKILLS.len())
         .map(|index| SkillId(index as u8))
-        .find(|skill| evolution.branch_ready(*skill, build))
-    {
+        .filter(|skill| evolution.branch_ready(*skill, build))
+        .collect();
+    if !ready.is_empty() {
+        let skill = ready[rng.next_u32() as usize % ready.len()];
         return super::skill_evolution::UrEvolutionPath::ALL
             .into_iter()
             .map(|path| DraftChoice::EvolveUr { skill, path })
             .collect();
     }
-    let mut upgrades: Vec<_> = (0..SKILLS.len())
+    let upgrades: Vec<_> = (0..SKILLS.len())
         .map(|index| SkillId(index as u8))
         .filter(|skill| evolution.eligible(*skill, build))
         .collect();
-    upgrades.sort_by_key(|skill| (evolution.tiers[usize::from(skill.0)], skill.0));
-    for skill in upgrades.into_iter().take(3).rev() {
-        choices.insert(
-            0,
-            DraftChoice::Evolution {
-                skill,
-                tier: evolution.tiers[usize::from(skill.0)] + 1,
-            },
-        );
+    if !upgrades.is_empty() {
+        choices.extend(upgrades.into_iter().map(|skill| DraftChoice::Evolution {
+            skill,
+            tier: evolution.tiers[usize::from(skill.0)] + 1,
+        }));
+        // Ascensions compete with ordinary upgrades, independent of skill-ID ordering.
+        for index in (1..choices.len()).rev() {
+            let other = rng.next_u32() as usize % (index + 1);
+            choices.swap(index, other);
+        }
+        choices.truncate(3);
     }
-    choices.truncate(3);
-    if active_skill_slots(build) >= evolution.skill_capacity() && elapsed >= EPIC_SKILL_UNLOCK_AT {
+    if active_skill_slots(build) >= evolution.skill_capacity()
+        && elapsed >= EPIC_SKILL_UNLOCK_AT
+        && !choices.iter().any(|choice| {
+            matches!(choice,
+            DraftChoice::Skill(skill) if skill.definition().rarity == Rarity::Ur)
+        })
+        && (choices.is_empty() || rng.next_u32() % 100 < Rarity::Ur.draw_weight())
+    {
         let candidates: Vec<_> = (0..SKILLS.len())
             .map(|index| SkillId(index as u8))
             .filter(|skill| {
@@ -1530,11 +1532,15 @@ pub(crate) fn reset_run(world: &mut World) {
 }
 
 #[cfg(test)]
+#[path = "progression_draft_tests.rs"]
+mod draft_tests;
+
+#[cfg(test)]
 mod tests {
     use super::*;
     use crate::game::DraftRoot;
 
-    fn test_app() -> App {
+    pub(super) fn test_app() -> App {
         let mut app = App::new();
         app.add_plugins(MinimalPlugins)
             .init_resource::<ButtonInput<KeyCode>>()
@@ -1561,21 +1567,23 @@ mod tests {
             ..default()
         };
         let mut rng = RunRng::default();
-        for tier in 1..=3 {
-            for _ in 0..2 {
-                let choices = late_skill_choices(Vec::new(), &build, &evolution, 0.0, &mut rng);
-                assert_eq!(choices.len(), 3);
-                for choice in choices {
-                    let DraftChoice::Evolution {
-                        skill,
-                        tier: offered,
-                    } = choice
-                    else {
-                        panic!("expected mastery offer")
-                    };
-                    assert_eq!(offered, tier);
-                    evolution.tiers[usize::from(skill.0)] = offered;
-                }
+        // Stages may now be offered in any order; every eligible skill remains reachable.
+        for _ in 0..18 {
+            let choices = late_skill_choices(Vec::new(), &build, &evolution, 0.0, &mut rng);
+            if choices.is_empty() {
+                break;
+            }
+            for choice in choices {
+                let DraftChoice::Evolution {
+                    skill,
+                    tier: offered,
+                } = choice
+                else {
+                    panic!("expected mastery offer")
+                };
+                assert_eq!(offered, evolution.tiers[usize::from(skill.0)] + 1);
+                assert!(offered <= 3);
+                evolution.tiers[usize::from(skill.0)] = offered;
             }
         }
         assert_eq!(&evolution.tiers[..6], &[3; 6]);
@@ -1913,7 +1921,7 @@ mod tests {
         assert!(!build.bond_complete(BondId::Underworld));
     }
 
-    fn tap_g(app: &mut App) {
+    pub(super) fn tap_g(app: &mut App) {
         app.world_mut()
             .resource_mut::<ButtonInput<KeyCode>>()
             .press(KeyCode::KeyG);
@@ -1952,7 +1960,7 @@ mod tests {
         press_choice(app, 0);
     }
 
-    fn press_choice(app: &mut App, wanted: usize) {
+    pub(super) fn press_choice(app: &mut App, wanted: usize) {
         let entity = {
             let world = app.world_mut();
             let mut choices = world.query::<(Entity, &DraftButton)>();
@@ -2186,15 +2194,19 @@ mod tests {
     }
 
     #[test]
-    fn skill_price_increases_and_caps() {
+    fn skill_price_preserves_opening_costs_and_keeps_increasing() {
         let mut economy = SkillEconomy::default();
         assert_eq!(skill_cost(&economy), 80);
         economy.paid_draws = 1;
         assert_eq!(skill_cost(&economy), 95);
+        economy.paid_draws = 2;
+        assert_eq!(skill_cost(&economy), 110);
         economy.paid_draws = 12;
-        assert_eq!(skill_cost(&economy), 260);
+        assert_eq!(skill_cost(&economy), 2260);
+        economy.paid_draws = 30;
+        assert_eq!(skill_cost(&economy), 16210);
         economy.paid_draws = u32::MAX;
-        assert_eq!(skill_cost(&economy), 260);
+        assert_eq!(skill_cost(&economy), u32::MAX);
     }
 
     #[test]
