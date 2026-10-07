@@ -774,7 +774,7 @@ pub const SKILLS: [SkillDef; super::SkillId::COUNT] = [
                 spell_ratio: 0.0,
                 summon_ratio: 0.25,
             },
-            description: "召唤守门骨卫；等级提高生命、攻击与同时存在上限。",
+            description: "召唤守门骨卫；等级提高攻击、体型与同时存在上限。",
         },
     },
     SkillDef {

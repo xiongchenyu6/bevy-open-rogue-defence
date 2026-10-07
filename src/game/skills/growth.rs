@@ -29,10 +29,12 @@ pub(super) fn update_summon_growth(
     time: Res<Time>,
     session: Res<GameSession>,
     build: Res<PlayerBuild>,
+    vitals: Res<HeroVitals>,
+    runtime: Res<SkillRuntime>,
     mut summons: Query<
         (
             &mut Transform,
-            Option<&BoneSentry>,
+            Option<&mut BoneSentry>,
             Option<&SpiritHound>,
             Option<&TideElemental>,
             Option<&BoltTurret>,
@@ -49,7 +51,13 @@ pub(super) fn update_summon_growth(
     }
     let blend = 1.0 - (-8.0 * time.delta_secs()).exp();
     for (mut transform, bone, hound, tide, turret, banner, wyrm, colossus) in &mut summons {
-        let skill = if bone.is_some() {
+        let skill = if let Some(mut bone) = bone {
+            let rank = build.skills[4];
+            if rank > 0 {
+                // Permanent guards must match the damage shown for current training
+                // and inherited hero attributes, not remain at their birth snapshot.
+                bone.damage = scaled_skill_damage(4, rank, &build, &vitals, &runtime);
+            }
             4
         } else if let Some(hound) = hound {
             hound.source_skill
@@ -92,11 +100,67 @@ mod tests {
     }
 
     #[test]
+    fn existing_guard_damage_tracks_training_and_attributes_without_respawning_or_compounding() {
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<GameSession>()
+            .init_resource::<PlayerBuild>()
+            .init_resource::<SkillRuntime>()
+            .insert_resource(HeroVitals {
+                strength: 0.0,
+                agility: 0.0,
+                intelligence: 0.0,
+                ..HeroVitals::default()
+            })
+            .add_systems(Update, update_summon_growth);
+        app.world_mut().resource_mut::<PlayerBuild>().skills[4] = 1;
+        let guard = app
+            .world_mut()
+            .spawn((
+                SkillSummon,
+                BoneSentry {
+                    attack_remaining: 0.73,
+                    damage: 24.0,
+                },
+                Transform::from_scale(summon_scale(4, 1)),
+            ))
+            .id();
+        // Published formula: base 18 + 11 per rank + 25% inherited summon power.
+        // With zero attributes: spell power 20, attack 20, summon power 24.
+        advance(&mut app);
+        assert_eq!(app.world().get::<BoneSentry>(guard).unwrap().damage, 24.0);
+        app.world_mut().resource_mut::<PlayerBuild>().skills[4] = 2;
+        advance(&mut app);
+        assert_eq!(app.world().get::<BoneSentry>(guard).unwrap().damage, 35.0);
+        app.world_mut().resource_mut::<HeroVitals>().intelligence = 10.0;
+        // Summon power is now 0.7 * 40 + 0.5 * 30 = 43.
+        for _ in 0..10 {
+            advance(&mut app);
+        }
+        let bone = app.world().get::<BoneSentry>(guard).unwrap();
+        assert_eq!(bone.damage, 39.75);
+        assert_eq!(bone.attack_remaining, 0.73);
+        assert_eq!(
+            app.world_mut()
+                .query::<&BoneSentry>()
+                .iter(app.world())
+                .count(),
+            1
+        );
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        app.world_mut().resource_mut::<PlayerBuild>().skills[4] = 3;
+        advance(&mut app);
+        assert_eq!(app.world().get::<BoneSentry>(guard).unwrap().damage, 39.75);
+    }
+
+    #[test]
     fn live_skeleton_upgrade_grows_smoothly_without_compounding_or_moving() {
         let mut app = App::new();
         app.init_resource::<Time>()
             .init_resource::<GameSession>()
             .init_resource::<PlayerBuild>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<SkillRuntime>()
             .add_systems(Update, update_summon_growth);
         let location = Vec3::new(-8.6, 0.0, 1.65);
         let entity = app
@@ -143,6 +207,8 @@ mod tests {
         app.init_resource::<Time>()
             .init_resource::<GameSession>()
             .init_resource::<PlayerBuild>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<SkillRuntime>()
             .add_systems(Update, update_summon_growth);
         app.world_mut().resource_mut::<PlayerBuild>().skills[5] = 1;
         app.world_mut().resource_mut::<PlayerBuild>().skills[29] = 5;
