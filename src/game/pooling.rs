@@ -595,46 +595,55 @@ impl DamageNumberPool {
         delta: f32,
         camera: Option<(&Camera, &GlobalTransform)>,
     ) {
-        let mut ordered: Vec<(Entity, Entity, u64)> = self
+        // Critical feedback gets first choice; stable entity order breaks equal serials.
+        let mut ordered: Vec<_> = self
             .entries
             .iter()
-            .map(|(entity, entry)| (*entity, entry.target, entry.serial))
+            .map(|(entity, entry)| (*entity, entry.critical, entry.serial))
             .collect();
         ordered.sort_by(|left, right| {
-            left.1
-                .to_bits()
-                .cmp(&right.1.to_bits())
+            right
+                .1
+                .cmp(&left.1)
                 .then_with(|| right.2.cmp(&left.2))
                 .then_with(|| left.0.to_bits().cmp(&right.0.to_bits()))
         });
-        let mut stack_indices = HashMap::with_capacity(ordered.len());
-        let mut previous_target = None;
-        let mut stack_index = 0usize;
-        for (entity, target, _) in ordered {
-            if previous_target == Some(target) {
-                stack_index = stack_index.saturating_add(1);
-            } else {
-                previous_target = Some(target);
-                stack_index = 0;
-            }
-            stack_indices.insert(entity, stack_index);
-        }
-
+        let mut occupied = Vec::with_capacity(ordered.len());
         let mut expired = Vec::new();
-        for (entity, entry) in &mut self.entries {
+        for (entity, _, _) in ordered {
+            let entry = self
+                .entries
+                .get_mut(&entity)
+                .expect("ordered active damage number");
             entry.age += delta.max(0.0);
             if entry.age >= DAMAGE_NUMBER_LIFETIME_SECONDS {
-                expired.push(*entity);
+                expired.push(entity);
             } else {
                 let screen_position = camera.and_then(|(camera, camera_transform)| {
-                    damage_number_screen_position(
-                        camera,
-                        camera_transform,
-                        *entry,
-                        stack_indices.get(entity).copied().unwrap_or(0),
-                    )
+                    let anchor = damage_number_screen_position(camera, camera_transform, *entry)?;
+                    let size = camera.logical_viewport_size()?;
+                    let (minimum, maximum) = damage_number_bounds(size);
+                    // Reserve peak pop dimensions, so animation does not reintroduce collisions.
+                    let peak_font = if entry.critical {
+                        32.0 * 1.25
+                    } else {
+                        24.0 * 1.12
+                    };
+                    let half_size = Vec2::new(
+                        format_damage_number(entry.amount, entry.critical)
+                            .chars()
+                            .count() as f32
+                            * peak_font
+                            * 0.325
+                            + 4.0,
+                        peak_font * 0.5 + 4.0,
+                    );
+                    let placed =
+                        place_damage_number(anchor, half_size, minimum, maximum, &occupied);
+                    occupied.push((placed, half_size));
+                    Some(placed)
                 });
-                write_damage_number(commands, *entity, *entry, screen_position);
+                write_damage_number(commands, entity, *entry, screen_position);
             }
         }
         for entity in expired {
@@ -698,7 +707,7 @@ fn write_damage_number(
         },
         Text2d::new(format_damage_number(entry.amount, entry.critical)),
         TextFont {
-            font_size: FontSize::Px(if entry.critical { 48.0 } else { 34.0 }),
+            font_size: FontSize::Px(if entry.critical { 32.0 } else { 24.0 }),
             ..default()
         },
         TextColor(damage_number_color(entry).with_alpha(alpha)),
@@ -716,37 +725,72 @@ fn damage_number_screen_position(
     camera: &Camera,
     camera_transform: &GlobalTransform,
     entry: DamageNumberEntry,
-    stack_index: usize,
 ) -> Option<Vec2> {
-    // `world_to_viewport` returns logical coordinates; use the matching
-    // logical extent so HiDPI phones do not shift numbers toward a corner.
+    // world_to_viewport and this overlay both use logical pixels, including HiDPI.
     let size = camera.logical_viewport_size()?;
-    let world_position = entry.origin + Vec3::Y * 1.1;
-    let mut viewport = camera
-        .world_to_viewport(camera_transform, world_position)
+    let viewport = camera
+        .world_to_viewport(camera_transform, entry.origin + Vec3::Y * 1.1)
         .ok()?;
-    // Reserve the left stats, right challenge panel, top timer, and bottom
-    // mobile controls. Off-lane numbers clamp beside those panels instead of
-    // drawing over them.
-    let left_margin = (size.x * 0.2).clamp(180.0, 260.0);
-    let right_margin = (size.x * 0.29).clamp(230.0, 380.0);
-    let top_margin = (size.y * 0.15).max(80.0);
-    let bottom_margin = (size.y * 0.23).max(130.0);
-    viewport.x = viewport.x.clamp(
-        left_margin.min(size.x * 0.5),
-        (size.x - right_margin).max(size.x * 0.5),
-    );
-    viewport.y = viewport.y.clamp(
-        top_margin.min(size.y * 0.5),
-        (size.y - bottom_margin).max(size.y * 0.5),
-    );
-    let stack_slot = stack_index.min(5);
-    let x_offset = [-10.0, 12.0, -20.0, 20.0, -6.0, 8.0][stack_slot];
-    let y_offset = stack_slot as f32 * 38.0;
     Some(Vec2::new(
-        viewport.x - size.x * 0.5 + x_offset,
-        size.y * 0.5 - viewport.y + entry.age * 30.0 + y_offset,
+        viewport.x - size.x * 0.5,
+        size.y * 0.5 - viewport.y + entry.age * 30.0,
     ))
+}
+
+fn damage_number_bounds(size: Vec2) -> (Vec2, Vec2) {
+    // Fixed desktop minimum margins collapsed the usable lane to zero in portrait.
+    let left_margin = (size.x * 0.2).min(260.0);
+    let right_edge = size.x - (size.x * 0.29).min(380.0);
+    let top_margin = (size.y * 0.15).max(80.0).min(size.y * 0.5);
+    let bottom_edge = (size.y - (size.y * 0.23).max(130.0)).max(size.y * 0.5);
+    (
+        Vec2::new(left_margin - size.x * 0.5, size.y * 0.5 - bottom_edge),
+        Vec2::new(right_edge - size.x * 0.5, size.y * 0.5 - top_margin),
+    )
+}
+
+// Bounded local search: keep every amount even when a packed viewport cannot fit all labels.
+fn place_damage_number(
+    anchor: Vec2,
+    half_size: Vec2,
+    minimum: Vec2,
+    maximum: Vec2,
+    occupied: &[(Vec2, Vec2)],
+) -> Vec2 {
+    let midpoint = (minimum + maximum) * 0.5;
+    let lower = (minimum + half_size).min(midpoint);
+    let upper = (maximum - half_size).max(midpoint);
+    let anchor = anchor.clamp(lower, upper);
+    let mut best = anchor;
+    let mut best_overlaps = usize::MAX;
+    let mut best_distance = f32::INFINITY;
+    for row in [0.0, 1.0, -1.0, 2.0, -2.0, 3.0, -3.0] {
+        for column in [0.0, 1.0, -1.0, 2.0, -2.0] {
+            let candidate = (anchor
+                + Vec2::new(
+                    column * (half_size.x * 2.0 + 6.0),
+                    row * (half_size.y * 2.0 + 4.0),
+                ))
+            .clamp(lower, upper);
+            let overlaps = occupied
+                .iter()
+                .filter(|(center, half)| {
+                    let distance = (candidate - *center).abs();
+                    distance.x < half_size.x + half.x && distance.y < half_size.y + half.y
+                })
+                .count();
+            if overlaps == 0 {
+                return candidate;
+            }
+            let distance = candidate.distance_squared(anchor);
+            if overlaps < best_overlaps || (overlaps == best_overlaps && distance < best_distance) {
+                best = candidate;
+                best_overlaps = overlaps;
+                best_distance = distance;
+            }
+        }
+    }
+    best
 }
 
 fn format_damage_number(amount: f32, critical: bool) -> String {
@@ -760,9 +804,9 @@ fn format_damage_number(amount: f32, critical: bool) -> String {
 /// Fresh numbers overshoot then settle; crits punch harder so they read at a glance.
 fn damage_number_pop_scale(entry: DamageNumberEntry) -> f32 {
     let (overshoot, duration) = if entry.critical {
-        (0.75, 0.16)
+        (0.25, 0.16)
     } else {
-        (0.28, 0.10)
+        (0.12, 0.10)
     };
     1.0 + overshoot * (1.0 - entry.age / duration).clamp(0.0, 1.0)
 }
@@ -1402,6 +1446,60 @@ mod tests {
 
     use super::super::combat::MAX_REGULAR_ENEMIES;
     use super::*;
+
+    #[test]
+    fn damage_number_placement_separates_distinct_targets_and_wide_crits_within_viewport() {
+        for size in [
+            Vec2::new(1280.0, 720.0),
+            Vec2::new(667.0, 375.0),
+            Vec2::new(390.0, 844.0),
+        ] {
+            let (minimum, maximum) = damage_number_bounds(size);
+            let anchor = (minimum + maximum) * 0.5;
+            let critical_half = Vec2::new(56.0, 24.0);
+            let normal_half = Vec2::new(20.0, 18.0);
+            let first = place_damage_number(anchor, critical_half, minimum, maximum, &[]);
+            let second = place_damage_number(
+                anchor,
+                normal_half,
+                minimum,
+                maximum,
+                &[(first, critical_half)],
+            );
+            let separation = (first - second).abs();
+            assert!(
+                separation.x >= critical_half.x + normal_half.x
+                    || separation.y >= critical_half.y + normal_half.y
+            );
+            for (center, half) in [(first, critical_half), (second, normal_half)] {
+                assert!((center - half).cmpge(minimum).all());
+                assert!((center + half).cmple(maximum).all());
+            }
+            assert_eq!(
+                second,
+                place_damage_number(
+                    anchor,
+                    normal_half,
+                    minimum,
+                    maximum,
+                    &[(first, critical_half)]
+                )
+            );
+        }
+    }
+
+    #[test]
+    fn packed_damage_number_fallback_is_bounded_and_keeps_exact_text() {
+        let minimum = Vec2::new(-40.0, -20.0);
+        let maximum = Vec2::new(40.0, 20.0);
+        let half = Vec2::new(30.0, 18.0);
+        let occupied = vec![(Vec2::ZERO, half); DAMAGE_NUMBER_POOL_CAPACITY];
+        let placed = place_damage_number(Vec2::splat(1000.0), half, minimum, maximum, &occupied);
+        assert!((placed - half).cmpge(minimum).all());
+        assert!((placed + half).cmple(maximum).all());
+        assert_eq!(format_damage_number(12345.0, true), "12345!");
+        assert_eq!(format_damage_number(12345.0, false), "12345");
+    }
 
     fn projectile(seed: f32) -> Projectile {
         Projectile {

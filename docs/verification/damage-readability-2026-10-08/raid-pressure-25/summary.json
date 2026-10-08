@@ -1,0 +1,25 @@
+{
+  "measurement": "serialized offscreen application update plus GPU wait; not windowed FPS",
+  "recorded_frames": 1795,
+  "measured_frames": 1669,
+  "warmup_frames": 120,
+  "explicit_excluded_frames": [
+    450,
+    451,
+    900,
+    901,
+    1500,
+    1501
+  ],
+  "median_ms": 9.81221,
+  "p95_ms": 13.279343,
+  "p99_ms": 16.611329,
+  "maximum_ms": 30.983336,
+  "frames_over_16_667_ms": 15,
+  "frames_over_33_333_ms": 0,
+  "recorded_peak_counts": {
+    "entities": 11336,
+    "enemies": 96,
+    "projectiles": 0
+  }
+}
