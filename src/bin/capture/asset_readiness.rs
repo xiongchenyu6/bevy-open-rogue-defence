@@ -11,11 +11,12 @@ use bevy::{
     camera::RenderTarget,
     input::{ButtonState, mouse::MouseButtonInput},
     prelude::*,
+    text::FontSource,
     window::{CursorMoved, WindowRef},
 };
 use rogue_commander::game::{
     AssetReadiness, AssetReadinessInputSet, AssetReadinessPlugin, Autoplay, CampaignMenu,
-    GameAssets, GameSession, HeroKind, SelectedHero,
+    GameAssets, GameLanguage, GameSession, HeroKind, SelectedHero,
 };
 use std::{
     fs,
@@ -29,6 +30,7 @@ use std::{
     time::{SystemTime, UNIX_EPOCH},
 };
 const BACKDROP: &str = "ui/draft_backdrop.png";
+const UI_FONT: &str = "fonts/rogue_commander_ui.ttf";
 #[derive(Default)]
 struct ReadGate {
     open: AtomicBool,
@@ -56,12 +58,13 @@ impl ReadGate {
     }
 }
 struct ControlledReader {
+    target: &'static str,
     file: FileAssetReader,
     gate: Arc<ReadGate>,
 }
 impl AssetReader for ControlledReader {
     async fn read<'a>(&'a self, path: &'a Path) -> Result<impl Reader + 'a, AssetReaderError> {
-        if path == Path::new(BACKDROP) {
+        if path == Path::new(self.target) {
             self.gate.reads.fetch_add(1, Ordering::SeqCst);
             self.gate.wait().await;
         }
@@ -82,6 +85,7 @@ impl AssetReader for ControlledReader {
 }
 #[derive(Resource)]
 struct Probe {
+    target: &'static str,
     frame: u32,
     root: PathBuf,
     gate: Arc<ReadGate>,
@@ -89,23 +93,29 @@ struct Probe {
     pointer_targets: Vec<(Entity, RenderTarget)>,
     unoffered: Option<Handle<WorldAsset>>,
 }
-fn copy_assets(source: &Path, target: &Path, relative: &Path) {
+fn copy_assets(source: &Path, target: &Path, relative: &Path, omitted: &Path) {
     fs::create_dir_all(target).unwrap();
     for entry in fs::read_dir(source).unwrap() {
         let entry = entry.unwrap();
         let child = relative.join(entry.file_name());
-        if child == Path::new(BACKDROP) {
+        if child == omitted {
             continue;
         }
         if entry.path().is_dir() {
-            copy_assets(&entry.path(), &target.join(entry.file_name()), &child);
+            copy_assets(
+                &entry.path(),
+                &target.join(entry.file_name()),
+                &child,
+                omitted,
+            );
         } else {
             fs::copy(entry.path(), target.join(entry.file_name())).unwrap();
         }
     }
 }
 /// Register before AssetPlugin; no production asset files or readiness flags are changed.
-pub fn prepare(app: &mut App) {
+pub fn prepare(app: &mut App, font_scenario: bool) {
+    let target = if font_scenario { UI_FONT } else { BACKDROP };
     let nonce = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .unwrap()
@@ -115,6 +125,7 @@ pub fn prepare(app: &mut App) {
         &Path::new(env!("CARGO_MANIFEST_DIR")).join("assets"),
         &root,
         Path::new(""),
+        Path::new(target),
     );
     let gate = Arc::new(ReadGate::default());
     let reader_gate = gate.clone();
@@ -123,12 +134,14 @@ pub fn prepare(app: &mut App) {
         AssetSourceId::Default,
         AssetSourceBuilder::new(move || {
             Box::new(ControlledReader {
+                target,
                 file: FileAssetReader::new(&reader_root),
                 gate: reader_gate.clone(),
             })
         }),
     );
     app.insert_resource(Probe {
+        target,
         frame: 0,
         root,
         gate,
@@ -138,6 +151,9 @@ pub fn prepare(app: &mut App) {
     });
 }
 pub fn configure(world: &mut World) {
+    if world.resource::<Probe>().target == UI_FONT {
+        world.insert_resource(GameLanguage::SimplifiedChinese);
+    }
     world.remove_resource::<Autoplay>();
     world.resource_mut::<CampaignMenu>().0 = false;
     world.resource_mut::<GameSession>().paused = false;
@@ -215,8 +231,8 @@ fn input(world: &mut World) {
         fs::copy(
             Path::new(env!("CARGO_MANIFEST_DIR"))
                 .join("assets")
-                .join(BACKDROP),
-            p.root.join(BACKDROP),
+                .join(p.target),
+            p.root.join(p.target),
         )
         .unwrap();
     }
@@ -281,6 +297,9 @@ fn repeat_click(world: &mut World) {
 }
 fn audit(world: &mut World) {
     let frame = world.resource::<Probe>().frame;
+    if world.resource::<Probe>().target == UI_FONT {
+        audit_font(world, frame);
+    }
     if frame == 59 {
         let position = world
             .query::<(&Name, &UiGlobalTransform)>()
@@ -306,13 +325,13 @@ fn audit(world: &mut World) {
     let probe = world.resource::<Probe>();
     let critical = world
         .resource::<AssetServer>()
-        .get_path_id(BACKDROP)
-        .expect("real backdrop request must exist");
+        .get_path_id(probe.target)
+        .expect("real controlled asset request must exist");
     let state = world.resource::<AssetServer>().get_load_state(critical);
     let reads = probe.gate.reads.load(Ordering::SeqCst);
     let gate = world.resource::<AssetReadiness>();
     println!(
-        "ASSET_READINESS_STAGE frame={frame} ready={} loaded={}/{} failed={} backdrop={state:?} real_reads={reads}",
+        "ASSET_READINESS_STAGE frame={frame} ready={} loaded={}/{} failed={} controlled={state:?} real_reads={reads}",
         gate.ready, gate.loaded, gate.total, gate.failed
     );
     if [10, 15].contains(&frame) {
@@ -386,5 +405,101 @@ fn audit(world: &mut World) {
         println!(
             "ASSET_READINESS_PASS genuine pending/error/reload/ready, blocked inputs and clock"
         );
+    }
+}
+
+// Inspect real production TextFont sources; language strings alone cannot prove fallback.
+fn audit_font(world: &mut World, frame: u32) {
+    if ![10, 15, 40, 45, 67, 70, 75, 110, 140].contains(&frame) {
+        return;
+    }
+    let font_id = world
+        .resource::<AssetServer>()
+        .get_path_id(UI_FONT)
+        .expect("production UI font request");
+    if frame < 85 {
+        assert!(
+            !world
+                .resource::<AssetServer>()
+                .is_loaded_with_dependencies(font_id)
+        );
+        let overlay = world
+            .query::<(Entity, &Name)>()
+            .iter(world)
+            .find_map(|(entity, name)| (name.as_str() == "Expedition loading").then_some(entity))
+            .expect("actual fallback loading overlay");
+        let rows: Vec<_> = world
+            .query::<(Entity, &Text, &TextFont)>()
+            .iter(world)
+            .map(|(entity, text, font)| (entity, text.0.clone(), font.font.clone()))
+            .collect();
+        let mut status_seen = false;
+        let mut retry_seen = false;
+        for (entity, text, font) in rows {
+            let mut ancestor = entity;
+            let mut in_overlay = ancestor == overlay;
+            while !in_overlay {
+                let Some(parent) = world.get::<ChildOf>(ancestor) else {
+                    break;
+                };
+                ancestor = parent.parent();
+                in_overlay = ancestor == overlay;
+            }
+            if !in_overlay {
+                continue;
+            }
+            assert!(
+                matches!(font,FontSource::Handle(ref handle) if *handle == Handle::<Font>::default()),
+                "fallback must use Bevy's embedded font"
+            );
+            assert!(
+                !text.chars().any(|c| ('\u{4e00}'..='\u{9fff}').contains(&c)),
+                "missing font overlay must remain readable English"
+            );
+            if text.contains("Preparing expedition")
+                || text.contains("Some expedition assets could not be loaded")
+            {
+                status_seen = true;
+            }
+            if text == "Retry loading" {
+                retry_seen = true;
+            }
+        }
+        assert!(status_seen, "actual English fallback status");
+        assert_eq!(retry_seen, [40, 45].contains(&frame));
+        println!(
+            "ASSET_READINESS_FONT_FALLBACK frame={frame} embedded English, retry={retry_seen}"
+        );
+    } else {
+        assert!(
+            world
+                .resource::<AssetServer>()
+                .is_loaded_with_dependencies(font_id)
+        );
+        assert!(
+            world
+                .query::<&Name>()
+                .iter(world)
+                .all(|name| name.as_str() != "Expedition loading")
+        );
+        let rows: Vec<_> = world
+            .query::<(&Text, &TextFont)>()
+            .iter(world)
+            .map(|(text, font)| (text.0.clone(), font.font.clone()))
+            .collect();
+        assert!(
+            rows.iter().any(|(text, font)| text
+                .chars()
+                .any(|c| ('\u{4e00}'..='\u{9fff}').contains(&c))
+                && matches!(font,FontSource::Handle(handle) if handle.id().untyped()==font_id)),
+            "recovered actual Chinese UI must use loaded production font"
+        );
+        if frame == 110 {
+            assert!(
+                rows.iter()
+                    .any(|(text, _)| text == "点击基础指挥官开始远征")
+            );
+        }
+        println!("ASSET_READINESS_FONT_RECOVERED frame={frame} loaded real Chinese UI font");
     }
 }

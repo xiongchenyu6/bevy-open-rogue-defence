@@ -412,8 +412,8 @@ fn main() {
     });
 
     let mut app = App::new();
-    if scenario == "asset-readiness" {
-        asset_readiness_capture::prepare(&mut app);
+    if matches!(scenario, "asset-readiness" | "asset-readiness-font") {
+        asset_readiness_capture::prepare(&mut app, scenario == "asset-readiness-font");
     }
     app.insert_resource(ClearColor(Color::srgb(0.015, 0.025, 0.045)))
         .insert_resource(TimeUpdateStrategy::ManualDuration(Duration::from_secs_f64(
@@ -447,7 +447,7 @@ fn main() {
         .add_plugins(GamePlugin)
         .add_systems(PostUpdate, suppress_final_drafts);
 
-    if scenario == "asset-readiness" {
+    if matches!(scenario, "asset-readiness" | "asset-readiness-font") {
         asset_readiness_capture::plugin(&mut app);
     }
 
@@ -491,7 +491,7 @@ fn main() {
     // Publish the render-target asset to the render world before a long
     // main-world-only simulation. Pause gameplay during this startup/render
     // frame so it cannot consume any of the requested simulation time.
-    if scenario == "asset-readiness" {
+    if matches!(scenario, "asset-readiness" | "asset-readiness-font") {
         asset_readiness_capture::install(&mut apps.main);
         println!(
             "[capture] readiness scenario retains cold-start asset loading; no preload warm-up"
@@ -917,7 +917,7 @@ fn configure_scenario(world: &mut World, scenario: &str) {
         onboarding_capture::configure(world, scenario);
         return;
     }
-    if scenario == "asset-readiness" {
+    if matches!(scenario, "asset-readiness" | "asset-readiness-font") {
         asset_readiness_capture::configure(world);
         return;
     }

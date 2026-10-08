@@ -1,0 +1,30 @@
+{
+  "frames": 450,
+  "reviewed_images_by_root": 12,
+  "scope": "Real isolated font/backdrop omission and reader hold, actual retry input, embedded font handles, recovery to production Chinese font and fresh initial card; no later recruitment, campaign or package proof",
+  "source_sha256": {
+    "src/bin/capture.rs": "952493880b714c252824c384399a8e556a587b3f3ef0c69101f816f8f44123d3",
+    "src/bin/capture/asset_readiness.rs": "452c1ea37eb9a57444e95e8eadd6ca73eb26a40b6d03f03e6e8e9c33ca18162c"
+  },
+  "original_ui_font_sha256": "bdab91e514165db0446a841bc4892b0d48c009638e6e609276a1cbbc85df8b99",
+  "files": {
+    "backdrop-regression/capture.log": "d36398f93a938e05e7af988b60d612fbf16038761e9723b83ce1e5df2922cf5f",
+    "backdrop-regression/frame00044.png": "e5a3c572989182541ff45d17e054931d718d0c526e4bd7070cfbb3bf154f8c8f",
+    "backdrop-regression/frame00109.png": "0f8f4abd077d669b54dc18b5ee81da8565f49b5532634c4f6b88e9340aea5e5e",
+    "build.log": "0c6534704226fb188c99dfb3efc5b4366d045ef1e54a3ebb3ac7061d3ba1bc8a",
+    "clippy.log": "a8b989d79826c0c8c1911689dcc66654436b07c3d74dc7a5b8850691beb02765",
+    "font-1280x720/capture.log": "130842a92b4f6daadb758e779c12205db159e94aa531c8e1fe39aef0b5a6cb0c",
+    "font-1280x720/frame00014.png": "1c921d7384de8be871c36347ef9835698f6d2f95a0776feb57452e327c34d33c",
+    "font-1280x720/frame00044.png": "c5762b261fb54692dd12a3d4f8ba260719ba8539389e60d27f4b6d618d444412",
+    "font-1280x720/frame00074.png": "1c921d7384de8be871c36347ef9835698f6d2f95a0776feb57452e327c34d33c",
+    "font-1280x720/frame00109.png": "e559d456f9cd17701bfe5e5bb3e3a398858615709e13294234757a4a5136b82d",
+    "font-1280x720/frame00139.png": "9fd27329bc153c68545e3eca7c8f07cd70c8f2e9428f301d08a0ba70e196ff51",
+    "font-640x360/capture.log": "cc5af9e176901dfc01c6c4127552bf68b46da64e9656e7f122943d3ed605aad2",
+    "font-640x360/frame00014.png": "062af70e41f74757ffc65f10aec47d6aa1373222f4358126e4d8d8376be6375b",
+    "font-640x360/frame00044.png": "e4e43f3d9c142853202585fdbe9f07605da059b0f111fa2ba27faf8e98ae8c2f",
+    "font-640x360/frame00074.png": "062af70e41f74757ffc65f10aec47d6aa1373222f4358126e4d8d8376be6375b",
+    "font-640x360/frame00109.png": "c1901b27d6ce0d8e8c6b03ee5964c07345371f31cb4f052d35a8acc235e6c9bb",
+    "font-640x360/frame00139.png": "725e369d4027828f9785786c125c82a49fc097e703b3714415c759e3c1f719f7",
+    "format.log": "e36e1c53f56e344362938e79a430194927b1970a78b5c7ac77b25e960d4bc752"
+  }
+}
