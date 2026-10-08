@@ -1,6 +1,29 @@
 use super::*;
 use crate::game::summon_movement::{FormationSlot, advance, follow};
 
+// Count due contacts only after reaching the target; idle/travel cannot bank hits.
+fn due_contacts(
+    timer: &mut f32,
+    delta: f32,
+    travel_seconds: f32,
+    multiplier: f32,
+    interval: f32,
+) -> usize {
+    if travel_seconds > 0.0 {
+        let travel = travel_seconds.min(delta);
+        *timer = (*timer - summon_attack_delta(travel, multiplier)).max(0.0)
+            - summon_attack_delta(delta - travel, multiplier);
+    } else {
+        *timer -= summon_attack_delta(delta, multiplier);
+    }
+    let mut count = 0;
+    while *timer <= 0.0 {
+        *timer += interval;
+        count += 1;
+    }
+    count
+}
+
 pub(super) fn update_skill_summons(
     mut commands: Commands,
     time: Res<Time>,
@@ -43,18 +66,14 @@ pub(super) fn update_skill_summons(
             sentry.attack_remaining = (sentry.attack_remaining - attack_delta).max(0.0);
             continue;
         }
-        let multiplier = market_effects.summon_attack_speed_multiplier();
-        if travel_seconds > 0.0 {
-            let travel = travel_seconds.min(delta);
-            sentry.attack_remaining =
-                (sentry.attack_remaining - summon_attack_delta(travel, multiplier)).max(0.0)
-                    - summon_attack_delta(delta - travel, multiplier);
-        } else {
-            sentry.attack_remaining -= attack_delta;
-        }
-        // Preserve fractional cooldown and every due contact at accelerated deltas.
-        while sentry.attack_remaining <= 0.0 {
-            sentry.attack_remaining += 0.9;
+        let contacts = due_contacts(
+            &mut sentry.attack_remaining,
+            delta,
+            travel_seconds,
+            market_effects.summon_attack_speed_multiplier(),
+            0.9,
+        );
+        for _ in 0..contacts {
             schedule_typed_strike(
                 &mut commands,
                 target_entity,
@@ -69,36 +88,47 @@ pub(super) fn update_skill_summons(
     }
 
     for (entity, slot, mut transform, mut hound) in &mut hounds {
+        let active_delta = delta.min(hound.remaining.max(0.0));
         hound.remaining -= delta;
-        if hound.remaining <= 0.0 {
+        if active_delta <= 0.0 {
             pools.retire_summon(&mut commands, entity);
             continue;
         }
-        hound.attack_remaining = (hound.attack_remaining - attack_delta).max(0.0);
-        let Some((target_entity, target)) = nearest_position(transform.translation, &targets)
-        else {
-            follow(&mut transform, slot.0, 5.2, delta);
-            continue;
-        };
-        if advance(
-            &mut transform,
-            target,
-            5.2,
-            1.1 * rank_size(build.skills[5]),
-            delta,
-        ) && hound.attack_remaining <= 0.0
-        {
-            hound.attack_remaining += 0.7;
-            schedule_typed_strike(
-                &mut commands,
-                target_entity,
-                hound.damage,
-                0.0,
-                0.05,
-                false,
-                0.48,
-                DamageProfile::for_skill(5),
-            );
+        let multiplier = market_effects.summon_attack_speed_multiplier();
+        let active_attack_delta = summon_attack_delta(active_delta, multiplier);
+        if let Some((target_entity, target)) = nearest_position(transform.translation, &targets) {
+            let reach = 1.1 * rank_size(build.skills[5]);
+            let travel_seconds =
+                ((target - transform.translation).with_y(0.0).length() - reach).max(0.0) / 5.2;
+            if advance(&mut transform, target, 5.2, reach, active_delta) {
+                let contacts = due_contacts(
+                    &mut hound.attack_remaining,
+                    active_delta,
+                    travel_seconds,
+                    multiplier,
+                    0.7,
+                );
+                for _ in 0..contacts {
+                    schedule_typed_strike(
+                        &mut commands,
+                        target_entity,
+                        hound.damage,
+                        0.0,
+                        0.05,
+                        false,
+                        0.48,
+                        DamageProfile::for_skill(5),
+                    );
+                }
+            } else {
+                hound.attack_remaining = (hound.attack_remaining - active_attack_delta).max(0.0);
+            }
+        } else {
+            hound.attack_remaining = (hound.attack_remaining - active_attack_delta).max(0.0);
+            follow(&mut transform, slot.0, 5.2, active_delta);
+        }
+        if hound.remaining <= 0.0 {
+            pools.retire_summon(&mut commands, entity);
         }
     }
 }

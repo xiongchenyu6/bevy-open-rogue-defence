@@ -187,3 +187,71 @@ fn bone_sentry_pursuit_time_cannot_be_spent_as_contact_time() {
             < 0.001
     );
 }
+
+fn hound_output(step: Duration) -> (usize, f64) {
+    let mut app = app();
+    app.world_mut().resource_mut::<PlayerBuild>().skills[5] = 1;
+    let target = enemy(&mut app, 0.5);
+    let hound = app
+        .world_mut()
+        .spawn((
+            SkillSummon,
+            FormationSlot(0),
+            SpiritHound {
+                source_skill: 5,
+                remaining: 8.0,
+                attack_remaining: 0.0,
+                damage: 50.0,
+            },
+            Transform::default(),
+        ))
+        .id();
+    let total = Duration::from_secs(10);
+    let mut elapsed = Duration::ZERO;
+    let mut count = 0;
+    let mut damage = 0.0;
+    while elapsed < total {
+        let delta = step.min(total - elapsed);
+        app.world_mut().resource_mut::<Time>().advance_by(delta);
+        app.world_mut()
+            .run_system_once(update_skill_summons)
+            .unwrap();
+        let strikes: Vec<_> = app
+            .world_mut()
+            .query::<(Entity, &SkillStrike)>()
+            .iter(app.world())
+            .map(|(entity, strike)| {
+                assert_eq!(strike.target, target);
+                assert_eq!(strike.profile.skill_index, Some(5));
+                (entity, f64::from(strike.damage))
+            })
+            .collect();
+        for (entity, amount) in strikes {
+            count += 1;
+            damage += amount;
+            app.world_mut().despawn(entity);
+        }
+        elapsed += delta;
+    }
+    assert!(app.world().get::<SpiritHound>(hound).unwrap().remaining <= 0.0);
+    assert_eq!(app.world().get::<Enemy>(target).unwrap().hp, 1000.0);
+    (count, damage)
+}
+
+#[test]
+fn hound_equal_lifetime_preserves_contacts_at_accelerated_steps() {
+    let normal = hound_output(Duration::from_secs_f64(1.0 / 60.0));
+    let fast = hound_output(Duration::from_secs_f64(32.0 / 60.0));
+    let slow = hound_output(Duration::from_secs_f64(32.0 / 15.0));
+    println!(
+        "HOUND_EQUAL_8S_LIFETIME normal={normal:?} fast={fast:?} slow={slow:?}; outgoing contacts, not HP damage"
+    );
+    assert!(normal.0 >= 10);
+    let overshot = hound_output(Duration::from_secs(10));
+    for output in [fast, slow, overshot] {
+        assert!(
+            normal.0.abs_diff(output.0) <= 1 && (normal.1 - output.1).abs() <= 50.0,
+            "finite lifetime must preserve due contacts: normal={normal:?}, accelerated={output:?}"
+        );
+    }
+}

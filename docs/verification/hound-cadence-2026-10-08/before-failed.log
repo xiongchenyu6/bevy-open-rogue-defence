@@ -1,0 +1,38 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3m 09s
+     Running unittests src/lib.rs (target/debug/deps/rogue_commander-7930c12b106a9f5a)
+
+running 1 test
+HOUND_EQUAL_8S_LIFETIME normal=(12, 600.0) fast=(8, 400.0) slow=(3, 150.0); outgoing contacts, not HP damage
+
+thread 'game::skills::summons::cadence_tests::hound_equal_lifetime_preserves_contacts_at_accelerated_steps' (167075) panicked at src/game/skills/summons_cadence_tests.rs:251:9:
+finite lifetime must preserve due contacts: normal=(12, 600.0), accelerated=(8, 400.0)
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: rogue_commander::game::skills::summons::cadence_tests::hound_equal_lifetime_preserves_contacts_at_accelerated_steps
+             at ./src/game/skills/summons_cadence_tests.rs:251:9
+   3: rogue_commander::game::skills::summons::cadence_tests::hound_equal_lifetime_preserves_contacts_at_accelerated_steps::{closure#0}
+             at ./src/game/skills/summons_cadence_tests.rs:242:66
+   4: <rogue_commander::game::skills::summons::cadence_tests::hound_equal_lifetime_preserves_contacts_at_accelerated_steps::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+test game::skills::summons::cadence_tests::hound_equal_lifetime_preserves_contacts_at_accelerated_steps ... FAILED
+
+failures:
+
+failures:
+    game::skills::summons::cadence_tests::hound_equal_lifetime_preserves_contacts_at_accelerated_steps
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 600 filtered out; finished in 1.80s
+
+error: test failed, to rerun pass `--lib`

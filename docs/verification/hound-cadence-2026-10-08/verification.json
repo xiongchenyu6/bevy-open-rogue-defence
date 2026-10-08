@@ -1,0 +1,19 @@
+{
+  "library_tests": 600,
+  "ignored": 1,
+  "native_frames": 1360,
+  "reviewed_images": 4,
+  "controlled_scope": "Hound outgoing SkillStrike contacts and nominal damage during an8-second lifetime, including expiry-crossing delta; not resolved HP damage or whole-game32x equivalence",
+  "before_contacts": [
+    12,
+    8,
+    3
+  ],
+  "after_contacts": [
+    12,
+    12,
+    12
+  ],
+  "source_sha256": "f087c148fac1cabd556c12deb64929cb790d554d4f4f565606113d5bbdea5d65",
+  "visual_limitation": "667x375 wall reconstruction countdown overlaps left HUD; this change does not fix that layout"
+}
