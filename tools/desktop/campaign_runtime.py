@@ -3,6 +3,7 @@
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -24,6 +25,33 @@ def read_progress(path):
                 upgrades=[int(value) for value in lines[4].split(',')])
 
 
+def strength_from_lines(text_lines):
+    """Only accept the Strength row's first-column value, never other stats."""
+    values, evidence = set(), []
+    for label in text_lines:
+        text, left, top, right, bottom = label
+        if not re.match(r'^Strength\b', text, re.I):
+            continue
+        inline = re.match(r'^Strength\s+(\d+(?:\.\d+)?)(?:\s|$)', text, re.I)
+        if inline:
+            values.add(float(inline[1])); evidence.append(label)
+        elif normalized(text) == 'strength':
+            for candidate in text_lines:
+                value, x, y, _, lower = candidate
+                if (re.fullmatch(r'\d+(?:\.\d+)?', value.strip())
+                        and right < x < left + 285
+                        and abs((y + lower) / 2 - (top + bottom) / 2) <= 8):
+                    values.add(float(value)); evidence.extend((label, candidate))
+    assert len(values) == 1, f'Cannot identify a unique Strength-row value: {evidence}'
+    return values.pop(), list(dict.fromkeys(evidence))
+
+
+def seed_from_text(text):
+    match = re.fullmatch(r'SEED(0x[0-9a-f]{16})', ''.join(text.split()), re.I)
+    assert match, f'Expected complete16-digit result seed, got {text!r}'
+    return match[1].lower()
+
+
 def main():
     assert not Path('/nix').exists() and not Path('/project').exists()
     assert not shutil.which('cargo') and not shutil.which('rustc')
@@ -32,12 +60,16 @@ def main():
     OUT.mkdir(exist_ok=True)
     state = OUT / 'state'; state.mkdir(exist_ok=False)
     progress_path = state / 'campaign.save'
+    speed = int(os.environ.get('CAMPAIGN_SPEED', '32'))
+    assert speed in (1, 2, 4, 8, 16, 32), 'CAMPAIGN_SPEED must be 1,2,4,8,16,32'
+    requested_seed = os.environ.get('CAMPAIGN_SEED', '0xA11CE')
+    assert 0 <= int(requested_seed, 0) < (1 << 64), 'CAMPAIGN_SEED must fit u64'
     env = os.environ.copy()
     for key in ('BEVY_ASSET_ROOT', 'CARGO_MANIFEST_DIR', 'WAYLAND_DISPLAY', 'ROGUE_TUTORIAL_SAVE'):
         env.pop(key, None)
     env.update(DISPLAY=':93', WINIT_UNIX_BACKEND='x11', XDG_CONFIG_HOME=str(state / 'config'),
                XDG_RUNTIME_DIR=str(state), ROGUE_CAMPAIGN_SAVE=str(progress_path),
-               ROGUE_COMMANDER_LANG='en', ROGUE_COMMANDER_SEED='0xA11CE',
+               ROGUE_COMMANDER_LANG='en', ROGUE_COMMANDER_SEED=requested_seed,
                ROGUE_AUDIO_SAVE=str(state / 'audio'),
                VK_ICD_FILENAMES=str(next(Path('/usr/share/vulkan/icd.d').glob('lvp_icd*.json'))))
     (state / 'audio').write_text('1 0 0 1\n')
@@ -78,17 +110,7 @@ def main():
         time.sleep(1)
         if app.poll() is None: click_text(win, app, 'Quit game')
         assert app.wait(timeout=30) == 0
-    stop_input = threading.Event()
-    input_thread = None
-    report = dict(scope='Packaged Ubuntu/X11 software Vulkan, public UI/keys, stationary greedy policy',
-                  seed='0xA11CE', speed=32, completed_run=False, victory=False)
-    try:
-        start(['Xvfb', ':93', '-screen', '0', '1600x900x24', '-nolisten', 'tcp', '-ac'], 'xvfb.log')
-        time.sleep(1); start(['openbox'], 'wm.log'); time.sleep(1)
-        app = start([str(GAME / 'rogue_commander')], 'game.log'); win = window(app)
-        click_text(win, app, 'BEGIN EXPEDITION')
-        wait_text(win, app, 'Skip'); call(['xdotool', 'key', 'Escape'])
-        wait_text(win, app, 'Click a basic commander to begin')
+    def select_storm(win, app):
         names = [line for line in lines(win) if normalized(line[0]) == 'stormsavant' and 150 < line[2] < 550]
         assert names, 'Actual portrait card caption, not the duplicate detail heading'
         _, left, top, right, bottom = min(names, key=lambda line: line[2])
@@ -99,17 +121,76 @@ def main():
             if any('24:' in text.replace(' ', '') for text, *_ in lines(win)): break
             call(['xdotool', 'key', '1']); time.sleep(.3)
         else: raise RuntimeError('Actual battle countdown did not advance after hero card click')
-        for _ in range(5): call(['xdotool', 'key', 't']); time.sleep(.25)
+    def record_strength(win, app, name, expected):
+        geometry = dict(line.split('=', 1) for line in call(
+            ['xdotool', 'getwindowgeometry', '--shell', win]).splitlines())
+        assert geometry['WIDTH'] == '1280' and geometry['HEIGHT'] == '720'
+        assert any(re.fullmatch(r'1\s*[x×]', text.strip(), re.I)
+                   for text, *_ in lines(win)), 'Sample attributes only after confirming actual 1x'
+        # Screenshot-confirmed public portrait rectangle: (156,22,44,44).
+        call(['xdotool', 'mousemove', '--window', win, '178', '44'])
+        call(['xdotool', 'click', '1'])
+        wait_text(win, app, 'ATTRIBUTES')
+        screen = shot(win, name)
+        text_lines = ocr_screenshot(screen, env)
+        assert any(re.search(r'Storm\s*Savant.*Level\s+1\b', text, re.I)
+                   for text, *_ in text_lines), 'Attributes must show StormSavant at Level 1'
+        actual, evidence = strength_from_lines(text_lines)
+        record = dict(hero='StormSavant', level=1, speed=1, strength=actual,
+                      expected=expected, screenshot=name, strength_ocr=evidence)
+        assert actual == expected, f'Actual Strength {actual}, expected {expected}'
+        call(['xdotool', 'key', 'Escape'])
+        deadline = time.monotonic() + 30
+        while time.monotonic() < deadline:
+            if find_text(lines(win), 'ATTRIBUTES') is None:
+                break
+            time.sleep(.3)
+        else:
+            raise RuntimeError('Attributes did not close after Escape')
+        return record
+    stop_input = threading.Event()
+    input_thread = None
+    report = dict(scope='Packaged Ubuntu/X11 software Vulkan, public UI/keys, stationary greedy policy',
+                  requested_seed=requested_seed, requested_speed=speed,
+                  strategy='Stationary greedy public keys: 1, g, f', completed_run=False, victory=False)
+    try:
+        start(['Xvfb', ':93', '-screen', '0', '1600x900x24', '-nolisten', 'tcp', '-ac'], 'xvfb.log')
+        time.sleep(1); start(['openbox'], 'wm.log'); time.sleep(1)
+        app = start([str(GAME / 'rogue_commander')], 'game.log'); win = window(app)
+        click_text(win, app, 'BEGIN EXPEDITION')
+        wait_text(win, app, 'Skip'); call(['xdotool', 'key', 'Escape'])
+        wait_text(win, app, 'Click a basic commander to begin')
+        select_storm(win, app)
+        report['base_attributes'] = record_strength(win, app, 'base-strength.png', 20.0)
+        for _ in range(speed.bit_length() - 1): call(['xdotool', 'key', 't']); time.sleep(.25)
         def operate():
             while not stop_input.is_set() and app.poll() is None:
                 call(['xdotool', 'key', '--delay', '30', '1', 'g', 'f'])
                 stop_input.wait(.2)
         input_thread = threading.Thread(target=operate, daemon=True)
         input_thread.start()
-        speed_lines = lines(win)
-        assert any('32' in text and ('x' in normalized(text) or '×' in text) for text, *_ in speed_lines), 'Actual speed must be32'
-        shot(win, 'speed32.png')
-        started, deadline = time.monotonic(), time.monotonic() + 900
+        deadline = time.monotonic() + 45
+        while time.monotonic() < deadline:
+            speed_lines = lines(win)
+            visible = {int(match[1]) for text, x, y, right, bottom in speed_lines
+                       if 1000 <= x <= 1080 and y < 90
+                       and (match := re.fullmatch(r'(1|2|4|8|16|32)\s*[x×]', text.strip(), re.I))}
+            assert len(visible) <= 1, f'Ambiguous toolbar speed: {visible}'
+            if visible == {speed}:
+                break
+            if visible:
+                current = visible.pop()
+                # Correct a missed input through the real +/- toolbar button.
+                call(['xdotool', 'mousemove', '--window', win, str(995 if current < speed else 943), '44'])
+                call(['xdotool', 'mousedown', '1']); time.sleep(.15)
+                call(['xdotool', 'mouseup', '1']); time.sleep(.3)
+        else:
+            raise RuntimeError(f'Actual toolbar speed did not reach {speed}x')
+        report['actual_speed'] = speed
+        shot(win, f'speed{speed}.png')
+        timeout = max(900, 1500 / speed + 300)
+        report['battle_timeout_seconds'] = timeout
+        started, deadline = time.monotonic(), time.monotonic() + timeout
         next_sample, sample = 0., 0
         while time.monotonic() < deadline:
             assert app.poll() is None, 'Unexpected game exit'
@@ -122,6 +203,11 @@ def main():
                 if title:
                     report.update(completed_run=True, victory=title=='CHAPTER CLEARED', terminal=title,
                                   wall_seconds=time.monotonic()-started, samples=sample)
+                    seed_row = OUT / 'seed-row.png'
+                    call(['convert', str(screen), '-crop', '480x36+400+452', '-resize', '400%', str(seed_row)])
+                    seed_text = call(['tesseract', str(seed_row), 'stdout', '-l', 'eng', '--psm', '7'])
+                    report['actual_run_seed'] = seed_from_text(seed_text)
+                    report['actual_seed_ocr'] = seed_text
                     shutil.copy2(screen, OUT / 'result.png'); break
                 next_sample = time.monotonic() + 3
             time.sleep(.2)
@@ -145,13 +231,20 @@ def main():
             shot(win,'training-before.png')
             call(['xdotool','mousemove','--window',win,'290','231']);call(['xdotool','click','1']);time.sleep(1)
             after=read_progress(progress_path)
-            assert after['currency']==before['currency']-15 and sum(after['upgrades'])==1
+            assert after['currency']==before['currency']-15 and after['upgrades']==[1, 0, 0, 0, 0, 0]
             report['earned_upgrade']=after;shot(win,'training.png')
         quit_game(win,app)
         app=start([str(GAME/'rogue_commander')],'restart.log');win=window(app)
         wait_text(win,app,'EXPEDITIONS');shot(win,'restart.png')
         assert read_progress(progress_path)==report.get('earned_upgrade',before)
         report['saved_progress_survives_restart']=True
+        assert 'earned_upgrade' in report, 'Earned shards insufficient to purchase Strength; effect remains unverified'
+        # Default first chapter remains selected after a fresh launch.
+        click_text(win, app, 'BEGIN EXPEDITION')
+        wait_text(win, app, 'Click a basic commander to begin')
+        select_storm(win, app)
+        report['upgraded_attributes'] = record_strength(win, app, 'earned-strength-restart.png', 22.0)
+        report['earned_strength_applies_after_restart'] = True
         quit_game(win,app);report['normal_quit_twice']=True
         (OUT/'result.json').write_text(json.dumps(report,indent=2)+'\n')
         assert report['victory'], 'Actual run lost: retain failure evidence, do not count as chapter completion'

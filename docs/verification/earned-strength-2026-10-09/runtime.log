@@ -1,0 +1,11 @@
+{"sample": 1, "wall_seconds": 7.9, "terminal": null}
+{"sample": 2, "wall_seconds": 18.0, "terminal": null}
+{"sample": 3, "wall_seconds": 23.6, "terminal": "NO LIVES REMAIN"}
+Traceback (most recent call last):
+  File "/harness/campaign_runtime.py", line 255, in <module>
+    if __name__=='__main__': main()
+                             ^^^^^^
+  File "/harness/campaign_runtime.py", line 243, in main
+    assert report['victory'], 'Actual run lost: retain failure evidence, do not count as chapter completion'
+           ~~~~~~^^^^^^^^^^^
+AssertionError: Actual run lost: retain failure evidence, do not count as chapter completion

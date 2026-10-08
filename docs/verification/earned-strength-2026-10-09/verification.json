@@ -1,0 +1,16 @@
+{
+  "source_commit": "e109893d96296849a292bccedcbe635116009f1a",
+  "actual_run_seed": "0x00000000000a11cf",
+  "requested_seed": "0xA11CE",
+  "raw_report_seed_invalid": true,
+  "raw_report_seed_note": "Whole-image OCR accepted a truncated seed. Raw result retained unchanged. Corrected crop OCR and exact16-digit parser validated separately on this actual result image. Final harness uses that correction; full final harness run remains pending.",
+  "reviewed_native_images_by_root": 9,
+  "earned_shards": 43,
+  "spent_shards": 15,
+  "remaining_shards": 28,
+  "initial_strength": 20,
+  "new_run_strength": 22,
+  "strength_applies_after_restart": true,
+  "victory": false,
+  "terminal_assertion": "Runtime job failed only at final required-victory assertion. This is not a chapter-clear pass."
+}
