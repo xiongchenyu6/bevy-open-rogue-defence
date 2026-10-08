@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Real packaged first chapter via public keyboard/UI; never sets game state."""
+"""Real packaged selected chapter via public keyboard/UI; never sets game state."""
 import hashlib
 import json
 import os
@@ -60,14 +60,36 @@ def result_seed_crop(text_lines):
     return f'480x{seed_height}+400+{seed_top}'
 
 
+def strength_purchase(progress):
+    """Expected public Strength purchase under campaign_progress.rs's pricing."""
+    level = progress['upgrades'][0]
+    assert level < 10, 'Strength already at maximum upgrade level'
+    cost = 15 + 10 * level + 5 * level * level
+    expected = dict(progress, currency=progress['currency'] - cost,
+                    upgrades=[level + 1, *progress['upgrades'][1:]])
+    return cost, expected
+
+
 def main():
     assert not Path('/nix').exists() and not Path('/project').exists()
     assert not shutil.which('cargo') and not shutil.which('rustc')
     for item in json.loads((GAME / 'package-manifest.json').read_text())['files']:
         assert hashlib.sha256((GAME / item['file']).read_bytes()).hexdigest() == item['sha256']
     OUT.mkdir(exist_ok=True)
-    state = OUT / 'state'; state.mkdir(exist_ok=False)
+    stage = int(os.environ.get('CAMPAIGN_STAGE', '0'))
+    assert 0 <= stage < 6, 'CAMPAIGN_STAGE must be 0..5'
+    continuation = os.environ.get('CAMPAIGN_CONTINUE', '0')
+    assert continuation in ('0', '1'), 'CAMPAIGN_CONTINUE must be 0 or 1'
+    state = OUT / 'state'
     progress_path = state / 'campaign.save'
+    if continuation == '1':
+        assert state.is_dir() and progress_path.is_file(), 'Continue requires actual existing state'
+        initial = read_progress(progress_path)
+        assert stage < initial['unlocked'] and all(value == '1' for value in initial['cleared'][:stage])
+    else:
+        assert stage == 0, 'Fresh campaign can only begin at stage 0'
+        state.mkdir(exist_ok=False)
+        initial = dict(unlocked=1, currency=0, cleared='000000', upgrades=[0]*6)
     speed = int(os.environ.get('CAMPAIGN_SPEED', '32'))
     assert speed in (1, 2, 4, 8, 16, 32), 'CAMPAIGN_SPEED must be 1,2,4,8,16,32'
     requested_seed = os.environ.get('CAMPAIGN_SEED', '0xA11CE')
@@ -80,7 +102,7 @@ def main():
                ROGUE_COMMANDER_LANG='en', ROGUE_COMMANDER_SEED=requested_seed,
                ROGUE_AUDIO_SAVE=str(state / 'audio'),
                VK_ICD_FILENAMES=str(next(Path('/usr/share/vulkan/icd.d').glob('lvp_icd*.json'))))
-    (state / 'audio').write_text('1 0 0 1\n')
+    if continuation == '0': (state / 'audio').write_text('1 0 0 1\n')
     processes, logs = [], []
     def start(args, name):
         log = (OUT / name).open('w'); logs.append(log)
@@ -118,12 +140,12 @@ def main():
         time.sleep(1)
         if app.poll() is None: click_text(win, app, 'Quit game')
         assert app.wait(timeout=30) == 0
-    def start_first_chapter(win):
+    def start_chapter(win):
         geometry = dict(line.split('=', 1) for line in call(
             ['xdotool', 'getwindowgeometry', '--shell', win]).splitlines())
         assert geometry['WIDTH'] == '1280' and geometry['HEIGHT'] == '720'
-        # Multiple unlocked cards share BEGIN EXPEDITION; use the inspected first card.
-        call(['xdotool', 'mousemove', '--window', win, '289', '294'])
+        # Multiple cards share BEGIN EXPEDITION; use the inspected chapter grid.
+        call(['xdotool', 'mousemove', '--window', win, str((289, 640, 990)[stage % 3]), str(294 if stage < 3 else 509)])
         call(['xdotool', 'click', '1'])
     def select_storm(win, app):
         names = [line for line in lines(win) if normalized(line[0]) == 'stormsavant' and 150 < line[2] < 550]
@@ -166,17 +188,21 @@ def main():
     stop_input = threading.Event()
     input_thread = None
     report = dict(scope='Packaged Ubuntu/X11 software Vulkan, public UI/keys, stationary greedy policy',
+                  stage=stage, continued=continuation == '1', initial_progress=initial,
                   requested_seed=requested_seed, requested_speed=speed,
                   strategy='Stationary greedy public keys: 1, g, f', completed_run=False, victory=False)
     try:
         start(['Xvfb', ':93', '-screen', '0', '1600x900x24', '-nolisten', 'tcp', '-ac'], 'xvfb.log')
         time.sleep(1); start(['openbox'], 'wm.log'); time.sleep(1)
         app = start([str(GAME / 'rogue_commander')], 'game.log'); win = window(app)
-        start_first_chapter(win)
-        wait_text(win, app, 'Skip'); call(['xdotool', 'key', 'Escape'])
+        wait_text(win, app, 'EXPEDITIONS')
+        if continuation == '1': assert read_progress(progress_path) == initial
+        start_chapter(win)
+        if continuation == '0':
+            wait_text(win, app, 'Skip'); call(['xdotool', 'key', 'Escape'])
         wait_text(win, app, 'Click a basic commander to begin')
         select_storm(win, app)
-        report['base_attributes'] = record_strength(win, app, 'base-strength.png', 20.0)
+        report['base_attributes'] = record_strength(win, app, 'base-strength.png', 20.0 + 2 * initial['upgrades'][0])
         for _ in range(speed.bit_length() - 1): call(['xdotool', 'key', 't']); time.sleep(.25)
         def operate():
             while not stop_input.is_set() and app.poll() is None:
@@ -233,20 +259,22 @@ def main():
         while not progress_path.exists() and time.monotonic()<deadline: time.sleep(.2)
         before = read_progress(progress_path); report['earned_progress'] = before
         assert before['currency'] > 0
-        assert (before['cleared'][0]=='1') == report['victory']
-        if before['currency'] >= 15:
+        assert (before['cleared'][stage] == '1') == (report['victory'] or initial['cleared'][stage] == '1')
+        cost, expected_purchase = strength_purchase(before)
+        report['strength_upgrade_cost'] = cost
+        if before['currency'] >= cost:
             geometry=dict(line.split('=',1) for line in call(['xdotool','getwindowgeometry','--shell',win]).splitlines())
             assert geometry['WIDTH']=='1280' and geometry['HEIGHT']=='720'
             # The inspected report footer places the training action here; require
             # the real training title after the click rather than trusting OCR aliases.
-            call(['xdotool','mousemove','--window',win,str(714 if report['victory'] else 655),'620'])
+            call(['xdotool','mousemove','--window',win,str(714 if report['victory'] and stage < 5 else 655),'620'])
             call(['xdotool','click','1'])
             wait_text(win, app, 'LEGACY TRAINING')
             # Inspected1280x720 training layout: first Strength upgrade button.
             shot(win,'training-before.png')
             call(['xdotool','mousemove','--window',win,'290','231']);call(['xdotool','click','1']);time.sleep(1)
             after=read_progress(progress_path)
-            assert after['currency']==before['currency']-15 and after['upgrades']==[1, 0, 0, 0, 0, 0]
+            assert after == expected_purchase, 'Actual saved purchase differs from expected cost/level'
             report['earned_upgrade']=after;shot(win,'training.png')
         quit_game(win,app)
         app=start([str(GAME/'rogue_commander')],'restart.log');win=window(app)
@@ -254,11 +282,11 @@ def main():
         assert read_progress(progress_path)==report.get('earned_upgrade',before)
         report['saved_progress_survives_restart']=True
         assert 'earned_upgrade' in report, 'Earned shards insufficient to purchase Strength; effect remains unverified'
-        # Default first chapter remains selected after a fresh launch.
-        start_first_chapter(win)
+        # Reopen the configured chapter after restarting with its real purchased upgrade.
+        start_chapter(win)
         wait_text(win, app, 'Click a basic commander to begin')
         select_storm(win, app)
-        report['upgraded_attributes'] = record_strength(win, app, 'earned-strength-restart.png', 22.0)
+        report['upgraded_attributes'] = record_strength(win, app, 'earned-strength-restart.png', 20.0 + 2 * report['earned_upgrade']['upgrades'][0])
         report['earned_strength_applies_after_restart'] = True
         quit_game(win,app);report['normal_quit_twice']=True
         (OUT/'result.json').write_text(json.dumps(report,indent=2)+'\n')
