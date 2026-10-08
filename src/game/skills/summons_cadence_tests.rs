@@ -1,5 +1,5 @@
 //! Compare real outgoing contact strikes under equal simulated time, without
-//! target movement, target attacks, collision, skill casts or summon expiry.
+//! target movement, target attacks, collision or skill casts.
 use super::{
     tests::{app, enemy},
     *,

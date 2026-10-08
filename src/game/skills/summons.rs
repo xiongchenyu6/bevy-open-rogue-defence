@@ -160,52 +160,62 @@ pub(super) fn update_rare_summons(
         return;
     };
     let delta = time.delta_secs();
-    let attack_delta = summon_attack_delta(delta, market_effects.summon_attack_speed_multiplier());
+    let multiplier = market_effects.summon_attack_speed_multiplier();
     let targets: Vec<(Entity, Vec3)> = enemies
         .iter()
         .filter(|(_, _, enemy)| enemy.hp > 0.0)
         .map(|(entity, transform, _)| (entity, transform.translation))
         .collect();
     for (entity, slot, mut transform, mut elemental) in &mut tide_elementals {
+        let active_delta = delta.min(elemental.remaining.max(0.0));
         elemental.remaining -= delta;
-        if elemental.remaining <= 0.0 {
+        if active_delta <= 0.0 {
             pools.retire_summon(&mut commands, entity);
             continue;
         }
-        elemental.attack_remaining = (elemental.attack_remaining - attack_delta).max(0.0);
-        let Some((target_entity, target)) = nearest_position(transform.translation, &targets)
-        else {
-            follow(&mut transform, slot.0, 3.5, delta);
-            continue;
-        };
-        if !advance(
-            &mut transform,
-            target,
-            3.5,
-            6.0 * rank_size(build.skills[16]),
-            delta,
-        ) {
-            continue;
-        }
-        if elemental.attack_remaining <= 0.0 {
-            elemental.attack_remaining += 1.0;
-            let direction = (target - transform.translation).normalize_or_zero();
-            if spawn_typed_projectile(
-                &mut commands,
-                &assets,
-                &mut pools,
-                transform.translation + Vec3::Y * 0.65,
-                direction,
-                15.0,
-                elemental.damage,
-                0.46,
-                0,
-                1.8,
-                0.76,
-                DamageProfile::for_skill(16),
-            ) {
-                runtime.wet.insert(target_entity, 3.0);
+        let active_attack_delta = summon_attack_delta(active_delta, multiplier);
+        if let Some((target_entity, target)) = nearest_position(transform.translation, &targets) {
+            let reach = 6.0 * rank_size(build.skills[16]);
+            let travel_seconds =
+                ((target - transform.translation).with_y(0.0).length() - reach).max(0.0) / 3.5;
+            if advance(&mut transform, target, 3.5, reach, active_delta) {
+                let contacts = due_contacts(
+                    &mut elemental.attack_remaining,
+                    active_delta,
+                    travel_seconds,
+                    multiplier,
+                    1.0,
+                );
+                let direction = (target - transform.translation).normalize_or_zero();
+                for _ in 0..contacts {
+                    if spawn_typed_projectile(
+                        &mut commands,
+                        &assets,
+                        &mut pools,
+                        transform.translation + Vec3::Y * 0.65,
+                        direction,
+                        15.0,
+                        elemental.damage,
+                        0.46,
+                        0,
+                        1.8,
+                        0.76,
+                        DamageProfile::for_skill(16),
+                    ) {
+                        runtime.wet.insert(target_entity, 3.0);
+                    }
+                }
+            } else {
+                elemental.attack_remaining =
+                    (elemental.attack_remaining - active_attack_delta).max(0.0);
             }
+        } else {
+            elemental.attack_remaining =
+                (elemental.attack_remaining - active_attack_delta).max(0.0);
+            follow(&mut transform, slot.0, 3.5, active_delta);
+        }
+        if elemental.remaining <= 0.0 {
+            pools.retire_summon(&mut commands, entity);
         }
     }
 
@@ -218,46 +228,57 @@ pub(super) fn update_rare_summons(
                 Visibility::Visible
             };
         }
+        let active_delta = delta.min(turret.remaining.max(0.0));
         turret.remaining -= delta;
-        if turret.remaining <= 0.0 {
+        if active_delta <= 0.0 {
             pools.retire_summon(&mut commands, entity);
             continue;
         }
-        if gate_down {
-            continue;
+        // Gate downtime consumes lifetime but freezes the weapon cooldown.
+        if !gate_down {
+            if let Some((_, target)) = targets
+                .iter()
+                .copied()
+                .filter(|(_, position)| {
+                    (*position - transform.translation)
+                        .with_y(0.0)
+                        .length_squared()
+                        <= (8.0 * rank_size(build.skills[17])).powi(2)
+                })
+                .min_by(|left, right| left.1.x.total_cmp(&right.1.x))
+            {
+                let contacts = due_contacts(
+                    &mut turret.attack_remaining,
+                    active_delta,
+                    0.0,
+                    multiplier,
+                    0.72,
+                );
+                for _ in 0..contacts {
+                    spawn_typed_projectile(
+                        &mut commands,
+                        &assets,
+                        &mut pools,
+                        transform.translation + Vec3::Y * 0.75,
+                        (target - transform.translation).normalize_or_zero(),
+                        21.0,
+                        turret.damage,
+                        0.43,
+                        1,
+                        1.7,
+                        0.72,
+                        DamageProfile::for_skill(17),
+                    );
+                }
+            } else {
+                turret.attack_remaining = (turret.attack_remaining
+                    - summon_attack_delta(active_delta, multiplier))
+                .max(0.0);
+            }
         }
-        turret.attack_remaining = (turret.attack_remaining - attack_delta).max(0.0);
-        if turret.attack_remaining > 0.0 {
-            continue;
+        if turret.remaining <= 0.0 {
+            pools.retire_summon(&mut commands, entity);
         }
-        let Some((_, target)) = targets
-            .iter()
-            .copied()
-            .filter(|(_, position)| {
-                (*position - transform.translation)
-                    .with_y(0.0)
-                    .length_squared()
-                    <= (8.0 * rank_size(build.skills[17])).powi(2)
-            })
-            .min_by(|left, right| left.1.x.total_cmp(&right.1.x))
-        else {
-            continue;
-        };
-        turret.attack_remaining += 0.72;
-        spawn_typed_projectile(
-            &mut commands,
-            &assets,
-            &mut pools,
-            transform.translation + Vec3::Y * 0.75,
-            (target - transform.translation).normalize_or_zero(),
-            21.0,
-            turret.damage,
-            0.43,
-            1,
-            1.7,
-            0.72,
-            DamageProfile::for_skill(17),
-        );
     }
 }
 
@@ -303,7 +324,7 @@ pub(super) fn update_epic_summons(
         return;
     };
     let delta = time.delta_secs();
-    let attack_delta = summon_attack_delta(delta, market_effects.summon_attack_speed_multiplier());
+    let multiplier = market_effects.summon_attack_speed_multiplier();
     let snapshots: Vec<TargetInfo> = enemies
         .iter()
         .filter(|(_, _, enemy, _, _, _)| enemy.hp > 0.0)
@@ -313,121 +334,152 @@ pub(super) fn update_epic_summons(
         .collect();
 
     for (entity, slot, mut transform, mut wyrm) in &mut wyrms {
+        let active_delta = delta.min(wyrm.remaining.max(0.0));
         wyrm.remaining -= delta;
-        if wyrm.remaining <= 0.0 {
+        if active_delta <= 0.0 {
             pools.retire_summon(&mut commands, entity);
             continue;
         }
-        wyrm.attack_remaining = (wyrm.attack_remaining - attack_delta).max(0.0);
-        let Some(target) = snapshots.iter().copied().min_by(|left, right| {
+        let active_attack_delta = summon_attack_delta(active_delta, multiplier);
+        if let Some(target) = snapshots.iter().copied().min_by(|left, right| {
             transform
                 .translation
                 .distance_squared(left.position)
                 .total_cmp(&transform.translation.distance_squared(right.position))
-        }) else {
-            follow(&mut transform, slot.0, 4.2, delta);
-            continue;
-        };
-        if !advance(
-            &mut transform,
-            target.position,
-            4.2,
-            7.0 * rank_size(build.skills[26]),
-            delta,
-        ) || wyrm.attack_remaining > 0.0
-        {
-            continue;
-        }
-        wyrm.attack_remaining += 1.15;
-        let direction = (target.position - transform.translation).normalize_or_zero();
-        if spawn_typed_projectile(
-            &mut commands,
-            &assets,
-            &mut pools,
-            transform.translation + Vec3::Y * 0.7,
-            direction,
-            17.0,
-            wyrm.damage,
-            0.62,
-            3,
-            2.0,
-            1.05,
-            DamageProfile::for_skill(26),
-        ) {
-            for hit in line_targets(
-                transform.translation,
-                direction,
-                &snapshots,
-                14.0 * rank_size(build.skills[26]),
-                0.9 * rank_size(build.skills[26]),
-                4,
-            ) {
-                let count = wyrm.frost_hits.entry(hit.entity).or_default();
-                *count += 1;
-                if *count >= 3 {
-                    *count = 0;
-                    apply_control(&mut runtime, hit, 1.8, 1.2, 0.0);
+        }) {
+            let reach = 7.0 * rank_size(build.skills[26]);
+            let travel_seconds = ((target.position - transform.translation)
+                .with_y(0.0)
+                .length()
+                - reach)
+                .max(0.0)
+                / 4.2;
+            if advance(&mut transform, target.position, 4.2, reach, active_delta) {
+                let contacts = due_contacts(
+                    &mut wyrm.attack_remaining,
+                    active_delta,
+                    travel_seconds,
+                    multiplier,
+                    1.15,
+                );
+                let direction = (target.position - transform.translation).normalize_or_zero();
+                for _ in 0..contacts {
+                    if spawn_typed_projectile(
+                        &mut commands,
+                        &assets,
+                        &mut pools,
+                        transform.translation + Vec3::Y * 0.7,
+                        direction,
+                        17.0,
+                        wyrm.damage,
+                        0.62,
+                        3,
+                        2.0,
+                        1.05,
+                        DamageProfile::for_skill(26),
+                    ) {
+                        for hit in line_targets(
+                            transform.translation,
+                            direction,
+                            &snapshots,
+                            14.0 * rank_size(build.skills[26]),
+                            0.9 * rank_size(build.skills[26]),
+                            4,
+                        ) {
+                            let count = wyrm.frost_hits.entry(hit.entity).or_default();
+                            *count += 1;
+                            if *count >= 3 {
+                                *count = 0;
+                                apply_control(&mut runtime, hit, 1.8, 1.2, 0.0);
+                            }
+                        }
+                    }
                 }
+            } else {
+                wyrm.attack_remaining = (wyrm.attack_remaining - active_attack_delta).max(0.0);
             }
+        } else {
+            wyrm.attack_remaining = (wyrm.attack_remaining - active_attack_delta).max(0.0);
+            follow(&mut transform, slot.0, 4.2, active_delta);
         }
         wyrm.frost_hits
             .retain(|target, _| enemies.contains(*target));
+        if wyrm.remaining <= 0.0 {
+            pools.retire_summon(&mut commands, entity);
+        }
     }
 
     for (entity, slot, mut transform, mut colossus) in &mut colossi {
+        let active_delta = delta.min(colossus.remaining.max(0.0));
         colossus.remaining -= delta;
-        colossus.slam_remaining = (colossus.slam_remaining - attack_delta).max(0.0);
-        if colossus.remaining <= 0.0 {
+        if active_delta <= 0.0 {
             pools.retire_summon(&mut commands, entity);
             continue;
         }
-        let Some(target) = snapshots.iter().min_by(|a, b| {
+        if let Some(target) = snapshots.iter().min_by(|a, b| {
             transform
                 .translation
                 .distance_squared(a.position)
                 .total_cmp(&transform.translation.distance_squared(b.position))
-        }) else {
-            follow(&mut transform, slot.0, 3.0, delta);
-            continue;
-        };
-        let in_reach = advance(
-            &mut transform,
-            target.position,
-            3.0,
-            2.6 * rank_size(build.skills[27]),
-            delta,
-        );
-        let center = transform.translation;
-        for (enemy_entity, mut enemy_transform, enemy, boss, trial, archive) in &mut enemies {
-            if enemy.hp <= 0.0 {
-                continue;
+        }) {
+            let reach = 2.6 * rank_size(build.skills[27]);
+            let travel_seconds = ((target.position - transform.translation)
+                .with_y(0.0)
+                .length()
+                - reach)
+                .max(0.0)
+                / 3.0;
+            let in_reach = advance(&mut transform, target.position, 3.0, reach, active_delta);
+            let center = transform.translation;
+            for (enemy_entity, mut enemy_transform, enemy, boss, trial, archive) in &mut enemies {
+                if enemy.hp <= 0.0 {
+                    continue;
+                }
+                let distance = center.distance(enemy_transform.translation);
+                if distance > skill_effect_radius(27, build.skills[27]).unwrap() {
+                    continue;
+                }
+                let target =
+                    target_info(enemy_entity, &enemy_transform, enemy, boss, trial, archive);
+                let pull_scale = forced_movement_scale(enemy.elite, boss.is_some());
+                if distance > 1.55 {
+                    let to_center = center - enemy_transform.translation;
+                    enemy_transform.translation += to_center.normalize_or_zero()
+                        * (2.4 * pull_scale * active_delta).min((distance - 1.55).max(0.0));
+                } else {
+                    apply_control(&mut runtime, target, 0.0, 0.0, 0.16);
+                }
             }
-            let distance = center.distance(enemy_transform.translation);
-            if distance > skill_effect_radius(27, build.skills[27]).unwrap() {
-                continue;
-            }
-            let target = target_info(enemy_entity, &enemy_transform, enemy, boss, trial, archive);
-            let pull_scale = forced_movement_scale(enemy.elite, boss.is_some());
-            if distance > 1.55 {
-                let to_center = center - enemy_transform.translation;
-                enemy_transform.translation += to_center.normalize_or_zero()
-                    * (2.4 * pull_scale * delta).min((distance - 1.55).max(0.0));
+            let contacts = if in_reach {
+                due_contacts(
+                    &mut colossus.slam_remaining,
+                    active_delta,
+                    travel_seconds,
+                    multiplier,
+                    3.0,
+                )
             } else {
-                apply_control(&mut runtime, target, 0.0, 0.0, 0.16);
+                colossus.slam_remaining = (colossus.slam_remaining
+                    - summon_attack_delta(active_delta, multiplier))
+                .max(0.0);
+                0
+            };
+            for _ in 0..contacts {
+                schedule_typed_fixed_strike(
+                    &mut commands,
+                    center,
+                    colossus.damage,
+                    0.0,
+                    3.1,
+                    true,
+                    3.25 * rank_size(build.skills[27]),
+                    DamageProfile::for_skill(27),
+                );
             }
-        }
-        while in_reach && colossus.slam_remaining <= 0.0 && colossus.remaining >= -0.001 {
-            colossus.slam_remaining += 3.0;
-            schedule_typed_fixed_strike(
-                &mut commands,
-                center,
-                colossus.damage,
-                0.0,
-                3.1,
-                true,
-                3.25 * rank_size(build.skills[27]),
-                DamageProfile::for_skill(27),
-            );
+        } else {
+            colossus.slam_remaining =
+                (colossus.slam_remaining - summon_attack_delta(active_delta, multiplier)).max(0.0);
+            follow(&mut transform, slot.0, 3.0, active_delta);
         }
         if colossus.remaining <= 0.0 {
             pools.retire_summon(&mut commands, entity);
@@ -785,3 +837,7 @@ mod tests {
 #[cfg(test)]
 #[path = "summons_cadence_tests.rs"]
 mod cadence_tests;
+
+#[cfg(test)]
+#[path = "rare_summons_cadence_tests.rs"]
+mod rare_cadence_tests;

@@ -1,0 +1,29 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.56s
+     Running unittests src/lib.rs (target/debug/deps/rogue_commander-7930c12b106a9f5a)
+
+running 1 test
+FINITE_SUMMON Tide lifetime=8s step=533.333333ms normal=(8, 400.0) accelerated=(9, 450.0); outgoing count/damage, no collision
+FINITE_SUMMON Tide lifetime=8s step=2.133333333s normal=(8, 400.0) accelerated=(9, 450.0); outgoing count/damage, no collision
+FINITE_SUMMON Tide lifetime=8s step=10s normal=(8, 400.0) accelerated=(9, 450.0); outgoing count/damage, no collision
+FINITE_SUMMON Turret lifetime=8s step=533.333333ms normal=(12, 600.0) accelerated=(12, 600.0); outgoing count/damage, no collision
+FINITE_SUMMON Turret lifetime=8s step=2.133333333s normal=(12, 600.0) accelerated=(12, 600.0); outgoing count/damage, no collision
+FINITE_SUMMON Turret lifetime=8s step=10s normal=(12, 600.0) accelerated=(12, 600.0); outgoing count/damage, no collision
+FINITE_SUMMON Wyrm lifetime=8s step=533.333333ms normal=(7, 350.0) accelerated=(7, 350.0); outgoing count/damage, no collision
+FINITE_SUMMON Wyrm lifetime=8s step=2.133333333s normal=(7, 350.0) accelerated=(7, 350.0); outgoing count/damage, no collision
+FINITE_SUMMON Wyrm lifetime=8s step=10s normal=(7, 350.0) accelerated=(7, 350.0); outgoing count/damage, no collision
+FINITE_SUMMON Colossus lifetime=8s step=533.333333ms normal=(3, 150.0) accelerated=(3, 150.0); outgoing count/damage, no collision
+FINITE_SUMMON Colossus lifetime=8s step=2.133333333s normal=(3, 150.0) accelerated=(3, 150.0); outgoing count/damage, no collision
+FINITE_SUMMON Colossus lifetime=8s step=10s normal=(3, 150.0) accelerated=(3, 150.0); outgoing count/damage, no collision
+test game::skills::summons::rare_cadence_tests::finite_summons_preserve_output_across_32x_steps_and_lifetime_overshoot ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 604 filtered out; finished in 0.05s
+
