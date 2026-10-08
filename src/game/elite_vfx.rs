@@ -31,6 +31,8 @@ struct Art {
     glyphs: [Handle<Mesh>; 8],
     colors: [Handle<StandardMaterial>; 8],
     ring: Handle<Mesh>,
+    yellow_field: Handle<Mesh>,
+    yellow_material: Handle<StandardMaterial>,
 }
 #[derive(Component)]
 struct Crest {
@@ -55,11 +57,14 @@ fn index(kind: EliteAffixKind) -> usize {
     }
 }
 fn mesh(paths: &[Vec<Vec3>]) -> Mesh {
+    mesh_with_width(paths, 0.055)
+}
+fn mesh_with_width(paths: &[Vec<Vec3>], half_width: f32) -> Mesh {
     let mut vertices = Vec::new();
     let mut indices = Vec::new();
     for path in paths {
         for pair in path.windows(2) {
-            let side = (pair[1] - pair[0]).cross(Vec3::Y).normalize_or_zero() * 0.055;
+            let side = (pair[1] - pair[0]).cross(Vec3::Y).normalize_or_zero() * half_width;
             let start = vertices.len() as u32;
             vertices.extend(
                 [
@@ -92,6 +97,34 @@ fn circle(x: f32, z: f32, r: f32) -> Vec<Vec3> {
             Vec3::new(x + a.cos() * r, 0.0, z + a.sin() * r)
         })
         .collect()
+}
+// The outer edge stays at unit radius: scaling still shows the exact gameplay boundary.
+fn yellow_field_mesh() -> Mesh {
+    let mut paths = vec![
+        (0..=64)
+            .map(|i| {
+                let angle = i as f32 * std::f32::consts::TAU / 64.0;
+                Vec3::new(angle.cos(), 0.0, angle.sin()) * 0.99
+            })
+            .collect(),
+    ];
+    for i in 0..8 {
+        let angle = i as f32 * std::f32::consts::TAU / 8.0;
+        let direction = Vec3::new(angle.cos(), 0.0, angle.sin());
+        paths.push(vec![direction * 0.86, direction * 0.95]);
+        if i % 2 == 0 {
+            let side = Vec3::new(-direction.z, 0.0, direction.x);
+            let center = direction * 0.76;
+            paths.push(vec![
+                center + direction * 0.06,
+                center + side * 0.035,
+                center - direction * 0.06,
+                center - side * 0.035,
+                center + direction * 0.06,
+            ]);
+        }
+    }
+    mesh_with_width(&paths, 0.01)
 }
 fn signature(i: usize) -> Mesh {
     let paths = match i {
@@ -215,6 +248,15 @@ fn setup(
         glyphs: std::array::from_fn(|i| meshes.add(signature(i))),
         colors,
         ring,
+        yellow_field: meshes.add(yellow_field_mesh()),
+        yellow_material: materials.add(StandardMaterial {
+            base_color: Color::srgba(1.0, 0.78, 0.15, 0.62),
+            emissive: LinearRgba::rgb(1.6, 1.0, 0.15),
+            unlit: true,
+            alpha_mode: AlphaMode::Blend,
+            cull_mode: None,
+            ..default()
+        }),
     });
 }
 fn attach(
@@ -244,8 +286,16 @@ fn attach(
             .spawn((
                 Name::new("Elite affix field"),
                 Field { owner },
-                Mesh3d(art.ring.clone()),
-                MeshMaterial3d(art.colors[i].clone()),
+                Mesh3d(if affix.kind() == EliteAffixKind::YellowSign {
+                    art.yellow_field.clone()
+                } else {
+                    art.ring.clone()
+                }),
+                MeshMaterial3d(if affix.kind() == EliteAffixKind::YellowSign {
+                    art.yellow_material.clone()
+                } else {
+                    art.colors[i].clone()
+                }),
                 Transform::from_xyz(0.0, 0.07, 0.0),
                 Visibility::Hidden,
                 NotShadowCaster,
@@ -351,6 +401,31 @@ pub(crate) fn reset_run(world: &mut World) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn yellow_sigil_keeps_the_real_escape_boundary_and_has_an_open_center() {
+        let mesh = yellow_field_mesh();
+        let positions = mesh
+            .attribute(Mesh::ATTRIBUTE_POSITION)
+            .unwrap()
+            .as_float3()
+            .unwrap();
+        let radii: Vec<_> = positions
+            .iter()
+            .map(|p| Vec2::new(p[0], p[2]).length())
+            .collect();
+        assert!(
+            radii
+                .iter()
+                .all(|radius| radius.is_finite() && *radius <= 1.001)
+        );
+        let outer = radii.iter().copied().fold(0.0_f32, f32::max);
+        assert!((outer * YELLOW_SIGN_RADIUS - YELLOW_SIGN_RADIUS).abs() < 0.001);
+        assert!(
+            radii.iter().all(|radius| *radius > 0.65),
+            "symbols stay outside the actor center"
+        );
+        assert!(positions.iter().all(|p| p[1] == 0.0));
+    }
     #[test]
     fn signatures_are_unique_and_bounded() {
         let meshes = (0..8).map(signature).collect::<Vec<_>>();
