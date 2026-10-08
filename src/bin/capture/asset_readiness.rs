@@ -1,13 +1,8 @@
 //! Exercise the production readiness plugin with controlled, genuine asset I/O.
+use super::asset_io_capture::{self, ReadGate};
 use bevy::{
     app::SubApp,
-    asset::{
-        AssetApp, LoadState, RecursiveDependencyLoadState,
-        io::{
-            AssetReader, AssetReaderError, AssetSourceBuilder, AssetSourceId, PathStream, Reader,
-            file::FileAssetReader,
-        },
-    },
+    asset::{LoadState, RecursiveDependencyLoadState},
     camera::RenderTarget,
     input::{ButtonState, mouse::MouseButtonInput},
     prelude::*,
@@ -19,70 +14,11 @@ use rogue_commander::game::{
     GameAssets, GameLanguage, GameSession, HeroKind, SelectedHero,
 };
 use std::{
-    fs,
-    future::poll_fn,
-    path::{Path, PathBuf},
-    sync::{
-        Arc, Mutex,
-        atomic::{AtomicBool, AtomicUsize, Ordering},
-    },
-    task::{Poll, Waker},
-    time::{SystemTime, UNIX_EPOCH},
+    path::PathBuf,
+    sync::{Arc, atomic::Ordering},
 };
 const BACKDROP: &str = "ui/draft_backdrop.png";
 const UI_FONT: &str = "fonts/rogue_commander_ui.ttf";
-#[derive(Default)]
-struct ReadGate {
-    open: AtomicBool,
-    reads: AtomicUsize,
-    waiters: Mutex<Vec<Waker>>,
-}
-impl ReadGate {
-    async fn wait(&self) {
-        poll_fn(|context| {
-            let mut waiters = self.waiters.lock().unwrap();
-            if self.open.load(Ordering::SeqCst) {
-                Poll::Ready(())
-            } else {
-                waiters.push(context.waker().clone());
-                Poll::Pending
-            }
-        })
-        .await;
-    }
-    fn release(&self) {
-        self.open.store(true, Ordering::SeqCst);
-        for waker in self.waiters.lock().unwrap().drain(..) {
-            waker.wake();
-        }
-    }
-}
-struct ControlledReader {
-    target: &'static str,
-    file: FileAssetReader,
-    gate: Arc<ReadGate>,
-}
-impl AssetReader for ControlledReader {
-    async fn read<'a>(&'a self, path: &'a Path) -> Result<impl Reader + 'a, AssetReaderError> {
-        if path == Path::new(self.target) {
-            self.gate.reads.fetch_add(1, Ordering::SeqCst);
-            self.gate.wait().await;
-        }
-        self.file.read(path).await
-    }
-    async fn read_meta<'a>(&'a self, path: &'a Path) -> Result<impl Reader + 'a, AssetReaderError> {
-        self.file.read_meta(path).await
-    }
-    async fn read_directory<'a>(
-        &'a self,
-        path: &'a Path,
-    ) -> Result<Box<PathStream>, AssetReaderError> {
-        self.file.read_directory(path).await
-    }
-    async fn is_directory<'a>(&'a self, path: &'a Path) -> Result<bool, AssetReaderError> {
-        self.file.is_directory(path).await
-    }
-}
 #[derive(Resource)]
 struct Probe {
     target: &'static str,
@@ -93,53 +29,10 @@ struct Probe {
     pointer_targets: Vec<(Entity, RenderTarget)>,
     unoffered: Option<Handle<WorldAsset>>,
 }
-fn copy_assets(source: &Path, target: &Path, relative: &Path, omitted: &Path) {
-    fs::create_dir_all(target).unwrap();
-    for entry in fs::read_dir(source).unwrap() {
-        let entry = entry.unwrap();
-        let child = relative.join(entry.file_name());
-        if child == omitted {
-            continue;
-        }
-        if entry.path().is_dir() {
-            copy_assets(
-                &entry.path(),
-                &target.join(entry.file_name()),
-                &child,
-                omitted,
-            );
-        } else {
-            fs::copy(entry.path(), target.join(entry.file_name())).unwrap();
-        }
-    }
-}
 /// Register before AssetPlugin; no production asset files or readiness flags are changed.
 pub fn prepare(app: &mut App, font_scenario: bool) {
     let target = if font_scenario { UI_FONT } else { BACKDROP };
-    let nonce = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap()
-        .as_nanos();
-    let root = std::env::temp_dir().join(format!("rogue-readiness-{}-{nonce}", std::process::id()));
-    copy_assets(
-        &Path::new(env!("CARGO_MANIFEST_DIR")).join("assets"),
-        &root,
-        Path::new(""),
-        Path::new(target),
-    );
-    let gate = Arc::new(ReadGate::default());
-    let reader_gate = gate.clone();
-    let reader_root = root.clone();
-    app.register_asset_source(
-        AssetSourceId::Default,
-        AssetSourceBuilder::new(move || {
-            Box::new(ControlledReader {
-                target,
-                file: FileAssetReader::new(&reader_root),
-                gate: reader_gate.clone(),
-            })
-        }),
-    );
+    let (root, gate) = asset_io_capture::prepare(app, &[target], false);
     app.insert_resource(Probe {
         target,
         frame: 0,
@@ -172,7 +65,7 @@ pub fn install(app: &mut SubApp) {
     );
     app.add_systems(Last, audit);
 }
-fn press(world: &mut World, name: &str) {
+pub(super) fn press(world: &mut World, name: &str) {
     let e = world
         .query::<(Entity, &Name, &Interaction)>()
         .iter(world)
@@ -228,13 +121,7 @@ fn input(world: &mut World) {
     if frame == 50 {
         let p = world.resource::<Probe>();
         p.gate.open.store(false, Ordering::SeqCst);
-        fs::copy(
-            Path::new(env!("CARGO_MANIFEST_DIR"))
-                .join("assets")
-                .join(p.target),
-            p.root.join(p.target),
-        )
-        .unwrap();
+        asset_io_capture::restore(&p.root, &[p.target]);
     }
     if frame == 60 {
         press(world, "Retry loading");
@@ -252,16 +139,28 @@ fn repeat_click(world: &mut World) {
     if frame != 66 && frame != 67 {
         return;
     }
+    let position = world
+        .resource::<Probe>()
+        .retry_position
+        .expect("original retry button coordinates");
+    let targets = pointer_click(world, position, frame == 66);
+    world.resource_mut::<Probe>().pointer_targets = targets;
+    if frame == 66 {
+        println!("ASSET_READINESS_REAL_REPEAT_POINTER position={position:?}");
+    }
+}
+/// Inject real cursor and pointer events against the real button coordinates.
+pub(super) fn pointer_click(
+    world: &mut World,
+    position: Vec2,
+    pressed: bool,
+) -> Vec<(Entity, RenderTarget)> {
     let window = world
         .query::<(Entity, &Window)>()
         .iter(world)
         .next()
         .unwrap()
         .0;
-    let position = world
-        .resource::<Probe>()
-        .retry_position
-        .expect("original retry button coordinates");
     let logical = position / world.get::<Window>(window).unwrap().scale_factor();
     world
         .get_mut::<Window>(window)
@@ -274,7 +173,7 @@ fn repeat_click(world: &mut World) {
     });
     world.write_message(MouseButtonInput {
         button: MouseButton::Left,
-        state: if frame == 66 {
+        state: if pressed {
             ButtonState::Pressed
         } else {
             ButtonState::Released
@@ -290,11 +189,9 @@ fn repeat_click(world: &mut World) {
         *world.get_mut::<RenderTarget>(*e).unwrap() =
             RenderTarget::Window(WindowRef::Entity(window));
     }
-    world.resource_mut::<Probe>().pointer_targets = targets;
-    if frame == 66 {
-        println!("ASSET_READINESS_REAL_REPEAT_POINTER position={position:?}");
-    }
+    targets
 }
+
 fn audit(world: &mut World) {
     let frame = world.resource::<Probe>().frame;
     if world.resource::<Probe>().target == UI_FONT {

@@ -63,7 +63,12 @@ fn track_failures(
     for event in events.read() {
         // A fresh failure result ends the attempt; the old Failed state may
         // remain visible in AssetServer throughout a genuine asynchronous retry.
-        if gate.retrying && gate.retry_paths.contains(&event.path.without_label()) {
+        if gate.retrying
+            && gate
+                .retry_paths
+                .iter()
+                .any(|path| path.without_label() == event.path.without_label())
+        {
             gate.retrying = false;
             gate.drawn = None;
         }
@@ -85,12 +90,13 @@ fn retry(
         return;
     }
     let mut paths = HashSet::new();
-    // Reload parent files, which also reload their nested textures/meshes and labels.
+    // Keep the live requested label: a failed scene may have no parent asset handle.
+    // Reloading that label reads its file and rebuilds its nested assets as well.
     for &id in &gate.required {
         if failed(&server, id)
             && let Some(path) = server.get_path(id)
         {
-            paths.insert(path.without_label().into_owned());
+            paths.insert(path.into_owned());
             if let Some((own, _, dependencies)) = server.get_load_states(id) {
                 let error = match (own, dependencies) {
                     (LoadState::Failed(error), _)
@@ -103,7 +109,7 @@ fn retry(
                             server.get_load_state(*dependency)
                             && std::sync::Arc::ptr_eq(&error, &dependency_error)
                         {
-                            paths.insert(path.without_label().into_owned());
+                            paths.insert(path.clone());
                         }
                     }
                 }

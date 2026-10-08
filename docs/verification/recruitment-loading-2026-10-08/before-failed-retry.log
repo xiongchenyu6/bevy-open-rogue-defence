@@ -1,0 +1,59 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {14, 44, 74, 93, 119, 149}; all 165 simulation/render updates retained
+[2m2026-10-08T01:56:14.713238Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.8", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r2/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r2/runtime/wayland-1" plus null terminator exceeds 108 bytes
+[2m2026-10-08T01:56:14.838065Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.71.09", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-10-08T01:56:15.169384Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-08T01:56:15.169456Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[capture] later recruitment readiness retains cold-start missing catalog assets
+[2m2026-10-08T01:56:15.183384Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.nAryl7/rogue-readiness-2421875-1791424574668386080/models/hero_spirit_keeper.glb
+[2m2026-10-08T01:56:15.183429Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.nAryl7/rogue-readiness-2421875-1791424574668386080/models/hero_frost_oracle.glb
+[2m2026-10-08T01:56:15.183439Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.nAryl7/rogue-readiness-2421875-1791424574668386080/models/hero_tide_walker.glb
+[2m2026-10-08T01:56:15.184222Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.nAryl7/rogue-readiness-2421875-1791424574668386080/models/hero_iron_berserker.glb
+[2m2026-10-08T01:56:15.184247Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.nAryl7/rogue-readiness-2421875-1791424574668386080/models/hero_star_wagerer.glb
+[2m2026-10-08T01:56:15.184255Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.nAryl7/rogue-readiness-2421875-1791424574668386080/models/hero_rift_dancer.glb
+[2m2026-10-08T01:56:15.184263Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.nAryl7/rogue-readiness-2421875-1791424574668386080/models/hero_grove_artificer.glb
+[2m2026-10-08T01:56:15.184271Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.nAryl7/rogue-readiness-2421875-1791424574668386080/models/hero_solar_vanguard.glb
+[2m2026-10-08T01:56:15.184279Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.nAryl7/rogue-readiness-2421875-1791424574668386080/models/hero_void_reaper.glb
+[2m2026-10-08T01:56:15.314162Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+RECRUIT_READINESS_INITIAL_READY nine genuine unoffered failures ignored
+[2m2026-10-08T01:56:16.058917Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r2/en-1280x720/frames/frame00014.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r2/en-1280x720/frames/frame00014.png (356376 bytes)
+RECRUIT_READINESS_AWARD level=10 old=StormSavant clock=0.49999997
+[2m2026-10-08T01:56:16.305629Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r2/en-1280x720/frames/frame00044.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r2/en-1280x720/frames/frame00044.png (40904 bytes)
+
+thread 'main' (2421875) panicked at src/bin/capture/recruitment_readiness.rs:299:17:
+assertion `left == right` failed: retry reads only real offered failed scenes: path=models/hero_star_wagerer.glb, offers=["models/hero_ember_ranger.glb", "models/hero_frost_oracle.glb", "models/hero_grove_artificer.glb", "models/hero_iron_berserker.glb", "models/hero_star_wagerer.glb", "models/hero_stone_warden.glb"], reads={"models/hero_frost_oracle.glb": 1, "models/hero_grove_artificer.glb": 1, "models/hero_iron_berserker.glb": 1, "models/hero_rift_dancer.glb": 1, "models/hero_solar_vanguard.glb": 1, "models/hero_spirit_keeper.glb": 1, "models/hero_star_wagerer.glb": 1, "models/hero_tide_walker.glb": 1, "models/hero_void_reaper.glb": 1}
+  left: Some(1)
+ right: Some(2)
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<core::option::Option<&usize>, core::option::Option<&usize>>
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/panicking.rs:394:5
+   4: capture::recruitment_readiness_capture::audit
+             at ./src/bin/capture/recruitment_readiness.rs:299:17
+   5: <capture::recruitment_readiness_capture::audit as core::ops::function::FnMut<(&mut bevy_ecs::world::World,)>>::call_mut
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:166:5
+   6: <&mut capture::recruitment_readiness_capture::audit as core::ops::function::FnMut<(&mut bevy_ecs::world::World,)>>::call_mut
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:298:21
+   7: <_ as bevy_ecs::system::exclusive_function_system::ExclusiveSystemParamFunction<fn() -> _>>::run::call_inner::<(), &mut capture::recruitment_readiness_capture::audit>
+             at /home/freeman.xiong/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_ecs-0.19.0/src/system/exclusive_function_system.rs:261:21
+   8: <capture::recruitment_readiness_capture::audit as bevy_ecs::system::exclusive_function_system::ExclusiveSystemParamFunction<fn()>>::run
+             at /home/freeman.xiong/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_ecs-0.19.0/src/system/exclusive_function_system.rs:264:17
+   9: <bevy_ecs::system::exclusive_function_system::ExclusiveFunctionSystem<fn(), (), capture::recruitment_readiness_capture::audit> as bevy_ecs::system::system::System>::run_unsafe::{closure#0}
+             at /home/freeman.xiong/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_ecs-0.19.0/src/system/exclusive_function_system.rs:135:33
+  10: <bevy_ecs::world::World>::last_change_tick_scope::<core::result::Result<(), bevy_ecs::system::system::RunSystemError>, <bevy_ecs::system::exclusive_function_system::ExclusiveFunctionSystem<fn(), (), capture::recruitment_readiness_capture::audit> as bevy_ecs::system::system::System>::run_unsafe::{closure#0}>
+             at /home/freeman.xiong/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_ecs-0.19.0/src/world/mod.rs:3315:9
+  11: <bevy_ecs::system::exclusive_function_system::ExclusiveFunctionSystem<fn(), (), capture::recruitment_readiness_capture::audit> as bevy_ecs::system::system::System>::run_unsafe
+             at /home/freeman.xiong/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_ecs-0.19.0/src/system/exclusive_function_system.rs:113:15
+  12: <bevy_ecs::system::exclusive_function_system::ExclusiveFunctionSystem<fn(), (), capture::recruitment_readiness_capture::audit> as bevy_ecs::system::system::System>::run_without_applying_deferred
+             at /home/freeman.xiong/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_ecs-0.19.0/src/system/system.rs:147:23
+  13: <bevy_ecs::system::exclusive_function_system::ExclusiveFunctionSystem<fn(), (), capture::recruitment_readiness_capture::audit> as bevy_ecs::system::system::System>::run
+             at /home/freeman.xiong/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_ecs-0.19.0/src/system/system.rs:131:24
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+Encountered a panic in system `<Enable the debug feature to see the name>`!
+Encountered a panic in system `<Enable the debug feature to see the name>`!

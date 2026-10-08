@@ -1,0 +1,35 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {44, 74, 109}; all 150 simulation/render updates retained
+[2m2026-10-08T06:16:52.060579Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.9", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/runtime/wayland-1" plus null terminator exceeds 108 bytes
+[2m2026-10-08T06:16:52.133913Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.71.09", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-10-08T06:16:52.428749Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-08T06:16:52.428822Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[capture] readiness scenario retains cold-start asset loading; no preload warm-up
+[2m2026-10-08T06:16:52.582341Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[2m2026-10-08T06:16:52.626769Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.S3m9eI/rogue-readiness-32625-1791440212037560999/models/readiness-unoffered-missing.glb
+ASSET_READINESS_STAGE frame=10 ready=false loaded=23/24 failed=0 controlled=Some(Loading) real_reads=1
+ASSET_READINESS_STAGE frame=15 ready=false loaded=23/24 failed=0 controlled=Some(Loading) real_reads=1
+[2m2026-10-08T06:16:53.277954Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.S3m9eI/rogue-readiness-32625-1791440212037560999/ui/draft_backdrop.png
+ASSET_READINESS_STAGE frame=40 ready=false loaded=23/24 failed=1 controlled=Some(Failed(AssetReaderError(NotFound("/tmp/nix-shell.S3m9eI/rogue-readiness-32625-1791440212037560999/ui/draft_backdrop.png")))) real_reads=1
+ASSET_READINESS_STAGE frame=45 ready=false loaded=23/24 failed=1 controlled=Some(Failed(AssetReaderError(NotFound("/tmp/nix-shell.S3m9eI/rogue-readiness-32625-1791440212037560999/ui/draft_backdrop.png")))) real_reads=1
+[2m2026-10-08T06:16:53.505386Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/asset-readiness-regression/frames/frame00044.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/asset-readiness-regression/frames/frame00044.png (34689 bytes)
+ASSET_READINESS_REAL_RETRY_CLICK
+ASSET_READINESS_REAL_REPEAT_POINTER position=Vec2(640.0, 393.0)
+ASSET_READINESS_STAGE frame=67 ready=false loaded=23/24 failed=1 controlled=Some(Failed(AssetReaderError(NotFound("/tmp/nix-shell.S3m9eI/rogue-readiness-32625-1791440212037560999/ui/draft_backdrop.png")))) real_reads=2
+ASSET_READINESS_STAGE frame=70 ready=false loaded=23/24 failed=1 controlled=Some(Failed(AssetReaderError(NotFound("/tmp/nix-shell.S3m9eI/rogue-readiness-32625-1791440212037560999/ui/draft_backdrop.png")))) real_reads=2
+ASSET_READINESS_STAGE frame=75 ready=false loaded=23/24 failed=1 controlled=Some(Failed(AssetReaderError(NotFound("/tmp/nix-shell.S3m9eI/rogue-readiness-32625-1791440212037560999/ui/draft_backdrop.png")))) real_reads=2
+[2m2026-10-08T06:16:53.814696Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/asset-readiness-regression/frames/frame00074.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/asset-readiness-regression/frames/frame00074.png (20495 bytes)
+ASSET_READINESS_STAGE frame=110 ready=true loaded=24/24 failed=0 controlled=Some(Loaded) real_reads=2
+ASSET_READINESS_UNOFFERED_FAILURE_IGNORED SolarVanguard (Failed(AssetReaderError(NotFound("/tmp/nix-shell.S3m9eI/rogue-readiness-32625-1791440212037560999/models/readiness-unoffered-missing.glb"))), Failed(AssetReaderError(NotFound("/tmp/nix-shell.S3m9eI/rogue-readiness-32625-1791440212037560999/models/readiness-unoffered-missing.glb"))), Failed(AssetReaderError(NotFound("/tmp/nix-shell.S3m9eI/rogue-readiness-32625-1791440212037560999/models/readiness-unoffered-missing.glb"))))
+[2m2026-10-08T06:16:54.191456Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/asset-readiness-regression/frames/frame00109.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/asset-readiness-regression/frames/frame00109.png (343876 bytes)
+ASSET_READINESS_STAGE frame=140 ready=true loaded=24/24 failed=0 controlled=Some(Loaded) real_reads=2
+ASSET_READINESS_UNOFFERED_FAILURE_IGNORED SolarVanguard (Failed(AssetReaderError(NotFound("/tmp/nix-shell.S3m9eI/rogue-readiness-32625-1791440212037560999/models/readiness-unoffered-missing.glb"))), Failed(AssetReaderError(NotFound("/tmp/nix-shell.S3m9eI/rogue-readiness-32625-1791440212037560999/models/readiness-unoffered-missing.glb"))), Failed(AssetReaderError(NotFound("/tmp/nix-shell.S3m9eI/rogue-readiness-32625-1791440212037560999/models/readiness-unoffered-missing.glb"))))
+ASSET_READINESS_PASS genuine pending/error/reload/ready, blocked inputs and clock
+[capture] all 3 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 67 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 150 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/asset-readiness-regression/frames

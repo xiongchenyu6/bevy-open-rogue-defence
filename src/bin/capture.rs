@@ -51,6 +51,11 @@ mod picker_settings_capture;
 #[path = "capture/onboarding.rs"]
 mod onboarding_capture;
 
+#[path = "capture/asset_io.rs"]
+mod asset_io_capture;
+#[path = "capture/recruitment_readiness.rs"]
+mod recruitment_readiness_capture;
+
 #[path = "capture/asset_readiness.rs"]
 mod asset_readiness_capture;
 
@@ -412,6 +417,9 @@ fn main() {
     });
 
     let mut app = App::new();
+    if scenario == "asset-readiness-recruit" {
+        recruitment_readiness_capture::prepare(&mut app);
+    }
     if matches!(scenario, "asset-readiness" | "asset-readiness-font") {
         asset_readiness_capture::prepare(&mut app, scenario == "asset-readiness-font");
     }
@@ -447,6 +455,9 @@ fn main() {
         .add_plugins(GamePlugin)
         .add_systems(PostUpdate, suppress_final_drafts);
 
+    if scenario == "asset-readiness-recruit" {
+        recruitment_readiness_capture::plugin(&mut app);
+    }
     if matches!(scenario, "asset-readiness" | "asset-readiness-font") {
         asset_readiness_capture::plugin(&mut app);
     }
@@ -491,7 +502,10 @@ fn main() {
     // Publish the render-target asset to the render world before a long
     // main-world-only simulation. Pause gameplay during this startup/render
     // frame so it cannot consume any of the requested simulation time.
-    if matches!(scenario, "asset-readiness" | "asset-readiness-font") {
+    if scenario == "asset-readiness-recruit" {
+        recruitment_readiness_capture::install(&mut apps.main);
+        println!("[capture] later recruitment readiness retains cold-start missing catalog assets");
+    } else if matches!(scenario, "asset-readiness" | "asset-readiness-font") {
         asset_readiness_capture::install(&mut apps.main);
         println!(
             "[capture] readiness scenario retains cold-start asset loading; no preload warm-up"
@@ -909,6 +923,10 @@ fn wait_for_screenshots(apps: &mut SubApps) {
 }
 
 fn configure_scenario(world: &mut World, scenario: &str) {
+    if scenario == "asset-readiness-recruit" {
+        recruitment_readiness_capture::configure(world);
+        return;
+    }
     if scenario == "picker-settings-layout" {
         picker_settings_capture::configure(world);
         return;

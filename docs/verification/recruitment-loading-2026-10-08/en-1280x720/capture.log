@@ -1,0 +1,41 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {14, 44, 74, 93, 119, 149}; all 165 simulation/render updates retained
+[2m2026-10-08T06:16:37.289177Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.9", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/runtime/wayland-1" plus null terminator exceeds 108 bytes
+[2m2026-10-08T06:16:37.562731Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.71.09", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-10-08T06:16:37.976816Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-08T06:16:37.976882Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[capture] later recruitment readiness retains cold-start missing catalog assets
+[2m2026-10-08T06:16:37.988765Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.Kc1VLp/rogue-readiness-32178-1791440197230237994/models/hero_frost_oracle.glb
+[2m2026-10-08T06:16:37.988812Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.Kc1VLp/rogue-readiness-32178-1791440197230237994/models/hero_iron_berserker.glb
+[2m2026-10-08T06:16:37.988821Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.Kc1VLp/rogue-readiness-32178-1791440197230237994/models/hero_rift_dancer.glb
+[2m2026-10-08T06:16:37.988828Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.Kc1VLp/rogue-readiness-32178-1791440197230237994/models/hero_grove_artificer.glb
+[2m2026-10-08T06:16:37.988855Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.Kc1VLp/rogue-readiness-32178-1791440197230237994/models/hero_void_reaper.glb
+[2m2026-10-08T06:16:37.988864Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.Kc1VLp/rogue-readiness-32178-1791440197230237994/models/hero_solar_vanguard.glb
+[2m2026-10-08T06:16:38.042520Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.Kc1VLp/rogue-readiness-32178-1791440197230237994/models/hero_star_wagerer.glb
+[2m2026-10-08T06:16:38.043046Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.Kc1VLp/rogue-readiness-32178-1791440197230237994/models/hero_tide_walker.glb
+[2m2026-10-08T06:16:38.043069Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.Kc1VLp/rogue-readiness-32178-1791440197230237994/models/hero_spirit_keeper.glb
+[2m2026-10-08T06:16:38.146200Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+RECRUIT_READINESS_INITIAL_READY nine genuine unoffered failures ignored
+[2m2026-10-08T06:16:38.900082Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/en-1280x720/frames/frame00014.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/en-1280x720/frames/frame00014.png (356376 bytes)
+RECRUIT_READINESS_AWARD level=10 old=StormSavant clock=0.49999997
+[2m2026-10-08T06:16:39.152441Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/en-1280x720/frames/frame00044.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/en-1280x720/frames/frame00044.png (40904 bytes)
+RECRUIT_READINESS_HELD frame=70 path_reads=Some({"models/hero_frost_oracle.glb": 2, "models/hero_grove_artificer.glb": 2, "models/hero_iron_berserker.glb": 2, "models/hero_rift_dancer.glb": 1, "models/hero_solar_vanguard.glb": 1, "models/hero_spirit_keeper.glb": 1, "models/hero_star_wagerer.glb": 2, "models/hero_tide_walker.glb": 1, "models/hero_void_reaper.glb": 1})
+RECRUIT_READINESS_HELD frame=75 path_reads=Some({"models/hero_frost_oracle.glb": 2, "models/hero_grove_artificer.glb": 2, "models/hero_iron_berserker.glb": 2, "models/hero_rift_dancer.glb": 1, "models/hero_solar_vanguard.glb": 1, "models/hero_spirit_keeper.glb": 1, "models/hero_star_wagerer.glb": 2, "models/hero_tide_walker.glb": 1, "models/hero_void_reaper.glb": 1})
+[2m2026-10-08T06:16:39.409779Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/en-1280x720/frames/frame00074.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/en-1280x720/frames/frame00074.png (22564 bytes)
+RECRUIT_READINESS_HELD frame=94 path_reads=Some({"models/hero_frost_oracle.glb": 2, "models/hero_grove_artificer.glb": 2, "models/hero_iron_berserker.glb": 2, "models/hero_rift_dancer.glb": 1, "models/hero_solar_vanguard.glb": 1, "models/hero_spirit_keeper.glb": 1, "models/hero_star_wagerer.glb": 2, "models/hero_tide_walker.glb": 1, "models/hero_void_reaper.glb": 1})
+[2m2026-10-08T06:16:39.570851Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/en-1280x720/frames/frame00093.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/en-1280x720/frames/frame00093.png (22564 bytes)
+RECRUIT_READINESS_RECOVERED current six scene dependencies loaded
+[2m2026-10-08T06:16:39.802436Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/en-1280x720/frames/frame00119.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/en-1280x720/frames/frame00119.png (415307 bytes)
+RECRUIT_READINESS_PASS initial ready, six late offers blocked, genuine held retry >1.1s, one commitment, retained skills/bonds/legacy, resumed clock
+[2m2026-10-08T06:16:40.100657Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/en-1280x720/frames/frame00149.png
+[capture] saved 6/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/en-1280x720/frames/frame00149.png (1007476 bytes)
+[capture] all 6 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 63 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 165 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/recruit-gate-oct8-r4/en-1280x720/frames
