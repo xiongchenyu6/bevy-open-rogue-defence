@@ -1,0 +1,43 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `test` profile [optimized + debuginfo] target(s) in 6m 17s
+     Running unittests src/lib.rs (target/debug/deps/rogue_commander-7930c12b106a9f5a)
+
+running 1 test
+ZONE_EXPIRY kind=StormMatrix delta=0.016666668 contacts=3/3 repaired=2.9000015
+ZONE_EXPIRY kind=GlacierCore delta=0.016666668 contacts=2/2 repaired=2.9000015
+ZONE_EXPIRY kind=VortexColumn delta=0.016666668 contacts=3/3 repaired=2.9000015
+ZONE_EXPIRY kind=StormMatrix delta=0.53333336 contacts=2/3 repaired=1.4500008
+ZONE_EXPIRY kind=GlacierCore delta=0.53333336 contacts=2/2 repaired=1.4500008
+ZONE_EXPIRY kind=VortexColumn delta=0.53333336 contacts=2/3 repaired=1.4500008
+ZONE_EXPIRY kind=StormMatrix delta=2.1333334 contacts=0/3 repaired=0
+ZONE_EXPIRY kind=GlacierCore delta=2.1333334 contacts=0/2 repaired=0
+ZONE_EXPIRY kind=VortexColumn delta=2.1333334 contacts=0/3 repaired=0
+ZONE_EXPIRY kind=StormMatrix delta=3.2 contacts=0/3 repaired=0
+ZONE_EXPIRY kind=GlacierCore delta=3.2 contacts=0/2 repaired=0
+ZONE_EXPIRY kind=VortexColumn delta=3.2 contacts=0/3 repaired=0
+
+thread 'game::skills::expiry_tests::expiry_outputs_are_independent_of_frame_size' (946100) panicked at src/game/skills/expiry_tests.rs:164:5:
+StormMatrix delta=0.53333336 contacts=2/3 repaired=1.4500008; GlacierCore delta=0.53333336 contacts=2/2 repaired=1.4500008; VortexColumn delta=0.53333336 contacts=2/3 repaired=1.4500008; StormMatrix delta=2.1333334 contacts=0/3 repaired=0; GlacierCore delta=2.1333334 contacts=0/2 repaired=0; VortexColumn delta=2.1333334 contacts=0/3 repaired=0; StormMatrix delta=3.2 contacts=0/3 repaired=0; GlacierCore delta=3.2 contacts=0/2 repaired=0; VortexColumn delta=3.2 contacts=0/3 repaired=0
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::panic_display::<alloc::string::String>
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/panicking.rs:259:5
+   3: rogue_commander::game::skills::expiry_tests::expiry_outputs_are_independent_of_frame_size
+             at ./src/game/skills/expiry_tests.rs:164:5
+   4: rogue_commander::game::skills::expiry_tests::expiry_outputs_are_independent_of_frame_size::{closure#0}
+             at ./src/game/skills/expiry_tests.rs:109:50
+   5: <rogue_commander::game::skills::expiry_tests::expiry_outputs_are_independent_of_frame_size::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+test game::skills::expiry_tests::expiry_outputs_are_independent_of_frame_size ... FAILED
+
+failures:
+
+failures:
+    game::skills::expiry_tests::expiry_outputs_are_independent_of_frame_size
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 607 filtered out; finished in 3.26s
+
+error: test failed, to rerun pass `--lib`

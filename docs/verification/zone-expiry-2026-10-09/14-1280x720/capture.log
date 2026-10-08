@@ -1,0 +1,27 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {149, 249}; all 400 simulation/render updates retained
+[2m2026-10-08T19:43:51.691331Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.9", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/zone-expiry-oct9-r3/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/zone-expiry-oct9-r3/runtime/wayland-1" plus null terminator exceeds 108 bytes
+[2m2026-10-08T19:43:51.763932Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.71.09", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-10-08T19:43:52.057612Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-08T19:43:52.057721Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-10-08T19:43:52.183400Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] skill-identity-14: glacier_core rank 5; no other learned skills
+[capture] first skill 14 main visual at frame 80
+[capture] skill 14 observation frame 80: main_visual=true, parts=12, damage=true, summon=false
+[2m2026-10-08T19:43:53.934924Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/zone-expiry-oct9-r3/14-1280x720/frames/frame00149.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/zone-expiry-oct9-r3/14-1280x720/frames/frame00149.png (1018981 bytes)
+[capture] skill 14 observation frame 160: main_visual=true, parts=18, damage=true, summon=false
+[capture] skill 14 observation frame 250: main_visual=false, parts=0, damage=true, summon=false
+[2m2026-10-08T19:43:54.726603Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/zone-expiry-oct9-r3/14-1280x720/frames/frame00249.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/zone-expiry-oct9-r3/14-1280x720/frames/frame00249.png (1031257 bytes)
+[capture] PASS actual charged zone 14: casts=1
+[capture] PASS skill-identity-14: attributable silhouette, real gameplay, isolated rank 5; first=Some(80), peak_parts=83, max_visual_scale=5.6000
+[capture] PASS skill-lighting: 80 bounded slots, real visible contact, actual pause frozen, finished pool hidden
+[capture] all 2 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 400 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/zone-expiry-oct9-r3/14-1280x720/frames

@@ -720,14 +720,17 @@ fn update_oath_banners(
     }
     let delta = time.delta_secs();
     for (entity, mut banner) in &mut banners {
-        if !banner.applied {
-            apply_banner_bonuses(&mut banner, &mut build, &mut vitals);
-        }
+        let active_delta = delta.min(banner.remaining.max(0.0));
         banner.remaining -= delta;
-        banner.repair_remaining -= delta;
-        while banner.repair_remaining <= 0.0 && banner.remaining >= -0.001 {
-            session.heal_gate(skill_utility_multiplier(21));
-            banner.repair_remaining += 1.0;
+        if active_delta > 0.0 || banner.remaining > 0.0 {
+            if !banner.applied {
+                apply_banner_bonuses(&mut banner, &mut build, &mut vitals);
+            }
+            banner.repair_remaining -= active_delta;
+            while banner.repair_remaining <= 0.0 {
+                session.heal_gate(skill_utility_multiplier(21));
+                banner.repair_remaining += 1.0;
+            }
         }
         if banner.remaining <= 0.0 {
             retire_oath_banner(
@@ -827,12 +830,17 @@ fn update_spell_zones(
     }
     let delta = time.delta_secs();
     for (zone_entity, mut zone, mut zone_transform) in &mut zones {
+        let active_delta = delta.min(zone.remaining.max(0.0));
         zone.remaining -= delta;
-        zone.pulse_remaining -= delta;
-        zone_transform.rotate_y(delta * 1.6);
+        if active_delta <= 0.0 && zone.remaining <= 0.0 {
+            commands.entity(zone_entity).despawn();
+            continue;
+        }
+        zone.pulse_remaining -= active_delta;
+        zone_transform.rotate_y(active_delta * 1.6);
         let interval = zone_pulse_interval(zone.kind);
         let mut pulses = 0_u8;
-        while zone.pulse_remaining <= 0.0 && zone.remaining >= -0.001 {
+        while zone.pulse_remaining <= 0.0 {
             zone.pulse_remaining += interval;
             pulses = pulses.saturating_add(1);
         }
@@ -848,8 +856,8 @@ fn update_spell_zones(
             if zone.kind == ZoneKind::VortexColumn {
                 let pull_scale = forced_movement_scale(enemy.elite, boss.is_some());
                 let to_center = center - transform.translation;
-                transform.translation +=
-                    to_center.normalize_or_zero() * 3.8 * pull_scale * delta.min(0.1);
+                transform.translation += to_center.normalize_or_zero()
+                    * (3.8 * pull_scale * active_delta).min(to_center.length());
             }
             affected.push(target);
         }
@@ -4118,3 +4126,7 @@ mod tests {
         )));
     }
 }
+
+#[cfg(test)]
+#[path = "skills/expiry_tests.rs"]
+mod expiry_tests;

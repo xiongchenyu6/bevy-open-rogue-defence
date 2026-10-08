@@ -1,0 +1,21 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.52s
+     Running unittests src/lib.rs (target/debug/deps/rogue_commander-7930c12b106a9f5a)
+
+running 1 test
+ZONE_EXPIRY kind=StormMatrix delta=0.016666668 contacts=3/3 repaired=2.9000015
+ZONE_EXPIRY kind=GlacierCore delta=0.016666668 contacts=2/2 repaired=2.9000015
+ZONE_EXPIRY kind=VortexColumn delta=0.016666668 contacts=3/3 repaired=2.9000015
+ZONE_EXPIRY kind=StormMatrix delta=0.53333336 contacts=3/3 repaired=2.9000015
+ZONE_EXPIRY kind=GlacierCore delta=0.53333336 contacts=2/2 repaired=2.9000015
+ZONE_EXPIRY kind=VortexColumn delta=0.53333336 contacts=3/3 repaired=2.9000015
+ZONE_EXPIRY kind=StormMatrix delta=2.1333334 contacts=3/3 repaired=2.9000015
+ZONE_EXPIRY kind=GlacierCore delta=2.1333334 contacts=2/2 repaired=2.9000015
+ZONE_EXPIRY kind=VortexColumn delta=2.1333334 contacts=3/3 repaired=2.9000015
+ZONE_EXPIRY kind=StormMatrix delta=3.2 contacts=3/3 repaired=2.9000015
+ZONE_EXPIRY kind=GlacierCore delta=3.2 contacts=2/2 repaired=2.9000015
+ZONE_EXPIRY kind=VortexColumn delta=3.2 contacts=3/3 repaired=2.9000015
+test game::skills::expiry_tests::expiry_outputs_are_independent_of_frame_size ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 607 filtered out; finished in 0.05s
+

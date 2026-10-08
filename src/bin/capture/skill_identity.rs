@@ -2,7 +2,8 @@
 use bevy::{prelude::*, time::Virtual};
 use rogue_commander::game::{
     ActiveSkill, AttackClock, Autoplay, CampaignMenu, Enemy, GameAssets, GameSession, Hero,
-    HeroKind, HeroVitals, PlayerBuild, SelectedHero, SkillId, SpawnDirector, content::SKILLS,
+    HeroKind, HeroVitals, PlayerBuild, SelectedHero, SkillCastTelemetry, SkillId, SpawnDirector,
+    content::SKILLS,
 };
 #[derive(Component)]
 struct IdentityTarget;
@@ -82,11 +83,9 @@ pub fn install(app: &mut bevy::app::SubApp) {
         }
     }
     world.resource_mut::<ActiveSkill>().remaining = 10_000.0;
-    if matches!(index, 1 | 7 | 11 | 22 | 28 | 29) {
-        world.resource_mut::<AttackClock>().0.unpause();
-    } else {
-        world.resource_mut::<AttackClock>().0.pause();
-    }
+    // Real damage spells charge from actual basic volleys. Keep those attacks
+    // enabled instead of manufacturing charge or pausing the trigger source.
+    world.resource_mut::<AttackClock>().0.unpause();
     if matches!(index, 10 | 20) {
         world
             .resource_mut::<Time<Virtual>>()
@@ -228,6 +227,7 @@ fn observe(
     build: Res<PlayerBuild>,
     session: Res<GameSession>,
     active: Res<ActiveSkill>,
+    telemetry: Res<SkillCastTelemetry>,
     assets: Res<GameAssets>,
     names: Query<&Name>,
     visuals: Query<(&Name, &Transform)>,
@@ -303,6 +303,16 @@ fn observe(
     }
     if frame == 295 {
         assert_eq!(build.skills[index], state.rank);
+        if matches!(index, 12 | 14 | 15) {
+            assert!(
+                telemetry.casts[index] > 0,
+                "charged zone skill must really cast"
+            );
+            println!(
+                "[capture] PASS actual charged zone {index}: casts={}",
+                telemetry.casts[index]
+            );
+        }
         if index == 12 {
             let expected_radius = 3.1 * (1. + 0.25 * f32::from(state.rank - 1));
             assert!(
