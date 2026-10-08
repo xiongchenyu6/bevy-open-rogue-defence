@@ -1,0 +1,11 @@
+{
+  "library_tests": 601,
+  "failed": 0,
+  "ignored": 1,
+  "strict_clippy": true,
+  "native_frames": 2040,
+  "reviewed_images_by_root": 6,
+  "source_sha256": "7fb1314513a0c3a191cb1f400f401e8bbe16e11aef234ebc07acbf750c461ad5",
+  "scope": "English1280x720 and English/Chinese667x375 real summon-assault: countdown avoids HUD and buttons, pursuit/damage/pause/retarget/wall-rebuild assertions pass",
+  "limits": "Not all viewport sizes, touch/controllers, or packaged release; no direct measurement of layout timing"
+}

@@ -197,12 +197,30 @@ fn countdown_digit(remaining: f32) -> String {
         .clamp(1.0, crate::game::resources::GATE_REBUILD_SECONDS)
         .to_string()
 }
+// Short landscape reserves the left HUD, top speed controls and bottom action row.
+fn gate_countdown_origin(position: Vec2, viewport: Vec2) -> Vec2 {
+    if viewport.x > viewport.y && viewport.y < 540.0 {
+        let left = 280.0_f32.min((viewport.x - 88.0).max(8.0));
+        let right = (viewport.x - 180.0).max(left);
+        let bottom = (viewport.y - 160.0).max(132.0);
+        Vec2::new(
+            (position.x - 40.0).clamp(left, right),
+            (position.y - 40.0).clamp(132.0, bottom),
+        )
+    } else {
+        position - Vec2::splat(60.0)
+    }
+}
+
 fn update_gate_countdown(
     session: Res<GameSession>,
     language: Res<GameLanguage>,
     cameras: Query<(&Camera, &GlobalTransform), With<Camera3d>>,
     mut roots: Query<&mut Node, With<GateCountdownRoot>>,
-    mut digits: Query<&mut Text, (With<GateCountdownDigit>, Without<GateCountdownCaption>)>,
+    mut digits: Query<
+        (&mut Text, &mut TextFont),
+        (With<GateCountdownDigit>, Without<GateCountdownCaption>),
+    >,
     mut captions: Query<&mut Text, (With<GateCountdownCaption>, Without<GateCountdownDigit>)>,
 ) {
     let down = session.core_hp <= 0.0 && !session.finished;
@@ -213,8 +231,17 @@ fn update_gate_countdown(
                 crate::game::resources::GATE_POSITION + Vec3::Y * 0.5,
             )
             .ok()
+            .zip(camera.logical_viewport_size())
     });
+    let compact = position.is_some_and(|(_, size)| size.x > size.y && size.y < 540.0);
+    let badge_size = if compact { 80.0 } else { 120.0 };
     for mut node in &mut roots {
+        node.reborrow()
+            .map_unchanged(|value| &mut value.width)
+            .set_if_neq(px(badge_size));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.height)
+            .set_if_neq(px(badge_size));
         node.reborrow()
             .map_unchanged(|value| &mut value.display)
             .set_if_neq(if down && position.is_some() {
@@ -222,16 +249,20 @@ fn update_gate_countdown(
             } else {
                 Display::None
             });
-        if let Some(position) = position {
+        if let Some((position, viewport)) = position {
+            let origin = gate_countdown_origin(position, viewport);
             node.reborrow()
                 .map_unchanged(|value| &mut value.left)
-                .set_if_neq(px(position.x - 60.0));
+                .set_if_neq(px(origin.x));
             node.reborrow()
                 .map_unchanged(|value| &mut value.top)
-                .set_if_neq(px(position.y - 60.0));
+                .set_if_neq(px(origin.y));
         }
     }
-    for mut digit in &mut digits {
+    for (mut digit, mut font) in &mut digits {
+        font.reborrow()
+            .map_unchanged(|value| &mut value.font_size)
+            .set_if_neq(FontSize::Px(if compact { 40.0 } else { 64.0 }));
         digit
             .reborrow()
             .map_unchanged(|value| &mut value.0)
@@ -252,6 +283,19 @@ fn update_gate_countdown(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn compact_gate_countdown_avoids_hud_and_action_rows() {
+        let viewport = Vec2::new(667.0, 375.0);
+        for position in [Vec2::ZERO, Vec2::new(210.0, 170.0), viewport] {
+            let origin = gate_countdown_origin(position, viewport);
+            assert!(origin.x >= 280.0 && origin.x + 80.0 <= 487.0 + 80.0);
+            assert!(origin.y >= 132.0 && origin.y + 80.0 <= 295.0);
+        }
+        assert_eq!(
+            gate_countdown_origin(Vec2::new(480.0, 410.0), Vec2::new(1280.0, 720.0)),
+            Vec2::new(420.0, 350.0)
+        );
+    }
     #[test]
     fn countdown_shows_four_integer_steps() {
         for (remaining, expected) in [
