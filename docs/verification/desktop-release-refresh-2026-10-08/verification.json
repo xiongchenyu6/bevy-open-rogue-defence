@@ -1,0 +1,30 @@
+{
+  "game_source": "31bdac83ea5e5584a39fbe1aa93089cb8beeb716",
+  "binary_sha256": "18cb1ead8f1cb2c9e1c60155f5cc8cc1cb24bd5974044350f20543d8aeffe55e",
+  "tar_sha256": "847af95917171ce00424cfa7f9a0b5c2bf0a7e4923ef84d2e0590fc07aab4ed1",
+  "package_files_verified": 875,
+  "reviewed_images_by_root": 11,
+  "scope": "Ubuntu 24.04 / X11 / software Vulkan; no Steam client or hardware performance claim",
+  "files": {
+    "battle.png": "94c9e31e765bd716f2c2144671c88be57738341852785b3a94659d08f0b0866e",
+    "fullscreen-chinese.png": "1a1b8d78ff30cffcf049839319a724e6f75d1b85bb37ecedb9199e2e06b743f7",
+    "game.log": "f4d58808fa809a218c80c379a3bbf508fe75a54d19c8fbc68219c9ea5f4403ef",
+    "guide.png": "bab1aebe45b9b4ee99e48247ef76fbcc26dd5ec32509914dc6e5356df57a3e52",
+    "package-build.log": "2ea1adb3dec99406ad740d7d3095b86ea823b69bf2178df4c7a1734f00e9f52f",
+    "package-manifest.json": "b943211aebaa3b1754d542686ff18054c972349cb63db5dbf9b945d514de824a",
+    "quit-chinese.png": "235fd5a57fe8d469a856bc3be6f25c83397e5d5d288e0600e98bc7a8f4b44573",
+    "recruit.png": "bbb525c42a2d85e221256a68f3283cc97b99432dea158c2a61449cab777d2876",
+    "restart-battle-chinese.png": "5cb371c83712e79cbd4605a1138bc434cf1ad4f83d3572e4a40fdb8afbaeb24a",
+    "restart-chinese.png": "5e1de05db88e926f19da2e74bffa647c98932f86da3a1630f08e182d0c82d807",
+    "restart-quit-chinese.png": "d1035251ed827632940bea8b6948fc3ed1c30ad68d68883e761122445562634b",
+    "restart-recruit-chinese.png": "18c93a282803b4d4fab3678fc25aad28ae57ce7727d17226796209f73295d2ab",
+    "restart.log": "d29867ed4900706e412e4ad77cb056e494ca6cb37d59ef20650b5409f705ee64",
+    "result.json": "215d783b72806db3ce5cb5a28ecec9e372c3c3bb89c3672f4c9b92f6736171ac",
+    "runtime.log": "fc31b5abf89a19ff32f8c0bb79dbf029d74c8b54d79696f4dd23f443db283229",
+    "settings-chinese.png": "6e2af4811f3b43c94b5dd501dce56d865a990c0f59b647a295cb05c34897b2d7",
+    "startup.png": "c2eb721c8f41eef5c0ccb646319ad20bd094e6807b0701124131a88f9f0c713a",
+    "version.json": "8374c4e059df7ee14f95d00f24c1656830ea9007b44b9bdf9e7a3f051d4a4be2",
+    "wm.log": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c",
+    "xvfb.log": "b987a262609a3720f450ab6815ed90b2069dd47b7b012959ca19c325aebf5d55"
+  }
+}
