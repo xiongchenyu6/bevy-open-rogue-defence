@@ -143,7 +143,9 @@ fn notice_copy(language: GameLanguage, change: Upgrade) -> String {
 }
 
 fn notice_top(width: f32, height: f32) -> f32 {
-    if super::mobile_layout::hud_metrics(width, height).compact {
+    if height < 540.0 {
+        (height - 116.0).max(132.0)
+    } else if super::mobile_layout::hud_metrics(width, height).compact {
         (height - 175.0).max(120.0)
     } else {
         66.0

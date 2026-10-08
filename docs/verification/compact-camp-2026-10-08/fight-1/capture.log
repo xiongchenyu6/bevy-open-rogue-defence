@@ -1,0 +1,55 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {11, 34, 89, 299, 599, 999}; all 1000 simulation/render updates retained
+[2m2026-10-08T01:06:04.048264Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.8", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/compact-camp-oct8-r2/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/compact-camp-oct8-r2/runtime/wayland-1" plus null terminator exceeds 108 bytes
+[2m2026-10-08T01:06:04.120263Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.71.09", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-10-08T01:06:04.391383Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-08T01:06:04.391429Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-10-08T01:06:04.514627Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] adventure-stage three-independent-camp-models frame=10
+[capture] adventure-stage world-camp-entries frame=10
+[capture] actual virtual-window pointer Adventure camp entry 1 at Vec2(635.0, 200.0) frame=12
+[capture] actual virtual-window pointer Adventure camp entry 1 at Vec2(635.0, 200.0) frame=13
+[capture] actual virtual-window pointer Adventure camp entry 1 at Vec2(635.0, 200.0) frame=14
+[2m2026-10-08T01:06:05.352954Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/compact-camp-oct8-r2/fight-1/frames/frame00011.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/compact-camp-oct8-r2/fight-1/frames/frame00011.png (294595 bytes)
+[capture] actual virtual-window pointer Adventure camp entry 1 at Vec2(635.0, 200.0) frame=15
+[capture] adventure-stage choice frame=35
+[2m2026-10-08T01:06:05.554352Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/compact-camp-oct8-r2/fight-1/frames/frame00034.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/compact-camp-oct8-r2/fight-1/frames/frame00034.png (135349 bytes)
+[capture] actual virtual-window pointer Encounter boss fight at Vec2(176.0, 299.0) frame=50
+[capture] adventure-stage arrival-airborne frame=65
+[capture] adventure-stage arrival-landed frame=90
+[capture] adventure-stage camp-battle frame=90
+[2m2026-10-08T01:06:06.040658Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/compact-camp-oct8-r2/fight-1/frames/frame00089.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/compact-camp-oct8-r2/fight-1/frames/frame00089.png (289959 bytes)
+[capture] adventure-stage primary-warning frame=141
+[capture] adventure-stage warning-paused frame=146
+[capture] native adventure impact kind=0 frame=183
+[capture] adventure-stage actual-hazard-hit frame=183
+[capture] adventure-stage phase-two frame=184
+[capture] native adventure impact kind=1 frame=252
+[capture] adventure-stage secondary-active frame=252
+[capture] adventure-stage native-attacks-finish-camp frame=260
+[2m2026-10-08T01:06:07.833970Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/compact-camp-oct8-r2/fight-1/frames/frame00299.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/compact-camp-oct8-r2/fight-1/frames/frame00299.png (289675 bytes)
+[capture] native adventure impact kind=0 frame=364
+[capture] adventure-stage victory-reward frame=432
+[capture] adventure-stage paused-cleanup-reward-once frame=447
+[capture] adventure-stage awarded-relic-basic-attacks frame=462
+[capture] adventure-stage real-relic-cast frame=466
+[capture] adventure-stage relic-spectacle frame=479
+[capture] adventure-stage relic-area-damage frame=479
+[capture] adventure-stage relic-actual-freeze frame=480
+[2m2026-10-08T01:06:10.649400Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/compact-camp-oct8-r2/fight-1/frames/frame00599.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/compact-camp-oct8-r2/fight-1/frames/frame00599.png (278783 bytes)
+[capture] PASS adventure-boss-1: real choice/combat/reward/cleanup across 1000 frames
+[2m2026-10-08T01:06:14.014740Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/compact-camp-oct8-r2/fight-1/frames/frame00999.png
+[capture] saved 6/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/compact-camp-oct8-r2/fight-1/frames/frame00999.png (278396 bytes)
+[capture] all 6 screenshot(s) saved after 2 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 1000 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/compact-camp-oct8-r2/fight-1/frames

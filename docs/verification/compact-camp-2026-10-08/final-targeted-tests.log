@@ -1,0 +1,19 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `test` profile [optimized + debuginfo] target(s) in 4m 55s
+     Running unittests src/lib.rs (target/debug/deps/rogue_commander-7930c12b106a9f5a)
+
+running 2 tests
+test game::encounter_boss_ui::camp_position_tests::desktop_entry_clears_main_boss_health_title ... ok
+test game::encounter_boss_ui::camp_position_tests::mobile_camp_pointer_target_clears_top_hud_and_stays_on_screen ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 594 filtered out; finished in 0.00s
+

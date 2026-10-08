@@ -481,6 +481,8 @@ fn camp_entries(mut commands: Commands, assets: Option<Res<AssetServer>>) {
                 parent.spawn((
                     CampEntryCaption(index as u8),
                     Text::new(""),
+                    Node::default(),
+                    BackgroundColor(Color::NONE),
                     TextFont {
                         font_size: FontSize::Px(11.0),
                         ..default()
@@ -513,8 +515,16 @@ fn position_entries(
     language: Res<GameLanguage>,
     cameras: Query<(&Camera, &GlobalTransform), With<Camera3d>>,
     windows: Query<&Window>,
-    mut entries: Query<(&CampEntry, &mut Node)>,
-    mut captions: Query<(&CampEntryCaption, &mut Text)>,
+    mut entries: Query<(&CampEntry, &Interaction, &mut Node)>,
+    mut captions: Query<
+        (
+            &CampEntryCaption,
+            &mut Text,
+            &mut Node,
+            &mut BackgroundColor,
+        ),
+        Without<CampEntry>,
+    >,
 ) {
     let size = windows
         .iter()
@@ -522,7 +532,12 @@ fn position_entries(
         .map_or(Vec2::new(1280.0, 720.0), |window| {
             Vec2::new(window.width(), window.height())
         });
-    for (entry, mut node) in &mut entries {
+    let docked = size.y < 540.0;
+    let mut preview = [false; 3];
+    for (entry, interaction, mut node) in &mut entries {
+        preview[usize::from(entry.0)] = *interaction != Interaction::None;
+        node.width = px(if docked { 40.0 } else { 128.0 });
+        node.min_height = px(40.0);
         let position = cameras.single().ok().and_then(|(camera, t)| {
             camera
                 .world_to_viewport(t, ADVENTURE_SITES[usize::from(entry.0)] + Vec3::Y * 1.7)
@@ -539,13 +554,32 @@ fn position_entries(
             Display::None
         };
         if let Some(p) = position {
-            let position = camp_screen_position(p, size);
+            let position = camp_screen_position(p, size, usize::from(entry.0));
             node.left = px(position.x);
             node.top = px(position.y);
         }
     }
-    for (entry, mut text) in &mut captions {
+    for (entry, mut text, mut node, mut background) in &mut captions {
         let index = usize::from(entry.0);
+        node.display = if docked && !preview[index] {
+            Display::None
+        } else {
+            Display::Flex
+        };
+        node.position_type = if docked {
+            PositionType::Absolute
+        } else {
+            PositionType::Relative
+        };
+        node.right = if docked { px(46.0) } else { Val::Auto };
+        node.top = if docked { px(0.0) } else { Val::Auto };
+        node.width = if docked { px(148.0) } else { Val::Auto };
+        node.padding = UiRect::all(px(if docked { 6.0 } else { 0.0 }));
+        background.0 = if docked {
+            Color::srgba(0.025, 0.04, 0.04, 0.96)
+        } else {
+            Color::NONE
+        };
         let def = &ADVENTURE_BOSSES[index];
         let suffix = if state.unlocked & (1 << entry.0) != 0 {
             language.pick("Explore", "探索").to_string()
@@ -624,8 +658,11 @@ fn relic_feedback(
     }
 }
 
-fn camp_screen_position(projected: Vec2, size: Vec2) -> Vec2 {
-    let top = if size.y < 540.0 { 132.0 } else { 145.0 };
+fn camp_screen_position(projected: Vec2, size: Vec2, index: usize) -> Vec2 {
+    if size.y < 540.0 {
+        return Vec2::new((size.x - 52.0).max(0.0), 132.0 + index as f32 * 48.0);
+    }
+    let top = 145.0;
     Vec2::new(
         (projected.x - 64.0).clamp(0.0, (size.x - 128.0).max(0.0)),
         projected.y.clamp(top, (size.y - 100.0).max(top)),
@@ -637,16 +674,16 @@ mod camp_position_tests {
     #[test]
     fn desktop_entry_clears_main_boss_health_title() {
         assert_eq!(
-            camp_screen_position(Vec2::new(640.0, 70.0), Vec2::new(1280.0, 720.0)).y,
+            camp_screen_position(Vec2::new(640.0, 70.0), Vec2::new(1280.0, 720.0), 0).y,
             145.0
         );
     }
     #[test]
     fn mobile_camp_pointer_target_clears_top_hud_and_stays_on_screen() {
-        let p = camp_screen_position(Vec2::new(340.0, 31.0), Vec2::new(667.0, 375.0));
-        assert_eq!(p, Vec2::new(276.0, 132.0));
+        let p = camp_screen_position(Vec2::new(340.0, 31.0), Vec2::new(667.0, 375.0), 0);
+        assert_eq!(p, Vec2::new(615.0, 132.0));
         assert!(p.y + 40.0 <= 275.0);
-        let edge = camp_screen_position(Vec2::new(700.0, 600.0), Vec2::new(667.0, 375.0));
-        assert_eq!(edge, Vec2::new(539.0, 275.0));
+        let edge = camp_screen_position(Vec2::new(700.0, 600.0), Vec2::new(667.0, 375.0), 0);
+        assert_eq!(edge, Vec2::new(615.0, 132.0));
     }
 }

@@ -162,7 +162,7 @@ fn pointer_input(world: &mut World) {
         (p.frame + 1, p.index, p.scenario == "adventure-small")
     };
     let label = match frame {
-        15 => Some(format!("Adventure camp entry {index}")),
+        12..=15 => Some(format!("Adventure camp entry {index}")),
         50 => Some(
             if small {
                 "Encounter boss safe reward"
@@ -210,11 +210,13 @@ fn pointer_input(world: &mut World) {
             position: logical,
             delta: None,
         });
-        world.write_message(MouseButtonInput {
-            button: MouseButton::Left,
-            state: ButtonState::Pressed,
-            window,
-        });
+        if !(12..15).contains(&frame) {
+            world.write_message(MouseButtonInput {
+                button: MouseButton::Left,
+                state: ButtonState::Pressed,
+                window,
+            });
+        }
         let targets: Vec<_> = world
             .query_filtered::<(Entity, &RenderTarget), With<Camera>>()
             .iter(world)
@@ -225,7 +227,7 @@ fn pointer_input(world: &mut World) {
                 RenderTarget::Window(WindowRef::Entity(window));
         }
         world.resource_mut::<Pointer>().saved_targets = targets;
-        world.resource_mut::<Pointer>().down = true;
+        world.resource_mut::<Pointer>().down = !(12..15).contains(&frame);
         println!("[capture] actual virtual-window pointer {label} at {position:?} frame={frame}");
     }
 }
