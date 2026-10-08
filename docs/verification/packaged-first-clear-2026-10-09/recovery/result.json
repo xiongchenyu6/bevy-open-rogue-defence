@@ -1,0 +1,75 @@
+{
+  "scope": "Continue actual 1x chapter-clear reward through public UI",
+  "before": {
+    "unlocked": 2,
+    "currency": 180,
+    "cleared": "100000",
+    "upgrades": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "all_steps_verified": true,
+  "earned_startup_verified": true,
+  "after": {
+    "unlocked": 2,
+    "currency": 165,
+    "cleared": "100000",
+    "upgrades": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "purchase_verified": true,
+  "purchase_quit_exit_code": 0,
+  "restart_verified": true,
+  "attributes": {
+    "hero": "StormSavant",
+    "level": 1,
+    "speed": 1,
+    "strength": 22.0,
+    "expected_strength": 22,
+    "strength_ocr": [
+      [
+        "Strength",
+        203,
+        235,
+        259,
+        250
+      ],
+      [
+        "22.0",
+        457,
+        235,
+        484,
+        247
+      ],
+      [
+        "Strength",
+        204,
+        235,
+        259,
+        250
+      ],
+      [
+        "Strength 22.0 Base attack 48.0 Armor 0.0",
+        204,
+        231,
+        1076,
+        254
+      ]
+    ],
+    "screenshot": "earned-strength-restart.png"
+  },
+  "earned_strength_applies_after_restart": true,
+  "attributes_closed_verified": true,
+  "restart_quit_exit_code": 0
+}

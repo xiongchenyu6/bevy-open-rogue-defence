@@ -1,0 +1,51 @@
+{
+  "scope": "Packaged Ubuntu/X11 software Vulkan, public UI/keys, stationary greedy policy",
+  "requested_seed": "0xA11CE",
+  "requested_speed": 1,
+  "strategy": "Stationary greedy public keys: 1, g, f",
+  "completed_run": true,
+  "victory": true,
+  "base_attributes": {
+    "hero": "StormSavant",
+    "level": 1,
+    "speed": 1,
+    "strength": 20.0,
+    "expected": 20.0,
+    "screenshot": "base-strength.png",
+    "strength_ocr": [
+      [
+        "Strength",
+        203,
+        235,
+        259,
+        250
+      ],
+      [
+        "20.0",
+        457,
+        235,
+        484,
+        247
+      ],
+      [
+        "Strength",
+        204,
+        235,
+        259,
+        250
+      ],
+      [
+        "Strength 20.0 Base attack 48.0 Armor 0.0",
+        204,
+        231,
+        1076,
+        254
+      ]
+    ]
+  },
+  "actual_speed": 1,
+  "battle_timeout_seconds": 1800.0,
+  "terminal": "CHAPTER CLEARED",
+  "wall_seconds": 1549.516380809997,
+  "samples": 141
+}

@@ -52,6 +52,14 @@ def seed_from_text(text):
     return match[1].lower()
 
 
+def result_seed_crop(text_lines):
+    seed_lines = [line for line in text_lines if re.match(r'^SEED\b', line[0], re.I)]
+    assert seed_lines, 'Result must expose the SEED row for crop verification'
+    seed_top = max(0, min(line[2] for line in seed_lines) - 6)
+    seed_height = max(line[4] for line in seed_lines) - seed_top + 6
+    return f'480x{seed_height}+400+{seed_top}'
+
+
 def main():
     assert not Path('/nix').exists() and not Path('/project').exists()
     assert not shutil.which('cargo') and not shutil.which('rustc')
@@ -110,6 +118,13 @@ def main():
         time.sleep(1)
         if app.poll() is None: click_text(win, app, 'Quit game')
         assert app.wait(timeout=30) == 0
+    def start_first_chapter(win):
+        geometry = dict(line.split('=', 1) for line in call(
+            ['xdotool', 'getwindowgeometry', '--shell', win]).splitlines())
+        assert geometry['WIDTH'] == '1280' and geometry['HEIGHT'] == '720'
+        # Multiple unlocked cards share BEGIN EXPEDITION; use the inspected first card.
+        call(['xdotool', 'mousemove', '--window', win, '289', '294'])
+        call(['xdotool', 'click', '1'])
     def select_storm(win, app):
         names = [line for line in lines(win) if normalized(line[0]) == 'stormsavant' and 150 < line[2] < 550]
         assert names, 'Actual portrait card caption, not the duplicate detail heading'
@@ -157,7 +172,7 @@ def main():
         start(['Xvfb', ':93', '-screen', '0', '1600x900x24', '-nolisten', 'tcp', '-ac'], 'xvfb.log')
         time.sleep(1); start(['openbox'], 'wm.log'); time.sleep(1)
         app = start([str(GAME / 'rogue_commander')], 'game.log'); win = window(app)
-        click_text(win, app, 'BEGIN EXPEDITION')
+        start_first_chapter(win)
         wait_text(win, app, 'Skip'); call(['xdotool', 'key', 'Escape'])
         wait_text(win, app, 'Click a basic commander to begin')
         select_storm(win, app)
@@ -204,7 +219,7 @@ def main():
                     report.update(completed_run=True, victory=title=='CHAPTER CLEARED', terminal=title,
                                   wall_seconds=time.monotonic()-started, samples=sample)
                     seed_row = OUT / 'seed-row.png'
-                    call(['convert', str(screen), '-crop', '480x36+400+452', '-resize', '400%', str(seed_row)])
+                    call(['convert', str(screen), '-crop', result_seed_crop(text_lines), '-resize', '400%', str(seed_row)])
                     seed_text = call(['tesseract', str(seed_row), 'stdout', '-l', 'eng', '--psm', '7'])
                     report['actual_run_seed'] = seed_from_text(seed_text)
                     report['actual_seed_ocr'] = seed_text
@@ -240,7 +255,7 @@ def main():
         report['saved_progress_survives_restart']=True
         assert 'earned_upgrade' in report, 'Earned shards insufficient to purchase Strength; effect remains unverified'
         # Default first chapter remains selected after a fresh launch.
-        click_text(win, app, 'BEGIN EXPEDITION')
+        start_first_chapter(win)
         wait_text(win, app, 'Click a basic commander to begin')
         select_storm(win, app)
         report['upgraded_attributes'] = record_strength(win, app, 'earned-strength-restart.png', 22.0)

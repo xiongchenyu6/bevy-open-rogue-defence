@@ -1,0 +1,21 @@
+{
+  "package_source": "e109893d96296849a292bccedcbe635116009f1a",
+  "initial_state": "Fresh real game-created save, no injected currency/health/victory",
+  "speed": 1,
+  "requested_seed": "0xA11CE",
+  "actual_run_seed": "0x00000000000a11cf",
+  "chapter": 0,
+  "chapter_cleared": true,
+  "level": 43,
+  "kills": 2084,
+  "earned_shards": 180,
+  "observed_battle_wall_seconds": 1549.516380809997,
+  "samples_verified": 141,
+  "reviewed_native_images_by_root": 13,
+  "recovery_job_exit_code": 0,
+  "recovery_strength": 22,
+  "remaining_shards": 165,
+  "battle_job_pass": false,
+  "battle_job_failure": "Frozen script used fixed seed crop; victory reward rows shifted SEED position. Winning process terminated in harness cleanup, not normal UI quit. Recovery uses same actually earned state and normal quits twice.",
+  "not_proven": "Second through sixth chapters, every hero/build, whole-game32x equivalence, a single fully successful end-to-end victory harness run, hardware/Steam client"
+}
