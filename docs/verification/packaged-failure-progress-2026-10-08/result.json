@@ -1,0 +1,38 @@
+{
+  "scope": "Packaged Ubuntu/X11 software Vulkan, public UI/keys, stationary greedy policy",
+  "seed": "0xA11CE",
+  "speed": 32,
+  "completed_run": true,
+  "victory": false,
+  "terminal": "NO LIVES REMAIN",
+  "wall_seconds": 32.694926141000906,
+  "samples": 4,
+  "earned_progress": {
+    "unlocked": 1,
+    "currency": 34,
+    "cleared": "000000",
+    "upgrades": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "earned_upgrade": {
+    "unlocked": 1,
+    "currency": 19,
+    "cleared": "000000",
+    "upgrades": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "saved_progress_survives_restart": true,
+  "normal_quit_twice": true
+}

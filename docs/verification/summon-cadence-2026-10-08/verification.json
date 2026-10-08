@@ -1,0 +1,7 @@
+{
+  "library_tests": 599,
+  "native_frames": 1360,
+  "reviewed_native_images_by_root": 4,
+  "controlled_scope": "Actual BoneSentry outgoing SkillStrike count/damage over60s at1/60,32/60,32/15 deltas; not resolved HP damage or all gameplay speed invariance",
+  "source_sha256": "14891056a596ccd7760376b766f82af05d931891fd903065e7411865c237e611"
+}

@@ -29,33 +29,43 @@ pub(super) fn update_skill_summons(
         .map(|(entity, transform, _)| (entity, transform.translation))
         .collect();
     for (_, slot, mut transform, mut sentry) in &mut sentries {
-        sentry.attack_remaining = (sentry.attack_remaining - attack_delta).max(0.0);
         let Some((target_entity, target)) = nearest_position(transform.translation, &targets)
         else {
+            // Idle time makes the weapon ready, but cannot bank attacks.
+            sentry.attack_remaining = (sentry.attack_remaining - attack_delta).max(0.0);
             follow(&mut transform, slot.0, 3.8, delta);
             continue;
         };
-        if !advance(
-            &mut transform,
-            target,
-            3.8,
-            1.1 * rank_size(build.skills[4]),
-            delta,
-        ) || sentry.attack_remaining > 0.0
-        {
+        let reach = 1.1 * rank_size(build.skills[4]);
+        let travel_seconds =
+            ((target - transform.translation).with_y(0.0).length() - reach).max(0.0) / 3.8;
+        if !advance(&mut transform, target, 3.8, reach, delta) {
+            sentry.attack_remaining = (sentry.attack_remaining - attack_delta).max(0.0);
             continue;
         }
-        sentry.attack_remaining = 0.9;
-        schedule_typed_strike(
-            &mut commands,
-            target_entity,
-            sentry.damage,
-            0.0,
-            0.05,
-            false,
-            0.72,
-            DamageProfile::for_skill(4),
-        );
+        let multiplier = market_effects.summon_attack_speed_multiplier();
+        if travel_seconds > 0.0 {
+            let travel = travel_seconds.min(delta);
+            sentry.attack_remaining =
+                (sentry.attack_remaining - summon_attack_delta(travel, multiplier)).max(0.0)
+                    - summon_attack_delta(delta - travel, multiplier);
+        } else {
+            sentry.attack_remaining -= attack_delta;
+        }
+        // Preserve fractional cooldown and every due contact at accelerated deltas.
+        while sentry.attack_remaining <= 0.0 {
+            sentry.attack_remaining += 0.9;
+            schedule_typed_strike(
+                &mut commands,
+                target_entity,
+                sentry.damage,
+                0.0,
+                0.05,
+                false,
+                0.72,
+                DamageProfile::for_skill(4),
+            );
+        }
     }
 
     for (entity, slot, mut transform, mut hound) in &mut hounds {
@@ -399,7 +409,7 @@ pub(super) fn update_epic_summons(
 mod tests {
     use super::*;
     use bevy::ecs::system::RunSystemOnce;
-    fn app() -> App {
+    pub(super) fn app() -> App {
         let mut app = App::new();
         app.init_resource::<Time>()
             .init_resource::<GameSession>()
@@ -428,7 +438,7 @@ mod tests {
         app.world_mut().spawn((Hero, Transform::default()));
         app
     }
-    fn enemy(app: &mut App, x: f32) -> Entity {
+    pub(super) fn enemy(app: &mut App, x: f32) -> Entity {
         app.world_mut()
             .spawn((
                 Enemy {
@@ -634,7 +644,8 @@ mod tests {
             .query::<&SkillStrike>()
             .iter(app.world())
             .collect();
-        assert_eq!(strikes.len(), 1);
+        // After reaching range, the rest of the32s step contains34 due contacts.
+        assert_eq!(strikes.len(), 34);
         assert_eq!(strikes[0].target, target);
         assert_eq!(strikes[0].damage, 50.0);
         assert_eq!(strikes[0].profile.skill_index, Some(4));
@@ -740,3 +751,7 @@ mod tests {
         );
     }
 }
+
+#[cfg(test)]
+#[path = "summons_cadence_tests.rs"]
+mod cadence_tests;

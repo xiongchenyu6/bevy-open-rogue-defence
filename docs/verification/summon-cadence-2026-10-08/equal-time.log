@@ -1,0 +1,10 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.30s
+     Running unittests src/lib.rs (target/debug/deps/rogue_commander-7930c12b106a9f5a)
+
+running 1 test
+BONE_SENTRY_EQUAL_60S normal=(67, 3350.0) speed32_60fps=(67, 3350.0) speed32_15fps=(67, 3350.0); outputs=(actual SkillStrike count, summed outgoing damage), no collision or HP damage
+test game::skills::summons::cadence_tests::bone_sentry_equal_simulated_time_preserves_contact_cadence_at_32x ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 599 filtered out; finished in 0.02s
+
