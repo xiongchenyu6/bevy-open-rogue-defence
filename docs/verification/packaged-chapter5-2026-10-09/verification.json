@@ -1,0 +1,17 @@
+{
+  "package_source": "5c77f1ea708a6dbd0271b208c87a704a63ae3602",
+  "victory": false,
+  "harness_exit": 1,
+  "normal_game_exit_twice": 0,
+  "samples": 103,
+  "reviewed_screenshots": 10,
+  "terminal": "NO LIVES REMAIN",
+  "level": 29,
+  "kills": 1111,
+  "earned_shards": 60,
+  "strength_purchase": 135,
+  "final_shards": 575,
+  "final_strength_upgrade": 5,
+  "restart_strength": 30,
+  "limits": "One stationary greedy public-input route at1x; failure is not evidence of balanced difficulty. Negative dead energy observed in run102 remains a separate defect."
+}

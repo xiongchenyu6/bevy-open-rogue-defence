@@ -1,0 +1,136 @@
+{
+  "scope": "Packaged Ubuntu/X11 software Vulkan, public UI/keys, stationary greedy policy",
+  "stage": 4,
+  "continued": true,
+  "initial_progress": {
+    "unlocked": 5,
+    "currency": 650,
+    "cleared": "111100",
+    "upgrades": [
+      4,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "requested_seed": "0xA11CE",
+  "requested_speed": 1,
+  "strategy": "Stationary greedy public keys: 1, g, f",
+  "completed_run": true,
+  "victory": false,
+  "base_attributes": {
+    "hero": "StormSavant",
+    "level": 1,
+    "speed": 1,
+    "strength": 28.0,
+    "expected": 28.0,
+    "screenshot": "base-strength.png",
+    "strength_ocr": [
+      [
+        "Strength",
+        203,
+        235,
+        259,
+        250
+      ],
+      [
+        "28.0",
+        457,
+        235,
+        484,
+        247
+      ],
+      [
+        "Strength",
+        204,
+        235,
+        259,
+        250
+      ],
+      [
+        "Strength 28.0 Base attack 480 Armor 0.0",
+        204,
+        224,
+        1076,
+        256
+      ]
+    ]
+  },
+  "actual_speed": 1,
+  "battle_timeout_seconds": 1800.0,
+  "terminal": "NO LIVES REMAIN",
+  "wall_seconds": 1081.7972017580032,
+  "samples": 103,
+  "actual_run_seed": "0x00000000000a11cf",
+  "actual_seed_ocr": "SEED 0x00000000000A11CF",
+  "earned_progress": {
+    "unlocked": 5,
+    "currency": 710,
+    "cleared": "111100",
+    "upgrades": [
+      4,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "strength_upgrade_cost": 135,
+  "earned_upgrade": {
+    "unlocked": 5,
+    "currency": 575,
+    "cleared": "111100",
+    "upgrades": [
+      5,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "saved_progress_survives_restart": true,
+  "upgraded_attributes": {
+    "hero": "StormSavant",
+    "level": 1,
+    "speed": 1,
+    "strength": 30.0,
+    "expected": 30.0,
+    "screenshot": "earned-strength-restart.png",
+    "strength_ocr": [
+      [
+        "Strength",
+        203,
+        235,
+        259,
+        250
+      ],
+      [
+        "30.0",
+        457,
+        235,
+        484,
+        247
+      ],
+      [
+        "Strength",
+        204,
+        235,
+        259,
+        250
+      ],
+      [
+        "Strength 30.0 Base attack 48.0 Armor 0.0",
+        204,
+        231,
+        1076,
+        254
+      ]
+    ]
+  },
+  "earned_strength_applies_after_restart": true,
+  "normal_quit_twice": true
+}
