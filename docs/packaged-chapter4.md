@@ -1,0 +1,5 @@
+# Earned progression clears chapter four
+
+The read-only e109893 Linux package continued actual earned progress:500shards,Strength level3,unlocked4andcleared111000. Public1/g/f controls at1× completed HollowGrove atLevel43/2075kills and earned240shards. SiegeOfDawn unlocked. The actual next Strength purchase cost90, leaving650shards andupgrades[4,0,0,0,0,0]. After restart, a newLevel1StormSavant showedStrength28; both normal quits returned0. The full runtime job returned0. No currency, health or victory was injected. [Evidence](verification/packaged-chapter4-2026-10-09/verification.json).
+
+All147ordered samples and ten native screenshots were inspected. Actual seed0x00000000000A11CF differs from requested0xA11CE. This covers one actual earned route through the first four chapters onUbuntu/X11/softwareVulkan. The remaining two chapters, more seeds/heroes/builds and hardware/Steamclient checks remain. The e109893 artifact used here predates the new5c77f1e candidate; progress transfer to that artifact is the next runtime check.

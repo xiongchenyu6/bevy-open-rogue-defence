@@ -1,0 +1,16 @@
+{
+  "package_source": "e109893d96296849a292bccedcbe635116009f1a",
+  "stage": 3,
+  "speed": 1,
+  "actual_seed": "0x00000000000a11cf",
+  "job_exit_code": 0,
+  "samples_verified": 147,
+  "reviewed_native_images_by_root": 10,
+  "level": 43,
+  "kills": 2075,
+  "earned_shards": 240,
+  "spent_shards": 90,
+  "remaining_shards": 650,
+  "new_run_strength": 28,
+  "not_proven": "Remaining two chapters, all builds/seeds, hardware/Steam client and newer package long campaign"
+}
