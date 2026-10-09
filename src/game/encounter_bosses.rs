@@ -232,7 +232,8 @@ fn tick_adventure_skills(
         if enemy.hp <= 0.0 {
             continue;
         }
-        if controls.actions_blocked(owner) {
+        let delta = controls.action_delta(owner, time.delta_secs());
+        if controls.actions_blocked(owner) || (delta <= 0.0 && time.delta_secs() > 0.0) {
             continue;
         }
         if !clock.enraged && enemy.hp <= enemy.max_hp * 0.5 {
@@ -256,7 +257,7 @@ fn tick_adventure_skills(
             .iter()
             .enumerate()
         {
-            clock.cooldowns[kind] -= time.delta_secs();
+            clock.cooldowns[kind] -= delta;
             if clock.cooldowns[kind] > 0.0 {
                 continue;
             }

@@ -1,0 +1,21 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+error[E0689]: can't call method `min` on ambiguous numeric type `{float}`
+  --> src/game/skills/control_time_tests.rs:47:35
+   |
+42 |     for step_size in [1. / 60., 32. / 60., 32. / 15., 1.6] {
+   |         --------- you must specify a type for this binding, like `f32`
+...
+47 |             let delta = step_size.min(1.6 - elapsed);
+   |                                   ^^^
+
+For more information about this error, try `rustc --explain E0689`.
+error: could not compile `rogue_commander` (lib test) due to 1 previous error

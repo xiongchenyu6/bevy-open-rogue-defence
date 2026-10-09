@@ -551,7 +551,8 @@ fn move_challenge_enemies(
         return;
     };
     for (entity, enemy, mut fighter, speed_effect, mut transform) in &mut challenges {
-        if controls.actions_blocked(entity) {
+        let delta = controls.action_delta(entity, time.delta_secs());
+        if controls.actions_blocked(entity) || (delta <= 0.0 && time.delta_secs() > 0.0) {
             continue;
         }
         let protecting_gate = core.single().ok().filter(|gate| {
@@ -570,7 +571,7 @@ fn move_challenge_enemies(
             transform.translation,
             target,
             enemy.speed * speed_effect.map_or(1.0, |effect| effect.multiplier),
-            time.delta_secs(),
+            delta,
             CHALLENGE_ATTACK_RANGE,
         );
         transform.translation = next;
@@ -1284,5 +1285,71 @@ mod tests {
         );
         assert_eq!(gold_reward(14), 630);
         assert_eq!(gold_total_reward(14), 6_300);
+    }
+
+    #[test]
+    fn control_time_partial_thaw_preserves_unexpired_attack_cooldown() {
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<BondRuntime>()
+            .init_resource::<crate::game::PlayerBuild>()
+            .init_resource::<crate::game::market::MarketEffects>()
+            .init_resource::<crate::game::encounters::EncounterState>()
+            .init_resource::<crate::game::skills::SkillRuntime>()
+            .add_message::<EnemyAttackCue>();
+        app.world_mut()
+            .spawn((Hero, Transform::from_xyz(-1., 0., 0.), Visibility::Visible));
+        let source = app
+            .world_mut()
+            .spawn((
+                TrialEnemy {
+                    level: 1,
+                    reward: 0,
+                    kind: ChallengeKind::Tower,
+                },
+                ChallengeFighter {
+                    attack_remaining: 0.5,
+                },
+                Enemy {
+                    hp: 100.,
+                    max_hp: 100.,
+                    speed: 2.,
+                    damage: 10.,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+                Transform::default(),
+            ))
+            .id();
+        app.world_mut()
+            .resource_mut::<crate::game::skills::SkillRuntime>()
+            .freeze_relic(source, 2., false, false, 0.1);
+        let tick = app
+            .world_mut()
+            .register_system(crate::game::skills::tick_skill_runtime);
+        let attack = app.world_mut().register_system(move_challenge_enemies);
+        let delta = 32.0 / 60.0;
+        let health = app.world().resource::<HeroVitals>().health;
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(delta));
+        app.world_mut().run_system(tick).unwrap();
+        app.world_mut().run_system(attack).unwrap();
+        assert!(
+            (app.world()
+                .get::<ChallengeFighter>(source)
+                .unwrap()
+                .attack_remaining
+                - (0.5 - (delta - 0.1)))
+                .abs()
+                < 0.00001
+        );
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 0);
+        assert_eq!(app.world().resource::<HeroVitals>().health, health);
     }
 }

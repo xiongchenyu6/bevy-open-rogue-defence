@@ -108,6 +108,7 @@ pub(crate) struct SkillRuntime {
     attack_count: u64,
     burns: BTreeMap<Entity, BurnState>,
     controls: HashMap<Entity, ControlState>,
+    control_blocked_seconds: HashMap<Entity, f32>,
     seals: HashMap<Entity, u8>,
     orbit_hit_cooldowns: HashMap<Entity, f32>,
     wet: HashMap<Entity, f32>,
@@ -130,6 +131,7 @@ impl Default for SkillRuntime {
             attack_count: 0,
             burns: BTreeMap::new(),
             controls: HashMap::new(),
+            control_blocked_seconds: HashMap::new(),
             seals: HashMap::new(),
             orbit_hit_cooldowns: HashMap::new(),
             wet: HashMap::new(),
@@ -171,6 +173,22 @@ impl SkillRuntime {
         self.controls.get(&target).is_some_and(|control| {
             control.frozen_remaining > 0.0 || control.stunned_remaining > 0.0
         })
+    }
+    /// Time available for this actor after control has consumed part of this step.
+    /// Newly applied control still blocks actions; expired control keeps its spent
+    /// time until the next runtime tick so every consumer sees the same budget.
+    pub(crate) fn action_delta(&self, target: Entity, delta: f32) -> f32 {
+        if self.actions_blocked(target) {
+            0.0
+        } else {
+            (delta.max(0.0)
+                - self
+                    .control_blocked_seconds
+                    .get(&target)
+                    .copied()
+                    .unwrap_or(0.0))
+            .max(0.0)
+        }
     }
     pub(crate) fn is_frozen(&self, target: Entity) -> bool {
         self.controls
@@ -446,6 +464,7 @@ pub(super) fn tick_skill_runtime(
     runtime.spell_power_multiplier = market_effects.effective_spell_power(1.0);
     runtime.summon_inherit_multiplier = market_effects.effective_summon_power(1.0);
     runtime.market_echo_chance = market_effects.spell_echo_chance();
+    runtime.control_blocked_seconds.clear();
     if session.paused || session.finished {
         return;
     }
@@ -496,6 +515,10 @@ pub(super) fn tick_skill_runtime(
         let Some(control) = runtime.controls.get_mut(&entity) else {
             continue;
         };
+        let blocked = control
+            .frozen_remaining
+            .max(control.stunned_remaining)
+            .min(delta.max(0.0));
         control.slow_remaining = (control.slow_remaining - delta).max(0.0);
         control.frozen_remaining = (control.frozen_remaining - delta).max(0.0);
         control.stunned_remaining = (control.stunned_remaining - delta).max(0.0);
@@ -510,6 +533,9 @@ pub(super) fn tick_skill_runtime(
         } else {
             enemy.speed = control.base_speed;
             expired_controls.push(entity);
+        }
+        if blocked > 0.0 {
+            runtime.control_blocked_seconds.insert(entity, blocked);
         }
     }
     for entity in expired_controls {
@@ -4163,3 +4189,7 @@ mod tests {
 #[cfg(test)]
 #[path = "skills/expiry_tests.rs"]
 mod expiry_tests;
+
+#[cfg(test)]
+#[path = "skills/control_time_tests.rs"]
+mod control_time_tests;

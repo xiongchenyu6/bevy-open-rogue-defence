@@ -187,10 +187,17 @@ pub(super) fn tick_dangers(
         }
         // Inactive telegraphs belong to the boss-held pending windup.
         // Pause their warning with pending; released active hazards keep running.
-        if !danger.active && controls.actions_blocked(danger.boss) {
+        let delta = if danger.active {
+            time.delta_secs()
+        } else {
+            controls.action_delta(danger.boss, time.delta_secs())
+        };
+        if !danger.active
+            && (controls.actions_blocked(danger.boss) || (delta <= 0.0 && time.delta_secs() > 0.0))
+        {
             continue;
         }
-        danger.remaining -= time.delta_secs();
+        danger.remaining -= delta;
         if danger.remaining > 0.0 {
             continue;
         }
@@ -198,7 +205,7 @@ pub(super) fn tick_dangers(
             danger.active = true;
             danger.remaining = danger.active_secs;
         }
-        danger.tick_remaining -= time.delta_secs();
+        danger.tick_remaining -= delta;
         if danger.tick_remaining <= 0.0 {
             danger.tick_remaining = 0.5;
             let gate_position = gate.single().ok().map(|transform| transform.translation);

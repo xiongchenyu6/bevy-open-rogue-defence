@@ -1,0 +1,25 @@
+{
+  "library_tests_passed": 627,
+  "failed": 0,
+  "ignored": 1,
+  "selected_baseline_failed": 4,
+  "baseline_actual_premature_ranged_cues": 1,
+  "new_control_time_regressions": 7,
+  "strict_clippy": true,
+  "build_pass": true,
+  "native_job_exit": 0,
+  "native_frames": 1600,
+  "reviewed_screenshots": 12,
+  "source_sha256": {
+    "src/game/skills.rs": "6d74413c33b39631c2f5753f66faf1c7bc333c81eec6504dc2bb6b667f433dce",
+    "src/game/skills/control_time_tests.rs": "65ada590effd7bad4b073e9614584cf69d97c79d851e5209f312b87a51d04d84",
+    "src/game/combat.rs": "ef9c384d9cf27dad38e834b7b4ebb07dbd61c001c454981e3373af9d57d58dec",
+    "src/game/trial.rs": "b09b4bf3eb2b013f2c38bb189143e8107544875fa77672f67928df88584cb818",
+    "src/game/archive.rs": "9ec8041f33cda0c50867298158754ce86e2533d7269b44c5c31b696966802f98",
+    "src/game/bosses.rs": "1873a48d981f4c3623da7ad940eec81e15eb5ef9208dc7076f2f3a16691620ce",
+    "src/game/bosses/dangers.rs": "ad7371cf8131608dc15591efdeaf774d8737c0733ed69094ac0713555f984e81",
+    "src/game/encounter_bosses.rs": "6ecc7dc1aad15f178301aee2337e96551749ea013b93baf52b43fd92b9b2ba93"
+  },
+  "scope": "Production freeze/stun consumed-time budgets and real ranged movement/cooldown, trial/archive combat, boss pending+spawned-warning synchronization. Native scenes are visual and survival regressions.",
+  "limits": "Not whole-game speed equivalence; partial slow expiry, new intra-frame control, hazard phase transition and animation playback remain separate."
+}

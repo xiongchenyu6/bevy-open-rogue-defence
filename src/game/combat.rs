@@ -1098,9 +1098,7 @@ fn move_enemies(
     // Bounty encounter: every lane attacker hits harder while it runs.
     let bounty = encounters.enemy_damage_multiplier();
     cue_clocks.retain(|entity, remaining| {
-        if !controls.actions_blocked(*entity) {
-            *remaining -= delta;
-        }
+        *remaining -= controls.action_delta(*entity, delta);
         enemies.p1().contains(*entity)
     });
     let Ok(core) = core_query.single() else {
@@ -1136,7 +1134,8 @@ fn move_enemies(
         if affix.is_some_and(|affix| affix.is_volatile_pending()) {
             continue;
         }
-        if controls.actions_blocked(entity) {
+        let delta = controls.action_delta(entity, delta);
+        if controls.actions_blocked(entity) || (delta <= 0.0 && time.delta_secs() > 0.0) {
             continue;
         }
         if camp.is_some_and(|camp| hero_position.xz().distance(camp.center.xz()) > 6.0) {
@@ -1548,16 +1547,19 @@ fn enemy_auras(
         return;
     }
     cue_clocks.retain(|entity, remaining| {
-        if !controls.actions_blocked(*entity) {
-            *remaining -= time.delta_secs();
-        }
+        *remaining -= controls.action_delta(*entity, time.delta_secs());
         enemies.p0().contains(*entity)
     });
-    let healers: Vec<(Entity, Vec3)> = enemies
+    let healers: Vec<(Entity, Vec3, f32)> = enemies
         .p0()
         .iter()
-        .filter(|(entity, _, kind)| kind.0 == 8 && !controls.actions_blocked(*entity))
-        .map(|(entity, transform, _)| (entity, transform.translation))
+        .filter_map(|(entity, transform, kind)| {
+            let delta = controls.action_delta(entity, time.delta_secs());
+            (kind.0 == 8
+                && !controls.actions_blocked(entity)
+                && (delta > 0.0 || time.delta_secs() <= 0.0))
+                .then_some((entity, transform.translation, delta))
+        })
         .collect();
     if healers.is_empty() {
         return;
@@ -1566,12 +1568,12 @@ fn enemy_auras(
         if kind.is_some_and(|kind| kind.0 == 8) {
             continue;
         }
-        if let Some((source, origin)) = healers
+        if let Some((source, origin, delta)) = healers
             .iter()
-            .find(|(_, position)| position.distance_squared(transform.translation) <= 12.25)
+            .find(|(_, position, _)| position.distance_squared(transform.translation) <= 12.25)
         {
             let before = enemy.hp;
-            enemy.hp = (enemy.hp + enemy.max_hp * 0.02 * time.delta_secs()).min(enemy.max_hp);
+            enemy.hp = (enemy.hp + enemy.max_hp * 0.02 * delta).min(enemy.max_hp);
             if enemy.hp > before && continuous_enemy_cue_due(&mut cue_clocks, *source) {
                 attack_cues.write(EnemyAttackCue {
                     source: *source,
@@ -3567,6 +3569,72 @@ mod tests {
         app.world_mut().run_system(system).unwrap();
         assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 1);
         assert_eq!(app.world().resource::<HeroVitals>().health, health - 10.0);
+    }
+
+    #[test]
+    fn control_time_partial_thaw_uses_only_available_movement_and_attack_seconds() {
+        let frame_delta = 32.0 / 60.0;
+        let available = frame_delta - 0.1;
+        for start_x in [5.0, 12.0] {
+            let mut app = enemy_movement_test_app();
+            app.init_resource::<PlayerBuild>();
+            // Put the hero beyond the wall so this exercises the real ranged AI.
+            app.world_mut()
+                .query_filtered::<&mut Transform, With<Hero>>()
+                .single_mut(app.world_mut())
+                .unwrap()
+                .translation
+                .x = 1.0;
+            let mut enemy = test_enemy(100.0);
+            enemy.speed = 2.0;
+            enemy.damage = 10.0;
+            let source = app
+                .world_mut()
+                .spawn((
+                    enemy,
+                    EnemyArchetype(3),
+                    EnemyHeroThreat::ranged(),
+                    Transform::from_xyz(start_x, 0.0, 0.0),
+                ))
+                .id();
+            app.world_mut()
+                .get_mut::<EnemyHeroThreat>(source)
+                .unwrap()
+                .attack_remaining = 0.5;
+            app.world_mut()
+                .resource_mut::<SkillRuntime>()
+                .freeze_relic(source, 2.0, false, false, 0.1);
+            let tick = app
+                .world_mut()
+                .register_system(super::super::skills::tick_skill_runtime);
+            let movement = app.world_mut().register_system(move_enemies);
+            let health = app.world().resource::<HeroVitals>().health;
+            app.world_mut()
+                .resource_mut::<Time>()
+                .advance_by(std::time::Duration::from_secs_f32(frame_delta));
+            app.world_mut().run_system(tick).unwrap();
+            app.world_mut().run_system(movement).unwrap();
+            assert!(
+                !app.world()
+                    .resource::<SkillRuntime>()
+                    .actions_blocked(source)
+            );
+            assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 0);
+            assert_eq!(app.world().resource::<HeroVitals>().health, health);
+            let position = app.world().get::<Transform>(source).unwrap().translation.x;
+            let cooldown = app
+                .world()
+                .get::<EnemyHeroThreat>(source)
+                .unwrap()
+                .attack_remaining;
+            if start_x == 5.0 {
+                assert!((position - start_x).abs() < 0.00001);
+                assert!((cooldown - (0.5 - available)).abs() < 0.00001);
+            } else {
+                assert!((position - (start_x - 2.0 * available)).abs() < 0.00001);
+                assert!((cooldown - 0.5).abs() < 0.00001);
+            }
+        }
     }
 
     #[test]

@@ -228,7 +228,8 @@ fn run_boss_mechanics(
         if enemy.hp <= 0.0 {
             continue;
         }
-        if controls.actions_blocked(*entity) {
+        let delta = controls.action_delta(*entity, delta);
+        if controls.actions_blocked(*entity) || (delta <= 0.0 && time.delta_secs() > 0.0) {
             continue;
         }
         if enter_second_phase(state, &enemy) {
@@ -922,5 +923,101 @@ mod tests {
         let tracked: Vec<Entity> = query.iter(&world).collect();
         assert_eq!(tracked, [boss]);
         assert!(!tracked.contains(&echo));
+    }
+
+    #[test]
+    fn control_time_partial_thaw_keeps_boss_pending_and_warning_in_sync() {
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<GameSession>()
+            .init_resource::<crate::game::HeroVitals>()
+            .init_resource::<crate::game::PlayerBuild>()
+            .init_resource::<crate::game::market::MarketEffects>()
+            .init_resource::<crate::game::encounters::EncounterState>()
+            .init_resource::<crate::game::skills::SkillRuntime>()
+            .init_resource::<BossRuntime>()
+            .init_resource::<CombatPools>()
+            .insert_resource(test_game_assets())
+            .add_message::<EnemyAttackCue>()
+            .add_message::<BossPhaseCue>();
+        let boss = app
+            .world_mut()
+            .spawn((
+                BossEnemy { index: 0 },
+                Transform::default(),
+                Enemy {
+                    hp: 100.,
+                    max_hp: 100.,
+                    speed: 1.,
+                    damage: 10.,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+            ))
+            .id();
+        let register = app.world_mut().register_system(register_bosses);
+        app.world_mut().run_system(register).unwrap();
+        app.world_mut()
+            .resource_mut::<BossRuntime>()
+            .states
+            .get_mut(&boss)
+            .unwrap()
+            .pending = Some(PendingAbility {
+            remaining_secs: 0.9,
+            target: Vec3::X,
+            variant: 0,
+        });
+        let session = GameSession::default();
+        {
+            let mut commands = app.world_mut().commands();
+            dangers::spawn_dangers(
+                &mut commands,
+                boss,
+                0,
+                Vec3::ZERO,
+                Some(Vec3::X),
+                None,
+                &session,
+                0,
+                false,
+                10.,
+                0.9,
+            );
+        }
+        app.world_mut().flush();
+        app.world_mut()
+            .resource_mut::<crate::game::skills::SkillRuntime>()
+            .freeze_relic(boss, 1., false, false, 0.1);
+        let tick = app
+            .world_mut()
+            .register_system(crate::game::skills::tick_skill_runtime);
+        let mechanics = app.world_mut().register_system(run_boss_mechanics);
+        let warning = app.world_mut().register_system(dangers::tick_dangers);
+        let delta = 32.0 / 60.0;
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(delta));
+        app.world_mut().run_system(tick).unwrap();
+        app.world_mut().run_system(mechanics).unwrap();
+        app.world_mut().run_system(warning).unwrap();
+        let state = &app.world().resource::<BossRuntime>().states[&boss];
+        let pending = state.pending.unwrap().remaining_secs;
+        assert!((state.age_secs - (delta - 0.1)).abs() < 0.00001);
+        assert!((pending - (0.9 - (delta - 0.1))).abs() < 0.00001);
+        let warnings: Vec<_> = app
+            .world_mut()
+            .query::<&BossTelegraph>()
+            .iter(app.world())
+            .copied()
+            .collect();
+        assert!(!warnings.is_empty());
+        for danger in warnings {
+            assert!(!danger.active);
+            assert!((danger.remaining - pending).abs() < 0.00001);
+        }
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 0);
     }
 }

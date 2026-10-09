@@ -1,0 +1,96 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3m 38s
+     Running unittests src/lib.rs (target/debug/deps/rogue_commander-7930c12b106a9f5a)
+
+running 4 tests
+test game::skills::control_time_tests::control_time_expiry_preserves_spent_time_for_every_consumer_only_this_step ... FAILED
+test game::skills::control_time_tests::control_time_new_freeze_pause_removal_and_reset_do_not_leak_a_budget ... FAILED
+test game::combat::tests::control_time_partial_thaw_uses_only_available_movement_and_attack_seconds ... FAILED
+test game::skills::control_time_tests::control_time_overlap_spends_maximum_duration_across_small_and_large_steps ... FAILED
+
+failures:
+
+---- game::skills::control_time_tests::control_time_expiry_preserves_spent_time_for_every_consumer_only_this_step stdout ----
+
+thread 'game::skills::control_time_tests::control_time_expiry_preserves_spent_time_for_every_consumer_only_this_step' (1746039) panicked at src/game/skills/control_time_tests.rs:34:9:
+assertion failed: (runtime.action_delta(target, 32. / 60.) - (32. / 60. - 0.1)).abs() < 0.00001
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::panic
+   3: rogue_commander::game::skills::control_time_tests::control_time_expiry_preserves_spent_time_for_every_consumer_only_this_step
+   4: rogue_commander::game::skills::control_time_tests::control_time_expiry_preserves_spent_time_for_every_consumer_only_this_step::{closure#0}
+             at ./src/game/skills/control_time_tests.rs:28:80
+   5: <rogue_commander::game::skills::control_time_tests::control_time_expiry_preserves_spent_time_for_every_consumer_only_this_step::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+---- game::skills::control_time_tests::control_time_new_freeze_pause_removal_and_reset_do_not_leak_a_budget stdout ----
+
+thread 'game::skills::control_time_tests::control_time_new_freeze_pause_removal_and_reset_do_not_leak_a_budget' (1746040) panicked at src/game/skills/control_time_tests.rs:59:5:
+assertion failed: (app.world().resource::<SkillRuntime>().action_delta(target, 0.5) - 0.4).abs()
+    < 0.00001
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::panic
+   3: rogue_commander::game::skills::control_time_tests::control_time_new_freeze_pause_removal_and_reset_do_not_leak_a_budget
+   4: rogue_commander::game::skills::control_time_tests::control_time_new_freeze_pause_removal_and_reset_do_not_leak_a_budget::{closure#0}
+             at ./src/game/skills/control_time_tests.rs:56:74
+   5: <rogue_commander::game::skills::control_time_tests::control_time_new_freeze_pause_removal_and_reset_do_not_leak_a_budget::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+---- game::combat::tests::control_time_partial_thaw_uses_only_available_movement_and_attack_seconds stdout ----
+
+thread 'game::combat::tests::control_time_partial_thaw_uses_only_available_movement_and_attack_seconds' (1746038) panicked at src/game/combat.rs:3597:13:
+assertion `left == right` failed
+  left: 1
+ right: 0
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<usize, usize>
+   4: rogue_commander::game::combat::tests::control_time_partial_thaw_uses_only_available_movement_and_attack_seconds
+             at ./src/game/combat.rs:3597:13
+   5: rogue_commander::game::combat::tests::control_time_partial_thaw_uses_only_available_movement_and_attack_seconds::{closure#0}
+             at ./src/game/combat.rs:3572:83
+   6: <rogue_commander::game::combat::tests::control_time_partial_thaw_uses_only_available_movement_and_attack_seconds::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+---- game::skills::control_time_tests::control_time_overlap_spends_maximum_duration_across_small_and_large_steps stdout ----
+
+thread 'game::skills::control_time_tests::control_time_overlap_spends_maximum_duration_across_small_and_large_steps' (1746041) panicked at src/game/skills/control_time_tests.rs:52:9:
+step=0.53333336 available=0.5333333
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: rogue_commander::game::skills::control_time_tests::control_time_overlap_spends_maximum_duration_across_small_and_large_steps
+             at ./src/game/skills/control_time_tests.rs:52:9
+   3: rogue_commander::game::skills::control_time_tests::control_time_overlap_spends_maximum_duration_across_small_and_large_steps::{closure#0}
+             at ./src/game/skills/control_time_tests.rs:41:79
+   4: <rogue_commander::game::skills::control_time_tests::control_time_overlap_spends_maximum_duration_across_small_and_large_steps::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+
+failures:
+    game::combat::tests::control_time_partial_thaw_uses_only_available_movement_and_attack_seconds
+    game::skills::control_time_tests::control_time_expiry_preserves_spent_time_for_every_consumer_only_this_step
+    game::skills::control_time_tests::control_time_new_freeze_pause_removal_and_reset_do_not_leak_a_budget
+    game::skills::control_time_tests::control_time_overlap_spends_maximum_duration_across_small_and_large_steps
+
+test result: FAILED. 0 passed; 4 failed; 0 ignored; 0 measured; 621 filtered out; finished in 1.43s
+
+error: test failed, to rerun pass `--lib`

@@ -233,7 +233,8 @@ fn run_archive(
         return;
     };
 
-    if controls.actions_blocked(echo_entity) {
+    let delta = controls.action_delta(echo_entity, delta);
+    if controls.actions_blocked(echo_entity) || (delta <= 0.0 && time.delta_secs() > 0.0) {
         return;
     }
     let protecting_gate = core.single().ok().filter(|gate| {
@@ -497,5 +498,73 @@ mod tests {
 
         let mut trials = world.query_filtered::<Entity, With<super::super::TrialEnemy>>();
         assert!(!trials.iter(&world).any(|entity| entity == echo));
+    }
+
+    #[test]
+    fn control_time_partial_thaw_preserves_unexpired_attack_cooldown() {
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<BondRuntime>()
+            .init_resource::<crate::game::PlayerBuild>()
+            .init_resource::<crate::game::market::MarketEffects>()
+            .init_resource::<crate::game::encounters::EncounterState>()
+            .init_resource::<crate::game::skills::SkillRuntime>()
+            .add_message::<EnemyAttackCue>();
+        app.world_mut()
+            .spawn((Hero, Transform::from_xyz(-1., 0., 0.), Visibility::Visible));
+        app.init_resource::<CombatPools>()
+            .insert_resource(ArchiveState {
+                active: true,
+                attack_timer: 0.5,
+                ..default()
+            });
+        {
+            let mut session = app.world_mut().resource_mut::<GameSession>();
+            session.save_active = true;
+            session.save_remaining = 60.;
+        }
+        let source = app
+            .world_mut()
+            .spawn((
+                ArchiveEcho,
+                Enemy {
+                    hp: 100.,
+                    max_hp: 100.,
+                    speed: 2.,
+                    damage: 10.,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+                Transform::default(),
+            ))
+            .id();
+        app.world_mut()
+            .resource_mut::<crate::game::skills::SkillRuntime>()
+            .freeze_relic(source, 2., false, false, 0.1);
+        let tick = app
+            .world_mut()
+            .register_system(crate::game::skills::tick_skill_runtime);
+        let attack = app.world_mut().register_system(run_archive);
+        let delta = 32.0 / 60.0;
+        let health = app.world().resource::<HeroVitals>().health;
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(delta));
+        app.world_mut().run_system(tick).unwrap();
+        app.world_mut().run_system(attack).unwrap();
+        assert!(
+            (app.world().resource::<ArchiveState>().attack_timer - (0.5 - (delta - 0.1))).abs()
+                < 0.00001
+        );
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 0);
+        assert_eq!(app.world().resource::<HeroVitals>().health, health);
+        assert!(
+            (app.world().resource::<GameSession>().save_remaining - (60. - delta)).abs() < 0.00001
+        );
     }
 }
