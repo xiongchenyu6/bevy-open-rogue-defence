@@ -295,17 +295,7 @@ pub(super) fn impact(
             );
             star(p, Motif::Ice, at.with_y(0.07), reach, phase * 0.1, 6);
         }
-        15 => p.emit(
-            Motif::Water,
-            p.art.helix.clone(),
-            at,
-            Vec3::new(reach, 1.3, reach),
-            Quat::IDENTITY,
-            Vec3::ZERO,
-            0.45,
-            6.0,
-            0.05,
-        ),
+        15 => vortex(p, at, reach, phase),
         16 => {
             p.emit(
                 Motif::Water,
@@ -572,19 +562,40 @@ pub(super) fn zone(p: &mut Painter, zone: &SkillZone, position: Vec3, rank: u8, 
             );
             star(p, Motif::Ice, position.with_y(0.05), radius, 0.0, 6);
         }
-        ZoneKind::VortexColumn => p.emit(
-            Motif::Water,
-            p.art.helix.clone(),
-            position,
-            Vec3::new(radius, 1.6, radius),
-            Quat::from_rotation_y(phase),
-            Vec3::ZERO,
-            0.4,
-            5.0,
-            0.0,
-        ),
+        ZoneKind::VortexColumn => vortex(p, position, radius, phase),
     }
     p.identity = previous;
+}
+
+fn vortex(p: &mut Painter, position: Vec3, radius: f32, phase: f32) {
+    p.emit(
+        Motif::Water,
+        p.art.vortex.clone(),
+        position,
+        Vec3::new(radius, 1.4, radius),
+        Quat::from_rotation_y(phase),
+        Vec3::ZERO,
+        0.38,
+        2.4,
+        0.0,
+    );
+    let size = (radius / 4.0).clamp(0.75, 2.0);
+    for strand in 0..3 {
+        let angle = phase + strand as f32 * std::f32::consts::TAU / 3.0;
+        let offset = Vec3::new(angle.cos(), 0.0, angle.sin()) * radius * 0.64;
+        let tangent = Vec3::new(-angle.sin(), 0.0, angle.cos());
+        p.emit(
+            Motif::Water,
+            p.art.shard.clone(),
+            position + offset + Vec3::Y * 0.3,
+            Vec3::new(0.16, 0.65, 0.16) * size,
+            Quat::from_rotation_y(-angle),
+            tangent * 1.4 + Vec3::Y * 0.7,
+            0.32,
+            1.8,
+            0.0,
+        );
+    }
 }
 
 pub(super) fn projectile(

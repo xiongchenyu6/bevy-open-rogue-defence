@@ -46,6 +46,7 @@ struct ProjectionArt {
     cool: Handle<StandardMaterial>,
     warm: Handle<StandardMaterial>,
     storm: Handle<StandardMaterial>,
+    vortex: Handle<StandardMaterial>,
     infection: Handle<StandardMaterial>,
     impacts: [Handle<StandardMaterial>; 4],
 }
@@ -72,6 +73,13 @@ fn setup(
     let warm = materials.add(light(Color::srgba(0.95, 0.28, 0.08, 0.16)));
     let storm = materials.add(light(Color::srgba(0.65, 0.25, 0.95, 0.16)));
     let infection = materials.add(light(Color::srgba(0.16, 0.85, 0.22, 0.16)));
+    let vortex = materials.add(StandardMaterial {
+        base_color: Color::srgba(0.12, 0.36, 0.48, 0.045),
+        emissive: LinearRgba::rgb(0.0, 0.04, 0.06),
+        alpha_mode: AlphaMode::Blend,
+        unlit: true,
+        ..default()
+    });
     let impacts = [
         (0.18, 0.70, 1.0),
         (1.0, 0.28, 0.04),
@@ -118,6 +126,7 @@ fn setup(
         cool,
         warm,
         storm,
+        vortex,
         infection,
         impacts,
     });
@@ -151,6 +160,9 @@ fn color_impacts(
         return;
     }
     for (mut material, ground, zone) in &mut effects {
+        if zone.is_some_and(SkillZone::uses_authored_ground_material) {
+            continue;
+        }
         let profile = ground
             .map(|p| &p.0)
             .or_else(|| zone.map(SkillZone::lighting_profile));
@@ -357,6 +369,8 @@ fn project(
                 &art.shadow
             } else if beam.is_some() {
                 &art.warm
+            } else if zone.is_some_and(SkillZone::uses_authored_ground_material) {
+                &art.vortex
             } else {
                 art.energy(
                     ground_profile

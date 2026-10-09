@@ -5,6 +5,8 @@ use super::*;
 
 #[path = "spectacle.rs"]
 mod spectacle;
+#[path = "vortex_art.rs"]
+mod vortex_art;
 
 const MAX_PARTICLES: usize = 600;
 const EMIT_INTERVAL: f32 = 0.085;
@@ -14,7 +16,13 @@ pub(super) fn install(app: &mut App) {
         .add_systems(Startup, setup)
         .add_systems(
             PostUpdate,
-            (animate, authored_bodies, branch_feedback, present)
+            (
+                animate,
+                authored_bodies,
+                finish_vortex_ground,
+                branch_feedback,
+                present,
+            )
                 .chain()
                 .before(TransformSystems::Propagate),
         );
@@ -33,6 +41,9 @@ struct Art {
     bar: Handle<Mesh>,
     ring: Handle<Mesh>,
     helix: Handle<Mesh>,
+    vortex: Handle<Mesh>,
+    vortex_material: Handle<StandardMaterial>,
+    vortex_ground: Handle<StandardMaterial>,
     blade: Handle<Mesh>,
     crescent: Handle<Mesh>,
     colors: Vec<Handle<StandardMaterial>>,
@@ -121,11 +132,25 @@ fn setup(
         bar: meshes.add(Cuboid::new(1.0, 1.0, 1.0)),
         ring: meshes.add(crate::game::energy_art::halo_mesh()),
         helix: meshes.add(spectacle::helix_mesh()),
+        vortex: meshes.add(vortex_art::mesh()),
+        vortex_material: materials.add(vortex_art::material()),
+        vortex_ground: materials.add(vortex_art::ground_material()),
         blade: meshes.add(spectacle::blade_mesh()),
         crescent: meshes.add(spectacle::crescent_mesh()),
         colors,
     });
 }
+fn finish_vortex_ground(
+    art: Res<Art>,
+    mut zones: Query<(&SkillZone, &mut MeshMaterial3d<StandardMaterial>)>,
+) {
+    for (zone, mut material) in &mut zones {
+        if zone.kind == ZoneKind::VortexColumn && material.0 != art.vortex_ground {
+            material.0 = art.vortex_ground.clone();
+        }
+    }
+}
+
 struct Painter<'a, 'w, 's> {
     identity: Option<usize>,
     commands: &'a mut Commands<'w, 's>,
@@ -155,7 +180,13 @@ impl Painter<'_, '_, '_> {
                 |index| format!("Skill identity {index}"),
             )),
             Mesh3d(mesh),
-            MeshMaterial3d(self.art.colors[motif.color()].clone()),
+            MeshMaterial3d(
+                if self.identity == Some(15) && matches!(motif, Motif::Water) {
+                    self.art.vortex_material.clone()
+                } else {
+                    self.art.colors[motif.color()].clone()
+                },
+            ),
             Transform::from_translation(position)
                 .with_scale(scale)
                 .with_rotation(rotation),
@@ -812,13 +843,23 @@ mod tests {
                 bar: default(),
                 ring: default(),
                 helix: default(),
+                vortex: default(),
+                vortex_material: default(),
+                vortex_ground: default(),
                 blade: default(),
                 crescent: default(),
                 colors: vec![Handle::default(); 8],
             })
             .add_systems(
                 Update,
-                (animate, authored_bodies, branch_feedback, present).chain(),
+                (
+                    animate,
+                    authored_bodies,
+                    finish_vortex_ground,
+                    branch_feedback,
+                    present,
+                )
+                    .chain(),
             );
         for index in 0..32 {
             app.world_mut().spawn((

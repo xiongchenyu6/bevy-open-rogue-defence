@@ -1,0 +1,10 @@
+{
+  "library_tests": 607,
+  "failed": 0,
+  "ignored": 1,
+  "accepted_native_frames": 800,
+  "reviewed_final_images_by_root": 4,
+  "source_sha256": "ec5cf5d698f1844029ea29c11762a4415028bb9683da0191d4b4081b38f64a6a",
+  "scope": "Vortex rank5 real charged cast, dedicated ground material persists, actual damage/visuals/pause/end cleanup at1280x720 and667x375",
+  "limits": "Static snapshots do not prove final temporal polish, all ranks/build combinations or hardware performance; packagee109893 does not contain this art"
+}

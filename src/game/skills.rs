@@ -307,6 +307,9 @@ impl SkillZone {
     pub(crate) fn lighting_profile(&self) -> &DamageProfile {
         &self.profile
     }
+    pub(crate) fn uses_authored_ground_material(&self) -> bool {
+        self.kind == ZoneKind::VortexColumn
+    }
 }
 
 #[derive(Component)]

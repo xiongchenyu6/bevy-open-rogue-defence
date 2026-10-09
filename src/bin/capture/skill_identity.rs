@@ -228,6 +228,8 @@ fn observe(
     session: Res<GameSession>,
     active: Res<ActiveSkill>,
     telemetry: Res<SkillCastTelemetry>,
+    materials: Res<Assets<StandardMaterial>>,
+    zone_materials: Query<(&Name, &MeshMaterial3d<StandardMaterial>)>,
     assets: Res<GameAssets>,
     names: Query<&Name>,
     visuals: Query<(&Name, &Transform)>,
@@ -299,6 +301,24 @@ fn observe(
         println!(
             "[capture] skill {index} observation frame {frame}: main_visual={signature}, parts={count}, damage={}, summon={}",
             state.saw_damage, state.saw_summon
+        );
+    }
+    if frame == 149 && index == 15 {
+        let (_, handle) = zone_materials
+            .iter()
+            .find(|(name, _)| name.as_str() == "Vortex column damage zone")
+            .expect("actual live vortex zone");
+        let material = materials
+            .get(&handle.0)
+            .expect("loaded vortex ground material");
+        let color = material.base_color.to_srgba();
+        assert!(
+            color.alpha <= 0.1 && color.blue > color.red,
+            "generic lighting must not overwrite authored vortex ground material"
+        );
+        println!(
+            "[capture] PASS persistent vortex ground material: alpha={}",
+            color.alpha
         );
     }
     if frame == 295 {
