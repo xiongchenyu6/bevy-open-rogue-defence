@@ -1,0 +1,20 @@
+{
+  "package_hashes_verified": true,
+  "no_source": true,
+  "no_rust": true,
+  "no_nix": true,
+  "working_directory": "/tmp",
+  "chapter_recruit_battle": true,
+  "fullscreen_restored": true,
+  "language_saved_and_reloaded": true,
+  "normal_quit_twice": true,
+  "real_guide_after_readiness": true,
+  "tutorial_dismissal_saved": true,
+  "restart_skips_automatic_guide_and_runs_battle": true,
+  "scope": "Ubuntu 24.04 / X11 / software Vulkan; no Steam client or hardware performance claim",
+  "source_commit": "700d221ad5ffc709182066d8d333cb0f8cb8cf65",
+  "reviewed_images_by_root": 11,
+  "package_files_verified_on_host": 875,
+  "tar_bytes": 56949862,
+  "tar_sha256": "5c585181cba9c3ee3e38e0b924de9d9e5bac574c6b0f400308e8adaf2f44ddde"
+}
