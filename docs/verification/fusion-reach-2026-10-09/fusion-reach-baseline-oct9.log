@@ -1,0 +1,108 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `test` profile [optimized + debuginfo] target(s) in 4m 43s
+     Running unittests src/lib.rs (target/debug/deps/rogue_commander-7930c12b106a9f5a)
+
+running 9 tests
+test game::hero_fusion::tests::inherited_weapons_preserve_damage_identity_and_cannot_chain_card_procs ... ok
+test game::skills::tests::arc_lens_and_legion_scale_spell_and_inherited_summon_power ... ok
+test game::combat::tests::forged_bloodreaver_really_increases_armor_damage_and_inherited_lifesteal ... ok
+test game::hero_abilities::tests::inherited_kill_passives_all_apply_to_the_same_real_kills ... ok
+test game::hero_abilities::tests::inherited_ultimates_really_auto_cast_in_separate_bounded_sequences ... ok
+test game::combat::tests::inherited_fallback_defers_large_step_without_native_backlog_or_double_slots ... FAILED
+test game::combat::tests::inherited_deferred_slots_clear_when_no_legacy_target_is_reachable ... FAILED
+test game::combat::tests::inherited_ranged_weapon_reaches_beyond_melee_host_without_native_hits ... FAILED
+test game::combat::tests::inherited_fallback_preserves_four_slot_cadence_at_normal_and_32x_deltas ... FAILED
+
+failures:
+
+---- game::combat::tests::inherited_fallback_defers_large_step_without_native_backlog_or_double_slots stdout ----
+
+thread 'game::combat::tests::inherited_fallback_defers_large_step_without_native_backlog_or_double_slots' (1881399) panicked at src/game/combat.rs:6803:9:
+assertion `left == right` failed
+  left: 0
+ right: 2
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<u64, u64>
+   4: rogue_commander::game::combat::tests::inherited_fallback_defers_large_step_without_native_backlog_or_double_slots
+   5: rogue_commander::game::combat::tests::inherited_fallback_defers_large_step_without_native_backlog_or_double_slots::{closure#0}
+             at ./src/game/combat.rs:6800:85
+   6: <rogue_commander::game::combat::tests::inherited_fallback_defers_large_step_without_native_backlog_or_double_slots::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+---- game::combat::tests::inherited_deferred_slots_clear_when_no_legacy_target_is_reachable stdout ----
+
+thread 'game::combat::tests::inherited_deferred_slots_clear_when_no_legacy_target_is_reachable' (1881398) panicked at src/game/combat.rs:6829:9:
+assertion `left == right` failed
+  left: 0
+ right: 2
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<u64, u64>
+   4: rogue_commander::game::combat::tests::inherited_deferred_slots_clear_when_no_legacy_target_is_reachable
+   5: rogue_commander::game::combat::tests::inherited_deferred_slots_clear_when_no_legacy_target_is_reachable::{closure#0}
+             at ./src/game/combat.rs:6821:75
+   6: <rogue_commander::game::combat::tests::inherited_deferred_slots_clear_when_no_legacy_target_is_reachable::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+---- game::combat::tests::inherited_ranged_weapon_reaches_beyond_melee_host_without_native_hits stdout ----
+
+thread 'game::combat::tests::inherited_ranged_weapon_reaches_beyond_melee_host_without_native_hits' (1881401) panicked at src/game/combat.rs:6754:13:
+assertion `left == right` failed: EmberRanger
+  left: 0
+ right: 4
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<u64, u64>
+   4: rogue_commander::game::combat::tests::inherited_ranged_weapon_reaches_beyond_melee_host_without_native_hits
+   5: rogue_commander::game::combat::tests::inherited_ranged_weapon_reaches_beyond_melee_host_without_native_hits::{closure#0}
+             at ./src/game/combat.rs:6750:79
+   6: <rogue_commander::game::combat::tests::inherited_ranged_weapon_reaches_beyond_melee_host_without_native_hits::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+---- game::combat::tests::inherited_fallback_preserves_four_slot_cadence_at_normal_and_32x_deltas stdout ----
+
+thread 'game::combat::tests::inherited_fallback_preserves_four_slot_cadence_at_normal_and_32x_deltas' (1881400) panicked at src/game/combat.rs:6773:13:
+assertion `left == right` failed
+  left: 0
+ right: 4
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<u64, u64>
+   4: rogue_commander::game::combat::tests::inherited_fallback_preserves_four_slot_cadence_at_normal_and_32x_deltas
+   5: rogue_commander::game::combat::tests::inherited_fallback_preserves_four_slot_cadence_at_normal_and_32x_deltas::{closure#0}
+             at ./src/game/combat.rs:6769:81
+   6: <rogue_commander::game::combat::tests::inherited_fallback_preserves_four_slot_cadence_at_normal_and_32x_deltas::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+
+failures:
+    game::combat::tests::inherited_deferred_slots_clear_when_no_legacy_target_is_reachable
+    game::combat::tests::inherited_fallback_defers_large_step_without_native_backlog_or_double_slots
+    game::combat::tests::inherited_fallback_preserves_four_slot_cadence_at_normal_and_32x_deltas
+    game::combat::tests::inherited_ranged_weapon_reaches_beyond_melee_host_without_native_hits
+
+test result: FAILED. 5 passed; 4 failed; 0 ignored; 0 measured; 625 filtered out; finished in 1.65s
+
+error: test failed, to rerun pass `--lib`

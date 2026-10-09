@@ -1883,6 +1883,9 @@ fn auto_attack(
     }
     if session.finished || !vitals.can_act() {
         volley_runtime.pending = 0;
+        if let Some(fusion) = fusion.as_deref_mut() {
+            fusion.clear_pending_fallback();
+        }
         return;
     }
     if session.paused {
@@ -1910,10 +1913,6 @@ fn auto_attack(
     let previous_pending = volley_runtime.pending;
     let available = previous_pending.saturating_add(u64::from(raw_volley_count));
     let planned_volley_count = available.min(u64::from(MAX_ATTACK_CATCH_UP_VOLLEYS)) as u32;
-    if planned_volley_count == 0 {
-        return;
-    }
-
     let mut target: Option<(u8, f32, Entity, Vec3)> = None;
     let mut target_positions = Vec::new();
     let weapon = basic_attacks::weapon(vitals.kind);
@@ -1955,8 +1954,55 @@ fn auto_attack(
             target = Some(candidate);
         }
     }
+    // Completed legacy-only opportunities share the four-hit cadence, but
+    // never increment native volley counters or trigger native attack procs.
+    if let Some(fusion) = fusion.as_deref_mut() {
+        let candidates: Vec<_> = HeroKind::ALL
+            .into_iter()
+            .filter(|kind| fusion.has(*kind) && !basic_attacks::weapon(*kind).melee())
+            .filter_map(|kind| {
+                let range = basic_attacks::class_basic_stats(kind, vitals.level, &build).range;
+                target_positions
+                    .iter()
+                    .filter(|(_, position)| {
+                        position.distance_squared(hero.translation) <= range * range
+                    })
+                    .min_by(|a, b| {
+                        a.1.distance_squared(hero.translation)
+                            .total_cmp(&b.1.distance_squared(hero.translation))
+                            .then_with(|| a.0.to_bits().cmp(&b.0.to_bits()))
+                    })
+                    .map(|(entity, _)| (kind, *entity))
+            })
+            .collect();
+        for kind in fusion.fallback_echoes(
+            raw_volley_count,
+            target.is_some(),
+            |kind| candidates.iter().any(|(candidate, _)| *candidate == kind),
+            MAX_ATTACK_CATCH_UP_VOLLEYS.saturating_sub(if target.is_some() {
+                planned_volley_count
+            } else {
+                0
+            }),
+        ) {
+            let (_, entity) = candidates
+                .iter()
+                .find(|(candidate, _)| *candidate == kind)
+                .unwrap();
+            commands.spawn(super::hero_fusion::FusionRequest {
+                hero: hero_entity,
+                kind,
+                target: *entity,
+                damage: build.attack_damage,
+                speed: build.projectile_speed,
+            });
+        }
+    }
     let Some((_, _, target_entity, target)) = target else {
         volley_runtime.pending = 0;
+        return;
+    };
+    if planned_volley_count == 0 {
         return;
     };
 
@@ -6718,6 +6764,370 @@ mod tests {
         assert_eq!(
             hero_guard_damage_multiplier(&stone, Vec3::ZERO, Vec3::ZERO, Some(&fusion)),
             0.85
+        );
+    }
+    fn fusion_reach_app(kind: HeroKind, distance: f32) -> App {
+        let mut app = projectile_test_app();
+        app.init_resource::<AttackClock>()
+            .init_resource::<AttackVolleyRuntime>()
+            .init_resource::<BasicAttackCounter>()
+            .init_resource::<WeaponCues>()
+            .add_plugins(super::super::hero_fusion::HeroFusionPlugin);
+        app.world_mut().resource_mut::<HeroVitals>().kind = HeroKind::StoneWarden;
+        let mut build = app.world_mut().resource_mut::<PlayerBuild>();
+        build.attacks_per_second = 2.0;
+        build.attack_range = 8.0;
+        build.multishot = 1;
+        app.world_mut()
+            .resource_mut::<super::super::hero_fusion::HeroFusion>()
+            .record_absorbed(kind);
+        app.world_mut().spawn((Hero, Transform::default()));
+        app.world_mut()
+            .spawn((test_enemy(10000.0), Transform::from_xyz(distance, 0.0, 0.0)));
+        app
+    }
+
+    fn fusion_reach_step(app: &mut App, seconds: f32) {
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(seconds));
+        app.world_mut().run_system_once(auto_attack).unwrap();
+        // Execute the production fusion emitter; auto_attack is not installed
+        // in this fixture, so this does not create another clock opportunity.
+        app.update();
+    }
+
+    #[test]
+    fn inherited_ranged_weapon_reaches_beyond_melee_host_without_native_hits() {
+        for kind in [HeroKind::EmberRanger, HeroKind::StormSavant] {
+            let mut app = fusion_reach_app(kind, 5.0);
+            for _ in 0..16 {
+                fusion_reach_step(&mut app, 0.5);
+            }
+            assert_eq!(
+                app.world()
+                    .resource::<super::super::hero_fusion::HeroFusion>()
+                    .echoes_emitted,
+                4,
+                "{kind:?}"
+            );
+            assert_eq!(app.world().resource::<BasicAttackCounter>().0, 0);
+            assert_eq!(
+                app.world()
+                    .resource::<AttackVolleyRuntime>()
+                    .resolved_this_frame,
+                0
+            );
+            assert_eq!(
+                app.world_mut()
+                    .query::<&PendingSwing>()
+                    .iter(app.world())
+                    .count(),
+                0
+            );
+            assert_eq!(
+                app.world_mut()
+                    .query::<&super::super::hero_fusion::FusionAttack>()
+                    .iter(app.world())
+                    .count(),
+                4
+            );
+            let projectile = app
+                .world_mut()
+                .query_filtered::<Entity, With<super::super::hero_fusion::FusionAttack>>()
+                .iter(app.world())
+                .next()
+                .unwrap();
+            let target = app
+                .world_mut()
+                .query_filtered::<Entity, With<Enemy>>()
+                .single(app.world())
+                .unwrap();
+            app.world_mut()
+                .get_mut::<Transform>(projectile)
+                .unwrap()
+                .translation = Vec3::new(5.0, 0.0, 0.0);
+            app.world_mut().run_system_once(projectile_hits).unwrap();
+            assert!(
+                app.world().get::<Enemy>(target).unwrap().hp < 10000.0,
+                "legacy contact must deal resolved damage"
+            );
+            assert_eq!(app.world().resource::<BasicAttackCounter>().0, 0);
+        }
+    }
+
+    #[test]
+    fn inherited_fallback_preserves_four_slot_cadence_at_normal_and_32x_deltas() {
+        for (delta, frames) in [(1.0 / 60.0, 480), (32.0 / 60.0, 15)] {
+            let mut app = fusion_reach_app(HeroKind::EmberRanger, 5.0);
+            for _ in 0..frames {
+                fusion_reach_step(&mut app, delta);
+            }
+            assert_eq!(
+                app.world()
+                    .resource::<super::super::hero_fusion::HeroFusion>()
+                    .echoes_emitted,
+                4
+            );
+            assert_eq!(app.world().resource::<BasicAttackCounter>().0, 0);
+        }
+    }
+
+    #[test]
+    fn unreachable_legacy_slots_do_not_bank_or_fire_outside_reach() {
+        let mut app = fusion_reach_app(HeroKind::StormSavant, 9.0);
+        for _ in 0..16 {
+            fusion_reach_step(&mut app, 0.5);
+        }
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            0
+        );
+        let target = app
+            .world_mut()
+            .query_filtered::<Entity, With<Enemy>>()
+            .single(app.world())
+            .unwrap();
+        app.world_mut()
+            .get_mut::<Transform>(target)
+            .unwrap()
+            .translation
+            .x = 5.0;
+        for _ in 0..3 {
+            fusion_reach_step(&mut app, 0.5);
+        }
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            0
+        );
+        fusion_reach_step(&mut app, 0.5);
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            1
+        );
+    }
+
+    #[test]
+    fn native_reach_keeps_single_legacy_per_four_hits_without_extra_fallback() {
+        let mut app = fusion_reach_app(HeroKind::EmberRanger, 1.0);
+        for _ in 0..16 {
+            fusion_reach_step(&mut app, 0.5);
+        }
+        assert_eq!(app.world().resource::<BasicAttackCounter>().0, 16);
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            4
+        );
+    }
+
+    #[test]
+    fn inherited_fallback_defers_large_step_without_native_backlog_or_double_slots() {
+        let mut app = fusion_reach_app(HeroKind::EmberRanger, 5.0);
+        fusion_reach_step(&mut app, 10.0); // 20 eligible slots, eight-slot work budget.
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            2
+        );
+        assert_eq!(app.world().resource::<AttackVolleyRuntime>().pending, 0);
+        // Return into native reach while draining old fallback opportunities.
+        let target = app
+            .world_mut()
+            .query_filtered::<Entity, With<Enemy>>()
+            .single(app.world())
+            .unwrap();
+        app.world_mut()
+            .get_mut::<Transform>(target)
+            .unwrap()
+            .translation
+            .x = 1.0;
+        fusion_reach_step(&mut app, 0.0);
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            4
+        );
+        fusion_reach_step(&mut app, 0.0);
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            5
+        );
+        assert_eq!(app.world().resource::<BasicAttackCounter>().0, 0);
+        fusion_reach_step(&mut app, 0.0);
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            5
+        );
+        for _ in 0..4 {
+            fusion_reach_step(&mut app, 0.5);
+        }
+        assert_eq!(app.world().resource::<BasicAttackCounter>().0, 4);
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            6
+        );
+    }
+
+    #[test]
+    fn inherited_deferred_slots_clear_when_no_legacy_target_is_reachable() {
+        let mut app = fusion_reach_app(HeroKind::EmberRanger, 5.0);
+        fusion_reach_step(&mut app, 10.0);
+        let target = app
+            .world_mut()
+            .query_filtered::<Entity, With<Enemy>>()
+            .single(app.world())
+            .unwrap();
+        app.world_mut()
+            .get_mut::<Transform>(target)
+            .unwrap()
+            .translation
+            .x = 9.0;
+        fusion_reach_step(&mut app, 0.0);
+        app.world_mut()
+            .get_mut::<Transform>(target)
+            .unwrap()
+            .translation
+            .x = 5.0;
+        fusion_reach_step(&mut app, 0.0);
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            2
+        );
+        for _ in 0..4 {
+            fusion_reach_step(&mut app, 0.5);
+        }
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            3
+        );
+    }
+
+    #[test]
+    fn inherited_deferred_slots_clear_on_death_and_finish_but_pause_preserves_them() {
+        for finish in [false, true] {
+            let mut app = fusion_reach_app(HeroKind::EmberRanger, 5.0);
+            fusion_reach_step(&mut app, 10.0);
+            if finish {
+                app.world_mut().resource_mut::<GameSession>().finished = true;
+            } else {
+                app.world_mut().resource_mut::<HeroVitals>().alive = false;
+            }
+            fusion_reach_step(&mut app, 0.0);
+            app.world_mut().resource_mut::<GameSession>().finished = false;
+            app.world_mut().resource_mut::<HeroVitals>().alive = true;
+            fusion_reach_step(&mut app, 0.0);
+            assert_eq!(
+                app.world()
+                    .resource::<super::super::hero_fusion::HeroFusion>()
+                    .echoes_emitted,
+                2
+            );
+        }
+        let mut app = fusion_reach_app(HeroKind::EmberRanger, 5.0);
+        fusion_reach_step(&mut app, 10.0);
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        fusion_reach_step(&mut app, 0.0);
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            2
+        );
+        app.world_mut().resource_mut::<GameSession>().paused = false;
+        fusion_reach_step(&mut app, 0.0);
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            4
+        );
+    }
+    #[test]
+    fn inherited_backlog_waits_for_native_budget_and_drains_exactly_once() {
+        let mut app = fusion_reach_app(HeroKind::EmberRanger, 5.0);
+        fusion_reach_step(&mut app, 10.0); // 20 slots: eight resolved, twelve deferred.
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            2
+        );
+        let target = app
+            .world_mut()
+            .query_filtered::<Entity, With<Enemy>>()
+            .single(app.world())
+            .unwrap();
+        app.world_mut()
+            .get_mut::<Transform>(target)
+            .unwrap()
+            .translation
+            .x = 1.0;
+        fusion_reach_step(&mut app, 8.0); // 16 native slots: eight resolved, eight deferred.
+        assert_eq!(app.world().resource::<BasicAttackCounter>().0, 8);
+        assert_eq!(app.world().resource::<AttackVolleyRuntime>().pending, 8);
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            4
+        );
+        fusion_reach_step(&mut app, 0.0); // Native backlog consumes the entire shared budget.
+        assert_eq!(app.world().resource::<BasicAttackCounter>().0, 16);
+        assert_eq!(app.world().resource::<AttackVolleyRuntime>().pending, 0);
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            6
+        );
+        fusion_reach_step(&mut app, 0.0); // Eight legacy-only opportunities now have room.
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            8
+        );
+        fusion_reach_step(&mut app, 0.0); // Last four old opportunities; no new native hit.
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            9
+        );
+        fusion_reach_step(&mut app, 0.0);
+        assert_eq!(
+            app.world()
+                .resource::<super::super::hero_fusion::HeroFusion>()
+                .echoes_emitted,
+            9
+        );
+        assert_eq!(app.world().resource::<BasicAttackCounter>().0, 16);
+        assert_eq!(
+            app.world_mut()
+                .query::<&super::super::hero_fusion::FusionAttack>()
+                .iter(app.world())
+                .count(),
+            9
         );
     }
 }

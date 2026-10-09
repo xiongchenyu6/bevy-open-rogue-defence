@@ -1,4 +1,4 @@
-//! Permanent, unique hero legacies; one rotating weapon echo per four native attacks.
+//! Permanent, unique hero legacies; one rotating weapon echo per four eligible attack opportunities.
 use super::attack_vfx::{WeaponCues, WeaponFlight};
 use super::basic_attacks::{self, BasicAttackArt, PendingSwing};
 use super::bonds::{DamageClass, DamageElement, DamageProfile};
@@ -11,8 +11,9 @@ use bevy::prelude::*;
 pub struct HeroFusion {
     absorbed: [bool; HeroKind::COUNT],
     starting_skills: [Option<super::SkillId>; HeroKind::COUNT],
-    attacks: u8,
+    opportunities: u8,
     cursor: usize,
+    pending_fallback: u64,
     /// Actual legacy attacks emitted, useful for HUD feedback and capture verification.
     pub echoes_emitted: u64,
     pub attacks_emitted: [u64; HeroKind::COUNT],
@@ -48,20 +49,61 @@ impl HeroFusion {
             .into_iter()
             .filter(move |kind| *kind == current || self.has(*kind))
     }
+    /// Retain eligible completed slots across the bounded per-frame budget.
+    /// Native reentry adds no fallback slots; earlier slots drain only once.
+    pub(crate) fn fallback_echoes(
+        &mut self,
+        completed: u32,
+        native_target: bool,
+        eligible: impl Fn(HeroKind) -> bool,
+        budget: u32,
+    ) -> Vec<HeroKind> {
+        if !HeroKind::ALL
+            .into_iter()
+            .any(|kind| self.has(kind) && eligible(kind))
+        {
+            self.pending_fallback = 0;
+            return Vec::new();
+        }
+        if !native_target {
+            self.pending_fallback = self.pending_fallback.saturating_add(u64::from(completed));
+        }
+        let slots = self.pending_fallback.min(u64::from(budget));
+        self.pending_fallback -= slots;
+        (0..slots)
+            .filter_map(|_| self.on_opportunity(&eligible))
+            .collect()
+    }
+    pub(crate) fn clear_pending_fallback(&mut self) {
+        self.pending_fallback = 0;
+    }
     pub(crate) fn on_attack(&mut self, _current: HeroKind) -> Option<HeroKind> {
+        self.on_opportunity(|_| true)
+    }
+    /// Native hits and reachable legacy-only clock slots share one cadence.
+    pub(crate) fn on_opportunity(
+        &mut self,
+        eligible: impl Fn(HeroKind) -> bool,
+    ) -> Option<HeroKind> {
         if self.count() == 0 {
-            self.attacks = 0;
+            self.opportunities = 0;
             return None;
         }
-        self.attacks += 1;
-        if self.attacks < 4 {
+        if !HeroKind::ALL
+            .into_iter()
+            .any(|kind| self.has(kind) && eligible(kind))
+        {
             return None;
         }
-        self.attacks = 0;
+        self.opportunities += 1;
+        if self.opportunities < 4 {
+            return None;
+        }
+        self.opportunities = 0;
         for step in 0..HeroKind::COUNT {
             let index = (self.cursor + step) % HeroKind::COUNT;
             let kind = HeroKind::ALL[index];
-            if self.has(kind) {
+            if self.has(kind) && eligible(kind) {
                 self.cursor = (index + 1) % HeroKind::COUNT;
                 return Some(kind);
             }
@@ -152,6 +194,11 @@ fn emit(
             vitals.level,
             build.as_deref().unwrap_or(&fallback),
         );
+        if !weapon.melee()
+            && target.translation.distance_squared(hero.translation) > class_stats.range.powi(2)
+        {
+            continue;
+        }
         if weapon.melee() {
             // A projected weapon apparition strikes at the victim, so a ranged
             // current hero can still wield an absorbed melee legacy.

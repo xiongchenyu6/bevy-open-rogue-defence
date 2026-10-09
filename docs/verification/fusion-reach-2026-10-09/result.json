@@ -1,0 +1,41 @@
+{
+  "production_tests": {
+    "passed": 635,
+    "failed": 0,
+    "ignored": 1
+  },
+  "baseline_behavior_failure": {
+    "passed": 5,
+    "failed": 4,
+    "exit": 101
+  },
+  "native_final": {
+    "frames": 800,
+    "images": 12,
+    "resolutions": [
+      "1280x720",
+      "667x375"
+    ],
+    "exit": 0,
+    "bow_each": 3,
+    "staff_each": 3,
+    "target_hp_each": 99859.61,
+    "target_max_hp": 100000,
+    "native_attacks": 0,
+    "skills": 0,
+    "ultimate_visual_entities": 0,
+    "reach_m": 5
+  },
+  "fixture": "Explicit absorbed legacy injection, not earned recruitment or campaign. Update sees selected.locked=true; custom after-Update schedule sets false for PostUpdate ability configuration/cast only; First restores true.",
+  "source_sha256": {
+    "src/game/combat.rs": "cc0e29137771959afb35fcfad87822024ceb5fb81b9cce46704d7c85e33167da",
+    "src/game/hero_fusion.rs": "4d38c3edff3bf9c1f232964463e9ac1f6f6ce6e8fd1ec1b311140cac68ce234a",
+    "src/bin/capture.rs": "bc93b8b9f03006b22b26b6ff83f1ff99ce2283c2e886691145d59259a4e72903",
+    "src/bin/capture/fusion_reach.rs": "b9f13608dfa1b8be39947150edf45a3b7f1014971ee528e0bff6a34d80c53f87"
+  },
+  "limitations": [
+    "No claim about campaign difficulty or cause of campaign loss.",
+    "No claim of projectile trajectory invariance at arbitrary attack speeds.",
+    "First native capture rejected because inherited automatic ultimates were not isolated."
+  ]
+}

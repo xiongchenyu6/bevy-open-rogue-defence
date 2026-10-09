@@ -82,6 +82,9 @@ mod summon_assault_capture;
 #[path = "capture/fusion.rs"]
 mod fusion_capture;
 
+#[path = "capture/fusion_reach.rs"]
+mod fusion_reach_capture;
+
 #[path = "capture/growth.rs"]
 mod growth_capture;
 
@@ -554,6 +557,9 @@ fn main() {
     if scenario == "summon-assault" {
         summon_assault_capture::install(&mut apps.main);
     }
+    if scenario == "hero-fusion-reach" {
+        fusion_reach_capture::install(&mut apps.main);
+    }
     if scenario == "hero-fusion" {
         fusion_capture::install(&mut apps.main);
     }
@@ -993,6 +999,10 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     }
     if scenario == "summon-assault" {
         summon_assault_capture::configure(world);
+        return;
+    }
+    if scenario == "hero-fusion-reach" {
+        fusion_reach_capture::configure(world);
         return;
     }
     if scenario == "hero-fusion" {
