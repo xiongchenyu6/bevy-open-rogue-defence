@@ -167,6 +167,11 @@ impl SkillRuntime {
     pub(crate) fn ignite_relic(&mut self, entity: Entity, damage: f32) {
         add_burn(&mut self.burns, entity, damage, 3);
     }
+    pub(crate) fn actions_blocked(&self, target: Entity) -> bool {
+        self.controls.get(&target).is_some_and(|control| {
+            control.frozen_remaining > 0.0 || control.stunned_remaining > 0.0
+        })
+    }
     pub(crate) fn is_frozen(&self, target: Entity) -> bool {
         self.controls
             .get(&target)
@@ -423,7 +428,7 @@ impl SummonBudget {
     }
 }
 
-fn tick_skill_runtime(
+pub(super) fn tick_skill_runtime(
     build: Res<PlayerBuild>,
     telemetry: Option<ResMut<SkillCastTelemetry>>,
     mut commands: Commands,
@@ -3410,6 +3415,31 @@ mod tests {
     use bevy::ecs::system::RunSystemOnce;
 
     use super::*;
+
+    #[test]
+    fn action_blocking_uses_freeze_and_stun_but_not_slow_or_stale_controls() {
+        let mut runtime = SkillRuntime::default();
+        let entity = Entity::PLACEHOLDER;
+        runtime.controls.insert(
+            entity,
+            ControlState {
+                base_speed: 2.0,
+                frozen_remaining: 0.0,
+                stunned_remaining: 0.0,
+                slow_remaining: 5.0,
+            },
+        );
+        assert!(!runtime.actions_blocked(entity));
+        runtime.controls.get_mut(&entity).unwrap().stunned_remaining = 0.5;
+        assert!(runtime.actions_blocked(entity));
+        runtime.controls.get_mut(&entity).unwrap().stunned_remaining = 0.0;
+        runtime.freeze_relic(entity, 2.0, false, false, 2.0);
+        assert!(runtime.actions_blocked(entity));
+        runtime.controls.get_mut(&entity).unwrap().frozen_remaining = 0.0;
+        assert!(!runtime.actions_blocked(entity));
+        runtime.controls.clear();
+        assert!(!runtime.actions_blocked(entity));
+    }
 
     #[test]
     fn burn_damage_order_is_independent_of_status_insertion_order() {

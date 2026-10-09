@@ -43,6 +43,7 @@ mod tests {
         app.init_resource::<Time>()
             .init_resource::<GameSession>()
             .init_resource::<HeroVitals>()
+            .init_resource::<crate::game::skills::SkillRuntime>()
             .init_resource::<Assets<AnimationClip>>()
             .add_message::<EnemyAttackCue>()
             .add_systems(Update, (collect, animate_cast).chain());

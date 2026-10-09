@@ -1,0 +1,13 @@
+# Control and dead-hero energy
+
+An actual chapter-five screenshot exposed negative energy during revival. Bond recalculation removed the previous energy contribution every frame but only restored it while the hero was alive. Energy now completes that transaction regardless of survival state. Hero growth and hero changes preserve the missing energy pool during death; health remains zero until actual revival.
+
+The pre-fix energy baseline failed both selected regressions. Three final tests cover repeated depleted-pool rebuilds, contribution changes, and persistent production growth across levels and hero changes. The refill in the pure bond fixture is simulated; the native survival scenario separately checks actual revival.
+
+The pre-fix registered ranged AI baseline emitted an attack while frozen. Active enemy attack, heal and cast clocks now stop when authoritative freeze or stun remains. Challenge and archive attackers use the same control predicate. Boss-held windups and their inactive warnings pause together; released hazards continue. Passive auras, death effects and the archive timeout retain their existing behavior. Enemy animation players pause before pose and facing changes, and discard stale attack cues.
+
+Seven regressions cover registered ranged AI and thaw, challenge/archive clocks and damage, boss pending windups, warning versus released-hazard clocks and death cleanup, animation pause state/facing/cue cleanup, and the freeze/stun predicate. The animation fixture does not run the animation playback scheduler, so it establishes player pause state rather than elapsed playback equivalence. Released-hazard coverage establishes clock progression, not damage.
+
+The final library suite passed620 tests with0 failures and1 ignored; strict all-targets Clippy passed. The first full suite exposed a missing resource in an old animation fixture; that failure and both pre-fix baselines are retained. Both binaries built. Four native400-frame scenes passed at1280×720 and667×375; twelve screenshots were inspected. Death HUD shows37/478 and actual revival restores478/478 twice per energy scene. Native frost scenes retain real charged casts, shells and cleanup; attack suppression is established by the registered-system regressions, not static images. [Evidence](verification/combat-control-energy-2026-10-09/verification.json).
+
+Control guards read remaining duration at the current step. Partial-frame expiry and precise32× control timing remain unresolved. One failed chapter-five route does not establish the cause of defeat or balanced difficulty. The existing5c77f1e package predates these corrections.

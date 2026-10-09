@@ -1039,6 +1039,7 @@ fn move_enemies(
     pressure_and_fusion: (
         Option<Res<EnemyPressureSettings>>,
         Option<Res<super::hero_fusion::HeroFusion>>,
+        Res<SkillRuntime>,
     ),
     mut commands: Commands,
     mut attack_cues: MessageWriter<EnemyAttackCue>,
@@ -1080,7 +1081,7 @@ fn move_enemies(
         >,
     )>,
 ) {
-    let (pressure_settings, fusion) = pressure_and_fusion;
+    let (pressure_settings, fusion, controls) = pressure_and_fusion;
     let HeroDamageGuards {
         mut market_effects,
         mut bond_runtime,
@@ -1097,7 +1098,9 @@ fn move_enemies(
     // Bounty encounter: every lane attacker hits harder while it runs.
     let bounty = encounters.enemy_damage_multiplier();
     cue_clocks.retain(|entity, remaining| {
-        *remaining -= delta;
+        if !controls.actions_blocked(*entity) {
+            *remaining -= delta;
+        }
         enemies.p1().contains(*entity)
     });
     let Ok(core) = core_query.single() else {
@@ -1131,6 +1134,9 @@ fn move_enemies(
     ) in &mut enemies.p1()
     {
         if affix.is_some_and(|affix| affix.is_volatile_pending()) {
+            continue;
+        }
+        if controls.actions_blocked(entity) {
             continue;
         }
         if camp.is_some_and(|camp| hero_position.xz().distance(camp.center.xz()) > 6.0) {
@@ -1525,6 +1531,7 @@ fn commander_aura_multiplier(state: Option<&CommanderAuraState>) -> f32 {
 
 fn enemy_auras(
     time: Res<Time>,
+    controls: Res<SkillRuntime>,
     mut attack_cues: MessageWriter<EnemyAttackCue>,
     mut cue_clocks: Local<HashMap<Entity, f32>>,
     session: Res<GameSession>,
@@ -1541,13 +1548,15 @@ fn enemy_auras(
         return;
     }
     cue_clocks.retain(|entity, remaining| {
-        *remaining -= time.delta_secs();
+        if !controls.actions_blocked(*entity) {
+            *remaining -= time.delta_secs();
+        }
         enemies.p0().contains(*entity)
     });
     let healers: Vec<(Entity, Vec3)> = enemies
         .p0()
         .iter()
-        .filter(|(_, _, kind)| kind.0 == 8)
+        .filter(|(entity, _, kind)| kind.0 == 8 && !controls.actions_blocked(*entity))
         .map(|(entity, transform, _)| (entity, transform.translation))
         .collect();
     if healers.is_empty() {
@@ -3497,11 +3506,67 @@ mod tests {
             .init_resource::<DodgeState>()
             .init_resource::<ActiveSkill>()
             .init_resource::<MoveIntent>()
-            .init_resource::<CombatPools>();
+            .init_resource::<CombatPools>()
+            .init_resource::<SkillRuntime>();
         app.world_mut().spawn((Core, Transform::default()));
         app.world_mut()
             .spawn((Hero, Transform::default(), Visibility::Visible));
         app
+    }
+
+    // Paste inside combat.rs's existing tests module (reuses enemy_movement_test_app
+    // and test_enemy; no duplicated GameAssets fixture). NOT compiled or run.
+    // This is a desired-behavior regression, expected to fail current unguarded code.
+    // It deliberately uses 10s control and 1s delta: it tests ongoing freeze, NOT
+    // partial-frame expiry or 32x time invariance.
+    #[test]
+    fn real_frozen_ranged_enemy_cannot_attack_in_range_but_thaws_normally() {
+        let mut app = enemy_movement_test_app();
+        app.init_resource::<SkillRuntime>();
+        let mut enemy = test_enemy(100.0);
+        enemy.speed = 0.0;
+        enemy.damage = 10.0;
+        let source = app
+            .world_mut()
+            .spawn((
+                enemy,
+                EnemyArchetype(3),
+                EnemyHeroThreat::ranged(),
+                Transform::from_xyz(5.0, 0.0, 0.0),
+            ))
+            .id();
+        app.world_mut()
+            .get_mut::<EnemyHeroThreat>(source)
+            .unwrap()
+            .attack_remaining = 0.5;
+        app.world_mut()
+            .resource_mut::<SkillRuntime>()
+            .freeze_relic(source, 2.0, false, false, 10.0);
+        let health = app.world().resource::<HeroVitals>().health;
+        let gate = app.world().resource::<GameSession>().core_hp;
+        let before = *app.world().get::<Transform>(source).unwrap();
+        let system = app.world_mut().register_system(move_enemies);
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(1.0));
+        app.world_mut().run_system(system).unwrap();
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 0);
+        assert_eq!(app.world().resource::<HeroVitals>().health, health);
+        assert_eq!(app.world().resource::<GameSession>().core_hp, gate);
+        assert_eq!(*app.world().get::<Transform>(source).unwrap(), before);
+        assert_eq!(
+            app.world()
+                .get::<EnemyHeroThreat>(source)
+                .unwrap()
+                .attack_remaining,
+            0.5
+        );
+        // Remove authoritative control, not enemy.speed: stationary enemies must still
+        // attack normally. Prevent a "speed==0 means frozen" implementation passing.
+        app.world_mut().insert_resource(SkillRuntime::default());
+        app.world_mut().run_system(system).unwrap();
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 1);
+        assert_eq!(app.world().resource::<HeroVitals>().health, health - 10.0);
     }
 
     #[test]

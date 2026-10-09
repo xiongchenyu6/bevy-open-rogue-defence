@@ -178,6 +178,7 @@ fn animate_cast(
     time: Res<Time>,
     clips: Res<Assets<AnimationClip>>,
     session: Res<GameSession>,
+    controls: Res<super::skills::SkillRuntime>,
     vitals: Res<HeroVitals>,
     volleys: Option<Res<AttackVolleyRuntime>>,
     aim: Option<Res<BasicAttackAim>>,
@@ -239,6 +240,15 @@ fn animate_cast(
         }
         if session.paused || session.finished {
             player.pause_all();
+            continue;
+        }
+        if enemy.is_some() && controls.actions_blocked(state.actor) {
+            player.pause_all();
+            // Do not replay control-time damage/movement/cues as a new action.
+            state.previous_position = Some(transform.translation);
+            state.previous_health = enemy.map(|enemy| enemy.hp);
+            state.previous_cooldown = threat.map(|threat| threat.attack_remaining);
+            state.enemy_attack_pending = false;
             continue;
         }
         player.resume_all();
@@ -362,13 +372,137 @@ mod tests {
     use super::*;
 
     #[test]
+    fn frozen_enemy_pauses_authored_clip_and_facing_without_replaying_attack_on_thaw() {
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<Assets<AnimationClip>>()
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<super::super::skills::SkillRuntime>()
+            .add_systems(Update, animate_cast);
+        let mut clip = AnimationClip::default();
+        clip.set_duration(1.0);
+        let clip = app
+            .world_mut()
+            .resource_mut::<Assets<AnimationClip>>()
+            .add(clip);
+        let actor = app
+            .world_mut()
+            .spawn((
+                Enemy {
+                    hp: 100.0,
+                    max_hp: 100.0,
+                    speed: 1.0,
+                    damage: 10.0,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+                EnemyHeroThreat::ranged(),
+                Transform::default(),
+                Visibility::Visible,
+            ))
+            .id();
+        let node = AnimationNodeIndex::new(0);
+        let mut animation = AnimationPlayer::default();
+        animation.play(node).repeat().set_seek_time(0.37);
+        let player = app
+            .world_mut()
+            .spawn((
+                animation,
+                CastPlayer {
+                    actor,
+                    clips: vec![node; 4],
+                    source_clips: vec![clip; 4],
+                    pose: Some(Pose::Walk),
+                    previous_position: Some(Vec3::ZERO),
+                    previous_health: Some(100.0),
+                    previous_cooldown: Some(1.0),
+                    reaction_remaining: 0.25,
+                    enemy_attack_target: Some(Vec3::X),
+                    enemy_attack_pending: true,
+                },
+            ))
+            .id();
+        app.world_mut()
+            .resource_mut::<super::super::skills::SkillRuntime>()
+            .freeze_relic(actor, 1.0, false, false, 10.0);
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(0.5));
+        let transform = *app.world().get::<Transform>(actor).unwrap();
+        app.update();
+        assert!(
+            app.world()
+                .get::<AnimationPlayer>(player)
+                .unwrap()
+                .all_paused()
+        );
+        assert_eq!(
+            app.world()
+                .get::<AnimationPlayer>(player)
+                .unwrap()
+                .animation(node)
+                .unwrap()
+                .seek_time(),
+            0.37
+        );
+        assert_eq!(*app.world().get::<Transform>(actor).unwrap(), transform);
+        assert_eq!(
+            app.world()
+                .get::<CastPlayer>(player)
+                .unwrap()
+                .reaction_remaining,
+            0.25
+        );
+        assert!(
+            !app.world()
+                .get::<CastPlayer>(player)
+                .unwrap()
+                .enemy_attack_pending
+        );
+        app.world_mut()
+            .insert_resource(super::super::skills::SkillRuntime::default());
+        app.update();
+        assert!(
+            !app.world()
+                .get::<AnimationPlayer>(player)
+                .unwrap()
+                .all_paused()
+        );
+        assert_ne!(
+            app.world().get::<CastPlayer>(player).unwrap().pose,
+            Some(Pose::Attack)
+        );
+        app.world_mut()
+            .resource_mut::<super::super::skills::SkillRuntime>()
+            .freeze_relic(actor, 1.0, false, false, 10.0);
+        app.world_mut()
+            .get_mut::<Visibility>(actor)
+            .unwrap()
+            .set_if_neq(Visibility::Hidden);
+        app.update();
+        assert!(
+            app.world()
+                .get::<AnimationPlayer>(player)
+                .unwrap()
+                .playing_animations()
+                .next()
+                .is_none()
+        );
+    }
+
+    #[test]
     fn idle_summon_formation_displacement_does_not_override_forward_facing() {
         use bevy::ecs::system::RunSystemOnce;
         let mut app = App::new();
         app.init_resource::<Time>()
             .init_resource::<Assets<AnimationClip>>()
             .init_resource::<GameSession>()
-            .init_resource::<HeroVitals>();
+            .init_resource::<HeroVitals>()
+            .init_resource::<super::super::skills::SkillRuntime>();
         app.world_mut()
             .resource_mut::<Time>()
             .advance_by(std::time::Duration::from_millis(33));
@@ -441,6 +575,7 @@ mod tests {
         app.init_resource::<Time>()
             .init_resource::<GameSession>()
             .init_resource::<HeroVitals>()
+            .init_resource::<super::super::skills::SkillRuntime>()
             .init_resource::<Assets<AnimationClip>>()
             .add_systems(Update, animate_cast);
         let actor = app
@@ -541,6 +676,7 @@ mod tests {
         app.init_resource::<Time>()
             .init_resource::<GameSession>()
             .init_resource::<HeroVitals>()
+            .init_resource::<super::super::skills::SkillRuntime>()
             .init_resource::<Assets<AnimationClip>>()
             .insert_resource(AttackVolleyRuntime {
                 pending: 0,

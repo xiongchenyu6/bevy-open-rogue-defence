@@ -1,0 +1,35 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {149, 199, 244, 319}; all 400 simulation/render updates retained
+[2m2026-10-09T03:20:14.419113Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.9", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-10-09T03:20:14.643933Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.71.09", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-10-09T03:20:14.984789Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-09T03:20:14.984844Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-10-09T03:20:15.093291Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] gate-revival: 400 frames at 4x; two gate rebuilds and all three hero lives
+[capture] gate ahead of hero PASS: gate=Vec3(-5.2, 1.0, 0.0) hero=Vec3(-8.2, 0.0, 0.0)
+[capture] PASS full-road barrier: 12 archetypes blocked, all lane positions preserved, finite gate HP, hero protected
+[capture] gate down frame=25, rebuild=3.47, expedition continues
+[capture] PASS persistent rear pressure: crossed opening, survived rebuild on hero side, actual hero damage
+[capture] full-health gate rebuild frame=70 PASS
+[capture] gate down frame=85, rebuild=3.47, expedition continues
+[capture] PASS visible rebuild countdown: 4 / 3 / 2 / 1, hidden on restored full-health wall
+[capture] full-health gate rebuild frame=120 PASS
+[capture] hero life spent deaths=1 remaining=2 revive=5.47 energy=37.0/478.0
+[2m2026-10-09T03:20:16.549506Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dead-energy-native-oct9/1280x720/frames/frame00149.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dead-energy-native-oct9/1280x720/frames/frame00149.png (1006995 bytes)
+[capture] hero respawn after death 1 PASS
+[2m2026-10-09T03:20:16.828167Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dead-energy-native-oct9/1280x720/frames/frame00199.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dead-energy-native-oct9/1280x720/frames/frame00199.png (1008862 bytes)
+[capture] hero life spent deaths=2 remaining=1 revive=8.47 energy=37.0/478.0
+[2m2026-10-09T03:20:17.086710Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dead-energy-native-oct9/1280x720/frames/frame00244.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dead-energy-native-oct9/1280x720/frames/frame00244.png (1007226 bytes)
+[capture] hero respawn after death 2 PASS
+[2m2026-10-09T03:20:17.512426Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dead-energy-native-oct9/1280x720/frames/frame00319.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dead-energy-native-oct9/1280x720/frames/frame00319.png (1008586 bytes)
+[capture] PASS gate-revival: two nonterminal rebuilds, frozen pause, two hero respawns, third death settles defeat
+[capture] all 4 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 400 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dead-energy-native-oct9/1280x720/frames

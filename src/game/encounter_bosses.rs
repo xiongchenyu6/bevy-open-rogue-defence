@@ -208,6 +208,7 @@ const ADVENTURE_COOLDOWNS: [[f32; 2]; 3] = [[4.0, 7.0], [6.0, 9.0], [5.0, 8.0]];
 fn tick_adventure_skills(
     mut commands: Commands,
     time: Res<Time>,
+    controls: Res<super::skills::SkillRuntime>,
     session: Res<GameSession>,
     hero: Query<&Transform, With<Hero>>,
     gate: Query<&Transform, With<Core>>,
@@ -229,6 +230,9 @@ fn tick_adventure_skills(
     };
     for (owner, boss, enemy, transform, mut clock) in &mut leaders {
         if enemy.hp <= 0.0 {
+            continue;
+        }
+        if controls.actions_blocked(owner) {
             continue;
         }
         if !clock.enraged && enemy.hp <= enemy.max_hp * 0.5 {
@@ -931,6 +935,7 @@ mod tests {
             .init_resource::<super::super::BasicRelics>()
             .init_resource::<CombatPools>()
             .init_resource::<AdventureBossState>()
+            .init_resource::<super::super::skills::SkillRuntime>()
             .add_message::<AdventureCampRequest>()
             .add_message::<AdventureBossChoice>()
             .add_message::<AdventurePhaseCue>()

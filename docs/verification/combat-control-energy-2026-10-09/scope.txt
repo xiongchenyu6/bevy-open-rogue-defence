@@ -1,0 +1,33 @@
+Control action guard scope (2026-10-09)
+
+Baseline: real_frozen_ranged_enemy_cannot_attack_in_range_but_thaws_normally
+ran against unguarded production system, failed with 1 emitted attack cue rather than 0.
+Baseline log: enemy-control-baseline-oct9.log, exit 101.
+
+Production changes:
+- SkillRuntime actions_blocked checks remaining freeze or stun; slow alone is not blocked.
+- Lane/hero/ranged/siege/burrow attack clocks, active healer cues, challenge and archive attacks,
+  campaign boss pending casts/age/speed writes and adventure boss new casts stop while blocked.
+- Boss-held inactive warnings pause with pending casts. Already active/released hazards continue.
+- Archive overall encounter timeout continues. Passive commander/chanter auras and death effects remain.
+- Enemy animation players pause before pose/facing updates; stale control-time attack cues are cleared.
+  Hidden/retired actor cleanup runs before the control guard.
+
+Executable regression coverage:
+- Real persistent registered ranged AI: no attack cue, damage, rotation or attack-clock progress
+  while frozen; normal stationary attack after authoritative control removed.
+- Persistent challenge/archive attacks: no cue/damage/rotation while frozen, attack clock preserved;
+  real attacks resume after thaw.
+- Campaign boss age/pending windup preserved while frozen, advances after thaw.
+- Inactive warning held, released hazard clock progresses, dead owner cleanup still runs.
+  This test does not claim released hazard damage coverage.
+- Active authored clip pause state, unchanged facing/reaction, stale cue suppression and retirement.
+  App does not schedule AnimationPlugin playback: seek-time assertion proves no guard playhead mutation,
+  not elapsed animation playback equivalence.
+- Predicate includes stun and freeze, excludes slow-only and stale zero-duration controls.
+
+Limits:
+These guards use authoritative remaining control at the current system step. They do not account
+for partial-frame control expiry; large simulation steps can cross expiry before combat runs.
+No all-speed / 32x status or full AI temporal equivalence claim.
+No native screenshot alone proves attack suppression; screenshots verify visual regressions only.

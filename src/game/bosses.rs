@@ -183,6 +183,7 @@ fn run_boss_mechanics(
     mut phases: MessageWriter<BossPhaseCue>,
     mut commands: Commands,
     time: Res<Time>,
+    controls: Res<super::skills::SkillRuntime>,
     mut session: ResMut<GameSession>,
     assets: Option<Res<GameAssets>>,
     hero: Query<&Transform, (With<Hero>, Without<BossEnemy>)>,
@@ -225,6 +226,9 @@ fn run_boss_mechanics(
             continue;
         }
         if enemy.hp <= 0.0 {
+            continue;
+        }
+        if controls.actions_blocked(*entity) {
             continue;
         }
         if enter_second_phase(state, &enemy) {
@@ -663,6 +667,66 @@ mod tests {
             projectile_material: Handle::default(),
             storm_material: Handle::default(),
         }
+    }
+
+    #[test]
+    fn frozen_boss_preserves_pending_windup_and_age_until_thaw() {
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<GameSession>()
+            .init_resource::<super::super::skills::SkillRuntime>()
+            .init_resource::<BossRuntime>()
+            .init_resource::<CombatPools>()
+            .insert_resource(test_game_assets())
+            .add_message::<EnemyAttackCue>()
+            .add_message::<BossPhaseCue>()
+            .add_systems(Update, (register_bosses, run_boss_mechanics).chain());
+        let boss = app
+            .world_mut()
+            .spawn((
+                BossEnemy { index: 0 },
+                Transform::default(),
+                Enemy {
+                    hp: 100.0,
+                    max_hp: 100.0,
+                    speed: 1.0,
+                    damage: 10.0,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+            ))
+            .id();
+        app.update();
+        app.world_mut()
+            .resource_mut::<BossRuntime>()
+            .states
+            .get_mut(&boss)
+            .unwrap()
+            .pending = Some(PendingAbility {
+            remaining_secs: 0.9,
+            target: Vec3::X,
+            variant: 0,
+        });
+        app.world_mut()
+            .resource_mut::<super::super::skills::SkillRuntime>()
+            .freeze_relic(boss, 1.0, false, false, 10.0);
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(0.5));
+        app.update();
+        let state = &app.world().resource::<BossRuntime>().states[&boss];
+        assert_eq!(state.age_secs, 0.0);
+        assert_eq!(state.pending.unwrap().remaining_secs, 0.9);
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 0);
+        app.world_mut()
+            .insert_resource(super::super::skills::SkillRuntime::default());
+        app.update();
+        let state = &app.world().resource::<BossRuntime>().states[&boss];
+        assert_eq!(state.age_secs, 0.5);
+        assert!((state.pending.unwrap().remaining_secs - 0.4).abs() < 0.0001);
     }
 
     #[test]

@@ -500,14 +500,15 @@ pub(crate) fn synchronize_hero_growth(
     if let Some(runtime) = runtime.as_deref_mut() {
         runtime.apply_stats(&mut build, &mut vitals);
     }
+    // Growth preserves the missing energy pool during the entire respawn countdown.
+    vitals.energy =
+        (before_energy + vitals.max_energy - before_max_energy).clamp(0.0, vitals.max_energy);
     if vitals.alive {
         vitals.health = if before_health <= 0.0 {
             0.0
         } else {
             (before_health + vitals.max_health - before_max).clamp(0.0, vitals.max_health)
         };
-        vitals.energy =
-            (before_energy + vitals.max_energy - before_max_energy).clamp(0.0, vitals.max_energy);
         if let Some(runtime) = runtime.as_deref_mut() {
             vitals.heal(runtime.take_kill_healing());
         }
@@ -972,6 +973,55 @@ mod tests {
         assert_eq!(dead.health, 0.);
         assert_eq!(dead.deaths, 2);
         assert_eq!(dead.revive_remaining, 6.);
+    }
+
+    #[test]
+    fn dead_energy_growth_and_hero_switch_preserve_missing_pool() {
+        use super::super::bond_catalog::BondCardId;
+        use super::super::bonds::BondsPlugin;
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<SelectedHero>()
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<PlayerBuild>()
+            .add_plugins(BondsPlugin)
+            .add_systems(Update, synchronize_hero_growth);
+        app.world_mut()
+            .resource_mut::<PlayerBuild>()
+            .owned_bond_cards[BondCardId::JourneyStrength.index()] = true;
+        app.update();
+        {
+            let mut vitals = app.world_mut().resource_mut::<HeroVitals>();
+            vitals.alive = false;
+            vitals.health = 0.;
+            vitals.energy = vitals.max_energy - 37.;
+            vitals.deaths = 1;
+            vitals.revive_remaining = 6.;
+        }
+        for (level, kind) in [
+            (2, HeroKind::StormSavant),
+            (3, HeroKind::FrostOracle),
+            (4, HeroKind::StoneWarden),
+        ] {
+            app.world_mut().resource_mut::<GameSession>().level = level;
+            app.world_mut().resource_mut::<SelectedHero>().kind = kind;
+            for _ in 0..20 {
+                app.update();
+                let vitals = app.world().resource::<HeroVitals>();
+                assert!(
+                    (vitals.max_energy - vitals.energy - 37.).abs() < 0.005,
+                    "missing energy changed: {} / {}",
+                    vitals.energy,
+                    vitals.max_energy
+                );
+                assert!((0.0..=vitals.max_energy).contains(&vitals.energy));
+                assert!(!vitals.alive);
+                assert_eq!(vitals.health, 0.);
+                assert_eq!(vitals.deaths, 1);
+                assert_eq!(vitals.revive_remaining, 6.);
+            }
+        }
     }
 
     #[test]

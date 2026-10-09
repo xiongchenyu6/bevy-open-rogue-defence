@@ -31,6 +31,12 @@ pub fn configure(world: &mut World) {
     world.resource_mut::<GameSession>().skill_points = 0;
     world.resource_mut::<SpawnDirector>().enabled = false;
     world.resource_mut::<PlayerBuild>().skills.fill(0);
+    let intelligence_card =
+        rogue_commander::game::available_bond_cards(world.resource::<PlayerBuild>())
+            .into_iter()
+            .find(|card| card.definition().id == "journey_intelligence")
+            .unwrap();
+    world.resource_mut::<PlayerBuild>().owned_bond_cards[intelligence_card.index()] = true;
 }
 pub fn install(app: &mut bevy::app::SubApp) {
     let world = app.world_mut();
@@ -85,6 +91,11 @@ fn lethal_hit(world: &mut World) {
         vitals.invulnerable_remaining, 0.,
         "wait for genuine respawn protection to expire"
     );
+    assert!(
+        vitals.max_energy > HeroVitals::for_hero(vitals.kind, vitals.level).max_energy,
+        "Intelligence Journey must supply a real nonzero energy contribution"
+    );
+    vitals.energy = 37.;
     let damage = vitals.max_health * 100.;
     assert!(vitals.take_magical_damage(damage) > 0.);
     assert_eq!(vitals.health, 0.);
@@ -92,6 +103,15 @@ fn lethal_hit(world: &mut World) {
 fn exercise(world: &mut World) {
     world.resource_mut::<RevivalCapture>().frame += 1;
     let frame = world.resource::<RevivalCapture>().frame;
+    if !world.resource::<HeroVitals>().alive {
+        let vitals = world.resource::<HeroVitals>();
+        assert!((0.0..=vitals.max_energy).contains(&vitals.energy));
+        assert!(
+            (vitals.energy - 37.).abs() < 0.005,
+            "dead energy drift: {}",
+            vitals.energy
+        );
+    }
     if (81..120).contains(&frame) {
         let down = world.resource::<GameSession>().gate_revive_remaining > 0.;
         let labels: Vec<(String, String)> = world
@@ -320,16 +340,19 @@ fn exercise(world: &mut World) {
                 "hero death must not damage gate"
             );
             println!(
-                "[capture] hero life spent deaths={} remaining={} revive={:.2}",
+                "[capture] hero life spent deaths={} remaining={} revive={:.2} energy={:.1}/{:.1}",
                 vitals.deaths,
                 vitals.lives_remaining(),
-                vitals.revive_remaining
+                vitals.revive_remaining,
+                vitals.energy,
+                vitals.max_energy
             );
         }
         200 | 320 => {
             let vitals = world.resource::<HeroVitals>();
             assert!(vitals.alive);
             assert_eq!(vitals.health, vitals.max_health);
+            assert_eq!(vitals.energy, vitals.max_energy);
             assert!(!world.resource::<GameSession>().finished);
             println!("[capture] hero respawn after death {} PASS", vitals.deaths);
         }

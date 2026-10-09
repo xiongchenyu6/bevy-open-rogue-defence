@@ -1,0 +1,58 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `test` profile [optimized + debuginfo] target(s) in 4m 07s
+     Running unittests src/lib.rs (target/debug/deps/rogue_commander-7930c12b106a9f5a)
+
+running 2 tests
+test game::bonds::tests::dead_energy_contribution_change_applies_once_and_revived_pool_stays_full ... FAILED
+test game::hero::tests::dead_energy_growth_and_hero_switch_preserve_missing_pool ... FAILED
+
+failures:
+
+---- game::bonds::tests::dead_energy_contribution_change_applies_once_and_revived_pool_stays_full stdout ----
+
+thread 'game::bonds::tests::dead_energy_contribution_change_applies_once_and_revived_pool_stays_full' (1699276) panicked at src/game/bonds.rs:799:9:
+-363 != 117
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: rogue_commander::game::bonds::tests::close
+             at ./src/game/bonds.rs:799:9
+   3: rogue_commander::game::bonds::tests::dead_energy_contribution_change_applies_once_and_revived_pool_stays_full
+   4: rogue_commander::game::bonds::tests::dead_energy_contribution_change_applies_once_and_revived_pool_stays_full::{closure#0}
+             at ./src/game/bonds.rs:833:78
+   5: <rogue_commander::game::bonds::tests::dead_energy_contribution_change_applies_once_and_revived_pool_stays_full::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+---- game::hero::tests::dead_energy_growth_and_hero_switch_preserve_missing_pool stdout ----
+
+thread 'game::hero::tests::dead_energy_growth_and_hero_switch_preserve_missing_pool' (1699277) panicked at src/game/hero.rs:1005:17:
+missing energy changed: 467 / 531.2
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: rogue_commander::game::hero::tests::dead_energy_growth_and_hero_switch_preserve_missing_pool
+             at ./src/game/hero.rs:1005:17
+   3: rogue_commander::game::hero::tests::dead_energy_growth_and_hero_switch_preserve_missing_pool::{closure#0}
+             at ./src/game/hero.rs:978:66
+   4: <rogue_commander::game::hero::tests::dead_energy_growth_and_hero_switch_preserve_missing_pool::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+
+failures:
+    game::bonds::tests::dead_energy_contribution_change_applies_once_and_revived_pool_stays_full
+    game::hero::tests::dead_energy_growth_and_hero_switch_preserve_missing_pool
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 612 filtered out; finished in 1.05s
+
+error: test failed, to rerun pass `--lib`

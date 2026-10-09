@@ -1,0 +1,31 @@
+{
+  "tests_passed": 620,
+  "failed": 0,
+  "ignored": 1,
+  "strict_clippy": true,
+  "main_capture_build": true,
+  "native_job_exit": 0,
+  "native_frames": 1600,
+  "reviewed_screenshots": 12,
+  "baseline_energy_selected_failed": 2,
+  "baseline_control_failed": 1,
+  "baseline_frozen_attack_cues": 1,
+  "actual_dead_energy": 37,
+  "actual_max_energy": 478,
+  "actual_respawns_per_native_energy_case": 2,
+  "source_sha256": {
+    "src/game/bonds.rs": "e13de03027434ad2b86fc3959d0ec9410d67d1b8d716b9d27d34052b28ed7e55",
+    "src/game/hero.rs": "fe701e3f16af6ffc4706c774f05913eb3a0553b884151a177996a61ff3e232f1",
+    "src/game/skills.rs": "c6df4b9cbf123e01ddfaa494def43d3d9f25c775265ed0fd47266e189d0d5ca9",
+    "src/game/combat.rs": "a1acd1000df918865c4da0d4af495505007956d7fe17cab4d1173124e311fb17",
+    "src/game/trial.rs": "767b751e373c1da455f0088e98ba99ca0d3e2969ea0b196faf86273db2bac770",
+    "src/game/archive.rs": "e37c818b0b2e6b3a289483c65fb5605c9db06d4e3a79b9cb48e4e0dc73ed4259",
+    "src/game/bosses.rs": "1da55a4bf0db1cfe08515271d7a572b1ea80e210886d75d44bfeaa763d62bac4",
+    "src/game/bosses/dangers.rs": "6ed9ba7205c1ec7ccf0d1f79d3fde73809aacdc7de1594692b7f8a612cee721e",
+    "src/game/encounter_bosses.rs": "825db0157887d5ba69cb89769fb2f8ab428624bb5bc2efc2a32f39e134ed629c",
+    "src/game/model_animation.rs": "827ee9452a6a94834bf4e30a85a4c573b21cda44c314ae56e40da5cd54e7254e",
+    "src/game/model_animation/enemy_attacks.rs": "2291a2304dba31a4c5803e80837f90517789db4eb161c20bb31cd0ed19e96e2b",
+    "src/bin/capture/gate_revival.rs": "ca4ebb1cc586ff0a1a5e64b3af43c40b66226c8fc49b37ccbf4735339ee6cdc1"
+  },
+  "limits": "Partial-frame control expiry and all-speed equivalence unresolved; animation test covers pause state not scheduler elapsed playback; native frost screenshots cover visual regression not independent attack suppression; current package predates corrections."
+}

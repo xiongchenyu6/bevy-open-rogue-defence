@@ -546,9 +546,10 @@ impl BondRuntime {
         vitals.armor += m.armor;
         vitals.max_health += health;
         vitals.max_energy += energy;
+        // Rebuild energy for fallen heroes too: removal and application are a paired transaction.
+        vitals.energy = (vitals.energy + energy).clamp(0.0, vitals.max_energy);
         if vitals.alive {
             vitals.health = (vitals.health + health).clamp(0.0, vitals.max_health);
-            vitals.energy = (vitals.energy + energy).clamp(0.0, vitals.max_energy);
         } else {
             vitals.health = 0.0;
         }
@@ -797,6 +798,81 @@ mod tests {
     }
     fn close(left: f32, right: f32) {
         assert!((left - right).abs() < 0.005, "{left} != {right}");
+    }
+
+    #[test]
+    fn dead_energy_bond_rebuild_preserves_depleted_energy_without_reviving() {
+        let mut build = PlayerBuild::default();
+        let mut vitals = HeroVitals::default();
+        let mut runtime = BondRuntime::default();
+        runtime.modifiers.intelligence = 50.0;
+        runtime.modifiers.health = 150.0;
+        runtime.apply_stats(&mut build, &mut vitals);
+        assert!(runtime.applied.energy > 37.0);
+        vitals.energy = 37.0;
+        vitals.alive = false;
+        vitals.health = 0.0;
+        vitals.deaths = 1;
+        vitals.revive_remaining = 12.0;
+        let missing = vitals.max_energy - vitals.energy;
+        let max_energy = vitals.max_energy;
+        for _ in 0..120 {
+            runtime.remove_applied(&mut build, &mut vitals);
+            runtime.apply_stats(&mut build, &mut vitals);
+            assert!((0.0..=vitals.max_energy).contains(&vitals.energy));
+            close(vitals.energy, 37.0);
+            close(vitals.max_energy, max_energy);
+            close(vitals.max_energy - vitals.energy, missing);
+            close(vitals.health, 0.0);
+            assert!(!vitals.alive);
+            assert_eq!(vitals.deaths, 1);
+            close(vitals.revive_remaining, 12.0);
+        }
+    }
+
+    #[test]
+    fn dead_energy_contribution_change_applies_once_and_revived_pool_stays_full() {
+        let mut build = PlayerBuild::default();
+        let mut vitals = HeroVitals::default();
+        let mut runtime = BondRuntime::default();
+        runtime.modifiers.intelligence = 50.0;
+        runtime.apply_stats(&mut build, &mut vitals);
+        vitals.energy = 37.0;
+        vitals.alive = false;
+        vitals.health = 0.0;
+        let missing = vitals.max_energy - vitals.energy;
+
+        // A larger then smaller contribution, as modifiers grow/change.
+        // Depletion must persist until a decrease exceeds the remaining energy.
+        for (intelligence, expected_energy) in [(60.0, 117.0), (55.0, 77.0)] {
+            runtime.remove_applied(&mut build, &mut vitals);
+            runtime.modifiers.intelligence = intelligence;
+            runtime.apply_stats(&mut build, &mut vitals);
+            close(vitals.energy, expected_energy);
+            close(vitals.max_energy - vitals.energy, missing);
+            for _ in 0..20 {
+                runtime.remove_applied(&mut build, &mut vitals);
+                runtime.apply_stats(&mut build, &mut vitals);
+                close(vitals.energy, expected_energy);
+                assert!((0.0..=vitals.max_energy).contains(&vitals.energy));
+                close(vitals.health, 0.0);
+                assert!(!vitals.alive);
+            }
+        }
+
+        // Match tick_hero_survival's refill, then verify subsequent stat rebuilds.
+        // This fixture does not claim to execute the survival system itself.
+        vitals.alive = true;
+        vitals.health = vitals.max_health;
+        vitals.energy = vitals.max_energy;
+        vitals.revive_remaining = 0.0;
+        for _ in 0..20 {
+            runtime.remove_applied(&mut build, &mut vitals);
+            runtime.apply_stats(&mut build, &mut vitals);
+            close(vitals.energy, vitals.max_energy);
+            close(vitals.health, vitals.max_health);
+            assert!(vitals.alive);
+        }
     }
 
     #[test]

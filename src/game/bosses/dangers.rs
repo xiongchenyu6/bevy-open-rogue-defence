@@ -169,6 +169,7 @@ fn gate_collision_point(danger: &BossTelegraph, gate: Vec3) -> Vec3 {
 pub(super) fn tick_dangers(
     mut commands: Commands,
     time: Res<Time>,
+    controls: Res<crate::game::skills::SkillRuntime>,
     mut session: ResMut<GameSession>,
     mut vitals: ResMut<HeroVitals>,
     bosses: Query<&Enemy, With<BossEnemy>>,
@@ -182,6 +183,11 @@ pub(super) fn tick_dangers(
             continue;
         }
         if session.paused || session.save_active {
+            continue;
+        }
+        // Inactive telegraphs belong to the boss-held pending windup.
+        // Pause their warning with pending; released active hazards keep running.
+        if !danger.active && controls.actions_blocked(danger.boss) {
             continue;
         }
         danger.remaining -= time.delta_secs();
@@ -268,6 +274,7 @@ mod tests {
         app.init_resource::<Time>()
             .init_resource::<GameSession>()
             .init_resource::<HeroVitals>()
+            .init_resource::<crate::game::skills::SkillRuntime>()
             .add_systems(Update, tick_dangers);
         let boss = app
             .world_mut()
@@ -299,6 +306,32 @@ mod tests {
             .advance_by(std::time::Duration::from_secs_f32(seconds));
         app.update();
     }
+    #[test]
+    fn frozen_owner_holds_warning_but_released_hazard_and_death_cleanup_continue() {
+        let (mut app, boss, hazard) = app_with_danger();
+        app.init_resource::<crate::game::skills::SkillRuntime>();
+        app.world_mut()
+            .resource_mut::<crate::game::skills::SkillRuntime>()
+            .freeze_relic(boss, 1.0, false, false, 10.0);
+        step(&mut app, 0.5);
+        assert_eq!(
+            app.world().get::<BossTelegraph>(hazard).unwrap().remaining,
+            1.0
+        );
+        app.world_mut()
+            .get_mut::<BossTelegraph>(hazard)
+            .unwrap()
+            .active = true;
+        step(&mut app, 0.25);
+        assert_eq!(
+            app.world().get::<BossTelegraph>(hazard).unwrap().remaining,
+            0.75
+        );
+        app.world_mut().get_mut::<Enemy>(boss).unwrap().hp = 0.0;
+        step(&mut app, 0.0);
+        assert!(app.world().get_entity(hazard).is_err());
+    }
+
     #[test]
     fn warning_pause_resistance_dodge_and_boss_death_are_real_runtime_rules() {
         let (mut app, boss, hazard) = app_with_danger();

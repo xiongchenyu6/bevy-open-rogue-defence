@@ -181,6 +181,7 @@ fn run_archive(
     mut rng: Option<ResMut<super::RunRng>>,
     mut commands: Commands,
     time: Res<Time>,
+    controls: Res<super::skills::SkillRuntime>,
     mut session: ResMut<GameSession>,
     mut archive: ResMut<ArchiveState>,
     mut vitals: ResMut<HeroVitals>,
@@ -232,6 +233,9 @@ fn run_archive(
         return;
     };
 
+    if controls.actions_blocked(echo_entity) {
+        return;
+    }
     let protecting_gate = core.single().ok().filter(|gate| {
         session.core_hp > 0.0
             && session.gate_revive_remaining <= 0.0
@@ -310,11 +314,93 @@ fn animate_archive_aura(
 mod tests {
     use super::*;
     #[test]
+    fn controlled_enemy_preserves_attack_clock_and_resumes_after_thaw() {
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<super::super::skills::SkillRuntime>()
+            .init_resource::<BondRuntime>()
+            .init_resource::<super::super::skills::SkillRuntime>()
+            .add_message::<EnemyAttackCue>()
+            .add_systems(Update, run_archive);
+        app.init_resource::<CombatPools>()
+            .insert_resource(ArchiveState {
+                active: true,
+                attack_timer: 0.,
+                ..default()
+            });
+        {
+            let mut session = app.world_mut().resource_mut::<GameSession>();
+            session.save_active = true;
+            session.save_remaining = 60.;
+        }
+        app.world_mut()
+            .spawn((Hero, Transform::from_xyz(-1., 0., 0.), Visibility::Visible));
+        let enemy = app
+            .world_mut()
+            .spawn((
+                ArchiveEcho,
+                Enemy {
+                    hp: 1000.,
+                    max_hp: 1000.,
+                    speed: 0.,
+                    damage: 10.,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+                Transform::default(),
+            ))
+            .id();
+        app.world_mut()
+            .resource_mut::<super::super::skills::SkillRuntime>()
+            .freeze_relic(enemy, 2.0, false, false, 10.0);
+        let frozen_health = app.world().resource::<HeroVitals>().health;
+        let frozen_transform = *app.world().get::<Transform>(enemy).unwrap();
+        app.update();
+        assert_eq!(app.world().resource::<HeroVitals>().health, frozen_health);
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 0);
+        assert_eq!(
+            *app.world().get::<Transform>(enemy).unwrap(),
+            frozen_transform
+        );
+        assert_eq!(app.world().resource::<ArchiveState>().attack_timer, 0.0);
+        app.world_mut()
+            .insert_resource(super::super::skills::SkillRuntime::default());
+        let before = app.world().resource::<HeroVitals>().health;
+        app.update();
+        assert!(app.world().resource::<HeroVitals>().health < before);
+        assert_eq!(
+            app.world_mut()
+                .resource_mut::<BondRuntime>()
+                .take_received_hits(),
+            1
+        );
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 1);
+        let rotation = app.world().get::<Transform>(enemy).unwrap().rotation;
+        app.update();
+        assert!(
+            rotation
+                .angle_between(app.world().get::<Transform>(enemy).unwrap().rotation)
+                .abs()
+                < 0.001
+        );
+        let health = app.world().resource::<HeroVitals>().health;
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        app.update();
+        assert_eq!(app.world().resource::<HeroVitals>().health, health);
+    }
+
+    #[test]
     fn real_attack_emits_cue_records_received_hit_and_holds_facing() {
         let mut app = App::new();
         app.add_plugins(MinimalPlugins)
             .init_resource::<GameSession>()
             .init_resource::<HeroVitals>()
+            .init_resource::<super::super::skills::SkillRuntime>()
             .init_resource::<BondRuntime>()
             .add_message::<EnemyAttackCue>()
             .add_systems(Update, run_archive);
