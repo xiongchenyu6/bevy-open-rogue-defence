@@ -1,0 +1,20 @@
+{
+  "package_source": "700d221ad5ffc709182066d8d333cb0f8cb8cf65",
+  "harness_exit": 0,
+  "victory": true,
+  "normal_quit_twice": true,
+  "samples": 147,
+  "reviewed_screenshots": 10,
+  "actual_seed": "0x00000000000a11cf",
+  "level": 43,
+  "kills": 2124,
+  "earned_shards": 260,
+  "strength_purchase": 190,
+  "final_shards": 645,
+  "final_strength_upgrade": 6,
+  "restart_strength": 32,
+  "cleared": "111110",
+  "unlocked": 6,
+  "scope": "Actual earned route at1x public1/g/f controls; no currency, health or victory injection",
+  "limits": "Changed source and Strength level versus previous failure, not a causal matched comparison. Sixth and broader seeds/builds not proven."
+}
