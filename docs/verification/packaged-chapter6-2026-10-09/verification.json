@@ -1,0 +1,21 @@
+{
+  "package_source": "700d221ad5ffc709182066d8d333cb0f8cb8cf65",
+  "harness_exit": 1,
+  "victory": false,
+  "normal_quit_twice": true,
+  "samples": 117,
+  "reviewed_screenshots": 10,
+  "actual_seed": "0x00000000000a11cf",
+  "terminal": "NO LIVES REMAIN",
+  "level": 35,
+  "kills": 1549,
+  "earned_shards": 82,
+  "strength_purchase": 255,
+  "final_shards": 472,
+  "final_strength_upgrade": 7,
+  "restart_strength": 34,
+  "cleared": "111110",
+  "unlocked": 6,
+  "scope": "Actual earned route at1x public1/g/f controls; no currency, health or victory injection",
+  "limits": "Actual failure, no sixth chapter completion or balanced difficulty claim. Artifact predates inherited reach, forge readability and initial market stock correction."
+}
