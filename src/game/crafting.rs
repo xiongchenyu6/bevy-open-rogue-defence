@@ -94,9 +94,9 @@ impl RecipeId {
                 )),
             }
         }
-        effects.push(self.bonus(language).into());
         format!(
-            "{}\n{}",
+            "{}\n{}\n{}",
+            self.bonus(language),
             language.pick("All ingredient effects inherited:", "继承全部材料效果："),
             effects.join("\n")
         )

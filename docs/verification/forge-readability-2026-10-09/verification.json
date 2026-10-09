@@ -1,0 +1,14 @@
+{
+  "crafting_tests_passed": 2,
+  "combined_library_tests_passed": 635,
+  "failed": 0,
+  "ignored": 1,
+  "native_frames": 1200,
+  "reviewed_images_by_root": 16,
+  "source_sha256": {
+    "src/game/crafting.rs": "3181f18f0b839d0592564d22821144c71959caf4c5c560baea145825e61e3def",
+    "src/game/equipment_ui/panel.rs": "05ae1f73474d48f5c1d73140fb3deeb29b670b0ee2573696fb85dc2b10fbb11b"
+  },
+  "scope": "Own forge bonus visible first, recursive inherited text retained, real wheel-message scroll through detail, camp overlay hidden below modal, EN/zh desktop+compact",
+  "limits": "Synthetic inventory/stock fixtures, not earned acquisition or physical pointer/touch flow. One owned GPU-startup hang retained, only missing case retried successfully; no root cause claim."
+}

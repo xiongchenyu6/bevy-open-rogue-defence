@@ -1,0 +1,6 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {215, 257, 274, 283}; all 300 simulation/render updates retained
+[2m2026-10-09T06:53:43.015934Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.9", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/forge-readability-oct9-r2/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/forge-readability-oct9-r2/runtime/wayland-1" plus null terminator exceeds 108 bytes
+[2m2026-10-09T06:53:43.158947Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.71.09", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }

@@ -15,7 +15,7 @@ pub(super) fn panel(
     commands.spawn((Name::new("Equipment panel"), Node { position_type: PositionType::Absolute,
         width: percent(100), height: percent(100), align_items: AlignItems::Center,
         justify_content: JustifyContent::Center, ..default() },
-        BackgroundColor(Color::srgba(0.0, 0.0, 0.0, 0.82)), GlobalZIndex(45)))
+        BackgroundColor(Color::srgba(0.0, 0.0, 0.0, 0.82)), GlobalZIndex(280)))
     .with_children(|overlay| {
         overlay.spawn((Node { width: px(width), height: px(height), flex_direction: FlexDirection::Column,
             padding: UiRect::all(px(12)), row_gap: px(8), border: UiRect::all(px(1)), ..default()
@@ -104,7 +104,7 @@ pub(super) fn panel(
                     .with_child((CraftAction, Name::new("Crafting result"), Text::new(""),
                         TextFont { font_size: FontSize::Px(14.0), ..default() }, TextColor(GOLD), Pickable::IGNORE));
                 }
-            body.spawn((Text::new(language.pick("All owned equipment stays active. Tap an icon to inspect.\nNo slot limit. Forge consumes materials and inherits all their effects.", "所有已持有装备同时生效，点击图标查看。\n无槽限制。合成消耗材料并继承其全部效果。")),
+            body.spawn((Text::new(language.pick("All owned equipment stays active. Tap an icon; scroll details to read more.\nNo slot limit. Forge consumes materials and inherits all their effects.", "所有已持有装备同时生效，点击图标；滚动详情查看全部效果。\n无槽限制。合成消耗材料并继承其全部效果。")),
                 Node { flex_shrink: 0.0, ..default() }, TextFont { font_size: FontSize::Px(12.0), ..default() }, TextColor(IVORY)));
         });
     }).id()
