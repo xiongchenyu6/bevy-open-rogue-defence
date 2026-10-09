@@ -2512,8 +2512,13 @@ fn roll_market_quality(level: u8, rng: &mut RunRng) -> MarketQuality {
 }
 
 pub(crate) fn reset_run(world: &mut World) {
-    world.insert_resource(MarketState::default());
-    world.insert_resource(MarketEffects::default());
+    let effects = MarketEffects::default();
+    let mut state = MarketState::default();
+    // The new expedition seed is installed before resetting market stock.
+    // First unlock must expose genuine offers, without charging for a refresh.
+    reroll_all(&mut state, &effects, &mut world.resource_mut::<RunRng>(), 1);
+    world.insert_resource(state);
+    world.insert_resource(effects);
 }
 
 pub fn prepare_crafting_market(world: &mut World, phase: u8) {
@@ -2955,6 +2960,117 @@ mod tests {
         assert!(!app.world().resource::<MarketState>().open);
         assert!(!app.world().resource::<MarketState>().paused_by_market);
         assert!(!app.world().resource::<GameSession>().paused);
+    }
+
+    fn expedition_market_app(seed: u64) -> App {
+        let mut app = test_app(0.0);
+        app.init_resource::<super::super::CampaignProgress>()
+            .init_resource::<super::super::CampaignRun>()
+            .init_resource::<super::super::RunRequest>()
+            .add_plugins(super::super::run_reset::RunResetPlugin);
+        app.world_mut().insert_resource(super::super::RunSeed(seed));
+        app
+    }
+
+    #[test]
+    fn real_expedition_reset_has_random_equipment_stock_at_first_unlock() {
+        let mut app = expedition_market_app(77);
+        super::super::run_reset::reset_run(app.world_mut(), 0);
+        let seed = app.world().resource::<super::super::RunSeed>().0;
+        assert_eq!(seed, 78);
+        let mut expected_rng = RunRng::from_seed(seed);
+        let mut expected = MarketState::default();
+        reroll_all(
+            &mut expected,
+            &MarketEffects::default(),
+            &mut expected_rng,
+            1,
+        );
+        let initial_offers = app.world().resource::<MarketState>().offers;
+        assert_eq!(
+            initial_offers, expected.offers,
+            "first stock uses the actual new expedition seed"
+        );
+        assert!(!initial_offers[0].item.is_consumable());
+        assert!(!initial_offers[1].item.is_consumable());
+        assert_eq!(
+            app.world().resource::<RunRng>().state(),
+            expected_rng.state()
+        );
+        app.world_mut().resource_mut::<GameSession>().elapsed = MARKET_UNLOCK_AT;
+        app.update();
+        let stock = app.world().resource::<MarketState>();
+        assert_eq!(
+            stock.offers, initial_offers,
+            "unlock does not discard the valid first stock"
+        );
+        assert_eq!(stock.stock_generation, 0);
+        assert_eq!(stock.next_stock_at, MARKET_UNLOCK_AT + STOCK_INTERVAL);
+        assert_eq!(stock.manual_refreshes, 0);
+    }
+
+    #[test]
+    fn defeat_retry_discards_old_market_and_rolls_from_the_next_run_seed() {
+        let mut app = expedition_market_app(77);
+        super::super::run_reset::reset_run(app.world_mut(), 0);
+        {
+            let mut old = app.world_mut().resource_mut::<MarketState>();
+            old.open = true;
+            old.paused_by_market = true;
+            old.manual_refreshes = 3;
+            old.marked[0] = Some(old.offers[0].item);
+        }
+        app.world_mut()
+            .resource_mut::<MarketEffects>()
+            .owned_equipment = u32::MAX;
+        app.world_mut().resource_mut::<GameSession>().finished = true;
+        super::super::run_reset::reset_run(app.world_mut(), 0);
+        assert_eq!(
+            app.world().resource::<super::super::CampaignRun>().run_id,
+            2
+        );
+        let seed = app.world().resource::<super::super::RunSeed>().0;
+        assert_eq!(seed, 80);
+        let mut expected = MarketState::default();
+        let mut rng = RunRng::from_seed(seed);
+        reroll_all(&mut expected, &MarketEffects::default(), &mut rng, 1);
+        let stock = app.world().resource::<MarketState>();
+        assert_eq!(stock.offers, expected.offers);
+        assert!(!stock.open && !stock.paused_by_market);
+        assert_eq!(stock.manual_refreshes, 0);
+        assert!(stock.marked.iter().all(Option::is_none));
+        assert_eq!(app.world().resource::<MarketEffects>().owned_equipment, 0);
+        assert!(!app.world().resource::<GameSession>().finished);
+        app.world_mut().resource_mut::<GameSession>().elapsed = MARKET_UNLOCK_AT;
+        app.update();
+        assert_eq!(
+            app.world().resource::<MarketState>().offers,
+            expected.offers
+        );
+    }
+
+    #[test]
+    fn first_market_stock_is_deterministic_for_the_fresh_seed_not_previous_rng() {
+        for seed in [1, 77, 0xA11CE, 0xBEEF] {
+            let mut first = expedition_market_app(seed);
+            let mut second = expedition_market_app(seed);
+            first.world_mut().insert_resource(RunRng::from_seed(111));
+            second.world_mut().insert_resource(RunRng::from_seed(999));
+            super::super::run_reset::reset_run(first.world_mut(), 0);
+            super::super::run_reset::reset_run(second.world_mut(), 0);
+            assert_eq!(
+                first.world().resource::<MarketState>().offers,
+                second.world().resource::<MarketState>().offers
+            );
+            assert_eq!(
+                first.world().resource::<RunRng>().state(),
+                second.world().resource::<RunRng>().state()
+            );
+            assert_ne!(
+                first.world().resource::<MarketState>().offers,
+                [MarketOffer::PLACEHOLDER; OFFER_COUNT]
+            );
+        }
     }
 
     #[test]

@@ -98,7 +98,6 @@ pub fn reset_run(world: &mut World, stage: usize) {
     bosses::reset_run(world);
     boss_vfx::reset_run(world);
     elite_vfx::reset_run(world);
-    market::reset_run(world);
     progression::reset_run(world);
     ui::reset_run(world);
     skill_feedback::reset_run(world);
@@ -118,6 +117,7 @@ pub fn reset_run(world: &mut World, stage: usize) {
     let seed = world.resource::<RunSeed>().0.wrapping_add(next);
     world.insert_resource(RunSeed(seed));
     world.insert_resource(RunRng::from_seed(seed));
+    market::reset_run(world);
     if let Some(mut time) = world.get_resource_mut::<Time<Virtual>>() {
         time.set_relative_speed(1.0);
         time.unpause();

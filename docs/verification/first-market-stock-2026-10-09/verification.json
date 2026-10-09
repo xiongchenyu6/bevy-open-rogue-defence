@@ -1,0 +1,18 @@
+{
+  "baseline_failed": 1,
+  "library_tests_passed": 638,
+  "failed": 0,
+  "ignored": 1,
+  "strict_clippy": true,
+  "main_capture_build": true,
+  "actual_old_package": "700d221",
+  "actual_old_wallet": 121,
+  "actual_old_identical_placeholder_offers": 5,
+  "new_reset_regressions": 3,
+  "source_sha256": {
+    "src/game/market.rs": "941276a6a52177a09a107385f3364368da13f6a06a4a33b44192a9b3768f372d",
+    "src/game/run_reset.rs": "531aaeb0ff43802633cfa231bd3635dac40991bf947d8182aebdddcc632ff5d6"
+  },
+  "scope": "Actual reset-to-unlock, defeat-retry cleanup, fresh-seed determinism; observed old first-unlock placeholder UI",
+  "limits": "Corrected public package UI acquisition is pending; no earned purchase/crafting success claim."
+}
