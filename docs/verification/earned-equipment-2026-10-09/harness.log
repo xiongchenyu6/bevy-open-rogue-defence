@@ -1,0 +1,16 @@
+stage: battle started; correcting actual toolbar to4x
+stage: earn kills and wait for real3min unlock
+stage: real unlock countdown '24:25'
+stage: real unlock countdown '——'
+stage: real unlock countdown '——'
+stage: real unlock countdown '23:20'
+stage: real unlock countdown '23:08'
+stage: real unlock countdown '22:52'
+stage: real unlock countdown '22:34'
+stage: real unlock countdown '22:20'
+stage: real unlock countdown '22:03'
+stage: real unlock countdown '21:48'
+{"stage": "market request", "attempt": 0, "visible": ["tw KILLS 0157", "[R/GEAR] Wind Boots 160 KILLS", "[R/GEAR] Arc Lens 180 KILLS", "[R/ USE] Gate Patch 120 KILLS", "[SR/ USE] Skill Tuner 140 KILLS", "[SR/ GEAR] Ember Heart 280 KILLS", "REFRESH STOCK 60 KILLS", "[R/GEAR] Wind Boots 160 KILLS ei", "SS Ne [R/GEAR]ArcLens 180 KILLS 2", "ee 3 [R/USE] Gate Patch 120 KILLS An", "= [SR1USE] Skill Tuner 140 KILLS", "\u8bf7 ri Vi <a [SR/GEAR] Ember Heart 280 KILLS aD", "Soo REFRESH STOCK 60 KILLS", "Wi KILLS 0157", "\u56db BLACK MARKET", "[SR/ USE] Skill Tuner 140 KILLS", "[SR/ GEAR] Ember Heart 280 KILLS", "\u2018 ip 2 ai BLACK MARKET un Kiso?", "Be By [R/GEAR] Wind Boots 160 KILLS =", "; [R/GEAR] Arc Lens 180 KILLS \u5404", "ro [R/ USE] Gate Patch 120 KILLS", "rs [SR/ USE] Skill Tuner 140 KILLS", "A, [SR/ GEAR] Ember Heart 280 KILLS", "> Sy REFRESH STOCK 60 KILLS"]}
+{"stage": "market request", "attempt": 1, "visible": []}
+{"stage": "market request", "attempt": 2, "visible": ["WW? KILLS 0455", "[R/GEAR] Arc Lens 180 KILLS", "[R/GEAR] Serrated Disc 180 KILLS", "[R/ USE] Gate Patch 120 KILLS", "[SR/ USE] Skill Tuner 140 KILLS", "[SR/ GEAR] Frost Mirror 280 KILLS", "REFRESH STOCK 60 KILLS", "Yee [R/GEAR|Arc Lens 180 KILLS =", "\u2014 i [R/GEAR] Serrated Disc 180 KILLS iy", "i iy j)  [R/USE] Gate Patch 120 KILLS", "a [SR/ USE] Skill Tuner 140 KILLS", "af ms {SR / GEAR] Frost Mirror 280 KILLS", "iis \u4e00 REFRESH STOCK 60 KILLS", "ta KILLS 0455", "fj BLACK MARKET", "[R/GEAR] Arc Lens 180 KILLS", "[R/ GEAR] Serrated Disc 180 KILLS", "[SR/ USE] Skill Tuner 140 KILLS", "[SR /GEAR] Frost Mirror 280 KILLS", "\u5168 rA/. BLACK MARKET pa", "yee [R/GEAR]Arc Lens 180 KILLS ="]}
+stage: acquired equipment, inspected inventory/recipes/attributes, actual countdown resumed

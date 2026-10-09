@@ -6,4 +6,4 @@ Market reset now rolls genuine level-one stock after the new expedition seed is 
 
 The production-reset baseline failed with five placeholders. Three regressions cover actual reset→180-second unlock, defeat retry and fresh-seed determinism independent of the previous RNG. The final638-test suite, strict all-targets Clippy and both binary builds passed. [Evidence](verification/first-market-stock-2026-10-09/verification.json).
 
-Corrected packaged acquisition remains pending. A new immutable package must show normal initial stock and a real affordable purchase, inventory ownership, attribute inspection and resume. Actual crafting also requires genuinely acquired materials; the previous failed attempts are not successful acquisition evidence.
+The corrected d2527eb package has now passed[actual earned acquisition](earned-equipment.md): normal initial stock, a real affordable purchase, inventory ownership, attribute inspection, resume and normal quit. Actual crafting also requires genuinely acquired materials; the previous failed attempts are not successful acquisition evidence.

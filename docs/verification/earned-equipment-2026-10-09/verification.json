@@ -1,0 +1,21 @@
+{
+  "package_source": "d2527eb5d1f43a475c0dc365e1a075f96b1723a7",
+  "runtime_exit": 0,
+  "reviewed_screenshots_by_root": 10,
+  "actual_speed": 4,
+  "item": "Arc Lens",
+  "price": 180,
+  "wallet_before": 455,
+  "wallet_after": 275,
+  "owned_count": 1,
+  "normal_quit": 0,
+  "initial_and_final_shards": 575,
+  "strength_upgrade": 5,
+  "resume_countdown_before": 979,
+  "resume_countdown_after": 965,
+  "initial_save_sha256": "da5bf0a9ca3f4032a265425f9989bda292d8c0c2622848157df6d2c0223ba825",
+  "final_save_sha256": "da5bf0a9ca3f4032a265425f9989bda292d8c0c2622848157df6d2c0223ba825",
+  "harness_sha256": "55fff947df57eedde66bad2a5a1f94ae9c313dc2f79abb0b2191f7b9bc421495",
+  "scope": "Packaged public X11/OCR inputs, naturally earned kills and real randomized stock, purchase/inventory/recipe catalog/attributes/resume/normal quit; isolated copy of actual earlier earned progress",
+  "limits": "No earned crafting, campaign victory, hardware FPS or sound claim. Purchase notice still hides header wallet; debit cross-checked actual HUD before/after."
+}
