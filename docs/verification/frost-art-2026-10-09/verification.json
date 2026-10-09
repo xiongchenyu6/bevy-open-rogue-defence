@@ -1,0 +1,13 @@
+{
+  "library_tests_before_material_revision": 610,
+  "failed": 0,
+  "ignored": 1,
+  "final_lifecycle_tests": 3,
+  "native_frames": 800,
+  "reviewed_final_screenshots": 4,
+  "actual_first_shell_frame": 147,
+  "peak_shells": 8,
+  "source_sha256": "b7dd9bee758f94648667636a124859b637752d89fc801002ca6f1a81c5b65e92",
+  "scope": "Frozen target shells, asset reuse, cap, pause, expiry/death/reset cleanup; real charged rank5 cast at two resolutions",
+  "limits": "Does not establish frozen enemy attack or animation inhibition; static images do not establish final motion quality. Wayland socket warning fell back to successful native capture."
+}

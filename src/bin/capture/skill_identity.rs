@@ -18,6 +18,8 @@ struct IdentityCapture {
     saw_signature: bool,
     saw_damage: bool,
     saw_summon: bool,
+    saw_frozen_shell: bool,
+    peak_frozen_shells: usize,
     revived: bool,
     initial_attack: f32,
     initial_gold: u32,
@@ -60,6 +62,8 @@ pub fn configure(world: &mut World, scenario: &str) {
         saw_signature: false,
         saw_damage: false,
         saw_summon: false,
+        saw_frozen_shell: false,
+        peak_frozen_shells: 0,
         revived: false,
         initial_attack: 0.0,
         initial_gold: 0,
@@ -239,6 +243,16 @@ fn observe(
     state.frame += 1;
     let frame = state.frame;
     let index = state.index;
+    let frozen_shells = names
+        .iter()
+        .filter(|name| name.as_str() == "Frozen ice shell")
+        .count();
+    if frozen_shells > 0 && !state.saw_frozen_shell {
+        println!("[capture] first real frozen shells frame={frame} count={frozen_shells}");
+    }
+    state.saw_frozen_shell |= frozen_shells > 0;
+    state.peak_frozen_shells = state.peak_frozen_shells.max(frozen_shells);
+    assert!(frozen_shells <= 32, "frozen presentation must stay bounded");
     let identity = format!("Skill identity {index}");
     let count = names
         .iter()
@@ -323,6 +337,16 @@ fn observe(
     }
     if frame == 295 {
         assert_eq!(build.skills[index], state.rank);
+        if index == 14 {
+            assert!(
+                state.saw_frozen_shell,
+                "actual glacier pulses must freeze targets and show ice shells"
+            );
+            println!(
+                "[capture] PASS actual frozen ice shells: peak={}",
+                state.peak_frozen_shells
+            );
+        }
         if matches!(index, 12 | 14 | 15) {
             assert!(
                 telemetry.casts[index] > 0,

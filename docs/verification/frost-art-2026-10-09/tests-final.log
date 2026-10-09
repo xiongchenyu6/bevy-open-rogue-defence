@@ -1,0 +1,20 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3m 45s
+     Running unittests src/lib.rs (target/debug/deps/rogue_commander-7930c12b106a9f5a)
+
+running 3 tests
+test game::skills::presentation::frost_control_art::tests::expiration_death_finish_and_reset_clean_up_even_while_paused ... ok
+test game::skills::presentation::frost_control_art::tests::freeze_cap_and_pause_preserve_transforms_and_stop_new_shells ... ok
+test game::skills::presentation::frost_control_art::tests::repeated_freeze_shares_assets_and_missing_targets_leave_no_ghosts ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 608 filtered out; finished in 0.01s
+

@@ -3,6 +3,8 @@ use super::super::bonds::DamageElement;
 use super::infection::Infection;
 use super::*;
 
+#[path = "frost_control_art.rs"]
+mod frost_control_art;
 #[path = "spectacle.rs"]
 mod spectacle;
 #[path = "vortex_art.rs"]
@@ -12,6 +14,7 @@ const MAX_PARTICLES: usize = 600;
 const EMIT_INTERVAL: f32 = 0.085;
 
 pub(super) fn install(app: &mut App) {
+    frost_control_art::install(app);
     app.init_resource::<EmissionClock>()
         .add_systems(Startup, setup)
         .add_systems(
@@ -557,15 +560,6 @@ fn present(
             );
         }
         if let Some(control) = runtime.controls.get(&entity) {
-            if control.frozen_remaining > 0.0 && clock.frame.is_multiple_of(3) {
-                painter.burst(
-                    Motif::Ice,
-                    position,
-                    build.skills[2].max(build.skills[14]).max(1),
-                    clock.phase * 0.04,
-                    true,
-                );
-            }
             if control.stunned_remaining > 0.0 {
                 painter.burst(
                     Motif::Shock,
@@ -764,6 +758,7 @@ fn branch_feedback(
 }
 
 pub(super) fn reset_run(world: &mut World) {
+    frost_control_art::reset_run(world);
     world.insert_resource(EmissionClock::default());
 }
 
