@@ -1,0 +1,5 @@
+# Earned progression clears chapter three
+
+The read-only e109893 Linux package continued the actual earned state from chapter two:335shards,Strength level2,unlocked3andcleared110000. Public1/g/f controls at1× completed FrozenCrossing atLevel43/2067kills and earned220shards. HollowGrove unlocked. The actual next Strength purchase cost55, leaving500shards andupgrades[3,0,0,0,0,0]. After restart, a newLevel1StormSavant showedStrength26; both normal quits returned0. The full runtime job returned0. No currency, health or victory was injected. [Evidence](verification/packaged-chapter3-2026-10-09/verification.json).
+
+All153ordered samples and ten native screenshots were inspected. Actual seed0x00000000000A11CF differs from requested0xA11CE. This verifies one real earned progression route through the first three chapters onUbuntu/X11/softwareVulkan; remaining chapters, more seeds/heroes/builds and hardware/Steam client checks remain. The package predates current artwork changes and zone/banner expiry correction.

@@ -1,0 +1,16 @@
+{
+  "package_source": "e109893d96296849a292bccedcbe635116009f1a",
+  "stage": 2,
+  "speed": 1,
+  "actual_seed": "0x00000000000a11cf",
+  "job_exit_code": 0,
+  "samples_verified": 153,
+  "reviewed_native_images_by_root": 10,
+  "level": 43,
+  "kills": 2067,
+  "earned_shards": 220,
+  "spent_shards": 55,
+  "remaining_shards": 500,
+  "new_run_strength": 26,
+  "not_proven": "Remaining three chapters, all builds/seeds, hardware/Steam client and current artwork changes"
+}
