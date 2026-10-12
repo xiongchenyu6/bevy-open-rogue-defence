@@ -96,9 +96,13 @@ def main():
     )
     runtime_adventures = set(re.findall(r'models/(adventure_[^"#]+\.glb)', arena))
     assert adventures == runtime_adventures
+    # src/bin holds capture/QA binaries; they probe deliberately missing models.
+    runtime_sources = [
+        p for p in (ROOT / "src").rglob("*.rs") if ROOT / "src/bin" not in p.parents
+    ]
     runtime_models = set(re.findall(
         r'"models/([^"#{}]+\.glb)',
-        "\n".join(p.read_text() for p in (ROOT / "src").rglob("*.rs")),
+        "\n".join(p.read_text() for p in runtime_sources),
     ))
     environment = (ROOT / "src/game/environment.rs").read_text()
     gate_models = re.search(
