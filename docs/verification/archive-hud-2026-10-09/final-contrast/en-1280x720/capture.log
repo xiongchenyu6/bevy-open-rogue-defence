@@ -1,0 +1,25 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {89, 149, 229}; all 260 simulation/render updates retained
+[2m2026-10-09T10:01:58.965137Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.9", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-10-09T10:01:59.234240Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.71.09", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-10-09T10:02:00.022769Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-09T10:02:00.022890Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[capture] campaign persistent path=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/archive-hud-oct9-r3/en-1280x720/campaign.save
+[2m2026-10-09T10:02:00.505790Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[2m2026-10-09T10:02:05.408158Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/archive-hud-oct9-r3/en-1280x720/frames/frame00089.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/archive-hud-oct9-r3/en-1280x720/frames/frame00089.png (1005414 bytes)
+[capture] campaign: prepared final checkpoint; archive echo must fall to actual hero combat
+[capture] archive safe rect=Vec2(540.0, 80.0)..Vec2(740.0, 138.0) status=(Vec2(22.0, 22.0), Vec2(242.0, 285.0)) speed=(Vec2(920.0, 22.0), Vec2(1072.0, 70.0))
+[capture] archive HUD actual text="ARCHIVE 60s\nECHO 100%\nHERO 100%" size=Vec2(200.0, 58.0) position=Vec2(640.0, 109.0)
+[capture] archive HUD active=true PASS
+[2m2026-10-09T10:02:08.240605Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/archive-hud-oct9-r3/en-1280x720/frames/frame00149.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/archive-hud-oct9-r3/en-1280x720/frames/frame00149.png (1014719 bytes)
+[capture] archive HUD active=false PASS
+[2m2026-10-09T10:02:11.670139Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/archive-hud-oct9-r3/en-1280x720/frames/frame00229.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/archive-hud-oct9-r3/en-1280x720/frames/frame00229.png (1019127 bytes)
+[capture] all 3 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 260 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/archive-hud-oct9-r3/en-1280x720/frames
