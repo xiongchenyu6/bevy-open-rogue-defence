@@ -1060,6 +1060,7 @@ fn setup_market(
         .spawn((
             Button,
             MarketToggleButton,
+            Name::new("Market toggle"),
             Node {
                 position_type: PositionType::Absolute,
                 right: px(18),
@@ -1104,6 +1105,7 @@ fn setup_market(
     commands
         .spawn((
             MarketTooltip,
+            Name::new("Market hint"),
             Node {
                 position_type: PositionType::Absolute,
                 right: px(18),
@@ -1136,6 +1138,7 @@ fn setup_market(
     commands
         .spawn((
             MarketPanel,
+            Name::new("Market panel"),
             Node {
                 position_type: PositionType::Absolute,
                 right: px(18),
@@ -1149,9 +1152,10 @@ fn setup_market(
                 border_radius: BorderRadius::all(px(10)),
                 ..default()
             },
-            BackgroundColor(Color::srgba(0.025, 0.02, 0.035, 0.94)),
+            BackgroundColor(Color::srgba(0.025, 0.02, 0.035, 1.0)),
             BorderColor::all(Color::srgba(0.7, 0.45, 0.18, 0.65)),
-            GlobalZIndex(20),
+            // Open shopping belongs above HUD and camp entries, below settings.
+            GlobalZIndex(280),
         ))
         .with_children(|panel| {
             panel
@@ -1176,6 +1180,7 @@ fn setup_market(
                     ));
                     header.spawn((
                         MarketWalletLabel,
+                        Name::new("Market wallet"),
                         Text::new(language.pick("KILLS 0000", "击杀 0000")),
                         TextFont {
                             font_size: FontSize::Px(11.0),
@@ -1238,6 +1243,7 @@ fn setup_market(
                             row.spawn((
                                 Button,
                                 MarketMarkButton(index),
+                                Name::new(format!("Market auto {index}")),
                                 Node {
                                     width: px(72),
                                     min_height: px(52),
@@ -1267,6 +1273,7 @@ fn setup_market(
                 .spawn((
                     Button,
                     MarketRefreshButton,
+                    Name::new("Market refresh"),
                     Node {
                         width: percent(100),
                         height: px(MARKET_REFRESH_HEIGHT),
@@ -1743,8 +1750,8 @@ fn tick_market_effects(
     }
 }
 
-fn tick_market_notice(time: Res<Time>, session: Res<GameSession>, mut state: ResMut<MarketState>) {
-    if session.paused || session.finished || state.notice_timer <= 0.0 {
+fn tick_market_notice(time: Res<Time<Real>>, mut state: ResMut<MarketState>) {
+    if state.notice_timer <= 0.0 {
         return;
     }
     state.notice_timer = (state.notice_timer - time.delta_secs()).max(0.0);
@@ -2164,67 +2171,46 @@ fn update_market_ui(
         font.reborrow()
             .map_unchanged(|value| &mut value.font_size)
             .set_if_neq(FontSize::Px(if layout.compact { 12.0 } else { 11.0 }));
+        let mut label = if language.is_chinese() && layout.compact {
+            format!(
+                "等级{}｜击杀 {}｜补货 {:02}:{:02}",
+                state.level,
+                session.kills,
+                next_stock / 60,
+                next_stock % 60
+            )
+        } else if language.is_chinese() {
+            format!(
+                "等级{}  击杀 {:04}\n补货 {:02}:{:02}",
+                state.level,
+                session.kills,
+                next_stock / 60,
+                next_stock % 60
+            )
+        } else if layout.compact {
+            format!(
+                "LV{} | KILLS {} | STOCK {:02}:{:02}",
+                state.level,
+                session.kills,
+                next_stock / 60,
+                next_stock % 60
+            )
+        } else {
+            format!(
+                "LV{}  KILLS {:04}\nRESTOCK {:02}:{:02}",
+                state.level,
+                session.kills,
+                next_stock / 60,
+                next_stock % 60
+            )
+        };
+        if state.notice_timer > 0.0 {
+            label.push('\n');
+            label.push_str(&state.notice[usize::from(language.is_chinese())]);
+        }
         text.reborrow()
             .map_unchanged(|value| &mut value.0)
-            .set_if_neq(if state.notice_timer > 0.0 {
-                if language.is_chinese() && layout.compact {
-                    format!(
-                        "等级{}｜{}",
-                        state.level,
-                        state.notice[usize::from(language.is_chinese())]
-                    )
-                } else if language.is_chinese() {
-                    format!(
-                        "等级{}  {}",
-                        state.level,
-                        state.notice[usize::from(language.is_chinese())]
-                    )
-                } else if layout.compact {
-                    format!(
-                        "LV{} | {}",
-                        state.level,
-                        state.notice[usize::from(language.is_chinese())]
-                    )
-                } else {
-                    format!(
-                        "LV{}  {}",
-                        state.level,
-                        state.notice[usize::from(language.is_chinese())]
-                    )
-                }
-            } else if language.is_chinese() && layout.compact {
-                format!(
-                    "等级{}｜击杀 {}｜补货 {:02}:{:02}",
-                    state.level,
-                    session.kills,
-                    next_stock / 60,
-                    next_stock % 60
-                )
-            } else if language.is_chinese() {
-                format!(
-                    "等级{}  击杀 {:04}\n补货 {:02}:{:02}",
-                    state.level,
-                    session.kills,
-                    next_stock / 60,
-                    next_stock % 60
-                )
-            } else if layout.compact {
-                format!(
-                    "LV{} | KILLS {} | STOCK {:02}:{:02}",
-                    state.level,
-                    session.kills,
-                    next_stock / 60,
-                    next_stock % 60
-                )
-            } else {
-                format!(
-                    "LV{}  KILLS {:04}\nRESTOCK {:02}:{:02}",
-                    state.level,
-                    session.kills,
-                    next_stock / 60,
-                    next_stock % 60
-                )
-            });
+            .set_if_neq(label);
     }
 
     for (mut text, mut font) in &mut refresh_labels {
@@ -2748,6 +2734,103 @@ mod tests {
         assert_eq!(vitals.armor, 6.0);
     }
 
+    fn paused_purchase_app() -> (App, String) {
+        let mut app = test_app(MARKET_UNLOCK_AT + 1.0);
+        app.insert_resource(bevy::time::TimeUpdateStrategy::ManualDuration(
+            std::time::Duration::from_millis(250),
+        ));
+        let item = app.world().resource::<MarketState>().offers[0].item;
+        assert!(!item.is_consumable());
+        app.world_mut().resource_mut::<GameSession>().kills = item.price() + 37;
+        tap_b(&mut app);
+        assert!(app.world().resource::<GameSession>().paused);
+        let world = app.world_mut();
+        for (button, mut interaction) in world
+            .query::<(&MarketOfferButton, &mut Interaction)>()
+            .iter_mut(world)
+        {
+            *interaction = if button.0 == 0 {
+                Interaction::Pressed
+            } else {
+                Interaction::None
+            };
+        }
+        app.update();
+        assert_eq!(app.world().resource::<GameSession>().kills, 37);
+        assert!(app.world().resource::<MarketEffects>().owns(item));
+        (app, item.name(GameLanguage::English).to_owned())
+    }
+
+    #[test]
+    fn paused_market_purchase_keeps_balance_and_restock_visible_with_feedback() {
+        let (mut app, name) = paused_purchase_app();
+        let wallet = app
+            .world_mut()
+            .query_filtered::<&Text, With<MarketWalletLabel>>()
+            .single(app.world())
+            .unwrap()
+            .0
+            .clone();
+        assert!(
+            wallet.contains("KILLS 0037"),
+            "actual paused balance vanished: {wallet}"
+        );
+        assert!(
+            wallet.contains("RESTOCK 02:59"),
+            "restock vanished: {wallet}"
+        );
+        assert!(wallet.contains(&format!("Bought {name}")));
+        assert!(app.world().resource::<GameSession>().paused);
+    }
+
+    #[test]
+    fn paused_market_feedback_expires_in_real_time_without_advancing_battle() {
+        let (mut app, _) = paused_purchase_app();
+        app.world_mut()
+            .resource_mut::<Time<bevy::time::Virtual>>()
+            .pause();
+        let virtual_elapsed = app
+            .world()
+            .resource::<Time<bevy::time::Virtual>>()
+            .elapsed();
+        let stock = app.world().resource::<MarketState>().offers;
+        let rng = app.world().resource::<RunRng>().state();
+        for _ in 0..10 {
+            app.update();
+        }
+        assert_eq!(app.world().resource::<MarketState>().notice_timer, 0.0);
+        assert!(
+            app.world()
+                .resource::<MarketState>()
+                .notice
+                .iter()
+                .all(String::is_empty)
+        );
+        assert_eq!(
+            app.world()
+                .resource::<Time<bevy::time::Virtual>>()
+                .elapsed(),
+            virtual_elapsed
+        );
+        assert_eq!(
+            app.world().resource::<GameSession>().elapsed,
+            MARKET_UNLOCK_AT + 1.0
+        );
+        assert_eq!(app.world().resource::<GameSession>().kills, 37);
+        assert!(app.world().resource::<GameSession>().paused);
+        assert_eq!(app.world().resource::<MarketState>().offers, stock);
+        assert_eq!(app.world().resource::<RunRng>().state(), rng);
+        let wallet = app
+            .world_mut()
+            .query_filtered::<&Text, With<MarketWalletLabel>>()
+            .single(app.world())
+            .unwrap()
+            .0
+            .clone();
+        assert!(wallet.contains("KILLS 0037") && wallet.contains("RESTOCK 02:59"));
+        assert!(!wallet.contains("Bought"));
+    }
+
     #[test]
     fn live_market_language_keeps_stock_wallet_and_translates_existing_notice() {
         let mut app = test_app(MARKET_UNLOCK_AT);
@@ -2789,7 +2872,9 @@ mod tests {
             app.world_mut()
                 .query_filtered::<&Text, With<MarketWalletLabel>>()
                 .iter(app.world())
-                .any(|text| text.0.contains("货品已刷新"))
+                .any(|text| text.0.contains("货品已刷新")
+                    && text.0.contains("击杀 0000")
+                    && text.0.contains("补货 03:00"))
         );
     }
 

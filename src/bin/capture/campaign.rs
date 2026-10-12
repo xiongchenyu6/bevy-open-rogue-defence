@@ -9,6 +9,7 @@ use rogue_commander::game::{
 struct CampaignCapture {
     frame: u32,
     reload: bool,
+    archive_hud: bool,
     difficulty_target: Option<Entity>,
 }
 pub fn configure(world: &mut World, reload: bool) {
@@ -40,6 +41,7 @@ pub fn configure(world: &mut World, reload: bool) {
     world.insert_resource(progress);
     world.insert_resource(CampaignCapture {
         reload,
+        archive_hud: std::env::args().nth(4).as_deref() == Some("archive-hud"),
         ..default()
     });
     println!("[capture] campaign persistent path={}", path.display());
@@ -136,6 +138,84 @@ fn exercise(world: &mut World) {
         }
         if frame == 50 {
             press(world, "Campaign training");
+        }
+        return;
+    }
+    if world.resource::<CampaignCapture>().archive_hud && frame > 100 {
+        if frame == 105 {
+            world.resource_mut::<GameSession>().paused = true;
+        }
+        if frame == 200 {
+            world.resource_mut::<GameSession>().save_active = false;
+        }
+        if matches!(frame, 150 | 230) {
+            let active = frame == 150;
+            let status = world
+                .query::<(&Name, &ComputedNode, &UiGlobalTransform)>()
+                .iter(world)
+                .find(|(name, _, _)| name.as_str() == "Battle status")
+                .map(|(_, node, transform)| {
+                    (
+                        transform.translation - node.size() * 0.5,
+                        transform.translation + node.size() * 0.5,
+                    )
+                })
+                .expect("actual left status bounds");
+            let speed = world
+                .query::<(&Name, &ComputedNode, &UiGlobalTransform)>()
+                .iter(world)
+                .find(|(name, _, _)| name.as_str() == "Battle speed")
+                .map(|(_, node, transform)| {
+                    (
+                        transform.translation - node.size() * 0.5,
+                        transform.translation + node.size() * 0.5,
+                    )
+                })
+                .expect("actual speed bounds");
+            let mut found = false;
+            for (name, text, node, computed, transform) in world
+                .query::<(&Name, &Text, &Node, &ComputedNode, &UiGlobalTransform)>()
+                .iter(world)
+            {
+                if name.as_str() == "Archive battle progress" {
+                    found = true;
+                    assert_eq!(node.display != Display::None, active);
+                    if active {
+                        assert!(
+                            text.0.lines().count() == 3,
+                            "archive has separate countdown/echo/hero rows"
+                        );
+                        assert!(matches!(computed.size().x, 128.0 | 200.0));
+                        let min = transform.translation - computed.size() * 0.5;
+                        let max = transform.translation + computed.size() * 0.5;
+                        assert!(
+                            min.x >= status.1.x
+                                || max.x <= status.0.x
+                                || min.y >= status.1.y
+                                || max.y <= status.0.y,
+                            "archive progress must not paint over left status: archive={min:?}..{max:?}, status={status:?}"
+                        );
+                        assert!(
+                            min.x >= speed.1.x
+                                || max.x <= speed.0.x
+                                || min.y >= speed.1.y
+                                || max.y <= speed.0.y,
+                            "archive progress must not paint over speed controls: archive={min:?}..{max:?}, speed={speed:?}"
+                        );
+                        println!(
+                            "[capture] archive safe rect={min:?}..{max:?} status={status:?} speed={speed:?}"
+                        );
+                        println!(
+                            "[capture] archive HUD actual text={:?} size={:?} position={:?}",
+                            text.0,
+                            computed.size(),
+                            transform.translation
+                        );
+                    }
+                }
+            }
+            assert!(found);
+            println!("[capture] archive HUD active={active} PASS");
         }
         return;
     }

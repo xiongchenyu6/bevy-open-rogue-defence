@@ -120,6 +120,9 @@ struct PauseButton;
 #[derive(Component)]
 struct SpeedControl;
 
+#[derive(Component)]
+struct ArchiveHudText;
+
 #[derive(Component, Clone, Copy)]
 struct SpeedButton(SpeedAction);
 
@@ -205,6 +208,7 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
             .with_children(|top| {
                 top.spawn((
                     HudLeft,
+                    Name::new("Battle status"),
                     Node {
                         width: px(240),
                         flex_direction: FlexDirection::Column,
@@ -397,6 +401,28 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
                     TextLayout::justify(Justify::Right),
                 ));
             });
+
+            root.spawn((
+                ArchiveHudText,
+                Name::new("Archive battle progress"),
+                Text::new(""),
+                TextFont {
+                    font_size: FontSize::Px(16.0),
+                    ..default()
+                },
+                TextColor(Color::srgb(0.88, 0.95, 1.0)),
+                TextLayout::justify(Justify::Center),
+                BackgroundColor(Color::srgba(0.025, 0.035, 0.045, 0.88)),
+                Node {
+                    position_type: PositionType::Absolute,
+                    left: percent(50),
+                    margin: UiRect::left(px(-100)),
+                    width: px(200),
+                    top: px(80),
+                    display: Display::None,
+                    ..default()
+                },
+            ));
 
             root.spawn((
                 HudBottom,
@@ -746,6 +772,7 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
     commands
         .spawn((
             SpeedControl,
+            Name::new("Battle speed"),
             Node {
                 position_type: PositionType::Absolute,
                 right: px(208),
@@ -894,6 +921,16 @@ fn apply_hud_layout(
     scheme: Res<ControlScheme>,
     windows: Query<&Window, With<PrimaryWindow>>,
     drawer: Res<TrialDrawerState>,
+    session: Res<GameSession>,
+    mut archive_nodes: Query<
+        &mut Node,
+        (
+            With<ArchiveHudText>,
+            Without<SpeedControl>,
+            Without<HudBottom>,
+            Without<DodgeArt>,
+        ),
+    >,
     mut nodes: Query<
         (
             &mut Node,
@@ -911,7 +948,12 @@ fn apply_hud_layout(
             Option<&TrialToggleButton>,
             Option<&PauseButton>,
         ),
-        (Without<SpeedControl>, Without<HudBottom>, Without<DodgeArt>),
+        (
+            Without<SpeedControl>,
+            Without<HudBottom>,
+            Without<DodgeArt>,
+            Without<ArchiveHudText>,
+        ),
     >,
     mut bottom_rows: Query<&mut Node, (With<HudBottom>, Without<SpeedControl>)>,
     mut speed_controls: Query<&mut Node, (With<SpeedControl>, Without<DodgeArt>)>,
@@ -1214,6 +1256,25 @@ fn apply_hud_layout(
         node.reborrow()
             .map_unchanged(|value| &mut value.height)
             .set_if_neq(px(if scheme.touch { 44 } else { 22 }));
+    }
+    for mut node in &mut archive_nodes {
+        let width = if compact { 128.0 } else { 200.0 };
+        node.reborrow()
+            .map_unchanged(|value| &mut value.width)
+            .set_if_neq(px(width));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.margin)
+            .set_if_neq(UiRect::left(px(-width * 0.5)));
+        node.reborrow()
+            .map_unchanged(|value| &mut value.display)
+            .set_if_neq(if session.save_active {
+                Display::Flex
+            } else {
+                Display::None
+            });
+        node.reborrow()
+            .map_unchanged(|value| &mut value.top)
+            .set_if_neq(px(if compact { 118.0 } else { 80.0 }));
     }
     for mut node in &mut speed_controls {
         node.reborrow()
@@ -1570,7 +1631,7 @@ fn update_hud(
     archive_echo: Query<&Enemy, With<ArchiveEcho>>,
     mut text_nodes: Query<(
         &mut Text,
-        Option<&TimerText>,
+        (Option<&TimerText>, Option<&ArchiveHudText>),
         Option<&LevelText>,
         Option<&TrialStatusText>,
         Option<&GoldChallengeStatusText>,
@@ -1712,8 +1773,16 @@ fn update_hud(
             )
         }
     };
-    for (mut text, timer, level, trial_marker, gold_marker, bond_button, skill_draw, dodge_label) in
-        &mut text_nodes
+    for (
+        mut text,
+        (timer, archive_text),
+        level,
+        trial_marker,
+        gold_marker,
+        bond_button,
+        skill_draw,
+        dodge_label,
+    ) in &mut text_nodes
     {
         text.reborrow()
             .map_unchanged(|value| &mut value.0)
@@ -1733,23 +1802,29 @@ fn update_hud(
                         "Shift".to_string()
                     }
                 }
-            } else if timer.is_some() {
+            } else if archive_text.is_some() {
                 if session.save_active {
                     if language.is_chinese() {
                         format!(
-                            "刻印 {:02}秒\n回响 {:03.0}%  英雄 {:03.0}%",
+                            "刻印 {:02}秒\n回响 {:03.0}%\n英雄 {:03.0}%",
                             session.save_remaining.ceil() as u32,
                             archive_hp,
                             hero_hp
                         )
                     } else {
                         format!(
-                            "ARCHIVE {:02}s\nECHO {:03.0}%  HERO {:03.0}%",
+                            "ARCHIVE {:02}s\nECHO {:03.0}%\nHERO {:03.0}%",
                             session.save_remaining.ceil() as u32,
                             archive_hp,
                             hero_hp
                         )
                     }
+                } else {
+                    String::new()
+                }
+            } else if timer.is_some() {
+                if session.save_active {
+                    String::new()
                 } else if language.is_chinese() {
                     format!(
                         "{:02}:{:02}\n首领 {}/5",
@@ -1905,6 +1980,7 @@ mod tests {
         let mut app = App::new();
         app.insert_resource(ControlScheme { touch: false })
             .init_resource::<TrialDrawerState>()
+            .init_resource::<GameSession>()
             .add_systems(Update, apply_hud_layout);
         app.world_mut().spawn((
             Window {

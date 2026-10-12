@@ -150,6 +150,9 @@ mod crafting_capture;
 #[path = "capture/equipment.rs"]
 mod equipment_capture;
 
+#[path = "capture/market_wallet.rs"]
+mod market_wallet_capture;
+
 #[path = "capture/attribute_growth.rs"]
 mod attribute_growth_capture;
 
@@ -524,7 +527,7 @@ fn main() {
         onboarding_capture::install(&mut apps.main);
     } else if scenario == "campaign-save-retry" {
         campaign_save_retry_capture::install(&mut apps.main);
-    } else if matches!(scenario, "campaign" | "campaign-reload") {
+    } else if matches!(scenario, "campaign" | "campaign-reload" | "archive-hud") {
         campaign_capture::install(&mut apps.main);
     }
     if scenario.starts_with("immediate-") {
@@ -604,6 +607,9 @@ fn main() {
     }
     if scenario == "equipment" {
         equipment_capture::install(&mut apps.main);
+    }
+    if scenario == "market-wallet" {
+        market_wallet_capture::install(&mut apps.main);
     }
     if scenario == "attribute-growth" {
         attribute_growth_capture::install(&mut apps.main);
@@ -949,7 +955,7 @@ fn configure_scenario(world: &mut World, scenario: &str) {
         campaign_save_retry_capture::configure(world);
         return;
     }
-    if matches!(scenario, "campaign" | "campaign-reload") {
+    if matches!(scenario, "campaign" | "campaign-reload" | "archive-hud") {
         campaign_capture::configure(world, scenario == "campaign-reload");
         return;
     }
@@ -1051,6 +1057,10 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     }
     if scenario == "equipment" {
         equipment_capture::configure(world);
+        return;
+    }
+    if scenario == "market-wallet" {
+        market_wallet_capture::configure(world);
         return;
     }
     if scenario == "attribute-growth" {
