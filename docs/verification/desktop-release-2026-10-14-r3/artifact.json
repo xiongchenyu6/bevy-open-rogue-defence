@@ -1,0 +1,8 @@
+{
+  "source_commit": "78251d2d265618ca013d057a1dfc23953e1a0ed8",
+  "binary_sha256": "8bea8c1040329e575ef64d5876e97689bd85b5d06df4df838e8fc57f3bab47f0",
+  "tar_sha256": "fd1a428dea0b1dc50ca45d6400628e747a570b4bf35136328c6873f220929348",
+  "tar_bytes": 57044742,
+  "root_reviewed_screenshots": 11,
+  "scope": "Ubuntu24/X11 softwareVulkan read-only offline package, no source/Rust/Nix; no hardware/Steam/Deck/audio claim"
+}

@@ -1,6 +1,6 @@
 # Controller controls
 
-Controller input is implemented and verified in source with ECS tests and synthetic native gamepad events. The full library suite passed (655 passed, 0 failed, 1 ignored); strict Clippy passed for all targets. All 75 native route steps passed at 1280×720, 1280×800 and 667×375, with screenshots reviewed. The Linux candidate was rebuilt from commit3922b11 and passed isolated keyboard/pointer startup/settings/restart smoke verification; packaged physical controller input remains unverified. Physical controllers and Steam Deck hardware remain unverified.
+Controller input is implemented and verified in source with ECS tests and synthetic native gamepad events. The full library suite passed (655 passed, 0 failed, 1 ignored); strict Clippy passed for all targets. All 75 native route steps passed at 1280×720, 1280×800 and 667×375, with screenshots reviewed. The Linux candidate was rebuilt from commit78251d2 and passed isolated keyboard/pointer startup/settings/restart smoke verification; packaged physical controller input remains unverified. Physical controllers and Steam Deck hardware remain unverified.
 
 | Context | Controls |
 | --- | --- |
@@ -36,4 +36,4 @@ Archived logs, source hashes and native screenshots: [verification evidence](ver
 
 The supplementary scroll evidence is `target/verification/controller-input-2026-10-14/final-evidence-scroll-r1.json`. Full tests are in `library-scroll-r1.log` (655 passed, 0 failed, 1 ignored), strict checks in `clippy-scroll-r1.log`, and captures in `scroll-r1/{667x375,1280x800}/frames/`. R13's earlier full menu route archive and immutable binary are preserved.
 
-Sibling detail scrolling proof: [native offsets and screenshots](verification/controller-scroll-2026-10-14/evidence.json). This source change is newer than the3922b11 Linux candidate.
+Sibling detail scrolling proof: [native offsets and screenshots](verification/controller-scroll-2026-10-14/evidence.json). The78251d2 Linux candidate includes this source change; its keyboard/pointer smoke passed.

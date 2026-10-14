@@ -15,7 +15,7 @@
 | 战役和存档 | `campaign_progress.rs` 实现章节解锁、战果货币及6种永久强化；原生文件与浏览器存储分开；写入失败后的独立保存重试、原存档保护及奖励不重复已通过真实文件／按钮回归与中英文原生截图，见[保存恢复](campaign-save-retry.md) | 已通过[实际赚取力量并应用到下一局](earned-strength-runtime.md)；[实际安装包第一章通关及奖励延续](packaged-first-clear.md)已核对；[第二章完整胜利脚本及奖励强化重启](packaged-chapter2.md)已通过；[第三章完整胜利及力量26重启验证](packaged-chapter3.md)已通过；[第四章完整胜利及力量28重启验证](packaged-chapter4.md)已通过；[第五章后续实际赚取路线通关及力量32重启验证](packaged-chapter5.md)已通过，保留此前失败；[第六章实际路线失败，但奖励、强化和力量34重启通过](packaged-chapter6.md)；完整通关仍未验证，更多种子与路线仍缺证据；浏览器存储故障恢复；发行升级后的存档验证 |
 | 装备和合成 | 首次黑市库存经过真实重置回归与安装包验证；[实际赚取货币购买奥术透镜、扣款、装备查看、属性查看、继续战斗和正常退出](earned-equipment.md)已通过；[合成奖励与材料继承展示](forge-readability.md)有中英文桌面／紧凑截图；[旧版独立包同局正常购买材料并合成星界棱镜](earned-forge-probe.md)已通过，材料消耗、属性与恢复战斗均有证据 | [3922b11新版正常材料获取／合成复验](verification/earned-forge-2026-10-14-r7/summary.json)已通过；进阶配方经济与获取路径；[购买提示期间钱包可读性](market-wallet.md)已有四套最终截图；更多装备组合和长期回归 |
 | 内容差异 | 独立英雄、技能、羁绊、装备及营地系统存在；[短射程宿主的继承远程攻击](fusion-reach.md)有真实命中与原生截图证据 | 每个技能、首领和巨型营地敌人的实际机制／外观辨识，避免换数值或放大模型冒充新内容；全流程无占位资产 |
-| 桌面交付 | 已有`3922b11`源码的Steam Runtime 3 SDK Linux release候选包，875项文件哈希、首次指南／征募／战斗／中文全屏设置／偏好重启／再次战斗及两次退出通过独立只读包、断网Ubuntu/X11软件Vulkan验收，见[桌面发行](desktop-release.md)；wasm／Android仍有构建脚本 | 真实Steam客户端、长局硬件性能、Steam Deck、Windows／macOS；更多驱动／分辨率；性能／崩溃记录与最终安装验收 |
+| 桌面交付 | 已有`78251d2`源码的Steam Runtime 3 SDK Linux release候选包，875项文件哈希、首次指南／征募／战斗／中文全屏设置／偏好重启／再次战斗及两次退出通过独立只读包、断网Ubuntu/X11软件Vulkan验收，见[桌面发行](desktop-release.md)；wasm／Android仍有构建脚本 | 真实Steam客户端、长局硬件性能、Steam Deck、Windows／macOS；更多驱动／分辨率；性能／崩溃记录与最终安装验收 |
 
 ## 验收口径
 
@@ -27,4 +27,4 @@
 
 ## 2026-10-14 当前库回归
 
-倒计时与手柄详情滚动修正版完整库测试656通过、0失败、1忽略，严格全目标Clippy通过，见[测试日志](verification/gate-countdown-labels-2026-10-14/library-countdown-r2.log)和[源码／原生验收范围](verification/controller-input-2026-10-14/evidence.json)。当前3922b11候选包独立烟雾验收已通过；新版完整第六章与真实硬件／Steam客户端仍待验证。3922b11正常合成路线已通过，[手柄详情滚动](controller-input.md)及[城门同帧倒计时](gate-countdown-labels.md)已通过原生验收，仍需下一候选包。
+倒计时与手柄详情滚动修正版完整库测试656通过、0失败、1忽略，严格全目标Clippy通过，见[测试日志](verification/gate-countdown-labels-2026-10-14/library-countdown-r2.log)和[源码／原生验收范围](verification/controller-input-2026-10-14/evidence.json)。当前78251d2候选包独立烟雾验收已通过；新版完整第六章与真实硬件／Steam客户端仍待验证。3922b11正常合成路线已通过，[手柄详情滚动](controller-input.md)及[城门同帧倒计时](gate-countdown-labels.md)已通过原生验收并纳入78251d2候选包。

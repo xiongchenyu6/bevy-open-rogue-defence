@@ -1,6 +1,6 @@
 # Linux 桌面发行候选包
 
-当前候选包为 `target/desktop-packages-oct14-r2/rogue-commander-linux/`，压缩包为 `target/desktop-packages-oct14-r2/rogue-commander-linux-0.1.0.tar.gz`（约55MiB）。游戏源版本为 `3922b11`，包含新版引导、加载保护、保存重试、音频恢复与成长节奏改动。可直接运行包内 `rogue_commander`，保持 `assets` 和 `third-party` 同级。尚未发布到 Steam。
+当前候选包为 `target/desktop-packages-oct14-r3/rogue-commander-linux/`，压缩包为 `target/desktop-packages-oct14-r3/rogue-commander-linux-0.1.0.tar.gz`（约55MiB）。游戏源版本为 `78251d2`，包含新版引导、加载保护、保存重试、音频恢复与成长节奏改动。可直接运行包内 `rogue_commander`，保持 `assets` 和 `third-party` 同级。尚未发布到 Steam。
 
 构建使用固定摘要的 Steam Runtime 3 sniper SDK、Rust 1.98.0。最终 ELF 使用普通 Linux 解释器，没有 Nix 库依赖或库搜索路径。SDK 与所选 Steam 运行时应匹配，见 [Valve Linux 开发说明](https://partner.steamgames.com/doc/store/application/platforms/linux)。
 
@@ -30,15 +30,19 @@ docker run --rm --network none \
   --workdir /tmp rogue-commander-linux-smoke:ubuntu24-oct8 python3 /smoke.py
 ```
 
-OCR 同时读取原图与反相灰度图、稀疏与块级排版，保留像素坐标；短小中文设置入口按工具栏位置打开后，仍要求真实设置标题出现。两个早期验收尝试因 OCR 漏识别按钮／中文标题而失败，没有算作通过。最终完整重跑通过，记录见 [验收证据](verification/desktop-release-2026-10-14-r2/result.json)。[引导](verification/desktop-release-2026-10-14-r2/guide.png) · [战斗](verification/desktop-release-2026-10-14-r2/battle.png) · [中文重启](verification/desktop-release-2026-10-14-r2/restart-chinese.png) · [重启战斗](verification/desktop-release-2026-10-14-r2/restart-battle-chinese.png)。
+OCR 同时读取原图与反相灰度图、稀疏与块级排版，保留像素坐标；短小中文设置入口按工具栏位置打开后，仍要求真实设置标题出现。两个早期验收尝试因 OCR 漏识别按钮／中文标题而失败，没有算作通过。最终完整重跑通过，记录见 [验收证据](verification/desktop-release-2026-10-14-r3/result.json)。[引导](verification/desktop-release-2026-10-14-r3/guide.png) · [战斗](verification/desktop-release-2026-10-14-r3/battle.png) · [中文重启](verification/desktop-release-2026-10-14-r3/restart-chinese.png) · [重启战斗](verification/desktop-release-2026-10-14-r3/restart-battle-chinese.png)。
 
 5项打包集成测试、2项 OCR 目标回归与 Python 编译检查通过。历史组合检查640项库测试通过（一项忽略），本次发行包独立构建及运行验收通过；模型加载、召唤计时及倒计时布局分别见 [远征加载](expedition-loading.md)、[有限召唤物计时](rare-summon-cadence.md)及[倒计时布局](gate-countdown-layout.md)。实际 Steam 客户端、Steam Deck、硬件帧率、完整打包战役、Windows／macOS仍未验证，整体发售品质见 [验收清单](release-readiness.md)。旧 Mesa 20.3.5 软件环境不能满足渲染要求，未保留降级兼容代码；玩家需要满足游戏渲染能力的驱动。
 
 
-本次候选包已包含立绘完整适配、伤害数字避让、紧凑营地图标／说明、黄色精英符文光环，以及失败场景标签重试修复、骨卫／猎犬与四类有限召唤物倍速攻击修正、紧凑重建倒计时布局修正、区域／旗帜过期结算，以及漩涡细流和淡色地面投影。Source `3922b11` 的 SDK release 构建与只读独立运行均已重新执行；Root实际查看本轮11张截图。875项文件哈希在容器与宿主独立核对一致。此验收只覆盖短首次流程与偏好重启，不能代替打包后的完整25波战役、后续征募／支线／死亡／奖励／强化全流程、Steam客户端或硬件性能验收。
+本次候选包已包含立绘完整适配、伤害数字避让、紧凑营地图标／说明、黄色精英符文光环，以及失败场景标签重试修复、骨卫／猎犬与四类有限召唤物倍速攻击修正、紧凑重建倒计时布局修正、区域／旗帜过期结算，以及漩涡细流和淡色地面投影。Source `78251d2` 的 SDK release 构建与只读独立运行均已重新执行；Root实际查看本轮11张截图。875项文件哈希在容器与宿主独立核对一致。此验收只覆盖短首次流程与偏好重启，不能代替打包后的完整25波战役、后续征募／支线／死亡／奖励／强化全流程、Steam客户端或硬件性能验收。
 
 此轮候选包还包含薄冰冻结外壳、死亡期间能量账本修正、冻结／眩晕攻击及动画暂停，以及控制在帧内结束时的可行动时间预算。包来源仍为d2527eb；此轮已经包含合成奖励优先展示、装备面板层级、继承远程武器独立射程和首次黑市库存初始化；正常赚取后购买与同局材料合成已在此包独立实测，见[完整合成路线](earned-forge-probe.md)；本轮新版仍需复验。
 
 ## 2026-10-14 手柄改动后的候选包
 
-`3922b11`已重新以Steam Runtime SDK构建（1分36秒），875项文件在宿主和隔离容器中哈希一致。独立只读包断网首次指南、战斗、中文设置、全屏／恢复、偏好重启和两次正常退出通过；Root查看11张最终截图。包包含手柄导航与保留选牌营地修正，但此安装包烟雾验收使用键鼠，不证明物理手柄；原生模拟手柄路线见[手柄证据](controller-input.md)。
+`78251d2`已重新以Steam Runtime SDK构建（1分36秒），875项文件在宿主和隔离容器中哈希一致。独立只读包断网首次指南、战斗、中文设置、全屏／恢复、偏好重启和两次正常退出通过；Root查看11张最终截图。包包含手柄导航与保留选牌营地修正，但此安装包烟雾验收使用键鼠，不证明物理手柄；原生模拟手柄路线见[手柄证据](controller-input.md)。
+
+## 滚动与倒计时修正后的候选包
+
+78251d2候选包包括074a8a4手柄详情滚动和13b7a8a城门同帧数字修正。SDK构建1分36秒，875项文件宿主／容器哈希一致，完整短烟雾路线和两次正常退出通过；Root查看本轮11张截图。[来源与压缩包哈希](verification/desktop-release-2026-10-14-r3/artifact.json)。第六章装备路线正在独立运行，未计入此短流程通过结果。
