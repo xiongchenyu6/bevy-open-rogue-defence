@@ -27,4 +27,4 @@
 
 ## 2026-10-14 当前库回归
 
-当前源码完整库测试640通过、0失败、1忽略，见[测试日志](verification/current-library-2026-10-14/cargo-test-lib.log)。这覆盖库回归，不能替代完整战役、真实合成、硬件与Steam客户端验收。
+手柄与营地修正版完整库测试654通过、0失败、1忽略，严格全目标Clippy通过，见[测试日志](verification/controller-input-2026-10-14/library-tests-r11.log)和[源码／原生验收范围](verification/controller-input-2026-10-14/evidence.json)。当前3922b11候选包独立烟雾验收已通过；新版完整第六章与真实硬件／Steam客户端仍待验证。旧版正常合成证据不替代新版路线。
