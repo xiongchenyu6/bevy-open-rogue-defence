@@ -247,9 +247,14 @@ def main():
                     seed_row = OUT / 'seed-row.png'
                     call(['convert', str(screen), '-crop', result_seed_crop(text_lines), '-resize', '400%', str(seed_row)])
                     seed_text = call(['tesseract', str(seed_row), 'stdout', '-l', 'eng', '--psm', '7'])
-                    report['actual_run_seed'] = seed_from_text(seed_text)
+                    shutil.copy2(screen, OUT / 'result.png')
                     report['actual_seed_ocr'] = seed_text
-                    shutil.copy2(screen, OUT / 'result.png'); break
+                    try:
+                        report['actual_run_seed'] = seed_from_text(seed_text)
+                    except AssertionError as error:
+                        # Keep strict seed proof, but finish reward/quit/restart checks first.
+                        report['seed_verification_error'] = str(error)
+                    break
                 next_sample = time.monotonic() + 3
             time.sleep(.2)
         stop_input.set(); input_thread.join(timeout=5)
@@ -290,6 +295,7 @@ def main():
         report['earned_strength_applies_after_restart'] = True
         quit_game(win,app);report['normal_quit_twice']=True
         (OUT/'result.json').write_text(json.dumps(report,indent=2)+'\n')
+        assert not report.get('seed_verification_error'), report.get('seed_verification_error')
         assert report['victory'], 'Actual run lost: retain failure evidence, do not count as chapter completion'
     finally:
         stop_input.set()
