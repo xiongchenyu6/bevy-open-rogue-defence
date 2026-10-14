@@ -70,7 +70,7 @@ def strength_purchase(progress):
     return cost, expected
 
 
-def main():
+def main(policy_factory=None):
     assert not Path('/nix').exists() and not Path('/project').exists()
     assert not shutil.which('cargo') and not shutil.which('rustc')
     for item in json.loads((GAME / 'package-manifest.json').read_text())['files']:
@@ -185,12 +185,19 @@ def main():
         else:
             raise RuntimeError('Attributes did not close after Escape')
         return record
+    input_lock = threading.RLock()
     stop_input = threading.Event()
     input_thread = None
     report = dict(scope='Packaged Ubuntu/X11 software Vulkan, public UI/keys, stationary greedy policy',
                   stage=stage, continued=continuation == '1', initial_progress=initial,
                   requested_seed=requested_seed, requested_speed=speed,
                   strategy='Stationary greedy public keys: 1, g, f', completed_run=False, victory=False)
+    policy = None
+    if policy_factory is not None:
+        policy = policy_factory(dict(call=call, shot=lambda name: shot(win, name),
+            lines=lambda: lines(win), click_text=lambda text: click_text(win, app, text),
+            app=lambda: app, window=lambda: win, env=env, out=OUT, report=report,
+            input_lock=input_lock))
     try:
         start(['Xvfb', ':93', '-screen', '0', '1600x900x24', '-nolisten', 'tcp', '-ac'], 'xvfb.log')
         time.sleep(1); start(['openbox'], 'wm.log'); time.sleep(1)
@@ -206,7 +213,9 @@ def main():
         for _ in range(speed.bit_length() - 1): call(['xdotool', 'key', 't']); time.sleep(.25)
         def operate():
             while not stop_input.is_set() and app.poll() is None:
-                call(['xdotool', 'key', '--delay', '30', '1', 'g', 'f'])
+                with input_lock:
+                    if not stop_input.is_set():
+                        call(['xdotool', 'key', '--delay', '30', '1', 'g', 'f'])
                 stop_input.wait(.2)
         input_thread = threading.Thread(target=operate, daemon=True)
         input_thread.start()
@@ -229,7 +238,7 @@ def main():
             raise RuntimeError(f'Actual toolbar speed did not reach {speed}x')
         report['actual_speed'] = speed
         shot(win, f'speed{speed}.png')
-        timeout = max(900, 1500 / speed + 300)
+        timeout = max(900, 1500 / speed + 300) + (600 if policy is not None else 0)
         report['battle_timeout_seconds'] = timeout
         started, deadline = time.monotonic(), time.monotonic() + timeout
         next_sample, sample = 0., 0
@@ -255,6 +264,8 @@ def main():
                         # Keep strict seed proof, but finish reward/quit/restart checks first.
                         report['seed_verification_error'] = str(error)
                     break
+                if policy is not None:
+                    policy.observe(text_lines, time.monotonic() - started)
                 next_sample = time.monotonic() + 3
             time.sleep(.2)
         stop_input.set(); input_thread.join(timeout=5)
@@ -296,6 +307,8 @@ def main():
         quit_game(win,app);report['normal_quit_twice']=True
         (OUT/'result.json').write_text(json.dumps(report,indent=2)+'\n')
         assert not report.get('seed_verification_error'), report.get('seed_verification_error')
+        if policy is not None:
+            policy.verify()
         assert report['victory'], 'Actual run lost: retain failure evidence, do not count as chapter completion'
     finally:
         stop_input.set()
