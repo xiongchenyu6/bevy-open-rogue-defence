@@ -85,7 +85,7 @@ def main():
         match=re.fullmatch(r'(1|2|4|8|16|32)\s*[x×]?',raw.strip(),re.I)
         if not match:
             rows=lines();terminal(rows)
-            if any(any(title in normalized(t) for title in ('forgeanewbond','chooseyourskill','chooseyour','shapeyourarsenal')) for t,*_ in rows):
+            if any(any(title in normalized(t) for title in ('forgeanewbond','chooseyourskill','chooseyour','shapeyourarsenal','recruitahero')) for t,*_ in rows):
                 report.setdefault('speed_hidden_by_choice',[]).append(rows);key('1');return read_speed(depth+1)
             raise RuntimeError('Actual speed crop unreadable: '+repr(raw))
         return int(match[1])
@@ -206,7 +206,7 @@ def main():
                     key('b')
             stop.clear();worker=threading.Thread(target=operate,daemon=True);worker.start();time.sleep(12)
         assert report.get('inventory_verified'), 'No genuine recipe completed within finite public stock route'
-        assert report['purchases'],'No naturally affordable equipment found within20 public market requests'
+        assert report['purchases'],'No naturally affordable equipment found within120 public market requests'
         before=timer_seconds();time.sleep(2);after=timer_seconds()
         report['resume_countdown_before']=before;report['resume_countdown_after']=after
         assert after<before,'Actual battlefield countdown did not resume'
