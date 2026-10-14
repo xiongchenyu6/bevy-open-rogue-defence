@@ -36,6 +36,8 @@ mod adventure_boss_capture;
 #[path = "capture/selection_detail.rs"]
 mod selection_detail_capture;
 
+#[path = "capture/gate_countdown_labels.rs"]
+mod gate_countdown_labels_capture;
 #[path = "capture/gate_revival.rs"]
 mod gate_revival_capture;
 
@@ -548,6 +550,9 @@ fn main() {
     if scenario == "selection-details" {
         selection_detail_capture::install(&mut apps.main);
     }
+    if scenario == "gate-countdown-labels" {
+        gate_countdown_labels_capture::install(&mut apps.main);
+    }
     if scenario == "gate-revival" {
         gate_revival_capture::install(&mut apps.main);
     }
@@ -1004,6 +1009,9 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     if scenario == "selection-details" {
         selection_detail_capture::configure(world);
         return;
+    }
+    if scenario == "gate-countdown-labels" {
+        gate_revival_capture::configure(world);
     }
     if scenario == "gate-revival" {
         gate_revival_capture::configure(world);

@@ -5,12 +5,13 @@ use super::*;
 struct LivesLabel(bool);
 
 pub(super) fn install(app: &mut App) {
-    app.add_systems(Startup, spawn_gate_countdown)
-        .add_systems(Update, update.after(update_static_ui_language))
-        .add_systems(
-            PostUpdate,
-            update_gate_countdown.after(bevy::transform::TransformSystems::Propagate),
-        );
+    app.add_systems(Startup, spawn_gate_countdown).add_systems(
+        PostUpdate,
+        (update, update_gate_countdown)
+            .chain()
+            .after(bevy::camera::CameraUpdateSystems)
+            .before(bevy::ui::UiSystems::Content),
+    );
 }
 
 pub(super) fn spawn(parent: &mut ChildSpawnerCommands, detail: bool) {
@@ -116,7 +117,7 @@ fn update(
             let mut value = gate_copy(
                 *language,
                 down,
-                session.gate_revive_remaining,
+                display_rebuild_remaining(&session),
                 gate_state.1 > 0.0,
             );
             if !down {
@@ -191,6 +192,13 @@ fn spawn_gate_countdown(mut commands: Commands) {
             ));
         });
 }
+fn display_rebuild_remaining(session: &GameSession) -> f32 {
+    if session.core_hp <= 0.0 && session.gate_revive_remaining <= 0.0 {
+        crate::game::resources::GATE_REBUILD_SECONDS
+    } else {
+        session.gate_revive_remaining
+    }
+}
 fn countdown_digit(remaining: f32) -> String {
     remaining
         .ceil()
@@ -215,7 +223,8 @@ fn gate_countdown_origin(position: Vec2, viewport: Vec2) -> Vec2 {
 fn update_gate_countdown(
     session: Res<GameSession>,
     language: Res<GameLanguage>,
-    cameras: Query<(&Camera, &GlobalTransform), With<Camera3d>>,
+    cameras: Query<(Entity, &Camera), With<Camera3d>>,
+    transforms: bevy::transform::helper::TransformHelper,
     mut roots: Query<&mut Node, With<GateCountdownRoot>>,
     mut digits: Query<
         (&mut Text, &mut TextFont),
@@ -224,10 +233,11 @@ fn update_gate_countdown(
     mut captions: Query<&mut Text, (With<GateCountdownCaption>, Without<GateCountdownDigit>)>,
 ) {
     let down = session.core_hp <= 0.0 && !session.finished;
-    let position = cameras.single().ok().and_then(|(camera, transform)| {
+    let position = cameras.single().ok().and_then(|(entity, camera)| {
+        let transform = transforms.compute_global_transform(entity).ok()?;
         camera
             .world_to_viewport(
-                transform,
+                &transform,
                 crate::game::resources::GATE_POSITION + Vec3::Y * 0.5,
             )
             .ok()
@@ -266,11 +276,7 @@ fn update_gate_countdown(
         digit
             .reborrow()
             .map_unchanged(|value| &mut value.0)
-            .set_if_neq(countdown_digit(if session.gate_revive_remaining > 0.0 {
-                session.gate_revive_remaining
-            } else {
-                crate::game::resources::GATE_REBUILD_SECONDS
-            }));
+            .set_if_neq(countdown_digit(display_rebuild_remaining(&session)));
     }
     for mut caption in &mut captions {
         caption
@@ -283,6 +289,62 @@ fn update_gate_countdown(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn both_gate_labels_publish_same_postupdate_transition_progress_pause_and_restore() {
+        for language in GameLanguage::ALL {
+            let mut app = App::new();
+            app.add_plugins(MinimalPlugins)
+                .init_resource::<GameSession>()
+                .init_resource::<HeroVitals>()
+                .insert_resource(language);
+            install(&mut app);
+            let hud = app
+                .world_mut()
+                .spawn((CoreIntegrityLabel, Text::default(), TextColor::default()))
+                .id();
+            for (hp, remaining, paused, expected) in [
+                (0., 0., true, "4"),
+                (0., 3.01, false, "4"),
+                (0., 3., true, "3"),
+                (0., 2., false, "2"),
+                (0., 1., true, "1"),
+            ] {
+                {
+                    let mut s = app.world_mut().resource_mut::<GameSession>();
+                    s.core_hp = hp;
+                    s.gate_revive_remaining = remaining;
+                    s.paused = paused;
+                }
+                app.update();
+                assert_eq!(
+                    app.world().get::<Text>(hud).unwrap().0,
+                    format!(
+                        "{} {expected}{}",
+                        language.pick("GATE DOWN", "城门重建"),
+                        language.pick("s", "秒")
+                    )
+                );
+                let mut digits = app
+                    .world_mut()
+                    .query_filtered::<&Text, With<GateCountdownDigit>>();
+                assert_eq!(digits.single(app.world()).unwrap().0, expected);
+            }
+            {
+                let mut s = app.world_mut().resource_mut::<GameSession>();
+                s.core_hp = s.core_max_hp;
+                s.gate_revive_remaining = 0.;
+                s.paused = false;
+            }
+            app.update();
+            assert!(
+                app.world()
+                    .get::<Text>(hud)
+                    .unwrap()
+                    .0
+                    .starts_with(language.pick("GATE RESTORED", "城门已重建"))
+            );
+        }
+    }
     #[test]
     fn compact_gate_countdown_avoids_hud_and_action_rows() {
         let viewport = Vec2::new(667.0, 375.0);
