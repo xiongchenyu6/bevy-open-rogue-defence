@@ -1,0 +1,488 @@
+{
+  "completed_cases": 24,
+  "planned_cases": 24,
+  "censored": 0,
+  "timeouts": 0,
+  "cases": [
+    {
+      "case": "active-h0-sa11ce-c4-t0",
+      "elapsed": 1540.679,
+      "victory": true,
+      "level": 43,
+      "kills": 2109,
+      "deaths": 0,
+      "bosses": 5,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 659919,
+      "gate_breaks": 34,
+      "skill_ranks": 29
+    },
+    {
+      "case": "passive-h0-sa11ce-c4-t0",
+      "elapsed": 74.351,
+      "victory": false,
+      "level": 1,
+      "kills": 9,
+      "deaths": 3,
+      "bosses": 0,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 659919,
+      "gate_breaks": 2,
+      "skill_ranks": 1
+    },
+    {
+      "case": "active-h0-sbeef-c4-t0",
+      "elapsed": 1558.863,
+      "victory": true,
+      "level": 43,
+      "kills": 2095,
+      "deaths": 0,
+      "bosses": 5,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 48880,
+      "gate_breaks": 62,
+      "skill_ranks": 30
+    },
+    {
+      "case": "passive-h0-sbeef-c4-t0",
+      "elapsed": 85.437,
+      "victory": false,
+      "level": 2,
+      "kills": 18,
+      "deaths": 3,
+      "bosses": 0,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 48880,
+      "gate_breaks": 3,
+      "skill_ranks": 1
+    },
+    {
+      "case": "active-h1-sa11ce-c4-t0",
+      "elapsed": 1535.291,
+      "victory": true,
+      "level": 43,
+      "kills": 2064,
+      "deaths": 0,
+      "bosses": 5,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 659919,
+      "gate_breaks": 7,
+      "skill_ranks": 29
+    },
+    {
+      "case": "passive-h1-sa11ce-c4-t0",
+      "elapsed": 235.791,
+      "victory": false,
+      "level": 4,
+      "kills": 85,
+      "deaths": 3,
+      "bosses": 0,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 659919,
+      "gate_breaks": 4,
+      "skill_ranks": 1
+    },
+    {
+      "case": "active-h1-sbeef-c4-t0",
+      "elapsed": 1548.738,
+      "victory": true,
+      "level": 44,
+      "kills": 2085,
+      "deaths": 0,
+      "bosses": 5,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 48880,
+      "gate_breaks": 12,
+      "skill_ranks": 31
+    },
+    {
+      "case": "passive-h1-sbeef-c4-t0",
+      "elapsed": 248.192,
+      "victory": false,
+      "level": 5,
+      "kills": 91,
+      "deaths": 3,
+      "bosses": 0,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 48880,
+      "gate_breaks": 3,
+      "skill_ranks": 1
+    },
+    {
+      "case": "active-h2-sa11ce-c4-t0",
+      "elapsed": 1563.275,
+      "victory": true,
+      "level": 43,
+      "kills": 2111,
+      "deaths": 2,
+      "bosses": 5,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 659919,
+      "gate_breaks": 66,
+      "skill_ranks": 29
+    },
+    {
+      "case": "passive-h2-sa11ce-c4-t0",
+      "elapsed": 201.032,
+      "victory": false,
+      "level": 4,
+      "kills": 67,
+      "deaths": 3,
+      "bosses": 0,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 659919,
+      "gate_breaks": 4,
+      "skill_ranks": 1
+    },
+    {
+      "case": "active-h2-sbeef-c4-t0",
+      "elapsed": 1561.702,
+      "victory": true,
+      "level": 44,
+      "kills": 2098,
+      "deaths": 0,
+      "bosses": 5,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 48880,
+      "gate_breaks": 30,
+      "skill_ranks": 30
+    },
+    {
+      "case": "passive-h2-sbeef-c4-t0",
+      "elapsed": 212.48,
+      "victory": false,
+      "level": 4,
+      "kills": 75,
+      "deaths": 3,
+      "bosses": 0,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 48880,
+      "gate_breaks": 4,
+      "skill_ranks": 1
+    },
+    {
+      "case": "active-h0-sa11ce-c5-t0",
+      "elapsed": 646.635,
+      "victory": false,
+      "level": 16,
+      "kills": 406,
+      "deaths": 3,
+      "bosses": 1,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 659919,
+      "gate_breaks": 23,
+      "skill_ranks": 17
+    },
+    {
+      "case": "passive-h0-sa11ce-c5-t0",
+      "elapsed": 67.0,
+      "victory": false,
+      "level": 1,
+      "kills": 7,
+      "deaths": 3,
+      "bosses": 0,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 659919,
+      "gate_breaks": 3,
+      "skill_ranks": 1
+    },
+    {
+      "case": "active-h0-sbeef-c5-t0",
+      "elapsed": 1553.773,
+      "victory": true,
+      "level": 43,
+      "kills": 2135,
+      "deaths": 0,
+      "bosses": 5,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 48880,
+      "gate_breaks": 75,
+      "skill_ranks": 29
+    },
+    {
+      "case": "passive-h0-sbeef-c5-t0",
+      "elapsed": 75.952,
+      "victory": false,
+      "level": 1,
+      "kills": 14,
+      "deaths": 3,
+      "bosses": 0,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 48880,
+      "gate_breaks": 2,
+      "skill_ranks": 1
+    },
+    {
+      "case": "active-h1-sa11ce-c5-t0",
+      "elapsed": 1544.251,
+      "victory": true,
+      "level": 43,
+      "kills": 2076,
+      "deaths": 0,
+      "bosses": 5,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 659919,
+      "gate_breaks": 31,
+      "skill_ranks": 29
+    },
+    {
+      "case": "passive-h1-sa11ce-c5-t0",
+      "elapsed": 223.044,
+      "victory": false,
+      "level": 4,
+      "kills": 73,
+      "deaths": 3,
+      "bosses": 0,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 659919,
+      "gate_breaks": 5,
+      "skill_ranks": 1
+    },
+    {
+      "case": "active-h1-sbeef-c5-t0",
+      "elapsed": 1620.499,
+      "victory": true,
+      "level": 43,
+      "kills": 2196,
+      "deaths": 1,
+      "bosses": 5,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 48880,
+      "gate_breaks": 90,
+      "skill_ranks": 30
+    },
+    {
+      "case": "passive-h1-sbeef-c5-t0",
+      "elapsed": 181.87,
+      "victory": false,
+      "level": 3,
+      "kills": 54,
+      "deaths": 3,
+      "bosses": 0,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 48880,
+      "gate_breaks": 2,
+      "skill_ranks": 1
+    },
+    {
+      "case": "active-h2-sa11ce-c5-t0",
+      "elapsed": 932.5,
+      "victory": false,
+      "level": 24,
+      "kills": 869,
+      "deaths": 3,
+      "bosses": 2,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 659919,
+      "gate_breaks": 22,
+      "skill_ranks": 20
+    },
+    {
+      "case": "passive-h2-sa11ce-c5-t0",
+      "elapsed": 176.718,
+      "victory": false,
+      "level": 3,
+      "kills": 47,
+      "deaths": 3,
+      "bosses": 0,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 659919,
+      "gate_breaks": 3,
+      "skill_ranks": 1
+    },
+    {
+      "case": "active-h2-sbeef-c5-t0",
+      "elapsed": 1555.895,
+      "victory": true,
+      "level": 43,
+      "kills": 2170,
+      "deaths": 0,
+      "bosses": 5,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 48880,
+      "gate_breaks": 30,
+      "skill_ranks": 30
+    },
+    {
+      "case": "passive-h2-sbeef-c5-t0",
+      "elapsed": 179.317,
+      "victory": false,
+      "level": 3,
+      "kills": 46,
+      "deaths": 3,
+      "bosses": 0,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 48880,
+      "gate_breaks": 5,
+      "skill_ranks": 1
+    }
+  ]
+}

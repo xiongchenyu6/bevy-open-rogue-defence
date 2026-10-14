@@ -1,0 +1,13 @@
+batch,policy,position,starter_class,chapter,training,cases,wins,losses,censored,finished_only_win_fraction,observed_wins_per_all_cases,mean_observed_game_seconds
+late-chapter-balance-oct14,greedy-card-zero,behind,archer,4,0,2,2,0,0,1.0,1.0,1542.0145
+late-chapter-balance-oct14,greedy-card-zero,behind,archer,5,0,2,2,0,0,1.0,1.0,1582.375
+late-chapter-balance-oct14,greedy-card-zero,behind,mage,4,0,2,2,0,0,1.0,1.0,1562.4885
+late-chapter-balance-oct14,greedy-card-zero,behind,mage,5,0,2,1,1,0,0.5,0.5,1244.1975
+late-chapter-balance-oct14,greedy-card-zero,behind,warrior,4,0,2,2,0,0,1.0,1.0,1549.7710000000002
+late-chapter-balance-oct14,greedy-card-zero,behind,warrior,5,0,2,1,1,0,0.5,0.5,1100.204
+late-chapter-balance-oct14,passive,behind,archer,4,0,2,0,2,0,0.0,0.0,241.9915
+late-chapter-balance-oct14,passive,behind,archer,5,0,2,0,2,0,0.0,0.0,202.457
+late-chapter-balance-oct14,passive,behind,mage,4,0,2,0,2,0,0.0,0.0,206.756
+late-chapter-balance-oct14,passive,behind,mage,5,0,2,0,2,0,0.0,0.0,178.01749999999998
+late-chapter-balance-oct14,passive,behind,warrior,4,0,2,0,2,0,0.0,0.0,79.894
+late-chapter-balance-oct14,passive,behind,warrior,5,0,2,0,2,0,0.0,0.0,71.476

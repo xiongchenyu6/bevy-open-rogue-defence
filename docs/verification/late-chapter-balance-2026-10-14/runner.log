@@ -1,0 +1,35 @@
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 37.21s
+{"case": "active-h0-sa11ce-c4-t0", "exit": 0, "seconds": 198.26524745498318}
+{"case": "passive-h0-sa11ce-c4-t0", "exit": 0, "seconds": 7.1780977819580585}
+{"case": "active-h0-sbeef-c4-t0", "exit": 0, "seconds": 265.9252992240363}
+{"case": "passive-h0-sbeef-c4-t0", "exit": 0, "seconds": 11.662868069950491}
+{"case": "active-h1-sa11ce-c4-t0", "exit": 0, "seconds": 254.7356249349541}
+{"case": "passive-h1-sa11ce-c4-t0", "exit": 0, "seconds": 28.329522274027113}
+{"case": "active-h1-sbeef-c4-t0", "exit": 0, "seconds": 266.9174670409993}
+{"case": "passive-h1-sbeef-c4-t0", "exit": 0, "seconds": 29.977418670023326}
+{"case": "active-h2-sa11ce-c4-t0", "exit": 0, "seconds": 219.12078546005068}
+{"case": "passive-h2-sa11ce-c4-t0", "exit": 0, "seconds": 16.44599268399179}
+{"case": "active-h2-sbeef-c4-t0", "exit": 0, "seconds": 199.78600412304513}
+{"case": "passive-h2-sbeef-c4-t0", "exit": 0, "seconds": 26.38118625502102}
+{"case": "active-h0-sa11ce-c5-t0", "exit": 0, "seconds": 101.48572877497645}
+{"case": "passive-h0-sa11ce-c5-t0", "exit": 0, "seconds": 9.302822002966423}
+{"case": "active-h0-sbeef-c5-t0", "exit": 0, "seconds": 375.2620015660068}
+{"case": "passive-h0-sbeef-c5-t0", "exit": 0, "seconds": 15.939202080015093}
+{"case": "active-h1-sa11ce-c5-t0", "exit": 0, "seconds": 347.7182057009777}
+{"case": "passive-h1-sa11ce-c5-t0", "exit": 0, "seconds": 29.126445026951842}
+{"case": "active-h1-sbeef-c5-t0", "exit": 0, "seconds": 294.7551334120217}
+{"case": "passive-h1-sbeef-c5-t0", "exit": 0, "seconds": 22.962739733047783}
+{"case": "active-h2-sa11ce-c5-t0", "exit": 0, "seconds": 147.34343833697494}
+{"case": "passive-h2-sa11ce-c5-t0", "exit": 0, "seconds": 32.89915843500057}
+{"case": "active-h2-sbeef-c5-t0", "exit": 0, "seconds": 415.28131444199244}
+{"case": "passive-h2-sbeef-c5-t0", "exit": 0, "seconds": 35.03408286900958}
+{"output": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/late-chapter-balance-oct14/analysis", "cases": 24, "checkpoints": 705}
