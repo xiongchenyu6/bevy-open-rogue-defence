@@ -1,0 +1,8 @@
+{
+  "source_commit": "3922b117e175eb38c5b7b45a98a83fc88f459488",
+  "binary_sha256": "4310df547d06c1976d5eb79d42940ac0ed3745f5b85b34e5107937c8e90f0fa6",
+  "tar_sha256": "42e065abaeb6e7b333f763f6967786d1316cb0cb6d7ef2a9ccb45a2868e81d95",
+  "tar_bytes": 57040817,
+  "root_reviewed_screenshots": 11,
+  "scope": "Ubuntu24.04/X11/softwareVulkan; network disabled, package read-only, no source/Rust/Nix; no physical audio/Steam/Deck/performance claim"
+}

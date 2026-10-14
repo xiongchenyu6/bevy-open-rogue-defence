@@ -1,6 +1,6 @@
 # Controller controls
 
-Controller input is implemented and verified in source with ECS tests and synthetic native gamepad events. The full library suite passed (654 passed, 0 failed, 1 ignored); strict Clippy passed for all targets. All 75 native route steps passed at 1280×720, 1280×800 and 667×375, with screenshots reviewed. The existing desktop package has not been rebuilt with this change. Physical controllers and Steam Deck hardware remain unverified.
+Controller input is implemented and verified in source with ECS tests and synthetic native gamepad events. The full library suite passed (654 passed, 0 failed, 1 ignored); strict Clippy passed for all targets. All 75 native route steps passed at 1280×720, 1280×800 and 667×375, with screenshots reviewed. The Linux candidate was rebuilt from commit3922b11 and passed isolated keyboard/pointer startup/settings/restart smoke verification; packaged physical controller input remains unverified. Physical controllers and Steam Deck hardware remain unverified.
 
 | Context | Controls |
 | --- | --- |
