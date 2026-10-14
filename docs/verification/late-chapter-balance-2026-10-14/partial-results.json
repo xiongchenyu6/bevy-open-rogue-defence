@@ -1,0 +1,46 @@
+{
+  "completed_cases": 2,
+  "planned_cases": 24,
+  "cases": [
+    {
+      "case": "active-h0-sa11ce-c4-t0",
+      "elapsed": 1540.679,
+      "victory": true,
+      "level": 43,
+      "kills": 2109,
+      "deaths": 0,
+      "bosses": 5,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 659919,
+      "gate_breaks": 34,
+      "skill_ranks": 29
+    },
+    {
+      "case": "passive-h0-sa11ce-c4-t0",
+      "elapsed": 74.351,
+      "victory": false,
+      "level": 1,
+      "kills": 9,
+      "deaths": 3,
+      "bosses": 0,
+      "permanent_upgrades": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "actual_run_seed": 659919,
+      "gate_breaks": 2,
+      "skill_ranks": 1
+    }
+  ]
+}

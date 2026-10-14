@@ -1,0 +1,24 @@
+{
+  "source": "2fdcea7e5fb05b914b3304b47285118d6375cff2",
+  "binary_sha256": "5f9ca85fe09c8f30277c3228808e9b60ff5a4685fa58c768033104c8e75747e3",
+  "chapters": [
+    5,
+    6
+  ],
+  "training": 0,
+  "seeds": [
+    "A11CE",
+    "BEEF"
+  ],
+  "heroes": [
+    0,
+    1,
+    2
+  ],
+  "policies": [
+    "active",
+    "passive"
+  ],
+  "frame_cap": 120000,
+  "scope": "Exploratory untrained late chapters; production systems, no renderer. Not earned chapter access or packaged victory; late determinism not established."
+}
