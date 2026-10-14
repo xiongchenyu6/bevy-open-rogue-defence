@@ -15,7 +15,7 @@
 | 战役和存档 | `campaign_progress.rs` 实现章节解锁、战果货币及6种永久强化；原生文件与浏览器存储分开；写入失败后的独立保存重试、原存档保护及奖励不重复已通过真实文件／按钮回归与中英文原生截图，见[保存恢复](campaign-save-retry.md) | 已通过[实际赚取力量并应用到下一局](earned-strength-runtime.md)；[实际安装包第一章通关及奖励延续](packaged-first-clear.md)已核对；[第二章完整胜利脚本及奖励强化重启](packaged-chapter2.md)已通过；[第三章完整胜利及力量26重启验证](packaged-chapter3.md)已通过；[第四章完整胜利及力量28重启验证](packaged-chapter4.md)已通过；[第五章后续实际赚取路线通关及力量32重启验证](packaged-chapter5.md)已通过，保留此前失败；[第六章实际路线失败，但奖励、强化和力量34重启通过](packaged-chapter6.md)；完整通关仍未验证，更多种子与路线仍缺证据；浏览器存储故障恢复；发行升级后的存档验证 |
 | 装备和合成 | 首次黑市库存经过真实重置回归与安装包验证；[实际赚取货币购买奥术透镜、扣款、装备查看、属性查看、继续战斗和正常退出](earned-equipment.md)已通过；[合成奖励与材料继承展示](forge-readability.md)有中英文桌面／紧凑截图 | 通过正常随机库存取得完整材料并实际合成；进阶配方经济与获取路径；[购买提示期间钱包可读性](market-wallet.md)已有四套最终截图；更多装备组合和长期回归 |
 | 内容差异 | 独立英雄、技能、羁绊、装备及营地系统存在；[短射程宿主的继承远程攻击](fusion-reach.md)有真实命中与原生截图证据 | 每个技能、首领和巨型营地敌人的实际机制／外观辨识，避免换数值或放大模型冒充新内容；全流程无占位资产 |
-| 桌面交付 | 已有当前`d2527eb`源码的Steam Runtime 3 SDK Linux release候选包，875项文件哈希、首次指南／征募／战斗／中文全屏设置／偏好重启／再次战斗及两次退出通过独立只读包、断网Ubuntu/X11软件Vulkan验收，见[桌面发行](desktop-release.md)；wasm／Android仍有构建脚本 | 真实Steam客户端、长局硬件性能、Steam Deck、Windows／macOS；更多驱动／分辨率；性能／崩溃记录与最终安装验收 |
+| 桌面交付 | 已有`a8e65a6`源码的Steam Runtime 3 SDK Linux release候选包，875项文件哈希、首次指南／征募／战斗／中文全屏设置／偏好重启／再次战斗及两次退出通过独立只读包、断网Ubuntu/X11软件Vulkan验收，见[桌面发行](desktop-release.md)；wasm／Android仍有构建脚本 | 真实Steam客户端、长局硬件性能、Steam Deck、Windows／macOS；更多驱动／分辨率；性能／崩溃记录与最终安装验收 |
 
 ## 验收口径
 

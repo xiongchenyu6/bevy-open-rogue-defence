@@ -1,0 +1,7 @@
+{
+  "tar_sha256": "c2a924c786049c2ad8106ba07bcfc7f08cb817d97e155b6ed4ef9d2e62f5bf15",
+  "bytes": 56993460,
+  "source": "a8e65a6d08ff27ca1217c7e0cb13872808e08887",
+  "reviewed_images": 11,
+  "scope": "Ubuntu24 X11 software Vulkan; no Steam client, audio hardware or full campaign proof"
+}
