@@ -71,9 +71,9 @@ def main():
             if required:raise RuntimeError('Actual isolated wallet unreadable: '+repr(raw))
             return None
         return int(m[1])
-    def hud_wallet():
+    def hud_wallet(dimmed=False):
         native=shot('hud-wallet-source.png')
-        value,bounds,raw=read_hud_wallet(native,env)
+        value,bounds,raw=read_hud_wallet(native,env,dimmed=dimmed)
         report.setdefault('hud_wallet_ocr',[]).append(dict(value=value,bounds=bounds,raw=raw))
         return value
     def read_speed(depth=0):
@@ -190,9 +190,9 @@ def main():
                     if len(report['acquired_materials'])==2:
                         clicktext('Forge');click(330,184);wait_contains('Astral Prism');ready_rows=lines()
                         assert any('arclens' in normalized(t) and 'echocore' in normalized(t) for t,*_ in ready_rows), ready_rows
-                        report['ready_material_ocr']=ready_rows;shot('ready-materials.png');before_forge=hud_wallet()
+                        report['ready_material_ocr']=ready_rows;shot('ready-materials.png');before_forge=hud_wallet(dimmed=True)
                         clicktext('Forge equipment');time.sleep(2);report['forge_result_ocr']=lines();shot('forged.png')
-                        assert hud_wallet()==before_forge,'Forge charged unexpected kill credit'
+                        assert hud_wallet(dimmed=True)==before_forge,'Forge charged unexpected kill credit'
                         assert any('alreadyforged' in normalized(t) for t,*_ in report['forge_result_ocr']),report['forge_result_ocr']
                         clicktext('Gear');wait_contains('Astral Prism');shot('crafted-inventory.png');report['crafted_inventory_ocr']=lines()
                         title=next(t for t,*_ in report['crafted_inventory_ocr'] if normalized(t).startswith('equipment'))

@@ -1,0 +1,37 @@
+{
+  "purchases": [
+    {
+      "name": "Arc Lens",
+      "price": 180,
+      "wallet_before": 320,
+      "wallet_after": 140,
+      "offer_ocr": [
+        "[R/GEAR] Arc Lens 180 KILLS",
+        922,
+        358,
+        1074,
+        386
+      ]
+    },
+    {
+      "name": "Echo Core",
+      "price": 300,
+      "wallet_before": 1197,
+      "wallet_after": 897,
+      "offer_ocr": [
+        "[SR GEAR] Echo Core 300 KILLS",
+        922,
+        374,
+        1089,
+        385
+      ]
+    }
+  ],
+  "acquired_materials": [
+    "Arc Lens",
+    "Echo Core"
+  ],
+  "completed": false,
+  "failure": "HUD wallet OCR failed under equipment dimmer before Forge click",
+  "package_commit": "d2527eb5d1f43a475c0dc365e1a075f96b1723a7"
+}

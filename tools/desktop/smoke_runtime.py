@@ -59,7 +59,7 @@ def ocr_screenshot(path, env=None):
     # Matching results from both passes need only one click rectangle.
     return list(dict.fromkeys(lines))
 
-def read_hud_wallet(path, env=None):
+def read_hud_wallet(path, env=None, dimmed=False):
     """Locate the last gold-colored resource number in the 1280x720 HUD.
 
     Earlier resource widths change with gold/wood totals; a fixed x crop can
@@ -70,11 +70,15 @@ def read_hud_wallet(path, env=None):
     if len(raw) != 300 * 14 * 3:
         raise ValueError('Unexpected HUD image geometry')
     groups = []
-    for x in range(300):
+    # Equipment covers x>=200; read only the exposed HUD, allowing its dimmer.
+    for x in range(180 if dimmed else 300):
         count = 0
         for y in range(14):
             r, g, b = raw[(y * 300 + x) * 3:(y * 300 + x) * 3 + 3]
-            count += r > 175 and g > 150 and r - g > 10 and g - b > 25 and b < 195
+            if dimmed:
+                count += r > 80 and g > 70 and r - g > 4 and g - b > 12 and b < 195
+            else:
+                count += r > 175 and g > 150 and r - g > 10 and g - b > 25 and b < 195
         if count >= 2:
             if not groups or x - groups[-1][-1] > 7:
                 groups.append([])
