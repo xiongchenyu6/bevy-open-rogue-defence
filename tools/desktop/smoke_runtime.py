@@ -89,10 +89,12 @@ def read_hud_wallet(path, env=None, dimmed=False):
     with tempfile.TemporaryDirectory(prefix='rogue-wallet-ocr-') as directory:
         crop = Path(directory) / 'digits.png'
         subprocess.run(['convert', str(path), '-crop', f'{right-left+5}x18+{left-2}+163',
-                        '-resize', '600%', '-colorspace', 'Gray', '-negate', str(crop)],
+                        '-resize', '600%', '-colorspace', 'Gray', '-negate',
+                        '-threshold', '70%' if dimmed else '35%',
+                        '-bordercolor', 'white', '-border', '20', str(crop)],
                        env=env, check=True, capture_output=True)
         text = subprocess.check_output(['tesseract', str(crop), 'stdout', '-l', 'eng',
-                                        '--psm', '7'], env=env, text=True,
+                                        '--psm', '7', '-c', 'tessedit_char_whitelist=0123456789'], env=env, text=True,
                                        stderr=subprocess.PIPE).strip()
     if not re.fullmatch(r'\d+', text):
         raise ValueError(f'Unreadable HUD wallet: {text!r}')
