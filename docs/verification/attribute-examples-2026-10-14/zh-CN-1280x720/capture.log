@@ -1,0 +1,32 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {139, 174}; all 220 simulation/render updates retained
+[2m2026-10-14T03:27:32.009418Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.9", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-10-14T03:27:32.065140Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.71.09", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-10-14T03:27:32.315483Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-14T03:27:32.315534Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[capture] hero-attributes: actual +/-/reset controls, live stats sheet, pause/close, no ultimate HUD
+[2m2026-10-14T03:27:32.413692Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 20.000s (paused restored to false)
+[capture] render target warmed
+[capture] actual speed control -> 2x
+[capture] actual speed control -> 4x
+[capture] actual speed control -> 8x
+[capture] actual speed control -> 16x
+[capture] actual speed control -> 32x
+[capture] actual speed control -> 32x
+[capture] actual speed control -> 16x
+[capture] actual speed control -> 1x
+[capture] actual speed control -> 1x
+[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport
+[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport
+[2m2026-10-14T03:27:33.809219Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/attributes-copy-oct14-r3/zh-CN-1280x720/frames/frame00139.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/attributes-copy-oct14-r3/zh-CN-1280x720/frames/frame00139.png (411521 bytes)
+[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport
+[2m2026-10-14T03:27:33.992272Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/attributes-copy-oct14-r3/zh-CN-1280x720/frames/frame00174.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/attributes-copy-oct14-r3/zh-CN-1280x720/frames/frame00174.png (409590 bytes)
+[capture] real close button restores running battle
+[capture] PASS: 1→2→4→8→16→32, upper/lower clamps, halve/reset; live sheet open/close/Esc; no ultimate HUD
+[capture] all 2 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 220 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/attributes-copy-oct14-r3/zh-CN-1280x720/frames

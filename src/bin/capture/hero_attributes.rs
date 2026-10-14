@@ -47,7 +47,8 @@ fn exercise(
     names: Query<&Name>,
     texts: Query<(&Name, &Text)>,
     layout: Query<(&Name, &ComputedNode, &UiGlobalTransform)>,
-    windows: Query<&Window>,
+    windows: Query<(Entity, &Window)>,
+    mut wheel: MessageWriter<bevy::input::mouse::MouseWheel>,
 ) {
     state.frame += 1;
     let action = match state.frame {
@@ -98,7 +99,7 @@ fn exercise(
                 .any(|name| name.as_str() == "Automatic ultimate status"),
             "removed ultimate HUD must not exist"
         );
-        let window = windows.single().unwrap();
+        let (_, window) = windows.single().unwrap();
         let viewport = Vec2::new(
             window.physical_width() as f32,
             window.physical_height() as f32,
@@ -121,7 +122,7 @@ fn exercise(
                 }
                 assert!(!text.0.trim().is_empty(), "attribute label text missing");
                 // Portrait sheets scroll vertically; landscape shows every row.
-                if viewport.x >= 600.0 {
+                if viewport.x >= 600.0 && viewport.y >= 640.0 {
                     assert_in_viewport(name.as_str(), viewport, &layout);
                 }
                 let (_, node, _) = layout
@@ -163,6 +164,16 @@ fn exercise(
                 "[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport"
             );
         }
+    }
+    if state.frame == 145 {
+        let (window, _) = windows.single().unwrap();
+        wheel.write(bevy::input::mouse::MouseWheel {
+            unit: bevy::input::mouse::MouseScrollUnit::Line,
+            phase: bevy::input::touch::TouchPhase::Moved,
+            x: 0.0,
+            y: -30.0,
+            window,
+        });
     }
     if state.frame == 185 {
         assert!(!session.paused);

@@ -307,8 +307,8 @@ fn growth_sources(language: GameLanguage) -> String {
     let mut lines = vec![
         language
             .pick(
-                "GROWTH SOURCES · Black Market equipment",
-                "成长来源 · 黑市装备",
+                "EQUIPMENT EXAMPLES · Acquire in the Black Market",
+                "可获取装备示例 · 从黑市取得",
             )
             .to_owned(),
     ];
@@ -326,7 +326,7 @@ fn growth_sources(language: GameLanguage) -> String {
             item.effect_text(language)
         ));
     }
-    lines.push(language.pick("Equipment bonuses persist through hero absorption. Armor penetration ignores armor points; magic penetration reduces resistance by percentage points. Evasion applies to enemy attacks, excluding area explosions.", "装备加成在吞噬换英雄后保留。物穿无视相应点数的护甲；法穿降低敌方对应百分比的抗性。闪避针对敌方攻击，不含范围自爆。").to_owned());
+    lines.push(language.pick("Listed examples are not owned bonuses. Acquire equipment to gain its effects; owned bonuses persist through hero absorption. Armor penetration ignores armor points; magic penetration reduces resistance by percentage points. Evasion applies to enemy attacks, excluding area explosions.", "以上为可获取示例，不代表已拥有加成。取得装备后效果生效，吞噬换英雄后保留。物穿无视相应点数的护甲；法穿降低敌方对应百分比的抗性。闪避针对敌方攻击，不含范围自爆。").to_owned());
     lines.join("\n")
 }
 
