@@ -4,6 +4,8 @@ use bevy::{prelude::*, window::PrimaryWindow};
 #[path = "controller_navigation.rs"]
 mod navigation;
 
+#[derive(Component)]
+pub(super) struct ControllerDetailScroll;
 #[derive(Component, Clone, Copy)]
 pub struct ControllerScope(pub i32);
 #[derive(SystemSet, Debug, Clone, Copy, PartialEq, Eq, Hash)]

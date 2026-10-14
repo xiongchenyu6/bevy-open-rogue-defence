@@ -221,6 +221,7 @@ fn view(
                     body.spawn((
                         PreviewScroll,
                         ScrollPosition::default(),
+                        crate::game::controller_input::ControllerDetailScroll,
                         Node {
                             min_height: px(0),
                             max_height: px(if compact { 130 } else { 270 }),

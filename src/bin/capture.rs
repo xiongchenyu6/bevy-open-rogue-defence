@@ -599,7 +599,7 @@ fn main() {
     if scenario == "skill-growth" {
         skill_growth_capture::install(&mut apps.main);
     }
-    if scenario == "controller-input" {
+    if matches!(scenario, "controller-input" | "controller-scroll") {
         controller_input_capture::install(&mut apps.main);
     }
     if scenario == "hud-input" {
@@ -950,7 +950,7 @@ fn wait_for_screenshots(apps: &mut SubApps) {
 }
 
 fn configure_scenario(world: &mut World, scenario: &str) {
-    if scenario == "controller-input" {
+    if matches!(scenario, "controller-input" | "controller-scroll") {
         controller_input_capture::configure(world);
         return;
     }

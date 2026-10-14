@@ -84,7 +84,7 @@ pub(super) fn panel(
                     }
                 });
             });
-            body.spawn((DetailScroll, Name::new("Equipment detail scroll"), ScrollPosition::default(), Interaction::default(), Node { width: percent(100), flex_shrink: 0.0, height: px(if compact { 100.0 } else { 152.0 }), overflow: Overflow::scroll_y(),
+            body.spawn((DetailScroll, Name::new("Equipment detail scroll"), ScrollPosition::default(), crate::game::controller_input::ControllerDetailScroll, Interaction::default(), Node { width: percent(100), flex_shrink: 0.0, height: px(if compact { 100.0 } else { 152.0 }), overflow: Overflow::scroll_y(),
                 flex_direction: FlexDirection::Column, row_gap: px(6), padding: UiRect::all(px(10)),
                 border: UiRect::top(px(1)), ..default() }, BorderColor::all(GOLD)))
             .with_children(|detail| {

@@ -373,7 +373,7 @@ fn spawn_panel(
                         BackgroundColor(Color::srgb(0.08,0.11,0.13)), GlobalZIndex(282), Pickable::IGNORE));
                 });
             });
-            panel.spawn((ScrollBody, ScrollPosition::default(), Node {
+            panel.spawn((ScrollBody, ScrollPosition::default(), crate::game::controller_input::ControllerDetailScroll, Node {
                 flex_grow: 1.0, min_height: px(0), overflow: Overflow::scroll_y(),
                 flex_direction: FlexDirection::Column,
                 row_gap: px(16), ..default()

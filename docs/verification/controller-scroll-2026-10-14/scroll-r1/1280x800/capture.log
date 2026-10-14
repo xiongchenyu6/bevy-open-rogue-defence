@@ -1,0 +1,49 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+[capture] selective PNG frames: {599}; all 600 simulation/render updates retained
+[2m2026-10-14T07:21:02.459065Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.9", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/scroll-r1/1280x800/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/scroll-r1/1280x800/runtime/wayland-1" plus null terminator exceeds 108 bytes
+[2m2026-10-14T07:21:02.553720Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.71.09", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-10-14T07:21:02.906520Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-14T07:21:02.906577Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-10-14T07:21:03.058877Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[2m2026-10-14T07:21:03.715024Z[0m [32m INFO[0m [2mbevy_input::gamepad[0m[2m:[0m Gamepad 2555v0 connected.
+CONTROLLER_ROUTE_INPUT step=0 frame=15 target=Campaign chapter 0 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=0 frame=19 target=Campaign chapter 0 key=South
+CONTROLLER_ROUTE_INPUT step=1 frame=39 target=Commander card 0 key=South
+CONTROLLER_ROUTE_INPUT step=3 frame=71 target=Equipment open key=DPadUp
+CONTROLLER_ROUTE_INPUT step=3 frame=75 target=Equipment open key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=3 frame=79 target=Equipment open key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=3 frame=83 target=Equipment open key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=3 frame=87 target=Equipment open key=South
+CONTROLLER_ROUTE_INPUT step=4 frame=107 target=Equipment crafting tab key=DPadRight
+CONTROLLER_ROUTE_INPUT step=4 frame=111 target=Equipment crafting tab key=South
+CONTROLLER_ROUTE_INPUT step=5 frame=131 target=Crafting recipe 5 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=5 frame=135 target=Crafting recipe 5 key=South
+[2m2026-10-14T07:21:04.901994Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/scroll-r1/1280x800/frames/scroll-before.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/scroll-r1/1280x800/frames/scroll-before.png (558110 bytes)
+CONTROLLER_SCROLL_OFFSET scroll-down before=0 after=200.00002 focus=1673v1
+CONTROLLER_ROUTE_CHECK scroll-down PASS frame=187
+[2m2026-10-14T07:21:05.229375Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/scroll-r1/1280x800/frames/scroll-after.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/scroll-r1/1280x800/frames/scroll-after.png (576134 bytes)
+CONTROLLER_SCROLL_OFFSET scroll-up before=200.00002 after=0.000011444092 focus=1673v1
+CONTROLLER_ROUTE_CHECK scroll-up PASS frame=231
+[2m2026-10-14T07:21:05.577112Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/scroll-r1/1280x800/frames/scroll-restored.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/scroll-r1/1280x800/frames/scroll-restored.png (558110 bytes)
+CONTROLLER_ROUTE_PASS all 13 steps; synthetic native only
+[2m2026-10-14T07:21:09.153811Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/scroll-r1/1280x800/frames/frame00599.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/scroll-r1/1280x800/frames/frame00599.png (558110 bytes)
+[capture] all 4 screenshot(s) saved after 2 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 600 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/scroll-r1/1280x800/frames

@@ -405,6 +405,7 @@ pub(super) fn spawn_draft_ui(
                             .spawn((
                                 BuildDetailScroll,
                                 ScrollPosition::default(),
+                                crate::game::controller_input::ControllerDetailScroll,
                                 Node {
                                     flex_direction: FlexDirection::Column,
                                     row_gap: px(4),

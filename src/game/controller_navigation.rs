@@ -1,6 +1,7 @@
 //! Focus and activation stay within the current visible public UI scope.
 use super::{
-    ControllerDisabled, ControllerFocus, ControllerFocused, ControllerInput, ControllerScope,
+    ControllerDetailScroll, ControllerDisabled, ControllerFocus, ControllerFocused,
+    ControllerInput, ControllerScope,
 };
 use bevy::prelude::*;
 struct Control {
@@ -196,6 +197,23 @@ pub(super) fn navigate(
                 if !focus.owned.contains(&control.entity) {
                     focus.owned.push(control.entity);
                 }
+                let detail_target = world
+                    .query_filtered::<Entity, (With<ControllerDetailScroll>, With<ScrollPosition>)>(
+                    )
+                    .iter(world)
+                    .find(|id| {
+                        let (target_scope, _, visible) = ancestry(world, *id);
+                        visible
+                            && target_scope == scope
+                            && world
+                                .get::<ComputedNode>(*id)
+                                .is_some_and(|n| n.size().min_element() > 0.)
+                    });
+                if let Some(id) = detail_target
+                    && let Some(mut scroll) = world.get_mut::<ScrollPosition>(id)
+                {
+                    scroll.y = (scroll.y - right.y * delta * 500.).max(0.);
+                }
                 // Scroll ancestors to reveal focused control, and right stick scrolls details/list.
                 let mut ancestor = world.get::<ChildOf>(control.entity).map(ChildOf::parent);
                 while let Some(id) = ancestor {
@@ -218,8 +236,13 @@ pub(super) fn navigate(
                             0.
                         };
                         if let Some(mut scroll) = world.get_mut::<ScrollPosition>(id) {
-                            scroll.y = (scroll.y + adjust * inverse_scale - right.y * delta * 500.)
-                                .max(0.);
+                            scroll.y = (scroll.y + adjust * inverse_scale
+                                - if detail_target.is_none() {
+                                    right.y * delta * 500.
+                                } else {
+                                    0.
+                                })
+                            .max(0.);
                         }
                     }
                     ancestor = world.get::<ChildOf>(id).map(ChildOf::parent);

@@ -19,6 +19,7 @@ enum Action {
     Focus(&'static str),
     Button(GamepadButton),
     Move,
+    Scroll(f32),
     Funding,
     Market,
     Shot(&'static str),
@@ -101,9 +102,27 @@ const ROUTE: &[Action] = &[
     Action::Check("chapters"),
     Action::Shot("12-returned-chapters"),
 ];
+const SCROLL_ROUTE: &[Action] = &[
+    Action::Target("Campaign chapter 0"),
+    Action::Target("Commander card 0"),
+    Action::Button(GamepadButton::East),
+    Action::Target("Equipment open"),
+    Action::Target("Equipment crafting tab"),
+    Action::Focus("Crafting recipe 5"),
+    Action::Shot("scroll-before"),
+    Action::Scroll(-1.),
+    Action::Check("scroll-down"),
+    Action::Shot("scroll-after"),
+    Action::Scroll(1.),
+    Action::Check("scroll-up"),
+    Action::Shot("scroll-restored"),
+];
 #[derive(Resource)]
 struct Driver {
     pad: Entity,
+    scroll_mode: bool,
+    axis_release: Option<u32>,
+    scroll_before: f32,
     frame: u32,
     step: usize,
     next: u32,
@@ -142,6 +161,11 @@ pub fn install(app: &mut SubApp) {
         .write(RawGamepadEvent::Connection(connection));
     world.insert_resource(Driver {
         pad,
+        scroll_mode: std::env::args()
+            .nth(4)
+            .is_some_and(|s| s == "controller-scroll"),
+        axis_release: None,
+        scroll_before: 0.,
         frame: 0,
         step: 0,
         next: 15,
@@ -247,9 +271,11 @@ fn direction_to(world: &mut World, target: &str) -> Option<GamepadButton> {
         .filter(|(id, name, node, _)| {
             node.size().min_element() > 0.
                 && world.get::<ControllerDisabled>(*id).is_none()
-                && scope(world, *id).is_some_and(|value| value == active
-                    || name.is_some_and(|n| n.as_str() == "Settings open")
-                        && matches!(active, 90 | 100 | 150 | 400))
+                && scope(world, *id).is_some_and(|value| {
+                    value == active
+                        || name.is_some_and(|n| n.as_str() == "Settings open")
+                            && matches!(active, 90 | 100 | 150 | 400)
+                })
         })
         .map(|(id, name, _, transform)| {
             (
@@ -312,6 +338,16 @@ fn score(offset: Vec2, direction: Vec2) -> f32 {
 fn drive(world: &mut World) {
     let mut driver = world.remove_resource::<Driver>().unwrap();
     driver.frame += 1;
+    let route = if driver.scroll_mode {
+        SCROLL_ROUTE
+    } else {
+        ROUTE
+    };
+    if driver.axis_release.is_some_and(|due| driver.frame >= due) {
+        axis(world, driver.pad, GamepadAxis::RightStickY, 0.);
+        driver.axis_release = None;
+    }
+
     if let Some((when, key)) = driver.release
         && driver.frame >= when
     {
@@ -322,11 +358,11 @@ fn drive(world: &mut World) {
         button(world, driver.pad, GamepadButton::North, 1.);
         driver.release = Some((4, GamepadButton::North));
     }
-    if driver.step >= ROUTE.len() {
+    if driver.step >= route.len() {
         if driver.frame == driver.next {
             println!(
                 "CONTROLLER_ROUTE_PASS all {} steps; synthetic native only",
-                ROUTE.len()
+                route.len()
             );
         }
         world.insert_resource(driver);
@@ -342,7 +378,7 @@ fn drive(world: &mut World) {
         world.insert_resource(driver);
         return;
     }
-    let action = ROUTE[driver.step];
+    let action = route[driver.step];
     let mut advance = true;
     let mut wait = 12;
     match action {
@@ -368,6 +404,18 @@ fn drive(world: &mut World) {
         Action::Button(key) => {
             button(world, driver.pad, key, 1.);
             driver.release = Some((driver.frame + 1, key));
+        }
+        Action::Scroll(value) => {
+            let mut q = world.query::<(&Name, &ScrollPosition)>();
+            driver.scroll_before = q
+                .iter(world)
+                .find(|(n, _)| n.as_str() == "Equipment detail scroll")
+                .unwrap()
+                .1
+                .y;
+            axis(world, driver.pad, GamepadAxis::RightStickY, value);
+            driver.axis_release = Some(driver.frame + 12);
+            wait = 20;
         }
         Action::Move => {
             driver.origin = world
@@ -428,6 +476,42 @@ fn drive(world: &mut World) {
         }
         Action::Check(label) => {
             match label {
+                "scroll-down" | "scroll-up" => {
+                    let mut q = world.query::<(&Name, &ScrollPosition)>();
+                    let after = q
+                        .iter(world)
+                        .find(|(n, _)| n.as_str() == "Equipment detail scroll")
+                        .unwrap()
+                        .1
+                        .y;
+                    if label == "scroll-down" {
+                        assert!(after > driver.scroll_before + 1.);
+                    } else {
+                        assert!(after < driver.scroll_before - 1.);
+                    }
+                    let entity = world.resource::<ControllerFocus>().entity.unwrap();
+                    let node = world.get::<ComputedNode>(entity).unwrap();
+                    let position = world.get::<UiGlobalTransform>(entity).unwrap().translation;
+                    let mut ancestor = world.get::<ChildOf>(entity).map(ChildOf::parent);
+                    while let Some(id) = ancestor {
+                        if world.get::<ScrollPosition>(id).is_some() {
+                            let parent = world.get::<ComputedNode>(id).unwrap();
+                            let center = world.get::<UiGlobalTransform>(id).unwrap().translation;
+                            assert!(
+                                position.y - node.size().y / 2.
+                                    >= center.y - parent.size().y / 2. - 1.
+                                    && position.y + node.size().y / 2.
+                                        <= center.y + parent.size().y / 2. + 1.,
+                                "focused recipe remains revealed"
+                            );
+                        }
+                        ancestor = world.get::<ChildOf>(id).map(ChildOf::parent);
+                    }
+                    println!(
+                        "CONTROLLER_SCROLL_OFFSET {label} before={} after={after} focus={entity:?}",
+                        driver.scroll_before
+                    );
+                }
                 "movement" => {
                     axis(world, driver.pad, GamepadAxis::LeftStickX, 0.);
                     let position = world

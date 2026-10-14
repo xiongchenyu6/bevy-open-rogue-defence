@@ -342,3 +342,62 @@ fn modal_starts_on_its_own_first_choice_before_global_settings_entry() {
     controller(&mut world);
     assert_eq!(world.resource::<ControllerFocus>().entity, Some(choice));
 }
+
+#[test]
+fn right_stick_scrolls_current_modal_sibling_details_without_moving_focused_grid() {
+    let mut w = world();
+    let root = w.spawn((ControllerScope(280), Name::new("Equipment"))).id();
+    let grid = w
+        .spawn((
+            ChildOf(root),
+            ScrollPosition::default(),
+            ComputedNode {
+                size: Vec2::new(200., 200.),
+                ..default()
+            },
+            UiGlobalTransform::from_xy(100., 100.),
+        ))
+        .id();
+    let item = control(&mut w, grid, "Recipe", 100.);
+    let detail = w
+        .spawn((
+            ChildOf(root),
+            ControllerDetailScroll,
+            ScrollPosition::default(),
+            ComputedNode {
+                size: Vec2::new(200., 100.),
+                ..default()
+            },
+        ))
+        .id();
+    let hidden = w
+        .spawn((
+            ControllerScope(500),
+            ControllerDetailScroll,
+            ScrollPosition::default(),
+            Node {
+                display: Display::None,
+                ..default()
+            },
+            ComputedNode {
+                size: Vec2::splat(100.),
+                ..default()
+            },
+        ))
+        .id();
+    let pad = pad(&mut w);
+    press(&mut w, pad, GamepadButton::North);
+    controller(&mut w);
+    clear(&mut w, pad);
+    w.get_mut::<Gamepad>(pad)
+        .unwrap()
+        .analog_mut()
+        .set(GamepadAxis::RightStickY, -1.);
+    w.resource_mut::<Time<Real>>()
+        .advance_by(std::time::Duration::from_secs_f32(0.1));
+    controller(&mut w);
+    assert_eq!(w.resource::<ControllerFocus>().entity, Some(item));
+    assert_eq!(w.get::<ScrollPosition>(detail).unwrap().y, 50.);
+    assert_eq!(w.get::<ScrollPosition>(grid).unwrap().y, 0.);
+    assert_eq!(w.get::<ScrollPosition>(hidden).unwrap().y, 0.);
+}
