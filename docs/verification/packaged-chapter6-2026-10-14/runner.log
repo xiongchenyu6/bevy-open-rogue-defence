@@ -1,0 +1,96 @@
+{"sample": 1, "wall_seconds": 7.1, "terminal": null}
+{"sample": 2, "wall_seconds": 17.1, "terminal": null}
+{"sample": 3, "wall_seconds": 27.1, "terminal": null}
+{"sample": 4, "wall_seconds": 37.0, "terminal": null}
+{"sample": 5, "wall_seconds": 47.0, "terminal": null}
+{"sample": 6, "wall_seconds": 56.7, "terminal": null}
+{"sample": 7, "wall_seconds": 66.6, "terminal": null}
+{"sample": 8, "wall_seconds": 76.7, "terminal": null}
+{"sample": 9, "wall_seconds": 86.2, "terminal": null}
+{"sample": 10, "wall_seconds": 96.2, "terminal": null}
+{"sample": 11, "wall_seconds": 106.0, "terminal": null}
+{"sample": 12, "wall_seconds": 116.1, "terminal": null}
+{"sample": 13, "wall_seconds": 126.0, "terminal": null}
+{"sample": 14, "wall_seconds": 136.1, "terminal": null}
+{"sample": 15, "wall_seconds": 145.9, "terminal": null}
+{"sample": 16, "wall_seconds": 156.0, "terminal": null}
+{"sample": 17, "wall_seconds": 165.9, "terminal": null}
+{"sample": 18, "wall_seconds": 175.7, "terminal": null}
+{"sample": 19, "wall_seconds": 185.7, "terminal": null}
+{"sample": 20, "wall_seconds": 195.7, "terminal": null}
+{"sample": 21, "wall_seconds": 205.9, "terminal": null}
+{"sample": 22, "wall_seconds": 216.0, "terminal": null}
+{"sample": 23, "wall_seconds": 226.1, "terminal": null}
+{"sample": 24, "wall_seconds": 236.9, "terminal": null}
+{"sample": 25, "wall_seconds": 246.9, "terminal": null}
+{"sample": 26, "wall_seconds": 256.8, "terminal": null}
+{"sample": 27, "wall_seconds": 266.9, "terminal": null}
+{"sample": 28, "wall_seconds": 277.5, "terminal": null}
+{"sample": 29, "wall_seconds": 288.0, "terminal": null}
+{"sample": 30, "wall_seconds": 298.1, "terminal": null}
+{"sample": 31, "wall_seconds": 308.3, "terminal": null}
+{"sample": 32, "wall_seconds": 318.0, "terminal": null}
+{"sample": 33, "wall_seconds": 327.7, "terminal": null}
+{"sample": 34, "wall_seconds": 338.2, "terminal": null}
+{"sample": 35, "wall_seconds": 348.7, "terminal": null}
+{"sample": 36, "wall_seconds": 358.8, "terminal": null}
+{"sample": 37, "wall_seconds": 369.4, "terminal": null}
+{"sample": 38, "wall_seconds": 379.0, "terminal": null}
+{"sample": 39, "wall_seconds": 389.1, "terminal": null}
+{"sample": 40, "wall_seconds": 398.8, "terminal": null}
+{"sample": 41, "wall_seconds": 408.6, "terminal": null}
+{"sample": 42, "wall_seconds": 418.5, "terminal": null}
+{"sample": 43, "wall_seconds": 429.0, "terminal": null}
+{"sample": 44, "wall_seconds": 440.9, "terminal": null}
+{"sample": 45, "wall_seconds": 453.0, "terminal": null}
+{"sample": 46, "wall_seconds": 464.8, "terminal": null}
+{"sample": 47, "wall_seconds": 476.8, "terminal": null}
+{"sample": 48, "wall_seconds": 489.0, "terminal": null}
+{"sample": 49, "wall_seconds": 501.2, "terminal": null}
+{"sample": 50, "wall_seconds": 513.7, "terminal": null}
+{"sample": 51, "wall_seconds": 526.7, "terminal": null}
+{"sample": 52, "wall_seconds": 540.0, "terminal": null}
+{"sample": 53, "wall_seconds": 552.2, "terminal": null}
+{"sample": 54, "wall_seconds": 565.0, "terminal": null}
+{"sample": 55, "wall_seconds": 578.3, "terminal": null}
+{"sample": 56, "wall_seconds": 593.0, "terminal": null}
+{"sample": 57, "wall_seconds": 606.9, "terminal": null}
+{"sample": 58, "wall_seconds": 621.9, "terminal": null}
+{"sample": 59, "wall_seconds": 635.5, "terminal": null}
+{"sample": 60, "wall_seconds": 649.3, "terminal": null}
+{"sample": 61, "wall_seconds": 662.6, "terminal": null}
+{"sample": 62, "wall_seconds": 676.8, "terminal": null}
+{"sample": 63, "wall_seconds": 691.4, "terminal": null}
+{"sample": 64, "wall_seconds": 705.2, "terminal": null}
+{"sample": 65, "wall_seconds": 719.7, "terminal": null}
+{"sample": 66, "wall_seconds": 733.2, "terminal": null}
+{"sample": 67, "wall_seconds": 746.6, "terminal": null}
+{"sample": 68, "wall_seconds": 759.6, "terminal": null}
+{"sample": 69, "wall_seconds": 773.3, "terminal": null}
+{"sample": 70, "wall_seconds": 786.7, "terminal": null}
+{"sample": 71, "wall_seconds": 799.7, "terminal": null}
+{"sample": 72, "wall_seconds": 815.1, "terminal": null}
+{"sample": 73, "wall_seconds": 827.8, "terminal": null}
+{"sample": 74, "wall_seconds": 841.2, "terminal": null}
+{"sample": 75, "wall_seconds": 856.7, "terminal": null}
+{"sample": 76, "wall_seconds": 870.2, "terminal": null}
+{"sample": 77, "wall_seconds": 884.3, "terminal": null}
+{"sample": 78, "wall_seconds": 898.6, "terminal": null}
+{"sample": 79, "wall_seconds": 911.4, "terminal": null}
+{"sample": 80, "wall_seconds": 923.7, "terminal": null}
+{"sample": 81, "wall_seconds": 936.1, "terminal": null}
+{"sample": 82, "wall_seconds": 948.5, "terminal": null}
+{"sample": 83, "wall_seconds": 961.8, "terminal": null}
+{"sample": 84, "wall_seconds": 973.7, "terminal": null}
+{"sample": 85, "wall_seconds": 979.9, "terminal": "NO LIVES REMAIN"}
+Traceback (most recent call last):
+  File "/harness/campaign_runtime.py", line 305, in <module>
+    if __name__=='__main__': main()
+                             ^^^^^^
+  File "/harness/campaign_runtime.py", line 250, in main
+    report['actual_run_seed'] = seed_from_text(seed_text)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/campaign_runtime.py", line 51, in seed_from_text
+    assert match, f'Expected complete16-digit result seed, got {text!r}'
+           ^^^^^
+AssertionError: Expected complete16-digit result seed, got 'SEED 0%0000000000008B EFO'

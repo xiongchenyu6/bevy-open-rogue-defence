@@ -1,0 +1,30 @@
+{
+  "source_commit": "3922b117e175eb38c5b7b45a98a83fc88f459488",
+  "binary_sha256": "4310df547d06c1976d5eb79d42940ac0ed3745f5b85b34e5107937c8e90f0fa6",
+  "completed_run": true,
+  "victory": false,
+  "terminal": "NO LIVES REMAIN",
+  "level": 22,
+  "kills": 754,
+  "earned_shards": 42,
+  "actual_seed_manually_read_from_result": "0x000000000000bef0",
+  "requested_seed": "0xBEEF",
+  "actual_speed": 1,
+  "wall_seconds": 979.948,
+  "samples": 85,
+  "initial_currency": 472,
+  "final_currency": 514,
+  "strength_upgrade": 7,
+  "normal_exit_verified": false,
+  "harness_exit": 1,
+  "harness_error": "Strict seed OCR rejected misread; skipped remaining training/restart/normal quit checks",
+  "strategy": "Stationary public keys1/g/f; no equipment buys or movement",
+  "root_reviewed": [
+    "run-003.png",
+    "run-047.png",
+    "run-060.png",
+    "run-085.png",
+    "seed-row.png"
+  ],
+  "scope": "Isolated actual earned save copy; no resource/health/victory injection; does not prove cause or broad balance"
+}
