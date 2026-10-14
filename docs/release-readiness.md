@@ -27,4 +27,4 @@
 
 ## 2026-10-14 当前库回归
 
-手柄与营地修正版完整库测试654通过、0失败、1忽略，严格全目标Clippy通过，见[测试日志](verification/controller-input-2026-10-14/library-tests-r11.log)和[源码／原生验收范围](verification/controller-input-2026-10-14/evidence.json)。当前3922b11候选包独立烟雾验收已通过；新版完整第六章与真实硬件／Steam客户端仍待验证。3922b11正常合成路线已通过，后续滚动与倒计时源码改动仍需下一候选包。
+倒计时与手柄详情滚动修正版完整库测试656通过、0失败、1忽略，严格全目标Clippy通过，见[测试日志](verification/gate-countdown-labels-2026-10-14/library-countdown-r2.log)和[源码／原生验收范围](verification/controller-input-2026-10-14/evidence.json)。当前3922b11候选包独立烟雾验收已通过；新版完整第六章与真实硬件／Steam客户端仍待验证。3922b11正常合成路线已通过，[手柄详情滚动](controller-input.md)及[城门同帧倒计时](gate-countdown-labels.md)已通过原生验收，仍需下一候选包。
