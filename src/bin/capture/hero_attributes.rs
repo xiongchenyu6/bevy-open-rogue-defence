@@ -57,6 +57,8 @@ fn exercise(
         65 => Some("Speed reset"),
         95 | 195 => Some("Hero attributes open"),
         180 => Some("Hero attributes close"),
+        215 => Some("Settings open"),
+        240 => Some("Settings close"),
         _ => None,
     };
     for (_, mut interaction) in &mut buttons {
@@ -164,6 +166,20 @@ fn exercise(
                 "[capture] live sheet values agree with authoritative snapshot and hero; paused; panel fits viewport"
             );
         }
+    }
+    if state.frame == 225 {
+        assert!(
+            session.paused,
+            "settings reopened after attributes owns pause"
+        );
+        assert!(names.iter().any(|name| name.as_str() == "Settings page"));
+    }
+    if state.frame == 250 {
+        assert!(!session.paused, "settings close resumes the battle");
+        assert!(!names.iter().any(|name| name.as_str() == "Settings page"));
+        println!(
+            "[capture] PASS: attribute close restores usable Settings; settings close resumes battle"
+        );
     }
     if state.frame == 145 {
         let (window, _) = windows.single().unwrap();

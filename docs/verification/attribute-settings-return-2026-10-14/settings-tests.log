@@ -1,0 +1,34 @@
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 44s
+     Running unittests src/lib.rs (target/debug/deps/rogue_commander-c9f19ae2f10dc8c0)
+
+running 18 tests
+test game::settings::display_controls::preferences::tests::native_display_save_roundtrips_and_rejects_corruption ... ok
+test game::settings::tests::settings_fits_desktop_and_compact_landscape ... ok
+test game::settings::tests::settings_restores_battle_and_existing_modal_pause_ownership ... ok
+test game::settings::audio_controls::tests::closed_settings_reject_stale_controls ... ok
+test game::settings::tests::escape_closes_settings_without_reaching_underlying_pause_hotkey ... ok
+test game::settings::audio_controls::tests::actual_settings_buttons_adjust_channels_independently_and_preserve_levels_when_muted ... ok
+test game::settings::run_actions::tests::confirmed_quit_emits_the_real_app_exit_message ... ok
+test game::settings::run_actions::tests::departure_labels_refresh_only_for_changed_choice_or_language ... ok
+test game::settings::audio_controls::tests::unchanged_audio_labels_are_clean_and_volume_language_changes_refresh ... ok
+test game::settings::audio_controls::tests::device_notice_tracks_availability_and_language_without_changing_volume ... ok
+test game::settings::entry_layout::tests::picker_settings_repositions_on_resize_without_changing_portrait_space ... ok
+test game::settings::display_controls::tests::display_labels_stay_clean_until_mode_or_language_changes ... ok
+test game::settings::display_controls::tests::real_button_changes_window_mode_preserves_size_and_saves ... ok
+test game::settings::tests::static_settings_do_not_dirty_text_layout_or_visibility ... ok
+test game::settings::run_actions::tests::departure_requires_confirmation_and_escape_preserves_paused_run ... ok
+test game::settings::display_controls::tests::f11_runs_before_settings_clears_keyboard_and_write_failure_is_visible ... ok
+test game::settings::tests::settings_replay_really_opens_over_chapters_and_results_and_stays_open ... ok
+test game::settings::tests::replay_entry_requires_plugin_and_restores_pause_before_requesting_guide ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 623 filtered out; finished in 0.02s
+
