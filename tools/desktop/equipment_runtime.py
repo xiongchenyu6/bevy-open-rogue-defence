@@ -2,7 +2,7 @@
 """Public UI equipment proof with copied real earned campaign state; no resource injection."""
 import hashlib,json,os,re,shutil,subprocess,threading,time
 from pathlib import Path
-from smoke_runtime import ocr_screenshot,find_text,normalized
+from smoke_runtime import ocr_screenshot,find_text,normalized,read_hud_wallet
 from campaign_runtime import read_progress
 GAME,OUT=Path('/game'),Path('/verify')
 def main():
@@ -72,12 +72,10 @@ def main():
             return None
         return int(m[1])
     def hud_wallet():
-        native=shot('hud-wallet-source.png');crop=OUT/'hud-wallet-crop.png'
-        call(['convert',str(native),'-crop','70x18+166+163','-resize','600%','-colorspace','Gray','-negate',str(crop)])
-        raw=call(['tesseract',str(crop),'stdout','-l','eng','--psm','7'])
-        report.setdefault('hud_wallet_ocr',[]).append(raw)
-        assert re.fullmatch(r'\d+',raw.strip()),('Actual isolated HUD kill counter unreadable',raw)
-        return int(raw.strip())
+        native=shot('hud-wallet-source.png')
+        value,bounds,raw=read_hud_wallet(native,env)
+        report.setdefault('hud_wallet_ocr',[]).append(dict(value=value,bounds=bounds,raw=raw))
+        return value
     def read_speed(depth=0):
         assert depth<20,"Cannot drain real modal choices before reading toolbar"
         native=shot('speed-source.png');crop=OUT/'speed-crop.png'

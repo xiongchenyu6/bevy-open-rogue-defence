@@ -59,6 +59,42 @@ def ocr_screenshot(path, env=None):
     # Matching results from both passes need only one click rectangle.
     return list(dict.fromkeys(lines))
 
+def read_hud_wallet(path, env=None):
+    """Locate the last gold-colored resource number in the 1280x720 HUD.
+
+    Earlier resource widths change with gold/wood totals; a fixed x crop can
+    silently lose the leading digit. Fail if no number is found.
+    """
+    raw = subprocess.check_output(
+        ['convert', str(path), '-crop', '300x14+20+166', '-depth', '8', 'rgb:-'], env=env)
+    if len(raw) != 300 * 14 * 3:
+        raise ValueError('Unexpected HUD image geometry')
+    groups = []
+    for x in range(300):
+        count = 0
+        for y in range(14):
+            r, g, b = raw[(y * 300 + x) * 3:(y * 300 + x) * 3 + 3]
+            count += r > 175 and g > 150 and r - g > 10 and g - b > 25 and b < 195
+        if count >= 2:
+            if not groups or x - groups[-1][-1] > 7:
+                groups.append([])
+            groups[-1].append(x)
+    if not groups:
+        raise ValueError('No resource digits found in HUD')
+    left, right = groups[-1][0] + 20, groups[-1][-1] + 20
+    with tempfile.TemporaryDirectory(prefix='rogue-wallet-ocr-') as directory:
+        crop = Path(directory) / 'digits.png'
+        subprocess.run(['convert', str(path), '-crop', f'{right-left+5}x18+{left-2}+163',
+                        '-resize', '600%', '-colorspace', 'Gray', '-negate', str(crop)],
+                       env=env, check=True, capture_output=True)
+        text = subprocess.check_output(['tesseract', str(crop), 'stdout', '-l', 'eng',
+                                        '--psm', '7'], env=env, text=True,
+                                       stderr=subprocess.PIPE).strip()
+    if not re.fullmatch(r'\d+', text):
+        raise ValueError(f'Unreadable HUD wallet: {text!r}')
+    return int(text), (left, right), text
+
+
 def find_text(lines, text):
     """Exact line match; choose the bottom action if title and button repeat."""
     matches = [line for line in lines if normalized(line[0]) == normalized(text)]
