@@ -421,6 +421,7 @@ fn update_settings_copy(
     #[cfg(not(target_arch = "wasm32"))] display_save: Option<
         Res<display_controls::DisplaySaveStatus>,
     >,
+    attributes: Option<Res<super::ui::hero_stats_ui::HeroStatsPanelState>>,
     mut labels: Query<(&mut Text, &SettingsCopy)>,
     mut selected: Query<(&SettingsSelected, &mut Visibility)>,
     mut launcher: Query<
@@ -475,11 +476,13 @@ fn update_settings_copy(
         });
     }
     for (mut visibility, interaction, mut background) in &mut launcher {
-        visibility.set_if_neq(if state.open {
-            Visibility::Hidden
-        } else {
-            Visibility::Inherited
-        });
+        visibility.set_if_neq(
+            if state.open || attributes.as_ref().is_some_and(|panel| panel.open()) {
+                Visibility::Hidden
+            } else {
+                Visibility::Inherited
+            },
+        );
         background
             .reborrow()
             .map_unchanged(|color| &mut color.0)
