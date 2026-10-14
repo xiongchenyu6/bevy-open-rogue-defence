@@ -183,6 +183,7 @@ pub(super) fn spawn_draft_ui(
             },
             BackgroundColor(Color::srgb(0.014, 0.024, 0.032)),
             GlobalZIndex(150),
+            crate::game::controller_input::ControllerScope(150),
         ))
         .with_children(|root| {
             root.spawn((
@@ -579,7 +580,12 @@ pub(super) fn update_layout(
                 .set_if_neq(px(m.footer));
             node.reborrow()
                 .map_unchanged(|value| &mut value.padding)
-                .set_if_neq(UiRect::axes(px(if m.compact { 12 } else { 20 }), px(10)));
+                .set_if_neq(UiRect {
+                    left: px(if m.compact { 12 } else { 20 }),
+                    right: px(if m.compact { 116 } else { 20 }),
+                    top: px(10),
+                    bottom: px(10),
+                });
         }
         if art {
             node.reborrow()
@@ -692,6 +698,7 @@ fn short_summary(language: GameLanguage, choice: DraftChoice, build: &PlayerBuil
 }
 
 pub(super) fn update_feedback(
+    mut commands: Commands,
     draft: Res<DraftState>,
     preview: Res<BuildPreview>,
     build: Res<PlayerBuild>,
@@ -701,8 +708,11 @@ pub(super) fn update_feedback(
     vitals: Option<Res<crate::game::HeroVitals>>,
     runtime: Option<Res<crate::game::skills::SkillRuntime>>,
     mut cards: Query<(
+        Entity,
         &DraftButton,
         &Interaction,
+        Has<crate::game::controller_input::ControllerFocused>,
+        Has<crate::game::controller_input::ControllerDisabled>,
         &mut BackgroundColor,
         &mut BorderColor,
     )>,
@@ -710,6 +720,7 @@ pub(super) fn update_feedback(
         (
             &DraftActionButton,
             &Interaction,
+            Has<crate::game::controller_input::ControllerFocused>,
             &mut BackgroundColor,
             &mut BorderColor,
         ),
@@ -729,9 +740,9 @@ pub(super) fn update_feedback(
         return;
     }
     let mut hovered_index = None;
-    for (button, interaction, mut bg, mut border) in &mut cards {
+    for (entity, button, interaction, focused, disabled, mut bg, mut border) in &mut cards {
         let selected = preview.root == draft.root && preview.index == Some(button.0);
-        let hovered = *interaction != Interaction::None;
+        let hovered = focused || *interaction != Interaction::None;
         if hovered {
             hovered_index = Some(button.0);
         }
@@ -739,6 +750,16 @@ pub(super) fn update_feedback(
             .choices
             .get(button.0)
             .is_some_and(|choice| !choice_available(*choice, &session));
+        if locked && !disabled {
+            commands
+                .entity(entity)
+                .insert(crate::game::controller_input::ControllerDisabled);
+        }
+        if !locked && disabled {
+            commands
+                .entity(entity)
+                .remove::<crate::game::controller_input::ControllerDisabled>();
+        }
         bg.0 = if locked {
             Color::srgb(0.03, 0.045, 0.05)
         } else if selected {
@@ -759,8 +780,8 @@ pub(super) fn update_feedback(
         });
     }
     let mut help = None;
-    for (action, interaction, mut bg, mut border) in &mut actions {
-        let hover = *interaction != Interaction::None;
+    for (action, interaction, focused, mut bg, mut border) in &mut actions {
+        let hover = focused || *interaction != Interaction::None;
         bg.0 = if hover {
             Color::srgb(0.12, 0.17, 0.18)
         } else {

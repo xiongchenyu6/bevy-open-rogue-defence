@@ -1156,6 +1156,7 @@ fn setup_market(
             BorderColor::all(Color::srgba(0.7, 0.45, 0.18, 0.65)),
             // Open shopping belongs above HUD and camp entries, below settings.
             GlobalZIndex(280),
+            crate::game::controller_input::ControllerScope(280),
         ))
         .with_children(|panel| {
             panel
@@ -1987,6 +1988,7 @@ fn apply_market_layout(
 
 #[allow(clippy::type_complexity, clippy::too_many_arguments)]
 fn update_market_ui(
+    mut commands: Commands,
     windows: Query<&Window, With<PrimaryWindow>>,
     language: Res<GameLanguage>,
     state: Res<MarketState>,
@@ -2030,6 +2032,8 @@ fn update_market_ui(
     >,
     mut action_buttons: Query<
         (
+            Entity,
+            Has<super::controller_input::ControllerDisabled>,
             Option<&MarketOfferButton>,
             Option<&MarketMarkButton>,
             &mut BackgroundColor,
@@ -2243,10 +2247,21 @@ fn update_market_ui(
             });
     }
 
-    for (offer_button, mark_button, mut background) in &mut action_buttons {
+    for (entity, disabled, offer_button, mark_button, mut background) in &mut action_buttons {
         if let Some(button) = offer_button {
             let item = state.offers[button.0].item;
             let affordable = session.kills >= discounted_cost(item.price(), &effects);
+            let enabled = !effects.owns(item) && affordable;
+            if !enabled && !disabled {
+                commands
+                    .entity(entity)
+                    .insert(super::controller_input::ControllerDisabled);
+            }
+            if enabled && disabled {
+                commands
+                    .entity(entity)
+                    .remove::<super::controller_input::ControllerDisabled>();
+            }
             background.0 = if effects.owns(item) {
                 Color::srgb(0.05, 0.045, 0.055)
             } else if affordable {
@@ -2268,11 +2283,18 @@ fn update_market_ui(
 }
 
 fn update_market_tooltip(
+    scheme: Option<Res<super::ControlScheme>>,
     windows: Query<&Window, With<PrimaryWindow>>,
     language: Res<GameLanguage>,
     session: Res<GameSession>,
     state: Res<MarketState>,
-    buttons: Query<&Interaction, With<MarketToggleButton>>,
+    buttons: Query<
+        (
+            &Interaction,
+            Has<super::controller_input::ControllerFocused>,
+        ),
+        With<MarketToggleButton>,
+    >,
     mut tips: Query<&mut Node, With<MarketTooltip>>,
     mut labels: Query<&mut Text, With<MarketTooltipText>>,
 ) {
@@ -2280,7 +2302,10 @@ fn update_market_tooltip(
         .single()
         .map(|w| market_layout(w.width(), w.height()))
         .unwrap_or_else(|_| market_layout(1280.0, 720.0));
-    let visible = !state.open && buttons.iter().any(|i| *i != Interaction::None);
+    let visible = !state.open
+        && buttons
+            .iter()
+            .any(|(i, focused)| focused || *i != Interaction::None);
     for mut node in &mut tips {
         node.reborrow()
             .map_unchanged(|value| &mut value.display)
@@ -2313,7 +2338,7 @@ fn update_market_tooltip(
                 "{}\n{}",
                 market_toggle_label(
                     *language,
-                    layout.compact,
+                    layout.compact || scheme.as_ref().is_some_and(|mode| mode.controller()),
                     session.elapsed,
                     state.open,
                     state.level

@@ -186,6 +186,7 @@ fn draw(
             Guide,
             Name::new("Tutorial overlay"),
             GlobalZIndex(900),
+            crate::game::controller_input::ControllerScope(900),
             bevy::ui::FocusPolicy::Block,
             Node {
                 position_type: PositionType::Absolute,

@@ -25,9 +25,16 @@ impl Plugin for EncounterBossUiPlugin {
             .add_message::<AdventureCampRequest>()
             .add_systems(Startup, camp_entries)
             .add_systems(PostUpdate, position_entries)
-            .add_systems(PreUpdate, (input, enter_camp).after(UiSystems::Focus))
+            .add_systems(PreUpdate, camp_inputs())
             .add_systems(Update, (view, scroll, relic_feedback));
     }
+}
+fn camp_inputs() -> bevy::ecs::schedule::ScheduleConfigs<bevy::ecs::system::ScheduleSystem> {
+    (input, enter_camp)
+        .chain()
+        .after(super::SettingsInputSet)
+        .after(UiSystems::Focus)
+        .after(super::ControllerInputSet)
 }
 #[derive(Resource, Default)]
 pub(crate) struct EncounterBossPanelState {
@@ -120,6 +127,7 @@ fn view(
             },
             BackgroundColor(Color::srgba(0.0, 0.0, 0.0, 0.85)),
             GlobalZIndex(285),
+            crate::game::controller_input::ControllerScope(285),
         ))
         .with_children(|overlay| {
             overlay
@@ -510,12 +518,20 @@ fn enter_camp(
     }
 }
 fn position_entries(
+    mut commands: Commands,
     state: Res<AdventureBossState>,
     session: Res<GameSession>,
     language: Res<GameLanguage>,
     cameras: Query<(&Camera, &GlobalTransform), With<Camera3d>>,
     windows: Query<&Window>,
-    mut entries: Query<(&CampEntry, &Interaction, &mut Node)>,
+    mut entries: Query<(
+        Entity,
+        &CampEntry,
+        &Interaction,
+        Has<super::controller_input::ControllerFocused>,
+        Has<super::controller_input::ControllerDisabled>,
+        &mut Node,
+    )>,
     mut captions: Query<
         (
             &CampEntryCaption,
@@ -534,8 +550,19 @@ fn position_entries(
         });
     let docked = size.y < 540.0;
     let mut preview = [false; 3];
-    for (entry, interaction, mut node) in &mut entries {
-        preview[usize::from(entry.0)] = *interaction != Interaction::None;
+    for (entity, entry, interaction, focused, disabled, mut node) in &mut entries {
+        let enabled = state.unlocked & (1 << entry.0) != 0;
+        if !enabled && !disabled {
+            commands
+                .entity(entity)
+                .insert(super::controller_input::ControllerDisabled);
+        }
+        if enabled && disabled {
+            commands
+                .entity(entity)
+                .remove::<super::controller_input::ControllerDisabled>();
+        }
+        preview[usize::from(entry.0)] = focused || *interaction != Interaction::None;
         node.width = px(if docked { 40.0 } else { 128.0 });
         node.min_height = px(40.0);
         let position = cameras.single().ok().and_then(|(camera, t)| {
@@ -685,5 +712,40 @@ mod camp_position_tests {
         assert!(p.y + 40.0 <= 275.0);
         let edge = camp_screen_position(Vec2::new(700.0, 600.0), Vec2::new(667.0, 375.0), 0);
         assert_eq!(edge, Vec2::new(615.0, 132.0));
+    }
+}
+
+#[cfg(test)]
+mod controller_order_tests {
+    use super::*;
+    #[test]
+    fn controller_camp_press_reaches_public_handler_in_same_preupdate() {
+        let mut app = App::new();
+        app.init_resource::<GameSession>()
+            .init_resource::<AdventureBossState>()
+            .add_message::<AdventureCampRequest>()
+            .add_message::<AdventureBossChoice>()
+            .add_systems(PreUpdate, camp_inputs())
+            .add_systems(
+                PreUpdate,
+                (|mut buttons: Query<&mut Interaction>| {
+                    for mut interaction in &mut buttons {
+                        *interaction = Interaction::Pressed;
+                    }
+                })
+                .in_set(crate::game::ControllerInputSet),
+            );
+        app.world_mut()
+            .resource_mut::<AdventureBossState>()
+            .unlocked = 1;
+        app.world_mut().spawn((CampEntry(0), Interaction::None));
+        app.update();
+        let requests: Vec<_> = app
+            .world_mut()
+            .resource_mut::<Messages<AdventureCampRequest>>()
+            .drain()
+            .collect();
+        assert_eq!(requests.len(), 1);
+        assert_eq!(requests[0].0, 0);
     }
 }

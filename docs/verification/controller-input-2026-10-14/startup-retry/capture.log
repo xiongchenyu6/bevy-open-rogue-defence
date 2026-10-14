@@ -1,0 +1,50 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {9, 39, 64, 99, 139}; all 150 simulation/render updates retained
+[2m2026-10-14T06:38:16.520368Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.9", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/startup-retry/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/startup-retry/runtime/wayland-1" plus null terminator exceeds 108 bytes
+[2m2026-10-14T06:38:16.584421Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.71.09", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-10-14T06:38:16.842509Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-14T06:38:16.842554Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[capture] readiness scenario retains cold-start asset loading; no preload warm-up
+[2m2026-10-14T06:38:16.859111Z[0m [32m INFO[0m [2mbevy_input::gamepad[0m[2m:[0m Gamepad 467v0 connected.
+[2m2026-10-14T06:38:16.952702Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+ASSET_READINESS_CONTROLLER_EVENT frame=2 button=North value=1
+[2m2026-10-14T06:38:16.989719Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.5drk4u/rogue-readiness-1624457-1791959896453706245/models/readiness-unoffered-missing.glb
+ASSET_READINESS_CONTROLLER_EVENT frame=3 button=North value=0
+ASSET_READINESS_STAGE frame=10 ready=false loaded=23/24 failed=0 controlled=Some(Loading) real_reads=1
+ASSET_READINESS_CONTROLLER_EVENT frame=12 button=South value=1
+[2m2026-10-14T06:38:17.517790Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/startup-retry/frames/frame00009.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/startup-retry/frames/frame00009.png (27974 bytes)
+ASSET_READINESS_CONTROLLER_EVENT frame=14 button=South value=0
+ASSET_READINESS_STAGE frame=15 ready=false loaded=23/24 failed=0 controlled=Some(Loading) real_reads=1
+[2m2026-10-14T06:38:17.553576Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.5drk4u/rogue-readiness-1624457-1791959896453706245/ui/draft_backdrop.png
+ASSET_READINESS_STAGE frame=40 ready=false loaded=23/24 failed=1 controlled=Some(Failed(AssetReaderError(NotFound("/tmp/nix-shell.5drk4u/rogue-readiness-1624457-1791959896453706245/ui/draft_backdrop.png")))) real_reads=1
+ASSET_READINESS_CONTROLLER_EVENT frame=42 button=East value=1
+[2m2026-10-14T06:38:17.680021Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/startup-retry/frames/frame00039.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/startup-retry/frames/frame00039.png (46373 bytes)
+ASSET_READINESS_CONTROLLER_EVENT frame=44 button=East value=0
+ASSET_READINESS_STAGE frame=45 ready=false loaded=23/24 failed=1 controlled=Some(Failed(AssetReaderError(NotFound("/tmp/nix-shell.5drk4u/rogue-readiness-1624457-1791959896453706245/ui/draft_backdrop.png")))) real_reads=1
+ASSET_READINESS_CONTROLLER_EVENT frame=60 button=South value=1
+ASSET_READINESS_CONTROLLER_EVENT frame=67 button=South value=0
+ASSET_READINESS_STAGE frame=67 ready=false loaded=23/24 failed=1 controlled=Some(Failed(AssetReaderError(NotFound("/tmp/nix-shell.5drk4u/rogue-readiness-1624457-1791959896453706245/ui/draft_backdrop.png")))) real_reads=2
+[2m2026-10-14T06:38:17.815985Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/startup-retry/frames/frame00064.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/startup-retry/frames/frame00064.png (27974 bytes)
+ASSET_READINESS_STAGE frame=70 ready=false loaded=23/24 failed=1 controlled=Some(Failed(AssetReaderError(NotFound("/tmp/nix-shell.5drk4u/rogue-readiness-1624457-1791959896453706245/ui/draft_backdrop.png")))) real_reads=2
+ASSET_READINESS_CONTROLLER_EVENT frame=72 button=South value=1
+ASSET_READINESS_CONTROLLER_EVENT frame=74 button=South value=0
+ASSET_READINESS_STAGE frame=75 ready=false loaded=23/24 failed=1 controlled=Some(Failed(AssetReaderError(NotFound("/tmp/nix-shell.5drk4u/rogue-readiness-1624457-1791959896453706245/ui/draft_backdrop.png")))) real_reads=2
+[2m2026-10-14T06:38:18.004844Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/startup-retry/frames/frame00099.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/startup-retry/frames/frame00099.png (360347 bytes)
+ASSET_READINESS_STAGE frame=110 ready=true loaded=24/24 failed=0 controlled=Some(Loaded) real_reads=2
+ASSET_READINESS_UNOFFERED_FAILURE_IGNORED SolarVanguard (Failed(AssetReaderError(NotFound("/tmp/nix-shell.5drk4u/rogue-readiness-1624457-1791959896453706245/models/readiness-unoffered-missing.glb"))), Failed(AssetReaderError(NotFound("/tmp/nix-shell.5drk4u/rogue-readiness-1624457-1791959896453706245/models/readiness-unoffered-missing.glb"))), Failed(AssetReaderError(NotFound("/tmp/nix-shell.5drk4u/rogue-readiness-1624457-1791959896453706245/models/readiness-unoffered-missing.glb"))))
+ASSET_READINESS_CONTROLLER_EVENT frame=120 button=South value=1
+ASSET_READINESS_CONTROLLER_EVENT frame=122 button=South value=0
+ASSET_READINESS_STAGE frame=140 ready=true loaded=24/24 failed=0 controlled=Some(Loaded) real_reads=2
+ASSET_READINESS_UNOFFERED_FAILURE_IGNORED SolarVanguard (Failed(AssetReaderError(NotFound("/tmp/nix-shell.5drk4u/rogue-readiness-1624457-1791959896453706245/models/readiness-unoffered-missing.glb"))), Failed(AssetReaderError(NotFound("/tmp/nix-shell.5drk4u/rogue-readiness-1624457-1791959896453706245/models/readiness-unoffered-missing.glb"))), Failed(AssetReaderError(NotFound("/tmp/nix-shell.5drk4u/rogue-readiness-1624457-1791959896453706245/models/readiness-unoffered-missing.glb"))))
+ASSET_READINESS_PASS genuine pending/error/reload/ready, blocked inputs and clock
+[2m2026-10-14T06:38:18.246810Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/startup-retry/frames/frame00139.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/startup-retry/frames/frame00139.png (1010849 bytes)
+[capture] all 5 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 67 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 150 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/startup-retry/frames

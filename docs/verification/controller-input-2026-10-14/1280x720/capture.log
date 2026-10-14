@@ -1,0 +1,164 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {1599}; all 1600 simulation/render updates retained
+[2m2026-10-14T06:37:36.061783Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.9", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/runtime/wayland-1" plus null terminator exceeds 108 bytes
+[2m2026-10-14T06:37:36.323758Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.71.09", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-10-14T06:37:36.822092Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-14T06:37:36.822142Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-10-14T06:37:36.932694Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[2m2026-10-14T06:37:38.956800Z[0m [32m INFO[0m [2mbevy_input::gamepad[0m[2m:[0m Gamepad 2555v0 connected.
+[2m2026-10-14T06:37:39.064298Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/01-chapters.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/01-chapters.png (120224 bytes)
+CONTROLLER_ROUTE_INPUT step=1 frame=27 target=Campaign training key=DPadRight
+CONTROLLER_ROUTE_INPUT step=1 frame=31 target=Campaign training key=South
+[2m2026-10-14T06:37:39.249845Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/01b-training.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/01b-training.png (91353 bytes)
+CONTROLLER_ROUTE_INPUT step=4 frame=75 target=Campaign chapter 0 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=4 frame=79 target=Campaign chapter 0 key=South
+[2m2026-10-14T06:37:39.521054Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/02-recruitment.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/02-recruitment.png (360770 bytes)
+CONTROLLER_ROUTE_INPUT step=6 frame=111 target=Commander card 0 key=South
+CONTROLLER_FIXTURE injected wallet/time, not earned progression
+CONTROLLER_ROUTE_CHECK movement PASS frame=163
+[2m2026-10-14T06:37:39.944952Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/03-combat.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/03-combat.png (1013147 bytes)
+[2m2026-10-14T06:37:40.156018Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/04-pause.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/04-pause.png (459474 bytes)
+CONTROLLER_ROUTE_INPUT step=14 frame=223 target=Settings open key=DPadUp
+CONTROLLER_ROUTE_INPUT step=14 frame=227 target=Settings open key=South
+CONTROLLER_ROUTE_INPUT step=15 frame=247 target=Settings mute key=DPadRight
+CONTROLLER_ROUTE_INPUT step=15 frame=251 target=Settings mute key=DPadRight
+CONTROLLER_ROUTE_INPUT step=15 frame=255 target=Settings mute key=DPadRight
+CONTROLLER_ROUTE_INPUT step=15 frame=259 target=Settings mute key=South
+CONTROLLER_ROUTE_INPUT step=16 frame=279 target=Settings music down key=DPadUp
+CONTROLLER_ROUTE_INPUT step=16 frame=283 target=Settings music down key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=16 frame=287 target=Settings music down key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=16 frame=291 target=Settings music down key=South
+CONTROLLER_ROUTE_INPUT step=17 frame=311 target=Settings display toggle key=DPadRight
+CONTROLLER_ROUTE_INPUT step=17 frame=315 target=Settings display toggle key=DPadRight
+CONTROLLER_ROUTE_INPUT step=17 frame=319 target=Settings display toggle key=DPadRight
+CONTROLLER_ROUTE_INPUT step=17 frame=323 target=Settings display toggle key=DPadDown
+CONTROLLER_ROUTE_INPUT step=17 frame=327 target=Settings display toggle key=South
+CONTROLLER_ROUTE_INPUT step=18 frame=347 target=Settings display toggle key=South
+CONTROLLER_ROUTE_INPUT step=19 frame=367 target=Settings chapters key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=19 frame=371 target=Settings chapters key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=19 frame=375 target=Settings chapters key=South
+[2m2026-10-14T06:37:41.305897Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/05-confirmation.png
+[capture] saved 6/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/05-confirmation.png (77793 bytes)
+CONTROLLER_ROUTE_CHECK cancel PASS frame=419
+[2m2026-10-14T06:37:41.552018Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/06-settings.png
+[capture] saved 7/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/06-settings.png (67109 bytes)
+CONTROLLER_ROUTE_INPUT step=24 frame=443 target=Settings close key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=24 frame=447 target=Settings close key=DPadDown
+CONTROLLER_ROUTE_INPUT step=24 frame=451 target=Settings close key=South
+CONTROLLER_ROUTE_CHECK resume PASS frame=483
+CONTROLLER_ROUTE_INPUT step=28 frame=507 target=Skill draw control key=DPadUp
+CONTROLLER_ROUTE_INPUT step=28 frame=511 target=Skill draw control key=DPadDown
+CONTROLLER_ROUTE_INPUT step=28 frame=515 target=Skill draw control key=DPadDown
+CONTROLLER_ROUTE_INPUT step=28 frame=519 target=Skill draw control key=South
+[2m2026-10-14T06:37:42.301771Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/03b-controller-tooltip.png
+[capture] saved 8/8 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/03b-controller-tooltip.png (1010557 bytes)
+CONTROLLER_ROUTE_INPUT step=30 frame=551 target=Skill draw control key=South
+[2m2026-10-14T06:37:42.552598Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/07-cards.png
+[capture] saved 9/9 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/07-cards.png (341740 bytes)
+CONTROLLER_ROUTE_INPUT step=32 frame=583 target=Build card 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=32 frame=587 target=Build card 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=32 frame=591 target=Build card 0 key=South
+CONTROLLER_ROUTE_CHECK draft PASS frame=611
+CONTROLLER_ROUTE_INPUT step=34 frame=623 target=Build card 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=34 frame=627 target=Build card 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=34 frame=631 target=Build card 0 key=South
+CONTROLLER_ROUTE_CHECK draft-second PASS frame=651
+CONTROLLER_ROUTE_INPUT step=36 frame=663 target=Build later key=DPadRight
+CONTROLLER_ROUTE_INPUT step=36 frame=667 target=Build later key=DPadRight
+CONTROLLER_ROUTE_INPUT step=36 frame=671 target=Build later key=DPadRight
+CONTROLLER_ROUTE_INPUT step=36 frame=675 target=Build later key=South
+CONTROLLER_ROUTE_CHECK banked PASS frame=695
+CONTROLLER_ROUTE_INPUT step=38 frame=707 target=Adventure camp entry 0 key=DPadUp
+CONTROLLER_ROUTE_INPUT step=38 frame=711 target=Adventure camp entry 0 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=38 frame=715 target=Adventure camp entry 0 key=South
+[2m2026-10-14T06:37:43.830694Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/07b-camp-choice.png
+[capture] saved 10/10 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/07b-camp-choice.png (589739 bytes)
+CONTROLLER_ROUTE_CHECK camp-back PASS frame=759
+CONTROLLER_ROUTE_INPUT step=42 frame=771 target=Encounter boss safe reward key=DPadRight
+CONTROLLER_ROUTE_INPUT step=42 frame=775 target=Encounter boss safe reward key=South
+CONTROLLER_ROUTE_CHECK camp-reward PASS frame=795
+CONTROLLER_ROUTE_INPUT step=44 frame=807 target=Skill draw control key=DPadUp
+CONTROLLER_ROUTE_INPUT step=44 frame=811 target=Skill draw control key=DPadDown
+CONTROLLER_ROUTE_INPUT step=44 frame=815 target=Skill draw control key=South
+CONTROLLER_ROUTE_CHECK banked-reopen PASS frame=835
+[2m2026-10-14T06:37:44.582303Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/07c-banked-reopen.png
+[capture] saved 11/11 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/07c-banked-reopen.png (307270 bytes)
+CONTROLLER_ROUTE_INPUT step=47 frame=859 target=Build later key=DPadRight
+CONTROLLER_ROUTE_INPUT step=47 frame=863 target=Build later key=DPadRight
+CONTROLLER_ROUTE_INPUT step=47 frame=867 target=Build later key=DPadRight
+CONTROLLER_ROUTE_INPUT step=47 frame=871 target=Build later key=South
+CONTROLLER_ROUTE_INPUT step=48 frame=891 target=Equipment open key=DPadUp
+CONTROLLER_ROUTE_INPUT step=48 frame=895 target=Equipment open key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=48 frame=899 target=Equipment open key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=48 frame=903 target=Equipment open key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=48 frame=907 target=Equipment open key=South
+CONTROLLER_ROUTE_INPUT step=49 frame=927 target=Equipment crafting tab key=DPadRight
+CONTROLLER_ROUTE_INPUT step=49 frame=931 target=Equipment crafting tab key=South
+CONTROLLER_ROUTE_INPUT step=50 frame=951 target=Crafting recipe 0 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=50 frame=955 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=50 frame=959 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=50 frame=963 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=50 frame=967 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=50 frame=971 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=50 frame=975 target=Crafting recipe 0 key=South
+[2m2026-10-14T06:37:45.699833Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/08-forge-missing.png
+[capture] saved 12/12 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/08-forge-missing.png (458008 bytes)
+CONTROLLER_FIXTURE injected deterministic stock; purchases use public controller navigation/button handlers
+[2m2026-10-14T06:37:45.966938Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/09-market.png
+[capture] saved 13/13 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/09-market.png (891839 bytes)
+CONTROLLER_ROUTE_INPUT step=55 frame=1043 target=Market offer 0 key=South
+CONTROLLER_ROUTE_INPUT step=56 frame=1063 target=Market offer 1 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=56 frame=1067 target=Market offer 1 key=South
+CONTROLLER_ROUTE_INPUT step=57 frame=1087 target=Market offer 2 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=57 frame=1091 target=Market offer 2 key=South
+CONTROLLER_ROUTE_INPUT step=58 frame=1111 target=Market offer 3 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=58 frame=1115 target=Market offer 3 key=South
+CONTROLLER_ROUTE_INPUT step=59 frame=1135 target=Market offer 4 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=59 frame=1139 target=Market offer 4 key=South
+CONTROLLER_ROUTE_INPUT step=61 frame=1171 target=Equipment open key=DPadUp
+CONTROLLER_ROUTE_INPUT step=61 frame=1175 target=Equipment open key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=61 frame=1179 target=Equipment open key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=61 frame=1183 target=Equipment open key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=61 frame=1187 target=Equipment open key=South
+CONTROLLER_ROUTE_INPUT step=62 frame=1207 target=Equipment crafting tab key=DPadRight
+CONTROLLER_ROUTE_INPUT step=62 frame=1211 target=Equipment crafting tab key=South
+CONTROLLER_ROUTE_INPUT step=63 frame=1231 target=Crafting recipe 0 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=63 frame=1235 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=63 frame=1239 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=63 frame=1243 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=63 frame=1247 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=63 frame=1251 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=63 frame=1255 target=Crafting recipe 0 key=South
+[2m2026-10-14T06:37:47.586797Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/10-forge-ready.png
+[capture] saved 14/14 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/10-forge-ready.png (456882 bytes)
+CONTROLLER_ROUTE_INPUT step=65 frame=1287 target=Crafting confirm key=DPadDown
+CONTROLLER_ROUTE_INPUT step=65 frame=1291 target=Crafting confirm key=South
+CONTROLLER_ROUTE_CHECK forged PASS frame=1311
+[2m2026-10-14T06:37:47.917779Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/11-forged.png
+[capture] saved 15/15 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/11-forged.png (457117 bytes)
+CONTROLLER_ROUTE_INPUT step=70 frame=1359 target=Settings open key=DPadUp
+CONTROLLER_ROUTE_INPUT step=70 frame=1363 target=Settings open key=South
+CONTROLLER_ROUTE_INPUT step=71 frame=1383 target=Settings chapters key=DPadDown
+CONTROLLER_ROUTE_INPUT step=71 frame=1387 target=Settings chapters key=DPadDown
+CONTROLLER_ROUTE_INPUT step=71 frame=1391 target=Settings chapters key=South
+CONTROLLER_ROUTE_INPUT step=72 frame=1411 target=Settings departure confirm key=DPadRight
+CONTROLLER_ROUTE_INPUT step=72 frame=1415 target=Settings departure confirm key=South
+CONTROLLER_ROUTE_CHECK chapters PASS frame=1435
+[2m2026-10-14T06:37:48.714865Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/12-returned-chapters.png
+[capture] saved 16/16 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/12-returned-chapters.png (120224 bytes)
+CONTROLLER_ROUTE_PASS all 75 steps; synthetic native only
+[2m2026-10-14T06:37:49.822375Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/frame01599.png
+[capture] saved 17/17 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames/frame01599.png (120224 bytes)
+[capture] all 17 screenshot(s) saved after 2 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 1600 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/1280x720/frames

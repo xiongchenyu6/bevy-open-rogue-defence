@@ -62,7 +62,7 @@ fn verify(
         return;
     }
     let expected_touch = (70..140).contains(&step.0);
-    assert_eq!(scheme.touch, expected_touch);
+    assert_eq!(scheme.touch(), expected_touch);
     let (_, pad, _, _) = nodes
         .iter()
         .find(|(name, _, _, _)| name.as_str() == "Movement pad")
@@ -124,7 +124,7 @@ fn verify(
     println!(
         "[capture] PASS input layout frame {}: touch={}, pad={}, dodge={:?}",
         step.0,
-        scheme.touch,
+        scheme.touch(),
         pad.display != Display::None,
         dodge.size()
     );

@@ -62,6 +62,7 @@ impl TouchJoystickState {
 fn read_move_input(
     time: Res<Time>,
     keyboard: Res<ButtonInput<KeyCode>>,
+    controller: Option<Res<super::ControllerInput>>,
     touches: Res<Touches>,
     window_query: Query<(Entity, &Window), With<PrimaryWindow>>,
     mut focus_events: MessageReader<WindowFocused>,
@@ -117,7 +118,12 @@ fn read_move_input(
         joystick.clear();
     }
 
-    let mut movement = Vec2::ZERO;
+    let mut movement = controller
+        .as_ref()
+        .map_or(Vec2::ZERO, |input| input.movement);
+    if controller.as_ref().is_some_and(|input| input.dodge) {
+        dodge.request();
+    }
     if keyboard.pressed(KeyCode::ArrowLeft) {
         movement.x -= 1.0;
     }

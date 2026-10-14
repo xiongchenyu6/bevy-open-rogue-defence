@@ -298,7 +298,7 @@ fn render(
     let compact = size.y < 540.0;
     let width = (size.x - 24.0).min(1080.0);
     let height = (size.y - 24.0).min(720.0);
-    let root=commands.spawn((Name::new("Campaign overlay"),CampaignOverlay,Node {position_type:PositionType::Absolute,width:percent(100),height:percent(100),align_items:AlignItems::Center,justify_content:JustifyContent::Center,..default()},BackgroundColor(Color::srgb(0.012,0.026,0.031)),GlobalZIndex(400))).with_children(|overlay| {
+    let root=commands.spawn((Name::new("Campaign overlay"),CampaignOverlay,Node {position_type:PositionType::Absolute,width:percent(100),height:percent(100),align_items:AlignItems::Center,justify_content:JustifyContent::Center,..default()},BackgroundColor(Color::srgb(0.012,0.026,0.031)),GlobalZIndex(400), crate::game::controller_input::ControllerScope(400))).with_children(|overlay| {
         overlay.spawn((Name::new("Campaign panel"),Node {width:px(width),height:px(height),padding:UiRect::all(px(if compact {10}else{20})),flex_direction:FlexDirection::Column,row_gap:px(if compact {8}else{14}),..default()},BackgroundColor(Color::srgb(0.025,0.05,0.058)))).with_children(|panel| {
             panel.spawn(Node {align_items:AlignItems::Center,column_gap:px(8),flex_shrink:0.0,..default()}).with_children(|header| {
                 header.spawn((label(match page {Page::Chapters=>language.pick("EXPEDITIONS","章节远征"),Page::Training=>language.pick("LEGACY TRAINING","永久强化"),Page::Result=>language.pick("EXPEDITION REPORT","远征战报")},if compact {21.0}else{30.0},IVORY),Node {flex_grow:1.0,min_width:px(0),..default()}));
@@ -376,6 +376,7 @@ fn chapters(
                         Color::srgb(0.19, 0.30, 0.32)
                     }),
                 ))
+                .insert_if(super::controller_input::ControllerDisabled, || !unlocked)
                 .with_children(|card| {
                     card.spawn((
                         ImageNode {
@@ -668,11 +669,18 @@ fn scroll(
         position.0.y = (position.0.y + delta).max(0.0);
     }
 }
-fn tooltips(hints: Query<(&Hint, &Interaction)>, mut texts: Query<(&HintText, &mut Text)>) {
+fn tooltips(
+    hints: Query<(
+        &Hint,
+        &Interaction,
+        Has<super::controller_input::ControllerFocused>,
+    )>,
+    mut texts: Query<(&HintText, &mut Text)>,
+) {
     let hovered = hints
         .iter()
-        .find(|(_, interaction)| **interaction != Interaction::None)
-        .map(|(hint, _)| hint.0.as_str());
+        .find(|(_, interaction, focused)| *focused || **interaction != Interaction::None)
+        .map(|(hint, _, _)| hint.0.as_str());
     for (default, mut text) in &mut texts {
         text.reborrow()
             .map_unchanged(|value| &mut value.0)

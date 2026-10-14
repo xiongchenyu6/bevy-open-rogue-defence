@@ -172,6 +172,7 @@ pub(super) fn spawn_hero_selector(
             },
             BackgroundColor(Color::srgb(0.018, 0.029, 0.038)),
             GlobalZIndex(100),
+            crate::game::controller_input::ControllerScope(100),
         ))
         .with_children(|root| {
             root.spawn((
@@ -635,6 +636,7 @@ pub(super) fn update_feedback(
     mut cards: Query<(
         &HeroChoiceButton,
         &Interaction,
+        Has<crate::game::controller_input::ControllerFocused>,
         &mut BorderColor,
         &mut BackgroundColor,
     )>,
@@ -664,9 +666,9 @@ pub(super) fn update_feedback(
             .map_unchanged(|value| &mut value.display)
             .set_if_neq(if fusing { Display::Flex } else { Display::None });
     }
-    for (choice, interaction, mut border, mut background) in &mut cards {
+    for (choice, interaction, focused, mut border, mut background) in &mut cards {
         let selected = preview == Some(choice.0);
-        let hovered = *interaction != Interaction::None;
+        let hovered = focused || *interaction != Interaction::None;
         border.set_all(if selected {
             GOLD
         } else if hovered {
@@ -786,6 +788,7 @@ pub(super) fn refresh_language(
     language: Res<GameLanguage>,
     recruitment: Option<Res<crate::game::RecruitmentProgress>>,
     mut labels: Query<(&DraftCopy, &mut Text)>,
+    scheme: Option<Res<crate::game::ControlScheme>>,
 ) {
     let context = recruitment.as_ref().and_then(|r| r.pending);
     for (copy, mut text) in &mut labels {
@@ -804,9 +807,17 @@ pub(super) fn refresh_language(
                     Some(crate::game::RecruitmentSource::Fruit) => language
                         .pick("Bond fruit · Recruit", "羁绊果实 · 英雄征募")
                         .into(),
-                    None => language
-                        .pick("Click a basic commander to begin", "点击基础指挥官开始远征")
-                        .into(),
+                    None => {
+                        if scheme.as_ref().is_some_and(|mode| mode.controller()) {
+                            language
+                                .pick("Choose a commander · A (South)", "选择指挥官 · A（下键）")
+                                .into()
+                        } else {
+                            language
+                                .pick("Click a basic commander to begin", "点击基础指挥官开始远征")
+                                .into()
+                        }
+                    }
                 },
                 DraftCopy::Name(kind) => hero_name(*language, *kind),
                 DraftCopy::Role(primary) => role_name(*language, *primary).into(),

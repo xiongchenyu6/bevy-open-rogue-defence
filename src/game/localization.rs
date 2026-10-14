@@ -236,6 +236,7 @@ mod tests {
     const PLAYER_FACING_SOURCES: &[&str] = &[
         include_str!("asset_readiness.rs"),
         include_str!("onboarding.rs"),
+        include_str!("controller_input.rs"),
         include_str!("content.rs"),
         include_str!("bond_catalog.rs"),
         include_str!("bond_catalog/expanded.rs"),

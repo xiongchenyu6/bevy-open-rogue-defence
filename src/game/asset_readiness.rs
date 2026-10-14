@@ -244,6 +244,7 @@ fn draw(
             LoadingRoot,
             Name::new("Expedition loading"),
             GlobalZIndex(1000),
+            crate::game::controller_input::ControllerScope(1000),
             Node {
                 position_type: PositionType::Absolute,
                 width: percent(100),

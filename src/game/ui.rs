@@ -1017,7 +1017,7 @@ fn apply_hud_layout(
         } else if movement_pad.is_some() {
             node.reborrow()
                 .map_unchanged(|value| &mut value.display)
-                .set_if_neq(if scheme.touch {
+                .set_if_neq(if scheme.touch() {
                     Display::Flex
                 } else {
                     Display::None
@@ -1031,10 +1031,10 @@ fn apply_hud_layout(
         } else if xp_panel.is_some() {
             node.reborrow()
                 .map_unchanged(|value| &mut value.height)
-                .set_if_neq(if scheme.touch { Val::Auto } else { px(40) });
+                .set_if_neq(if scheme.touch() { Val::Auto } else { px(40) });
             node.reborrow()
                 .map_unchanged(|value| &mut value.width)
-                .set_if_neq(px(if !scheme.touch {
+                .set_if_neq(px(if !scheme.touch() {
                     desktop_xp_width
                 } else if compact {
                     xp_width
@@ -1043,7 +1043,7 @@ fn apply_hud_layout(
                 }));
             node.reborrow()
                 .map_unchanged(|value| &mut value.flex_direction)
-                .set_if_neq(if scheme.touch {
+                .set_if_neq(if scheme.touch() {
                     FlexDirection::Column
                 } else {
                     FlexDirection::Row
@@ -1057,28 +1057,28 @@ fn apply_hud_layout(
         } else if xp_readout.is_some() {
             node.reborrow()
                 .map_unchanged(|value| &mut value.height)
-                .set_if_neq(if scheme.touch { Val::Auto } else { px(28) });
+                .set_if_neq(if scheme.touch() { Val::Auto } else { px(28) });
             node.reborrow()
                 .map_unchanged(|value| &mut value.justify_content)
-                .set_if_neq(if scheme.touch {
+                .set_if_neq(if scheme.touch() {
                     JustifyContent::FlexStart
                 } else {
                     JustifyContent::Center
                 });
             node.reborrow()
                 .map_unchanged(|value| &mut value.width)
-                .set_if_neq(if scheme.touch {
+                .set_if_neq(if scheme.touch() {
                     percent(100)
                 } else {
                     px(desktop_readout_width)
                 });
             node.reborrow()
                 .map_unchanged(|value| &mut value.row_gap)
-                .set_if_neq(px(if scheme.touch { 7 } else { 4 }));
+                .set_if_neq(px(if scheme.touch() { 7 } else { 4 }));
         } else if xp_track.is_some() {
             node.reborrow()
                 .map_unchanged(|value| &mut value.width)
-                .set_if_neq(px(if !scheme.touch {
+                .set_if_neq(px(if !scheme.touch() {
                     desktop_readout_width
                 } else if compact {
                     xp_width - 16.0
@@ -1087,18 +1087,18 @@ fn apply_hud_layout(
                 }));
             node.reborrow()
                 .map_unchanged(|value| &mut value.height)
-                .set_if_neq(px(if scheme.touch { 13 } else { 8 }));
+                .set_if_neq(px(if scheme.touch() { 13 } else { 8 }));
         } else if skill_button.is_some() {
             node.reborrow()
                 .map_unchanged(|value| &mut value.width)
-                .set_if_neq(px(if scheme.touch { 112 } else { 92 }));
+                .set_if_neq(px(if scheme.touch() { 112 } else { 92 }));
             node.reborrow()
                 .map_unchanged(|value| &mut value.height)
-                .set_if_neq(px(if scheme.touch { 48 } else { 40 }));
+                .set_if_neq(px(if scheme.touch() { 48 } else { 40 }));
         } else if action_panel.is_some() {
             node.reborrow()
                 .map_unchanged(|value| &mut value.width)
-                .set_if_neq(px(if !scheme.touch {
+                .set_if_neq(px(if !scheme.touch() {
                     88.0
                 } else if compact {
                     action_width
@@ -1107,7 +1107,7 @@ fn apply_hud_layout(
                 }));
             node.reborrow()
                 .map_unchanged(|value| &mut value.height)
-                .set_if_neq(px(if !scheme.touch {
+                .set_if_neq(px(if !scheme.touch() {
                     40.0
                 } else if compact {
                     layout.joystick_size
@@ -1116,7 +1116,7 @@ fn apply_hud_layout(
                 }));
             node.reborrow()
                 .map_unchanged(|value| &mut value.margin)
-                .set_if_neq(UiRect::right(px(if scheme.touch {
+                .set_if_neq(UiRect::right(px(if scheme.touch() {
                     action_panel_margin_right(compact)
                 } else {
                     0.0
@@ -1125,13 +1125,13 @@ fn apply_hud_layout(
             let size = if compact { compact_dodge_size } else { 76.0 };
             node.reborrow()
                 .map_unchanged(|value| &mut value.width)
-                .set_if_neq(px(if scheme.touch { size } else { 88.0 }));
+                .set_if_neq(px(if scheme.touch() { size } else { 88.0 }));
             node.reborrow()
                 .map_unchanged(|value| &mut value.height)
-                .set_if_neq(px(if scheme.touch { size } else { 40.0 }));
+                .set_if_neq(px(if scheme.touch() { size } else { 40.0 }));
             node.reborrow()
                 .map_unchanged(|value| &mut value.flex_direction)
-                .set_if_neq(if scheme.touch {
+                .set_if_neq(if scheme.touch() {
                     FlexDirection::Column
                 } else {
                     FlexDirection::Row
@@ -1206,24 +1206,24 @@ fn apply_hud_layout(
     for mut node in &mut bottom_rows {
         node.reborrow()
             .map_unchanged(|value| &mut value.height)
-            .set_if_neq(if scheme.touch { Val::Auto } else { px(40) });
+            .set_if_neq(if scheme.touch() { Val::Auto } else { px(40) });
         node.reborrow()
             .map_unchanged(|value| &mut value.left)
-            .set_if_neq(if scheme.touch {
+            .set_if_neq(if scheme.touch() {
                 px(layout.safe_x)
             } else {
                 px((window.width() - desktop_width) * 0.5)
             });
         node.reborrow()
             .map_unchanged(|value| &mut value.right)
-            .set_if_neq(if scheme.touch {
+            .set_if_neq(if scheme.touch() {
                 px(layout.safe_x)
             } else {
                 Val::Auto
             });
         node.reborrow()
             .map_unchanged(|value| &mut value.width)
-            .set_if_neq(if scheme.touch {
+            .set_if_neq(if scheme.touch() {
                 Val::Auto
             } else {
                 px(desktop_width)
@@ -1233,29 +1233,29 @@ fn apply_hud_layout(
             .set_if_neq(px(layout.safe_y));
         node.reborrow()
             .map_unchanged(|value| &mut value.align_items)
-            .set_if_neq(if scheme.touch {
+            .set_if_neq(if scheme.touch() {
                 AlignItems::FlexEnd
             } else {
                 AlignItems::Center
             });
         node.reborrow()
             .map_unchanged(|value| &mut value.justify_content)
-            .set_if_neq(if scheme.touch {
+            .set_if_neq(if scheme.touch() {
                 JustifyContent::SpaceBetween
             } else {
                 JustifyContent::FlexStart
             });
         node.reborrow()
             .map_unchanged(|value| &mut value.column_gap)
-            .set_if_neq(px(if scheme.touch { 0 } else { 12 }));
+            .set_if_neq(px(if scheme.touch() { 0 } else { 12 }));
     }
     for mut node in &mut dodge_art {
         node.reborrow()
             .map_unchanged(|value| &mut value.width)
-            .set_if_neq(px(if scheme.touch { 44 } else { 22 }));
+            .set_if_neq(px(if scheme.touch() { 44 } else { 22 }));
         node.reborrow()
             .map_unchanged(|value| &mut value.height)
-            .set_if_neq(px(if scheme.touch { 44 } else { 22 }));
+            .set_if_neq(px(if scheme.touch() { 44 } else { 22 }));
     }
     for mut node in &mut archive_nodes {
         let width = if compact { 128.0 } else { 200.0 };
@@ -1335,6 +1335,7 @@ fn handle_trial_drawer(
 }
 
 fn handle_battle_speed(
+    controller: Option<Res<super::ControllerInput>>,
     keyboard: Res<ButtonInput<KeyCode>>,
     interactions: Query<(&Interaction, &SpeedButton), Changed<Interaction>>,
     mut battle_speed: ResMut<BattleSpeed>,
@@ -1345,6 +1346,12 @@ fn handle_battle_speed(
     });
     if let Some(selected) = selected {
         battle_speed.apply(selected);
+    } else if controller.as_ref().is_some_and(|input| input.speed != 0) {
+        battle_speed.apply(if controller.as_ref().unwrap().speed < 0 {
+            SpeedAction::Decrease
+        } else {
+            SpeedAction::Increase
+        });
     } else if keyboard.just_pressed(KeyCode::KeyT) {
         battle_speed.apply(SpeedAction::Increase);
     } else {
@@ -1459,6 +1466,7 @@ fn update_static_ui_language(
 }
 
 fn handle_manual_pause(
+    controller: Option<Res<super::ControllerInput>>,
     mut commands: Commands,
     settings: Option<Res<super::settings::SettingsState>>,
     attributes: Option<Res<hero_stats_ui::HeroStatsPanelState>>,
@@ -1489,7 +1497,8 @@ fn handle_manual_pause(
     let lost_focus = state.was_focused && !focused;
     state.was_focused = focused;
 
-    let pause_pressed = keyboard.just_pressed(KeyCode::KeyP)
+    let pause_pressed = controller.as_ref().is_some_and(|input| input.pause)
+        || keyboard.just_pressed(KeyCode::KeyP)
         || keyboard.just_pressed(KeyCode::Escape)
         || pause_buttons
             .iter()
@@ -1527,6 +1536,7 @@ fn handle_manual_pause(
             },
             BackgroundColor(Color::srgba(0.01, 0.025, 0.045, 0.9)),
             GlobalZIndex(90),
+            crate::game::controller_input::ControllerScope(90),
         ))
         .with_children(|overlay| {
             overlay.spawn((
@@ -1561,6 +1571,7 @@ fn handle_manual_pause(
                 .spawn((
                     Button,
                     PauseResumeButton,
+                    Name::new("Battle resume"),
                     Node {
                         width: px(220),
                         height: px(56),
@@ -1796,7 +1807,9 @@ fn update_hud(
                         language.pick("s", "秒")
                     )
                 } else {
-                    if scheme.touch {
+                    if scheme.controller() {
+                        "A".to_string()
+                    } else if scheme.touch() {
                         language.pick("DODGE", "闪避").to_string()
                     } else {
                         "Shift".to_string()
@@ -1978,7 +1991,7 @@ mod tests {
     #[test]
     fn narrow_desktop_hides_touch_controls_until_real_touch_mode() {
         let mut app = App::new();
-        app.insert_resource(ControlScheme { touch: false })
+        app.insert_resource(ControlScheme::Keyboard)
             .init_resource::<TrialDrawerState>()
             .init_resource::<GameSession>()
             .add_systems(Update, apply_hud_layout);
@@ -1993,7 +2006,11 @@ mod tests {
         let dodge = app.world_mut().spawn((DodgeButton, Node::default())).id();
         let bottom = app.world_mut().spawn((HudBottom, Node::default())).id();
         for touch in [false, true, false] {
-            app.world_mut().resource_mut::<ControlScheme>().touch = touch;
+            *app.world_mut().resource_mut::<ControlScheme>() = if touch {
+                ControlScheme::Touch
+            } else {
+                ControlScheme::Keyboard
+            };
             app.update();
             let pad_node = app.world().get::<Node>(pad).unwrap();
             let dodge_node = app.world().get::<Node>(dodge).unwrap();

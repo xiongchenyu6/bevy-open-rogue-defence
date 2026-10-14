@@ -51,6 +51,8 @@ pub fn reset_run(world: &mut World, stage: usize) {
             || world.get::<Observer>(entity).is_some()
             || world.get::<Camera>(entity).is_some()
             || world.get::<ArenaEntity>(entity).is_some()
+            // Input devices connect after startup and retain settings while disconnected.
+            || world.get::<GamepadSettings>(entity).is_some()
         {
             continue;
         }
@@ -86,6 +88,7 @@ pub fn reset_run(world: &mut World, stage: usize) {
     world.insert_resource(bonds::BondRuntime::default());
     skills::reset_run(world);
     mobile_input::reset_run(world);
+    super::controller_input::reset_run(world);
     #[cfg(any(debug_assertions, feature = "dev-tools"))]
     debug_menu::reset_run(world);
     world.insert_resource(basic_attacks::BasicAttackAim::default());
@@ -198,6 +201,13 @@ mod tests {
             ))
             .id();
         remember_scene(&mut world);
+        let late_controller = world.spawn(Gamepad::default()).id();
+        world
+            .get_mut::<Gamepad>(late_controller)
+            .unwrap()
+            .digital_mut()
+            .press(GamepadButton::South);
+        let disconnected_controller = world.spawn(GamepadSettings::default()).id();
         #[derive(Resource)]
         struct LatePersistentAsset(u32);
         world.insert_resource(LatePersistentAsset(99));
@@ -239,6 +249,23 @@ mod tests {
 
         assert!(world.get_entity(transient).is_err());
         assert!(
+            world.get::<Gamepad>(late_controller).is_some(),
+            "late connected devices survive a new expedition"
+        );
+        assert!(
+            !world
+                .get::<Gamepad>(late_controller)
+                .unwrap()
+                .just_pressed(GamepadButton::South),
+            "run reset consumes the old confirmation edge"
+        );
+        assert!(
+            world
+                .get::<GamepadSettings>(disconnected_controller)
+                .is_some(),
+            "disconnected device identity remains available for reconnection"
+        );
+        assert!(
             world
                 .resource::<PlayerBuild>()
                 .skills
@@ -261,6 +288,12 @@ mod tests {
         let second_transient = world.spawn(Name::new("Second run ability")).id();
         reset_run(&mut world, 0);
         assert!(world.get_entity(second_transient).is_err());
+        assert!(world.get::<Gamepad>(late_controller).is_some());
+        assert!(
+            world
+                .get::<GamepadSettings>(disconnected_controller)
+                .is_some()
+        );
         assert_eq!(world.resource::<LatePersistentAsset>().0, 99);
         assert!(world.get_entity(scene).is_ok());
         assert_eq!(world.resource::<CampaignRun>().run_id, 2);

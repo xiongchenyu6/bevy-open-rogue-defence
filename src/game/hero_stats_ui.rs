@@ -348,7 +348,7 @@ fn spawn_panel(
     commands.spawn((Name::new("Hero attributes overlay"),
         Node { position_type: PositionType::Absolute, width: percent(100), height: percent(100),
             align_items: AlignItems::Center, justify_content: JustifyContent::Center, ..default() },
-        BackgroundColor(Color::srgba(0.0, 0.01, 0.02, 0.78)), GlobalZIndex(280),
+        BackgroundColor(Color::srgba(0.0, 0.01, 0.02, 0.78)), GlobalZIndex(280), crate::game::controller_input::ControllerScope(280),
     )).with_children(|overlay| {
         overlay.spawn((Name::new("Hero attributes panel"),
             Node { width: px((size.x-24.0).min(900.0)), height: px((size.y-24.0).min(620.0)),
@@ -477,16 +477,32 @@ fn scroll(
 }
 
 fn update_close_hint(
-    buttons: Query<&Interaction, With<Close>>,
-    mut hints: Query<&mut Node, With<CloseHint>>,
+    buttons: Query<
+        (
+            &Interaction,
+            Has<super::super::controller_input::ControllerFocused>,
+        ),
+        With<Close>,
+    >,
+    mut hints: Query<(&mut Node, &mut Text), With<CloseHint>>,
+    scheme: Option<Res<super::super::ControlScheme>>,
+    language: Res<GameLanguage>,
 ) {
     let show = buttons
         .iter()
-        .any(|interaction| *interaction != Interaction::None);
-    for mut node in &mut hints {
+        .any(|(interaction, focused)| focused || *interaction != Interaction::None);
+    for (mut node, mut text) in &mut hints {
         node.reborrow()
             .map_unchanged(|value| &mut value.display)
             .set_if_neq(if show { Display::Flex } else { Display::None });
+        let copy = if scheme.as_ref().is_some_and(|mode| mode.controller()) {
+            language.pick("Close · B (East)", "关闭 · B（右键）")
+        } else {
+            language.pick("Close · Escape", "关闭 · Escape")
+        };
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(copy.to_owned());
     }
 }
 

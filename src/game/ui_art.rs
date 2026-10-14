@@ -79,7 +79,12 @@ pub(super) fn update_icon_hud(
     build: Res<PlayerBuild>,
     bonds: Option<Res<super::super::bonds::BondRuntime>>,
     language: Res<GameLanguage>,
-    hints: Query<(Ref<Interaction>, &HudHint)>,
+    scheme: Option<Res<super::super::ControlScheme>>,
+    hints: Query<(
+        Ref<Interaction>,
+        &HudHint,
+        Has<super::super::controller_input::ControllerFocused>,
+    )>,
     mut review: Local<BondReview>,
     mouse: Option<Res<ButtonInput<MouseButton>>>,
     touches: Option<Res<Touches>>,
@@ -118,7 +123,7 @@ pub(super) fn update_icon_hud(
             .map_unchanged(|value| &mut value.width)
             .set_if_neq(percent(fraction.clamp(0.0, 1.0) * 100.0));
     }
-    let pressed = hints.iter().find_map(|(interaction, hint)| {
+    let pressed = hints.iter().find_map(|(interaction, hint, _)| {
         (*interaction == Interaction::Pressed && interaction.is_changed()).then_some(*hint)
     });
     if session.paused || session.finished {
@@ -137,9 +142,9 @@ pub(super) fn update_icon_hud(
     {
         review.pinned = None;
     }
-    let hovered = hints
-        .iter()
-        .find_map(|(interaction, hint)| (*interaction != Interaction::None).then_some(*hint));
+    let hovered = hints.iter().find_map(|(interaction, hint, focused)| {
+        (focused || *interaction != Interaction::None).then_some(*hint)
+    });
     let hovered_bond = match hovered {
         Some(HudHint::BondProgress(id)) => Some(id),
         _ => None,
@@ -209,6 +214,25 @@ pub(super) fn update_icon_hud(
             SpeedAction::Increase => language.pick("Faster · Double battle speed\nMaximum 32×. T also increases speed.", "加速 · 战斗速度翻倍\n最高三十二倍速，按 T 也可加速。"),
             SpeedAction::Reset => language.pick("Current battle speed\nReset to 1×.", "当前战斗速度\n点击恢复一倍速。"),
         }.into(),
+    };
+    let copy = if scheme.as_ref().is_some_and(|mode| mode.controller()) {
+        let mut result = copy;
+        for key in ["F", "E", "G", "H", "Shift"] {
+            result = result.replacen(
+                &format!(" · {key}"),
+                language.pick(" · A (South)", " · A（下键）"),
+                1,
+            );
+        }
+        result
+            .replacen(" · Escape", " · Start", 1)
+            .replace(
+                " T also increases speed.",
+                " Right shoulder also increases speed.",
+            )
+            .replace("按 T 也可加速", "右肩键也可加速")
+    } else {
+        copy
     };
     for mut text in &mut tip_text {
         text.reborrow()
@@ -420,16 +444,18 @@ pub(super) fn update_small_controls(
     mut buttons: Query<(
         &HudHint,
         &Interaction,
+        Has<super::super::controller_input::ControllerFocused>,
         &mut BackgroundColor,
         &mut BorderColor,
     )>,
 ) {
-    for (hint, interaction, mut background, mut border) in &mut buttons {
+    for (hint, interaction, controller_focused, mut background, mut border) in &mut buttons {
         if !matches!(hint, HudHint::Pause | HudHint::Trials) {
             continue;
         }
-        let focused =
-            *interaction != Interaction::None || (matches!(hint, HudHint::Trials) && drawer.open);
+        let focused = controller_focused
+            || *interaction != Interaction::None
+            || (matches!(hint, HudHint::Trials) && drawer.open);
         background.0 = if focused {
             Color::srgba(0.26, 0.18, 0.075, 0.96)
         } else {

@@ -1,0 +1,31 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {39, 94, 124, 149, 179}; all 200 simulation/render updates retained
+[2m2026-10-14T06:38:14.015338Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.2.9", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/keyboard-touch/runtime/wayland-1" plus null terminator exceeds 108 bytes
+error: socket path "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/keyboard-touch/runtime/wayland-1" plus null terminator exceeds 108 bytes
+[2m2026-10-14T06:38:14.082376Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.71.09", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-10-14T06:38:14.374286Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-10-14T06:38:14.374387Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[capture] hero-attributes: actual +/-/reset controls, live stats sheet, pause/close, no ultimate HUD
+[2m2026-10-14T06:38:14.476439Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 20.000s (paused restored to false)
+[capture] render target warmed
+[capture] PASS input layout frame 40: touch=false, pad=false, dodge=Vec2(88.0, 40.0)
+[2m2026-10-14T06:38:15.234889Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/keyboard-touch/frames/frame00039.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/keyboard-touch/frames/frame00039.png (296750 bytes)
+[capture] PASS input layout frame 95: touch=true, pad=true, dodge=Vec2(84.0, 84.0)
+[2m2026-10-14T06:38:15.514378Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/keyboard-touch/frames/frame00094.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/keyboard-touch/frames/frame00094.png (296149 bytes)
+[capture] PASS input layout frame 125: touch=true, pad=true, dodge=Vec2(84.0, 84.0)
+[2m2026-10-14T06:38:15.664915Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/keyboard-touch/frames/frame00124.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/keyboard-touch/frames/frame00124.png (296168 bytes)
+[capture] PASS input layout frame 150: touch=false, pad=false, dodge=Vec2(88.0, 40.0)
+[2m2026-10-14T06:38:15.795150Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/keyboard-touch/frames/frame00149.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/keyboard-touch/frames/frame00149.png (295973 bytes)
+[capture] PASS input layout frame 180: touch=false, pad=false, dodge=Vec2(88.0, 40.0)
+[2m2026-10-14T06:38:15.960721Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/keyboard-touch/frames/frame00179.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/keyboard-touch/frames/frame00179.png (296401 bytes)
+[capture] all 5 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 200 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/controller-input-2026-10-14/keyboard-touch/frames

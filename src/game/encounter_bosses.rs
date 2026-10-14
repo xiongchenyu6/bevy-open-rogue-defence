@@ -720,7 +720,7 @@ fn tick_adventure(
     }
     if state.pending.is_some()
         || !can_offer(&session)
-        || draft.as_deref().is_some_and(|draft| draft.kind.is_some())
+        || draft.as_deref().is_some_and(|draft| draft.root.is_some())
         || recruitment
             .as_deref()
             .is_some_and(|recruitment| recruitment.pending.is_some())
@@ -987,6 +987,36 @@ mod tests {
             paused: true,
             ..default()
         }));
+    }
+    #[test]
+    fn banked_draft_allows_camp_preserves_offers_and_visible_draft_blocks() {
+        for visible in [false, true] {
+            let mut app = test_app();
+            app.add_systems(Update, tick_adventure);
+            let root = visible.then(|| app.world_mut().spawn_empty().id());
+            let choices = vec![crate::game::DraftChoice::Skill(crate::game::SkillId(0))];
+            app.insert_resource(DraftState {
+                choices: choices.clone(),
+                root,
+                kind: Some(crate::game::DraftKind::Skill),
+                ..default()
+            });
+            app.world_mut().resource_mut::<GameSession>().elapsed = 240.;
+            app.world_mut().resource_mut::<GameSession>().gold = 420;
+            app.world_mut().write_message(AdventureCampRequest(0));
+            app.update();
+            assert_eq!(
+                app.world().resource::<AdventureBossState>().pending,
+                if visible { None } else { Some(0) }
+            );
+            assert_eq!(app.world().resource::<DraftState>().choices, choices);
+            assert_eq!(app.world().resource::<DraftState>().root, root);
+            assert_eq!(
+                app.world().resource::<DraftState>().kind,
+                Some(crate::game::DraftKind::Skill)
+            );
+            assert_eq!(app.world().resource::<GameSession>().gold, 420);
+        }
     }
     #[test]
     fn failed_fight_rental_keeps_choice_and_small_reward_pays_once() {

@@ -111,7 +111,17 @@ fn handle(
     mut keyboard: ResMut<ButtonInput<KeyCode>>,
     opens: Query<&Interaction, (With<Open>, Changed<Interaction>)>,
     closes: Query<&Interaction, (With<Close>, Changed<Interaction>)>,
-    choices: Query<(&Interaction, &Select), Changed<Interaction>>,
+    choices: Query<
+        (
+            &Interaction,
+            &Select,
+            Has<super::super::controller_input::ControllerFocused>,
+        ),
+        Or<(
+            Changed<Interaction>,
+            Added<super::super::controller_input::ControllerFocused>,
+        )>,
+    >,
     settings: Res<super::super::settings::SettingsState>,
     scroll_positions: Query<(&Name, &ScrollPosition), With<Scroll>>,
 ) {
@@ -122,8 +132,9 @@ fn handle(
         .single()
         .map(|w| Vec2::new(w.width(), w.height()))
         .unwrap_or(Vec2::new(1280.0, 720.0));
-    let choice = choices.iter().find_map(|(interaction, choice)| {
-        (*interaction == Interaction::Pressed).then_some(choice.0)
+    let choice = choices.iter().find_map(|(interaction, choice, focused)| {
+        ((focused && state.selected != Some(choice.0)) || *interaction == Interaction::Pressed)
+            .then_some(choice.0)
     });
     if state.open() {
         let closing = keyboard.just_pressed(KeyCode::Escape)
@@ -218,6 +229,7 @@ fn panel(
             },
             BackgroundColor(Color::srgba(0.0, 0.01, 0.02, 0.85)),
             GlobalZIndex(285),
+            crate::game::controller_input::ControllerScope(285),
         ))
         .with_children(|overlay| {
             overlay

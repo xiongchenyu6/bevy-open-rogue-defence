@@ -28,6 +28,7 @@ struct Probe {
     retry_position: Option<Vec2>,
     pointer_targets: Vec<(Entity, RenderTarget)>,
     unoffered: Option<Handle<WorldAsset>>,
+    controller: Option<Entity>,
 }
 /// Register before AssetPlugin; no production asset files or readiness flags are changed.
 pub fn prepare(app: &mut App, font_scenario: bool) {
@@ -41,6 +42,7 @@ pub fn prepare(app: &mut App, font_scenario: bool) {
         retry_position: None,
         pointer_targets: Vec::new(),
         unoffered: None,
+        controller: None,
     });
 }
 pub fn configure(world: &mut World) {
@@ -56,12 +58,27 @@ pub fn plugin(app: &mut App) {
     app.add_plugins(AssetReadinessPlugin);
 }
 pub fn install(app: &mut SubApp) {
+    if std::env::args().nth(4).as_deref() == Some("controller-readiness") {
+        use bevy::input::gamepad::{GamepadConnection, GamepadConnectionEvent};
+        let world = app.world_mut();
+        let pad = world.spawn_empty().id();
+        world.write_message(GamepadConnectionEvent::new(
+            pad,
+            GamepadConnection::Connected {
+                name: "Controller readiness capture".into(),
+                vendor_id: None,
+                product_id: None,
+            },
+        ));
+        world.resource_mut::<Probe>().controller = Some(pad);
+    }
     app.add_systems(First, repeat_click);
     app.add_systems(
         PreUpdate,
         input
             .after(bevy::ui::UiSystems::Focus)
-            .before(AssetReadinessInputSet),
+            .before(AssetReadinessInputSet)
+            .before(rogue_commander::game::ControllerInputSet),
     );
     app.add_systems(Last, audit);
 }
@@ -102,15 +119,16 @@ fn input(world: &mut World) {
             *current = target;
         }
     }
-    if [12, 42, 72].contains(&frame) {
+    let controller = world.resource::<Probe>().controller.is_some();
+    if !controller && [12, 42, 72].contains(&frame) {
         press(world, "Commander card 0");
     }
-    if [13, 43, 73].contains(&frame) {
+    if !controller && [13, 43, 73].contains(&frame) {
         world
             .resource_mut::<ButtonInput<KeyCode>>()
             .press(KeyCode::Digit1);
     }
-    if [14, 44, 74].contains(&frame) {
+    if !controller && [14, 44, 74].contains(&frame) {
         world
             .resource_mut::<ButtonInput<KeyCode>>()
             .release(KeyCode::Digit1);
@@ -123,18 +141,41 @@ fn input(world: &mut World) {
         p.gate.open.store(false, Ordering::SeqCst);
         asset_io_capture::restore(&p.root, &[p.target]);
     }
-    if frame == 60 {
+    if !controller && frame == 60 {
         press(world, "Retry loading");
         println!("ASSET_READINESS_REAL_RETRY_CLICK");
     }
     if frame == 85 {
         world.resource::<Probe>().gate.release();
     }
-    if frame == 120 {
+    if !controller && frame == 120 {
         press(world, "Commander card 0");
     }
 }
 fn repeat_click(world: &mut World) {
+    if let Some(pad) = world.resource::<Probe>().controller {
+        use bevy::input::gamepad::{RawGamepadButtonChangedEvent, RawGamepadEvent};
+        let frame = world.resource::<Probe>().frame + 1;
+        let event = match frame {
+            2 => Some((GamepadButton::North, 1.)),
+            3 => Some((GamepadButton::North, 0.)),
+            12 | 60 | 72 | 120 => Some((GamepadButton::South, 1.)),
+            14 | 67 | 74 | 122 => Some((GamepadButton::South, 0.)),
+            42 => Some((GamepadButton::East, 1.)),
+            44 => Some((GamepadButton::East, 0.)),
+            _ => None,
+        };
+        if let Some((button, value)) = event {
+            world.write_message(RawGamepadEvent::Button(RawGamepadButtonChangedEvent::new(
+                pad, button, value,
+            )));
+            println!(
+                "ASSET_READINESS_CONTROLLER_EVENT frame={frame} button={button:?} value={value}"
+            );
+        }
+        return;
+    }
+
     let frame = world.resource::<Probe>().frame + 1;
     if frame != 66 && frame != 67 {
         return;

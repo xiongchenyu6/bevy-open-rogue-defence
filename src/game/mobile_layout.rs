@@ -2,8 +2,10 @@ use bevy::prelude::*;
 
 /// Input mode is independent of viewport size: small desktop windows still use keys.
 #[derive(Resource, Clone, Copy, Debug, PartialEq, Eq)]
-pub struct ControlScheme {
-    pub touch: bool,
+pub enum ControlScheme {
+    Keyboard,
+    Touch,
+    Controller,
 }
 impl Default for ControlScheme {
     fn default() -> Self {
@@ -13,27 +15,38 @@ impl Default for ControlScheme {
             .is_some_and(|query| query.matches());
         #[cfg(not(target_arch = "wasm32"))]
         let touch = cfg!(any(target_os = "android", target_os = "ios"));
-        Self { touch }
+        if touch { Self::Touch } else { Self::Keyboard }
     }
 }
 impl ControlScheme {
+    pub fn touch(self) -> bool {
+        self == Self::Touch
+    }
+    pub fn controller(self) -> bool {
+        self == Self::Controller
+    }
     fn observe(&mut self, touch_pressed: bool, key_pressed: bool) {
         if touch_pressed {
-            self.touch = true;
+            *self = Self::Touch;
         } else if key_pressed {
-            self.touch = false;
+            *self = Self::Keyboard;
         }
     }
 }
-
 pub(super) fn update_control_scheme(
     touches: Res<Touches>,
     keyboard: Res<ButtonInput<KeyCode>>,
+    mouse: Res<ButtonInput<MouseButton>>,
+    mut motion: MessageReader<bevy::input::mouse::MouseMotion>,
     mut scheme: ResMut<ControlScheme>,
 ) {
     scheme.observe(
         touches.iter_just_pressed().next().is_some(),
-        keyboard.get_just_pressed().next().is_some(),
+        keyboard.get_just_pressed().next().is_some()
+            || mouse.get_just_pressed().next().is_some()
+            || motion
+                .read()
+                .any(|event| event.delta.length_squared() > 0.0),
     );
 }
 
@@ -87,17 +100,17 @@ mod tests {
 
     #[test]
     fn input_scheme_follows_input_and_persists_without_input() {
-        let mut scheme = ControlScheme { touch: false };
+        let mut scheme = ControlScheme::Keyboard;
         scheme.observe(false, false);
-        assert!(!scheme.touch);
+        assert!(!scheme.touch());
         scheme.observe(true, false);
-        assert!(scheme.touch);
+        assert!(scheme.touch());
         scheme.observe(false, false);
-        assert!(scheme.touch);
+        assert!(scheme.touch());
         scheme.observe(false, true);
-        assert!(!scheme.touch);
+        assert!(!scheme.touch());
         scheme.observe(true, true);
-        assert!(scheme.touch);
+        assert!(scheme.touch());
     }
 
     #[test]

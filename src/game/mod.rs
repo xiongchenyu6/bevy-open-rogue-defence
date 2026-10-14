@@ -1,4 +1,8 @@
 #![allow(clippy::too_many_arguments, clippy::type_complexity)]
+mod controller_input;
+pub use controller_input::{
+    ControllerDisabled, ControllerFocus, ControllerInput, ControllerInputSet, ControllerScope,
+};
 
 use bevy::prelude::*;
 
@@ -137,6 +141,7 @@ impl Plugin for GamePlugin {
             .add_plugins(localization::LocalizationPlugin)
             .add_plugins(audio_mix::AudioMixPlugin)
             .add_plugins(settings::SettingsPlugin)
+            .add_plugins(controller_input::ControllerInputPlugin)
             .add_plugins(pooling::PoolPlugin)
             .add_plugins(model_animation::ModelAnimationPlugin)
             .add_plugins(adventure_vfx::AdventureVfxPlugin)

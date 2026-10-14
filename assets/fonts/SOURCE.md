@@ -10,9 +10,9 @@ UI so Chinese text does not depend on fonts installed on the player's device.
 - Source SHA-256: `a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da`
 - License source SHA-256: `babcfe66c8a098b2fa279bc724a3a342f8124f77ce18941fbcc1bbb39823cded`
 - Subsetter: fontTools `4.63.0`
-- Glyph corpus SHA-256: `9519faee3a2ecbe670950c36f0c1ebf9478b1ff75e906a38db2c612fe45bafc2`
-- Subset SHA-256: `bdab91e514165db0446a841bc4892b0d48c009638e6e609276a1cbbc85df8b99`
-- Subset size: 478,556 bytes
+- Glyph corpus SHA-256: `d094972b157c97f91945c4157cd4d9e61317d8f7dbc3d324e807d3d0f063cdbf`
+- Subset SHA-256: `457a768f2365b79f4eee09dfbeeaf9f398cde8729bce1a4e85a557b5bb88aeca`
+- Subset size: 480,576 bytes
 - License: SIL Open Font License 1.1; see `OFL.txt`
 
 `glyphs.txt` contains the non-ASCII characters in the player-facing source catalog

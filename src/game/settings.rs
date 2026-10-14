@@ -153,6 +153,7 @@ fn spawn_settings(commands: &mut Commands) -> Entity {
             },
             bevy::ui::FocusPolicy::Block,
             GlobalZIndex(500),
+            crate::game::controller_input::ControllerScope(500),
             BackgroundColor(Color::srgb(0.014, 0.025, 0.032)),
         ))
         .with_children(|root| {

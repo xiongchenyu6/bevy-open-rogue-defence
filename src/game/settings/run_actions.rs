@@ -136,7 +136,7 @@ fn prompt(
     finished: bool,
     action: Action,
 ) -> Entity {
-    commands.spawn((Name::new("Settings departure confirmation"),GlobalZIndex(530),
+    commands.spawn((Name::new("Settings departure confirmation"),GlobalZIndex(530), crate::game::controller_input::ControllerScope(530),
         bevy::ui::FocusPolicy::Block, BackgroundColor(Color::srgba(0.0,0.0,0.0,0.92)),
         Node{position_type:PositionType::Absolute,width:percent(100),height:percent(100),
             align_items:AlignItems::Center,justify_content:JustifyContent::Center,..default()}))

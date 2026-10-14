@@ -1,0 +1,20 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.13s
+     Running unittests src/lib.rs (target/debug/deps/rogue_commander-c9f19ae2f10dc8c0)
+
+running 12 tests
+test game::controller_input::tests::navigation_prefers_same_row ... ok
+test game::controller_input::tests::radial_deadzone_rescales_and_clamps ... ok
+test game::controller_input::ecs_tests::analog_movement_dodge_and_disconnect_clear_transient_input ... ok
+test game::controller_input::ecs_tests::loading_scope_with_no_buttons_blocks_underlying_chapter_activation ... ok
+test game::controller_input::ecs_tests::a_new_controller_button_takes_over_without_old_held_stick_stealing_it ... ok
+test game::controller_input::ecs_tests::held_confirm_cannot_purchase_twice_or_select_rebuilt_next_card ... ok
+test game::controller_input::ecs_tests::modal_starts_on_its_own_first_choice_before_global_settings_entry ... ok
+test game::controller_input::ecs_tests::focus_survives_rebuild_and_excludes_hidden_and_disabled_buttons ... ok
+test game::controller_input::ecs_tests::topmost_confirmation_owns_back_without_battle_pause ... ok
+test game::controller_input::ecs_tests::pointer_takeover_keeps_the_real_click_after_ui_focus ... ok
+test game::controller_input::ecs_tests::navigation_reveals_focus_and_right_stick_scrolls_the_list ... ok
+test game::controller_input::ecs_tests::menu_repeat_and_scroll_ignore_virtual_speed_and_pause ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 641 filtered out; finished in 0.00s
+

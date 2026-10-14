@@ -88,6 +88,9 @@ mod fusion_reach_capture;
 #[path = "capture/growth.rs"]
 mod growth_capture;
 
+#[path = "capture/controller_input.rs"]
+mod controller_input_capture;
+
 #[path = "capture/hud_input.rs"]
 mod hud_input_capture;
 
@@ -426,7 +429,10 @@ fn main() {
     if scenario == "asset-readiness-recruit" {
         recruitment_readiness_capture::prepare(&mut app);
     }
-    if matches!(scenario, "asset-readiness" | "asset-readiness-font") {
+    if matches!(
+        scenario,
+        "asset-readiness" | "asset-readiness-font" | "controller-readiness"
+    ) {
         asset_readiness_capture::prepare(&mut app, scenario == "asset-readiness-font");
     }
     app.insert_resource(ClearColor(Color::srgb(0.015, 0.025, 0.045)))
@@ -464,7 +470,10 @@ fn main() {
     if scenario == "asset-readiness-recruit" {
         recruitment_readiness_capture::plugin(&mut app);
     }
-    if matches!(scenario, "asset-readiness" | "asset-readiness-font") {
+    if matches!(
+        scenario,
+        "asset-readiness" | "asset-readiness-font" | "controller-readiness"
+    ) {
         asset_readiness_capture::plugin(&mut app);
     }
 
@@ -511,7 +520,10 @@ fn main() {
     if scenario == "asset-readiness-recruit" {
         recruitment_readiness_capture::install(&mut apps.main);
         println!("[capture] later recruitment readiness retains cold-start missing catalog assets");
-    } else if matches!(scenario, "asset-readiness" | "asset-readiness-font") {
+    } else if matches!(
+        scenario,
+        "asset-readiness" | "asset-readiness-font" | "controller-readiness"
+    ) {
         asset_readiness_capture::install(&mut apps.main);
         println!(
             "[capture] readiness scenario retains cold-start asset loading; no preload warm-up"
@@ -586,6 +598,9 @@ fn main() {
     }
     if scenario == "skill-growth" {
         skill_growth_capture::install(&mut apps.main);
+    }
+    if scenario == "controller-input" {
+        controller_input_capture::install(&mut apps.main);
     }
     if scenario == "hud-input" {
         hud_input_capture::install(&mut apps.main);
@@ -935,6 +950,10 @@ fn wait_for_screenshots(apps: &mut SubApps) {
 }
 
 fn configure_scenario(world: &mut World, scenario: &str) {
+    if scenario == "controller-input" {
+        controller_input_capture::configure(world);
+        return;
+    }
     if scenario == "asset-readiness-recruit" {
         recruitment_readiness_capture::configure(world);
         return;
@@ -947,7 +966,10 @@ fn configure_scenario(world: &mut World, scenario: &str) {
         onboarding_capture::configure(world, scenario);
         return;
     }
-    if matches!(scenario, "asset-readiness" | "asset-readiness-font") {
+    if matches!(
+        scenario,
+        "asset-readiness" | "asset-readiness-font" | "controller-readiness"
+    ) {
         asset_readiness_capture::configure(world);
         return;
     }

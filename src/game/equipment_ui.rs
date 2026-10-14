@@ -191,8 +191,28 @@ fn input(
     crafting: Res<CraftingState>,
     (tabs, recipes, crafted_items, craft_buttons): (
         Query<(&Interaction, &Tab), Changed<Interaction>>,
-        Query<(&Interaction, &Recipe), Changed<Interaction>>,
-        Query<(&Interaction, &Crafted), Changed<Interaction>>,
+        Query<
+            (
+                &Interaction,
+                &Recipe,
+                Has<super::controller_input::ControllerFocused>,
+            ),
+            Or<(
+                Changed<Interaction>,
+                Added<super::controller_input::ControllerFocused>,
+            )>,
+        >,
+        Query<
+            (
+                &Interaction,
+                &Crafted,
+                Has<super::controller_input::ControllerFocused>,
+            ),
+            Or<(
+                Changed<Interaction>,
+                Added<super::controller_input::ControllerFocused>,
+            )>,
+        >,
         Query<&Interaction, (With<ConfirmCraft>, Changed<Interaction>)>,
     ),
     assets: Res<AssetServer>,
@@ -200,7 +220,17 @@ fn input(
     mut keyboard: ResMut<ButtonInput<KeyCode>>,
     open: Query<&Interaction, (With<Open>, Changed<Interaction>)>,
     close: Query<&Interaction, (With<Close>, Changed<Interaction>)>,
-    items: Query<(&Interaction, &Item), Changed<Interaction>>,
+    items: Query<
+        (
+            &Interaction,
+            &Item,
+            Has<super::controller_input::ControllerFocused>,
+        ),
+        Or<(
+            Changed<Interaction>,
+            Added<super::controller_input::ControllerFocused>,
+        )>,
+    >,
     settings: Res<super::settings::SettingsState>,
     hero: Res<super::ui::hero_stats_ui::HeroStatsPanelState>,
 ) {
@@ -231,13 +261,13 @@ fn input(
                 rebuild = true;
             }
         }
-        for (interaction, recipe) in &recipes {
-            if matches!(interaction, Interaction::Pressed | Interaction::Hovered) {
+        for (interaction, recipe, focused) in &recipes {
+            if focused || matches!(interaction, Interaction::Pressed | Interaction::Hovered) {
                 state.recipe = Some(recipe.0);
             }
         }
-        for (interaction, item) in &crafted_items {
-            if matches!(interaction, Interaction::Pressed | Interaction::Hovered) {
+        for (interaction, item, focused) in &crafted_items {
+            if focused || matches!(interaction, Interaction::Pressed | Interaction::Hovered) {
                 state.selected_crafted = Some(item.0);
                 state.selected = None;
             }
@@ -252,8 +282,8 @@ fn input(
                 super::crafting::craft_recipe(world, recipe);
             });
         }
-        for (interaction, item) in &items {
-            if matches!(interaction, Interaction::Pressed | Interaction::Hovered) {
+        for (interaction, item, focused) in &items {
+            if focused || matches!(interaction, Interaction::Pressed | Interaction::Hovered) {
                 state.selected = Some(item.0);
                 state.selected_crafted = None;
             }
@@ -420,6 +450,11 @@ fn feedback(
     }
 }
 fn details(
+    mut commands: Commands,
+    confirmations: Query<
+        (Entity, Has<super::controller_input::ControllerDisabled>),
+        With<ConfirmCraft>,
+    >,
     state: Res<EquipmentPanelState>,
     language: Res<GameLanguage>,
     crafting: Res<CraftingState>,
@@ -461,6 +496,18 @@ fn details(
             .into()
     };
     let ready = crafting.ready(recipe, &market);
+    for (entity, disabled) in &confirmations {
+        if ready && disabled {
+            commands
+                .entity(entity)
+                .remove::<super::controller_input::ControllerDisabled>();
+        }
+        if !ready && !disabled {
+            commands
+                .entity(entity)
+                .insert(super::controller_input::ControllerDisabled);
+        }
+    }
     let action = if crafting.acquired(recipe) {
         language.pick("Already forged", "已合成")
     } else if ready {

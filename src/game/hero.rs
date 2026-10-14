@@ -221,7 +221,10 @@ struct HeroChoiceInput<'w> {
 }
 fn handle_hero_choice(
     mut commands: Commands,
-    interactions: Query<(&Interaction, &HeroChoiceButton), Changed<Interaction>>,
+    (interactions, focused): (
+        Query<(&Interaction, &HeroChoiceButton), Changed<Interaction>>,
+        Query<&HeroChoiceButton, With<super::controller_input::ControllerFocused>>,
+    ),
     ordinals: Query<(&HeroChoiceButton, &HeroChoiceOrdinal)>,
     mut input: HeroChoiceInput,
     assets: Option<Res<GameAssets>>,
@@ -270,6 +273,11 @@ fn handle_hero_choice(
             .touches
             .as_ref()
             .is_some_and(|touches| touches.iter_just_pressed().next().is_some());
+    if let Some(choice) = focused.iter().next()
+        && state.preview != Some(choice.0)
+    {
+        state.preview = Some(choice.0);
+    }
     let mut clicked = interactions.iter().find_map(|(interaction, choice)| {
         if *interaction == Interaction::Hovered {
             state.preview = Some(choice.0);
@@ -1290,6 +1298,23 @@ mod live_language_tests {
                     .iter()
                     .all(|offer| names.contains(&hero_name(language, offer.kind)))
             );
+        }
+        app.insert_resource(crate::game::ControlScheme::Controller);
+        for language in [GameLanguage::English, GameLanguage::SimplifiedChinese] {
+            *app.world_mut().resource_mut::<GameLanguage>() = language;
+            app.update();
+            let headings: Vec<_> = app
+                .world_mut()
+                .query_filtered::<&Text, With<draft::DraftHeading>>()
+                .iter(app.world())
+                .map(|text| text.0.clone())
+                .collect();
+            assert_eq!(
+                headings,
+                [language.pick("Choose a commander · A (South)", "选择指挥官 · A（下键）")]
+            );
+            assert_eq!(app.world().resource::<HeroState>().preview, Some(offers[1]));
+            assert_eq!(app.world().resource::<RunRng>().0, rng);
         }
     }
 }

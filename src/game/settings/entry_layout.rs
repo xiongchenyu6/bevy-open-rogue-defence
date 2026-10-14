@@ -13,6 +13,7 @@ pub(super) fn install(app: &mut App) {
 fn position_picker_settings(
     windows: Query<&Window, With<PrimaryWindow>>,
     picker: Query<Entity, With<crate::game::hero::HeroSelectorRoot>>,
+    draft: Option<Res<crate::game::DraftState>>,
     mut nodes: Query<
         (
             &mut Node,
@@ -29,25 +30,40 @@ fn position_picker_settings(
         return;
     };
     let compact_picker = window.height() < 540.0 && !picker.is_empty();
+    let compact_draft = window.height() < 540.0 && draft.is_some_and(|d| d.root.is_some());
     for (mut node, launcher, header) in &mut nodes {
         if launcher {
-            node.reborrow()
-                .map_unchanged(|n| &mut n.left)
-                .set_if_neq(if compact_picker {
+            node.reborrow().map_unchanged(|n| &mut n.left).set_if_neq(
+                if compact_picker || compact_draft {
                     Val::Auto
                 } else {
                     percent(50)
-                });
+                },
+            );
             node.reborrow()
                 .map_unchanged(|n| &mut n.right)
-                .set_if_neq(if compact_picker { px(24) } else { Val::Auto });
-            node.reborrow()
-                .map_unchanged(|n| &mut n.margin)
-                .set_if_neq(if compact_picker {
+                .set_if_neq(if compact_draft {
+                    px(32)
+                } else if compact_picker {
+                    px(24)
+                } else {
+                    Val::Auto
+                });
+            node.reborrow().map_unchanged(|n| &mut n.margin).set_if_neq(
+                if compact_picker || compact_draft {
                     UiRect::ZERO
                 } else {
                     UiRect::left(px(-40))
-                });
+                },
+            );
+        }
+        if launcher {
+            node.reborrow()
+                .map_unchanged(|n| &mut n.top)
+                .set_if_neq(if compact_draft { Val::Auto } else { px(8) });
+            node.reborrow()
+                .map_unchanged(|n| &mut n.bottom)
+                .set_if_neq(if compact_draft { px(24) } else { Val::Auto });
         }
         if header {
             node.reborrow()
@@ -128,5 +144,20 @@ mod tests {
             .set(480., 360.);
         app.update();
         assert_eq!(app.world().get::<Node>(launcher).unwrap().left, percent(50));
+        app.insert_resource(crate::game::DraftState {
+            root: Some(header),
+            ..default()
+        });
+        app.update();
+        let entry = app.world().get::<Node>(launcher).unwrap();
+        assert_eq!(
+            (entry.left, entry.right, entry.top, entry.bottom),
+            (Val::Auto, px(32), Val::Auto, px(24))
+        );
+        app.world_mut()
+            .resource_mut::<crate::game::DraftState>()
+            .root = None;
+        app.update();
+        assert_eq!(app.world().get::<Node>(launcher).unwrap().top, px(8));
     }
 }
