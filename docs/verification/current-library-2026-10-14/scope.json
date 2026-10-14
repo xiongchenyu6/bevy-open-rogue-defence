@@ -1,0 +1,8 @@
+{
+  "source_commit": "2f022757f3ad1877b925682b9658f0d47b80dd3a",
+  "command": "nix develop --command cargo test --locked --lib",
+  "passed": 640,
+  "failed": 0,
+  "ignored": 1,
+  "scope": "library regressions; not full campaign, visual review or Steam hardware acceptance"
+}
