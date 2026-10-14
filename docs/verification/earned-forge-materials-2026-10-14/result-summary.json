@@ -1,0 +1,35 @@
+{
+  "package_commit": "d2527eb5d1f43a475c0dc365e1a075f96b1723a7",
+  "purchases": [
+    {
+      "name": "Arc Lens",
+      "price": 180,
+      "wallet_before": 183,
+      "wallet_after": 3,
+      "offer_ocr": [
+        "[R/.GEAR] Arc Lens 180 KILLS",
+        922,
+        358,
+        1074,
+        386
+      ]
+    },
+    {
+      "name": "Echo Core",
+      "price": 300,
+      "wallet_before": 303,
+      "wallet_after": 3,
+      "offer_ocr": [
+        "[SR/ GEAR] Echo Core 300KILLS",
+        922,
+        490,
+        1089,
+        501
+      ]
+    }
+  ],
+  "completed": false,
+  "failure": "RuntimeError: Missing visible text: Echo Core",
+  "reason": "Second owned icon was not selected before checking its detail text",
+  "crafting_verified": false
+}
