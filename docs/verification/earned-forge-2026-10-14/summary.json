@@ -1,0 +1,150 @@
+{
+  "package_version": {
+    "binary_sha256": "b4ec8c186f25588756ef8a1ccd26c503ff73c67396b1ad7c794e2686b1f66f00",
+    "git_commit": "d2527eb5d1f43a475c0dc365e1a075f96b1723a7",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "initial_progress": {
+    "unlocked": 5,
+    "currency": 575,
+    "cleared": "111100",
+    "upgrades": [
+      5,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "scope": "Packaged public X11 UI, earned kills, random market stock",
+  "purchases": [
+    {
+      "name": "Arc Lens",
+      "price": 180,
+      "wallet_before": 307,
+      "wallet_after": 127,
+      "offer_ocr": [
+        "[R/GEAR] Arc Lens 180 KILLS",
+        922,
+        358,
+        1074,
+        386
+      ]
+    },
+    {
+      "name": "Echo Core",
+      "price": 300,
+      "wallet_before": 309,
+      "wallet_after": 9,
+      "offer_ocr": [
+        "[SR/ GEAR] Echo Core 300 KILLS",
+        918,
+        365,
+        1090,
+        393
+      ]
+    }
+  ],
+  "crafting": "Astral Prism crafted from two same-run naturally purchased materials",
+  "acquired_materials": [
+    "Arc Lens",
+    "Echo Core"
+  ],
+  "actual_speed": 1,
+  "hud_wallet_ocr": [
+    {
+      "value": 307,
+      "bounds": [
+        169,
+        188
+      ],
+      "raw": "307"
+    },
+    {
+      "value": 127,
+      "bounds": [
+        169,
+        188
+      ],
+      "raw": "127"
+    },
+    {
+      "value": 309,
+      "bounds": [
+        169,
+        188
+      ],
+      "raw": "309"
+    },
+    {
+      "value": 9,
+      "bounds": [
+        168,
+        174
+      ],
+      "raw": "9"
+    },
+    {
+      "value": 20,
+      "bounds": [
+        169,
+        181
+      ],
+      "raw": "20"
+    },
+    {
+      "value": 20,
+      "bounds": [
+        169,
+        181
+      ],
+      "raw": "20"
+    }
+  ],
+  "inventory_verified": true,
+  "resume_timer_ocr": [
+    "17:01",
+    "16:58"
+  ],
+  "resume_countdown_before": 1021,
+  "resume_countdown_after": 1018,
+  "quit_exit": 0,
+  "final_progress": {
+    "unlocked": 5,
+    "currency": 575,
+    "cleared": "111100",
+    "upgrades": [
+      5,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "completed": true,
+  "visual_review": "Root reviewed readiness, forged, single-item inventory, attributes scroll; visible kill wallet 20 before/after Forge; magic penetration 20%."
+}
