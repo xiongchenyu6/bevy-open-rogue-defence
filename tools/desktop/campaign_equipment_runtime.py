@@ -16,12 +16,21 @@ from smoke_runtime import find_text, normalized, read_hud_wallet
 
 def market_wallet(rows):
     values = {int(match[1]) for text, x, y, *_ in rows
-              if x > 900 and 240 < y < 290
+              if x >= 1130 and 260 <= y < 283
               and (match := re.search(r'KILLS\s*(\d+)\b', text, re.I))}
     if not values:
         return None
     assert len(values) == 1, f'Ambiguous market wallet: {values}'
     return values.pop()
+
+
+def has_gear_rows(rows):
+    return any(x > 900 and 290 < y < 600 and re.search(r'\bGEAR\s*\]', text, re.I)
+               for text, x, y, *_ in rows)
+
+
+def market_closed(rows):
+    return market_wallet(rows) is None and not has_gear_rows(rows)
 
 
 def affordable_gear(rows, wallet):
@@ -70,7 +79,9 @@ class EquipmentPolicy:
             equipment_visit_limit=12, equipment_visit_timeout_seconds=45)
 
     def key(self, key):
-        self.ui['call'](['xdotool', 'key', key])
+        self.ui['call'](['xdotool', 'keydown', key])
+        time.sleep(.15)
+        self.ui['call'](['xdotool', 'keyup', key])
         time.sleep(.35)
 
     def click(self, row):
@@ -100,7 +111,14 @@ class EquipmentPolicy:
                 assert time.monotonic() < deadline, 'Existing card queue exceeded market visit budget'
             self.key('b')
             rows = self.ui['lines']()
+            self.ui['report'].setdefault('equipment_visit_rows', []).append(dict(visit=self.visits, rows=rows))
             wallet = market_wallet(rows)
+            # B is a toggle: never treat an open market with unreadable header as locked.
+            while wallet is None and has_gear_rows(rows):
+                assert time.monotonic() < deadline, 'Open market wallet never became readable'
+                time.sleep(.3)
+                rows = self.ui['lines']()
+                wallet = market_wallet(rows)
             if wallet is None:
                 assert not find_text(rows, 'BLACK MARKET'), 'Open market wallet could not be read'
                 # Locked market does not toggle open; retain actual UI for review.
@@ -122,7 +140,15 @@ class EquipmentPolicy:
                                 visit=self.visits, before=before.name, after=after.name)
                 self.purchases.append(purchase)
             self.key('b')
-            assert market_wallet(self.ui['lines']()) is None, 'Market failed to close'
+            while time.monotonic() < deadline:
+                closed_rows = self.ui['lines']()
+                if market_closed(closed_rows):
+                    break
+                time.sleep(.3)
+            else:
+                self.ui['report']['market_close_failure_rows'] = closed_rows
+                self.ui['shot'](prefix + '-close-failure.png')
+                raise AssertionError('Market failed to close within visit budget')
             if offers:
                 self.key('i')
                 inventory = self.ui['lines']()

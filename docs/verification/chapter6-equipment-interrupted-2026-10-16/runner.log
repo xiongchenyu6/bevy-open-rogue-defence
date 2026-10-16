@@ -1,0 +1,48 @@
+{"sample": 1, "wall_seconds": 6.8, "terminal": null}
+{"sample": 2, "wall_seconds": 16.5, "terminal": null}
+{"sample": 3, "wall_seconds": 26.3, "terminal": null}
+{"sample": 4, "wall_seconds": 36.1, "terminal": null}
+{"sample": 5, "wall_seconds": 45.9, "terminal": null}
+{"sample": 6, "wall_seconds": 55.5, "terminal": null}
+{"sample": 7, "wall_seconds": 65.4, "terminal": null}
+{"sample": 8, "wall_seconds": 75.2, "terminal": null}
+{"sample": 9, "wall_seconds": 84.7, "terminal": null}
+{"sample": 10, "wall_seconds": 94.8, "terminal": null}
+{"sample": 11, "wall_seconds": 104.6, "terminal": null}
+{"sample": 12, "wall_seconds": 114.1, "terminal": null}
+{"sample": 13, "wall_seconds": 124.0, "terminal": null}
+{"sample": 14, "wall_seconds": 133.6, "terminal": null}
+{"sample": 15, "wall_seconds": 143.5, "terminal": null}
+{"sample": 16, "wall_seconds": 153.5, "terminal": null}
+{"sample": 17, "wall_seconds": 163.4, "terminal": null}
+{"sample": 18, "wall_seconds": 173.1, "terminal": null}
+{"sample": 19, "wall_seconds": 182.8, "terminal": null}
+{"sample": 20, "wall_seconds": 192.3, "terminal": null}
+{"stage": "earned equipment visit", "visit": 1, "purchases": 0, "wallet": 120}
+{"sample": 21, "wall_seconds": 225.7, "terminal": null}
+{"sample": 22, "wall_seconds": 235.7, "terminal": null}
+{"sample": 23, "wall_seconds": 246.6, "terminal": null}
+{"sample": 24, "wall_seconds": 256.4, "terminal": null}
+{"sample": 25, "wall_seconds": 282.3, "terminal": null}
+{"sample": 26, "wall_seconds": 293.1, "terminal": null}
+{"sample": 27, "wall_seconds": 304.0, "terminal": null}
+{"sample": 28, "wall_seconds": 314.8, "terminal": null}
+{"sample": 29, "wall_seconds": 325.6, "terminal": null}
+{"sample": 30, "wall_seconds": 351.9, "terminal": null}
+{"sample": 31, "wall_seconds": 361.8, "terminal": null}
+{"sample": 32, "wall_seconds": 372.1, "terminal": null}
+{"sample": 33, "wall_seconds": 381.9, "terminal": null}
+{"sample": 34, "wall_seconds": 392.1, "terminal": null}
+{"stage": "earned equipment visit", "visit": 4, "purchases": 1, "wallet": 345}
+{"sample": 35, "wall_seconds": 442.8, "terminal": null}
+{"sample": 36, "wall_seconds": 452.1, "terminal": null}
+{"sample": 37, "wall_seconds": 461.8, "terminal": null}
+Traceback (most recent call last):
+  File "/harness/campaign_equipment_runtime.py", line 157, in <module>
+    main(EquipmentPolicy)
+  File "/harness/campaign_runtime.py", line 268, in main
+    policy.observe(text_lines, time.monotonic() - started)
+  File "/harness/campaign_equipment_runtime.py", line 125, in observe
+    assert market_wallet(self.ui['lines']()) is None, 'Market failed to close'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Market failed to close

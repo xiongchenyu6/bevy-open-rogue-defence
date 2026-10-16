@@ -1,5 +1,5 @@
 import unittest
-from campaign_equipment_runtime import affordable_gear, market_wallet, inventory_count, last_owned_icon
+from campaign_equipment_runtime import affordable_gear, market_wallet, inventory_count, last_owned_icon, has_gear_rows, market_closed
 
 
 class EquipmentPolicyParsing(unittest.TestCase):
@@ -19,6 +19,18 @@ class EquipmentPolicyParsing(unittest.TestCase):
         self.assertEqual([(item['name'], item['price']) for item in result], [('Arc Lens', 180)])
         self.assertEqual(affordable_gear(rows, 179), [])
 
+    def test_missing_wallet_with_real_gear_offer_is_still_open(self):
+        rows = [('[R/GEAR] Arc Lens 180 KILLS', 922, 474, 1074, 502)]
+        self.assertTrue(has_gear_rows(rows))
+        self.assertIsNone(market_wallet(rows))
+        self.assertFalse(market_closed(rows))
+        self.assertTrue(market_closed([]))
+        self.assertFalse(has_gear_rows([('[R/GEAR] Arc Lens 180 KILLS', 100, 474, 400, 502)]))
+
+    def test_actual_screenshot_wallet_header(self):
+        self.assertEqual(market_wallet([('Wi KILLS 0166', 1174, 270, 1251, 279),
+            ('7 Sn Ia KILis 0166', 368, 248, 1251, 296)]), 166)
+
     def test_inventory_header_and_wrapped_icon_boundaries(self):
         self.assertEqual(inventory_count([('EQUIPMENT · 12', 213, 108, 400, 130)]), 12)
         self.assertEqual(last_owned_icon(1), (245, 184))
@@ -36,8 +48,8 @@ class EquipmentPolicyParsing(unittest.TestCase):
 
     def test_ambiguous_wallet_is_failure(self):
         with self.assertRaises(AssertionError):
-            market_wallet([('KILLS 10', 1100, 266, 1240, 280),
-                           ('KILLS 11', 1100, 268, 1240, 280)])
+            market_wallet([('KILLS 10', 1174, 266, 1240, 280),
+                           ('KILLS 11', 1174, 268, 1240, 280)])
 
 
 if __name__ == '__main__':

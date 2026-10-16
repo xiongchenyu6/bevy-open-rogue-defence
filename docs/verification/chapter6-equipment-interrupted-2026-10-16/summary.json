@@ -1,0 +1,91 @@
+{
+  "scope": "Packaged public UI; stationary first-card policy plus earned equipment",
+  "package_version": {
+    "binary_sha256": "8bea8c1040329e575ef64d5876e97689bd85b5d06df4df838e8fc57f3bab47f0",
+    "git_commit": "78251d2d265618ca013d057a1dfc23953e1a0ed8",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "initial_progress": {
+    "unlocked": 6,
+    "currency": 514,
+    "cleared": "111110",
+    "upgrades": [
+      7,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "strategy": "Stationary keys 1/g/f; cheapest affordable natural gear; no refresh or movement",
+  "equipment_purchases": [
+    {
+      "name": "Arc Lens",
+      "price": 180,
+      "wallet_before": 345,
+      "wallet_after": 165,
+      "offer_ocr": [
+        "[R/GEAR] Arc Lens 180 KILLS",
+        922,
+        483,
+        1074,
+        494
+      ],
+      "after_wallet_ocr": "165",
+      "visit": 4,
+      "before": "equipment-04-before.png",
+      "after": "equipment-04-after.png",
+      "inventory_count": 1,
+      "selected_icon": [
+        245,
+        184
+      ],
+      "inventory_verified": true
+    },
+    {
+      "name": "Hardened Plate",
+      "price": 180,
+      "wallet_before": 226,
+      "wallet_after": 46,
+      "offer_ocr": [
+        "[R/ GEAR] Hardened Plate 180 KILLS",
+        922,
+        539,
+        1111,
+        567
+      ],
+      "after_wallet_ocr": "46",
+      "visit": 5,
+      "before": "equipment-05-before.png",
+      "after": "equipment-05-after.png"
+    }
+  ],
+  "completed_run": false,
+  "victory": false,
+  "harness_exit": 1,
+  "failure": "Market failed to close assertion; no terminal battle result",
+  "root_review": "Arc Lens inventory confirmed; Hardened Plate226\u219246, HP7100\u21928521 and bought notice visible; second inventory not verified"
+}
