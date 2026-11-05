@@ -1,0 +1,2828 @@
+{
+  "scope": "Packaged public UI; stationary first-card policy plus earned equipment",
+  "stage": 5,
+  "continued": true,
+  "initial_progress": {
+    "unlocked": 6,
+    "currency": 645,
+    "cleared": "111110",
+    "upgrades": [
+      6,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "requested_seed": "0xA11CE",
+  "requested_speed": 1,
+  "strategy": "Stationary keys 1/g/f; cheapest affordable natural gear; no refresh or movement",
+  "completed_run": false,
+  "victory": false,
+  "package_version": {
+    "binary_sha256": "d1f3c7dfc944376012ff5949b60cb1dea56117703ddb0bec36a02aa552b97d4f",
+    "git_commit": "8f4084b22b55be0040a8cb0f7f5a50bd470eb126",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "equipment_purchases": [
+    {
+      "name": "Wind Boots",
+      "price": 160,
+      "wallet_before": 343,
+      "wallet_after": 183,
+      "offer_ocr": {
+        "name": "Wind Boots",
+        "price": 160,
+        "category": "Equipment",
+        "index": 0,
+        "tile_ocr": "Wind Boots",
+        "price_ocr": "160",
+        "preview_ocr": "Wind Boots + Equipment"
+      },
+      "after_wallet_ocr": "183",
+      "after_market_ocr": "LV2 KILLS 0183",
+      "visit": 2,
+      "before": "equipment-02-before.png",
+      "after": "equipment-02-after.png",
+      "inventory_count": 1,
+      "selected_icon": [
+        245,
+        184
+      ],
+      "inventory_inspections": [
+        {
+          "icon": [
+            245,
+            184
+          ],
+          "detail_ocr": "[R] Wind Boots"
+        }
+      ],
+      "inventory_verified": true
+    }
+  ],
+  "equipment_visit_limit": 12,
+  "equipment_visit_timeout_seconds": 90,
+  "equipment_cooldown_after_completion_seconds": 60,
+  "base_attributes": {
+    "hero": "StormSavant",
+    "level": 1,
+    "speed": 1,
+    "strength": 32.0,
+    "expected": 32.0,
+    "screenshot": "base-strength.png",
+    "strength_ocr": [
+      [
+        "Strength",
+        203,
+        235,
+        259,
+        250
+      ],
+      [
+        "32.0",
+        457,
+        235,
+        484,
+        247
+      ],
+      [
+        "Strength",
+        204,
+        235,
+        259,
+        250
+      ],
+      [
+        "Strength 32.0 Base attack 48.0 Armor 0.0",
+        204,
+        231,
+        1076,
+        254
+      ]
+    ]
+  },
+  "actual_speed": 1,
+  "battle_timeout_seconds": 2400.0,
+  "equipment_visit_rows": [
+    {
+      "visit": 1,
+      "rows": [
+        [
+          "Settings",
+          615,
+          25,
+          664,
+          39
+        ],
+        [
+          "21:09",
+          1208,
+          27,
+          1257,
+          43
+        ],
+        [
+          "-",
+          920,
+          22,
+          953,
+          70
+        ],
+        [
+          "LVES3",
+          23,
+          87,
+          62,
+          97
+        ],
+        [
+          "(@ 2060/2060",
+          24,
+          106,
+          115,
+          126
+        ],
+        [
+          "3/3",
+          23,
+          134,
+          101,
+          153
+        ],
+        [
+          "xs",
+          286,
+          92,
+          438,
+          162
+        ],
+        [
+          "Embermaw",
+          629,
+          153,
+          687,
+          162
+        ],
+        [
+          "Co \u5415",
+          24,
+          160,
+          107,
+          190
+        ],
+        [
+          "\u2014",
+          459,
+          157,
+          497,
+          170
+        ],
+        [
+          "@w",
+          597,
+          159,
+          657,
+          183
+        ],
+        [
+          "My",
+          717,
+          172,
+          732,
+          179
+        ],
+        [
+          "Explore",
+          629,
+          179,
+          666,
+          190
+        ],
+        [
+          "ces",
+          718,
+          178,
+          740,
+          189
+        ],
+        [
+          "WW KILLS 0123",
+          1132,
+          205,
+          1209,
+          214
+        ],
+        [
+          "\u56db",
+          24,
+          193,
+          52,
+          231
+        ],
+        [
+          "BLACK MARKET",
+          617,
+          214,
+          759,
+          230
+        ],
+        [
+          "RESTOCK0210 \u82ad",
+          1132,
+          215,
+          1240,
+          228
+        ],
+        [
+          "\u201cy",
+          516,
+          241,
+          529,
+          255
+        ],
+        [
+          "SR",
+          1001,
+          255,
+          1013,
+          264
+        ],
+        [
+          "\u5305 | \u4ee4 \u3002",
+          31,
+          240,
+          127,
+          283
+        ],
+        [
+          "\u672c",
+          368,
+          275,
+          394,
+          287
+        ],
+        [
+          "i",
+          474,
+          326,
+          483,
+          336
+        ],
+        [
+          "i",
+          1149,
+          347,
+          1151,
+          352
+        ],
+        [
+          "Wind Boots",
+          646,
+          359,
+          704,
+          369
+        ],
+        [
+          "Arc Lens",
+          781,
+          360,
+          824,
+          369
+        ],
+        [
+          "Gate Patch",
+          901,
+          359,
+          955,
+          369
+        ],
+        [
+          "Skill Tuner",
+          1029,
+          359,
+          1083,
+          369
+        ],
+        [
+          "Emberteart",
+          1151,
+          348,
+          1215,
+          369
+        ],
+        [
+          "\u4e86",
+          222,
+          385,
+          227,
+          393
+        ],
+        [
+          "\u00ae 160",
+          656,
+          388,
+          696,
+          401
+        ],
+        [
+          "\u00a9 180",
+          783,
+          388,
+          823,
+          401
+        ],
+        [
+          "\u00a9 120",
+          909,
+          388,
+          949,
+          401
+        ],
+        [
+          "\u00a9 140",
+          1036,
+          388,
+          1076,
+          401
+        ],
+        [
+          "\u00ae 280",
+          1163,
+          388,
+          1203,
+          401
+        ],
+        [
+          "i",
+          1262,
+          372,
+          1280,
+          414
+        ],
+        [
+          "\u00a9",
+          665,
+          422,
+          681,
+          436
+        ],
+        [
+          "\u00a9",
+          792,
+          422,
+          808,
+          436
+        ],
+        [
+          "\u00a9",
+          1045,
+          422,
+          1061,
+          436
+        ],
+        [
+          "\u00a9",
+          1172,
+          422,
+          1188,
+          436
+        ],
+        [
+          "@",
+          237,
+          433,
+          272,
+          473
+        ],
+        [
+          "\u4e0a",
+          1261,
+          414,
+          1280,
+          458
+        ],
+        [
+          "Piaaa Wind Boots \uff0c Equipment",
+          622,
+          471,
+          854,
+          514
+        ],
+        [
+          "=",
+          636,
+          497,
+          653,
+          516
+        ],
+        [
+          "z",
+          655,
+          493,
+          671,
+          512
+        ],
+        [
+          ",",
+          672,
+          499,
+          682,
+          527
+        ],
+        [
+          "+15% move speed, -15% dodge cooldown, +8% evasion",
+          699,
+          499,
+          1032,
+          530
+        ],
+        [
+          "Need 37",
+          1159,
+          500,
+          1211,
+          513
+        ],
+        [
+          "=",
+          648,
+          510,
+          676,
+          536
+        ],
+        [
+          "Inspect an item effects remain active after hero absorption",
+          616,
+          570,
+          926,
+          582
+        ],
+        [
+          "O % 6",
+          901,
+          608,
+          963,
+          622
+        ],
+        [
+          "LEVELS 89/132XP",
+          487,
+          667,
+          592,
+          680
+        ],
+        [
+          "co",
+          658,
+          649,
+          755,
+          698
+        ],
+        [
+          "[ sexes | 21:09",
+          599,
+          0,
+          1257,
+          55
+        ],
+        [
+          "room (| Sy = Secor.",
+          24,
+          0,
+          1236,
+          88
+        ],
+        [
+          "@ aaiao sd ALN",
+          24,
+          88,
+          704,
+          145
+        ],
+        [
+          "\u5929 \u52a0 Se BY",
+          23,
+          122,
+          572,
+          165
+        ],
+        [
+          "tn: ee ei bs aa",
+          24,
+          142,
+          1007,
+          206
+        ],
+        [
+          "A BLACK MARKET esrocozi0 \u6c49",
+          483,
+          201,
+          1240,
+          234
+        ],
+        [
+          "Oca Me cx elec me I",
+          22,
+          211,
+          1140,
+          299
+        ],
+        [
+          "0 Zee || 2 2 Rae |e",
+          440,
+          282,
+          1276,
+          340
+        ],
+        [
+          ". J ae me | Al",
+          461,
+          307,
+          1276,
+          369
+        ],
+        [
+          "hs h Wind Bots Actens Gate Patch Skil Tuner \u2018Ember Heart",
+          160,
+          343,
+          1215,
+          379
+        ],
+        [
+          "ss a, .",
+          168,
+          344,
+          1272,
+          380
+        ],
+        [
+          "\u2018i | \u00a9 160 \u00a9 180 \u00a9 120 \u00a9 140 \u00a9 280",
+          222,
+          350,
+          1203,
+          434
+        ],
+        [
+          "a eer \u00b0 \u00b0 \u00b0 \u00b0 \u00b0",
+          237,
+          410,
+          1188,
+          459
+        ],
+        [
+          "oe ae",
+          240,
+          444,
+          600,
+          484
+        ],
+        [
+          "Pia A find Boots + Equi",
+          622,
+          472,
+          813,
+          514
+        ],
+        [
+          "BEN aa pe iow 6odge cooldown +896 evasion Need37",
+          626,
+          490,
+          1211,
+          536
+        ],
+        [
+          "Inspec anitem + effects emain active ater her absorption",
+          616,
+          553,
+          926,
+          589
+        ],
+        [
+          "\u2014",
+          685,
+          650,
+          778,
+          658
+        ],
+        [
+          "@& case 75/1000 4",
+          24,
+          26,
+          193,
+          63
+        ],
+        [
+          "ey",
+          264,
+          14,
+          356,
+          67
+        ],
+        [
+          "\u56db \u52a0",
+          920,
+          22,
+          1072,
+          70
+        ],
+        [
+          "ae",
+          336,
+          54,
+          366,
+          74
+        ],
+        [
+          "\u4f88 2060/2060",
+          24,
+          106,
+          115,
+          126
+        ],
+        [
+          "3/73",
+          23,
+          134,
+          101,
+          153
+        ],
+        [
+          "=",
+          286,
+          92,
+          438,
+          162
+        ],
+        [
+          "id",
+          552,
+          145,
+          573,
+          161
+        ],
+        [
+          "\u2014\u2014",
+          447,
+          154,
+          497,
+          171
+        ],
+        [
+          "4",
+          717,
+          171,
+          732,
+          179
+        ],
+        [
+          "@wn",
+          597,
+          159,
+          657,
+          183
+        ],
+        [
+          ">",
+          717,
+          177,
+          740,
+          189
+        ],
+        [
+          "Wi KILLS 0123",
+          1132,
+          205,
+          1209,
+          214
+        ],
+        [
+          "28",
+          30,
+          220,
+          43,
+          229
+        ],
+        [
+          "4 @",
+          60,
+          196,
+          116,
+          228
+        ],
+        [
+          "REsTOCK 02:10 \u82ad",
+          1132,
+          215,
+          1240,
+          228
+        ],
+        [
+          "SR",
+          1128,
+          255,
+          1140,
+          264
+        ],
+        [
+          "ea",
+          697,
+          276,
+          713,
+          282
+        ],
+        [
+          "fel",
+          639,
+          259,
+          674,
+          291
+        ],
+        [
+          "ou)",
+          929,
+          281,
+          965,
+          300
+        ],
+        [
+          "as",
+          1146,
+          276,
+          1185,
+          301
+        ],
+        [
+          "\u00ae)",
+          1188,
+          283,
+          1208,
+          299
+        ],
+        [
+          "hs",
+          646,
+          287,
+          665,
+          308
+        ],
+        [
+          "\u201cel",
+          749,
+          255,
+          880,
+          319
+        ],
+        [
+          "a",
+          946,
+          304,
+          973,
+          317
+        ],
+        [
+          "=",
+          1261,
+          299,
+          1280,
+          318
+        ],
+        [
+          "FA)",
+          671,
+          293,
+          714,
+          328
+        ],
+        [
+          "Dy",
+          883,
+          306,
+          929,
+          341
+        ],
+        [
+          "2",
+          941,
+          314,
+          975,
+          336
+        ],
+        [
+          "\u533b",
+          1262,
+          319,
+          1280,
+          329
+        ],
+        [
+          "\u00e9",
+          760,
+          316,
+          795,
+          347
+        ],
+        [
+          "Skil Tuner",
+          1029,
+          351,
+          1083,
+          368
+        ],
+        [
+          "Ember Heart",
+          1151,
+          349,
+          1215,
+          377
+        ],
+        [
+          "\u2014\u2014",
+          223,
+          385,
+          288,
+          401
+        ],
+        [
+          "180",
+          801,
+          390,
+          823,
+          401
+        ],
+        [
+          "280",
+          1180,
+          389,
+          1203,
+          401
+        ],
+        [
+          "c",
+          1269,
+          391,
+          1280,
+          410
+        ],
+        [
+          "e",
+          245,
+          451,
+          270,
+          465
+        ],
+        [
+          "bia ie",
+          628,
+          472,
+          685,
+          510
+        ],
+        [
+          "js. Wind Boots +",
+          670,
+          488,
+          779,
+          504
+        ],
+        [
+          "\u591a",
+          627,
+          498,
+          636,
+          510
+        ],
+        [
+          "ie",
+          653,
+          510,
+          672,
+          519
+        ],
+        [
+          "C4",
+          656,
+          498,
+          668,
+          510
+        ],
+        [
+          "\\)",
+          672,
+          499,
+          682,
+          518
+        ],
+        [
+          "Equipment",
+          788,
+          493,
+          854,
+          506
+        ],
+        [
+          "ee",
+          626,
+          514,
+          670,
+          534
+        ],
+        [
+          "+15% move speed, -15% dodge cooldown, +8% evasion",
+          699,
+          508,
+          1032,
+          523
+        ],
+        [
+          "Inspect an item + effects remain active after hero absorption",
+          616,
+          560,
+          926,
+          588
+        ],
+        [
+          "CO @ 0",
+          901,
+          603,
+          967,
+          631
+        ],
+        [
+          "LEVELS 89/132XP",
+          487,
+          667,
+          592,
+          679
+        ],
+        [
+          "Cie",
+          658,
+          649,
+          850,
+          698
+        ],
+        [
+          "vow (| Sy eo oF",
+          24,
+          0,
+          1162,
+          93
+        ],
+        [
+          "& Ey \u4e86 7 \u672c ROUND0",
+          163,
+          26,
+          1236,
+          79
+        ],
+        [
+          "nae < \u5168 \u5230\u3001",
+          24,
+          87,
+          699,
+          140
+        ],
+        [
+          "\u78cb 7173 Sr ty, 3 x",
+          23,
+          118,
+          703,
+          166
+        ],
+        [
+          "< Sf Embermaw y",
+          447,
+          139,
+          973,
+          172
+        ],
+        [
+          "aS h",
+          25,
+          193,
+          532,
+          200
+        ],
+        [
+          "vw (",
+          22,
+          190,
+          531,
+          223
+        ],
+        [
+          "\u56fe \u56fe \u8981 ar Hy BLACK MARKET restockozi0X",
+          22,
+          196,
+          1240,
+          240
+        ],
+        [
+          "L",
+          518,
+          233,
+          524,
+          245
+        ],
+        [
+          "cme a.// arn ae ae",
+          22,
+          235,
+          1191,
+          279
+        ],
+        [
+          "i, A eval rit ne",
+          497,
+          260,
+          1212,
+          292
+        ],
+        [
+          "we ge | Ola) O |",
+          385,
+          255,
+          1119,
+          330
+        ],
+        [
+          "ON rf ah ad 72 || ASD) | &",
+          75,
+          295,
+          1270,
+          340
+        ],
+        [
+          "tee) 1 ff Wind Boots Arc Lens Gate Patch Skil Tuner Ember Heart <",
+          159,
+          345,
+          1272,
+          377
+        ],
+        [
+          "~ Se i",
+          172,
+          353,
+          1276,
+          405
+        ],
+        [
+          "\u2014 } \u00a9 160 \u00a9 180 \u00a9 120 \u00a9 140 \u00a9 280 \u00a2",
+          272,
+          383,
+          1280,
+          424
+        ],
+        [
+          "tea \u4eba",
+          328,
+          406,
+          424,
+          430
+        ],
+        [
+          "= = \u00b0 \u00b0 \u00b0 \u00b0 \u00b0",
+          237,
+          422,
+          1188,
+          451
+        ],
+        [
+          "er ng iE _\u2014 \u00a9 |",
+          245,
+          443,
+          1254,
+          490
+        ],
+        [
+          "ER Wind Boots + Equipment Need 37",
+          627,
+          476,
+          1211,
+          517
+        ],
+        [
+          "aa +15% move speed, -15% dodge cooldown, +8% evasion",
+          626,
+          496,
+          1032,
+          530
+        ],
+        [
+          "oe",
+          635,
+          518,
+          670,
+          534
+        ],
+        [
+          "Inspect an item + effects remain active after hero absorption",
+          616,
+          570,
+          926,
+          582
+        ],
+        [
+          "CO @ 6",
+          901,
+          608,
+          963,
+          622
+        ]
+      ]
+    },
+    {
+      "visit": 2,
+      "rows": [
+        [
+          "Settings",
+          615,
+          25,
+          664,
+          39
+        ],
+        [
+          "19:32",
+          1209,
+          27,
+          1258,
+          43
+        ],
+        [
+          "-",
+          920,
+          22,
+          953,
+          70
+        ],
+        [
+          "LVES3",
+          23,
+          87,
+          62,
+          97
+        ],
+        [
+          "(2454/2454",
+          24,
+          106,
+          116,
+          126
+        ],
+        [
+          "\u4e5f 16211162",
+          23,
+          134,
+          115,
+          153
+        ],
+        [
+          "\u2014",
+          286,
+          92,
+          438,
+          162
+        ],
+        [
+          "ay",
+          610,
+          104,
+          661,
+          145
+        ],
+        [
+          "Embermaw",
+          629,
+          153,
+          687,
+          162
+        ],
+        [
+          "My",
+          717,
+          172,
+          732,
+          179
+        ],
+        [
+          "S50 S10",
+          24,
+          164,
+          120,
+          184
+        ],
+        [
+          "\u56db",
+          597,
+          159,
+          657,
+          183
+        ],
+        [
+          "Explore",
+          629,
+          179,
+          666,
+          190
+        ],
+        [
+          "ces",
+          718,
+          178,
+          740,
+          189
+        ],
+        [
+          "Wwe KILLS 0343",
+          1132,
+          195,
+          1212,
+          223
+        ],
+        [
+          "28",
+          30,
+          220,
+          43,
+          229
+        ],
+        [
+          "BLACK MARKET",
+          617,
+          214,
+          759,
+          230
+        ],
+        [
+          "RESTOCK 00:33 XK",
+          1132,
+          215,
+          1240,
+          228
+        ],
+        [
+          "\u5305 | \u4ee4 \u3002",
+          31,
+          240,
+          127,
+          283
+        ],
+        [
+          "\u201cy",
+          516,
+          241,
+          529,
+          255
+        ],
+        [
+          "SR",
+          1001,
+          255,
+          1013,
+          264
+        ],
+        [
+          "SR",
+          1128,
+          255,
+          1140,
+          264
+        ],
+        [
+          "i:",
+          373,
+          286,
+          407,
+          300
+        ],
+        [
+          "@:",
+          53,
+          292,
+          96,
+          318
+        ],
+        [
+          "\u4e86",
+          474,
+          326,
+          483,
+          336
+        ],
+        [
+          "2",
+          941,
+          302,
+          975,
+          340
+        ],
+        [
+          "a",
+          1143,
+          305,
+          1159,
+          331
+        ],
+        [
+          "Py",
+          469,
+          345,
+          475,
+          359
+        ],
+        [
+          "Wind Boots",
+          646,
+          359,
+          704,
+          369
+        ],
+        [
+          "Arc Lens",
+          781,
+          360,
+          824,
+          369
+        ],
+        [
+          "Gate Patch",
+          901,
+          359,
+          955,
+          369
+        ],
+        [
+          "Skill Tuner",
+          1029,
+          359,
+          1083,
+          369
+        ],
+        [
+          "\u201cemberter",
+          1147,
+          344,
+          1215,
+          369
+        ],
+        [
+          "\u4e86",
+          222,
+          385,
+          227,
+          393
+        ],
+        [
+          "\u00ae 160",
+          656,
+          388,
+          696,
+          401
+        ],
+        [
+          "@ 180",
+          783,
+          388,
+          823,
+          401
+        ],
+        [
+          "\u00a9 120",
+          909,
+          388,
+          949,
+          401
+        ],
+        [
+          "140",
+          1036,
+          388,
+          1076,
+          401
+        ],
+        [
+          "\u00ae 280",
+          1163,
+          388,
+          1203,
+          401
+        ],
+        [
+          "\u4eba",
+          424,
+          396,
+          442,
+          424
+        ],
+        [
+          "a",
+          461,
+          420,
+          473,
+          428
+        ],
+        [
+          "\u00a9",
+          665,
+          422,
+          681,
+          436
+        ],
+        [
+          "\u00a9",
+          792,
+          422,
+          808,
+          436
+        ],
+        [
+          "\u00a9",
+          1045,
+          422,
+          1061,
+          436
+        ],
+        [
+          "\u00a9",
+          1172,
+          422,
+          1188,
+          436
+        ],
+        [
+          "e",
+          237,
+          433,
+          272,
+          471
+        ],
+        [
+          ">",
+          251,
+          459,
+          268,
+          473
+        ],
+        [
+          "R",
+          1261,
+          414,
+          1280,
+          474
+        ],
+        [
+          "+896 critical chance; burns can critically strike",
+          699,
+          501,
+          972,
+          529
+        ],
+        [
+          "Ember Heart + Equipment",
+          700,
+          492,
+          862,
+          506
+        ],
+        [
+          "ae",
+          1129,
+          482,
+          1280,
+          544
+        ],
+        [
+          "Inspect an item effects remain active after hero absorption",
+          616,
+          570,
+          926,
+          582
+        ],
+        [
+          "O % 6",
+          901,
+          608,
+          963,
+          622
+        ],
+        [
+          "LEVEL9 140/204 xP",
+          483,
+          667,
+          595,
+          679
+        ],
+        [
+          "vom= (ty = SoD0r.",
+          24,
+          9,
+          1258,
+          76
+        ],
+        [
+          "Pees < @ Ae.",
+          24,
+          87,
+          704,
+          145
+        ],
+        [
+          "hs )",
+          563,
+          104,
+          661,
+          139
+        ],
+        [
+          "62/1162 =, B y a ee 1",
+          23,
+          118,
+          710,
+          166
+        ],
+        [
+          "ol i | Embermaw",
+          443,
+          148,
+          687,
+          168
+        ],
+        [
+          "i h 4",
+          60,
+          194,
+          546,
+          210
+        ],
+        [
+          "\u2014 ty ) Say BLACK MARKET wesvockwoas |X",
+          483,
+          204,
+          1240,
+          242
+        ],
+        [
+          "\u2018 4",
+          409,
+          236,
+          529,
+          251
+        ],
+        [
+          "Oca / \u201dTO",
+          22,
+          235,
+          1140,
+          279
+        ],
+        [
+          "\u672c \u2018alah SEGR \u672c",
+          369,
+          259,
+          1220,
+          304
+        ],
+        [
+          "4, (25h | \u662f [2 Se | 5",
+          407,
+          277,
+          1276,
+          340
+        ],
+        [
+          "HG cy ; NG? ae >",
+          447,
+          316,
+          1277,
+          352
+        ],
+        [
+          "oe @ar Wind Boots clans Gat Patch Skil Taner Emberteat | |.",
+          160,
+          342,
+          1272,
+          380
+        ],
+        [
+          "\u2018\u2014 hy \u00bb \u00a9 160 \u00a9 180 \u00a9 120 \u00a9 140 \u00a9 280 k",
+          222,
+          372,
+          1280,
+          424
+        ],
+        [
+          "\u2014 1",
+          316,
+          407,
+          423,
+          417
+        ],
+        [
+          "Ps ~ aka \u00b0 \u00b0 \u00b0 \u00b0 \u00b0",
+          233,
+          412,
+          1188,
+          463
+        ],
+        [
+          "oe ae",
+          240,
+          444,
+          600,
+          484
+        ],
+        [
+          "ae Ember Heart \u00bb Equipment",
+          629,
+          472,
+          862,
+          526
+        ],
+        [
+          "(OMPY +896 critical chance; burns can critically strike r",
+          631,
+          499,
+          1279,
+          544
+        ],
+        [
+          "Inspect an Ham = ofects mele stin afer ero absorption",
+          616,
+          570,
+          926,
+          582
+        ],
+        [
+          "ee",
+          685,
+          650,
+          778,
+          658
+        ],
+        [
+          "& case 252/100 4",
+          24,
+          26,
+          193,
+          63
+        ],
+        [
+          "ey",
+          264,
+          14,
+          356,
+          67
+        ],
+        [
+          "\u56db \u52a0",
+          920,
+          22,
+          1072,
+          70
+        ],
+        [
+          "ae",
+          336,
+          54,
+          366,
+          74
+        ],
+        [
+          "y",
+          618,
+          52,
+          636,
+          75
+        ],
+        [
+          "\u7d20 116211162",
+          23,
+          134,
+          115,
+          153
+        ],
+        [
+          "=",
+          286,
+          92,
+          438,
+          162
+        ],
+        [
+          "id",
+          552,
+          145,
+          573,
+          161
+        ],
+        [
+          "\u2014\u2014",
+          447,
+          154,
+          497,
+          171
+        ],
+        [
+          "4",
+          717,
+          171,
+          732,
+          179
+        ],
+        [
+          "Si50 S10",
+          24,
+          164,
+          120,
+          183
+        ],
+        [
+          "\u56db \u56db",
+          597,
+          159,
+          657,
+          183
+        ],
+        [
+          ">",
+          717,
+          177,
+          740,
+          189
+        ],
+        [
+          "ty",
+          94,
+          198,
+          115,
+          216
+        ],
+        [
+          "ell",
+          51,
+          196,
+          91,
+          228
+        ],
+        [
+          "ea",
+          697,
+          276,
+          713,
+          282
+        ],
+        [
+          "a",
+          531,
+          279,
+          542,
+          290
+        ],
+        [
+          "iwi",
+          639,
+          259,
+          674,
+          291
+        ],
+        [
+          "ou)",
+          929,
+          281,
+          965,
+          300
+        ],
+        [
+          "as",
+          1146,
+          276,
+          1185,
+          301
+        ],
+        [
+          "*)",
+          1188,
+          283,
+          1208,
+          299
+        ],
+        [
+          "hs",
+          646,
+          287,
+          665,
+          308
+        ],
+        [
+          "\u201cel",
+          749,
+          255,
+          880,
+          319
+        ],
+        [
+          "a",
+          946,
+          304,
+          973,
+          317
+        ],
+        [
+          "Ze",
+          671,
+          293,
+          714,
+          328
+        ],
+        [
+          "Dy",
+          883,
+          306,
+          929,
+          341
+        ],
+        [
+          "2",
+          941,
+          314,
+          975,
+          336
+        ],
+        [
+          "\u00e9",
+          760,
+          316,
+          795,
+          347
+        ],
+        [
+          "Skil Tuner",
+          1029,
+          351,
+          1083,
+          368
+        ],
+        [
+          "Ember Heart",
+          1151,
+          349,
+          1215,
+          377
+        ],
+        [
+          "14",
+          434,
+          374,
+          453,
+          394
+        ],
+        [
+          "\u2014\u2014",
+          223,
+          385,
+          288,
+          401
+        ],
+        [
+          "\u00a9 180",
+          783,
+          388,
+          823,
+          401
+        ],
+        [
+          "\u00a9 140",
+          1036,
+          388,
+          1076,
+          401
+        ],
+        [
+          "\u00a9 280",
+          1163,
+          388,
+          1203,
+          401
+        ],
+        [
+          "[/",
+          1269,
+          391,
+          1280,
+          410
+        ],
+        [
+          "\u4e86",
+          1261,
+          417,
+          1280,
+          426
+        ],
+        [
+          "e",
+          245,
+          451,
+          270,
+          465
+        ],
+        [
+          "fake",
+          645,
+          482,
+          667,
+          502
+        ],
+        [
+          "ae",
+          1129,
+          482,
+          1239,
+          530
+        ],
+        [
+          "Inspect an item + effects remain active after hero absorption",
+          616,
+          560,
+          926,
+          588
+        ],
+        [
+          "CO @ 0",
+          901,
+          603,
+          967,
+          631
+        ],
+        [
+          "LEVEL9 140/204 XP",
+          483,
+          667,
+          595,
+          679
+        ],
+        [
+          "von (| hy oo of...",
+          24,
+          14,
+          1235,
+          70
+        ],
+        [
+          "bi MF ROUND",
+          170,
+          48,
+          1219,
+          72
+        ],
+        [
+          "\u4e00 -\u4e00 Tae - 4",
+          21,
+          53,
+          647,
+          87
+        ],
+        [
+          "ve J, Oe",
+          24,
+          87,
+          700,
+          140
+        ],
+        [
+          "1162 / 1162 Ay ics a",
+          53,
+          127,
+          710,
+          154
+        ],
+        [
+          "\u5230 SS @u\u2122 nal)",
+          23,
+          134,
+          995,
+          183
+        ],
+        [
+          "OB Sy 2 Fenians I=, ae",
+          20,
+          159,
+          1010,
+          198
+        ],
+        [
+          "Pear ire fd to",
+          26,
+          190,
+          546,
+          234
+        ],
+        [
+          "albaleed 6:2 ar BLACK MARKET restockooss \u53c8",
+          22,
+          196,
+          1240,
+          240
+        ],
+        [
+          "/| =",
+          518,
+          233,
+          574,
+          245
+        ],
+        [
+          "Ges oo. // Par Nean ae",
+          22,
+          235,
+          1191,
+          286
+        ],
+        [
+          "y iS Hr. VS",
+          501,
+          264,
+          1209,
+          283
+        ],
+        [
+          "= aa {ER Sat. Habs",
+          376,
+          259,
+          1210,
+          308
+        ],
+        [
+          "\u5916 : < y/ ed) pe \u2018af2 ed ap) | \u00a9",
+          53,
+          287,
+          1280,
+          349
+        ],
+        [
+          ": @ S\u00e9 \u4e8e (Pe f Ce :",
+          204,
+          314,
+          1270,
+          359
+        ],
+        [
+          "\u2014* 1 Be Wind Boots Arctens Gate Patch kill Tuner Ember Heart",
+          159,
+          345,
+          1215,
+          379
+        ],
+        [
+          "= Qo .",
+          172,
+          357,
+          1272,
+          382
+        ],
+        [
+          "Te 4 \u00a5 \u00a9 160 \u00a9 180 120 \u00a9 140 280 {",
+          223,
+          372,
+          1278,
+          424
+        ],
+        [
+          "Soe nt 7",
+          315,
+          406,
+          1280,
+          425
+        ],
+        [
+          "mn mel ; \u00b0 \u00b0 \u00b0 \u00b0 \u00b0",
+          237,
+          412,
+          1188,
+          458
+        ],
+        [
+          "SS 2",
+          484,
+          453,
+          662,
+          481
+        ],
+        [
+          "Fas, ember Heart \u00ab Equipment",
+          635,
+          478,
+          862,
+          511
+        ],
+        [
+          "E890) 43% critical chance; burns can critically strike >",
+          632,
+          497,
+          1279,
+          539
+        ],
+        [
+          "Inspect anitem + eects renin active after hero absorption",
+          616,
+          570,
+          926,
+          582
+        ],
+        [
+          "Oe 6",
+          901,
+          608,
+          963,
+          622
+        ]
+      ]
+    }
+  ],
+  "equipment_hover_checks": [
+    {
+      "visit": 1,
+      "index": 0,
+      "stale_attempts": []
+    },
+    {
+      "visit": 1,
+      "index": 1,
+      "stale_attempts": [
+        {
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Wind Boots + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Wind Boots + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 1,
+      "index": 2,
+      "stale_attempts": [
+        {
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'ArcLens + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 1,
+      "index": 3,
+      "stale_attempts": [
+        {
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Gate Patch \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 1,
+      "index": 4,
+      "stale_attempts": [
+        {
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Skill Tuner \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 0,
+      "stale_attempts": [
+        {
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Wind Boots', 'Ember Heart + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 1,
+      "stale_attempts": [
+        {
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Wind Boots + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Wind Boots + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 2,
+      "stale_attempts": [
+        {
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'ArcLens + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 3,
+      "stale_attempts": [
+        {
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Gate Patch \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 4,
+      "stale_attempts": [
+        {
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Skill Tuner \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 0,
+      "stale_attempts": [
+        {
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Wind Boots', 'Ember Heart + Equipment'"
+        }
+      ]
+    }
+  ],
+  "equipment_inspections": [
+    {
+      "visit": 1,
+      "wallet": 123,
+      "wallet_ocr": "LV1 KILLS 0123",
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "wallet": 343,
+      "wallet_ocr": "LV2 KILLS 0343",
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    }
+  ],
+  "equipment_visit_timings": [
+    {
+      "visit": 1,
+      "phase": "panels closed",
+      "elapsed": 43.75540685100714
+    },
+    {
+      "visit": 1,
+      "phase": "resume verified",
+      "elapsed": 53.78680590100703
+    },
+    {
+      "visit": 2,
+      "phase": "panels closed",
+      "elapsed": 70.82714011400822
+    }
+  ],
+  "equipment_resume_proofs": [
+    {
+      "visit": 1,
+      "before": 1262,
+      "after": 1253
+    }
+  ],
+  "equipment_clock_choices": [
+    {
+      "visit": 2,
+      "rows": [
+        [
+          "Settings",
+          615,
+          25,
+          664,
+          39
+        ],
+        [
+          "\u2018THE LAST BASTION",
+          40,
+          53,
+          146,
+          62
+        ],
+        [
+          "Level 10 + Recruit a hero",
+          43,
+          75,
+          459,
+          118
+        ],
+        [
+          "sR",
+          58,
+          167,
+          70,
+          176
+        ],
+        [
+          "R",
+          262,
+          167,
+          267,
+          175
+        ],
+        [
+          "R",
+          465,
+          167,
+          470,
+          175
+        ],
+        [
+          "Sse",
+          667,
+          167,
+          685,
+          175
+        ],
+        [
+          "sR",
+          869,
+          167,
+          881,
+          176
+        ],
+        [
+          "sR",
+          1072,
+          167,
+          1084,
+          176
+        ],
+        [
+          "|",
+          598,
+          161,
+          620,
+          183
+        ],
+        [
+          "&",
+          1087,
+          328,
+          1119,
+          368
+        ],
+        [
+          "BABA of",
+          65,
+          208,
+          992,
+          405
+        ],
+        [
+          "\u5927 \u53ef",
+          1120,
+          383,
+          1172,
+          405
+        ],
+        [
+          "GROVE ARTIFICER",
+          63,
+          483,
+          202,
+          497
+        ],
+        [
+          "STONE WARDEN",
+          272,
+          483,
+          398,
+          497
+        ],
+        [
+          "EMBER RANGER",
+          476,
+          483,
+          600,
+          497
+        ],
+        [
+          "FROST ORACLE",
+          682,
+          483,
+          800,
+          497
+        ],
+        [
+          "TIDE WALKER",
+          890,
+          483,
+          997,
+          496
+        ],
+        [
+          "STAR WAGERER",
+          1086,
+          483,
+          1207,
+          497
+        ],
+        [
+          "VANGUARD",
+          103,
+          508,
+          160,
+          516
+        ],
+        [
+          "VANGUARD",
+          306,
+          508,
+          363,
+          516
+        ],
+        [
+          "SKIRMISHER",
+          507,
+          508,
+          570,
+          516
+        ],
+        [
+          "SPELLCASTER",
+          706,
+          508,
+          776,
+          516
+        ],
+        [
+          "SPELLCASTER",
+          908,
+          508,
+          978,
+          516
+        ],
+        [
+          "SKIRMISHER",
+          1115,
+          508,
+          1178,
+          516
+        ],
+        [
+          "4 + 8 EMBER RANGER",
+          66,
+          589,
+          323,
+          615
+        ],
+        [
+          "Inherited skill FIRE ARROW + Rank 1",
+          63,
+          616,
+          285,
+          644
+        ],
+        [
+          "arrows \u3002 1 bounces",
+          62,
+          646,
+          184,
+          656
+        ],
+        [
+          "so",
+          40,
+          53,
+          146,
+          62
+        ],
+        [
+          "Level 10 + Recruit a hero",
+          43,
+          79,
+          459,
+          109
+        ],
+        [
+          "se a a Bs se se",
+          58,
+          161,
+          1084,
+          183
+        ],
+        [
+          "i | &% ! f =a ea = x",
+          65,
+          209,
+          1201,
+          405
+        ],
+        [
+          "GROVE ARTIFICER STONE WARDEN EMBER RANGER FROST ORACLE TIDE WALKER STAR WAGERER",
+          63,
+          483,
+          1207,
+          497
+        ],
+        [
+          "4 + 2 EMBER RANGER",
+          66,
+          589,
+          323,
+          615
+        ],
+        [
+          "Inherited skill FIREARROW + Rank1",
+          63,
+          624,
+          285,
+          635
+        ],
+        [
+          "4arrows - 1 bounces:",
+          62,
+          646,
+          184,
+          656
+        ],
+        [
+          "\u2018THE LAST BASTION",
+          36,
+          43,
+          146,
+          71
+        ],
+        [
+          "SR",
+          59,
+          167,
+          70,
+          175
+        ],
+        [
+          "SSR",
+          668,
+          167,
+          685,
+          175
+        ],
+        [
+          "SR",
+          870,
+          167,
+          881,
+          175
+        ],
+        [
+          "SR",
+          1073,
+          167,
+          1084,
+          175
+        ],
+        [
+          "of",
+          665,
+          292,
+          796,
+          385
+        ],
+        [
+          "ss",
+          65,
+          341,
+          176,
+          404
+        ],
+        [
+          "\u8bc1 \u540d",
+          320,
+          361,
+          378,
+          413
+        ],
+        [
+          "Ww",
+          471,
+          329,
+          581,
+          408
+        ],
+        [
+          "\u53f7 |",
+          924,
+          373,
+          994,
+          417
+        ],
+        [
+          "a",
+          1087,
+          289,
+          1201,
+          404
+        ],
+        [
+          "4 + 8 EMBER RANGER",
+          66,
+          589,
+          323,
+          614
+        ],
+        [
+          "Inherited skill FIRE ARROW + Rank 1",
+          63,
+          616,
+          288,
+          644
+        ],
+        [
+          "arrows",
+          62,
+          647,
+          109,
+          656
+        ],
+        [
+          "1 bounces",
+          128,
+          646,
+          183,
+          656
+        ],
+        [
+          "PrPLAST EASTON",
+          40,
+          28,
+          146,
+          72
+        ],
+        [
+          "se 8 8 ss se se",
+          59,
+          151,
+          1084,
+          187
+        ],
+        [
+          "& & Ww 3 ,\u8d77 Ss rst |",
+          86,
+          204,
+          1204,
+          404
+        ],
+        [
+          "a ee \u4ee5 =a =a a \u66d9",
+          155,
+          367,
+          1172,
+          405
+        ],
+        [
+          "# + 2 EMBER RANGER",
+          66,
+          589,
+          323,
+          614
+        ],
+        [
+          "4arrows - 1 bounces",
+          62,
+          646,
+          183,
+          656
+        ]
+      ]
+    }
+  ]
+}

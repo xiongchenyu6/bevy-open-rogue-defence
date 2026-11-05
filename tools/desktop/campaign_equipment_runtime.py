@@ -221,8 +221,9 @@ class EquipmentPolicy:
                 rows = self.ui['lines']()
                 if not choice_pending(rows):
                     raise
+                choice_image = self.ui['shot'](prefix + '-choice.png')
                 self.ui['report'].setdefault('equipment_clock_choices', []).append(
-                    dict(visit=self.visits, rows=rows))
+                    dict(visit=self.visits, rows=rows, screenshot=choice_image.name))
                 self.key('1')
         raise AssertionError('Choice queue did not expose a battle countdown within visit budget')
 
@@ -326,7 +327,9 @@ class EquipmentPolicy:
             self.ui['report'].setdefault('equipment_visit_timings', []).append(
                 dict(visit=self.visits, phase='panels closed', elapsed=time.monotonic()-visit_started))
             before_seconds = self.visible_countdown(prefix + '-resume-before', deadline)
-            resume_deadline = min(deadline, time.monotonic() + 10)
+            # Modal recognition/settlement shares the remaining visit budget;
+            # a separate ten-second window can expire before the next frame.
+            resume_deadline = deadline
             while time.monotonic() < resume_deadline:
                 time.sleep(.5)
                 rows = self.ui['lines']()
