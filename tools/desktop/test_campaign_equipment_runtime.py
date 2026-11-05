@@ -269,6 +269,36 @@ class EquipmentPolicyParsing(unittest.TestCase):
                      root/'hud-recruitment-2026-11-05/level10-over-speed.png'):
             with self.assertRaises(AssertionError):market_header_text(path,None)
 
+    def test_merged_footer_hint_needs_anchored_xp_boundary_and_exact_pixels(self):
+        good=[('LEVEL 24 84/474 xP ey io | Se shift @:',483,656,1237,691)]
+        self.assertEqual(public_panel_state(good),'unknown')
+        with patch('campaign_equipment_runtime.battle_level_pixels',return_value='LEVEL2484/474XP') as pixels:
+            self.assertEqual(public_panel_state(good,Path('screen.png')),'battle')
+            pixels.assert_called_once()
+        for text in ('LEVEL 24 84/474 noXP', 'status LEVEL24 84/474XP',
+                     'LEVEL24 84/474XPP buttons','LEVEL24 84/474XPjunk'):
+            with patch('campaign_equipment_runtime.battle_level_pixels') as pixels:
+                self.assertEqual(public_panel_state([(text,483,656,1237,691)],Path('screen.png')),'unknown')
+                pixels.assert_not_called()
+        with patch('campaign_equipment_runtime.battle_level_pixels') as pixels:
+            self.assertEqual(public_panel_state(good+[('Choose an encounter',40,80,600,110)],Path('screen.png')),'unknown')
+            self.assertEqual(public_panel_state(good+[('Level20 · Recruit a hero',40,80,600,110)],Path('screen.png')),'choice')
+            pixels.assert_not_called()
+        with patch('campaign_equipment_runtime.battle_level_pixels',side_effect=AssertionError('invalid numeric pixels')):
+            with self.assertRaises(AssertionError):public_panel_state(good,Path('screen.png'))
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_actual_level24_merged_footer_requires_fresh_numeric_pixels(self):
+        from smoke_runtime import read_toolbar_speed
+        path=Path(__file__).resolve().parents[2]/'docs/verification/battle-level-footer-2026-11-05/level24-battle.png'
+        rows=ocr_screenshot(path)
+        self.assertEqual(public_panel_state(rows),'unknown')
+        self.assertEqual(public_panel_state(rows,path,None),'battle')
+        self.assertEqual(battle_level_pixels(path,None),'LEVEL2484/474XP')
+        self.assertEqual(screenshot_battle_seconds(path,None),9*60+50)
+        self.assertEqual(read_toolbar_speed(path,None),1)
+
     def test_inventory_opener_never_toggles_an_open_panel(self):
         rows=[('EQUIPMENT · 2',213,108,400,130)]
         policy,ocr,clock=self.inventory_opener([rows])

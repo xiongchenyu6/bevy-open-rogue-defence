@@ -1,0 +1,5 @@
+raw [('LEVEL 24 84/a74XP', 483, 659, 595, 687), ('LEVEL 24 84/474 xP ey io | Se shin @:', 483, 656, 1237, 691)]
+raw_state unknown
+numeric LEVEL2484/474XP
+pixel_state battle
+clock 590 speed 1
