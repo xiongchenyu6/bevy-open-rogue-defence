@@ -1,0 +1,30 @@
+[
+  {
+    "file": "replay-a/active-h2-behind-sa11ce-c5-t0.jsonl.gz",
+    "uncompressed_sha256": "44a7d2c5c2cbb880520eb756de5d5ec36e67979aff9ab3460f3f6dc77fe31c59",
+    "compressed_sha256": "c409401269085d99e51e196d696fd8524cf3bc1be581a080bfe0af26a3ada5a6",
+    "actor_trace_rows": 97439,
+    "actual_contact_rows": 0
+  },
+  {
+    "file": "replay-a/active-h2-behind-sa11ce-c5-t0.stderr.gz",
+    "uncompressed_sha256": "07b4b38ac97277da394868a847f4613680aad30b6fe235204341c177f7a8f025",
+    "compressed_sha256": "7138da25a5915aad6da8e3ecf2dd491e59b0cae2e56e9e650d73a38717e00165",
+    "actor_trace_rows": 0,
+    "actual_contact_rows": 73597
+  },
+  {
+    "file": "replay-b/active-h2-behind-sa11ce-c5-t0.jsonl.gz",
+    "uncompressed_sha256": "cd2e0df19e3a8bdbd59527ed2bbc2c7060528a1b3cd71dc8a51fe40ed59e3108",
+    "compressed_sha256": "80cb246f11068f17ac6db24f2c9a2fe644c44151d69fde752f3787f5e12750a0",
+    "actor_trace_rows": 97616,
+    "actual_contact_rows": 0
+  },
+  {
+    "file": "replay-b/active-h2-behind-sa11ce-c5-t0.stderr.gz",
+    "uncompressed_sha256": "6c5c8290537afd7f5cfe050b7e906e61d57bddd194432de47a80520bc5798e19",
+    "compressed_sha256": "4e9689862370d0f40702354106305a462f402447d8d73a04561bd4ea0ed0caa5",
+    "actor_trace_rows": 0,
+    "actual_contact_rows": 76915
+  }
+]

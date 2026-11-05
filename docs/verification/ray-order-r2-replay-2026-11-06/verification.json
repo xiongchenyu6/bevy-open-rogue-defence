@@ -1,0 +1,37 @@
+{
+  "scope": "Exact recorded numeric repeat gate remains open; first difference position only, not damage; both normal wins; scoped Ray tests independently pass",
+  "actor_counts": [
+    97439,
+    97616
+  ],
+  "contact_counts": [
+    73597,
+    76915
+  ],
+  "first_numeric": 67883,
+  "first_numeric_type": "enemy position only",
+  "files_sha256": {
+    "README.md": "b210ed7e34e56dd91f32696984a4a5b09be0b4df131cff733be27b3879b7ee39",
+    "actor-comparison.json": "ac7ee159f77ac79f0676e5d6ca273a621ceeb59ad05250ba495db886a4eeb703",
+    "archive-verification.log": "8edba2b590d8d09a17e879972a1a1e2df7aa31ec75ba089641e4e46cba79fcf4",
+    "binary.json": "59afbb44cc41c6e5c19613ffc1fedd9b74c958d224177e45d65137acdb1ca87d",
+    "checkpoint-comparison.json": "5e718d167886bbf4d71b1578ea01f9db7859a6ce03eb7c23748019c61512c9e4",
+    "contact-counts.json": "e52b9c52933b3b7ad6d8498bd9ac837d158789f2b233adb48550ab5cab34133b",
+    "first-difference-contacts-a.json": "889531e42086b8c1d404389f714f8755cce1460e27857257d1191c1e14aa2523",
+    "first-difference-contacts-b.json": "dce4344d4e95890c585106e4c289e3614e78bca4a90b4fb1a4f58cd1f9badf75",
+    "first-difference-context.json": "58f5c5a9dac46544d0c43e6e3664a5804565f6e2a1e771443cb0f19c9a21479c",
+    "probe-a.log": "2ce5ccb53d6cbf222ad2f44a3471eb75b17d7d36224686db125819f062405fbe",
+    "probe-b.log": "5a44ef16244d4f669a4af506ae56eb584181eca2bbaa08bf5756e656f6cf11b6",
+    "raw-receipts.json": "669a28d3440e5d9e0ab4b41181dcd23157cd2bf34c51e272775aad25bfcf23b9",
+    "replay-a/active-h2-behind-sa11ce-c5-t0.jsonl.gz": "c409401269085d99e51e196d696fd8524cf3bc1be581a080bfe0af26a3ada5a6",
+    "replay-a/active-h2-behind-sa11ce-c5-t0.stderr.gz": "7138da25a5915aad6da8e3ecf2dd491e59b0cae2e56e9e650d73a38717e00165",
+    "replay-a/summary.json": "24633babc5f0116c53fa91810d28d21704efc30c06c5681ee622ebc337a9c50a",
+    "replay-b/active-h2-behind-sa11ce-c5-t0.jsonl.gz": "80cb246f11068f17ac6db24f2c9a2fe644c44151d69fde752f3787f5e12750a0",
+    "replay-b/active-h2-behind-sa11ce-c5-t0.stderr.gz": "4e9689862370d0f40702354106305a462f402447d8d73a04561bd4ea0ed0caa5",
+    "replay-b/summary.json": "6840df0d6cac8f19f3e3511b8cee23f9d4c7cae04f5f98bcf2e7afdb108a2c07",
+    "run.py": "001e9cc7a1c1dc956350f17ffc3a1656be1cbdb0f5307f1733d49323e1da8f44",
+    "scope.json": "59c27cbf2b31c412b4482a5759b8962014606f569624008a8565ee3c03d2030f",
+    "sequence.log": "870794f0e141ade0d5412b791e4f8a4454975391d17a52d17eb78199ef9fab57",
+    "verify.py": "5d4c59fcbc1d4ae38944715f45a1e8f6155535f7edc079e5fe5329ba4b17c520"
+  }
+}
