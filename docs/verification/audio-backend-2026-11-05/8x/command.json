@@ -1,0 +1,25 @@
+{
+  "command": [
+    "nix",
+    "develop",
+    "--command",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/market-visual/debug/capture",
+    "frames",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/native-20261105-204458-1600174/8x/frames",
+    "1200",
+    "audio-backend",
+    "0xA11CE",
+    "1280x720"
+  ],
+  "env": {
+    "XDG_CONFIG_HOME": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/native-20261105-204458-1600174/8x/preferences",
+    "PULSE_SERVER": "unix:/tmp/rogue-audio-1000-nov5/native",
+    "PULSE_RUNTIME_PATH": "/tmp/rogue-audio-1000-nov5",
+    "PULSE_STATE_PATH": "/tmp/rogue-audio-1000-nov5/state",
+    "ALSA_CONFIG_PATH": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/private-alsa.conf",
+    "ALSA_PLUGIN_DIR": "/nix/store/3q9c80jj2j0gw4h6si34ka66h2mchxf4-alsa-plugins-1.2.12/lib/alsa-lib",
+    "ROGUE_AUDIO_SAVE": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/native-20261105-204458-1600174/8x/audio-preferences.json",
+    "ROGUE_CAPTURE_AUDIO_MODE": "8x",
+    "ROGUE_CAPTURE_SAVE_FRAMES": "20,80,200,500,1199"
+  }
+}

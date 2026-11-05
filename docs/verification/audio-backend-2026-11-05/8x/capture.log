@@ -1,0 +1,47 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+[capture] selective PNG frames: {20, 80, 200, 500, 1199}; all 1200 simulation/render updates retained
+[2m2026-11-05T12:47:06.600318Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-05T12:47:06.842325Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-05T12:47:08.004712Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-05T12:47:08.004934Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-05T12:47:09.237188Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+AUDIO_BACKEND_READY mode=8x gain=0.144
+AUDIO_BACKEND_STATE {"mode":"8x","phase":"initial","available":true,"music_entity":"705v0","sink_present":true,"sink_added":true,"sink_added_tick":3692,"sink_generation":1,"gain":0.144000,"settings_gain":0.144000,"effects":0,"wall_seconds":0.098,"real_seconds":0.088,"virtual_seconds":0.703}
+AUDIO_BACKEND_STATE {"mode":"8x","phase":"initial","available":true,"music_entity":"705v0","sink_present":true,"sink_added":false,"sink_added_tick":3692,"sink_generation":1,"gain":0.144000,"settings_gain":0.144000,"effects":0,"wall_seconds":0.230,"real_seconds":0.147,"virtual_seconds":1.177}
+[2m2026-11-05T12:47:17.409092Z[0m [33m WARN[0m [2mbevy_audio::audio_recovery[0m[2m:[0m Audio device failed; playback stopped until recovery: A backend-specific error has occurred: ALSA function 'snd_pcm_poll_descriptors_revents' failed with error 'Unknown errno (-5)'
+AUDIO_BACKEND_STATE {"mode":"8x","phase":"offline","available":false,"music_entity":"705v0","sink_present":true,"sink_added":false,"sink_added_tick":3692,"sink_generation":1,"gain":0.144000,"settings_gain":0.144000,"effects":0,"wall_seconds":2.467,"real_seconds":2.301,"virtual_seconds":18.404}
+AUDIO_BACKEND_STATE {"mode":"8x","phase":"offline","available":false,"music_entity":"705v0","sink_present":false,"sink_added":false,"sink_added_tick":null,"sink_generation":1,"gain":null,"settings_gain":0.144000,"effects":0,"wall_seconds":2.591,"real_seconds":2.458,"virtual_seconds":19.664}
+[2m2026-11-05T12:47:19.050150Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/native-20261105-204458-1600174/8x/frames/frame00020.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/native-20261105-204458-1600174/8x/frames/frame00020.png (1007643 bytes)
+ALSA lib pulse.c:242:(pulse_connect) [error.] PulseAudio: Unable to connect: Connection refused
+
+ALSA lib control.c:1646:(snd_ctl_open_noupdate) [error.control] Invalid CTL hw:0
+ALSA lib control.c:1646:(snd_ctl_open_noupdate) [error.control] Invalid CTL hw:1
+ALSA lib control.c:1646:(snd_ctl_open_noupdate) [error.control] Invalid CTL hw:0
+[2m2026-11-05T12:47:22.444200Z[0m [33m WARN[0m [2mbevy_audio::audio_recovery[0m[2m:[0m Audio device unavailable; retrying in 5 seconds: Failed to get the config for the given device
+[2m2026-11-05T12:47:27.429590Z[0m [32m INFO[0m [2mbevy_audio::audio_recovery[0m[2m:[0m Audio output restored.
+AUDIO_BACKEND_PASS mode=8x retained_music=true new_sink=true gain=0.144 real_seconds=12.466 wall_seconds=12.603
+AUDIO_BACKEND_STATE {"mode":"8x","phase":"restored","available":true,"music_entity":"705v0","sink_present":true,"sink_added":true,"sink_added_tick":144636,"sink_generation":2,"gain":0.144000,"settings_gain":0.144000,"effects":0,"wall_seconds":12.603,"real_seconds":12.466,"virtual_seconds":94.857}
+AUDIO_BACKEND_STATE {"mode":"8x","phase":"restored","available":true,"music_entity":"705v0","sink_present":true,"sink_added":false,"sink_added_tick":144636,"sink_generation":2,"gain":0.144000,"settings_gain":0.144000,"effects":0,"wall_seconds":12.718,"real_seconds":12.601,"virtual_seconds":95.933}
+[2m2026-11-05T12:47:28.762317Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/native-20261105-204458-1600174/8x/frames/frame00080.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/native-20261105-204458-1600174/8x/frames/frame00080.png (1008183 bytes)
+[2m2026-11-05T12:47:49.285151Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/native-20261105-204458-1600174/8x/frames/frame00200.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/native-20261105-204458-1600174/8x/frames/frame00200.png (1007099 bytes)
+[2m2026-11-05T12:48:16.304914Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/native-20261105-204458-1600174/8x/frames/frame00500.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/native-20261105-204458-1600174/8x/frames/frame00500.png (1007150 bytes)
+[2m2026-11-05T12:48:56.569351Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/native-20261105-204458-1600174/8x/frames/frame01199.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/native-20261105-204458-1600174/8x/frames/frame01199.png (1006184 bytes)
+[capture] all 5 screenshot(s) saved after 2 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 1200 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/native-20261105-204458-1600174/8x/frames

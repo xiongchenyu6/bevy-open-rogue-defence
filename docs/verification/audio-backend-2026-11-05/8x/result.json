@@ -1,0 +1,48 @@
+{
+  "mode": "8x",
+  "passed": true,
+  "initial": {
+    "mode": "8x",
+    "phase": "initial",
+    "available": true,
+    "music_entity": "705v0",
+    "sink_present": true,
+    "sink_added": true,
+    "sink_added_tick": 3692,
+    "sink_generation": 1,
+    "gain": 0.144,
+    "settings_gain": 0.144,
+    "effects": 0,
+    "wall_seconds": 0.098,
+    "real_seconds": 0.088,
+    "virtual_seconds": 0.703
+  },
+  "recovered": {
+    "mode": "8x",
+    "phase": "restored",
+    "available": true,
+    "music_entity": "705v0",
+    "sink_present": true,
+    "sink_added": true,
+    "sink_added_tick": 144636,
+    "sink_generation": 2,
+    "gain": 0.144,
+    "settings_gain": 0.144,
+    "effects": 0,
+    "wall_seconds": 12.603,
+    "real_seconds": 12.466,
+    "virtual_seconds": 94.857
+  },
+  "recordings": {
+    "initial": {
+      "samples": 214586,
+      "nonzero": 214320,
+      "peak": 466
+    },
+    "recovered": {
+      "samples": 214394,
+      "nonzero": 212666,
+      "peak": 457
+    }
+  }
+}

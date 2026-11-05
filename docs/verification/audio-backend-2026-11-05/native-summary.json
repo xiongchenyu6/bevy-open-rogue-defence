@@ -1,0 +1,98 @@
+[
+  {
+    "mode": "paused",
+    "passed": true,
+    "initial": {
+      "mode": "paused",
+      "phase": "initial",
+      "available": true,
+      "music_entity": "470v0",
+      "sink_present": true,
+      "sink_added": true,
+      "sink_added_tick": 3692,
+      "sink_generation": 1,
+      "gain": 0.144,
+      "settings_gain": 0.144,
+      "effects": 0,
+      "wall_seconds": 0.095,
+      "real_seconds": 0.109,
+      "virtual_seconds": 0.0
+    },
+    "recovered": {
+      "mode": "paused",
+      "phase": "restored",
+      "available": true,
+      "music_entity": "470v0",
+      "sink_present": true,
+      "sink_added": true,
+      "sink_added_tick": 106433,
+      "sink_generation": 2,
+      "gain": 0.144,
+      "settings_gain": 0.144,
+      "effects": 0,
+      "wall_seconds": 12.326,
+      "real_seconds": 12.371,
+      "virtual_seconds": 0.0
+    },
+    "recordings": {
+      "initial": {
+        "samples": 218964,
+        "nonzero": 218686,
+        "peak": 466
+      },
+      "recovered": {
+        "samples": 174764,
+        "nonzero": 163242,
+        "peak": 380
+      }
+    }
+  },
+  {
+    "mode": "8x",
+    "passed": true,
+    "initial": {
+      "mode": "8x",
+      "phase": "initial",
+      "available": true,
+      "music_entity": "705v0",
+      "sink_present": true,
+      "sink_added": true,
+      "sink_added_tick": 3692,
+      "sink_generation": 1,
+      "gain": 0.144,
+      "settings_gain": 0.144,
+      "effects": 0,
+      "wall_seconds": 0.098,
+      "real_seconds": 0.088,
+      "virtual_seconds": 0.703
+    },
+    "recovered": {
+      "mode": "8x",
+      "phase": "restored",
+      "available": true,
+      "music_entity": "705v0",
+      "sink_present": true,
+      "sink_added": true,
+      "sink_added_tick": 144636,
+      "sink_generation": 2,
+      "gain": 0.144,
+      "settings_gain": 0.144,
+      "effects": 0,
+      "wall_seconds": 12.603,
+      "real_seconds": 12.466,
+      "virtual_seconds": 94.857
+    },
+    "recordings": {
+      "initial": {
+        "samples": 214586,
+        "nonzero": 214320,
+        "peak": 466
+      },
+      "recovered": {
+        "samples": 214394,
+        "nonzero": 212666,
+        "peak": 457
+      }
+    }
+  }
+]

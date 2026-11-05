@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/setup.py", line 71, in <module>
+    results.append(proof(round))
+                   ~~~~~^^^^^^^
+  File "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/setup.py", line 61, in proof
+    assert peak>0 and nonzero>100
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

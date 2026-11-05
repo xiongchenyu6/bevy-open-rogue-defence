@@ -1,0 +1,3 @@
+ALSA_PRIVATE_PLAY_PASS frames=45600 channels=1
+ALSA_PRIVATE_PLAY_PASS frames=45600 channels=1
+[{"round": 1, "mode": "pulse", "samples": 190126, "nonzero": 89260, "peak": 6721}, {"round": 1, "mode": "alsa", "samples": 186666, "nonzero": 81580, "peak": 5898}, {"round": 2, "mode": "pulse", "samples": 190122, "nonzero": 89260, "peak": 6721}, {"round": 2, "mode": "alsa", "samples": 185342, "nonzero": 81580, "peak": 5898}]

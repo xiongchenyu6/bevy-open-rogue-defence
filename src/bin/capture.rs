@@ -117,6 +117,8 @@ mod ultimate_capture;
 #[path = "capture/skill_spectacle.rs"]
 mod skill_spectacle_capture;
 
+#[path = "capture/audio_backend.rs"]
+mod audio_backend_capture;
 #[path = "capture/audio_settings.rs"]
 mod audio_settings_capture;
 
@@ -690,6 +692,8 @@ fn main() {
             scenario == "settings-audio-reload",
             scenario == "settings-audio-failure",
         );
+    } else if scenario == "audio-backend" {
+        audio_backend_capture::install(&mut apps.main);
     } else if scenario.starts_with("settings-") {
         settings_capture::install(&mut apps, scenario);
     }
@@ -807,6 +811,9 @@ fn main() {
             );
         }
         wait_for_screenshots(&mut apps);
+    }
+    if scenario == "audio-backend" {
+        audio_backend_capture::assert_complete(apps.main.world());
     }
     audit_world_material_finish(apps.main.world());
     println!(
@@ -986,6 +993,11 @@ fn wait_for_screenshots(apps: &mut SubApps) {
 }
 
 fn configure_scenario(world: &mut World, scenario: &str) {
+    if scenario == "audio-backend" {
+        audio_backend_capture::configure(world);
+        world.resource_mut::<CaptureControls>().suppress_drafts = true;
+        return;
+    }
     if matches!(scenario, "controller-input" | "controller-scroll") {
         controller_input_capture::configure(world);
         return;

@@ -1,0 +1,4 @@
+load-module module-native-protocol-unix socket=/tmp/rogue-audio-1000-nov5/native auth-anonymous=1
+load-module module-null-sink sink_name=rogue_private rate=48000 channels=2
+set-default-sink rogue_private
+set-default-source rogue_private.monitor

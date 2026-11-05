@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "mode": "paused",
+      "updates": 1200,
+      "fault_warnings": 1,
+      "retry_unavailable_warnings": 1,
+      "restorations": 1,
+      "native_pass": true
+    },
+    {
+      "mode": "8x",
+      "updates": 1200,
+      "fault_warnings": 1,
+      "retry_unavailable_warnings": 1,
+      "restorations": 1,
+      "native_pass": true
+    }
+  ],
+  "private_socket_removed": true,
+  "sha256": {
+    "src/bin/capture.rs": "8c91c651d925d50c354ac00f5b6c7f8b61f62eea843bd91fdef6bc1b6dbe99f2",
+    "src/bin/capture/audio_backend.rs": "aa28c934b78b2ca4db2e7fc7010dbdd74f6f4c0654fd1111bc7db5d275bf0533",
+    "vendor/bevy_audio/src/audio_recovery.rs": "924a755ebddf5d9b19e855af72ed5f92441e3143c26f61477a9af6486163b1f1",
+    "src/game/audio_output_health.rs": "3cfaf0be0747eba6efbaf82120944dd083a84e77174e6329036b715abc2ef631",
+    "target/market-visual/debug/capture": "23dbcc217c70fc6b6975b117e4eac4600745cf041f87556fa8085e40311823ad"
+  }
+}

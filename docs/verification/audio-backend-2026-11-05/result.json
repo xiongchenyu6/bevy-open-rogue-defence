@@ -1,0 +1,40 @@
+{
+  "scope": "real private PulseAudio null sink, same socket restarted; not physical device or game recovery",
+  "env": {
+    "PULSE_SERVER": "unix:/tmp/rogue-audio-1000-nov5/native",
+    "PULSE_RUNTIME_PATH": "/tmp/rogue-audio-1000-nov5",
+    "PULSE_STATE_PATH": "/tmp/rogue-audio-1000-nov5/state",
+    "ALSA_CONFIG_PATH": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/audio-backend-2026-11-05/private-alsa.conf",
+    "ALSA_PLUGIN_DIR": "/nix/store/3q9c80jj2j0gw4h6si34ka66h2mchxf4-alsa-plugins-1.2.12/lib/alsa-lib"
+  },
+  "results": [
+    {
+      "round": 1,
+      "mode": "pulse",
+      "samples": 190126,
+      "nonzero": 89260,
+      "peak": 6721
+    },
+    {
+      "round": 1,
+      "mode": "alsa",
+      "samples": 186666,
+      "nonzero": 81580,
+      "peak": 5898
+    },
+    {
+      "round": 2,
+      "mode": "pulse",
+      "samples": 190122,
+      "nonzero": 89260,
+      "peak": 6721
+    },
+    {
+      "round": 2,
+      "mode": "alsa",
+      "samples": 185342,
+      "nonzero": 81580,
+      "peak": 5898
+    }
+  ]
+}

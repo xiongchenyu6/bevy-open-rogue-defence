@@ -1,0 +1,15 @@
+Server String: unix:/tmp/rogue-audio-1000-nov5/native
+Library Protocol Version: 35
+Server Protocol Version: 35
+Is Local: yes
+Client Index: 0
+Tile Size: 65472
+User Name: freeman.xiong
+Host Name: game
+Server Name: pulseaudio
+Server Version: 17.0
+Default Sample Specification: s16le 2ch 44100Hz
+Default Channel Map: front-left,front-right
+Default Sink: rogue_private
+Default Source: rogue_private.monitor
+Cookie: f01d:5e22

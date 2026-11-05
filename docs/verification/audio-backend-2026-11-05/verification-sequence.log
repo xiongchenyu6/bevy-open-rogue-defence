@@ -1,0 +1,6 @@
+START capture-clippy.log
+PASS capture-clippy.log
+START capture-build.log
+PASS capture-build.log
+START native-sequence.log
+PASS native-sequence.log
