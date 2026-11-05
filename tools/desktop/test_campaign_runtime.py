@@ -1,6 +1,24 @@
 """Reject unrelated or ambiguous numbers when verifying an earned stat bonus."""
 import unittest
+import shutil
+from pathlib import Path
+from smoke_runtime import toolbar_speed, read_toolbar_speed
 from campaign_runtime import strength_from_lines, seed_from_text, strength_purchase
+
+
+class ToolbarSpeedTests(unittest.TestCase):
+    def test_strict_toolbar_speed_values(self):
+        for text, value in [('1×', 1), ('32x', 32), ('2 x', 2)]:
+            self.assertEqual(toolbar_speed(text), value)
+        for text in ('1', '12x', 'ROUND 1/5', '1x 24:50', ''):
+            with self.assertRaises(AssertionError):
+                toolbar_speed(text)
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_native_startup_failure_pixels_still_prove_actual_1x(self):
+        root = Path(__file__).resolve().parents[2]
+        self.assertEqual(read_toolbar_speed(root / 'docs/verification/chapter6-startup-speed-2026-11-05/actual-1x.png'), 1)
 
 
 class StrengthEvidenceTests(unittest.TestCase):

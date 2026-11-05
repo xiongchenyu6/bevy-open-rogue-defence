@@ -9,7 +9,7 @@ import shutil
 import subprocess
 import time
 import threading
-from smoke_runtime import find_text, normalized, ocr_screenshot
+from smoke_runtime import find_text, normalized, ocr_screenshot, read_toolbar_speed
 
 GAME, OUT = Path('/game'), Path('/verify')
 
@@ -162,8 +162,8 @@ def main(policy_factory=None):
         geometry = dict(line.split('=', 1) for line in call(
             ['xdotool', 'getwindowgeometry', '--shell', win]).splitlines())
         assert geometry['WIDTH'] == '1280' and geometry['HEIGHT'] == '720'
-        assert any(re.fullmatch(r'1\s*[x×]', text.strip(), re.I)
-                   for text, *_ in lines(win)), 'Sample attributes only after confirming actual 1x'
+        speed_screen = shot(win, name.replace('.png', '-speed.png'))
+        assert read_toolbar_speed(speed_screen, env) == 1, 'Sample attributes only after confirming actual 1x'
         # Screenshot-confirmed public portrait rectangle: (156,22,44,44).
         call(['xdotool', 'mousemove', '--window', win, '178', '44'])
         call(['xdotool', 'click', '1'])
@@ -221,19 +221,19 @@ def main(policy_factory=None):
         input_thread.start()
         deadline = time.monotonic() + 45
         while time.monotonic() < deadline:
-            speed_lines = lines(win)
-            visible = {int(match[1]) for text, x, y, right, bottom in speed_lines
-                       if 1000 <= x <= 1080 and y < 90
-                       and (match := re.fullmatch(r'(1|2|4|8|16|32)\s*[x×]', text.strip(), re.I))}
-            assert len(visible) <= 1, f'Ambiguous toolbar speed: {visible}'
-            if visible == {speed}:
+            speed_screen = shot(win, 'speed-source.png')
+            try:
+                current = read_toolbar_speed(speed_screen, env)
+            except AssertionError as error:
+                report.setdefault('unreadable_speed_samples', []).append(str(error))
+                time.sleep(.3)
+                continue
+            if current == speed:
                 break
-            if visible:
-                current = visible.pop()
-                # Correct a missed input through the real +/- toolbar button.
-                call(['xdotool', 'mousemove', '--window', win, str(995 if current < speed else 943), '44'])
-                call(['xdotool', 'mousedown', '1']); time.sleep(.15)
-                call(['xdotool', 'mouseup', '1']); time.sleep(.3)
+            # Correct only an actually read value through the public +/- button.
+            call(['xdotool', 'mousemove', '--window', win, str(995 if current < speed else 943), '44'])
+            call(['xdotool', 'mousedown', '1']); time.sleep(.15)
+            call(['xdotool', 'mouseup', '1']); time.sleep(.3)
         else:
             raise RuntimeError(f'Actual toolbar speed did not reach {speed}x')
         report['actual_speed'] = speed

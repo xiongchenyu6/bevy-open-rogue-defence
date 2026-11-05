@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/harness/campaign_equipment_runtime.py", line 348, in <module>
+    main(EquipmentPolicy)
+  File "/harness/campaign_runtime.py", line 212, in main
+    report['base_attributes'] = record_strength(win, app, 'base-strength.png', 20.0 + 2 * initial['upgrades'][0])
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/campaign_runtime.py", line 165, in record_strength
+    assert any(re.fullmatch(r'1\s*[x×]', text.strip(), re.I)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Sample attributes only after confirming actual 1x

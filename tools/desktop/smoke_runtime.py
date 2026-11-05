@@ -101,6 +101,26 @@ def read_hud_wallet(path, env=None, dimmed=False):
     return int(text), (left, right), text
 
 
+def toolbar_speed(text):
+    match = re.fullmatch(r'(1|2|4|8|16|32)\s*[x×]', text.strip(), re.I)
+    assert match, f'Unreadable toolbar speed: {text!r}'
+    return int(match[1])
+
+
+def read_toolbar_speed(path, env=None):
+    # Verified 1280x720 toolbar bounds; whole-screen OCR can merge this
+    # small label with +/- and the timer even when the actual pixels are clear.
+    with tempfile.TemporaryDirectory(prefix='rogue-speed-') as directory:
+        crop = Path(directory) / 'speed.png'
+        subprocess.run(['convert', str(path), '-crop', '38x28+1029+32',
+                        '-resize', '600%', '-colorspace', 'Gray', '-negate',
+                        '-bordercolor', 'white', '-border', '20', str(crop)],
+                       env=env, check=True, capture_output=True)
+        raw = subprocess.check_output(['tesseract', str(crop), 'stdout', '-l', 'eng',
+                                       '--psm', '7'], env=env, text=True, stderr=subprocess.PIPE)
+        return toolbar_speed(raw)
+
+
 def find_text(lines, text):
     """Exact line match; choose the bottom action if title and button repeat."""
     matches = [line for line in lines if normalized(line[0]) == normalized(text)]

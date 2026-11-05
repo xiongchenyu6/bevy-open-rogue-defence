@@ -1,0 +1,24 @@
+test_actual_earned_level_one_progress_buys_next_level_for_thirty (test_campaign_runtime.ContinuedPurchaseTests.test_actual_earned_level_one_progress_buys_next_level_for_thirty) ... ok
+test_pricing_increases_and_max_level_cannot_be_purchased (test_campaign_runtime.ContinuedPurchaseTests.test_pricing_increases_and_max_level_cannot_be_purchased) ... ok
+test_complete_seed_accepts_ocr_word_spacing (test_campaign_runtime.SeedEvidenceTests.test_complete_seed_accepts_ocr_word_spacing) ... ok
+test_truncated_and_overlong_seeds_are_rejected (test_campaign_runtime.SeedEvidenceTests.test_truncated_and_overlong_seeds_are_rejected) ... ok
+test_inline_value_does_not_take_later_offense_number (test_campaign_runtime.StrengthEvidenceTests.test_inline_value_does_not_take_later_offense_number) ... ok
+test_missing_or_conflicting_strength_is_rejected (test_campaign_runtime.StrengthEvidenceTests.test_missing_or_conflicting_strength_is_rejected) ... ok
+test_separate_value_stays_in_strength_row_and_first_column (test_campaign_runtime.StrengthEvidenceTests.test_separate_value_stays_in_strength_row_and_first_column) ... ok
+test_native_startup_failure_pixels_still_prove_actual_1x (test_campaign_runtime.ToolbarSpeedTests.test_native_startup_failure_pixels_still_prove_actual_1x) ... ok
+test_strict_toolbar_speed_values (test_campaign_runtime.ToolbarSpeedTests.test_strict_toolbar_speed_values) ... ok
+test_battle_countdown_requires_complete_valid_time (test_campaign_equipment_runtime.EquipmentPolicyParsing.test_battle_countdown_requires_complete_valid_time) ... ok
+test_cheapest_equipment_requires_all_inspected_offers (test_campaign_equipment_runtime.EquipmentPolicyParsing.test_cheapest_equipment_requires_all_inspected_offers) ... ok
+test_countdown_drains_recognized_recruitment_before_reading_hud (test_campaign_equipment_runtime.EquipmentPolicyParsing.test_countdown_drains_recognized_recruitment_before_reading_hud) ... ok
+test_current_header_and_ambiguous_wallet (test_campaign_equipment_runtime.EquipmentPolicyParsing.test_current_header_and_ambiguous_wallet) ... ok
+test_fail_closed_on_unreadable_or_wrong_preview (test_campaign_equipment_runtime.EquipmentPolicyParsing.test_fail_closed_on_unreadable_or_wrong_preview) ... ok
+test_inventory_header_and_visible_grid (test_campaign_equipment_runtime.EquipmentPolicyParsing.test_inventory_header_and_visible_grid) ... ok
+test_queue_and_inventory_require_exact_evidence (test_campaign_equipment_runtime.EquipmentPolicyParsing.test_queue_and_inventory_require_exact_evidence) ... ok
+test_real_committed_native_market_pixels (test_campaign_equipment_runtime.EquipmentPolicyParsing.test_real_committed_native_market_pixels) ... ok
+test_unreadable_clock_without_choice_still_fails_without_keys (test_campaign_equipment_runtime.EquipmentPolicyParsing.test_unreadable_clock_without_choice_still_fails_without_keys) ... ok
+test_wrapped_tile_name_is_exact_and_contiguous (test_campaign_equipment_runtime.EquipmentPolicyParsing.test_wrapped_tile_name_is_exact_and_contiguous) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 5.818s
+
+OK
