@@ -1,0 +1,17 @@
+{
+  "exit": 101,
+  "elapsed": 0.3651054189831484,
+  "args": [
+    "nix",
+    "develop",
+    "--command",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/capture",
+    "frames",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/invalid-root",
+    "20",
+    "demon-cave",
+    "0xA11CE",
+    "1280x720"
+  ],
+  "expected_rejection": true
+}

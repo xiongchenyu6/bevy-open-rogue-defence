@@ -1,0 +1,15 @@
+# Actual native environment preview, not accepted cavern art
+
+The capture tool can load an isolated asset copy using `ROGUE_CAPTURE_ASSET_ROOT`. Its default still uses the repository assets. The two new candidate scenarios extend the existing cavern capture instead of adding a second production art path. No shipped game asset, collision, spawn coordinate or production camera changed.
+
+The tool replaces the actual old den at its observed transform and verifies that every entity in its old subtree is absent. It waits for the candidate WorldAsset to load and import real meshes, then introduces three actual animated enemy models at the audited maximum scales and both birth-band edges. Production movement must carry them beyond X10 while alive. These are controlled geometry probes, not naturally earned enemies, combat balance, or complete animated collision proof.
+
+The first attempt actually failed: its scenario branch returned before shared battle initialization. The expedition menu remained visible, the paused actors did not move, and the process exited101. Raw log, source and menu screenshot remain under r1. The correction routes through the existing battle setup and checks that the campaign menu is closed and the session is active before installing the preview. No failure was erased or counted as a pass.
+
+R2: capture-only strict Clippy/build pass; two400-update native candidate cases and the original320-update production-cave control pass. All23 requested PNGs were saved. The original camera is unchanged in den-preview. den-preview-reframed is explicitly a proposal: target(2,0,0), eye(10,24,21), vertical span24; it does not change production. A nonexistent asset-root invocation is rejected before app creation. Original source/assets and all186 cloned asset hashes were stable for the run. The full689 library check belongs to the preceding melee change; no unchanged-library rerun is claimed for this capture-only tooling.
+
+Root viewed both empty full-map frames90 and the reframed moving-actor frame180. **R30 was rejected**: its square L-shaped pillars and roof resemble a bus shelter, even though it imports and leaves the actor paths open. The copied GLB is explicitly named REJECTED-R30 and exists here only to preserve the tested input. It was never copied into the formal assets directory or an SDK package. Technical execution pass is not visual acceptance.
+
+The shader, game lighting, full map and HUD are the actual Bevy renderer, not the earlier Blender composites. This validates the preview loop and default capture control only. Final cavern geometry, camera composition, magical atmosphere, natural-wave play and performance remain separate work.
+
+To reproduce, copy the current normal assets to a fresh target folder and put a candidate at models/environment_demon_cavern_preview.glb inside that copy. Use the capture binary with the root override and den-preview or den-preview-reframed,400 frames. Keep the original assets for the demon-cave320-frame control. Never overwrite a shipped input to preview a candidate.

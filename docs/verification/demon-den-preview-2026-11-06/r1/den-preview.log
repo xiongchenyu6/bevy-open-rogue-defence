@@ -1,0 +1,44 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {30, 90, 120, 180, 240, 300, 350, 399}; all 400 simulation/render updates retained
+CAPTURE_ASSET_ROOT /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-2026-11-06/assets
+[2m2026-11-05T23:24:19.774243Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-05T23:24:20.100074Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-05T23:24:20.982179Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-05T23:24:20.982392Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-05T23:24:21.746702Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] den candidate: real arena and lighting, old den removed; fixture actors, not earned gameplay
+[2m2026-11-05T23:24:26.476210Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-2026-11-06/den-preview/frame00030.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-2026-11-06/den-preview/frame00030.png (114464 bytes)
+[2m2026-11-05T23:24:28.488604Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-2026-11-06/den-preview/frame00090.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-2026-11-06/den-preview/frame00090.png (114464 bytes)
+[capture] den preview loaded: imported_meshes=4; three maximum-scale fixture actors start actual production movement
+[2m2026-11-05T23:24:29.625102Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-2026-11-06/den-preview/frame00120.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-2026-11-06/den-preview/frame00120.png (114464 bytes)
+[2m2026-11-05T23:24:31.611397Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-2026-11-06/den-preview/frame00180.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-2026-11-06/den-preview/frame00180.png (114464 bytes)
+[2m2026-11-05T23:24:33.609290Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-2026-11-06/den-preview/frame00240.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-2026-11-06/den-preview/frame00240.png (114464 bytes)
+[2m2026-11-05T23:24:35.650896Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-2026-11-06/den-preview/frame00300.png
+[capture] saved 6/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-2026-11-06/den-preview/frame00300.png (114464 bytes)
+
+thread 'main' (3386374) panicked at src/bin/capture/demon_cave.rs:219:13:
+actual movement must leave the entrance: Vec3(16.4, 0.0, -4.25)
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: capture::demon_cave_capture::observe
+   3: <capture::demon_cave_capture::observe as core::ops::function::FnMut<(&mut bevy_ecs::world::World,)>>::call_mut
+   4: <&mut capture::demon_cave_capture::observe as core::ops::function::FnMut<(&mut bevy_ecs::world::World,)>>::call_mut
+   5: <_ as bevy_ecs::system::exclusive_function_system::ExclusiveSystemParamFunction<fn() -> _>>::run::call_inner::<(), &mut capture::demon_cave_capture::observe>
+   6: <capture::demon_cave_capture::observe as bevy_ecs::system::exclusive_function_system::ExclusiveSystemParamFunction<fn()>>::run
+   7: <bevy_ecs::system::exclusive_function_system::ExclusiveFunctionSystem<fn(), (), capture::demon_cave_capture::observe> as bevy_ecs::system::system::System>::run_unsafe::{closure#0}
+   8: <bevy_ecs::world::World>::last_change_tick_scope::<core::result::Result<(), bevy_ecs::system::system::RunSystemError>, <bevy_ecs::system::exclusive_function_system::ExclusiveFunctionSystem<fn(), (), capture::demon_cave_capture::observe> as bevy_ecs::system::system::System>::run_unsafe::{closure#0}>
+   9: <bevy_ecs::system::exclusive_function_system::ExclusiveFunctionSystem<fn(), (), capture::demon_cave_capture::observe> as bevy_ecs::system::system::System>::run_unsafe
+  10: <bevy_ecs::system::exclusive_function_system::ExclusiveFunctionSystem<fn(), (), capture::demon_cave_capture::observe> as bevy_ecs::system::system::System>::run_without_applying_deferred
+  11: <bevy_ecs::system::exclusive_function_system::ExclusiveFunctionSystem<fn(), (), capture::demon_cave_capture::observe> as bevy_ecs::system::system::System>::run
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+Encountered a panic in system `<Enable the debug feature to see the name>`!
+Encountered a panic in system `<Enable the debug feature to see the name>`!

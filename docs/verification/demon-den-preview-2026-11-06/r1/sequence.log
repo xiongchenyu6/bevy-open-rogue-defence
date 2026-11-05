@@ -1,0 +1,7 @@
+PASS clippy
+PASS build
+Traceback (most recent call last):
+  File "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-2026-11-06/run.py", line 39, in <module>
+    assert status.get('exit')==0 and marker in text and 'panicked at' not in text and 'ERROR' not in text,scenario
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: den-preview

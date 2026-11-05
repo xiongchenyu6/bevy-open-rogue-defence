@@ -1,0 +1,33 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {30, 90, 120, 180, 240, 300, 350, 399}; all 400 simulation/render updates retained
+CAPTURE_ASSET_ROOT /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/assets
+[2m2026-11-05T23:28:03.321851Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-05T23:28:03.425096Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-05T23:28:04.286885Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-05T23:28:04.287117Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-05T23:28:05.038068Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] den candidate: real arena and lighting, old den removed; fixture actors, not earned gameplay
+[2m2026-11-05T23:28:09.925878Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00030.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00030.png (1017737 bytes)
+[2m2026-11-05T23:28:12.207784Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00090.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00090.png (1017618 bytes)
+[capture] den preview loaded: imported_meshes=4; three maximum-scale fixture actors start actual production movement
+[2m2026-11-05T23:28:13.622853Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00120.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00120.png (1030063 bytes)
+[2m2026-11-05T23:28:15.880889Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00180.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00180.png (1029243 bytes)
+[2m2026-11-05T23:28:18.156358Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00240.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00240.png (1030775 bytes)
+[2m2026-11-05T23:28:20.439111Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00300.png
+[capture] saved 6/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00300.png (1030425 bytes)
+[capture] PASS den-preview: candidate imported, old den absent, actual parent retained, three moving maximum-scale models, reframed=false
+[2m2026-11-05T23:28:22.349563Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00350.png
+[capture] saved 7/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00350.png (1028271 bytes)
+[2m2026-11-05T23:28:24.372607Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00399.png
+[capture] saved 8/8 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview/frame00399.png (1028441 bytes)
+[capture] all 8 screenshot(s) saved after 2 wait frame(s)
+[capture] PASS material finish: 72 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 400 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/den-preview

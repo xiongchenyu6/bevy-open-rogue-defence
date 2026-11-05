@@ -159,10 +159,10 @@ mod crafting_capture;
 
 #[path = "capture/equipment.rs"]
 mod equipment_capture;
-#[path = "capture/equipment_mouse.rs"]
-mod equipment_mouse_capture;
 #[path = "capture/equipment_empty.rs"]
 mod equipment_empty_capture;
+#[path = "capture/equipment_mouse.rs"]
+mod equipment_mouse_capture;
 
 #[cfg(any(debug_assertions, feature = "dev-tools"))]
 #[path = "capture/hit_feedback.rs"]
@@ -441,6 +441,13 @@ fn main() {
         (width, height)
     });
 
+    let asset_root = env::var("ROGUE_CAPTURE_ASSET_ROOT")
+        .unwrap_or_else(|_| format!("{}/assets", env!("CARGO_MANIFEST_DIR")));
+    assert!(
+        PathBuf::from(&asset_root).is_dir(),
+        "capture asset root is not a directory: {asset_root}"
+    );
+    println!("CAPTURE_ASSET_ROOT {asset_root}");
     let mut app = App::new();
     if scenario == "equipment-empty-missing" {
         equipment_empty_capture::prepare(&mut app);
@@ -468,7 +475,7 @@ fn main() {
         .add_plugins(
             DefaultPlugins
                 .set(AssetPlugin {
-                    file_path: format!("{}/assets", env!("CARGO_MANIFEST_DIR")),
+                    file_path: asset_root,
                     ..default()
                 })
                 .set(WindowPlugin {
@@ -713,6 +720,9 @@ fn main() {
 
     if scenario.starts_with("attack-") || scenario.starts_with("weapon-growth-") {
         attack_capture::install(&mut apps.main, scenario);
+    }
+    if scenario.starts_with("den-preview") {
+        demon_cave_capture::install_preview(&mut apps.main, scenario);
     }
 
     if scenario == "hud-hint" {
@@ -1125,7 +1135,7 @@ fn configure_scenario(world: &mut World, scenario: &str) {
         hero_attributes_capture::configure(world);
         return;
     }
-    if scenario == "demon-cave" {
+    if scenario == "demon-cave" || scenario.starts_with("den-preview") {
         demon_cave_capture::configure(world);
         return;
     }

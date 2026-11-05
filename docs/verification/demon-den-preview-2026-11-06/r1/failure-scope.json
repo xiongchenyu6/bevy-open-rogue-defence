@@ -1,0 +1,6 @@
+{
+  "actual_failure": true,
+  "reason": "New preview configure branch returned before shared CampaignMenu=false and GameSession.paused=false initialization. Actual screenshot still shows expedition menu and fixture enemies did not move. No candidate visual pass or gameplay regression claimed.",
+  "evidence": "den-preview/frame00120.png; den-preview.log at actual movement assertion",
+  "correction": "Route preview through shared battle initialization before the existing cavern configure branch; add menu/paused precondition."
+}

@@ -1,0 +1,10 @@
+{
+  "execution_passed": true,
+  "scope": "Actual Bevy candidate preview with cloned assets; two cameras and original entrance control. Visual quality remains unapproved, no candidate integration or earned-gameplay/performance claim.",
+  "candidate_sha256": "a82be6821984e429bfef37e1000457d89b1f0798d03819fb3187ff636c1b2c97",
+  "cases": [
+    "den-preview",
+    "den-preview-reframed",
+    "demon-cave"
+  ]
+}

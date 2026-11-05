@@ -1,0 +1,16 @@
+{
+  "exit": 0,
+  "elapsed": 19.106152690015733,
+  "args": [
+    "nix",
+    "develop",
+    "--command",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/capture",
+    "frames",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r2-2026-11-06/demon-cave",
+    "320",
+    "demon-cave",
+    "0xA11CE",
+    "1280x720"
+  ]
+}

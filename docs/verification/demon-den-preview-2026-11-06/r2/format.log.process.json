@@ -1,0 +1,16 @@
+{
+  "exit": 0,
+  "elapsed": 11.790541663998738,
+  "args": [
+    "nix",
+    "develop",
+    "--command",
+    "rustfmt",
+    "--edition",
+    "2024",
+    "--config",
+    "skip_children=true",
+    "src/bin/capture.rs",
+    "src/bin/capture/demon_cave.rs"
+  ]
+}
