@@ -2,7 +2,7 @@
 """Public UI equipment proof with copied real earned campaign state; no resource injection."""
 import hashlib,json,os,re,shutil,subprocess,threading,time
 from pathlib import Path
-from smoke_runtime import ocr_screenshot,find_text,normalized,read_hud_wallet,read_toolbar_speed
+from smoke_runtime import ocr_screenshot,find_text,normalized,read_hud_wallet,read_toolbar_speed,wait_basic_commander
 from campaign_runtime import read_progress
 from campaign_equipment_runtime import (TILE_LEFTS, INVENTORY_TITLE_CROP,
     screenshot_wallet, choice_pending, crop_text, inventory_count,
@@ -191,7 +191,8 @@ def main():
         geometry=dict(line.split('=',1) for line in call(['xdotool','getwindowgeometry','--shell',win]).splitlines())
         assert geometry['WIDTH']=='1280' and geometry['HEIGHT']=='720', 'Forge OCR route requires1280x720English'
         wait('EXPEDITIONS');shot('startup.png');click(289,294)
-        wait('Click a basic commander to begin')
+        wait_basic_commander(shot,env,key,time.monotonic()+90,
+                             report.setdefault('startup_observations',[]))
         names=[r for r in lines() if normalized(r[0])=='stormsavant' and 150<r[2]<550];assert names
         _,x,y,r,b=min(names,key=lambda r:r[2]);click((x+r)//2,(y+b)//2)
         worker=threading.Thread(target=operate,daemon=True)

@@ -9,7 +9,7 @@ import shutil
 import subprocess
 import time
 import threading
-from smoke_runtime import find_text, normalized, ocr_screenshot, read_toolbar_speed
+from smoke_runtime import find_text, normalized, ocr_screenshot, wait_basic_commander, read_toolbar_speed
 
 GAME, OUT = Path('/game'), Path('/verify')
 
@@ -205,9 +205,11 @@ def main(policy_factory=None):
         wait_text(win, app, 'EXPEDITIONS')
         if continuation == '1': assert read_progress(progress_path) == initial
         start_chapter(win)
-        if continuation == '0':
-            wait_text(win, app, 'Skip'); call(['xdotool', 'key', 'Escape'])
-        wait_text(win, app, 'Click a basic commander to begin')
+        def startup_key(value):
+            call(['xdotool', 'keydown', value]); time.sleep(.15)
+            call(['xdotool', 'keyup', value]); time.sleep(.35)
+        wait_basic_commander(lambda name: shot(win, name), env, startup_key,
+                             time.monotonic()+90, report.setdefault('startup_observations', []))
         select_storm(win, app)
         report['base_attributes'] = record_strength(win, app, 'base-strength.png', 20.0 + 2 * initial['upgrades'][0])
         for _ in range(speed.bit_length() - 1): call(['xdotool', 'key', 't']); time.sleep(.25)

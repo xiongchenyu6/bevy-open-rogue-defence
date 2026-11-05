@@ -6,12 +6,63 @@ from unittest.mock import Mock, patch
 from pathlib import Path
 from smoke_runtime import normalized
 from smoke_runtime import ocr_screenshot
-from forge_runtime import natural_material, verify_recipe_selection, verify_crafted_inventory, poll_market_offer, offer_identity, visible_hud_value
+from forge_runtime import natural_material, verify_recipe_selection, verify_crafted_inventory, poll_market_offer, offer_identity, visible_hud_value, wait_basic_commander
 from campaign_equipment_runtime import (crop_text, screenshot_wallet, inspected_offer,
     tile_name_crop, PREVIEW_CROP, TILE_LEFTS, selected_inventory_name, choice_pending, screenshot_battle_seconds)
 
 
 class ForgePolicyTests(unittest.TestCase):
+    def test_startup_only_skips_real_guide_with_visible_skip_and_never_repeats_escape(self):
+        guide=[('1/4 + MOVE & DODGE',520,326,762,360),('Skip',476,446,507,463)]
+        commander=[('Click a basic commander to begin',400,100,800,130)]
+        send=Mock();records=[]
+        with patch('smoke_runtime.ocr_screenshot',side_effect=[guide,guide,commander]):
+            rows=wait_basic_commander(lambda name:Path(name),None,send,90,records,now=lambda:0,pause=lambda _:None)
+        self.assertEqual(rows,commander)
+        send.assert_called_once_with('Escape')
+        self.assertEqual(len(records),3)
+
+    def test_startup_commander_needs_no_skip_and_unknown_screens_never_receive_input(self):
+        commander=[('Click a basic commander to begin',400,100,800,130)]
+        send=Mock()
+        with patch('smoke_runtime.ocr_screenshot',return_value=commander):
+            self.assertEqual(wait_basic_commander(lambda name:Path(name),None,send,90,[],now=lambda:0),commander)
+        send.assert_not_called()
+        for rows in ([('1/4 + MOVE & DODGE',520,326,762,360)],
+                     [('Skip',476,446,507,463)],
+                     [('Preparing expedition',400,100,800,130),('Skip',476,446,507,463)]):
+            send=Mock();ticks=iter([0,0,90])
+            with patch('smoke_runtime.ocr_screenshot',return_value=rows),self.assertRaises(AssertionError):
+                wait_basic_commander(lambda name:Path(name),None,send,90,[],now=lambda:next(ticks),pause=lambda _:None)
+            send.assert_not_called()
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),'Screenshot OCR tools unavailable')
+    def test_actual_first_guide_is_skipped_before_recruitment_without_preference_injection(self):
+        path=Path(__file__).resolve().parents[2]/'docs/verification/forge-startup-guide-2026-11-05/first-guide.png'
+        actual=ocr_screenshot(path)
+        self.assertTrue(forge_runtime.find_text(actual,'1 / 4 · MOVE & DODGE'))
+        self.assertTrue(forge_runtime.find_text(actual,'Skip'))
+        commander=[('Click a basic commander to begin',400,100,800,130)]
+        send=Mock()
+        with patch('smoke_runtime.ocr_screenshot',side_effect=[actual,commander]):
+            result=wait_basic_commander(lambda name:Path(name),None,send,90,[],now=lambda:0,pause=lambda _:None)
+        self.assertEqual(result,commander)
+        send.assert_called_once_with('Escape')
+
+    def test_campaign_and_forge_share_observed_startup_contract_without_profile_special_cases(self):
+        import campaign_runtime
+        import smoke_runtime
+        self.assertIs(campaign_runtime.wait_basic_commander,smoke_runtime.wait_basic_commander)
+        self.assertIs(forge_runtime.wait_basic_commander,smoke_runtime.wait_basic_commander)
+        guide=[('1/4 + MOVE & DODGE',520,326,762,360),('Skip',476,446,507,463)]
+        commander=[('Click a basic commander to begin',400,100,800,130)]
+        for driver in (campaign_runtime,forge_runtime):
+            send=Mock()
+            with patch('smoke_runtime.ocr_screenshot',side_effect=[guide,commander]):
+                self.assertEqual(driver.wait_basic_commander(lambda name:Path(name),None,send,
+                    90,[],now=lambda:0,pause=lambda _:None),commander)
+            send.assert_called_once_with('Escape')
+
     def test_natural_same_run_material_selection(self):
         # Synthetic policy cases, separate from the real screenshot checks below.
         offers=[dict(index=i,name=name,category=category,price=price) for i,(name,category,price) in enumerate([

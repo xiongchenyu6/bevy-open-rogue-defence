@@ -135,6 +135,28 @@ def find_text(lines, text):
     matches = [line for line in lines if normalized(line[0]) == normalized(text)]
     return max(matches, key=lambda line: line[2]) if matches else None
 
+def wait_basic_commander(shot, env, send, deadline, records, now=time.monotonic, pause=time.sleep):
+    """Dismiss only the observed first real guide, then require recruitment."""
+    skip_sent = False
+    while now() < deadline:
+        image = shot(f'startup-observation-{len(records):02}.png')
+        rows = ocr_screenshot(image, env)
+        guide = find_text(rows, '1 / 4 · MOVE & DODGE')
+        skip = find_text(rows, 'Skip')
+        commander = find_text(rows, 'Click a basic commander to begin')
+        record = dict(screenshot=image.name, guide=guide, skip=skip, commander=commander)
+        records.append(record)
+        assert now() < deadline, 'Public startup observation exceeded deadline'
+        if guide and skip and not skip_sent:
+            send('Escape')
+            skip_sent = True
+            record['input'] = 'Escape'
+        elif commander and not guide:
+            return rows
+        pause(.2)
+    raise AssertionError('Actual basic commander recruitment did not appear within startup budget')
+
+
 def main():
     assert not Path('/nix').exists() and not Path('/project').exists()
     assert shutil.which('rustc') is None and shutil.which('cargo') is None

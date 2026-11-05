@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/harness/forge_runtime.py", line 329, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/harness/forge_runtime.py", line 194, in main
+    wait('Click a basic commander to begin')
+  File "/harness/forge_runtime.py", line 98, in wait
+    raise RuntimeError('Missing UI: '+text)
+RuntimeError: Missing UI: Click a basic commander to begin
