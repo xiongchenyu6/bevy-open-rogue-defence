@@ -1,0 +1,69 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+[capture] selective PNG frames: {8, 10, 12, 18, 60, 118, 120, 122, 148, 150, 152, 165}; all 180 simulation/render updates retained
+[2m2026-11-05T05:21:11.414311Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-05T05:21:12.071664Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-05T05:21:12.946580Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-05T05:21:12.946772Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-05T05:21:13.739809Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] volley-shake frame=10 trauma=0.000000000 offset=Vec3(-0.0, -0.0, 0.0)
+[capture] PASS 100 critical contacts use one camera impulse
+[capture] impact frame=10 scale=Vec3(1.7946718, 1.1316602, 1.7946718) punch=Some(HitPunch { elapsed: 0.03333333, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.6 })
+[2m2026-11-05T05:21:18.010757Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/shake-volley-2026-11-05/hit-feedback/frame00008.png
+[capture] saved 1/2 target/verification/shake-volley-2026-11-05/hit-feedback/frame00008.png (941840 bytes)
+[capture] volley-shake frame=12 trauma=0.000000000 offset=Vec3(-0.0, -0.0, 0.0)
+[capture] impact frame=12 scale=Vec3(1.4502198, 1.5622255, 1.4502198) punch=Some(HitPunch { elapsed: 0.099999994, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.6 })
+[2m2026-11-05T05:21:18.499027Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/shake-volley-2026-11-05/hit-feedback/frame00010.png
+[capture] saved 2/3 target/verification/shake-volley-2026-11-05/hit-feedback/frame00010.png (942232 bytes)
+[capture] impact frame=14 scale=Vec3(1.6841698, 1.2697877, 1.6841698) punch=Some(HitPunch { elapsed: 0.03333333, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.0 })
+[2m2026-11-05T05:21:18.993895Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/shake-volley-2026-11-05/hit-feedback/frame00012.png
+[capture] saved 3/3 target/verification/shake-volley-2026-11-05/hit-feedback/frame00012.png (944380 bytes)
+[capture] impact frame=18 scale=Vec3(1.6841698, 1.2697877, 1.6841698) punch=Some(HitPunch { elapsed: 0.03333333, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.0 })
+[2m2026-11-05T05:21:19.602837Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/shake-volley-2026-11-05/hit-feedback/frame00018.png
+[capture] saved 4/4 target/verification/shake-volley-2026-11-05/hit-feedback/frame00018.png (942106 bytes)
+[capture] impact frame=46 scale=Vec3(1.5, 1.5, 1.5) punch=None
+[capture] impact frame=60 scale=Vec3(1.5, 1.5, 1.5) punch=None
+[capture] PASS dense-hit impact peak and exact production recovery
+[2m2026-11-05T05:21:21.369670Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/shake-volley-2026-11-05/hit-feedback/frame00060.png
+[capture] saved 5/5 target/verification/shake-volley-2026-11-05/hit-feedback/frame00060.png (942132 bytes)
+[capture] impact frame=90 scale=Vec3(1.6841698, 1.2697877, 1.6841698) punch=Some(HitPunch { elapsed: 0.03333333, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.0 })
+[capture] PASS ordinary contact does not inherit critical strength
+[capture] impact frame=92 scale=Vec3(1.4688873, 1.538891, 1.4688873) punch=Some(HitPunch { elapsed: 0.099999994, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.0 })
+[capture] volley-shake frame=120 trauma=0.000000000 offset=Vec3(0.0, -0.0, 0.0)
+[capture] PASS 100 critical contacts use one camera impulse
+[capture] impact frame=120 scale=Vec3(1.7946718, 1.1316602, 1.7946718) punch=Some(HitPunch { elapsed: 0.03333333, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.6 })
+[2m2026-11-05T05:21:23.670994Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/shake-volley-2026-11-05/hit-feedback/frame00118.png
+[capture] saved 6/7 target/verification/shake-volley-2026-11-05/hit-feedback/frame00118.png (941744 bytes)
+[capture] impact frame=122 scale=Vec3(1.4502198, 1.5622255, 1.4502198) punch=Some(HitPunch { elapsed: 0.099999994, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.6 })
+[2m2026-11-05T05:21:24.157159Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/shake-volley-2026-11-05/hit-feedback/frame00120.png
+[capture] saved 7/8 target/verification/shake-volley-2026-11-05/hit-feedback/frame00120.png (941985 bytes)
+[2m2026-11-05T05:21:24.645298Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/shake-volley-2026-11-05/hit-feedback/frame00122.png
+[capture] saved 8/8 target/verification/shake-volley-2026-11-05/hit-feedback/frame00122.png (944500 bytes)
+[capture] volley-shake frame=150 trauma=0.370000005 offset=Vec3(-0.0006924384, 0.0240179, -0.024017897)
+[capture] impact frame=150 scale=Vec3(1.5, 1.5, 1.5) punch=None
+[2m2026-11-05T05:21:25.990952Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/shake-volley-2026-11-05/hit-feedback/frame00148.png
+[capture] saved 9/10 target/verification/shake-volley-2026-11-05/hit-feedback/frame00148.png (941816 bytes)
+[capture] volley-shake frame=152 trauma=0.210000023 offset=Vec3(-0.0036496578, -7.673387e-6, 7.673386e-6)
+[capture] impact frame=152 scale=Vec3(1.5, 1.5, 1.5) punch=None
+[2m2026-11-05T05:21:26.476352Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/shake-volley-2026-11-05/hit-feedback/frame00150.png
+[capture] saved 10/11 target/verification/shake-volley-2026-11-05/hit-feedback/frame00150.png (942736 bytes)
+[2m2026-11-05T05:21:26.957579Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/shake-volley-2026-11-05/hit-feedback/frame00152.png
+[capture] saved 11/11 target/verification/shake-volley-2026-11-05/hit-feedback/frame00152.png (943736 bytes)
+[capture] volley-shake frame=165 trauma=0.000000000 offset=Vec3(-0.0, -0.0, 0.0)
+[capture] impact frame=165 scale=Vec3(1.5, 1.5, 1.5) punch=None
+[capture] PASS heavy-kill sequence leaves requested 1x battle speed
+[2m2026-11-05T05:21:27.783425Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/shake-volley-2026-11-05/hit-feedback/frame00165.png
+[capture] saved 12/12 target/verification/shake-volley-2026-11-05/hit-feedback/frame00165.png (942018 bytes)
+[capture] all 12 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 180 simulation frames to target/verification/shake-volley-2026-11-05/hit-feedback

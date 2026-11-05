@@ -601,7 +601,6 @@ fn apply_screen_shake(
         shake.applied = Vec3::ZERO;
         return;
     }
-    shake.trauma = (shake.trauma - SHAKE_DECAY_PER_SECOND * time.delta_secs()).max(0.0);
     let offset = shake_offset(
         shake.trauma,
         time.elapsed_secs(),
@@ -610,6 +609,9 @@ fn apply_screen_shake(
     );
     transform.translation += offset;
     shake.applied = offset;
+    // Show the contact impulse before decaying it. At 30 Hz a small critical
+    // impulse otherwise disappears entirely before its first visible frame.
+    shake.trauma = (shake.trauma - SHAKE_DECAY_PER_SECOND * time.delta_secs()).max(0.0);
 }
 
 fn animate_hurt_flash(
@@ -854,6 +856,35 @@ mod tests {
             app.world_mut().run_system_cached(react_to_hits).unwrap();
             assert_eq!(app.world().get::<HitPunch>(target).unwrap().strength, 1.6);
         }
+    }
+
+    #[test]
+    fn low_frame_rate_keeps_first_camera_impulse_and_restores_exact_position() {
+        let mut app = App::new();
+        app.init_resource::<Time<Real>>()
+            .init_resource::<GameSession>()
+            .insert_resource(ScreenShake {
+                trauma: 0.07,
+                ..default()
+            })
+            .add_systems(Update, apply_screen_shake);
+        let base = Vec3::new(0.0, 10.0, 10.0);
+        let camera = app
+            .world_mut()
+            .spawn((Camera3d::default(), Transform::from_translation(base)))
+            .id();
+        app.world_mut()
+            .resource_mut::<Time<Real>>()
+            .advance_by(std::time::Duration::from_millis(100));
+        app.update();
+        assert!(app.world().resource::<ScreenShake>().applied.length() > 0.0001);
+        assert_eq!(app.world().resource::<ScreenShake>().trauma, 0.0);
+        app.update();
+        assert_eq!(
+            app.world().get::<Transform>(camera).unwrap().translation,
+            base
+        );
+        assert_eq!(app.world().resource::<ScreenShake>().applied, Vec3::ZERO);
     }
 
     #[test]

@@ -18,6 +18,7 @@ struct Probe {
     expect_hit_restart: bool,
     max_hit_elapsed: f32,
     authored_samples: u32,
+    volley: bool,
 }
 
 /// Debug/native capture only; no shipped gameplay entry point.
@@ -83,6 +84,7 @@ pub fn install(app: &mut bevy::app::SubApp, speed: f32) {
         expect_hit_restart: std::env::var_os("ROGUE_CAPTURE_EXPECT_HIT_RESTART").is_some(),
         max_hit_elapsed: 0.0,
         authored_samples: 0,
+        volley: std::env::var_os("ROGUE_CAPTURE_SHAKE_VOLLEY").is_some(),
     });
     app.add_systems(
         Update,
@@ -100,7 +102,7 @@ fn feed(world: &mut World) {
     }
     world.resource_mut::<Probe>().frame += 1;
     let p = world.resource::<Probe>();
-    let (frame, target, authored_hits) = (p.frame, p.target, p.authored_hits);
+    let (frame, target, authored_hits, volley) = (p.frame, p.target, p.authored_hits, p.volley);
     if authored_hits && (10..=45).contains(&frame) {
         world.get_mut::<Enemy>(target).unwrap().hp -= 1.0;
     }
@@ -117,14 +119,16 @@ fn feed(world: &mut World) {
         (heavy_kill, false, true, HitWeight::Elite),
     ] {
         if active {
-            feedback.push(HitEvent {
-                target,
-                position,
-                element: DamageElement::Physical,
-                weight,
-                critical: is_critical,
-                killed,
-            });
+            for _ in 0..if volley && is_critical { 100 } else { 1 } {
+                feedback.push(HitEvent {
+                    target,
+                    position,
+                    element: DamageElement::Physical,
+                    weight,
+                    critical: is_critical,
+                    killed,
+                });
+            }
         }
     }
 }
@@ -199,6 +203,24 @@ fn observe(world: &mut World) {
     }
     let p = world.resource::<Probe>();
     let (frame, target, base, previous_elapsed) = (p.frame, p.target, p.base, p.last_elapsed);
+    if p.volley && matches!(frame, 10 | 12 | 120 | 150 | 152 | 165) {
+        let shake = world.resource::<ScreenShake>();
+        println!(
+            "[capture] volley-shake frame={frame} trauma={:.9} offset={:?}",
+            shake.trauma, shake.applied
+        );
+        if matches!(frame, 10 | 120) {
+            assert!(
+                shake.trauma <= 0.07,
+                "one volley must not stack camera trauma"
+            );
+            assert!(
+                shake.applied.length() > 0.0001,
+                "critical impulse must reach the rendered camera"
+            );
+            println!("[capture] PASS 100 critical contacts use one camera impulse");
+        }
+    }
     let scale = world.get::<Transform>(target).unwrap().scale;
     let punch = world.get::<HitPunch>(target).copied();
     let p = &mut *world.resource_mut::<Probe>();

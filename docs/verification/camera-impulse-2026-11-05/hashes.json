@@ -1,0 +1,5 @@
+{
+  "src/game/hit_feedback.rs": "fa4f2483079b62c6f3fb7320d1c23576052ede89f9cfd08f2bf252b16a1086a5",
+  "src/game/hit_feedback/capture.rs": "a5c9c90fb3f160da0dce4fd7ff60ec8a03f1482d68f0244f640486beb75badaa",
+  "target/market-visual/debug/capture": "efcc3dd83880e2d3d34f8032ea01e52662499076d9b2f97d1c6ddf190162ee2e"
+}
