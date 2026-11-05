@@ -1,0 +1,607 @@
+{
+  "trials": [
+    {
+      "index": 0,
+      "ordinary": {
+        "elapsed": 11.042779568990227,
+        "inventory_open": false,
+        "close": null,
+        "screenshot": "trial-0-ordinary.png"
+      },
+      "held": [
+        {
+          "screenshot": "trial-0-held-00.png",
+          "rows": [
+            [
+              "Gear",
+              904,
+              110,
+              933,
+              121
+            ],
+            [
+              "Forge",
+              960,
+              110,
+              993,
+              124
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1055,
+              122
+            ],
+            [
+              "EQUIPMENT - 0",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1054,
+              122
+            ]
+          ]
+        },
+        {
+          "input": "mouseDown",
+          "target": [
+            "Close",
+            1019,
+            110,
+            1055,
+            122
+          ],
+          "wall": 215982.207768987
+        },
+        {
+          "screenshot": "trial-0-held-02.png",
+          "rows": [
+            [
+              "Gear",
+              904,
+              110,
+              933,
+              121
+            ],
+            [
+              "Forge",
+              960,
+              110,
+              993,
+              124
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1055,
+              122
+            ],
+            [
+              "EQUIPMENT - 0",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1054,
+              122
+            ]
+          ]
+        },
+        {
+          "inventory_open": true,
+          "close": [
+            "Close",
+            1019,
+            110,
+            1055,
+            122
+          ]
+        },
+        {
+          "screenshot": "trial-0-held-04.png",
+          "rows": [
+            [
+              "ae Te",
+              200,
+              80,
+              700,
+              145
+            ],
+            [
+              "a tl (DN",
+              200,
+              80,
+              709,
+              145
+            ],
+            [
+              "=~",
+              200,
+              88,
+              343,
+              145
+            ],
+            [
+              "@",
+              516,
+              87,
+              561,
+              145
+            ],
+            [
+              "\u2014\u2014 en Te na",
+              200,
+              80,
+              987,
+              145
+            ]
+          ]
+        },
+        {
+          "inventory_open": false,
+          "close": null
+        },
+        {
+          "input": "mouseUp",
+          "wall": 215986.954295722
+        }
+      ],
+      "held_elapsed": 13.253938417008612
+    },
+    {
+      "index": 1,
+      "ordinary": {
+        "elapsed": 11.312432311999146,
+        "inventory_open": false,
+        "close": null,
+        "screenshot": "trial-1-ordinary.png"
+      },
+      "held": [
+        {
+          "screenshot": "trial-1-held-00.png",
+          "rows": [
+            [
+              "Gear",
+              904,
+              110,
+              933,
+              121
+            ],
+            [
+              "Forge",
+              960,
+              110,
+              993,
+              124
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1055,
+              122
+            ],
+            [
+              "EQUIPMENT - 0",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1054,
+              122
+            ]
+          ]
+        },
+        {
+          "input": "mouseDown",
+          "target": [
+            "Close",
+            1019,
+            110,
+            1055,
+            122
+          ],
+          "wall": 216034.068817739
+        },
+        {
+          "screenshot": "trial-1-held-02.png",
+          "rows": [
+            [
+              "Gear",
+              904,
+              110,
+              933,
+              121
+            ],
+            [
+              "Forge",
+              960,
+              110,
+              993,
+              124
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1055,
+              122
+            ],
+            [
+              "EQUIPMENT - 0",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1054,
+              122
+            ]
+          ]
+        },
+        {
+          "inventory_open": true,
+          "close": [
+            "Close",
+            1019,
+            110,
+            1055,
+            122
+          ]
+        },
+        {
+          "screenshot": "trial-1-held-04.png",
+          "rows": [
+            [
+              "a et \u201d\u5168 \u6027",
+              200,
+              80,
+              698,
+              145
+            ],
+            [
+              "en a",
+              200,
+              80,
+              986,
+              145
+            ],
+            [
+              "=~",
+              200,
+              88,
+              343,
+              145
+            ],
+            [
+              "\u00a9. Se.",
+              516,
+              80,
+              702,
+              145
+            ],
+            [
+              "\u2014\u2014 en va",
+              200,
+              80,
+              986,
+              145
+            ]
+          ]
+        },
+        {
+          "inventory_open": false,
+          "close": null
+        },
+        {
+          "input": "mouseUp",
+          "wall": 216038.635603873
+        }
+      ],
+      "held_elapsed": 12.877875910984585
+    },
+    {
+      "index": 2,
+      "ordinary": {
+        "elapsed": 11.519313606986543,
+        "inventory_open": false,
+        "close": null,
+        "screenshot": "trial-2-ordinary.png"
+      },
+      "held": [
+        {
+          "screenshot": "trial-2-held-00.png",
+          "rows": [
+            [
+              "Gear",
+              904,
+              110,
+              933,
+              121
+            ],
+            [
+              "Forge",
+              960,
+              110,
+              993,
+              124
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1055,
+              122
+            ],
+            [
+              "EQUIPMENT - 0",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1054,
+              122
+            ]
+          ]
+        },
+        {
+          "input": "mouseDown",
+          "target": [
+            "Close",
+            1019,
+            110,
+            1055,
+            122
+          ],
+          "wall": 216084.229594594
+        },
+        {
+          "screenshot": "trial-2-held-02.png",
+          "rows": [
+            [
+              "Gear",
+              904,
+              110,
+              933,
+              121
+            ],
+            [
+              "Forge",
+              960,
+              110,
+              993,
+              124
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1055,
+              122
+            ],
+            [
+              "EQUIPMENT - 0",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1054,
+              122
+            ]
+          ]
+        },
+        {
+          "inventory_open": true,
+          "close": [
+            "Close",
+            1019,
+            110,
+            1055,
+            122
+          ]
+        },
+        {
+          "screenshot": "trial-2-held-04.png",
+          "rows": [
+            [
+              "eT",
+              200,
+              80,
+              708,
+              145
+            ],
+            [
+              "eT ae",
+              200,
+              80,
+              987,
+              145
+            ],
+            [
+              "=~",
+              200,
+              88,
+              343,
+              145
+            ],
+            [
+              "oo",
+              512,
+              80,
+              561,
+              145
+            ],
+            [
+              "\u2014\u2014 ee \u4e8c na",
+              200,
+              80,
+              987,
+              145
+            ]
+          ]
+        },
+        {
+          "inventory_open": false,
+          "close": null
+        },
+        {
+          "input": "mouseUp",
+          "wall": 216088.911491875
+        }
+      ],
+      "held_elapsed": 12.905410497973207
+    }
+  ],
+  "startup": [
+    {
+      "screenshot": "startup-observation-00.png",
+      "guide": [
+        "1/4 + MOVE & DODGE",
+        520,
+        330,
+        762,
+        353
+      ],
+      "skip": [
+        "Skip",
+        476,
+        446,
+        507,
+        463
+      ],
+      "commander": null,
+      "input": "Escape"
+    },
+    {
+      "screenshot": "startup-observation-01.png",
+      "guide": null,
+      "skip": null,
+      "commander": [
+        "Click a basic commander to begin",
+        42,
+        79,
+        599,
+        117
+      ]
+    }
+  ],
+  "completed": true,
+  "open": [
+    {
+      "visit": null,
+      "screenshot": "trial-0-open-00.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1498,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "trial-0-open-01.png",
+      "state": "inventory",
+      "requests": 1
+    },
+    {
+      "visit": null,
+      "screenshot": "held-0-open-02.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1484,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "held-0-open-03.png",
+      "state": "inventory",
+      "requests": 1
+    },
+    {
+      "visit": null,
+      "screenshot": "trial-1-open-04.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1464,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "trial-1-open-05.png",
+      "state": "inventory",
+      "requests": 1
+    },
+    {
+      "visit": null,
+      "screenshot": "held-1-open-06.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1449,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "held-1-open-07.png",
+      "state": "inventory",
+      "requests": 1
+    },
+    {
+      "visit": null,
+      "screenshot": "trial-2-open-08.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1428,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "trial-2-open-09.png",
+      "state": "inventory",
+      "requests": 1
+    },
+    {
+      "visit": null,
+      "screenshot": "held-2-open-10.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1413,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "held-2-open-11.png",
+      "state": "inventory",
+      "requests": 1
+    }
+  ]
+}

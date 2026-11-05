@@ -4,7 +4,7 @@ import hashlib,json,os,re,shutil,subprocess,threading,time
 from pathlib import Path
 from smoke_runtime import ocr_screenshot,find_text,normalized,read_hud_wallet,read_toolbar_speed,wait_basic_commander
 from campaign_runtime import read_progress
-from campaign_equipment_runtime import (TILE_LEFTS, INVENTORY_TITLE_CROP,
+from campaign_equipment_runtime import (TILE_LEFTS, INVENTORY_TITLE_CROP, close_visible_inventory, inventory_header_rows,
     screenshot_wallet, choice_pending, crop_text, inventory_count,
     inventory_icons, inventory_open, selected_inventory_name, market_closed,
     has_gear_rows, verify_deduction, screenshot_battle_seconds, wait_panel_open, public_panel_state, poll_market_offer, offer_identity)
@@ -146,7 +146,17 @@ def main():
             time.sleep(.3)
         raise RuntimeError('Market did not close')
     def close_inventory():
-        clicktext('Close')
+        observations = report.setdefault('inventory_close_observations', [])
+        def observed_rows():
+            image = shot(f'inventory-close-{len(observations):03}.png')
+            rows = inventory_header_rows(image, env)
+            observations.append(dict(screenshot=image.name, rows=rows))
+            return rows
+        def down(x, y):
+            call(['xdotool','mousemove','--window',win,str(x),str(y)])
+            call(['xdotool','mousedown','1'])
+        close_visible_inventory(observed_rows, down,
+            lambda: call(['xdotool','mouseup','1']), time.monotonic()+10, observations)
         rows = lines()
         assert not inventory_open(rows) and not find_text(rows, 'Close'), 'Equipment did not close'
     def inspect_inventory(prefix):

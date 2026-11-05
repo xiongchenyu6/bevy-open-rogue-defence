@@ -276,6 +276,50 @@ def verify_deduction(wallet, remaining, offer):
         ('Wrong purchase deduction', wallet, remaining, offer)
 
 
+def inventory_header_rows(image, env=None):
+    """Read only the actual equipment header; preserve full-screen coordinates."""
+    with tempfile.TemporaryDirectory(prefix='rogue-inventory-header-') as directory:
+        crop = Path(directory) / 'header.png'
+        subprocess.run(['convert', str(image), '-crop', '880x65+200+80', '+repage', str(crop)],
+                       env=env, check=True, capture_output=True)
+        return [(text, x+200, y+80, right+200, bottom+80)
+                for text,x,y,right,bottom in ocr_screenshot(crop, env)]
+
+
+def close_visible_inventory(read_rows, mouse_down, mouse_up, deadline, observations,
+                            now=time.monotonic, pause=time.sleep):
+    """One visible Close press; release even if observation or deadline fails."""
+    rows = read_rows()
+    assert inventory_open(rows), 'Inventory must be observed before closing'
+    inventory_count(rows)
+    target = find_text(rows, 'Close')
+    assert target is not None, 'Visible inventory Close missing'
+    _, left, top, right, bottom = target
+    assert 1000 <= left < right <= 1080 and 90 <= top < bottom <= 145, \
+        ('Close outside actual inventory header', target)
+    assert now() < deadline, 'Inventory close deadline expired before input'
+    pressed = False
+    try:
+        # Set before dispatch so a failing OS command still attempts release.
+        pressed = True
+        mouse_down((left + right) // 2, (top + bottom) // 2)
+        observations.append(dict(input='mouseDown', target=target, wall=now()))
+        while now() < deadline:
+            rows = read_rows()
+            assert now() < deadline, 'Inventory close observation exceeded deadline'
+            opened = inventory_open(rows)
+            close = find_text(rows, 'Close')
+            observations.append(dict(inventory_open=opened, close=close))
+            if not opened and not close:
+                return
+            pause(.1)
+        raise AssertionError('Equipment did not close within held-press budget')
+    finally:
+        if pressed:
+            mouse_up()
+            observations.append(dict(input='mouseUp', wall=now()))
+
+
 def inventory_count(rows):
     counts = {int(match[1]) for text, x, y, *_ in rows
               if 200 <= x < 600 and 80 <= y < 145
@@ -577,9 +621,18 @@ class EquipmentPolicy:
                 purchase['selected_icon'] = found
                 inventory = self.ui['lines']()
                 self.ui['shot'](prefix + '-inventory.png')
-                close = find_text(inventory, 'Close')
-                assert close, 'Actual equipment Close button not visible'
-                self.click(close)
+                close_observations = purchase.setdefault('close_observations', [])
+                def close_rows():
+                    image = self.ui['shot'](prefix + f'-close-{len(close_observations):03}.png')
+                    result = inventory_header_rows(image, self.ui['env'])
+                    close_observations.append(dict(screenshot=image.name, rows=result))
+                    return result
+                def close_down(x, y):
+                    self.ui['call'](['xdotool','mousemove','--window',self.ui['window'](),str(x),str(y)])
+                    self.ui['call'](['xdotool','mousedown','1'])
+                close_visible_inventory(close_rows, close_down,
+                    lambda: self.ui['call'](['xdotool','mouseup','1']),
+                    min(deadline, time.monotonic()+10), close_observations)
                 closed_inventory = self.ui['lines']()
                 assert not inventory_open(closed_inventory) and not find_text(closed_inventory, 'Close'), \
                     'Equipment did not close'

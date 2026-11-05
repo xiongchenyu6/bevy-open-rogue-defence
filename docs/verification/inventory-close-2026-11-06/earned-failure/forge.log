@@ -1,0 +1,29 @@
+stage: battle started; resetting actual toolbar to1x
+stage: earn kills and wait for real3min unlock
+stage: real unlock countdown 1478
+stage: real unlock countdown 1469
+stage: real unlock countdown 1461
+stage: real unlock countdown 1451
+stage: real unlock countdown 1440
+stage: real unlock countdown 1431
+stage: real unlock countdown 1421
+stage: real unlock countdown 1410
+stage: real unlock countdown 1400
+stage: real unlock countdown 1390
+stage: real unlock countdown 1380
+stage: real unlock countdown 1370
+stage: real unlock countdown 1360
+stage: real unlock countdown 1349
+stage: real unlock countdown 1340
+stage: real unlock countdown 1330
+stage: real unlock countdown 1319
+Traceback (most recent call last):
+  File "/harness/forge_runtime.py", line 330, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/harness/forge_runtime.py", line 305, in main
+    close_inventory()
+  File "/harness/forge_runtime.py", line 151, in close_inventory
+    assert not inventory_open(rows) and not find_text(rows, 'Close'), 'Equipment did not close'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Equipment did not close

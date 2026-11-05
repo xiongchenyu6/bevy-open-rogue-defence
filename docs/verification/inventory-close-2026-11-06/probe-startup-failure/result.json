@@ -1,0 +1,51 @@
+{
+  "trials": [],
+  "startup": [
+    {
+      "screenshot": "startup-observation-00.png",
+      "guide": null,
+      "skip": null,
+      "commander": null
+    },
+    {
+      "screenshot": "startup-observation-01.png",
+      "guide": [
+        "1/4 + MOVE & DODGE",
+        520,
+        330,
+        762,
+        353
+      ],
+      "skip": [
+        "Skip",
+        476,
+        446,
+        507,
+        463
+      ],
+      "commander": null,
+      "input": "Escape"
+    },
+    {
+      "screenshot": "startup-observation-02.png",
+      "guide": null,
+      "skip": null,
+      "commander": [
+        "Click a basic commander to begin",
+        42,
+        79,
+        599,
+        117
+      ]
+    }
+  ],
+  "completed": false,
+  "open": [
+    {
+      "visit": null,
+      "screenshot": "trial-0-open-00.png",
+      "state": "unknown",
+      "requests": 0
+    }
+  ]
+}

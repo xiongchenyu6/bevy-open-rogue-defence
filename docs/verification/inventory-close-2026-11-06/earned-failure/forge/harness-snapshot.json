@@ -1,0 +1,11 @@
+{
+  "harness_commit": "f2a04f6",
+  "package_commit": "49562e6fa1f1cf781eb9f0b8a4155e7a15ec22cb",
+  "files": {
+    "forge_runtime.py": "5ca49282927b2e66b73127586b21feffca1ce6b0a1f9613c01019bc5ff97edfd",
+    "campaign_equipment_runtime.py": "e9b5ca9710e20e436945115c2dc428bdc7b63cd4474466085004cd6dfb33a26a",
+    "campaign_runtime.py": "76ce1daa5939dbbbdcbc0b68162f62b59ce178c14228e1cecb1c8f50684c0591",
+    "smoke_runtime.py": "b836e98f55fe7997112145d72250b19bf2ff67f13fe441cab5d4d1320af4f4f6"
+  },
+  "scope": "Actual public UI, no source mounted, byte-identical real earned checkpoint, fresh isolated profile, natural same-run materials and stock; new equipment geometry; observed guide skipped through visible UI"
+}

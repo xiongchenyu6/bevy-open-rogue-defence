@@ -1,0 +1,4 @@
+PASS empty Close trial 0
+PASS empty Close trial 1
+PASS empty Close trial 2
+EMPTY_INVENTORY_CLOSE_PASS 3 actual OS trials

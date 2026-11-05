@@ -1,0 +1,22 @@
+[
+  "docker",
+  "run",
+  "--rm",
+  "--name",
+  "rogue-inventory-close-r3-nov6",
+  "--network",
+  "none",
+  "--mount",
+  "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/desktop-packages-inventory-nov5/rogue-commander-linux,dst=/game,readonly",
+  "--mount",
+  "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/inventory-close-r3-2026-11-06,dst=/verify",
+  "--mount",
+  "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/inventory-close-r3-2026-11-06/harness-source,dst=/harness,readonly",
+  "--env",
+  "PYTHONPATH=/harness",
+  "--workdir",
+  "/tmp",
+  "rogue-commander-linux-smoke:ubuntu24-oct8",
+  "python3",
+  "/verify/probe.py"
+]
