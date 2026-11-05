@@ -1,0 +1,6 @@
+WAIT after-fix verification gate
+START full replay a
+PASS normal replay a win
+START full replay b
+PASS normal replay b win
+TERMINAL NORMAL FULL-PREFIX REPLAYS {"first_strict": 24, "first_numeric": 38010, "contact_counts": [115308, 127621], "actor_trace_counts": [97358, 98560]}

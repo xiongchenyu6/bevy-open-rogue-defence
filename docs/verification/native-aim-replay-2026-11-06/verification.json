@@ -1,0 +1,37 @@
+{
+  "scope": "Normal same-binary duplicate gate failed; intentional native aim policy separately verified; initial-overlap geometry next candidate, no production change or matrix",
+  "first_numeric_frame": 38010,
+  "actor_trace_counts": [
+    97358,
+    98560
+  ],
+  "contact_counts": [
+    115308,
+    127621
+  ],
+  "files_sha256": {
+    "README.md": "019de83ee5955b929bf54cc8f45d121c5f758f38cf9c038a5f79e2bb8543a72e",
+    "actor-comparison.json": "f138b554f6e18643c059dfaf2fbfaa0a6bcad5f9a132e46f84e06cc7d3f26c63",
+    "archive-verification.log": "52b5d1a597921fbe3988a256f7cb0ab9fbe74382ea75661ad273648db8e9c730",
+    "binary.json": "16621a266395c88c4a5fc83c49fc46b7a087b209de95bee166389893f31bff54",
+    "checkpoint-comparison.json": "9d1b46eb4ff3a2a7bbb68b98c5a8456487e2e9e811d3146bfb37b61a5844da94",
+    "contact-counts.json": "cef04b5ebb1d54a75bd443611b087c2b86161d055cbf5698858d1c743e0f0f13",
+    "first-difference-contacts-a.json": "73890782de6bfcecf528c2bf83c008126cba5385d0f2cff7fec5acf2cc1b0d36",
+    "first-difference-contacts-b.json": "51f50f1b4d2579e0917eb9e5b92f92066f6d4a585bcdbb9d9337961fc3a2360d",
+    "first-difference-context.json": "5193029d6b51523ab88a1f019f2c60e40c81a8d49763f48f64797c4a04410dcf",
+    "probe-a.log": "9580861dee6066a0a66711ffe56bfb92d764a6e55c1eb36556e64f1f3eb897f1",
+    "probe-b.log": "8152119fedd68a6fdc983630622bcc157312e3e121797ebb8bc85a5ef9501a55",
+    "raw-receipts.json": "bed57abac4893a61768cc3ddbff693427d67af6a5b2856d998c29e7853ac0ebd",
+    "replay-a/active-h2-behind-sa11ce-c5-t0.jsonl.gz": "c8d8522dc8a9aac32356ede41e0151edd7fcc533f8f4913c197f63ae2f6fa218",
+    "replay-a/active-h2-behind-sa11ce-c5-t0.stderr.gz": "e8923301bc9148cd42affcceeb0b167cf3cb93b52900625f5f061425e8e8e177",
+    "replay-a/summary.json": "3e8a4958a4b0b1ebab2d2238fcea8c754f0bdedc056fed6520aadbfd097804fc",
+    "replay-b/active-h2-behind-sa11ce-c5-t0.jsonl.gz.part00": "2aff1dd543808584df79f4374b88e93ba9f72b3e0d4c3d954079c2cc78147a9e",
+    "replay-b/active-h2-behind-sa11ce-c5-t0.jsonl.gz.part01": "2a9e18c7f462e10ba33a6fed72e8baededaa1d9b1095c92bb7df763b35bf8658",
+    "replay-b/active-h2-behind-sa11ce-c5-t0.stderr.gz": "bebf60d3781c1733edb7854947e42899fdb59c2ab13b03a97b1487e680ff2ea4",
+    "replay-b/summary.json": "56bb952b5b539173fb03d20d271053aeb0bb78dcf38fd51a3b0a5578644f8044",
+    "run.py": "b2fc828edf998a889dfd473d46a0a10f28e046de4250e215af98f6156cf98ac0",
+    "scope.json": "c58ef56c8d394dbc2b4a8dc0703b4ad6d4f3eef1210811f8ce54e57853838559",
+    "sequence.log": "f1df4be16767880d849d7d7a1021d2ba994cc5a797cad680f5503a206d21488e",
+    "verify.py": "b20ab176e29ac28f0799424d4d026b1acf118a15cad77ae9fe308164fac72f13"
+  }
+}
