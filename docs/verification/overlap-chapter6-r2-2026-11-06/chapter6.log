@@ -1,0 +1,35 @@
+{"sample": 1, "wall_seconds": 7.3, "terminal": null}
+{"sample": 2, "wall_seconds": 17.4, "terminal": null}
+{"sample": 3, "wall_seconds": 27.7, "terminal": null}
+{"sample": 4, "wall_seconds": 39.0, "terminal": null}
+{"sample": 5, "wall_seconds": 53.7, "terminal": null}
+{"sample": 6, "wall_seconds": 71.5, "terminal": null}
+{"sample": 7, "wall_seconds": 88.1, "terminal": null}
+{"sample": 8, "wall_seconds": 105.4, "terminal": null}
+{"sample": 9, "wall_seconds": 123.2, "terminal": null}
+{"sample": 10, "wall_seconds": 139.7, "terminal": null}
+{"sample": 11, "wall_seconds": 154.3, "terminal": null}
+{"sample": 12, "wall_seconds": 166.7, "terminal": null}
+{"sample": 13, "wall_seconds": 180.9, "terminal": null}
+{"sample": 14, "wall_seconds": 194.6, "terminal": null}
+{"sample": 15, "wall_seconds": 211.7, "terminal": null}
+{"sample": 16, "wall_seconds": 225.4, "terminal": null}
+{"sample": 17, "wall_seconds": 239.0, "terminal": null}
+{"sample": 18, "wall_seconds": 252.2, "terminal": null}
+{"sample": 19, "wall_seconds": 265.8, "terminal": null}
+{"stage": "earned equipment visit", "visit": 2, "purchases": 0, "wallet": 122, "visit_budget_seconds": 160}
+{"sample": 20, "wall_seconds": 384.6, "terminal": null}
+{"sample": 21, "wall_seconds": 401.3, "terminal": null}
+{"sample": 22, "wall_seconds": 418.6, "terminal": null}
+{"sample": 23, "wall_seconds": 436.1, "terminal": null}
+Traceback (most recent call last):
+  File "/harness/campaign_equipment_runtime.py", line 791, in <module>
+    main(EquipmentPolicy)
+  File "/harness/campaign_runtime.py", line 270, in main
+    policy.observe(text_lines, time.monotonic() - started)
+  File "/harness/campaign_equipment_runtime.py", line 747, in observe
+    close_visible_inventory(close_rows, close_down,
+  File "/harness/campaign_equipment_runtime.py", line 392, in close_visible_inventory
+    assert header_at < deadline, 'Inventory close operation deadline expired during header'
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError: Inventory close operation deadline expired during header

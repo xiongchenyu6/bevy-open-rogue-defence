@@ -1,0 +1,23 @@
+{
+  "derived_visit_start": 229299.074424035,
+  "visit_deadline": 229459.074424035,
+  "buy_click_elapsed": 70.1421108689974,
+  "unchanged_wallet_elapsed": 73.8501139319851,
+  "exact_debit_elapsed": 78.4957865870092,
+  "passive_purchase_seconds": 8.3536757180118,
+  "item_down_elapsed": 143.98420520700165,
+  "item_up_elapsed": 144.38452963301097,
+  "close_start_elapsed": 157.09849050699268,
+  "close_remaining_at_start": 2.9015094930073246,
+  "close_header_seconds": 3.665064054017421,
+  "close_header_elapsed": 160.7635545610101,
+  "close_input_count": 0,
+  "mtime_windows": {
+    "equipment-03-market-open-03.png -> equipment-03-market-open-05.png": 23.540050506591797,
+    "equipment-03-inspect-0-0.png -> equipment-03-inspect-4-1.png": 22.708037614822388,
+    "equipment-03-purchase-01.png -> equipment-03-inventory-open-08.png": 55.31605553627014,
+    "equipment-03-inventory-open-08.png -> equipment-03-item-0-before.png": 9.46000599861145,
+    "equipment-03-item-0-ack-001.png -> equipment-03-inventory-icon-0.png": 0.29400014877319336,
+    "equipment-03-inventory-icon-0.png -> equipment-03-close-001.png": 12.742006063461304
+  }
+}

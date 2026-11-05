@@ -1,0 +1,13 @@
+# Overlap C6 R2 — Close header crossed existing visit deadline
+
+Actual childexit1 after674.182seconds; wrapper0 only wrote result. No game completion/defeat/reward/normalquit proof exists. No retry/helper/budget change followed. Packagef5ef6ff/76a6/886 and frozen64bcea4 threehelper hashes retained; freshcanonical4c9a save bytes unchanged.
+
+Visit3 one Buyclick naturally purchased WindBoots160 from wallet185. First public observation remained185 with sameoffer; second read exact25, independentHUD/header agreed. This passive transaction observer succeeded after8.354seconds, not the20second cap. Inventory count1, selected-card ACKtrue and exact[R]WindBoots detail passed the complete current ownedset assertion; final inventory_verified flag was not reached because close/resume were still pending. Only visit2 resume1243→1234 passed; visit1 was an unavailable skip.
+
+Close operation started229456.172915 with absolute deadline229459.074424, only2.901509seconds remaining. Header read took3.665064seconds and returned correctEQUIPMENT1/Close, then failed at160.763555seconds since visitstart. Zero ClosemouseDown/mouseUp inputs were issued: failure preceded input, so this is not a missed Closepress. Actual close001.png shows the genuine inventory still open.
+
+The absolute visitstart can be derived from recorded deadline minus the recorded160s visitbudget because frozen source assigns deadline=visit_started+visit_budget. Full raw timeline is timing.json. Buy dispatch occurred70.142s into visit; exactdebit78.496s; itemDown143.984s/itemUp144.385s; closeStart157.098s. There was65.488s between exactdebit and itemDown. Thus the8.354s purchase observer was not the sole or dominant observed postpurchase cost.
+
+Screenshot mtime windows (not isolated function CPU timings): marketopen first→observedmarket23.540s; fiveoffer firstframe→lastframe22.708s (each needed2observations); successfulpurchaseframe→observedinventory55.316s; observedinventory→item-before9.460s; ACKframe→selecteddetailframe0.294s; selecteddetailframe→Closeheaderframe12.742s. Intervals include UI/OCR/input overhead and must not be described as pureOCR durations. Only one item existed, so this was not a large inventory scan.
+
+Minimal followup proposal, not implemented: measure the already unused fullscene `inventory=self.ui['lines']()` immediately before Close (its result is never consumed), separately from required selected-title parsing and exact bounded closeheader read; remove that dead observation if confirmed and retain screenshot/closeheader/count/name/ACK assertions. Profile the marketclosure/opening stage with exact timestamps before changing any budgets. Do not weaken20s purchase cap or any ownership/debit proof. No new live probe is launched here.
