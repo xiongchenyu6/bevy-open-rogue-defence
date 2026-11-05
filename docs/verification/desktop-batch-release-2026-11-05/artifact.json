@@ -1,0 +1,11 @@
+{
+  "source_commit": "37fe665d4db0f171edbf5236ecbb733872398633",
+  "binary_sha256": "6b62507ef03cb963b753c55c0a06fa1dbb945658a07cc990c577f42783536bff",
+  "tar_sha256": "ceba63fca0684758ba93c8794f3b1e9be4363f8ca07e220f1c3b61f219030555",
+  "tar_bytes": 60257051,
+  "package_path": "target/desktop-packages-batch-nov5/rogue-commander-linux",
+  "tar_path": "target/desktop-packages-batch-nov5/rogue-commander-linux-0.1.0.tar.gz",
+  "smoke": "PASS; Ubuntu24/X11/software Vulkan; offline readonly package",
+  "chapter6": "Running; no terminal result yet",
+  "forge": "Queued after chapter route; independent checkpoint"
+}
