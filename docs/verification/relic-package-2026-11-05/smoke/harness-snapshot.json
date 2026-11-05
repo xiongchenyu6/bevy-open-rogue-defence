@@ -1,0 +1,7 @@
+{
+  "harness_commit": "b1d7dd1a2f6f6e5a8301823e6ca489954d6bd09a",
+  "files": {
+    "smoke_runtime.py": "4adad46813fefb10e034968b1fe705cb4b9ab20cf7b8cdd5c452f7bae33cc1e5"
+  },
+  "scope": "Frozen public UI driver; no game state injection"
+}

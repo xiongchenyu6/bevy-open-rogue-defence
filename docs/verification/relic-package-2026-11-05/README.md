@@ -1,0 +1,7 @@
+# Illustrated relic / ordinary-arrow Linux candidate
+
+SDK sourceb1d7dd1 includes the same-frame passive fixes, starter sword fading trail, plain starter archer and all six distinct crafted-item illustrations. Fixed sniperSDK/Rust1.98 hot build completed in1m42s. All882manifest files matched their hashes; all collected dependency-license files were present. The six new generated icons ship with their source/prompts/packing manifest. Legal review was not performed.
+
+Independent offline Ubuntu24/X11/software Vulkan smoke used the read-only package from/tmp, without source/Rust/Nix access. First guide/recruitment/battle, Chinese settings, fullscreen/restore, preference persistence, restarted recruitment/battle and two normal exits passed. Root inspected firstbattle and restartedChinese battle. The standalone run also validates the new required image is included and decodable before entry, but does not open the craftingUI; corresponding real UI/effect/art and missing-atlas retry evidence is separately scoped at../recipe-art-2026-11-05/.
+
+Frozen natural-forge and chapter-six drivers are running sequentially from byte-identical earned checkpoints. Neither has a terminal acceptance result yet. Earlier37fe665 natural crafting and prior32cf594 interrupted routes are historical evidence and do not establish current-package full-flow acceptance. No Steam-client, physical audio, hardware performance or other-platform claim.
