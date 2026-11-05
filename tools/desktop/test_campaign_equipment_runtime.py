@@ -513,8 +513,8 @@ class EquipmentPolicyParsing(unittest.TestCase):
         self.assertEqual(inventory_count([('EQUIPMENT · 12',213,108,400,130)]),12)
         self.assertEqual(inventory_count([('EQUIPMENT + 2',215,108,367,127)]),2)
         self.assertEqual(inventory_count([('EQUIPMENT \" 2',215,108,367,127)]),2)
-        self.assertEqual(inventory_icons(11)[10],(245,270))
-        for count in (0,21):
+        self.assertEqual(inventory_icons(11)[10],(365,505))
+        for count in (0,13):
             with self.assertRaises(AssertionError):inventory_icons(count)
         with self.assertRaises(AssertionError):inventory_count([])
 
@@ -525,7 +525,7 @@ class EquipmentPolicyParsing(unittest.TestCase):
         self.assertEqual(selected_inventory_name('[R] Arc Lens'),'arclens')
         for text in ('Arc Lens','+10% Arc Lens damage','[R] Arc Lens\nOther'):
             with self.assertRaises(AssertionError):selected_inventory_name(text)
-        self.assertEqual(len(inventory_icons(20)),20)
+        self.assertEqual(len(inventory_icons(12)),12)
 
     @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
                          'Native screenshot OCR requires Tesseract and ImageMagick')

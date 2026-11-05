@@ -4,10 +4,14 @@ import hashlib,json,os,re,shutil,subprocess,threading,time
 from pathlib import Path
 from smoke_runtime import ocr_screenshot,find_text,normalized,read_hud_wallet,read_toolbar_speed
 from campaign_runtime import read_progress
-from campaign_equipment_runtime import (TILE_LEFTS,
+from campaign_equipment_runtime import (TILE_LEFTS, INVENTORY_TITLE_CROP,
     screenshot_wallet, choice_pending, crop_text, inventory_count,
     inventory_icons, inventory_open, selected_inventory_name, market_closed,
     has_gear_rows, verify_deduction, screenshot_battle_seconds, wait_panel_open, public_panel_state, poll_market_offer, offer_identity)
+
+FORGE_RECIPE_PRISM_CENTER = (443, 207)
+FORGE_MATERIALS_CROP = '310x46+744+253'
+FORGE_ACTION_CROP = '180x24+720+546'
 
 MATERIALS = frozenset(('Arc Lens', 'Echo Core'))
 
@@ -153,7 +157,7 @@ def main():
             assert time.monotonic() < end, 'Inventory search exceeded90seconds'
             click(x, y)
             image = shot(f'{prefix}-icon-{index}.png')
-            text = crop_text(image, '840x25+220+445', env)
+            text = crop_text(image, INVENTORY_TITLE_CROP, env)
             details.append(selected_inventory_name(text))
         assert len(set(details)) == len(details), 'Duplicate selected inventory headings'
         report.setdefault('inventory_inspections', []).append(dict(prefix=prefix, count=count, names=details))
@@ -277,11 +281,11 @@ def main():
                     clicktext('Forge')
                     # Six recipe icons: second is Astral Prism. Verify actual
                     # selected heading/materials/action before spending inputs.
-                    click(330,184)
+                    click(*FORGE_RECIPE_PRISM_CENTER)
                     ready=shot('ready-materials.png')
-                    title=crop_text(ready,'840x25+220+394',env)
-                    materials=crop_text(ready,'840x24+220+420',env)
-                    action=crop_text(ready,'250x28+515+552',env)
+                    title=crop_text(ready,INVENTORY_TITLE_CROP,env)
+                    materials=crop_text(ready,FORGE_MATERIALS_CROP,env)
+                    action=crop_text(ready,FORGE_ACTION_CROP,env)
                     verify_recipe_selection(title,materials,action)
                     assert inventory_count(lines())==2
                     report['ready_material_ocr']=dict(title=title,materials=materials,action=action)

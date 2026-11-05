@@ -22,6 +22,7 @@ from smoke_runtime import find_text, normalized, read_hud_wallet, read_toolbar_s
 
 
 PREVIEW_CROP = '425x19+695+489'
+INVENTORY_TITLE_CROP = '310x38+744+219'
 
 
 TILE_LEFTS = (615, 742, 868, 995, 1122)
@@ -291,8 +292,8 @@ def verify_owned_inventory(count, names, purchases):
 
 def inventory_icons(count):
     # Public 1280x720 visible grid, catalog order rather than purchase order.
-    assert 1 <= count <= 20, f'Inventory count {count} exceeds verified visible grid bound 1..20'
-    return [(245 + 86 * (index % 10), 184 + 86 * (index // 10)) for index in range(count)]
+    assert 1 <= count <= 12, f'Inventory count {count} exceeds verified visible grid bound 1..12'
+    return [(261 + 104 * (index % 3), 193 + 104 * (index // 3)) for index in range(count)]
 
 
 def inventory_open(rows):
@@ -565,7 +566,7 @@ class EquipmentPolicy:
                     assert time.monotonic() < deadline, 'Inventory inspection exceeded visit budget'
                     self.click(('', x, y, x, y))
                     image = self.ui['shot'](prefix + f'-inventory-icon-{index}.png')
-                    text = crop_text(image, '840x25+220+445', self.ui['env'])
+                    text = crop_text(image, INVENTORY_TITLE_CROP, self.ui['env'])
                     name = selected_inventory_name(text)
                     details.append(dict(icon=[x, y], detail_ocr=text))
                     names.append(name)

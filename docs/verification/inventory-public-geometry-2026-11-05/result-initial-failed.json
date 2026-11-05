@@ -1,0 +1,21 @@
+{
+  "returncode": 1,
+  "elapsed_seconds": 84.80051469802856,
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "--network",
+    "none",
+    "--mount",
+    "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence,dst=/repo,readonly",
+    "--workdir",
+    "/repo/tools/desktop",
+    "rogue-commander-linux-smoke:ubuntu24-oct8",
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-v"
+  ]
+}
