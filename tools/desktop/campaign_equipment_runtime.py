@@ -35,8 +35,31 @@ def battle_seconds(text):
     return int(match[1]) * 60 + int(match[2])
 
 
+def battle_clock_reads(path, env):
+    """Read only the public timer digits; native and enlarged glyphs may differ."""
+    reads = []
+    with tempfile.TemporaryDirectory(prefix='rogue-battle-clock-') as directory:
+        for scale in (100, 200, 600):
+            crop = Path(directory) / f'clock-{scale}.png'
+            subprocess.run(['convert', str(path), '-crop', '100x28+1170+20',
+                '-resize', f'{scale}%', '-colorspace', 'Gray', '-negate',
+                '-bordercolor', 'white', '-border', '20', str(crop)],
+                env=env, check=True, capture_output=True)
+            text = subprocess.check_output(['tesseract', str(crop), 'stdout', '-l', 'eng',
+                '--psm', '7', '-c', 'tessedit_char_whitelist=0123456789:'],
+                env=env, text=True, stderr=subprocess.PIPE).strip()
+            reads.append((scale, text))
+    return reads
+
+
 def screenshot_battle_seconds(path, env):
-    return battle_seconds(crop_text(path, '100x28+1170+20', env))
+    reads = battle_clock_reads(path, env)
+    complete = [(scale, battle_seconds(text)) for scale, text in reads
+                if re.fullmatch(r'\d{2}:\d{2}', text)]
+    values = {value for _, value in complete}
+    assert len({scale for scale, _ in complete}) >= 2 and len(values) == 1, \
+        f'Unreadable/ambiguous battle countdown pixels: {reads!r}'
+    return values.pop()
 
 
 def market_wallet(rows):

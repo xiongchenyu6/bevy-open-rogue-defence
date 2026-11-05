@@ -1,0 +1,3 @@
+old_grayscale 'oe'
+numeric_reads [(100, '23:39'), (200, '23:39'), (600, '')]
+seconds 1419

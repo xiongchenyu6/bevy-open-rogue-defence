@@ -15,7 +15,7 @@
 | 战役和存档 | `campaign_progress.rs` 实现章节解锁、战果货币及6种永久强化；原生文件与浏览器存储分开；写入失败后的独立保存重试、原存档保护及奖励不重复已通过真实文件／按钮回归与中英文原生截图，见[保存恢复](campaign-save-retry.md) | 已通过[实际赚取力量并应用到下一局](earned-strength-runtime.md)；[实际安装包第一章通关及奖励延续](packaged-first-clear.md)已核对；[第二章完整胜利脚本及奖励强化重启](packaged-chapter2.md)已通过；[第三章完整胜利及力量26重启验证](packaged-chapter3.md)已通过；[第四章完整胜利及力量28重启验证](packaged-chapter4.md)已通过；[第五章后续实际赚取路线通关及力量32重启验证](packaged-chapter5.md)已通过，保留此前失败；[第六章实际路线失败，但奖励、强化和力量34重启通过](packaged-chapter6.md)；完整通关仍未验证，更多种子与路线仍缺证据；浏览器存储故障恢复；发行升级后的存档验证 |
 | 装备和合成 | 首次黑市库存经过真实重置回归与安装包验证；[实际赚取货币购买奥术透镜、扣款、装备查看、属性查看、继续战斗和正常退出](earned-equipment.md)已通过；[合成奖励与材料继承展示](forge-readability.md)有中英文桌面／紧凑截图；[旧版独立包同局正常购买材料并合成星界棱镜](earned-forge-probe.md)已通过，材料消耗、属性与恢复战斗均有证据 | [3922b11新版正常材料获取／合成复验](verification/earned-forge-2026-10-14-r7/summary.json)已通过；进阶配方经济与获取路径；[购买提示期间钱包可读性](market-wallet.md)已有四套最终截图；更多装备组合和长期回归 |
 | 内容差异 | 独立英雄、技能、羁绊、装备及营地系统存在；[短射程宿主的继承远程攻击](fusion-reach.md)有真实命中与原生截图证据 | 每个技能、首领和巨型营地敌人的实际机制／外观辨识，避免换数值或放大模型冒充新内容；全流程无占位资产 |
-| 桌面交付 | 已有`b1d7dd1`源码的Steam Runtime 3 SDK Linux release候选包，882项文件哈希、首次指南／征募／战斗／中文全屏设置／偏好重启／再次战斗及两次退出通过独立只读包、断网Ubuntu/X11软件Vulkan验收，见[桌面发行](desktop-release.md)；wasm／Android仍有构建脚本 | 真实Steam客户端、长局硬件性能、Steam Deck、Windows／macOS；更多驱动／分辨率；性能／崩溃记录与最终安装验收 |
+| 桌面交付 | 已有`040ce5c`源码的Steam Runtime 3 SDK Linux release候选包，882项文件哈希、首次指南／征募／战斗／中文全屏设置／偏好重启／再次战斗及两次退出通过独立只读包、断网Ubuntu/X11软件Vulkan验收，见[桌面发行](desktop-release.md)；wasm／Android仍有构建脚本 | 真实Steam客户端、长局硬件性能、Steam Deck、Windows／macOS；更多驱动／分辨率；性能／崩溃记录与最终安装验收 |
 
 ## 验收口径
 
@@ -33,4 +33,4 @@
 
 自然获取证据仍按二进制区分：旧`37fe665`第六章路线核验了五件自然装备；另一独立同局路线实际购入两件材料、消耗为星界棱镜并核验库存，但其恢复战斗／正常退出步骤被后到征募中断，见[自然合成](verification/earned-forge-2026-11-05/README.md)。后续`32cf594`整局与合成路线也被公开UI脚本读数或面板开启时序中断，没有完整结算或退出结论。不得把这些中断称为游戏失败或通关。
 
-脚本已保留全部失败证据，并修正[彩色卡名](verification/market-red-label-2026-11-05/README.md)、[小额补零余额](verification/market-wallet-0089-2026-11-05/README.md)、后到征募时钟和[有界装备界面开启](verification/inventory-open-2026-11-05/README.md)；54项Python测试通过（包含[实际LEVEL5识别失败回归](verification/battle-level-ocr-2026-11-05/README.md)），同截图HUD／双面板等待已统一，1×整局脚本预算按25分钟战斗＋5分钟余量＋12次有界访问推导为3240秒；新的完整原生路线仍待完成。所有后续章节、永久成长边界、更多种子／构筑、真实Steam客户端、手柄／音频设备、SteamDeck、其他平台与长局性能门槛保持未完成。
+脚本已保留全部失败证据，并修正[彩色卡名](verification/market-red-label-2026-11-05/README.md)、[小额补零余额](verification/market-wallet-0089-2026-11-05/README.md)、后到征募时钟和[有界装备界面开启](verification/inventory-open-2026-11-05/README.md)；56项Python测试通过（包含[实际LEVEL5识别失败回归](verification/battle-level-ocr-2026-11-05/README.md)），[实际倒计时像素识别](verification/battle-timer-ocr-2026-11-05/README.md)、同截图HUD／双面板等待已统一，1×整局脚本预算按25分钟战斗＋5分钟余量＋12次有界访问推导为3240秒；新的完整原生路线仍待完成。所有后续章节、永久成长边界、更多种子／构筑、真实Steam客户端、手柄／音频设备、SteamDeck、其他平台与长局性能门槛保持未完成。

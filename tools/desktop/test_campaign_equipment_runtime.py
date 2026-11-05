@@ -20,6 +20,29 @@ class EquipmentPolicyParsing(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 battle_seconds(text)
 
+    def test_timer_requires_two_agreed_numeric_scales_without_guessing(self):
+        with patch('campaign_equipment_runtime.battle_clock_reads',return_value=[
+                (100,'23:39'),(200,'23:39'),(600,'')]):
+            self.assertEqual(screenshot_battle_seconds(Path('screen.png'),None),23*60+39)
+        for reads in ([(100,'23:39'),(200,'23:38'),(600,'')],
+                      [(100,'23:39'),(200,''),(600,'oe')],
+                      [(100,'23:39'),(100,'23:39')],
+                      [(100,'23:99'),(200,'23:99')],
+                      [(100,'339'),(200,'oe'),(600,'')]):
+            with patch('campaign_equipment_runtime.battle_clock_reads',return_value=reads), self.assertRaises(AssertionError):
+                screenshot_battle_seconds(Path('screen.png'),None)
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_actual2339_timer_and_covered_modal_pixel_negatives(self):
+        root=Path(__file__).resolve().parents[2]/'docs/verification'
+        actual=root/'battle-timer-ocr-2026-11-05/clock2339.png'
+        self.assertEqual(screenshot_battle_seconds(actual,None),23*60+39)
+        for relative in ('earned-forge-2026-11-05/level20-recruitment.png',
+                         'hud-recruitment-2026-11-05/level10-over-speed.png'):
+            with self.subTest(path=relative),self.assertRaises(AssertionError):
+                screenshot_battle_seconds(root/relative,None)
+
     def test_countdown_drains_recognized_recruitment_before_reading_hud(self):
         policy = EquipmentPolicy.__new__(EquipmentPolicy)
         keys = []
