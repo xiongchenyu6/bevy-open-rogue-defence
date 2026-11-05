@@ -6,4 +6,4 @@ Read-only offline Ubuntu24/X11/softwareVulkan smoke passed in112.19seconds, with
 
 The native attack probe evidence for the hit flash is separate at../enemy-flash-2026-11-05/. This smoke proves standalone launch/persistence, not visual feedback for every skill, audible output, hardware performance or Steam-client compatibility.
 
-Frozen natural-forge and chapter6 routes are queued sequentially from unchanged real earned checkpoints. Their results remain pending. Earlier b1d7dd1 r2 runs stopped on the publicly captured LEVEL5 OCR issue documented at../battle-level-ocr-2026-11-05/; those are not game losses or campaign victories.
+Frozen natural-forge and chapter6 routes are queued sequentially from unchanged real earned checkpoints. The natural AstralPrism chain and same-profile restart subsequently passed at../earned-forge-040ce5c-2026-11-05/ and../forge-restart-2026-11-05/; full chapter6 remains pending. Earlier b1d7dd1 r2 runs stopped on the publicly captured LEVEL5 OCR issue documented at../battle-level-ocr-2026-11-05/; those are not game losses or campaign victories.

@@ -62,7 +62,7 @@ cargo clippy --all-targets -- -D warnings
 
 Linux发行构建见[桌面发行](docs/desktop-release.md)。其他构建入口包括[Web脚本](scripts/build-wasm.sh)和[Android脚本](tools/build_android.sh)；存在构建入口不代表最新浏览器部署、移动设备或各桌面平台已完成验收。
 
-视觉和交互改动需要原生画面对照；测试、平衡与性能记录都必须注明版本和覆盖范围。第六章完整通关、最新安装包自然合成后的完整恢复／退出链路、长期平衡与真实设备覆盖仍按[验收清单](docs/release-readiness.md)推进，当前不声明已达到Steam发售标准。
+视觉和交互改动需要原生画面对照；测试、平衡与性能记录都必须注明版本和覆盖范围。第六章完整通关、更多配方的自然获取与合成链路、长期平衡与真实设备覆盖仍按[验收清单](docs/release-readiness.md)推进，当前不声明已达到Steam发售标准。
 
 ## 素材与参考
 

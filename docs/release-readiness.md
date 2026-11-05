@@ -29,7 +29,7 @@
 
 当前游戏源码已包含[敌人受击短闪与材质隔离](verification/enemy-flash-2026-11-05/README.md)，以及：初始剑平滑渐隐残影、初始木箭与升级箭分档、同帧雷／冰被动和普攻回响完整结算，以及六件合成装备独立插画。优化库测试 **670通过、0失败、1忽略**，严格全目标release Clippy通过；分别有[剑残影](verification/sword-trail-2026-11-05/README.md)、[普通箭](verification/starter-arrow-2026-11-05/README.md)、[触发结算](verification/passive-batch-2026-11-05/README.md)和[六件合成装备／缺图重试](verification/recipe-art-2026-11-05/README.md)的原生证据。它们覆盖对应受控场景，不能替代完整长局和主观手感验收。
 
-最新独立短流程通过的SDK包为`040ce5c`：882项文件哈希、断网只读Ubuntu/X11启动／征募／战斗／中文设置／全屏／偏好重启与两次正常退出通过，见[发行证据](verification/impact-package-2026-11-05/README.md)。该包已包含上述受击短闪、普通木箭和六件合成插画；[当前包自然获取两件材料、实际合成、恢复战斗与正常退出](verification/earned-forge-040ce5c-2026-11-05/README.md)已通过；整局与合成后同存档重启仍待完成。[本机窗口性能基线](verification/window-performance-2026-11-05/README.md)仍是旧Nix构建的有限受控场景，不代表此包、其他硬件或长局性能。
+最新独立短流程通过的SDK包为`040ce5c`：882项文件哈希、断网只读Ubuntu/X11启动／征募／战斗／中文设置／全屏／偏好重启与两次正常退出通过，见[发行证据](verification/impact-package-2026-11-05/README.md)。该包已包含上述受击短闪、普通木箭和六件合成插画；[当前包自然获取两件材料、实际合成、恢复战斗与正常退出](verification/earned-forge-040ce5c-2026-11-05/README.md)已通过；[合成后同存档重启、永久属性保留与局内装备清空](verification/forge-restart-2026-11-05/README.md)也已通过；整局仍待完成。[本机窗口性能基线](verification/window-performance-2026-11-05/README.md)仍是旧Nix构建的有限受控场景，不代表此包、其他硬件或长局性能。
 
 自然获取证据仍按二进制区分：旧`37fe665`第六章路线核验了五件自然装备；另一独立同局路线实际购入两件材料、消耗为星界棱镜并核验库存，但其恢复战斗／正常退出步骤被后到征募中断，见[自然合成](verification/earned-forge-2026-11-05/README.md)。后续`32cf594`整局与合成路线也被公开UI脚本读数或面板开启时序中断，没有完整结算或退出结论。不得把这些中断称为游戏失败或通关。
 

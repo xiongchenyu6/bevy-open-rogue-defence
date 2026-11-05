@@ -1,0 +1,7 @@
+# Same-profile restart after earned forging — 2026-11-05
+
+The already completed [040ce5c natural forge route](../earned-forge-040ce5c-2026-11-05/README.md) was followed by a NEW game process on the EXACT same state directory, mounted as/earned-state. No profile copy, currency/training purchase, resource grant or save editing was used. The previous completed recipe/quit0 proof and exact package version/binary/file manifest were required before launch. Separate output and a frozen read-only harness preserve the prior evidence.
+
+Offline read-only Ubuntu24/X11/softwareVulkan route passed in118.84seconds: menu575shards; first chapter; observed actual StormSavant caption selection; actual1×battle; actual level1 Strength30 (base20+pre-existing earned Strength5×2); equipment count0 with No equipment yet (unfinished per-run AstralPrism correctly cleared); closed inventory; actual countdown1477→1468; normal quitexit0. Campaign progress remained5/575/111100/[5,0,0,0,0,0], with identical SHA256da5bf0a9ca3f4032a265425f9989bda292d8c0c2622848157df6d2c0223ba825.
+
+result.json explicitly reports PASS/completedtrue only after all assertions. Root inspected full Strength30 and empty-inventory screenshots; source, OS command/mount list, observed text, game log and process receipt are archived. No panic. This proves the one natural AstralPrism→resume→quit→same-profile restart chain, not a new campaign victory, newly earned permanent upgrade, every recipe, physical hardware or the upcoming redesigned inventory layout.

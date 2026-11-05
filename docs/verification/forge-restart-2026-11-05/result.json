@@ -1,0 +1,551 @@
+{
+  "scope": "Same earned profile restart; no purchase, training, save copy or resource grant",
+  "package_version": {
+    "binary_sha256": "a16998fe43d9fa7c830c3614aaae9e61b982579fc718195fea232c312c77a1de",
+    "git_commit": "040ce5c1084634f3e8d886b65d1f5c2c467997af",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "source_profile": "/earned-state",
+  "previous_proof": "/previous-proof/result.json",
+  "progress_before": {
+    "unlocked": 5,
+    "currency": 575,
+    "cleared": "111100",
+    "upgrades": [
+      5,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "save_before_sha256": "da5bf0a9ca3f4032a265425f9989bda292d8c0c2622848157df6d2c0223ba825",
+  "operation_budget_seconds": 180,
+  "completed": true,
+  "result": "PASS",
+  "menu_shards_ocr": [
+    "575 LEGACY SHARDS",
+    120,
+    91,
+    256,
+    103
+  ],
+  "selected_caption_ocr": [
+    "STORM SAVANT",
+    173,
+    483,
+    295,
+    497
+  ],
+  "attributes": {
+    "hero": "StormSavant",
+    "level": 1,
+    "speed": 1,
+    "strength": 30.0,
+    "strength_ocr": [
+      [
+        "Strength",
+        203,
+        235,
+        259,
+        250
+      ],
+      [
+        "30.0",
+        457,
+        235,
+        484,
+        247
+      ],
+      [
+        "Strength",
+        204,
+        235,
+        259,
+        250
+      ],
+      [
+        "Strength 30.0 Base attack 48.0 Armor 0.0",
+        204,
+        231,
+        1076,
+        254
+      ]
+    ]
+  },
+  "panel_open_attempts": [
+    {
+      "visit": null,
+      "screenshot": "restart-inventory-open-00.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1485,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "restart-inventory-open-01.png",
+      "state": "inventory",
+      "requests": 1
+    }
+  ],
+  "equipment_count": 0,
+  "empty_inventory_ocr": [
+    [
+      "=",
+      1032,
+      22,
+      1064,
+      23
+    ],
+    [
+      "=",
+      98,
+      40,
+      108,
+      42
+    ],
+    [
+      "Settings",
+      615,
+      25,
+      664,
+      39
+    ],
+    [
+      "24:37",
+      1209,
+      27,
+      1257,
+      42
+    ],
+    [
+      "& cue",
+      24,
+      37,
+      79,
+      54
+    ],
+    [
+      "+ \u56de 1",
+      993,
+      24,
+      1107,
+      68
+    ],
+    [
+      "ROUND 0/5,",
+      1155,
+      50,
+      1257,
+      66
+    ],
+    [
+      "@ 940/940",
+      25,
+      107,
+      102,
+      124
+    ],
+    [
+      "EQUIPMENT - 0",
+      215,
+      108,
+      366,
+      127
+    ],
+    [
+      "Gear",
+      904,
+      110,
+      933,
+      121
+    ],
+    [
+      "Forge",
+      960,
+      110,
+      993,
+      124
+    ],
+    [
+      "Close",
+      1019,
+      109,
+      1055,
+      122
+    ],
+    [
+      "504/504",
+      53,
+      135,
+      102,
+      144
+    ],
+    [
+      "2",
+      86,
+      174,
+      95,
+      178
+    ],
+    [
+      "No equipment yet.",
+      226,
+      160,
+      362,
+      177
+    ],
+    [
+      "Visit the Black Market (B) to buy equipment with kill tokens.",
+      225,
+      174,
+      665,
+      202
+    ],
+    [
+      "0",
+      116,
+      211,
+      122,
+      221
+    ],
+    [
+      "\u00a9",
+      175,
+      209,
+      192,
+      226
+    ],
+    [
+      "@>",
+      53,
+      250,
+      95,
+      276
+    ],
+    [
+      "wr,",
+      1155,
+      350,
+      1245,
+      398
+    ],
+    [
+      "No equipment",
+      224,
+      453,
+      344,
+      471
+    ],
+    [
+      "The Black Market opens after 3 minutes.",
+      223,
+      469,
+      482,
+      502
+    ],
+    [
+      "All owned equipment stays active. Inspect an icon; scroll details to read more.",
+      209,
+      592,
+      643,
+      620
+    ],
+    [
+      "No slot limit. Forge consumes materials and inherits all their effects.",
+      214,
+      614,
+      589,
+      627
+    ],
+    [
+      "LEVEL 1 20/60 xP",
+      490,
+      658,
+      588,
+      686
+    ],
+    [
+      "& a",
+      682,
+      666,
+      730,
+      688
+    ],
+    [
+      "> Shift",
+      783,
+      673,
+      833,
+      685
+    ],
+    [
+      "\u2014",
+      432,
+      686,
+      503,
+      690
+    ],
+    [
+      "ram [A -|- 24:37",
+      32,
+      26,
+      1257,
+      47
+    ],
+    [
+      "& a 1000/1000 | t . Lx) \u4e0a ROUNDO/S",
+      24,
+      22,
+      1257,
+      70
+    ],
+    [
+      "ives Aposnuznces",
+      23,
+      77,
+      1230,
+      99
+    ],
+    [
+      "x 5047508",
+      38,
+      135,
+      102,
+      144
+    ],
+    [
+      "eu co Be No equipment yet.",
+      24,
+      150,
+      364,
+      184
+    ],
+    [
+      "Visit the Black Market (B) to buy equipment with kill tokens,",
+      225,
+      169,
+      665,
+      203
+    ],
+    [
+      "e[e] 2",
+      33,
+      203,
+      192,
+      226
+    ],
+    [
+      "\u5730 >",
+      1155,
+      350,
+      1218,
+      384
+    ],
+    [
+      "\u5c40 A",
+      1089,
+      372,
+      1245,
+      407
+    ],
+    [
+      "The Black Market opens after 3 minutes.",
+      223,
+      468,
+      482,
+      502
+    ],
+    [
+      "Allowned equipment stays active. Inspect an icon; scroll details to read more.",
+      209,
+      596,
+      643,
+      618
+    ],
+    [
+      "No slot limit. Forge consumes materials and inherits all their effects.",
+      210,
+      610,
+      594,
+      632
+    ],
+    [
+      "LEVEL1 20/60 xP a1 Sr shift By 02:38",
+      490,
+      666,
+      1248,
+      687
+    ],
+    [
+      "24:37",
+      1209,
+      28,
+      1257,
+      42
+    ],
+    [
+      "eS",
+      993,
+      44,
+      999,
+      50
+    ],
+    [
+      "1x",
+      1038,
+      42,
+      1056,
+      52
+    ],
+    [
+      "\u5916",
+      1101,
+      41,
+      1107,
+      53
+    ],
+    [
+      "ROUND 0/5",
+      1156,
+      50,
+      1257,
+      65
+    ],
+    [
+      "u",
+      1189,
+      92,
+      1193,
+      93
+    ],
+    [
+      "Close",
+      1019,
+      110,
+      1054,
+      122
+    ],
+    [
+      "Qs",
+      131,
+      164,
+      160,
+      182
+    ],
+    [
+      "Visit the Black Market (B) to buy equipment with kill tokens.",
+      225,
+      175,
+      661,
+      200
+    ],
+    [
+      "No equipment",
+      225,
+      453,
+      344,
+      471
+    ],
+    [
+      "The Black Market opens after 3 minutes.",
+      223,
+      473,
+      482,
+      501
+    ],
+    [
+      "Allowned equipment stays active. Inspect an icon; scroll details to read more.",
+      213,
+      591,
+      643,
+      620
+    ],
+    [
+      "No slot limit. Forge consumes materials and inherits all their effects,",
+      214,
+      614,
+      589,
+      627
+    ],
+    [
+      "\u00a9 Shift",
+      790,
+      673,
+      832,
+      683
+    ],
+    [
+      "Qos Sco Ms No equipment yet.",
+      24,
+      156,
+      366,
+      181
+    ],
+    [
+      ". Visit the Black Market (B) to buy equipment with kill tokens,",
+      137,
+      169,
+      665,
+      200
+    ],
+    [
+      "hy || Bro )",
+      41,
+      197,
+      190,
+      227
+    ],
+    [
+      "The Black Market opens after 3 minutes.",
+      223,
+      472,
+      482,
+      501
+    ],
+    [
+      "Allowned equipment stays active, Inspect an icon; scroll details to read more.",
+      213,
+      590,
+      643,
+      620
+    ],
+    [
+      "No slot limit. Forge consumes materials and inherits all their effects.",
+      214,
+      604,
+      589,
+      634
+    ]
+  ],
+  "resume_countdown": {
+    "before": 1477,
+    "after": 1468
+  },
+  "quit_exit": 0,
+  "save_after_sha256": "da5bf0a9ca3f4032a265425f9989bda292d8c0c2622848157df6d2c0223ba825"
+}
