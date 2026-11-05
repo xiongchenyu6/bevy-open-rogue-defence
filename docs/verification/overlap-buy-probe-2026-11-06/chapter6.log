@@ -1,0 +1,27 @@
+{"sample": 1, "wall_seconds": 7.3, "terminal": null}
+{"sample": 2, "wall_seconds": 17.7, "terminal": null}
+{"sample": 3, "wall_seconds": 29.3, "terminal": null}
+{"sample": 4, "wall_seconds": 39.7, "terminal": null}
+{"sample": 5, "wall_seconds": 50.0, "terminal": null}
+{"sample": 6, "wall_seconds": 60.4, "terminal": null}
+{"sample": 7, "wall_seconds": 70.9, "terminal": null}
+{"sample": 8, "wall_seconds": 81.5, "terminal": null}
+{"sample": 9, "wall_seconds": 92.2, "terminal": null}
+{"sample": 10, "wall_seconds": 102.1, "terminal": null}
+{"sample": 11, "wall_seconds": 112.4, "terminal": null}
+{"sample": 12, "wall_seconds": 122.2, "terminal": null}
+{"sample": 13, "wall_seconds": 132.4, "terminal": null}
+{"sample": 14, "wall_seconds": 142.6, "terminal": null}
+{"sample": 15, "wall_seconds": 152.8, "terminal": null}
+{"sample": 16, "wall_seconds": 163.2, "terminal": null}
+{"sample": 17, "wall_seconds": 174.0, "terminal": null}
+{"sample": 18, "wall_seconds": 184.7, "terminal": null}
+{"sample": 19, "wall_seconds": 195.3, "terminal": null}
+{"stage": "earned equipment visit", "visit": 1, "purchases": 0, "wallet": 113, "visit_budget_seconds": 160}
+{"sample": 20, "wall_seconds": 271.5, "terminal": null}
+{"sample": 21, "wall_seconds": 282.3, "terminal": null}
+{"sample": 22, "wall_seconds": 292.9, "terminal": null}
+{"sample": 23, "wall_seconds": 304.2, "terminal": null}
+{"sample": 24, "wall_seconds": 315.2, "terminal": null}
+{"sample": 25, "wall_seconds": 325.9, "terminal": null}
+{"stage": "earned equipment visit", "visit": 2, "purchases": 1, "wallet": 336, "visit_budget_seconds": 160}
