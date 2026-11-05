@@ -1,0 +1,246 @@
+{
+  "trials": [
+    {
+      "mode": "ordinary",
+      "index": 0,
+      "expected": "Bloodreaver",
+      "caption": "Bloodreaver",
+      "observations": [],
+      "input": "xdotool click 1 (no hold)",
+      "title": "[SSR] Bloodreaver",
+      "matched": true,
+      "elapsed": 1.0771090610069223
+    },
+    {
+      "mode": "ordinary",
+      "index": 1,
+      "expected": "Astral Prism",
+      "caption": "Astral Prism",
+      "observations": [],
+      "input": "xdotool click 1 (no hold)",
+      "title": "[SSR] Astral Prism",
+      "matched": true,
+      "elapsed": 1.0629127789870836
+    },
+    {
+      "mode": "ordinary",
+      "index": 2,
+      "expected": "Storm Bastion",
+      "caption": "Storm Bastion",
+      "observations": [],
+      "input": "xdotool click 1 (no hold)",
+      "title": "[SSR] Storm Bastion",
+      "matched": true,
+      "elapsed": 1.0796177799929865
+    },
+    {
+      "mode": "ordinary",
+      "index": 3,
+      "expected": "Suncoil",
+      "caption": "Suncoil",
+      "observations": [],
+      "input": "xdotool click 1 (no hold)",
+      "title": "[SSR] Suncoil",
+      "matched": true,
+      "elapsed": 1.0433354550041258
+    },
+    {
+      "mode": "ordinary",
+      "index": 4,
+      "expected": "Night Crown",
+      "caption": "Night Crown",
+      "observations": [],
+      "input": "xdotool click 1 (no hold)",
+      "title": "[UR] Night Crown",
+      "matched": true,
+      "elapsed": 1.0480640309979208
+    },
+    {
+      "mode": "ordinary",
+      "index": 5,
+      "expected": "World Engine",
+      "caption": "World Engine",
+      "observations": [],
+      "input": "xdotool click 1 (no hold)",
+      "title": "[UR] World Engine",
+      "matched": true,
+      "elapsed": 1.1272359309950843
+    },
+    {
+      "mode": "held",
+      "index": 0,
+      "expected": "Bloodreaver",
+      "caption": "Bloodreaver",
+      "observations": [
+        {
+          "screenshot": "held-0-poll-00.png",
+          "title": "[UR] World Engine"
+        },
+        {
+          "screenshot": "held-0-poll-01.png",
+          "title": "[SSR] Bloodreaver"
+        }
+      ],
+      "down": 216581.995957797,
+      "up": 216583.102223199,
+      "title": "[SSR] Bloodreaver",
+      "matched": true,
+      "elapsed": 1.5613701379916165
+    },
+    {
+      "mode": "held",
+      "index": 1,
+      "expected": "Astral Prism",
+      "caption": "Astral Prism",
+      "observations": [
+        {
+          "screenshot": "held-1-poll-00.png",
+          "title": "[SSR] Bloodreaver"
+        },
+        {
+          "screenshot": "held-1-poll-01.png",
+          "title": "[SSR] Astral Prism"
+        }
+      ],
+      "down": 216583.954788147,
+      "up": 216584.990887413,
+      "title": "[SSR] Astral Prism",
+      "matched": true,
+      "elapsed": 1.519474127999274
+    },
+    {
+      "mode": "held",
+      "index": 2,
+      "expected": "Storm Bastion",
+      "caption": "Storm Bastion",
+      "observations": [
+        {
+          "screenshot": "held-2-poll-00.png",
+          "title": "[SSR] Astral Prism"
+        },
+        {
+          "screenshot": "held-2-poll-01.png",
+          "title": "[SSR] Storm Bastion"
+        }
+      ],
+      "down": 216585.910214398,
+      "up": 216586.95739632,
+      "title": "[SSR] Storm Bastion",
+      "matched": true,
+      "elapsed": 1.4963062310125679
+    },
+    {
+      "mode": "held",
+      "index": 3,
+      "expected": "Suncoil",
+      "caption": "Suncoil",
+      "observations": [
+        {
+          "screenshot": "held-3-poll-00.png",
+          "title": "[SSR] Storm Bastion"
+        },
+        {
+          "screenshot": "held-3-poll-01.png",
+          "title": "[SSR] Suncoil"
+        }
+      ],
+      "down": 216587.784848134,
+      "up": 216588.771351037,
+      "title": "[SSR] Suncoil",
+      "matched": true,
+      "elapsed": 1.4328001519897953
+    },
+    {
+      "mode": "held",
+      "index": 4,
+      "expected": "Night Crown",
+      "caption": "Night Crown",
+      "observations": [
+        {
+          "screenshot": "held-4-poll-00.png",
+          "title": "[SSR] Suncoil"
+        },
+        {
+          "screenshot": "held-4-poll-01.png",
+          "title": "[UR] Night Crown"
+        }
+      ],
+      "down": 216589.670654828,
+      "up": 216590.749994972,
+      "title": "[UR] Night Crown",
+      "matched": true,
+      "elapsed": 1.5245201989891939
+    },
+    {
+      "mode": "held",
+      "index": 5,
+      "expected": "World Engine",
+      "caption": "World Engine",
+      "observations": [
+        {
+          "screenshot": "held-5-poll-00.png",
+          "title": "[UR] Night Crown"
+        },
+        {
+          "screenshot": "held-5-poll-01.png",
+          "title": "[UR] World Engine"
+        }
+      ],
+      "down": 216591.630459948,
+      "up": 216592.645166695,
+      "title": "[UR] World Engine",
+      "matched": true,
+      "elapsed": 1.4791406139847822
+    }
+  ],
+  "startup": [
+    {
+      "screenshot": "startup-observation-00.png",
+      "guide": [
+        "1/4 + MOVE & DODGE",
+        520,
+        326,
+        762,
+        360
+      ],
+      "skip": [
+        "Skip",
+        476,
+        446,
+        507,
+        463
+      ],
+      "commander": null,
+      "input": "Escape"
+    },
+    {
+      "screenshot": "startup-observation-01.png",
+      "guide": null,
+      "skip": null,
+      "commander": [
+        "Click a basic commander to begin",
+        42,
+        79,
+        599,
+        117
+      ]
+    }
+  ],
+  "completed": true,
+  "open": [
+    {
+      "visit": null,
+      "screenshot": "selection-open-00.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1498,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "selection-open-01.png",
+      "state": "inventory",
+      "requests": 1
+    }
+  ]
+}

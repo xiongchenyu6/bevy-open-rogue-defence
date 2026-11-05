@@ -1,0 +1,13 @@
+SELECTION ordinary 0 Bloodreaver True
+SELECTION ordinary 1 Astral Prism True
+SELECTION ordinary 2 Storm Bastion True
+SELECTION ordinary 3 Suncoil True
+SELECTION ordinary 4 Night Crown True
+SELECTION ordinary 5 World Engine True
+SELECTION held 0 Bloodreaver True
+SELECTION held 1 Astral Prism True
+SELECTION held 2 Storm Bastion True
+SELECTION held 3 Suncoil True
+SELECTION held 4 Night Crown True
+SELECTION held 5 World Engine True
+EMPTY_FORGE_SELECTION_PASS 6 held actual OS selections

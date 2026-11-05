@@ -1,0 +1,12 @@
+SELECTION ordinary 0 Bloodreaver True
+SELECTION ordinary 1 Astral Prism True
+SELECTION ordinary 2 Storm Bastion True
+SELECTION ordinary 3 Suncoil True
+Traceback (most recent call last):
+  File "/verify/probe.py", line 61, in <module>
+    record.update(title=title,matched=selected_inventory_name(title)==normalized(name),elapsed=time.monotonic()-started)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/campaign_equipment_runtime.py", line 351, in selected_inventory_name
+    assert match, f'Unreadable selected inventory detail: {text!r}'
+           ^^^^^
+AssertionError: Unreadable selected inventory detail: '[UR] Night Crown\n©) Blondreaver + ©) Storm Bastion + (©) Ascendant'

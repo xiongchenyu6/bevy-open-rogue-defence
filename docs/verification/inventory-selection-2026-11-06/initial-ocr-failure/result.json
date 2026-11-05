@@ -1,0 +1,106 @@
+{
+  "trials": [
+    {
+      "mode": "ordinary",
+      "index": 0,
+      "expected": "Bloodreaver",
+      "caption": "Bloodreaver",
+      "observations": [],
+      "input": "xdotool click 1 (no hold)",
+      "title": "[SSR] Bloodreaver",
+      "matched": true,
+      "elapsed": 1.0973626530030742
+    },
+    {
+      "mode": "ordinary",
+      "index": 1,
+      "expected": "Astral Prism",
+      "caption": "Astral Prism",
+      "observations": [],
+      "input": "xdotool click 1 (no hold)",
+      "title": "[SSR] Astral Prism",
+      "matched": true,
+      "elapsed": 1.078833373991074
+    },
+    {
+      "mode": "ordinary",
+      "index": 2,
+      "expected": "Storm Bastion",
+      "caption": "Storm Bastion",
+      "observations": [],
+      "input": "xdotool click 1 (no hold)",
+      "title": "[SSR] Storm Bastion",
+      "matched": true,
+      "elapsed": 1.092356587992981
+    },
+    {
+      "mode": "ordinary",
+      "index": 3,
+      "expected": "Suncoil",
+      "caption": "Suncoil",
+      "observations": [],
+      "input": "xdotool click 1 (no hold)",
+      "title": "[SSR] Suncoil",
+      "matched": true,
+      "elapsed": 1.0704782480024733
+    },
+    {
+      "mode": "ordinary",
+      "index": 4,
+      "expected": "Night Crown",
+      "caption": "Night Crown",
+      "observations": [],
+      "input": "xdotool click 1 (no hold)"
+    }
+  ],
+  "startup": [
+    {
+      "screenshot": "startup-observation-00.png",
+      "guide": [
+        "1/4 + MOVE & DODGE",
+        520,
+        330,
+        762,
+        353
+      ],
+      "skip": [
+        "Skip",
+        476,
+        446,
+        507,
+        463
+      ],
+      "commander": null,
+      "input": "Escape"
+    },
+    {
+      "screenshot": "startup-observation-01.png",
+      "guide": null,
+      "skip": null,
+      "commander": [
+        "Click a basic commander to begin",
+        42,
+        79,
+        599,
+        117
+      ]
+    }
+  ],
+  "completed": false,
+  "open": [
+    {
+      "visit": null,
+      "screenshot": "selection-open-00.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1498,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "selection-open-01.png",
+      "state": "inventory",
+      "requests": 1
+    }
+  ]
+}
