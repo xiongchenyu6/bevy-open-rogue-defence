@@ -1,0 +1,11 @@
+{
+  "scope": "Normal full-prefix duplicate replay diagnostics; no automatic balance matrix or tuning",
+  "binary": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/designated-strike-2026-11-06/balance-sim-snapshot",
+  "binary_sha256": "65d4f11b6497dcf0bd0a26fdaf85a8c55afe006f8e9ca51b97b106cf81a23df1",
+  "frame_cap": 120000,
+  "actor_range": [
+    1,
+    120000
+  ],
+  "matrix_started": false
+}

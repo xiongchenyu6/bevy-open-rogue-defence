@@ -1,0 +1,20 @@
+{
+  "comparison_scope": "recorded checkpoints, not all internal simulation state",
+  "left": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/designated-fix-repeat-a-nov6/active-h2-behind-sa11ce-c5-t0.jsonl",
+  "right": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/designated-fix-repeat-b-nov6/active-h2-behind-sa11ce-c5-t0.jsonl",
+  "binary_sha256": "65d4f11b6497dcf0bd0a26fdaf85a8c55afe006f8e9ca51b97b106cf81a23df1",
+  "checkpoint_counts": [
+    56,
+    56
+  ],
+  "prefix_equal": false,
+  "complete_replay": false,
+  "first_divergence": {
+    "field": "checkpoint[5].attacks",
+    "left": 119,
+    "right": 120,
+    "reason": "value differs",
+    "frame": 9000,
+    "right_frame": 9000
+  }
+}

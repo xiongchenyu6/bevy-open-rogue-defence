@@ -1,0 +1,353 @@
+{
+  "scope": "all recorded scalar + actor numeric multiset fields; strips only entity identity/order; unrecorded state remains outside scope",
+  "first_strict": {
+    "frame": 24,
+    "fields": {
+      "enemies": [
+        [
+          [
+            8589932015,
+            1139843072,
+            1139843072,
+            1098560772,
+            0,
+            1058621472,
+            1073747466
+          ]
+        ],
+        [
+          [
+            8589931896,
+            1139843072,
+            1139843072,
+            1098560772,
+            0,
+            1058621472,
+            1073747466
+          ]
+        ]
+      ],
+      "enemy_order": [
+        [
+          8589932015
+        ],
+        [
+          8589931896
+        ]
+      ]
+    }
+  },
+  "first_numeric": {
+    "frame": 7924,
+    "elapsed_bits_a": 1124197975,
+    "elapsed_bits_b": 1124197975,
+    "fields": {
+      "projectiles_numeric_multiset": [
+        [
+          [
+            1107270969,
+            1051595899,
+            1087887118,
+            1104997085,
+            0,
+            1083470366,
+            1132493628,
+            1056964608,
+            1051797262,
+            0
+          ],
+          [
+            3237360646,
+            1048576000,
+            1026165849,
+            1106441111,
+            0,
+            1075800979,
+            1129891040,
+            1056293519,
+            1068568849,
+            0
+          ]
+        ],
+        [
+          [
+            1107270969,
+            1051595899,
+            1087887118,
+            1104997085,
+            0,
+            1083470366,
+            1132493628,
+            1056964608,
+            1051797262,
+            0
+          ],
+          [
+            3237417704,
+            1048576000,
+            1043133011,
+            1105585253,
+            0,
+            1092756269,
+            1129891040,
+            1056293519,
+            1068568849,
+            0
+          ]
+        ]
+      ]
+    }
+  },
+  "first_raw_order": {
+    "frame": 24,
+    "a": [
+      8589932015
+    ],
+    "b": [
+      8589931896
+    ]
+  },
+  "trace_counts": [
+    97999,
+    97841
+  ],
+  "frame_cap": 120000,
+  "outcomes": [
+    {
+      "outcome": "win",
+      "censored": false,
+      "last": {
+        "type": "checkpoint",
+        "frame": 97999,
+        "actual_chapter": 5,
+        "permanent_upgrades": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "actual_run_seed": 659919,
+        "rng_state": 3310356300959552249,
+        "skill_ranks_by_id": [
+          5,
+          0,
+          4,
+          0,
+          0,
+          2,
+          4,
+          0,
+          0,
+          5,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        "actual_hero_id": 7,
+        "owned_bond_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          9,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          35,
+          36,
+          37,
+          53,
+          62,
+          63,
+          64
+        ],
+        "absorbed_strength": 236.576,
+        "command_health_multiplier": 1.2,
+        "max_hero_hp": 38612.8,
+        "elapsed": 1540.926,
+        "wave": 25,
+        "level": 43,
+        "kills": 2081,
+        "gate_hp": 0.0,
+        "gate_breaks": 47,
+        "exposed_secs": 177.66,
+        "min_gate_hp": 0.0,
+        "min_hero_hp": 0.0,
+        "min_alive_health_fraction": 0.00018,
+        "max_health_deficit": 25094.248,
+        "injured_secs": 1097.175,
+        "hero_hp": 38612.79,
+        "deaths": 1,
+        "gold": 4903,
+        "wood": 187,
+        "bosses": 5,
+        "attacks": 11532,
+        "damage_skill_casts": 901,
+        "skill_ranks": 28,
+        "enemy_peak": 46,
+        "enemy_rejected": 0,
+        "paused": true,
+        "finished": true,
+        "victory": true
+      },
+      "runtime_secs": 185.13
+    },
+    {
+      "outcome": "win",
+      "censored": false,
+      "last": {
+        "type": "checkpoint",
+        "frame": 97841,
+        "actual_chapter": 5,
+        "permanent_upgrades": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "actual_run_seed": 659919,
+        "rng_state": 12187496815195260898,
+        "skill_ranks_by_id": [
+          5,
+          0,
+          5,
+          0,
+          0,
+          3,
+          5,
+          0,
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3,
+          0
+        ],
+        "actual_hero_id": 7,
+        "owned_bond_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          8,
+          9,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          51,
+          53
+        ],
+        "absorbed_strength": 236.576,
+        "command_health_multiplier": 1.2,
+        "max_hero_hp": 36202.99,
+        "elapsed": 1538.358,
+        "wave": 25,
+        "level": 43,
+        "kills": 2162,
+        "gate_hp": 1000.0,
+        "gate_breaks": 39,
+        "exposed_secs": 149.337,
+        "min_gate_hp": 0.0,
+        "min_hero_hp": 0.0,
+        "min_alive_health_fraction": 6.6e-05,
+        "max_health_deficit": 13703.296,
+        "injured_secs": 825.953,
+        "hero_hp": 36202.99,
+        "deaths": 1,
+        "gold": 5888,
+        "wood": 118,
+        "bosses": 5,
+        "attacks": 12020,
+        "damage_skill_casts": 858,
+        "skill_ranks": 29,
+        "enemy_peak": 46,
+        "enemy_rejected": 0,
+        "paused": true,
+        "finished": true,
+        "victory": true
+      },
+      "runtime_secs": 285.68
+    }
+  ],
+  "missing_row": 97841
+}

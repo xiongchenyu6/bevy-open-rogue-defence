@@ -1,0 +1,181 @@
+{
+  "scope": "Map actual projectile direction to recorded candidate positions; IDs and exact-X bits retained; semantic classes outside recorded fields remain unclaimed",
+  "cases": {
+    "a": {
+      "frame": 7924,
+      "hero_xyz": [
+        -8.199999809265137,
+        0.0,
+        0.0
+      ],
+      "new_projectile": [
+        4294964384,
+        3237360646,
+        1048576000,
+        1026165849,
+        1106441111,
+        0,
+        1075800979,
+        1129891040,
+        1056293519,
+        1068568849,
+        0
+      ],
+      "normalized_direction": [
+        0.9966530215648751,
+        0.0,
+        0.08174811683216103
+      ],
+      "selected_position_match": {
+        "entity_bits": 30064768000,
+        "xyz": [
+          -3.396132707595825,
+          0.0,
+          0.39402592182159424
+        ],
+        "x_bits": 3227081277,
+        "hp": 192.5,
+        "direction_error_squared": 5.729718255580819e-17,
+        "distance_squared": 23.232395557568072
+      },
+      "exact_front_tie": [
+        {
+          "entity_bits": 30064768000,
+          "xyz": [
+            -3.396132707595825,
+            0.0,
+            0.39402592182159424
+          ],
+          "x_bits": 3227081277,
+          "hp": 192.5,
+          "direction_error_squared": 5.729718255580819e-17,
+          "distance_squared": 23.232395557568072
+        },
+        {
+          "entity_bits": 38654702625,
+          "xyz": [
+            -3.396132707595825,
+            0.0,
+            1.0440258979797363
+          ],
+          "x_bits": 3227081277,
+          "hp": 192.5,
+          "direction_error_squared": 0.017441646707162087,
+          "distance_squared": 24.16712920615311
+        },
+        {
+          "entity_bits": 77309408171,
+          "xyz": [
+            -3.396132707595825,
+            0.0,
+            1.6940258741378784
+          ],
+          "x_bits": 3227081277,
+          "hp": 192.5,
+          "direction_error_squared": 0.06577958375304273,
+          "distance_squared": 25.946862792749318
+        }
+      ],
+      "closest_front": {
+        "entity_bits": 30064768000,
+        "xyz": [
+          -3.396132707595825,
+          0.0,
+          0.39402592182159424
+        ],
+        "x_bits": 3227081277,
+        "hp": 192.5,
+        "direction_error_squared": 5.729718255580819e-17,
+        "distance_squared": 23.232395557568072
+      }
+    },
+    "b": {
+      "frame": 7924,
+      "hero_xyz": [
+        -8.199999809265137,
+        0.0,
+        0.0
+      ],
+      "new_projectile": [
+        8589931744,
+        3237417704,
+        1048576000,
+        1043133011,
+        1105585253,
+        0,
+        1092756269,
+        1129891040,
+        1056293519,
+        1068568849,
+        0
+      ],
+      "normalized_direction": [
+        0.9430800482315513,
+        0.0,
+        0.33256581698601373
+      ],
+      "selected_position_match": {
+        "entity_bits": 21474833070,
+        "xyz": [
+          -3.396132707595825,
+          0.0,
+          1.6940258741378784
+        ],
+        "x_bits": 3227081277,
+        "hp": 192.5,
+        "direction_error_squared": 9.534390864571885e-18,
+        "distance_squared": 25.946862792749318
+      },
+      "exact_front_tie": [
+        {
+          "entity_bits": 21474833070,
+          "xyz": [
+            -3.396132707595825,
+            0.0,
+            1.6940258741378784
+          ],
+          "x_bits": 3227081277,
+          "hp": 192.5,
+          "direction_error_squared": 9.534390864571885e-18,
+          "distance_squared": 25.946862792749318
+        },
+        {
+          "entity_bits": 47244637195,
+          "xyz": [
+            -3.396132707595825,
+            0.0,
+            0.39402592182159424
+          ],
+          "x_bits": 3227081277,
+          "hp": 192.5,
+          "direction_error_squared": 0.06577957833152465,
+          "distance_squared": 23.232395557568072
+        },
+        {
+          "entity_bits": 55834571895,
+          "xyz": [
+            -3.396132707595825,
+            0.0,
+            1.0440258979797363
+          ],
+          "x_bits": 3227081277,
+          "hp": 192.5,
+          "direction_error_squared": 0.01560978190731605,
+          "distance_squared": 24.16712920615311
+        }
+      ],
+      "closest_front": {
+        "entity_bits": 47244637195,
+        "xyz": [
+          -3.396132707595825,
+          0.0,
+          0.39402592182159424
+        ],
+        "x_bits": 3227081277,
+        "hp": 192.5,
+        "direction_error_squared": 0.06577957833152465,
+        "distance_squared": 23.232395557568072
+      }
+    }
+  }
+}
