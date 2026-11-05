@@ -1,0 +1,11 @@
+{
+  "directory": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/overlap-forge-restart-2026-11-06",
+  "files": [
+    "harness-snapshot.json",
+    "harness-source"
+  ],
+  "command_exists": false,
+  "runtime_exists": false,
+  "process_exists": false,
+  "reason": "manager asserts successful forge exit before reaching any restart command"
+}

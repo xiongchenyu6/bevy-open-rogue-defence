@@ -1,0 +1,6 @@
+rogue-overlap-earned-forge-nov6 {'exit': 1, 'elapsed': 400.5895119489869}
+Traceback (most recent call last):
+  File "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/overlap-earned-forge-2026-11-06/manager.py", line 46, in <module>
+    assert status.get('exit')==0,'Earned forge incomplete; no restart'
+           ^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Earned forge incomplete; no restart

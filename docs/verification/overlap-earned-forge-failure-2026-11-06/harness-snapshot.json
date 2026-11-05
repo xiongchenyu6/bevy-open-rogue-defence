@@ -1,0 +1,11 @@
+{
+  "harness_commit": "a04c5fbeed287418f5567a7603bcc47e8e02a9e3",
+  "package_commit": "f5ef6ff8f37ecab467b5ba0baadb6decd8d49aaf",
+  "files": {
+    "forge_runtime.py": "ca60fe6221236ca8a449c23ce4f6f6916b876bcb66972d59b88174aa87d5223e",
+    "campaign_equipment_runtime.py": "a0c4fb0a0b8d8c22f583cf5fc00b3ca2a2316a64922197759aab66d27479f64e",
+    "campaign_runtime.py": "76ce1daa5939dbbbdcbc0b68162f62b59ce178c14228e1cecb1c8f50684c0591",
+    "smoke_runtime.py": "b836e98f55fe7997112145d72250b19bf2ff67f13fe441cab5d4d1320af4f4f6"
+  },
+  "scope": "Read-only pinned independent package and helpers; actual public OS UI; canonical earned save only; no profile/preferences/stock/resources injection"
+}
