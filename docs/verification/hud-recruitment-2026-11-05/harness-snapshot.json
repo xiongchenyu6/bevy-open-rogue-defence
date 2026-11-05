@@ -1,0 +1,10 @@
+{
+  "harness_commit": "b1d7dd1a2f6f6e5a8301823e6ca489954d6bd09a",
+  "files": {
+    "campaign_equipment_runtime.py": "e836afaeb06e2a3736a76607a3ff8e0d03fce28c141ab782f9c96999a58bcf84",
+    "campaign_runtime.py": "21eb764b2b6e4bef907351464b0b56457ea95657009eae93dc30344d952139f8",
+    "smoke_runtime.py": "4adad46813fefb10e034968b1fe705cb4b9ab20cf7b8cdd5c452f7bae33cc1e5",
+    "forge_runtime.py": "e4c49d758b14280484e00c09374641671dacb901a931169c0adfb35480f93aa8"
+  },
+  "scope": "Frozen public UI driver; no game state injection"
+}

@@ -1,0 +1,49 @@
+stage: battle started; resetting actual toolbar to1x
+stage: earn kills and wait for real3min unlock
+stage: real unlock countdown 1476
+stage: real unlock countdown 1474
+stage: real unlock countdown 1461
+stage: real unlock countdown 1457
+stage: real unlock countdown 1452
+stage: real unlock countdown 1448
+stage: real unlock countdown 1443
+stage: real unlock countdown 1439
+stage: real unlock countdown 1434
+stage: real unlock countdown 1431
+stage: real unlock countdown 1427
+stage: real unlock countdown 1422
+stage: real unlock countdown 1418
+stage: real unlock countdown 1403
+stage: real unlock countdown 1398
+stage: real unlock countdown 1387
+stage: real unlock countdown 1382
+stage: real unlock countdown 1378
+stage: real unlock countdown 1373
+stage: real unlock countdown 1369
+stage: real unlock countdown 1364
+stage: real unlock countdown 1360
+stage: real unlock countdown 1356
+stage: real unlock countdown 1351
+stage: real unlock countdown 1339
+stage: real unlock countdown 1335
+stage: real unlock countdown 1331
+stage: real unlock countdown 1326
+stage: real unlock countdown 1322
+stage: real unlock countdown 1317
+Traceback (most recent call last):
+  File "/harness/forge_runtime.py", line 348, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/harness/forge_runtime.py", line 261, in main
+    actual=read_speed()
+           ^^^^^^^^^^^^
+  File "/harness/forge_runtime.py", line 190, in read_speed
+    value = read_toolbar_speed(shot('speed-source.png'), env)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/smoke_runtime.py", line 130, in read_toolbar_speed
+    return toolbar_speed(raw)
+           ^^^^^^^^^^^^^^^^^^
+  File "/harness/smoke_runtime.py", line 115, in toolbar_speed
+    assert match, f'Unreadable toolbar speed: {text!r}'
+           ^^^^^
+AssertionError: Unreadable toolbar speed: '|\n'

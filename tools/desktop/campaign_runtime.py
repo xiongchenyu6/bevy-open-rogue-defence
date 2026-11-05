@@ -238,7 +238,7 @@ def main(policy_factory=None):
             raise RuntimeError(f'Actual toolbar speed did not reach {speed}x')
         report['actual_speed'] = speed
         shot(win, f'speed{speed}.png')
-        timeout = max(900, 1500 / speed + 300) + (600 if policy is not None else 0)
+        timeout = max(900, 1500 / speed + 300) + (policy.pause_budget_seconds if policy is not None else 0)
         report['battle_timeout_seconds'] = timeout
         started, deadline = time.monotonic(), time.monotonic() + timeout
         next_sample, sample = 0., 0

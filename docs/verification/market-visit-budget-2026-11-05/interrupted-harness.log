@@ -1,0 +1,60 @@
+{"sample": 1, "wall_seconds": 6.5, "terminal": null}
+{"sample": 2, "wall_seconds": 16.4, "terminal": null}
+{"sample": 3, "wall_seconds": 26.0, "terminal": null}
+{"sample": 4, "wall_seconds": 35.7, "terminal": null}
+{"sample": 5, "wall_seconds": 45.5, "terminal": null}
+{"sample": 6, "wall_seconds": 55.4, "terminal": null}
+{"sample": 7, "wall_seconds": 65.1, "terminal": null}
+{"sample": 8, "wall_seconds": 74.8, "terminal": null}
+{"sample": 9, "wall_seconds": 84.8, "terminal": null}
+{"sample": 10, "wall_seconds": 94.9, "terminal": null}
+{"sample": 11, "wall_seconds": 104.7, "terminal": null}
+{"sample": 12, "wall_seconds": 114.4, "terminal": null}
+{"sample": 13, "wall_seconds": 124.2, "terminal": null}
+{"sample": 14, "wall_seconds": 134.0, "terminal": null}
+{"sample": 15, "wall_seconds": 144.0, "terminal": null}
+{"sample": 16, "wall_seconds": 153.6, "terminal": null}
+{"sample": 17, "wall_seconds": 163.5, "terminal": null}
+{"sample": 18, "wall_seconds": 173.5, "terminal": null}
+{"sample": 19, "wall_seconds": 183.1, "terminal": null}
+{"sample": 20, "wall_seconds": 192.9, "terminal": null}
+{"stage": "earned equipment visit", "visit": 1, "purchases": 0, "wallet": 112}
+{"sample": 21, "wall_seconds": 256.8, "terminal": null}
+{"sample": 22, "wall_seconds": 266.0, "terminal": null}
+{"sample": 23, "wall_seconds": 275.5, "terminal": null}
+{"sample": 24, "wall_seconds": 285.1, "terminal": null}
+{"sample": 25, "wall_seconds": 294.8, "terminal": null}
+{"sample": 26, "wall_seconds": 304.3, "terminal": null}
+{"sample": 27, "wall_seconds": 314.1, "terminal": null}
+{"stage": "earned equipment visit", "visit": 2, "purchases": 1, "wallet": 188}
+{"sample": 28, "wall_seconds": 410.7, "terminal": null}
+{"sample": 29, "wall_seconds": 420.8, "terminal": null}
+{"sample": 30, "wall_seconds": 430.2, "terminal": null}
+{"sample": 31, "wall_seconds": 440.4, "terminal": null}
+{"sample": 32, "wall_seconds": 450.0, "terminal": null}
+{"sample": 33, "wall_seconds": 460.0, "terminal": null}
+{"sample": 34, "wall_seconds": 469.8, "terminal": null}
+{"stage": "earned equipment visit", "visit": 3, "purchases": 2, "wallet": 302}
+{"sample": 35, "wall_seconds": 565.0, "terminal": null}
+{"sample": 36, "wall_seconds": 574.7, "terminal": null}
+{"sample": 37, "wall_seconds": 584.2, "terminal": null}
+{"sample": 38, "wall_seconds": 593.7, "terminal": null}
+{"sample": 39, "wall_seconds": 603.3, "terminal": null}
+{"sample": 40, "wall_seconds": 612.6, "terminal": null}
+{"sample": 41, "wall_seconds": 622.5, "terminal": null}
+{"stage": "earned equipment visit", "visit": 4, "purchases": 3, "wallet": 281}
+{"sample": 42, "wall_seconds": 718.8, "terminal": null}
+{"sample": 43, "wall_seconds": 729.1, "terminal": null}
+{"sample": 44, "wall_seconds": 739.3, "terminal": null}
+{"sample": 45, "wall_seconds": 750.0, "terminal": null}
+{"sample": 46, "wall_seconds": 760.6, "terminal": null}
+{"sample": 47, "wall_seconds": 770.3, "terminal": null}
+Traceback (most recent call last):
+  File "/harness/campaign_equipment_runtime.py", line 464, in <module>
+    main(EquipmentPolicy)
+  File "/harness/campaign_runtime.py", line 268, in main
+    policy.observe(text_lines, time.monotonic() - started)
+  File "/harness/campaign_equipment_runtime.py", line 450, in observe
+    assert time.monotonic() < deadline, 'Market visit exceeded 90 seconds'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Market visit exceeded 90 seconds

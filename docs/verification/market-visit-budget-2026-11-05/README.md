@@ -1,0 +1,5 @@
+# Bounded UI visit calibration
+
+The b1d7dd1 public chapter-six route verified natural Wind Boots, Hardened Plate, Serrated Disc and Arc Lens purchases and selected inventory ownership. It recorded five real countdown resumes, including lastvisit825→816. The fifth visit closed panels at80.198wallseconds and completed the resume observation afterward, then the final ninety-second wall-bound assertion stopped the driver. This is not a game terminal or a failed purchase. No complete reward/quit/restart route is claimed.
+
+The policy now allows120seconds per visit and at most12visits. Its extra pause budget is derived as12×120=1440seconds; the1× campaign total is1500seconds nominal battle+300base allowance+1440bounded visits=3240seconds. All strict purchase, ownership, resumed-clock, terminal, seed, reward and normal-quit checks remain. Both bounds are reported. This is an automation I/O allowance, not a change to gameplay balance, simulation speed or a way to count timeout as victory. The52-test suite linked in the companion HUD-recruitment evidence passes; a new native whole-route run remains pending.

@@ -7,31 +7,27 @@ from campaign_runtime import read_progress
 from campaign_equipment_runtime import (TILE_LEFTS, PREVIEW_CROP, tile_name_text,
     screenshot_wallet, inspected_offer, choice_pending, crop_text, inventory_count,
     inventory_icons, inventory_open, selected_inventory_name, market_closed,
-    has_gear_rows, verify_deduction, screenshot_battle_seconds, wait_inventory_open)
+    has_gear_rows, verify_deduction, screenshot_battle_seconds, wait_panel_open, public_panel_state)
 
 MATERIALS = frozenset(('Arc Lens', 'Echo Core'))
 
 
-def visible_timer(shot, read_timer, read_rows, choose, deadline, now=time.monotonic):
-    """Handle a late automatic choice using the same public screenshot.
-
-    A missing timer alone never authorizes input. Only a positively recognized
-    choice heading permits one ordinal; other unreadable HUDs fail unchanged.
-    """
+def visible_hud_value(shot, read_value, read_rows, choose, deadline, now=time.monotonic):
+    """Classify same-frame public overlays before accepting any HUD metric."""
     while now() < deadline:
         image = shot()
-        try:
-            value = read_timer(image)
-        except AssertionError:
-            rows = read_rows(image)
-            if not choice_pending(rows):
-                raise
-            assert now() < deadline, 'Choice timer deadline exhausted before input'
+        state = public_panel_state(read_rows(image))
+        if state == 'terminal':
+            return None
+        assert now() < deadline, 'HUD observation deadline exhausted'
+        if state == 'choice':
             choose('1')
-        else:
-            assert now() < deadline, 'Timer read exceeded deadline'
-            return value
-    raise AssertionError('Recognized choices did not expose a timer within90seconds')
+            continue
+        assert state == 'battle', 'Unknown or covered public HUD'
+        value = read_value(image)
+        assert now() < deadline, 'HUD read exceeded deadline'
+        return value
+    raise AssertionError('Recognized choices did not expose a HUD within90seconds')
 
 
 def material_name(name):
@@ -116,17 +112,22 @@ def main():
             if found:return found
             time.sleep(.3)
         raise RuntimeError('Missing UI: '+text)
-    def timer_seconds():
-        def choice_rows(image):
+    def hud_value(reader, prefix):
+        def rows_for(image):
             rows=ocr_screenshot(image,env)
             if choice_pending(rows):
-                evidence=OUT/f'resume-choice-{len(report.get("resume_clock_choices",[]))}.png'
+                evidence=OUT/f'{prefix}-choice-{len(report.get("hud_choices",[]))}.png'
                 shutil.copy2(image,evidence)
-                report.setdefault('resume_clock_choices',[]).append(dict(screenshot=evidence.name,rows=rows))
+                report.setdefault('hud_choices',[]).append(dict(screenshot=evidence.name,rows=rows))
             return rows
-        value=visible_timer(lambda:shot('resume-timer-source.png'),
-            lambda image:screenshot_battle_seconds(image,env),choice_rows,key,
-            time.monotonic()+90)
+        value=visible_hud_value(lambda:shot(prefix+'-source.png'),
+            lambda image:reader(image,env),rows_for,key,time.monotonic()+90)
+        if value is None:
+            terminal(lines())
+            raise AssertionError('Observed terminal no longer readable; proof remains pending')
+        return value
+    def timer_seconds():
+        value=hud_value(screenshot_battle_seconds,'resume-timer')
         report.setdefault('resume_timer_reads',[]).append(value)
         return value
     def click(x,y):
@@ -186,8 +187,7 @@ def main():
         report.setdefault('hud_wallet_ocr',[]).append(dict(value=value,bounds=bounds,raw=raw))
         return value
     def read_speed():
-        drain_choices()
-        value = read_toolbar_speed(shot('speed-source.png'), env)
+        value = hud_value(read_toolbar_speed,'speed')
         report.setdefault('speed_ocr_values', []).append(value)
         return value
     def terminal(rows):
@@ -235,12 +235,7 @@ def main():
         unlock_deadline=time.monotonic()+900
         last_clock=None; last_progress=time.monotonic()
         while time.monotonic()<unlock_deadline:
-            native=shot('unlock-source.png')
-            try:
-                clock=screenshot_battle_seconds(native,env)
-            except AssertionError as error:
-                report.setdefault('unreadable_unlock_clock',[]).append(str(error))
-                terminal(lines());time.sleep(3);continue
+            clock=hud_value(screenshot_battle_seconds,'unlock')
             report.setdefault('unlock_timer_reads',[]).append(clock)
             print('stage: real unlock countdown '+str(clock),flush=True)
             now=time.monotonic()
@@ -262,9 +257,11 @@ def main():
             if actual != 1:
                 click(1045,44)
                 assert read_speed() == 1, 'Actual reset speed did not reach1x'
-            key('b')
-            rows=lines();terminal(rows)
-            assert has_gear_rows(rows), ('Expected unlocked market panel', rows)
+            rows=wait_panel_open(shot,env,key,time.monotonic()+90,
+                report.setdefault('panel_open_attempts',[]),f'market-{attempt:02}','market')
+            if rows is None:
+                terminal(lines())
+                raise AssertionError('Observed terminal no longer readable; proof remains pending')
             before=wallet();shot(f'market-{attempt:02}.png')
             offers=[]
             visit_end=time.monotonic()+120
@@ -285,9 +282,9 @@ def main():
                 verify_deduction(before,after,offer)
                 report['purchases'].append(dict(name=name,price=price,wallet_before=before,wallet_after=after,offer_ocr=offer))
                 shot('purchase.png');close_market_panel();drain_choices()
-                opened=wait_inventory_open(shot,env,key,time.monotonic()+90,
+                opened=wait_panel_open(shot,env,key,time.monotonic()+90,
                     report.setdefault('inventory_open_attempts',[]),
-                    f'material-{len(report["purchases"])}')
+                    f'material-{len(report["purchases"])}','inventory')
                 if opened is None:
                     terminal(lines())
                     raise AssertionError('Terminal inventory observation no longer readable; craft proof remains pending')

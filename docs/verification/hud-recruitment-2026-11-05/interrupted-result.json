@@ -1,0 +1,628 @@
+{
+  "package_version": {
+    "binary_sha256": "0a7fc512a81f6a7b69f8d51f1057447c0e8d214e0b748fb1e3a9b09b8fe1b57b",
+    "git_commit": "b1d7dd1a2f6f6e5a8301823e6ca489954d6bd09a",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "initial_progress": {
+    "unlocked": 5,
+    "currency": 575,
+    "cleared": "111100",
+    "upgrades": [
+      5,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "scope": "Packaged public X11 UI, earned kills, random market stock",
+  "purchases": [
+    {
+      "name": "Arc Lens",
+      "price": 180,
+      "wallet_before": 318,
+      "wallet_after": 138,
+      "offer_ocr": {
+        "name": "Arc Lens",
+        "price": 180,
+        "category": "Equipment",
+        "index": 1,
+        "tile_ocr": "Arc Lens",
+        "price_ocr": "180",
+        "preview_ocr": "ArcLens + Equipment",
+        "observed_name": "ArcLens"
+      }
+    }
+  ],
+  "crafting": "Pending same-run Arc Lens + Echo Core -> Astral Prism",
+  "acquired_materials": [
+    "Arc Lens"
+  ],
+  "speed_ocr_values": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "actual_speed": 1,
+  "unlock_timer_reads": [
+    1476,
+    1474,
+    1461,
+    1457,
+    1452,
+    1448,
+    1443,
+    1439,
+    1434,
+    1431,
+    1427,
+    1422,
+    1418,
+    1403,
+    1398,
+    1387,
+    1382,
+    1378,
+    1373,
+    1369,
+    1364,
+    1360,
+    1356,
+    1351,
+    1339,
+    1335,
+    1331,
+    1326,
+    1322,
+    1317
+  ],
+  "clock_progress": [
+    {
+      "stage": "unlock",
+      "remaining": 1476,
+      "stall_seconds": 0.0,
+      "wall": 194806.159389331
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1474,
+      "stall_seconds": 0.0,
+      "wall": 194810.595767711
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1461,
+      "stall_seconds": 0.0,
+      "wall": 194825.00705576
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1457,
+      "stall_seconds": 0.0,
+      "wall": 194829.463791941
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1452,
+      "stall_seconds": 0.0,
+      "wall": 194833.957447304
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1448,
+      "stall_seconds": 0.0,
+      "wall": 194838.449611439
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1443,
+      "stall_seconds": 0.0,
+      "wall": 194842.929213356
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1439,
+      "stall_seconds": 0.0,
+      "wall": 194847.404310605
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1434,
+      "stall_seconds": 0.0,
+      "wall": 194851.871981665
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1431,
+      "stall_seconds": 0.0,
+      "wall": 194856.307109028
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1427,
+      "stall_seconds": 0.0,
+      "wall": 194860.756681826
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1422,
+      "stall_seconds": 0.0,
+      "wall": 194865.304276918
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1418,
+      "stall_seconds": 0.0,
+      "wall": 194869.808322822
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1403,
+      "stall_seconds": 0.0,
+      "wall": 194885.163955095
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1398,
+      "stall_seconds": 0.0,
+      "wall": 194889.671914447
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1387,
+      "stall_seconds": 0.0,
+      "wall": 194902.598182
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1382,
+      "stall_seconds": 0.0,
+      "wall": 194907.203107672
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1378,
+      "stall_seconds": 0.0,
+      "wall": 194911.647359625
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1373,
+      "stall_seconds": 0.0,
+      "wall": 194916.11998122
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1369,
+      "stall_seconds": 0.0,
+      "wall": 194920.608774002
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1364,
+      "stall_seconds": 0.0,
+      "wall": 194925.097502287
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1360,
+      "stall_seconds": 0.0,
+      "wall": 194929.835291047
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1356,
+      "stall_seconds": 0.0,
+      "wall": 194934.259840136
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1351,
+      "stall_seconds": 0.0,
+      "wall": 194938.718112462
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1339,
+      "stall_seconds": 0.0,
+      "wall": 194952.037553944
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1335,
+      "stall_seconds": 0.0,
+      "wall": 194956.471826939
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1331,
+      "stall_seconds": 0.0,
+      "wall": 194960.936198697
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1326,
+      "stall_seconds": 0.0,
+      "wall": 194965.405460109
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1322,
+      "stall_seconds": 0.0,
+      "wall": 194969.895386139
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1317,
+      "stall_seconds": 0.0,
+      "wall": 194974.365344296
+    }
+  ],
+  "unreadable_unlock_clock": [
+    "Unreadable battle countdown: ''",
+    "Unreadable battle countdown: 'Pope'",
+    "Unreadable battle countdown: ''",
+    "Unreadable battle countdown: ''"
+  ],
+  "wallet_ocr": [
+    "200%: LV1 KILLS 0085 | 300%: LV1 KILLS 0085 | 600%: LV1 KILLS 0085",
+    "200%: LV1 KILLS 0122 | 300%: LV1 KILLS 0122 | 600%: LV1 KILLS 0122",
+    "200%: LV1 KILLS 0140 | 300%: LV1 KILLS 0140 | 600%: LV1 KILLS 0140",
+    "200%: LV1 KILLS 0169 | 300%: LV1 KILLS 0169 | 600%: LV1 KILLS 0169",
+    "200%: LV2 KILLS 0318 | 300%: LV2 KILLS 0318 | 600%: LV2 KILLS 0318",
+    "200%: LV2 KILLS 0318 | 300%: LV2 KILLS 0318 | 600%: LV2 KILLS 0318",
+    "200%: LV2 KILLS 0138 | 300%: LV2 KILLS 0138 | 600%: LV2 KILLS 0138"
+  ],
+  "market_inspections": [
+    {
+      "attempt": 0,
+      "wallet": 85,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 1,
+      "wallet": 122,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 2,
+      "wallet": 140,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 3,
+      "wallet": 169,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 4,
+      "wallet": 318,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    }
+  ],
+  "selected_material_ocr": {
+    "name": "ArcLens",
+    "price": 180,
+    "category": "Equipment",
+    "index": 1,
+    "tile_ocr": "Arc Lens",
+    "price_ocr": "180",
+    "preview_ocr": "ArcLens + Equipment"
+  },
+  "hud_wallet_ocr": [
+    {
+      "value": 318,
+      "bounds": [
+        169,
+        188
+      ],
+      "raw": "318"
+    },
+    {
+      "value": 138,
+      "bounds": [
+        169,
+        188
+      ],
+      "raw": "138"
+    }
+  ],
+  "pending_purchase": {
+    "name": "Arc Lens",
+    "price": 180,
+    "wallet_before": 318,
+    "offer_ocr": {
+      "name": "Arc Lens",
+      "price": 180,
+      "category": "Equipment",
+      "index": 1,
+      "tile_ocr": "Arc Lens",
+      "price_ocr": "180",
+      "preview_ocr": "ArcLens + Equipment",
+      "observed_name": "ArcLens"
+    }
+  },
+  "inventory_open_attempts": [
+    {
+      "visit": null,
+      "screenshot": "material-1-open-00.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1146,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "material-1-open-01.png",
+      "state": "inventory",
+      "requests": 1
+    }
+  ],
+  "inventory_inspections": [
+    {
+      "prefix": "material-1",
+      "count": 1,
+      "names": [
+        "arclens"
+      ]
+    }
+  ]
+}

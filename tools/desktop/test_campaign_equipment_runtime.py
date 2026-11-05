@@ -2,9 +2,10 @@ from campaign_equipment_runtime import screenshot_battle_seconds
 from smoke_runtime import normalized
 import shutil
 import unittest
+from contextlib import nullcontext
 from unittest.mock import patch, Mock
 from smoke_runtime import ocr_screenshot
-from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop, tile_name_text, inventory_view
+from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop, tile_name_text, public_panel_state, wait_panel_open
 from campaign_equipment_runtime import battle_seconds
 from pathlib import Path
 from campaign_equipment_runtime import (affordable_gear, market_wallet, inventory_count,
@@ -76,15 +77,15 @@ class EquipmentPolicyParsing(unittest.TestCase):
 
     def test_battle_level_anchor_is_exact_spatial_and_blocked_by_optional_modal(self):
         level=('LEVEL1 12/60XP',490,657,600,680)
-        self.assertEqual(inventory_view([level]),'battle')
+        self.assertEqual(public_panel_state([level]),'battle')
         for row in [('LEVEL1 12/60XP',100,300,300,320),
                     ('LEVEL1 12 XP',490,657,600,680),
                     ('LEVEL1 unknown/60XP',490,657,600,680),
                     ('Something LEVEL1 12/60XP',490,657,600,680)]:
-            self.assertEqual(inventory_view([row]),'unknown')
+            self.assertEqual(public_panel_state([row]),'unknown')
         encounter=('Choose an encounter',40,80,600,110)
-        self.assertEqual(inventory_view([level,encounter]),'unknown')
-        self.assertEqual(inventory_view([('LIVES3',23,87,70,98),encounter]),'unknown')
+        self.assertEqual(public_panel_state([level,encounter]),'unknown')
+        self.assertEqual(public_panel_state([('LIVES3',23,87,70,98),encounter]),'unknown')
 
     @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
                          'Native screenshot OCR requires Tesseract and ImageMagick')
@@ -92,15 +93,31 @@ class EquipmentPolicyParsing(unittest.TestCase):
         from smoke_runtime import read_toolbar_speed
         path=Path(__file__).resolve().parents[2]/'docs/verification/sword-package-2026-11-05/smoke/battle.png'
         rows=ocr_screenshot(path)
-        self.assertEqual(inventory_view(rows),'battle')
+        self.assertEqual(public_panel_state(rows),'battle')
         self.assertEqual(screenshot_battle_seconds(path,None),24*60+46)
         self.assertEqual(read_toolbar_speed(path,None),1)
+
+    def test_market_opener_uses_same_choice_clock_and_no_toggle_rules(self):
+        battle=[('LIVES2',23,87,70,98)]
+        market=[('BLACK MARKET',617,214,759,230)]
+        policy,ocr,clock=self.inventory_opener([
+            [('Level10 · Recruit a hero',40,80,500,110)],battle,battle,battle,market],[100,100,99])
+        with ocr,clock,patch('campaign_equipment_runtime.time.monotonic',return_value=0), \
+                patch('campaign_equipment_runtime.read_toolbar_speed',return_value=1), \
+                patch('campaign_equipment_runtime.screenshot_wallet',return_value=(89,'LV1 KILLS0089')):
+            self.assertEqual(wait_panel_open(policy.ui['shot'],None,policy.key,90,[],'test','market'),market)
+        self.assertEqual([call.args[0] for call in policy.key.call_args_list],['1','b','b'])
+        policy,ocr,clock=self.inventory_opener([market])
+        with ocr,clock,patch('campaign_equipment_runtime.time.monotonic',return_value=0), \
+                patch('campaign_equipment_runtime.screenshot_wallet',return_value=(89,'LV1 KILLS0089')):
+            self.assertEqual(wait_panel_open(policy.ui['shot'],None,policy.key,90,[],'test','market'),market)
+        policy.key.assert_not_called()
 
     def test_inventory_opener_never_toggles_an_open_panel(self):
         rows=[('EQUIPMENT · 2',213,108,400,130)]
         policy,ocr,clock=self.inventory_opener([rows])
         with ocr,clock,patch('campaign_equipment_runtime.time.monotonic',return_value=0):
-            self.assertEqual(policy.open_inventory('test',90),rows)
+            self.assertEqual(wait_panel_open(policy.ui['shot'],None,policy.key,90,policy.ui['report'].setdefault('equipment_open_attempts',[]),'test','inventory',2),rows)
         policy.key.assert_not_called()
 
     def test_inventory_opener_handles_choice_and_waits_for_clock_before_retry(self):
@@ -110,7 +127,7 @@ class EquipmentPolicyParsing(unittest.TestCase):
         policy,ocr,clock=self.inventory_opener([choice,battle,battle,battle,inventory],[1167,1167,1166])
         with ocr,clock,patch('campaign_equipment_runtime.time.monotonic',return_value=0), \
                 patch('campaign_equipment_runtime.read_toolbar_speed',return_value=1):
-            self.assertEqual(policy.open_inventory('test',90),inventory)
+            self.assertEqual(wait_panel_open(policy.ui['shot'],None,policy.key,90,policy.ui['report'].setdefault('equipment_open_attempts',[]),'test','inventory',2),inventory)
         self.assertEqual([call.args[0] for call in policy.key.call_args_list],['1','i','i'])
         records=policy.ui['report']['equipment_open_attempts']
         self.assertEqual([row.get('clock') for row in records],[None,1167,1167,1166,None])
@@ -122,27 +139,27 @@ class EquipmentPolicyParsing(unittest.TestCase):
                      [('BLACK MARKET',617,214,759,230),('LIVES2',23,87,70,98)]):
             policy,ocr,clock=self.inventory_opener([rows])
             with ocr,clock,patch('campaign_equipment_runtime.time.monotonic',return_value=0), self.assertRaises(AssertionError):
-                policy.open_inventory('test',90)
+                wait_panel_open(policy.ui['shot'],None,policy.key,90,policy.ui['report'].setdefault('equipment_open_attempts',[]),'test','inventory',2)
             policy.key.assert_not_called()
         policy,ocr,clock=self.inventory_opener([])
         with ocr,clock,patch('campaign_equipment_runtime.time.monotonic',return_value=90), self.assertRaises(AssertionError):
-            policy.open_inventory('test',90)
+            wait_panel_open(policy.ui['shot'],None,policy.key,90,policy.ui['report'].setdefault('equipment_open_attempts',[]),'test','inventory',2)
         policy.key.assert_not_called()
 
     def test_inventory_opener_limits_requests_and_defers_real_terminal(self):
-        self.assertEqual(inventory_view([('CHAPTER CLEARED',400,200,800,250),
+        self.assertEqual(public_panel_state([('CHAPTER CLEARED',400,200,800,250),
             ('EQUIPMENT · 2',213,108,400,130)]), 'terminal')
         battle=[('LIVES2',23,87,70,98)]
         policy,ocr,clock=self.inventory_opener([battle]*4,[10,9,8,7])
         with ocr,clock,patch('campaign_equipment_runtime.time.monotonic',return_value=0), \
                 patch('campaign_equipment_runtime.read_toolbar_speed',return_value=1),self.assertRaises(AssertionError):
-            policy.open_inventory('test',90)
+            wait_panel_open(policy.ui['shot'],None,policy.key,90,policy.ui['report'].setdefault('equipment_open_attempts',[]),'test','inventory',2)
         self.assertEqual([call.args[0] for call in policy.key.call_args_list],['i']*3)
         policy,ocr,clock=self.inventory_opener([[('NO LIVES REMAIN',400,300,800,350)]])
         with ocr,clock,patch('campaign_equipment_runtime.time.monotonic',return_value=0):
-            self.assertIsNone(policy.open_inventory('test',90))
+            self.assertIsNone(wait_panel_open(policy.ui['shot'],None,policy.key,90,policy.ui['report'].setdefault('equipment_open_attempts',[]),'test','inventory',2))
         policy.key.assert_not_called()
-        self.assertIn('equipment_inventory_terminal',policy.ui['report'])
+        self.assertEqual(policy.ui['report']['equipment_open_attempts'][-1]['state'],'terminal')
         self.assertNotIn('victory',policy.ui['report'])
 
     @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
@@ -150,9 +167,34 @@ class EquipmentPolicyParsing(unittest.TestCase):
     def test_actual_missed_inventory_open_is_live_battle_not_inventory_or_terminal(self):
         from smoke_runtime import read_toolbar_speed
         path=Path(__file__).resolve().parents[2]/'docs/verification/inventory-open-2026-11-05/missed-open-battle.png'
-        self.assertEqual(inventory_view(ocr_screenshot(path)), 'battle')
+        self.assertEqual(public_panel_state(ocr_screenshot(path)), 'battle')
         self.assertEqual(screenshot_battle_seconds(path,None),19*60+27)
         self.assertEqual(read_toolbar_speed(path,None),1)
+
+    def test_campaign_market_visit_skips_until_public_simulation_unlock(self):
+        for clock in (22*60+1,22*60):
+            policy=EquipmentPolicy.__new__(EquipmentPolicy)
+            policy.next_visit=185;policy.visits=0;policy.key=Mock()
+            policy.visible_countdown=Mock(return_value=clock)
+            policy.ui=dict(input_lock=nullcontext(),report={},shot=Mock(return_value=Path('unavailable.png')))
+            with patch('campaign_equipment_runtime.wait_panel_open') as opener:
+                policy.observe([],185)
+            opener.assert_not_called();policy.key.assert_not_called()
+            self.assertEqual(policy.next_visit,245)
+            self.assertEqual(policy.ui['report']['equipment_unlock_checks'],
+                             [dict(visit=1,countdown=clock,unlocked=False)])
+            policy.ui['shot'].assert_called_once_with('equipment-01-unavailable.png')
+        policy=EquipmentPolicy.__new__(EquipmentPolicy)
+        policy.next_visit=185;policy.visits=0;policy.key=Mock()
+        policy.visible_countdown=Mock(return_value=22*60-1)
+        policy.ui=dict(input_lock=nullcontext(),report={},shot=Mock(),env=None)
+        with patch('campaign_equipment_runtime.wait_panel_open',side_effect=RuntimeError('unlocked route reached')) as opener, \
+                self.assertRaisesRegex(RuntimeError,'unlocked route reached'):
+            policy.observe([],185)
+        opener.assert_called_once()
+        self.assertEqual(opener.call_args.args[-2], 'market')
+        self.assertTrue(policy.ui['report']['equipment_unlock_checks'][0]['unlocked'])
+        policy.key.assert_not_called()
 
     def test_current_header_and_ambiguous_wallet(self):
         self.assertEqual(market_wallet([('LV1 KILLS 99880',1120,205,1209,214)]),99880)

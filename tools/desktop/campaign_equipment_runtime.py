@@ -3,8 +3,9 @@
 
 Run only in isolated packaged Ubuntu/X11 container. Requires CAMPAIGN_STAGE=5,
 CAMPAIGN_CONTINUE=1, CAMPAIGN_SPEED=1 and PACKAGE_COMMIT. No movement claim,
-stock refresh, save mutation, or resource injection. At most 12 market visits,
-a 60-second cooldown after completed visits, each bounded to 90 seconds; total battle bound 2400 seconds.
+stock refresh, save mutation, or resource injection. Visits have finite shared
+inspection/resume budgets and a 60-second cooldown after completion; the report
+records the visit, cumulative pause, and total battle bounds.
 """
 import json
 import os
@@ -198,14 +199,16 @@ def choice_pending(rows):
                     'recruitahero', 'chooseanevolution', 'chooseabondtoreplace')) for text, *_ in rows)
 
 
-def inventory_view(rows):
+def public_panel_state(rows):
     if any(find_text(rows, title) for title in ('NO LIVES REMAIN', 'CHAPTER CLEARED')):
         return 'terminal'
-    if inventory_open(rows):
-        return 'inventory'
     if choice_pending(rows):
         return 'choice'
-    if has_gear_rows(rows) or any(70 <= y < 650 and normalized(text) in
+    if inventory_open(rows):
+        return 'inventory'
+    if has_gear_rows(rows):
+        return 'market'
+    if any(70 <= y < 650 and normalized(text) in
             ('attributes', 'legacytraining', 'expeditions', 'settings', 'paused', 'chooseanencounter')
             for text, _, y, *_ in rows):
         return 'unknown'
@@ -217,38 +220,46 @@ def inventory_view(rows):
     return 'unknown'
 
 
-def wait_inventory_open(shot, env, send, deadline, records, prefix, visit=None):
+def wait_panel_open(shot, env, send, deadline, records, prefix, target_panel, visit=None):
+    assert target_panel in ('inventory', 'market')
     requests, previous_clock = 0, None
     while time.monotonic() < deadline:
         image = shot(prefix + f'-open-{len(records):02}.png')
         rows = ocr_screenshot(image, env)
-        state = inventory_view(rows)
+        state = public_panel_state(rows)
         record = dict(visit=visit, screenshot=image.name, state=state, requests=requests)
         records.append(record)
-        if state == 'inventory':
-            inventory_count(rows)  # An ambiguous visible header never permits another I.
+        if state == target_panel:
+            if state == 'inventory':
+                inventory_count(rows)
+            else:
+                screenshot_wallet(image, env)
             return rows
         if state == 'terminal':
             return None  # Outer campaign loop owns the actual result/reward flow.
-        assert time.monotonic() < deadline, 'Inventory open observation exceeded visit budget'
+        assert time.monotonic() < deadline, 'Panel open observation exceeded visit budget'
         if state == 'choice':
             send('1')
             continue
-        assert state == 'battle', f'Unknown public screen while opening inventory: {rows}'
+        assert state == 'battle', f'Unexpected public screen while opening {target_panel}: {rows}'
         clock = screenshot_battle_seconds(image, env)
-        assert read_toolbar_speed(image, env) == 1, 'Inventory route requires actual1x'
+        assert read_toolbar_speed(image, env) == 1, 'Panel route requires actual1x'
         record['clock'] = clock
-        assert time.monotonic() < deadline, 'Inventory open OCR exceeded visit budget'
+        assert time.monotonic() < deadline, 'Panel open OCR exceeded visit budget'
         if previous_clock is None or clock < previous_clock:
-            assert requests < 3, 'Inventory failed to open after three public requests'
-            send('i')
+            assert requests < 3, f'{target_panel} failed to open after three public requests'
+            send({'inventory': 'i', 'market': 'b'}[target_panel])
             requests += 1
             previous_clock = clock
-            record['input'] = 'i'
-    raise AssertionError('Inventory did not open within remaining visit budget')
+            record['input'] = {'inventory': 'i', 'market': 'b'}[target_panel]
+    raise AssertionError(f'{target_panel} did not open within remaining visit budget')
 
 
 class EquipmentPolicy:
+    visit_limit = 12
+    visit_budget_seconds = 120
+    pause_budget_seconds = visit_limit * visit_budget_seconds
+
     def __init__(self, ui):
         assert os.environ.get('CAMPAIGN_STAGE') == '5'
         assert os.environ.get('CAMPAIGN_CONTINUE') == '1'
@@ -262,7 +273,8 @@ class EquipmentPolicy:
         ui['report'].update(scope='Packaged public UI; stationary first-card policy plus earned equipment',
             strategy='Stationary keys 1/g/f; cheapest affordable natural gear; no refresh or movement',
             package_version=version, equipment_purchases=self.purchases,
-            equipment_visit_limit=12, equipment_visit_timeout_seconds=90,
+            equipment_visit_limit=self.visit_limit, equipment_visit_timeout_seconds=self.visit_budget_seconds,
+            equipment_pause_budget_seconds=self.pause_budget_seconds,
             equipment_cooldown_after_completion_seconds=60)
 
     def key(self, key):
@@ -324,38 +336,26 @@ class EquipmentPolicy:
                 self.key('1')
         raise AssertionError('Choice queue did not expose a battle countdown within visit budget')
 
-    def open_inventory(self, prefix, deadline):
-        records = self.ui['report'].setdefault('equipment_open_attempts', [])
-        rows = wait_inventory_open(self.ui['shot'], self.ui['env'], self.key,
-                                   deadline, records, prefix, self.visits)
-        if rows is None:
-            self.ui['report']['equipment_inventory_terminal'] = records[-1]
-        return rows
-
     def observe(self, rows, elapsed):
-        if elapsed < self.next_visit or self.visits >= 12:
+        if elapsed < self.next_visit or self.visits >= self.visit_limit:
             return
         self.visits += 1
         self.next_visit = elapsed + 60
         visit_started = time.monotonic()
-        deadline = visit_started + 90
+        deadline = visit_started + self.visit_budget_seconds
         prefix = f'equipment-{self.visits:02}'
         with self.ui['input_lock']:
-            # Drain only already queued choices; never draw or refresh here.
-            for _ in range(20):
-                rows = self.ui['lines']()
-                if choice_pending(rows):
-                    self.key('1')
-                else:
-                    break
-                assert time.monotonic() < deadline, 'Existing card queue exceeded market visit budget'
-            assert not choice_pending(self.ui['lines']()), 'Existing choice queue not drained after 20 selections'
-            self.key('b')
-            rows = self.ui['lines']()
-            self.ui['report'].setdefault('equipment_visit_rows', []).append(dict(visit=self.visits, rows=rows))
-            if not has_gear_rows(rows):
-                assert market_wallet(rows) is None, 'Market visibility ambiguous'
+            clock = self.visible_countdown(prefix + '-unlock-clock', deadline)
+            self.ui['report'].setdefault('equipment_unlock_checks', []).append(
+                dict(visit=self.visits, countdown=clock, unlocked=clock < 22 * 60))
+            if clock >= 22 * 60:
                 self.ui['shot'](prefix + '-unavailable.png')
+                return
+            records = self.ui['report'].setdefault('equipment_open_attempts', [])
+            rows = wait_panel_open(self.ui['shot'], self.ui['env'], self.key,
+                                   deadline, records, prefix + '-market', 'market', self.visits)
+            if rows is None:
+                self.ui['report']['equipment_panel_terminal'] = records[-1]
                 return
             market = self.ui['shot'](prefix + '-market.png')
             wallet, wallet_raw = screenshot_wallet(market, self.ui['env'])
@@ -396,8 +396,10 @@ class EquipmentPolicy:
                 self.ui['shot'](prefix + '-close-failure.png')
                 raise AssertionError('Market failed to close within visit budget')
             if offers:
-                inventory = self.open_inventory(prefix, deadline)
+                inventory = wait_panel_open(self.ui['shot'], self.ui['env'], self.key,
+                    deadline, records, prefix + '-inventory', 'inventory', self.visits)
                 if inventory is None:
+                    self.ui['report']['equipment_panel_terminal'] = records[-1]
                     return
                 count = inventory_count(inventory)
                 details = []
@@ -447,13 +449,14 @@ class EquipmentPolicy:
                     break
             else:
                 raise AssertionError('Battle countdown did not resume after market/equipment closure')
-            assert time.monotonic() < deadline, 'Market visit exceeded 90 seconds'
+            assert time.monotonic() < deadline, f'Market visit exceeded {self.visit_budget_seconds} seconds'
             self.ui['report']['equipment_visit_timings'].append(
                 dict(visit=self.visits, phase='resume verified', elapsed=time.monotonic()-visit_started))
             # Leave a full minute of battle after a slow software-render visit.
             self.next_visit = elapsed + (time.monotonic()-visit_started) + 60
             print(json.dumps(dict(stage='earned equipment visit', visit=self.visits,
-                                  purchases=len(self.purchases), wallet=wallet)), flush=True)
+                                  purchases=len(self.purchases), wallet=wallet,
+                                  visit_budget_seconds=self.visit_budget_seconds)), flush=True)
 
     def verify(self):
         assert self.purchases, 'No earned equipment purchased; active equipment route unproven'

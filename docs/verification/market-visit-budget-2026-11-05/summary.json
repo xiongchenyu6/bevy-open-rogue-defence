@@ -1,0 +1,85 @@
+{
+  "package_commit": "b1d7dd1a2f6f6e5a8301823e6ca489954d6bd09a",
+  "purchases_verified": [
+    "Wind Boots",
+    "Hardened Plate",
+    "Serrated Disc",
+    "ArcLens"
+  ],
+  "visit_timings": [
+    {
+      "visit": 1,
+      "phase": "panels closed",
+      "elapsed": 44.53059915298945
+    },
+    {
+      "visit": 1,
+      "phase": "resume verified",
+      "elapsed": 54.36625551999896
+    },
+    {
+      "visit": 2,
+      "phase": "panels closed",
+      "elapsed": 76.68852104799589
+    },
+    {
+      "visit": 2,
+      "phase": "resume verified",
+      "elapsed": 86.75622042099712
+    },
+    {
+      "visit": 3,
+      "phase": "panels closed",
+      "elapsed": 75.64382854901487
+    },
+    {
+      "visit": 3,
+      "phase": "resume verified",
+      "elapsed": 85.7001421530149
+    },
+    {
+      "visit": 4,
+      "phase": "panels closed",
+      "elapsed": 76.21844870698988
+    },
+    {
+      "visit": 4,
+      "phase": "resume verified",
+      "elapsed": 86.31938191998051
+    },
+    {
+      "visit": 5,
+      "phase": "panels closed",
+      "elapsed": 80.19778623100137
+    }
+  ],
+  "resume_proofs": [
+    {
+      "visit": 1,
+      "before": 1262,
+      "after": 1254
+    },
+    {
+      "visit": 2,
+      "before": 1151,
+      "after": 1143
+    },
+    {
+      "visit": 3,
+      "before": 1040,
+      "after": 1031
+    },
+    {
+      "visit": 4,
+      "before": 929,
+      "after": 921
+    },
+    {
+      "visit": 5,
+      "before": 825,
+      "after": 816
+    }
+  ],
+  "game_terminal": false,
+  "interruption": "Final visit90second automation bound expired after actual resume proof; no game win/loss"
+}

@@ -6,7 +6,7 @@ from unittest.mock import Mock, patch
 from pathlib import Path
 from smoke_runtime import normalized
 from smoke_runtime import ocr_screenshot
-from forge_runtime import natural_material, verify_recipe_selection, verify_crafted_inventory, poll_preview, offer_identity, visible_timer
+from forge_runtime import natural_material, verify_recipe_selection, verify_crafted_inventory, poll_preview, offer_identity, visible_hud_value
 from campaign_equipment_runtime import (crop_text, screenshot_wallet, inspected_offer,
     tile_name_crop, PREVIEW_CROP, TILE_LEFTS, selected_inventory_name, choice_pending, screenshot_battle_seconds)
 
@@ -66,44 +66,65 @@ class ForgePolicyTests(unittest.TestCase):
                 patch('campaign_equipment_runtime.screenshot_battle_seconds',side_effect=[1167,1167,1166]), \
                 patch('campaign_equipment_runtime.read_toolbar_speed',return_value=1), \
                 patch('campaign_equipment_runtime.time.monotonic',return_value=0):
-            result=forge_runtime.wait_inventory_open(lambda name:Path(name),None,send,90,records,'forge-owned')
+            result=forge_runtime.wait_panel_open(lambda name:Path(name),None,send,90,records,'forge-owned','inventory')
         self.assertEqual(result,owned)
         self.assertEqual([call.args[0] for call in send.call_args_list],['i','i'])
         self.assertEqual([record['state'] for record in records],['battle','battle','battle','inventory'])
         self.assertNotIn('input',records[-1])
 
-    def test_visible_timer_recovers_late_recruitment_before_each_read(self):
+    def test_visible_hud_value_recovers_late_recruitment_before_each_read(self):
         # A modal appears after an earlier drain returned. Each timer read
         # independently observes its own screenshot and recognized heading.
         shot=Mock(side_effect=['recruit20','hud1','recruit40','hud2'])
-        timer=Mock(side_effect=[AssertionError('covered'),100,AssertionError('covered'),97])
-        rows=Mock(return_value=[('Level 20 · Recruit a hero',300,200,800,230)])
+        timer=Mock(side_effect=[100,97])
+        rows=Mock(side_effect=[[('Level 20 · Recruit a hero',300,200,800,230)],[('LIVES2',23,87,70,98)],[('Level 40 · Recruit a hero',300,200,800,230)],[('LIVES2',23,87,70,98)]])
         choose=Mock()
-        self.assertEqual(visible_timer(shot,timer,rows,choose,90,now=lambda:0),100)
-        self.assertEqual(visible_timer(shot,timer,rows,choose,90,now=lambda:0),97)
+        self.assertEqual(visible_hud_value(shot,timer,rows,choose,90,now=lambda:0),100)
+        self.assertEqual(visible_hud_value(shot,timer,rows,choose,90,now=lambda:0),97)
         self.assertEqual(choose.call_args_list,[unittest.mock.call('1'),unittest.mock.call('1')])
-        self.assertEqual(rows.call_args_list,[unittest.mock.call('recruit20'),unittest.mock.call('recruit40')])
+        self.assertEqual(rows.call_args_list,[unittest.mock.call('recruit20'),unittest.mock.call('hud1'),unittest.mock.call('recruit40'),unittest.mock.call('hud2')])
 
-    def test_visible_timer_unknown_hud_fails_without_input(self):
+    def test_visible_hud_value_unknown_hud_fails_without_input(self):
         choose=Mock()
-        with self.assertRaisesRegex(AssertionError,'unreadable'):
-            visible_timer(lambda:'unknown',Mock(side_effect=AssertionError('unreadable')),
+        with self.assertRaisesRegex(AssertionError,'Unknown'):
+            visible_hud_value(lambda:'unknown',Mock(side_effect=AssertionError('unreadable')),
                 lambda image:[('GATE 1000/1000',20,20,150,40)],choose,90,now=lambda:0)
         choose.assert_not_called()
 
-    def test_visible_timer_deadline_bounds_covered_and_success_reads(self):
+    def test_visible_hud_value_terminal_returns_pending_without_metric_or_keys(self):
+        metric=Mock(return_value=1);send=Mock()
+        result=visible_hud_value(lambda:'terminal',metric,
+            lambda image:[('NO LIVES REMAIN',400,300,800,340)],send,90,now=lambda:0)
+        self.assertIsNone(result)
+        metric.assert_not_called()
+        send.assert_not_called()
+
+    def test_visible_hud_value_deadline_bounds_covered_and_success_reads(self):
         for timer_result in (AssertionError('covered'),100):
             choose=Mock();ticks=iter([89,90])
             timer=Mock(side_effect=timer_result) if isinstance(timer_result,Exception) else Mock(return_value=timer_result)
             with self.assertRaises(AssertionError):
-                visible_timer(lambda:'screen',timer,
+                visible_hud_value(lambda:'screen',timer,
                     lambda image:[('Level 20 · Recruit a hero',300,200,800,230)],
                     choose,90,now=lambda:next(ticks))
             choose.assert_not_called()
         shot=Mock()
         with self.assertRaises(AssertionError):
-            visible_timer(shot,Mock(),Mock(),Mock(),90,now=lambda:90)
+            visible_hud_value(shot,Mock(),Mock(),Mock(),90,now=lambda:90)
         shot.assert_not_called()
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),'Screenshot OCR tools unavailable')
+    def test_actual_level10_masks_speed_before_any_metric_is_accepted(self):
+        path=Path(__file__).resolve().parents[2]/'docs/verification/hud-recruitment-2026-11-05/level10-over-speed.png'
+        rows=ocr_screenshot(path)
+        self.assertEqual(forge_runtime.public_panel_state(rows),'choice')
+        for value in (1,1167):
+            metric=Mock(return_value=value);send=Mock()
+            result=visible_hud_value(Mock(side_effect=[path,'battle']),metric,
+                lambda image:rows if image==path else [('LIVES2',23,87,70,98)],send,90,now=lambda:0)
+            self.assertEqual(result,value)
+            metric.assert_called_once_with('battle')
+            send.assert_called_once_with('1')
 
     @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),'Screenshot OCR tools unavailable')
     def test_actual_level20_recruitment_covers_timer_and_permits_only_ordinal(self):
@@ -118,7 +139,7 @@ class ForgePolicyTests(unittest.TestCase):
         def timer(image):
             return 100 if image=='exposed' else screenshot_battle_seconds(image,None)
         choose=Mock()
-        self.assertEqual(visible_timer(shot,timer,lambda image:rows,choose,90,now=lambda:0),100)
+        self.assertEqual(visible_hud_value(shot,timer,lambda image:rows if image==path else [('LIVES2',23,87,70,98)],choose,90,now=lambda:0),100)
         choose.assert_called_once_with('1')
 
     @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),'Screenshot OCR tools unavailable')
