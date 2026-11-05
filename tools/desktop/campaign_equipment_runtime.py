@@ -332,28 +332,43 @@ def select_visible_inventory_item(shot, call, window, env, index, deadline, obse
 
 def close_visible_inventory(read_rows, mouse_down, mouse_up, deadline, observations,
                             now=time.monotonic, pause=time.sleep):
-    """One visible Close press; release even if observation or deadline fails."""
-    rows = read_rows()
-    assert inventory_open(rows), 'Inventory must be observed before closing'
-    inventory_count(rows)
-    target = find_text(rows, 'Close')
-    assert target is not None, 'Visible inventory Close missing'
-    _, left, top, right, bottom = target
-    assert 1000 <= left < right <= 1080 and 90 <= top < bottom <= 145, \
-        ('Close outside actual inventory header', target)
-    assert now() < deadline, 'Inventory close deadline expired before input'
+    """One Close press: overall operation deadline plus ten seconds held."""
+    started = now()
+    observations.append(dict(phase='operation_start', wall=started,
+                             operation_deadline=deadline, hold_budget_seconds=10))
     pressed = False
+    hold_started = None
     try:
+        assert started < deadline, 'Inventory close operation deadline expired before header'
+        rows = read_rows()
+        header_at = now()
+        observations.append(dict(phase='header_observed', wall=header_at,
+                                 elapsed=header_at-started))
+        assert header_at < deadline, 'Inventory close operation deadline expired during header'
+        assert inventory_open(rows), 'Inventory must be observed before closing'
+        inventory_count(rows)
+        target = find_text(rows, 'Close')
+        assert target is not None, 'Visible inventory Close missing'
+        _, left, top, right, bottom = target
+        assert 1000 <= left < right <= 1080 and 90 <= top < bottom <= 145, \
+            ('Close outside actual inventory header', target)
+        hold_started = now()
+        hold_deadline = min(deadline, hold_started+10)
+        assert hold_started < hold_deadline, 'Inventory close operation deadline expired before input'
         # Set before dispatch so a failing OS command still attempts release.
         pressed = True
         mouse_down((left + right) // 2, (top + bottom) // 2)
-        observations.append(dict(input='mouseDown', target=target, wall=now()))
-        while now() < deadline:
+        observations.append(dict(input='mouseDown', target=target, wall=hold_started,
+                                 dispatch_finished=now(), hold_deadline=hold_deadline,
+                                 operation_deadline=deadline))
+        while now() < hold_deadline:
             rows = read_rows()
-            assert now() < deadline, 'Inventory close observation exceeded deadline'
+            observed_at = now()
             opened = inventory_open(rows)
             close = find_text(rows, 'Close')
-            observations.append(dict(inventory_open=opened, close=close))
+            observations.append(dict(phase='held_observation', wall=observed_at,
+                held_seconds=observed_at-hold_started, inventory_open=opened, close=close))
+            assert observed_at < hold_deadline, 'Inventory close held observation exceeded deadline'
             if not opened and not close:
                 return
             pause(.1)
@@ -361,7 +376,11 @@ def close_visible_inventory(read_rows, mouse_down, mouse_up, deadline, observati
     finally:
         if pressed:
             mouse_up()
-            observations.append(dict(input='mouseUp', wall=now()))
+            released_at = now()
+            observations.append(dict(input='mouseUp', wall=released_at,
+                                     held_seconds=released_at-hold_started))
+        ended = now()
+        observations.append(dict(phase='operation_end', wall=ended, elapsed=ended-started))
 
 
 def inventory_count(rows):
@@ -493,7 +512,7 @@ def wait_panel_open(shot, env, send, deadline, records, prefix, target_panel, vi
 
 class EquipmentPolicy:
     visit_limit = 12
-    visit_base_budget_seconds = 120
+    visit_base_budget_seconds = 140
     per_owned_item_budget_seconds = 20
     pause_budget_seconds = (visit_limit * visit_base_budget_seconds
                             + per_owned_item_budget_seconds * sum(range(1, visit_limit + 1)))
@@ -680,7 +699,7 @@ class EquipmentPolicy:
                     self.ui['call'](['xdotool','mousedown','1'])
                 close_visible_inventory(close_rows, close_down,
                     lambda: self.ui['call'](['xdotool','mouseup','1']),
-                    min(deadline, time.monotonic()+10), close_observations)
+                    deadline, close_observations)
                 closed_inventory = self.ui['lines']()
                 assert not inventory_open(closed_inventory) and not find_text(closed_inventory, 'Close'), \
                     'Equipment did not close'

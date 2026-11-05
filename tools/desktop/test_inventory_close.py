@@ -21,10 +21,33 @@ class InventoryCloseTests(unittest.TestCase):
                 close_visible_inventory(lambda:rows,down,up,10,[],now=lambda:0)
             down.assert_not_called();up.assert_not_called()
     def test_timeout_keeps_assertion_and_releases_once(self):
-        down,up=Mock(),Mock();clock=iter([0,0,0,0,11])
+        down,up=Mock(),Mock();clock=[0]
+        def pause(_):clock[0]+=11
         with self.assertRaisesRegex(AssertionError,'did not close'):
-            close_visible_inventory(lambda:OPEN,down,up,10,[],now=lambda:next(clock,11),pause=lambda _:None)
+            close_visible_inventory(lambda:OPEN,down,up,20,[],now=lambda:clock[0],pause=pause)
         down.assert_called_once();up.assert_called_once()
+    def test_header_time_does_not_consume_ten_second_hold_budget(self):
+        down,up=Mock(),Mock();clock=[0];reads=[0];records=[]
+        def read():
+            reads[0]+=1
+            clock[0]+=8 if reads[0]==1 else 6
+            return OPEN if reads[0]==1 else BATTLE
+        close_visible_inventory(read,down,up,20,records,now=lambda:clock[0])
+        press=next(r for r in records if r.get('input')=='mouseDown')
+        release=next(r for r in records if r.get('input')=='mouseUp')
+        self.assertEqual((press['wall'],press['hold_deadline'],press['operation_deadline']),(8,18,20))
+        self.assertEqual(release['held_seconds'],6)
+        self.assertEqual(records[-1]['elapsed'],14)
+    def test_overall_deadline_caps_hold_and_expired_header_sends_nothing(self):
+        for budget in (5,10):
+            down,up=Mock(),Mock();clock=[0];reads=[0]
+            def read():
+                reads[0]+=1;clock[0]+=8 if reads[0]==1 else 3
+                return OPEN if reads[0]==1 else BATTLE
+            with self.assertRaisesRegex(AssertionError,'deadline'):
+                close_visible_inventory(read,down,up,budget,[],now=lambda:clock[0])
+            if budget==5:down.assert_not_called();up.assert_not_called()
+            else:down.assert_called_once();up.assert_called_once()
     def test_read_failure_and_dispatch_failure_release(self):
         for read,down in [(Mock(side_effect=[OPEN,RuntimeError('read')]),Mock()),
                           (Mock(return_value=OPEN),Mock(side_effect=RuntimeError('dispatch')))]:

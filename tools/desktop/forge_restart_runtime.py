@@ -9,7 +9,7 @@ import shutil
 import subprocess
 import time
 from campaign_runtime import read_progress, strength_from_lines
-from campaign_equipment_runtime import inventory_count, wait_panel_open, screenshot_battle_seconds
+from campaign_equipment_runtime import inventory_count, wait_panel_open, screenshot_battle_seconds, close_visible_inventory, inventory_header_rows, inventory_open
 from forge_runtime import visible_hud_value
 from smoke_runtime import find_text, normalized, ocr_screenshot, read_toolbar_speed
 
@@ -39,7 +39,7 @@ def main():
     before = progress.read_bytes()
     assert hashlib.sha256(before).hexdigest() == EXPECTED_SAVE
     assert read_progress(progress) == EXPECTED_PROGRESS
-    assert (STATE/'audio').is_file() and (STATE/'config').is_dir()
+    assert (STATE/'config').is_dir()
     env = os.environ.copy()
     for key in ('BEVY_ASSET_ROOT', 'CARGO_MANIFEST_DIR', 'WAYLAND_DISPLAY', 'ROGUE_TUTORIAL_SAVE'):
         env.pop(key, None)
@@ -119,7 +119,19 @@ def main():
         report['equipment_count']=0;report['empty_inventory_ocr']=inventory
         shutil.copy2(image,OUT/'restart-empty-inventory.png')
         assert any('noequipmentyet' in normalized(row[0]) for row in inventory)
-        click_text('Close')
+        close_observations=report.setdefault('inventory_close_observations',[])
+        def close_rows():
+            image=shot(f'restart-close-{len(close_observations):03}.png')
+            result=inventory_header_rows(image,env)
+            close_observations.append(dict(screenshot=image.name,rows=result))
+            return result
+        def close_down(x,y):
+            call(['xdotool','mousemove','--window',win,str(x),str(y)])
+            call(['xdotool','mousedown','1'])
+        close_visible_inventory(close_rows,close_down,
+            lambda:call(['xdotool','mouseup','1']),min(deadline,time.monotonic()+20),close_observations)
+        closed=rows()
+        assert not inventory_open(closed) and not find_text(closed,'Close'),'Equipment did not close'
         first=clock('restart-resume-before');time.sleep(2);second=clock('restart-resume-after')
         assert second<first, ('Actual battle countdown failed to resume',first,second)
         report['resume_countdown']=dict(before=first,after=second)

@@ -156,7 +156,7 @@ def main():
             call(['xdotool','mousemove','--window',win,str(x),str(y)])
             call(['xdotool','mousedown','1'])
         close_visible_inventory(observed_rows, down,
-            lambda: call(['xdotool','mouseup','1']), time.monotonic()+10, observations)
+            lambda: call(['xdotool','mouseup','1']), time.monotonic()+20, observations)
         rows = lines()
         assert not inventory_open(rows) and not find_text(rows, 'Close'), 'Equipment did not close'
     def inspect_inventory(prefix):
