@@ -205,6 +205,28 @@ class EquipmentPolicyParsing(unittest.TestCase):
         self.assertEqual(public_panel_state(ocr_screenshot(control)),'battle')
         self.assertEqual(screenshot_battle_seconds(control,None),21*60+51)
 
+    def test_duplicate_x_hint_only_invokes_numeric_pixels_after_modal_guards(self):
+        hint=[('LEVEL 11 1/240XxP',487,667,592,679)]
+        self.assertEqual(public_panel_state(hint),'unknown')
+        with patch('campaign_equipment_runtime.battle_level_pixels',side_effect=AssertionError('not numeric')):
+            with self.assertRaises(AssertionError):public_panel_state(hint,Path('screen.png'))
+        with patch('campaign_equipment_runtime.battle_level_pixels') as pixels:
+            self.assertEqual(public_panel_state(hint+[('Choose an encounter',40,80,600,110)],Path('screen.png')),'unknown')
+            self.assertEqual(public_panel_state(hint+[('Level20 · Recruit a hero',40,80,600,110)],Path('screen.png')),'choice')
+            pixels.assert_not_called()
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_actual_duplicate_x_level11_caption_requires_exact_numeric_pixels(self):
+        from smoke_runtime import read_toolbar_speed
+        path=Path(__file__).resolve().parents[2]/'docs/verification/battle-level-xp-2026-11-05/level11-battle.png'
+        rows=ocr_screenshot(path)
+        self.assertEqual(public_panel_state(rows),'unknown')
+        self.assertEqual(public_panel_state(rows,path,None),'battle')
+        self.assertEqual(battle_level_pixels(path,None),'LEVEL111/240XP')
+        self.assertEqual(screenshot_battle_seconds(path,None),17*60+44)
+        self.assertEqual(read_toolbar_speed(path,None),1)
+
     def test_inventory_opener_never_toggles_an_open_panel(self):
         rows=[('EQUIPMENT · 2',213,108,400,130)]
         policy,ocr,clock=self.inventory_opener([rows])

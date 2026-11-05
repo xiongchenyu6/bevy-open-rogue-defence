@@ -1,0 +1,5 @@
+raw [('LEVELI1 17240XP', 487, 667, 592, 680), ('LEVEL11 1/240 xP & 5 站 se shite 令 加', 487, 656, 1237, 691), ('LEVEL 11 1/240XxP', 487, 667, 592, 679)]
+rawstate unknown
+numeric LEVEL111/240XP
+pixelstate battle
+clock 1064 speed 1

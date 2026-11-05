@@ -264,7 +264,7 @@ def public_panel_state(rows, image=None, env=None):
     # A spatial LEVEL/numeric/XP candidate only requests fresh pixel validation;
     # missing separators or an S glyph never become guessed numeric values.
     if image is not None and any(450 <= x < 650 and 640 <= y < 695
-            and re.fullmatch(r'LEVEL\s*(?:\d+|S)(?:\s+\d+)?(?:\s*/\s*\d+)?\s*XP', text.strip(), re.I)
+            and re.fullmatch(r'LEVEL\s*(?:\d+|S)(?:\s+\d+)?(?:\s*/\s*\d+)?\s*X+P', text.strip(), re.I)
             for text, x, y, *_ in rows):
         battle_level_pixels(image, env)
         return 'battle'

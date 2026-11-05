@@ -1,0 +1,1957 @@
+{
+  "package_version": {
+    "binary_sha256": "a16998fe43d9fa7c830c3614aaae9e61b982579fc718195fea232c312c77a1de",
+    "git_commit": "040ce5c1084634f3e8d886b65d1f5c2c467997af",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "initial_progress": {
+    "unlocked": 5,
+    "currency": 575,
+    "cleared": "111100",
+    "upgrades": [
+      5,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "scope": "Packaged public X11 UI, earned kills, random market stock",
+  "purchases": [
+    {
+      "name": "Arc Lens",
+      "price": 180,
+      "wallet_before": 317,
+      "wallet_after": 137,
+      "offer_ocr": {
+        "name": "Arc Lens",
+        "price": 180,
+        "category": "Equipment",
+        "index": 1,
+        "tile_ocr": "Arc Lens",
+        "price_ocr": "180",
+        "preview_ocr": "ArcLens + Equipment",
+        "observed_name": "ArcLens"
+      }
+    }
+  ],
+  "crafting": "Pending same-run Arc Lens + Echo Core -> Astral Prism",
+  "acquired_materials": [
+    "Arc Lens"
+  ],
+  "speed_ocr_values": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "actual_speed": 1,
+  "unlock_timer_reads": [
+    1479,
+    1471,
+    1463,
+    1453,
+    1443,
+    1428,
+    1419,
+    1409,
+    1399,
+    1390,
+    1380,
+    1370,
+    1360,
+    1345,
+    1335,
+    1325,
+    1315
+  ],
+  "clock_progress": [
+    {
+      "stage": "unlock",
+      "remaining": 1479,
+      "stall_seconds": 0.0,
+      "wall": 200744.908759053
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1471,
+      "stall_seconds": 0.0,
+      "wall": 200754.695864701
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1463,
+      "stall_seconds": 0.0,
+      "wall": 200764.481683179
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1453,
+      "stall_seconds": 0.0,
+      "wall": 200774.143163069
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1443,
+      "stall_seconds": 0.0,
+      "wall": 200784.14364277
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1428,
+      "stall_seconds": 0.0,
+      "wall": 200800.223428419
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1419,
+      "stall_seconds": 0.0,
+      "wall": 200810.178265621
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1409,
+      "stall_seconds": 0.0,
+      "wall": 200820.267990333
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1399,
+      "stall_seconds": 0.0,
+      "wall": 200830.443674028
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1390,
+      "stall_seconds": 0.0,
+      "wall": 200840.280160577
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1380,
+      "stall_seconds": 0.0,
+      "wall": 200850.665884165
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1370,
+      "stall_seconds": 0.0,
+      "wall": 200861.01088652
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1360,
+      "stall_seconds": 0.0,
+      "wall": 200871.073087491
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1345,
+      "stall_seconds": 0.0,
+      "wall": 200887.651613554
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1335,
+      "stall_seconds": 0.0,
+      "wall": 200897.847386086
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1325,
+      "stall_seconds": 0.0,
+      "wall": 200907.780327853
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1315,
+      "stall_seconds": 0.0,
+      "wall": 200917.716192427
+    }
+  ],
+  "hud_choices": [
+    {
+      "screenshot": "unlock-choice-0.png",
+      "rows": [
+        [
+          "Settings",
+          615,
+          25,
+          664,
+          39
+        ],
+        [
+          "Detailed - switch to simple",
+          837,
+          74,
+          991,
+          103
+        ],
+        [
+          "Oo xX | \u4e4b",
+          1021,
+          71,
+          1162,
+          113
+        ],
+        [
+          "Shape your arsenal",
+          111,
+          76,
+          395,
+          110
+        ],
+        [
+          "@\u00a9@\u00aeO\u00aee",
+          123,
+          161,
+          1158,
+          345
+        ],
+        [
+          "CINDER AURA",
+          209,
+          377,
+          354,
+          396
+        ],
+        [
+          "RETURNING WIND BLADE",
+          507,
+          377,
+          774,
+          396
+        ],
+        [
+          "GROUND PULSE",
+          914,
+          377,
+          1084,
+          396
+        ],
+        [
+          "a",
+          300,
+          416,
+          307,
+          423
+        ],
+        [
+          "a",
+          659,
+          416,
+          666,
+          423
+        ],
+        [
+          "a",
+          1018,
+          416,
+          1025,
+          423
+        ],
+        [
+          "CINDER AURA",
+          131,
+          478,
+          270,
+          510
+        ],
+        [
+          "Rank 0-1/5",
+          131,
+          509,
+          209,
+          523
+        ],
+        [
+          "Passive + no cast cooldown \u2014> Passive + no cast cooldown",
+          131,
+          517,
+          487,
+          545
+        ],
+        [
+          "Damage (magical): unlearned; rank 1 24.4 24.4",
+          131,
+          540,
+          424,
+          555
+        ],
+        [
+          "Effect radius 2.60\u2014 2.60 m",
+          131,
+          556,
+          291,
+          567
+        ],
+        [
+          "Formula: (12 +8 X (rank - 1) + 0.15 x spell power) x 1.00",
+          131,
+          561,
+          477,
+          592
+        ],
+        [
+          "Attack 56.4 + Spell power 82.8 + Summon power 83.7",
+          126,
+          579,
+          458,
+          608
+        ],
+        [
+          "Spell power scales with INT; summon power inherits 70% spell power + 50% hero attack.",
+          131,
+          603,
+          661,
+          617
+        ],
+        [
+          "Values include active power bonuses; before enemy armor/resistance.",
+          130,
+          618,
+          550,
+          632
+        ],
+        [
+          "Rank 1/5 + Scorch enemies around you every 0.5 seconds; displayed damage is each tick.",
+          131,
+          634,
+          695,
+          649
+        ],
+        [
+          "R i] fe 2| | a",
+          123,
+          161,
+          1158,
+          169
+        ],
+        [
+          "CINDER AURA RETURNING WIND BLADE GROUND PULSE",
+          209,
+          377,
+          1084,
+          396
+        ],
+        [
+          "sooo sooo sooo",
+          256,
+          416,
+          1025,
+          423
+        ],
+        [
+          "CINDER AURA",
+          131,
+          482,
+          270,
+          500
+        ],
+        [
+          "RankO 1/5",
+          131,
+          501,
+          213,
+          528
+        ],
+        [
+          "Passive + no cast cooldown \u2014 Passive + no cast cooldown",
+          131,
+          521,
+          487,
+          544
+        ],
+        [
+          "Damage (magical): unlearned; rank 1 24.4 24.4",
+          131,
+          530,
+          424,
+          561
+        ],
+        [
+          "Effect radius 2.60 > 2.60 m",
+          131,
+          552,
+          294,
+          575
+        ],
+        [
+          "Attack 56.4 * Spell power 82.8 \u00bb Summon power 83.7",
+          126,
+          579,
+          458,
+          605
+        ],
+        [
+          "Spell power scales with INT; summon power inherits 70% spell power + 50% hero attack.",
+          131,
+          593,
+          661,
+          624
+        ],
+        [
+          "Values include active power bonuses; before enemy armor/resistance.",
+          130,
+          608,
+          550,
+          639
+        ],
+        [
+          "Rank 1/5 + Scorch enemies around you every 0.5 seconds; displayed damage is each tick.",
+          131,
+          624,
+          695,
+          655
+        ],
+        [
+          "Detailed + switch to simple",
+          837,
+          75,
+          990,
+          103
+        ],
+        [
+          "OX",
+          1021,
+          75,
+          1159,
+          101
+        ],
+        [
+          "R",
+          841,
+          161,
+          846,
+          169
+        ],
+        [
+          "y,",
+          966,
+          209,
+          998,
+          251
+        ],
+        [
+          "bp/",
+          1021,
+          246,
+          1049,
+          286
+        ],
+        [
+          "CINDERAURA",
+          209,
+          377,
+          354,
+          396
+        ],
+        [
+          "sooo",
+          256,
+          416,
+          307,
+          423
+        ],
+        [
+          "sooo",
+          615,
+          416,
+          666,
+          423
+        ],
+        [
+          "sooo",
+          974,
+          416,
+          1025,
+          423
+        ],
+        [
+          "CINDER AURA",
+          131,
+          478,
+          269,
+          510
+        ],
+        [
+          "Rank0 \u4e00 115",
+          131,
+          501,
+          209,
+          529
+        ],
+        [
+          "Passive",
+          131,
+          526,
+          174,
+          536
+        ],
+        [
+          "mo cast cooldown \u2014 Passive",
+          194,
+          518,
+          362,
+          546
+        ],
+        [
+          "no cast cooldown",
+          383,
+          517,
+          486,
+          545
+        ],
+        [
+          "Damage (magical): unlearned; rank 1 24.4\u2014> 24.4",
+          131,
+          540,
+          423,
+          554
+        ],
+        [
+          "Effect radius 2.60 2.60 m",
+          131,
+          556,
+          291,
+          567
+        ],
+        [
+          "Formula: (12+ 8 X (rank - 1) + 0.15 x spell power) x 1.00",
+          131,
+          563,
+          477,
+          592
+        ],
+        [
+          "Attack 56.4 + Spell power 82.8 + Summon power 83.7",
+          130,
+          579,
+          458,
+          608
+        ],
+        [
+          "Rank 1/5 + Scorch enemies around you every 0.5 seconds; displayed damage is each tick.",
+          131,
+          626,
+          695,
+          655
+        ],
+        [
+          "Shape your arsenal SI \u533a | \u4ee4",
+          111,
+          55,
+          1159,
+          126
+        ],
+        [
+          "R a] je 2] |e 3",
+          123,
+          161,
+          1158,
+          169
+        ],
+        [
+          "Vy \u65cb",
+          1007,
+          244,
+          1053,
+          259
+        ],
+        [
+          "CINDER AURA",
+          131,
+          482,
+          269,
+          500
+        ],
+        [
+          "Rank0- 1/5",
+          131,
+          510,
+          209,
+          522
+        ],
+        [
+          "Passive + no cast cooldown \u4e00 Passive + no cast cooldown",
+          131,
+          516,
+          486,
+          545
+        ],
+        [
+          "Damage (magical): unlearned; rank 124.4 24.4",
+          131,
+          540,
+          423,
+          554
+        ],
+        [
+          "Effect radius 2.60 \u2014 2.60 m",
+          131,
+          548,
+          294,
+          577
+        ],
+        [
+          "Spell power scales with INT; summon power inherits 70% spell power + 50% hero attack.",
+          131,
+          595,
+          661,
+          624
+        ]
+      ]
+    },
+    {
+      "screenshot": "unlock-choice-1.png",
+      "rows": [
+        [
+          "Settings",
+          615,
+          25,
+          664,
+          39
+        ],
+        [
+          "Detailed + switch to simple",
+          837,
+          75,
+          991,
+          103
+        ],
+        [
+          "Oo xX | \u4e4b",
+          1021,
+          71,
+          1162,
+          113
+        ],
+        [
+          "Shape your arsenal",
+          111,
+          76,
+          395,
+          110
+        ],
+        [
+          "sk",
+          481,
+          161,
+          493,
+          170
+        ],
+        [
+          "2",
+          794,
+          161,
+          799,
+          169
+        ],
+        [
+          "R",
+          841,
+          161,
+          846,
+          169
+        ],
+        [
+          "@",
+          200,
+          242,
+          230,
+          272
+        ],
+        [
+          "@",
+          311,
+          315,
+          341,
+          345
+        ],
+        [
+          "VIOLET CHAIN",
+          206,
+          377,
+          355,
+          396
+        ],
+        [
+          "METEOR SEED",
+          566,
+          377,
+          716,
+          396
+        ],
+        [
+          "GROUND PULSE",
+          914,
+          377,
+          1084,
+          396
+        ],
+        [
+          "weno",
+          256,
+          416,
+          307,
+          423
+        ],
+        [
+          "sooo",
+          615,
+          416,
+          666,
+          423
+        ],
+        [
+          "sooo",
+          974,
+          416,
+          1025,
+          423
+        ],
+        [
+          "VIOLET CHAIN",
+          130,
+          482,
+          272,
+          500
+        ],
+        [
+          "Rank3\u2014 4/5",
+          131,
+          509,
+          209,
+          523
+        ],
+        [
+          "Cooldown 4.7s + 2 basic attacks required > Cooldown 4.15 + 2 basic attacks required",
+          130,
+          525,
+          648,
+          539
+        ],
+        [
+          "Damage (magical): 154.0 182.0",
+          131,
+          540,
+          329,
+          555
+        ],
+        [
+          "Chain hop reach 8.25 9.62 m",
+          130,
+          556,
+          314,
+          570
+        ],
+        [
+          "Formula: (45 +28 X (rank 1) + 0.55 X spell power) x 1.00",
+          131,
+          561,
+          484,
+          592
+        ],
+        [
+          "Attack 71.2 + Spell power'96.4 + Summon power 96.6",
+          126,
+          579,
+          458,
+          608
+        ],
+        [
+          "Spell power scales with INT; summon power inherits 70% spell power + 50% hero attack.",
+          131,
+          603,
+          661,
+          617
+        ],
+        [
+          "Values include active power bonuses; before enemy armor/resistance.",
+          130,
+          618,
+          550,
+          632
+        ],
+        [
+          "Hits / projectiles / summons 4\u2014 4",
+          131,
+          626,
+          335,
+          655
+        ],
+        [
+          "Rank 34/5 + Chain lightni",
+          131,
+          649,
+          304,
+          664
+        ],
+        [
+          "3",
+          327,
+          650,
+          333,
+          660
+        ],
+        [
+          "-5 hits; each hit deals the displayed damage.",
+          334,
+          639,
+          602,
+          670
+        ],
+        [
+          "R 1] | se 2| |e 3",
+          123,
+          149,
+          1158,
+          179
+        ],
+        [
+          "VIOLET CHAIN METEOR SEED GROUND PULSE",
+          206,
+          377,
+          1084,
+          396
+        ],
+        [
+          "amen sooo sooo",
+          256,
+          416,
+          1025,
+          423
+        ],
+        [
+          "Rank3 4/5",
+          131,
+          509,
+          209,
+          523
+        ],
+        [
+          "Cooldown 4.7s + 2 basic attacks required Cooldown 4.1s + 2 basic attacks required",
+          130,
+          516,
+          648,
+          546
+        ],
+        [
+          "Damage (magical): 154.0 \u4e00 182.0",
+          131,
+          540,
+          329,
+          555
+        ],
+        [
+          "Chain hop reach 8.25 \u4e00 9.62 m",
+          130,
+          556,
+          314,
+          570
+        ],
+        [
+          "Formula: (45 +28 x (rank - 1) + 0.55 x spell power) x 1.00",
+          131,
+          562,
+          484,
+          592
+        ],
+        [
+          "\u2018Attack 71.2 + Spell power 96.4 + Summon power 96.6",
+          126,
+          578,
+          458,
+          608
+        ],
+        [
+          "Spell power scales with INT; summon power inherits 70% spell power + 50% hero attack.",
+          131,
+          594,
+          661,
+          624
+        ],
+        [
+          "Values include active power bonuses; before enemy armor/resistance.",
+          130,
+          609,
+          550,
+          639
+        ],
+        [
+          "Hits / projectiles / summons 4\u2014> 4",
+          127,
+          625,
+          337,
+          655
+        ],
+        [
+          "Rank3\u2014> 4/5 + Chain lightning: 3-5 hits; each hit deals the displayed damage.",
+          131,
+          640,
+          602,
+          670
+        ],
+        [
+          "Detailed - switch to simple",
+          837,
+          74,
+          990,
+          102
+        ],
+        [
+          "OX",
+          1021,
+          75,
+          1159,
+          101
+        ],
+        [
+          "sR",
+          482,
+          162,
+          493,
+          169
+        ],
+        [
+          "2",
+          794,
+          162,
+          799,
+          169
+        ],
+        [
+          "@",
+          200,
+          243,
+          230,
+          272
+        ],
+        [
+          "4",
+          993,
+          229,
+          1022,
+          269
+        ],
+        [
+          "e",
+          311,
+          315,
+          341,
+          344
+        ],
+        [
+          "Rank3\u2014 4/5",
+          131,
+          510,
+          209,
+          522
+        ],
+        [
+          "Cooldown 4.75",
+          131,
+          526,
+          219,
+          536
+        ],
+        [
+          "2 basic attacks required > Cooldown 4.1",
+          238,
+          526,
+          488,
+          539
+        ],
+        [
+          "2 basic attacks required",
+          507,
+          526,
+          648,
+          539
+        ],
+        [
+          "Damage (magical): 154.0 182.0",
+          131,
+          541,
+          329,
+          554
+        ],
+        [
+          "Chain hop reach 8.25\u2014 9.62 m",
+          131,
+          557,
+          314,
+          570
+        ],
+        [
+          "Formula: (45 + 28 X (rank 1) + 0.55 x spell power) x 1.00",
+          131,
+          563,
+          484,
+          593
+        ],
+        [
+          "Attack 71.2 + Spell power'96.4 + Summon power 96.6",
+          130,
+          579,
+          458,
+          608
+        ],
+        [
+          "Spell power scales with INT; summon power inherits 70% spell power + 50% hero attack.",
+          131,
+          604,
+          661,
+          617
+        ],
+        [
+          "Hits / projectiles / summons 4\u2014> 4",
+          131,
+          626,
+          335,
+          655
+        ],
+        [
+          "Rank3\u2014 4/5 + Chain lightning: 3-5 hits; each hit deals the displayed damage.",
+          131,
+          641,
+          602,
+          670
+        ],
+        [
+          "Shape your arsenal SERIE:",
+          111,
+          57,
+          1159,
+          133
+        ],
+        [
+          "\u00ae We \u4e0b fe 5",
+          123,
+          161,
+          1158,
+          169
+        ],
+        [
+          "e ly",
+          200,
+          242,
+          1053,
+          286
+        ],
+        [
+          "f lA",
+          1003,
+          261,
+          1043,
+          272
+        ],
+        [
+          "Rank3> 4/5",
+          131,
+          510,
+          209,
+          522
+        ],
+        [
+          "Cooldown 4.7s + 2 basic attacks required \u4e00 Cooldown 4.1s + 2 basic attacks required",
+          131,
+          526,
+          648,
+          539
+        ],
+        [
+          "Damage (magical): 154.0 > 182.0",
+          131,
+          541,
+          329,
+          554
+        ],
+        [
+          "Chain hop reach 8.25 > 9.62 m",
+          131,
+          557,
+          314,
+          570
+        ],
+        [
+          "Formula: (45 +28 x (rank - 1) + 0.55 x spell power) 1.00",
+          131,
+          565,
+          484,
+          590
+        ],
+        [
+          "Attack 71.2 + Spell power 96.4 + Summon power 96.6",
+          126,
+          580,
+          458,
+          605
+        ],
+        [
+          "Spell power scales with INT; summon power inherits 70% spell power + 50% hero attack.",
+          131,
+          596,
+          661,
+          621
+        ],
+        [
+          "Hits / projectiles / summons 44",
+          131,
+          627,
+          340,
+          653
+        ],
+        [
+          "Rank3\u2014 4/5 + Chain lightning: 3-5 hits; each hit deals the displayed damage.",
+          131,
+          642,
+          602,
+          668
+        ]
+      ]
+    },
+    {
+      "screenshot": "speed-choice-2.png",
+      "rows": [
+        [
+          "Settings",
+          615,
+          25,
+          664,
+          39
+        ],
+        [
+          "\u2018THE LAST BASTION",
+          40,
+          53,
+          146,
+          62
+        ],
+        [
+          "Level 10 + Recruit a hero",
+          43,
+          75,
+          459,
+          118
+        ],
+        [
+          "sR",
+          58,
+          167,
+          70,
+          176
+        ],
+        [
+          "R",
+          262,
+          167,
+          267,
+          175
+        ],
+        [
+          "R",
+          465,
+          167,
+          470,
+          175
+        ],
+        [
+          "Sse",
+          667,
+          167,
+          685,
+          175
+        ],
+        [
+          "sR",
+          869,
+          167,
+          881,
+          176
+        ],
+        [
+          "sR",
+          1072,
+          167,
+          1084,
+          176
+        ],
+        [
+          "|",
+          598,
+          161,
+          620,
+          183
+        ],
+        [
+          "&",
+          1087,
+          328,
+          1119,
+          368
+        ],
+        [
+          "BABA of",
+          65,
+          208,
+          992,
+          405
+        ],
+        [
+          "\u5927 \u53ef",
+          1120,
+          383,
+          1172,
+          405
+        ],
+        [
+          "GROVE ARTIFICER",
+          63,
+          483,
+          202,
+          497
+        ],
+        [
+          "STONE WARDEN",
+          272,
+          483,
+          398,
+          497
+        ],
+        [
+          "EMBER RANGER",
+          476,
+          483,
+          600,
+          497
+        ],
+        [
+          "FROST ORACLE",
+          682,
+          483,
+          800,
+          497
+        ],
+        [
+          "TIDE WALKER",
+          890,
+          483,
+          997,
+          496
+        ],
+        [
+          "STAR WAGERER",
+          1086,
+          483,
+          1207,
+          497
+        ],
+        [
+          "VANGUARD",
+          103,
+          508,
+          160,
+          516
+        ],
+        [
+          "VANGUARD",
+          306,
+          508,
+          363,
+          516
+        ],
+        [
+          "SKIRMISHER",
+          507,
+          508,
+          570,
+          516
+        ],
+        [
+          "SPELLCASTER",
+          706,
+          508,
+          776,
+          516
+        ],
+        [
+          "SPELLCASTER",
+          908,
+          508,
+          978,
+          516
+        ],
+        [
+          "SKIRMISHER",
+          1115,
+          508,
+          1178,
+          516
+        ],
+        [
+          "4 + 8 EMBER RANGER",
+          66,
+          589,
+          323,
+          615
+        ],
+        [
+          "Inherited skill FIRE ARROW + Rank 1",
+          63,
+          616,
+          285,
+          644
+        ],
+        [
+          "arrows \u3002 1 bounces",
+          62,
+          646,
+          184,
+          656
+        ],
+        [
+          "so",
+          40,
+          53,
+          146,
+          62
+        ],
+        [
+          "Level 10 + Recruit a hero",
+          43,
+          79,
+          459,
+          109
+        ],
+        [
+          "se a a Bs se se",
+          58,
+          161,
+          1084,
+          183
+        ],
+        [
+          "i | &% ! f =a ea = x",
+          65,
+          209,
+          1201,
+          405
+        ],
+        [
+          "GROVE ARTIFICER STONE WARDEN EMBER RANGER FROST ORACLE TIDE WALKER STAR WAGERER",
+          63,
+          483,
+          1207,
+          497
+        ],
+        [
+          "4 + 2 EMBER RANGER",
+          66,
+          589,
+          323,
+          615
+        ],
+        [
+          "Inherited skill FIREARROW + Rank1",
+          63,
+          624,
+          285,
+          635
+        ],
+        [
+          "3arrows - 1 bounces:",
+          62,
+          646,
+          184,
+          656
+        ],
+        [
+          "\u2018THE LAST BASTION",
+          36,
+          43,
+          146,
+          71
+        ],
+        [
+          "SR",
+          59,
+          167,
+          70,
+          175
+        ],
+        [
+          "SSR",
+          668,
+          167,
+          685,
+          175
+        ],
+        [
+          "SR",
+          870,
+          167,
+          881,
+          175
+        ],
+        [
+          "SR",
+          1073,
+          167,
+          1084,
+          175
+        ],
+        [
+          "of",
+          665,
+          292,
+          796,
+          385
+        ],
+        [
+          "ss",
+          65,
+          341,
+          176,
+          404
+        ],
+        [
+          "\u8bc1 \u540d",
+          320,
+          361,
+          378,
+          413
+        ],
+        [
+          "Ww",
+          471,
+          329,
+          581,
+          408
+        ],
+        [
+          "\u53f7 |",
+          924,
+          373,
+          994,
+          417
+        ],
+        [
+          "a",
+          1087,
+          289,
+          1201,
+          404
+        ],
+        [
+          "4 + 8 EMBER RANGER",
+          66,
+          589,
+          323,
+          614
+        ],
+        [
+          "Inherited skill FIRE ARROW + Rank 1",
+          63,
+          616,
+          288,
+          644
+        ],
+        [
+          "arrows",
+          62,
+          647,
+          109,
+          656
+        ],
+        [
+          "1 bounces",
+          128,
+          646,
+          183,
+          656
+        ],
+        [
+          "PrPLAST EASTON",
+          40,
+          28,
+          146,
+          72
+        ],
+        [
+          "se 8 8 ss se se",
+          59,
+          151,
+          1084,
+          187
+        ],
+        [
+          "& & Ww 3 ,\u8d77 Ss rst |",
+          86,
+          204,
+          1204,
+          404
+        ],
+        [
+          "a ee \u4ee5 =a =a a \u66d9",
+          155,
+          367,
+          1172,
+          405
+        ],
+        [
+          "# + 2 EMBER RANGER",
+          66,
+          589,
+          323,
+          614
+        ],
+        [
+          "3arrows - 1 bounces",
+          62,
+          646,
+          183,
+          656
+        ]
+      ]
+    }
+  ],
+  "panel_open_attempts": [
+    {
+      "visit": null,
+      "screenshot": "market-00-open-00.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1293,
+      "input": "b"
+    },
+    {
+      "visit": null,
+      "screenshot": "market-00-open-01.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": null,
+      "screenshot": "market-01-open-02.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1255,
+      "input": "b"
+    },
+    {
+      "visit": null,
+      "screenshot": "market-01-open-03.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": null,
+      "screenshot": "market-02-open-04.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1212,
+      "input": "b"
+    },
+    {
+      "visit": null,
+      "screenshot": "market-02-open-05.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": null,
+      "screenshot": "market-03-open-06.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1170,
+      "input": "b"
+    },
+    {
+      "visit": null,
+      "screenshot": "market-03-open-07.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": null,
+      "screenshot": "market-04-open-08.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1105,
+      "input": "b"
+    },
+    {
+      "visit": null,
+      "screenshot": "market-04-open-09.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": null,
+      "screenshot": "market-05-open-10.png",
+      "state": "unknown",
+      "requests": 0
+    }
+  ],
+  "wallet_ocr": [
+    "200%: LV1 KILLS 0100 | 300%: LV1 KILLS 0100 | 600%: LV1 KILLS 0100",
+    "200%: LV1 KILLS 0132 | 300%: LV1 KILLS 0132 | 600%: LV1 KILLS 0132",
+    "200%: LV1 KILLS 0166 | 300%: LV1 KILLS 0166 | 600%: LV1 KILLS 0166",
+    "200%: LV2 KILLS 0317 | 300%: LV2 KILLS 0317 | 600%: LV2 KILLS 0317",
+    "200%: LV2 KILLS 0317 | 300%: LV2 KILLS 0317 | 600%: LV2 KILLS 0317",
+    "200%: LV2 KILLS 0137 | 300%: LV2 KILLS 0137 | 600%: LV2 KILLS 0137",
+    "200%: LV2 KILLS 0202 | 300%: LV2 KILLS 0202 | 600%: LV2 KILLS 0202"
+  ],
+  "market_inspections": [
+    {
+      "attempt": 0,
+      "wallet": 100,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 1,
+      "wallet": 132,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 2,
+      "wallet": 166,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 3,
+      "wallet": 317,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 4,
+      "wallet": 202,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "Storm Coil",
+          "price": 280,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Storm Coil",
+          "price_ocr": "280",
+          "preview_ocr": "Storm Coil + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Slow Hourglass",
+          "price": 200,
+          "category": "Consumable",
+          "index": 4,
+          "tile_ocr": "Slow Hourglass",
+          "price_ocr": "200",
+          "preview_ocr": "Slow Hourglass + Consumable"
+        }
+      ]
+    }
+  ],
+  "selected_material_ocr": {
+    "name": "ArcLens",
+    "price": 180,
+    "category": "Equipment",
+    "index": 1,
+    "tile_ocr": "Arc Lens",
+    "price_ocr": "180",
+    "preview_ocr": "ArcLens + Equipment"
+  },
+  "hud_wallet_ocr": [
+    {
+      "value": 317,
+      "bounds": [
+        169,
+        188
+      ],
+      "raw": "317"
+    },
+    {
+      "value": 137,
+      "bounds": [
+        169,
+        188
+      ],
+      "raw": "137"
+    }
+  ],
+  "pending_purchase": {
+    "name": "Arc Lens",
+    "price": 180,
+    "wallet_before": 317,
+    "offer_ocr": {
+      "name": "Arc Lens",
+      "price": 180,
+      "category": "Equipment",
+      "index": 1,
+      "tile_ocr": "Arc Lens",
+      "price_ocr": "180",
+      "preview_ocr": "ArcLens + Equipment",
+      "observed_name": "ArcLens"
+    }
+  },
+  "inventory_open_attempts": [
+    {
+      "visit": null,
+      "screenshot": "material-1-open-00.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1148,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "material-1-open-01.png",
+      "state": "inventory",
+      "requests": 1
+    }
+  ],
+  "inventory_inspections": [
+    {
+      "prefix": "material-1",
+      "count": 1,
+      "names": [
+        "arclens"
+      ]
+    }
+  ]
+}
