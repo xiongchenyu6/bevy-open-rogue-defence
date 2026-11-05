@@ -1,0 +1,32 @@
+{"sample": 1, "wall_seconds": 10.7, "terminal": null}
+{"sample": 2, "wall_seconds": 23.7, "terminal": null}
+{"sample": 3, "wall_seconds": 37.3, "terminal": null}
+{"sample": 4, "wall_seconds": 49.8, "terminal": null}
+{"sample": 5, "wall_seconds": 63.3, "terminal": null}
+{"sample": 6, "wall_seconds": 76.7, "terminal": null}
+{"sample": 7, "wall_seconds": 89.8, "terminal": null}
+{"sample": 8, "wall_seconds": 102.6, "terminal": null}
+{"sample": 9, "wall_seconds": 115.8, "terminal": null}
+{"sample": 10, "wall_seconds": 129.5, "terminal": null}
+{"sample": 11, "wall_seconds": 141.8, "terminal": null}
+{"sample": 12, "wall_seconds": 154.4, "terminal": null}
+{"sample": 13, "wall_seconds": 167.6, "terminal": null}
+{"sample": 14, "wall_seconds": 180.6, "terminal": null}
+{"sample": 15, "wall_seconds": 193.9, "terminal": null}
+{"stage": "earned equipment visit", "visit": 1, "purchases": 0, "wallet": 100, "visit_budget_seconds": 140}
+{"sample": 16, "wall_seconds": 288.6, "terminal": null}
+{"sample": 17, "wall_seconds": 300.8, "terminal": null}
+{"sample": 18, "wall_seconds": 313.3, "terminal": null}
+{"sample": 19, "wall_seconds": 326.3, "terminal": null}
+{"sample": 20, "wall_seconds": 338.6, "terminal": null}
+Traceback (most recent call last):
+  File "/harness/campaign_equipment_runtime.py", line 725, in <module>
+    main(EquipmentPolicy)
+  File "/harness/campaign_runtime.py", line 270, in main
+    policy.observe(text_lines, time.monotonic() - started)
+  File "/harness/campaign_equipment_runtime.py", line 681, in observe
+    close_visible_inventory(close_rows, close_down,
+  File "/harness/campaign_equipment_runtime.py", line 353, in close_visible_inventory
+    assert now() < deadline, 'Inventory close observation exceeded deadline'
+           ^^^^^^^^^^^^^^^^
+AssertionError: Inventory close observation exceeded deadline
