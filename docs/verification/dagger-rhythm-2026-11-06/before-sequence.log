@@ -1,0 +1,5 @@
+BEFORE build gate PASS
+BEFORE native PASS rift
+BEFORE native PASS tide
+BEFORE native PASS ember
+TERMINAL BEFORE PASS

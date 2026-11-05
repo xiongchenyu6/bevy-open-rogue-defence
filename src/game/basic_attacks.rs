@@ -587,13 +587,12 @@ pub(crate) struct SwingTrail {
 }
 
 pub(crate) fn swing_windup(kind: HeroKind, interval: f32) -> f32 {
-    // The shared one-handed sword clip is still raising the weapon at 42%.
-    // Contact follows its 50–60% downswing; other authored weapons retain
-    // their existing timing until their own contact phases are verified.
-    let phase = if weapon(kind) == BasicWeapon::Sword {
-        0.60
-    } else {
-        0.42
+    // Match each verified authored downswing; uncalibrated axes keep their
+    // existing timing. Native 30Hz traces include the actual action window.
+    let phase = match weapon(kind) {
+        BasicWeapon::Sword => 0.60,
+        BasicWeapon::Daggers => 0.50,
+        _ => 0.42,
     };
     interval.clamp(0.03, 0.45) * phase
 }

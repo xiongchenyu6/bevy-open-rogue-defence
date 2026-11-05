@@ -1,0 +1,11 @@
+Not executed: wait wallet policy owner's explicit Cargo/source handoff.
+
+Current-source capture build (unless policy's final capture artifact has exact matching Rust/asset manifest):
+nix develop --command cargo build --locked --bin capture -j1 --target-dir target/market-visual --config 'profile.dev.opt-level=0' --config 'profile.dev.package."*".opt-level=0' --config 'profile.dev.debug=0'
+
+Freeze source/assets and binary SHA before native baseline; copy capture binary to this folder so later builds cannot replace running artifact. Fresh per-case campaign/tutorial/audio preferences; synthetic fixtures, not natural campaign samples.
+
+For attack-rift, attack-tide, attack-ember, sequential:
+ROGUE_CAPTURE_ATTACK_TRACE=1 ROGUE_CAPTURE_SAVE_FRAMES=8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,70 VK_ICD_FILENAMES=/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.json nix develop --command ./FROZEN_CAPTURE frames ./BEFORE_CASE 210 attack-rift 0xA11CE 1280x720
+
+Actual HP drop trace and clip seek/speed determine contact/source phase and runtime attack window. Root reviews saved keyframes and weapon orientation around the FIRST real HP contact. Do not map arbitrary render frame to ideal .42 without trace. Need same damage/cadence, ranged control, unchanged non-dagger timing. Candidate dagger downswing source .48-.60 only; exact chosen phase waits native proof. High APS window=min(actual AttackClock duration,.45), not assumed default .45. Axe stays separately uncalibrated.

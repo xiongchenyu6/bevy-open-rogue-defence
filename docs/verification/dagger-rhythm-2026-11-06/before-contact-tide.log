@@ -1,0 +1,163 @@
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+[capture] selective PNG frames: {10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}; all 210 simulation/render updates retained
+[2m2026-11-05T22:19:01.297933Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-05T22:19:01.370688Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-05T22:19:02.222631Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-05T22:19:02.222833Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[capture] scenario=attack-tide
+[capture] seed=0x00000000000A11CE
+[2m2026-11-05T22:19:03.104188Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] attack-tide: centered battlefield, real TideWalker basic attacks; no Autoplay or ultimate
+ATTACK_TIMING frame=1 health=300000.000 damage=0.000 clips=[(1, 0.03333333, 1.0)]
+ATTACK_TIMING frame=2 health=300000.000 damage=0.000 clips=[(1, 0.06666666, 1.0)]
+ATTACK_TIMING frame=3 health=300000.000 damage=0.000 clips=[(1, 0.099999994, 1.0)]
+ATTACK_TIMING frame=4 health=300000.000 damage=0.000 clips=[(1, 0.13333333, 1.0)]
+ATTACK_TIMING frame=5 health=300000.000 damage=0.000 clips=[(1, 0.16666666, 1.0)]
+ATTACK_TIMING frame=6 health=300000.000 damage=0.000 clips=[(1, 0.19999999, 1.0)]
+ATTACK_TIMING frame=7 health=300000.000 damage=0.000 clips=[(1, 0.23333332, 1.0)]
+ATTACK_TIMING frame=8 health=300000.000 damage=0.000 clips=[(1, 0.26666665, 1.0)]
+ATTACK_TIMING frame=9 health=300000.000 damage=0.000 clips=[(1, 0.29999998, 1.0)]
+ATTACK_TIMING frame=10 health=300000.000 damage=0.000 clips=[(1, 0.3333333, 1.0)]
+ATTACK_TIMING frame=11 health=300000.000 damage=0.000 clips=[(3, 0.10849687, 3.2549062)]
+ATTACK_TIMING frame=12 health=300000.000 damage=0.000 clips=[(3, 0.21699373, 3.2549062)]
+[2m2026-11-05T22:19:08.031336Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00010.png
+[capture] saved 1/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00010.png (944114 bytes)
+ATTACK_TIMING frame=13 health=300000.000 damage=0.000 clips=[(3, 0.3254906, 3.2549062)]
+[2m2026-11-05T22:19:08.550705Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00011.png
+[capture] saved 2/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00011.png (945362 bytes)
+ATTACK_TIMING frame=14 health=300000.000 damage=0.000 clips=[(3, 0.43398747, 3.2549062)]
+[2m2026-11-05T22:19:09.064773Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00012.png
+[capture] saved 3/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00012.png (944991 bytes)
+SWORD_TRAIL frame=15 entity=2630v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=15 health=299952.000 damage=48.000 clips=[(3, 0.54248434, 3.2549062)]
+[2m2026-11-05T22:19:09.637593Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00013.png
+[capture] saved 4/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00013.png (944623 bytes)
+SWORD_TRAIL frame=16 entity=2630v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=16 health=299952.000 damage=0.000 clips=[(3, 0.6509812, 3.2549062)]
+[2m2026-11-05T22:19:10.163625Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00014.png
+[capture] saved 5/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00014.png (944340 bytes)
+SWORD_TRAIL frame=17 entity=2630v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=17 health=299952.000 damage=0.000 clips=[(3, 0.75947803, 3.2549062)]
+[2m2026-11-05T22:19:10.666922Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00015.png
+[capture] saved 6/8 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00015.png (942625 bytes)
+SWORD_TRAIL frame=18 entity=2630v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=18 health=299952.000 damage=0.000 clips=[(3, 0.8679749, 3.2549062)]
+[2m2026-11-05T22:19:11.167303Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00016.png
+[capture] saved 7/9 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00016.png (943507 bytes)
+SWORD_TRAIL frame=19 entity=2630v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=19 health=299952.000 damage=0.000 clips=[(3, 0.9764717, 3.2549062)]
+[2m2026-11-05T22:19:11.688227Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00017.png
+[capture] saved 8/10 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00017.png (945230 bytes)
+SWORD_TRAIL frame=20 entity=2630v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=20 health=299952.000 damage=0.000 clips=[(3, 1.0849686, 3.2549062)]
+[2m2026-11-05T22:19:12.190189Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00018.png
+[capture] saved 9/11 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00018.png (945528 bytes)
+ATTACK_TIMING frame=21 health=299952.000 damage=0.000 clips=[(3, 1.1934655, 3.2549062)]
+[2m2026-11-05T22:19:12.723610Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00019.png
+[capture] saved 10/11 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00019.png (945498 bytes)
+ATTACK_TIMING frame=22 health=299952.000 damage=0.000 clips=[(3, 0.10849687, 3.2549062)]
+[2m2026-11-05T22:19:13.208537Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00020.png
+[capture] saved 11/11 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide/frame00020.png (944042 bytes)
+ATTACK_TIMING frame=23 health=299952.000 damage=0.000 clips=[(3, 0.21699373, 3.2549062)]
+ATTACK_TIMING frame=24 health=299952.000 damage=0.000 clips=[(3, 0.3254906, 3.2549062)]
+ATTACK_TIMING frame=25 health=299952.000 damage=0.000 clips=[(3, 0.43398747, 3.2549062)]
+SWORD_TRAIL frame=26 entity=2838v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=26 health=299904.000 damage=48.000 clips=[(3, 0.54248434, 3.2549062)]
+SWORD_TRAIL frame=27 entity=2838v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=27 health=299904.000 damage=0.000 clips=[(3, 0.6509812, 3.2549062)]
+SWORD_TRAIL frame=28 entity=2838v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=28 health=299904.000 damage=0.000 clips=[(3, 0.75947803, 3.2549062)]
+SWORD_TRAIL frame=29 entity=2838v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=29 health=299904.000 damage=0.000 clips=[(3, 0.8679749, 3.2549062)]
+SWORD_TRAIL frame=30 entity=2838v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=30 health=299904.000 damage=0.000 clips=[(3, 0.9764717, 3.2549062)]
+SWORD_TRAIL frame=31 entity=2838v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=31 health=299904.000 damage=0.000 clips=[(3, 1.0849686, 3.2549062)]
+ATTACK_TIMING frame=32 health=299904.000 damage=0.000 clips=[(3, 1.1934655, 3.2549062)]
+ATTACK_TIMING frame=33 health=299904.000 damage=0.000 clips=[(3, 0.10849687, 3.2549062)]
+ATTACK_TIMING frame=34 health=299904.000 damage=0.000 clips=[(3, 0.21699373, 3.2549062)]
+ATTACK_TIMING frame=35 health=299904.000 damage=0.000 clips=[(3, 0.3254906, 3.2549062)]
+ATTACK_TIMING frame=36 health=299904.000 damage=0.000 clips=[(3, 0.43398747, 3.2549062)]
+SWORD_TRAIL frame=37 entity=2844v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=37 health=299856.000 damage=48.000 clips=[(3, 0.54248434, 3.2549062)]
+SWORD_TRAIL frame=38 entity=2844v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=38 health=299856.000 damage=0.000 clips=[(3, 0.6509812, 3.2549062)]
+SWORD_TRAIL frame=39 entity=2844v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=39 health=299856.000 damage=0.000 clips=[(3, 0.75947803, 3.2549062)]
+SWORD_TRAIL frame=40 entity=2844v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=40 health=299856.000 damage=0.000 clips=[(3, 0.8679749, 3.2549062)]
+SWORD_TRAIL frame=41 entity=2844v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=41 health=299856.000 damage=0.000 clips=[(3, 0.9764717, 3.2549062)]
+SWORD_TRAIL frame=42 entity=2844v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=42 health=299856.000 damage=0.000 clips=[(3, 1.0849686, 3.2549062)]
+ATTACK_TIMING frame=43 health=299856.000 damage=0.000 clips=[(3, 1.1934655, 3.2549062)]
+ATTACK_TIMING frame=44 health=299856.000 damage=0.000 clips=[(3, 0.10849687, 3.2549062)]
+ATTACK_TIMING frame=45 health=299856.000 damage=0.000 clips=[(3, 0.21699373, 3.2549062)]
+ATTACK_TIMING frame=46 health=299856.000 damage=0.000 clips=[(3, 0.3254906, 3.2549062)]
+ATTACK_TIMING frame=47 health=299856.000 damage=0.000 clips=[(3, 0.43398747, 3.2549062)]
+SWORD_TRAIL frame=48 entity=2849v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=48 health=299808.000 damage=48.000 clips=[(3, 0.54248434, 3.2549062)]
+SWORD_TRAIL frame=49 entity=2849v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=49 health=299808.000 damage=0.000 clips=[(3, 0.6509812, 3.2549062)]
+SWORD_TRAIL frame=50 entity=2849v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=50 health=299808.000 damage=0.000 clips=[(3, 0.75947803, 3.2549062)]
+SWORD_TRAIL frame=51 entity=2849v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=51 health=299808.000 damage=0.000 clips=[(3, 0.8679749, 3.2549062)]
+SWORD_TRAIL frame=52 entity=2849v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=52 health=299808.000 damage=0.000 clips=[(3, 0.9764717, 3.2549062)]
+SWORD_TRAIL frame=53 entity=2849v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=53 health=299808.000 damage=0.000 clips=[(3, 1.0849686, 3.2549062)]
+ATTACK_TIMING frame=54 health=299808.000 damage=0.000 clips=[(3, 0.10849687, 3.2549062)]
+ATTACK_TIMING frame=55 health=299808.000 damage=0.000 clips=[(3, 0.21699373, 3.2549062)]
+ATTACK_TIMING frame=56 health=299808.000 damage=0.000 clips=[(3, 0.3254906, 3.2549062)]
+ATTACK_TIMING frame=57 health=299808.000 damage=0.000 clips=[(3, 0.43398747, 3.2549062)]
+SWORD_TRAIL frame=58 entity=2982v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=58 health=299760.000 damage=48.000 clips=[(3, 0.54248434, 3.2549062)]
+SWORD_TRAIL frame=59 entity=2982v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=59 health=299760.000 damage=0.000 clips=[(3, 0.6509812, 3.2549062)]
+SWORD_TRAIL frame=60 entity=2982v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=60 health=299760.000 damage=0.000 clips=[(3, 0.75947803, 3.2549062)]
+SWORD_TRAIL frame=61 entity=2982v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=61 health=299760.000 damage=0.000 clips=[(3, 0.8679749, 3.2549062)]
+SWORD_TRAIL frame=62 entity=2982v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=62 health=299760.000 damage=0.000 clips=[(3, 0.9764717, 3.2549062)]
+SWORD_TRAIL frame=63 entity=2982v0 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=63 health=299760.000 damage=0.000 clips=[(3, 1.0849686, 3.2549062)]
+ATTACK_TIMING frame=64 health=299760.000 damage=0.000 clips=[(3, 1.1934655, 3.2549062)]
+ATTACK_TIMING frame=65 health=299760.000 damage=0.000 clips=[(3, 0.10849687, 3.2549062)]
+ATTACK_TIMING frame=66 health=299760.000 damage=0.000 clips=[(3, 0.21699373, 3.2549062)]
+ATTACK_TIMING frame=67 health=299760.000 damage=0.000 clips=[(3, 0.3254906, 3.2549062)]
+ATTACK_TIMING frame=68 health=299760.000 damage=0.000 clips=[(3, 0.43398747, 3.2549062)]
+SWORD_TRAIL frame=69 entity=2981v1 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=69 health=299712.000 damage=48.000 clips=[(3, 0.54248434, 3.2549062)]
+SWORD_TRAIL frame=70 entity=2981v1 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=70 health=299712.000 damage=0.000 clips=[(3, 0.6509812, 3.2549062)]
+SWORD_TRAIL frame=71 entity=2981v1 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=71 health=299712.000 damage=0.000 clips=[(3, 0.75947803, 3.2549062)]
+SWORD_TRAIL frame=72 entity=2981v1 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=72 health=299712.000 damage=0.000 clips=[(3, 0.8679749, 3.2549062)]
+SWORD_TRAIL frame=73 entity=2981v1 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=73 health=299712.000 damage=0.000 clips=[(3, 0.9764717, 3.2549062)]
+SWORD_TRAIL frame=74 entity=2981v1 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=74 health=299712.000 damage=0.000 clips=[(3, 1.0849686, 3.2549062)]
+ATTACK_TIMING frame=75 health=299712.000 damage=0.000 clips=[(3, 1.1934655, 3.2549062)]
+ATTACK_TIMING frame=76 health=299712.000 damage=0.000 clips=[(3, 0.10849687, 3.2549062)]
+ATTACK_TIMING frame=77 health=299712.000 damage=0.000 clips=[(3, 0.21699373, 3.2549062)]
+ATTACK_TIMING frame=78 health=299712.000 damage=0.000 clips=[(3, 0.3254906, 3.2549062)]
+ATTACK_TIMING frame=79 health=299712.000 damage=0.000 clips=[(3, 0.43398747, 3.2549062)]
+SWORD_TRAIL frame=80 entity=2848v1 alpha=1.000000 mode=Opaque material_count=276
+ATTACK_TIMING frame=80 health=299664.000 damage=48.000 clips=[(3, 0.54248434, 3.2549062)]
+[capture] PASS: real basic attack damage and weapon visuals; learned skills/ultimate/Autoplay suppressed
+[capture] all 11 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 210 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/dagger-rhythm-2026-11-06/before-contact-tide

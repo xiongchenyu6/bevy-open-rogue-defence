@@ -93,3 +93,79 @@ fn equal_front_symmetric_native_aim_uses_visible_coordinate_tie() {
     assert_native_aim(forward, points[0]);
     assert_native_aim(reverse, points[0]);
 }
+
+#[test]
+fn dagger_native_contacts_wait_for_slice_and_keep_one_real_damage_event() {
+    for kind in [HeroKind::RiftDancer, HeroKind::TideWalker] {
+        let mut app = projectile_test_app();
+        app.init_resource::<AttackClock>()
+            .init_resource::<AttackVolleyRuntime>()
+            .init_resource::<BasicAttackCounter>()
+            .init_resource::<BasicAttackAim>();
+        app.world_mut().resource_mut::<HeroVitals>().kind = kind;
+        {
+            let mut build = app.world_mut().resource_mut::<PlayerBuild>();
+            build.attacks_per_second = 1.;
+            build.attack_damage = 25.;
+        }
+        app.world_mut().spawn((Hero, Transform::default()));
+        let mut enemy = test_enemy(100.);
+        enemy.elite = false;
+        let target = app
+            .world_mut()
+            .spawn((enemy, Transform::from_xyz(1., 0., 0.)))
+            .id();
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs(1));
+        app.world_mut().run_system_once(auto_attack).unwrap();
+        assert_eq!(app.world().resource::<BasicAttackCounter>().count(), 1);
+        let window = app
+            .world()
+            .resource::<AttackClock>()
+            .0
+            .duration()
+            .as_secs_f32()
+            .min(0.45);
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(window * 0.46));
+        app.world_mut()
+            .run_system_once(basic_attacks::resolve_swings)
+            .unwrap();
+        assert_eq!(
+            app.world_mut()
+                .query::<&Projectile>()
+                .iter(app.world())
+                .count(),
+            0,
+            "no apex contact carrier"
+        );
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(window * 0.05));
+        app.world_mut()
+            .run_system_once(basic_attacks::resolve_swings)
+            .unwrap();
+        assert_eq!(
+            app.world_mut()
+                .query::<&Projectile>()
+                .iter(app.world())
+                .count(),
+            1,
+            "one actual slice carrier"
+        );
+        app.world_mut().run_system_once(projectile_hits).unwrap();
+        assert_eq!(app.world().get::<Enemy>(target).unwrap().hp, 75.);
+        app.world_mut()
+            .run_system_once(basic_attacks::resolve_swings)
+            .unwrap();
+        app.world_mut().run_system_once(projectile_hits).unwrap();
+        assert_eq!(
+            app.world().get::<Enemy>(target).unwrap().hp,
+            75.,
+            "no duplicate damage during recovery"
+        );
+        assert_eq!(app.world().resource::<BasicAttackCounter>().count(), 1);
+    }
+}

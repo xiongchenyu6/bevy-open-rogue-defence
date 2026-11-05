@@ -1,0 +1,20 @@
+# Dual-dagger contact follows the authored slice
+
+This is a controlled native fixture, not a natural campaign or balance sample. The two reference ideas—anticipation, swing, contact, recovery—exposed a concrete timing gap: the dagger damage/flash happened with both hands still near the high anticipation pose. The separately calibrated sword remains unchanged, and axes remain uncalibrated.
+
+`basic_attacks::weapon` maps Stone/Solar→Sword; Tide/Rift→Daggers; Iron/Void→Axe; Ember/Grove→Crossbow; Storm/Spirit/Star/Frost→their respective spell weapon. Imported dagger heroes share the actual `Dualwield_Melee_Attack_Slice`1.1666666second clip/channel hash. Both global hand slots are near their sampled apex at phase.42 (Y≈.997/.998), then move forward/down through.48–.60. Axe clips are a different1.6333333second two-hand chop; nothing here applies sword/dagger timing to them. Full12hero GLB hashes, sampled channels and both dagger/axe hand trajectories are preserved by the reproducible read-only audit. These are bone trajectories using NLERP interpolation, not an authored contact event or exact Bevy SLERP evaluation.
+
+Current-source capture was explicitly rebuilt with equal pre/post Rust/asset hashes, then copied to immutable before/after binaries. This avoids claiming an old binary was compatible merely from its filename. The existing `attack-rift`, `attack-tide`, `attack-ember` fixtures disable unrelated learned skills/automatic ultimates and use real animation, attack clock, pending contact, pools and HP. All six210frame cases pass; exact contact supplemental screenshots also use the frozen before binary. Fresh isolated capture profile paths are recorded in scripts.
+
+| Hero | Before real first HP drop/source phase | After | Change |
+| --- | --- | --- | --- |
+| Rift | trace13, seek.4994951 / phase.42814 | trace14, seek.62436885 / phase.53517 | +one30Hz frame |
+| Tide | trace15, seek.54248434 / phase.46499 | trace16, seek.6509812 / phase.55798 | +one30Hz frame |
+
+Only dagger windup fraction changes.42→.50, preserving interval, range, damage, hit budget and recovery animation. At the real measured animation speeds3.7462134/3.2549062, action windows are approximately.3114/.3584seconds (inferred from clip duration/speed), not an assumed default.45. ThirtyHz quantization matters: copying.60 or using.55 blindly would overshoot the early slice. Root visually reviewed before Rift frame12/Tide14 and after Rift13/Tide15: after contact hands/blades extend into forward/down slice rather than high anticipation. Capture filenames are zero-based while attack trace frames are one-based.
+
+`compare.py` independently compares real matched HP-hit deltas and interhit cadence. Every matched dagger contact moves exactly one frame later; corresponding damage and cadence remain equal. It does not require arbitrary80frame total HP equality, which can depend on a boundary hit. Full Ember control trace—including every HP/clip row—is identical. HP deltas are aggregate-f32 observations, retaining their actual rounding; no hidden formula is substituted.
+
+The meaningful production regression runs actual autoattack→pending swing→pooled contact→HP for both daggers: no carrier at46% action window, one actual25damage event after51%, no duplicate recovery damage or attack count. Full optimized library/strict all-target Clippy receipts validate the accepted candidate. No hitstop, extra brightness, axe/ranged timing, numerical balance or broad determinism change is claimed. Full campaign verification remains separate.
+
+Final full optimized library: **689passed,0failed,1ignored**; strict all-target release Clippy PASS. Native and release pre/post source/asset manifests agree exactly. Within the recorded<=80prefix, Rift has8matched hits before/after; Tide has7before versus6after, with six paired equal hits and its old boundary contact at80retained explicitly. The later corresponding event is outside the recorded prefix; no fabricated row fills it. All six native runs still complete210frames. Dense before images retain original before-contact-rift/tide folder names, using the same frozen binary as the coarse baseline.

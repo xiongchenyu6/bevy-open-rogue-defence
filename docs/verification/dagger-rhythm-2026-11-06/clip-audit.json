@@ -1,0 +1,3182 @@
+{
+  "method": "GLB global TRS hierarchy; LINEAR vectors, shortest-arc NLERP quaternion samples",
+  "limitations": "Bone trajectory only, not authored contact event or exact Bevy SLERP/native phase. No timing change authorized by these samples alone.",
+  "source_sha256": {
+    "src/game/basic_attacks.rs": "bbadbfdef7452a7911c456765b967f85d021f1a997cbf0febbba6ad05c744761",
+    "src/game/model_animation.rs": "12f08bad10299cc21392ca1b86835482f3407c2e2897679ce3cdfdf656cb2660",
+    "src/game/combat.rs": "884638a9e2426e04e665726a45f4186647bbda2de9c825503e211d38379d6e69",
+    "src/bin/capture/attacks.rs": "d4ce0aaec2842cb1e6a897a369c0e15e8967e6bc15dfe2597932c3f4c51ab485",
+    "assets/models/cast-manifest.json": "2994b33b2ec2e9fbbf8a1fb22f238b34c23a437b72e717760b32da4e2f724f8f",
+    "tools/import_cast.py": "6b51ae2ef50f1750f8296e521c53ed11d278d7380fe6c45eb7842fa3cd35b8ec"
+  },
+  "models": [
+    {
+      "file": "assets/models/hero_stone_warden.glb",
+      "sha256": "5f68ad845b610a708fdb0b2b495c83c94413c59f327cf3bb36177b49ca93214a",
+      "source_model": "Knight.glb",
+      "source_clip": "1H_Melee_Attack_Chop",
+      "attack_channel_sha256": "826fbb557bd4705dd18467df7fea8dffc01bd3d9294f9532ff8d84f35a57a11b",
+      "duration_seconds": 1.0666667222976685,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Sword",
+        "2H_Sword"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.266666681,
+          "slot_position": [
+            0.399011632,
+            0.850115175,
+            -0.302013552
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840320711,
+            -0.126045111,
+            0.021756016
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.373333353,
+          "slot_position": [
+            0.403805001,
+            0.919663075,
+            -0.304841502
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840363056,
+            -0.127185193,
+            -0.010646159
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.426666689,
+          "slot_position": [
+            0.414790728,
+            0.92289844,
+            -0.281741443
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840374888,
+            -0.125572229,
+            -0.022383662
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.448000023,
+          "slot_position": [
+            0.418336758,
+            0.922892803,
+            -0.270875189
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840452344,
+            -0.12414913,
+            -0.026947713
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.480000025,
+          "slot_position": [
+            0.422091508,
+            0.925652272,
+            -0.258731581
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840521917,
+            -0.122514185,
+            -0.031819905
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.512000027,
+          "slot_position": [
+            0.420907261,
+            0.929795223,
+            -0.253349599
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840402812,
+            -0.122186129,
+            -0.03595882
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.533333361,
+          "slot_position": [
+            0.417398144,
+            0.932301196,
+            -0.250627219
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840508613,
+            -0.121238394,
+            -0.036687051
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.554666696,
+          "slot_position": [
+            0.419656375,
+            0.849098095,
+            -0.279897102
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.839412206,
+            -0.128333527,
+            0.037645103
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.586666697,
+          "slot_position": [
+            0.427192443,
+            0.693076754,
+            -0.308856167
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.838220866,
+            -0.049080948,
+            0.132198244
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.640000033,
+          "slot_position": [
+            0.423121762,
+            0.588408571,
+            -0.350380507
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.839723725,
+            0.016313966,
+            0.130757365
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.746666706,
+          "slot_position": [
+            0.419150454,
+            0.548437482,
+            -0.329326321
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840300408,
+            0.011385312,
+            0.12753508
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.066666722,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_solar_vanguard.glb",
+      "sha256": "196312426fea75a7197d5102f0957bb578311c76fd466682f302a51881cb7dcd",
+      "source_model": "Knight.glb",
+      "source_clip": "1H_Melee_Attack_Chop",
+      "attack_channel_sha256": "826fbb557bd4705dd18467df7fea8dffc01bd3d9294f9532ff8d84f35a57a11b",
+      "duration_seconds": 1.0666667222976685,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Sword",
+        "2H_Sword"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.266666681,
+          "slot_position": [
+            0.399011632,
+            0.850115175,
+            -0.302013552
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840320711,
+            -0.126045111,
+            0.021756016
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.373333353,
+          "slot_position": [
+            0.403805001,
+            0.919663075,
+            -0.304841502
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840363056,
+            -0.127185193,
+            -0.010646159
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.426666689,
+          "slot_position": [
+            0.414790728,
+            0.92289844,
+            -0.281741443
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840374888,
+            -0.125572229,
+            -0.022383662
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.448000023,
+          "slot_position": [
+            0.418336758,
+            0.922892803,
+            -0.270875189
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840452344,
+            -0.12414913,
+            -0.026947713
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.480000025,
+          "slot_position": [
+            0.422091508,
+            0.925652272,
+            -0.258731581
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840521917,
+            -0.122514185,
+            -0.031819905
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.512000027,
+          "slot_position": [
+            0.420907261,
+            0.929795223,
+            -0.253349599
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840402812,
+            -0.122186129,
+            -0.03595882
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.533333361,
+          "slot_position": [
+            0.417398144,
+            0.932301196,
+            -0.250627219
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840508613,
+            -0.121238394,
+            -0.036687051
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.554666696,
+          "slot_position": [
+            0.419656375,
+            0.849098095,
+            -0.279897102
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.839412206,
+            -0.128333527,
+            0.037645103
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.586666697,
+          "slot_position": [
+            0.427192443,
+            0.693076754,
+            -0.308856167
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.838220866,
+            -0.049080948,
+            0.132198244
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.640000033,
+          "slot_position": [
+            0.423121762,
+            0.588408571,
+            -0.350380507
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.839723725,
+            0.016313966,
+            0.130757365
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.746666706,
+          "slot_position": [
+            0.419150454,
+            0.548437482,
+            -0.329326321
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840300408,
+            0.011385312,
+            0.12753508
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.066666722,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_iron_berserker.glb",
+      "sha256": "229f22f40cffe51a879cfc8ea374702ff456e1ca2fee34697ad8e2739d3a20f4",
+      "source_model": "Barbarian.glb",
+      "source_clip": "2H_Melee_Attack_Chop",
+      "attack_channel_sha256": "bac2fb92fc3e2cfa5f3e71181fc7b514353f399dceebe3843428714cc5593951",
+      "duration_seconds": 1.6333333253860474,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Axe",
+        "2H_Axe",
+        "Mug"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.235710272,
+            0.587616725,
+            -0.296440327
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.517448677,
+            0.588232239,
+            -0.329740888
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.408333331,
+          "slot_position": [
+            -0.154285284,
+            0.796868049,
+            -0.126948884
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.440367472,
+            0.655602658,
+            -0.31426248
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.571666664,
+          "slot_position": [
+            -0.175020007,
+            0.827010812,
+            -0.092204929
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.475006874,
+            0.67393217,
+            -0.206598894
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.65333333,
+          "slot_position": [
+            -0.127866171,
+            0.805671501,
+            -0.17512243
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.473912073,
+            0.695170191,
+            -0.121016414
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.685999997,
+          "slot_position": [
+            -0.063483253,
+            0.769171123,
+            -0.267839135
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.446948679,
+            0.71677982,
+            -0.09467207
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.734999996,
+          "slot_position": [
+            0.066224207,
+            0.692009725,
+            -0.40773578
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.429417389,
+            0.719229047,
+            -0.144255131
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.783999996,
+          "slot_position": [
+            0.192134433,
+            0.60984067,
+            -0.479582471
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.57749005,
+            0.557965854,
+            -0.278708933
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.816666663,
+          "slot_position": [
+            0.246285766,
+            0.565254952,
+            -0.443522281
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.723228909,
+            0.426120213,
+            -0.133644143
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.849333329,
+          "slot_position": [
+            0.262571816,
+            0.549833436,
+            -0.363237373
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.652927307,
+            0.544179963,
+            -0.007298658
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.898333329,
+          "slot_position": [
+            0.26419713,
+            0.550999582,
+            -0.307628055
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.566636707,
+            0.623646229,
+            -0.111747052
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.979999995,
+          "slot_position": [
+            0.263410223,
+            0.551175476,
+            -0.283953112
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.563929382,
+            0.608127185,
+            -0.186183222
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 1.143333328,
+          "slot_position": [
+            0.258450339,
+            0.554506496,
+            -0.274487405
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.568578849,
+            0.604399688,
+            -0.184169302
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.633333325,
+          "slot_position": [
+            0.235710272,
+            0.587616725,
+            -0.296440327
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.517448677,
+            0.588232239,
+            -0.329740888
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_void_reaper.glb",
+      "sha256": "f157cbebdb669cfbc72146292d078f8392f3a20b8309ea8000dfecfdb534db7a",
+      "source_model": "Barbarian.glb",
+      "source_clip": "2H_Melee_Attack_Chop",
+      "attack_channel_sha256": "bac2fb92fc3e2cfa5f3e71181fc7b514353f399dceebe3843428714cc5593951",
+      "duration_seconds": 1.6333333253860474,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Axe",
+        "2H_Axe",
+        "Mug"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.235710272,
+            0.587616725,
+            -0.296440327
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.517448677,
+            0.588232239,
+            -0.329740888
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.408333331,
+          "slot_position": [
+            -0.154285284,
+            0.796868049,
+            -0.126948884
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.440367472,
+            0.655602658,
+            -0.31426248
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.571666664,
+          "slot_position": [
+            -0.175020007,
+            0.827010812,
+            -0.092204929
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.475006874,
+            0.67393217,
+            -0.206598894
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.65333333,
+          "slot_position": [
+            -0.127866171,
+            0.805671501,
+            -0.17512243
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.473912073,
+            0.695170191,
+            -0.121016414
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.685999997,
+          "slot_position": [
+            -0.063483253,
+            0.769171123,
+            -0.267839135
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.446948679,
+            0.71677982,
+            -0.09467207
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.734999996,
+          "slot_position": [
+            0.066224207,
+            0.692009725,
+            -0.40773578
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.429417389,
+            0.719229047,
+            -0.144255131
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.783999996,
+          "slot_position": [
+            0.192134433,
+            0.60984067,
+            -0.479582471
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.57749005,
+            0.557965854,
+            -0.278708933
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.816666663,
+          "slot_position": [
+            0.246285766,
+            0.565254952,
+            -0.443522281
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.723228909,
+            0.426120213,
+            -0.133644143
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.849333329,
+          "slot_position": [
+            0.262571816,
+            0.549833436,
+            -0.363237373
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.652927307,
+            0.544179963,
+            -0.007298658
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.898333329,
+          "slot_position": [
+            0.26419713,
+            0.550999582,
+            -0.307628055
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.566636707,
+            0.623646229,
+            -0.111747052
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.979999995,
+          "slot_position": [
+            0.263410223,
+            0.551175476,
+            -0.283953112
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.563929382,
+            0.608127185,
+            -0.186183222
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 1.143333328,
+          "slot_position": [
+            0.258450339,
+            0.554506496,
+            -0.274487405
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.568578849,
+            0.604399688,
+            -0.184169302
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.633333325,
+          "slot_position": [
+            0.235710272,
+            0.587616725,
+            -0.296440327
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.517448677,
+            0.588232239,
+            -0.329740888
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_tide_walker.glb",
+      "sha256": "45cd0aeccf23307e01b0d0679d76d001d97630f89443faed5b916e76ca7b7311",
+      "source_model": "Rogue.glb",
+      "source_clip": "Dualwield_Melee_Attack_Slice",
+      "attack_channel_sha256": "51d84508a7eeafc1849c35fd9742515cf9c08549ffc4aa08bcdeb10981061a8b",
+      "duration_seconds": 1.1666666269302368,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Crossbow",
+        "2H_Crossbow",
+        "Knife",
+        "Throwable"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.417401915,
+            0.544875059,
+            -0.090606203
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.84039638,
+            -9.1e-08,
+            0.127410351
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.291666657,
+          "slot_position": [
+            0.336170689,
+            0.799520956,
+            -0.232422605
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.83093567,
+            0.176403861,
+            0.030449192
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.408333319,
+          "slot_position": [
+            0.314468912,
+            0.943220629,
+            -0.251832648
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.832709766,
+            0.167860654,
+            0.030278743
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.466666651,
+          "slot_position": [
+            0.314901954,
+            0.990594537,
+            -0.253537592
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.838094656,
+            0.13803342,
+            0.032305832
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.489999983,
+          "slot_position": [
+            0.318546818,
+            0.996853262,
+            -0.259986965
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.833708462,
+            0.154453401,
+            0.059782055
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.524999982,
+          "slot_position": [
+            0.331875173,
+            0.966543659,
+            -0.328871871
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.79493647,
+            0.253749548,
+            0.161823186
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.559999981,
+          "slot_position": [
+            0.373539666,
+            0.869124542,
+            -0.491168947
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.621919099,
+            0.49868155,
+            0.295013361
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.583333313,
+          "slot_position": [
+            0.418201201,
+            0.792777853,
+            -0.608809857
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.409149302,
+            0.691058025,
+            0.278451297
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.606666646,
+          "slot_position": [
+            0.461194048,
+            0.72558538,
+            -0.707497109
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.18777586,
+            0.817334785,
+            0.138576649
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.641666645,
+          "slot_position": [
+            0.507507278,
+            0.66904536,
+            -0.810938397
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.023146875,
+            0.844744068,
+            -0.091493466
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.699999976,
+          "slot_position": [
+            0.583833783,
+            0.651496884,
+            -0.797286238
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.008066755,
+            0.835872916,
+            -0.154112875
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.816666639,
+          "slot_position": [
+            0.699522048,
+            0.645185107,
+            -0.364708399
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.000226309,
+            0.849807676,
+            -0.018063491
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.166666627,
+          "slot_position": [
+            0.417401915,
+            0.544875059,
+            -0.090606203
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.84039638,
+            -9.1e-08,
+            0.127410351
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_rift_dancer.glb",
+      "sha256": "e48c26c814b88c29b50142c569b6a9db7d5d81f5d7001458671822ed541d0588",
+      "source_model": "Rogue_Hooded.glb",
+      "source_clip": "Dualwield_Melee_Attack_Slice",
+      "attack_channel_sha256": "51d84508a7eeafc1849c35fd9742515cf9c08549ffc4aa08bcdeb10981061a8b",
+      "duration_seconds": 1.1666666269302368,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Crossbow",
+        "2H_Crossbow",
+        "Knife",
+        "Throwable"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.417401915,
+            0.544875059,
+            -0.090606203
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.84039638,
+            -9.1e-08,
+            0.127410351
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.291666657,
+          "slot_position": [
+            0.336170689,
+            0.799520956,
+            -0.232422605
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.83093567,
+            0.176403861,
+            0.030449192
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.408333319,
+          "slot_position": [
+            0.314468912,
+            0.943220629,
+            -0.251832648
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.832709766,
+            0.167860654,
+            0.030278743
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.466666651,
+          "slot_position": [
+            0.314901954,
+            0.990594537,
+            -0.253537592
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.838094656,
+            0.13803342,
+            0.032305832
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.489999983,
+          "slot_position": [
+            0.318546818,
+            0.996853262,
+            -0.259986965
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.833708462,
+            0.154453401,
+            0.059782055
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.524999982,
+          "slot_position": [
+            0.331875173,
+            0.966543659,
+            -0.328871871
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.79493647,
+            0.253749548,
+            0.161823186
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.559999981,
+          "slot_position": [
+            0.373539666,
+            0.869124542,
+            -0.491168947
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.621919099,
+            0.49868155,
+            0.295013361
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.583333313,
+          "slot_position": [
+            0.418201201,
+            0.792777853,
+            -0.608809857
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.409149302,
+            0.691058025,
+            0.278451297
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.606666646,
+          "slot_position": [
+            0.461194048,
+            0.72558538,
+            -0.707497109
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.18777586,
+            0.817334785,
+            0.138576649
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.641666645,
+          "slot_position": [
+            0.507507278,
+            0.66904536,
+            -0.810938397
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.023146875,
+            0.844744068,
+            -0.091493466
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.699999976,
+          "slot_position": [
+            0.583833783,
+            0.651496884,
+            -0.797286238
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.008066755,
+            0.835872916,
+            -0.154112875
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.816666639,
+          "slot_position": [
+            0.699522048,
+            0.645185107,
+            -0.364708399
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.000226309,
+            0.849807676,
+            -0.018063491
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.166666627,
+          "slot_position": [
+            0.417401915,
+            0.544875059,
+            -0.090606203
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.84039638,
+            -9.1e-08,
+            0.127410351
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_ember_ranger.glb",
+      "sha256": "72b57aca948ca319fc4cd1ec7e73d03b876961d541bae4fbc9ea276cd1ae2811",
+      "source_model": "Rogue_Hooded.glb",
+      "source_clip": "2H_Ranged_Shoot",
+      "attack_channel_sha256": "ee027b6ed84c8233dbeaaa18da7c17beb5c807fa569cdc1f58e1d98cf6c2924e",
+      "duration_seconds": 1.0666667222976685,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Crossbow",
+        "2H_Crossbow",
+        "Knife",
+        "Throwable"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.81489833,
+            0.104062873,
+            0.218199876
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.266666681,
+          "slot_position": [
+            0.362475891,
+            0.829503277,
+            -0.052267382
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850941,
+            0.002048064,
+            -0.015761188
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.373333353,
+          "slot_position": [
+            0.363504622,
+            0.82844761,
+            0.011393103
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850857,
+            0.003425555,
+            -0.015522081
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.426666689,
+          "slot_position": [
+            0.363255487,
+            0.82867883,
+            -0.003518983
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850806,
+            0.004196271,
+            -0.015333902
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.448000023,
+          "slot_position": [
+            0.363129145,
+            0.828807114,
+            -0.011207184
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850719,
+            0.003977027,
+            -0.015396838
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.480000025,
+          "slot_position": [
+            0.362933855,
+            0.829004807,
+            -0.023216703
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850705,
+            0.003523914,
+            -0.015507222
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.512000027,
+          "slot_position": [
+            0.362751097,
+            0.829197354,
+            -0.034648168
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850735,
+            0.002997401,
+            -0.015615537
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.533333361,
+          "slot_position": [
+            0.362640541,
+            0.829311883,
+            -0.041629441
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850855,
+            0.002646366,
+            -0.015672114
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.554666696,
+          "slot_position": [
+            0.362564059,
+            0.829404031,
+            -0.046565452
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850783,
+            0.002371966,
+            -0.015719596
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.586666697,
+          "slot_position": [
+            0.362493848,
+            0.829482589,
+            -0.051097317
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850835,
+            0.002116431,
+            -0.015752799
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.640000033,
+          "slot_position": [
+            0.362502807,
+            0.829175448,
+            -0.05207776
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850813,
+            0.001954758,
+            -0.015774011
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.746666706,
+          "slot_position": [
+            0.362755817,
+            0.826102154,
+            -0.050163276
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850711,
+            0.00107416,
+            -0.015861991
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.066666722,
+          "slot_position": [
+            0.363680159,
+            0.815277636,
+            -0.041202673
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850671,
+            -0.002118392,
+            -0.015753066
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_grove_artificer.glb",
+      "sha256": "6f2050ec3e71fedec7bc978c78c2adf6e00f413b465daaaf04871240574366e7",
+      "source_model": "Rogue.glb",
+      "source_clip": "1H_Ranged_Shoot",
+      "attack_channel_sha256": "2ed02d3a42763aec32335f63868491eef18e5dd06d3e51c33e480b040f14ec5a",
+      "duration_seconds": 1.0666667222976685,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Crossbow",
+        "2H_Crossbow",
+        "Knife",
+        "Throwable"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.812377722,
+            0.040964527,
+            0.246706052
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.266666681,
+          "slot_position": [
+            0.226895159,
+            0.848112926,
+            -0.588729903
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849771303,
+            0.002047969,
+            -0.019601254
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.373333353,
+          "slot_position": [
+            0.231437112,
+            0.859485939,
+            -0.53503819
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.847068835,
+            0.053983863,
+            -0.045386339
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.426666689,
+          "slot_position": [
+            0.23062179,
+            0.868348593,
+            -0.549324335
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.847067352,
+            0.059025568,
+            -0.038634907
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.448000023,
+          "slot_position": [
+            0.22987577,
+            0.868362258,
+            -0.555010939
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.847060956,
+            0.059305392,
+            -0.038345361
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.480000025,
+          "slot_position": [
+            0.228683154,
+            0.868223862,
+            -0.562515787
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.847047004,
+            0.059853518,
+            -0.037797722
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.512000027,
+          "slot_position": [
+            0.227812408,
+            0.867694992,
+            -0.56886641
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.847028364,
+            0.060407117,
+            -0.037331776
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.533333361,
+          "slot_position": [
+            0.227485186,
+            0.867122219,
+            -0.57264373
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.847015422,
+            0.060714732,
+            -0.037125842
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.554666696,
+          "slot_position": [
+            0.227488584,
+            0.866161365,
+            -0.575775982
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.846201731,
+            0.073082105,
+            -0.033187014
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.586666697,
+          "slot_position": [
+            0.22755193,
+            0.864364419,
+            -0.579906445
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.842707223,
+            0.108716762,
+            -0.022911796
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.640000033,
+          "slot_position": [
+            0.228065362,
+            0.859967196,
+            -0.58504515
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.825696125,
+            0.201776845,
+            -0.003426733
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.746666706,
+          "slot_position": [
+            0.235192152,
+            0.841003363,
+            -0.585334612
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.791731258,
+            0.308206789,
+            -0.025881535
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.066666722,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.812377722,
+            0.040964527,
+            0.246706052
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_storm_savant.glb",
+      "sha256": "e69441a01346b6cf0cb358c8470927db2635f976c9d6d53f58ac17440fe09474",
+      "source_model": "Mage.glb",
+      "source_clip": "Spellcast_Shoot",
+      "attack_channel_sha256": "6dc2c9f3c77c792041b03a19b0e5eff6b66baebbe28fa16ca04c98235cc2a775",
+      "duration_seconds": 0.9333333373069763,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Wand",
+        "2H_Staff"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.233333334,
+          "slot_position": [
+            0.311772167,
+            0.716674631,
+            -0.502673804
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840882599,
+            0.120219849,
+            -0.031039506
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.326666668,
+          "slot_position": [
+            0.31550349,
+            0.655804275,
+            -0.529112023
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.848949786,
+            0.000838198,
+            -0.042229754
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.373333335,
+          "slot_position": [
+            0.31469515,
+            0.652352129,
+            -0.506494412
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.844150847,
+            0.04780084,
+            -0.087316532
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.392000002,
+          "slot_position": [
+            0.314356826,
+            0.652453858,
+            -0.494821789
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.841314427,
+            0.066362671,
+            -0.101418781
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.420000002,
+          "slot_position": [
+            0.313858709,
+            0.653636926,
+            -0.475109956
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.836524493,
+            0.092940198,
+            -0.118695489
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.448000002,
+          "slot_position": [
+            0.313388629,
+            0.655632948,
+            -0.453269352
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.831491362,
+            0.117387807,
+            -0.131688806
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.466666669,
+          "slot_position": [
+            0.31303688,
+            0.657268562,
+            -0.437919354
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.828043728,
+            0.132711851,
+            -0.138675425
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.485333335,
+          "slot_position": [
+            0.312861064,
+            0.658838558,
+            -0.421491068
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.825378171,
+            0.144716113,
+            -0.142505615
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.513333336,
+          "slot_position": [
+            0.312686616,
+            0.660972129,
+            -0.3963057
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.822004368,
+            0.159531953,
+            -0.146144145
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.560000002,
+          "slot_position": [
+            0.313063516,
+            0.662747495,
+            -0.35306187
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.820168751,
+            0.169857926,
+            -0.144814578
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.653333336,
+          "slot_position": [
+            0.331330788,
+            0.642547194,
+            -0.265850958
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.832748165,
+            0.136408111,
+            -0.102093613
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 0.933333337,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_spirit_keeper.glb",
+      "sha256": "eaf361258db5e6bee518b4592e7affa433e0c876e707e0ef0bd9b3fbe6bd3d09",
+      "source_model": "Mage.glb",
+      "source_clip": "Spellcast_Shoot",
+      "attack_channel_sha256": "6dc2c9f3c77c792041b03a19b0e5eff6b66baebbe28fa16ca04c98235cc2a775",
+      "duration_seconds": 0.9333333373069763,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Wand",
+        "2H_Staff"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.233333334,
+          "slot_position": [
+            0.311772167,
+            0.716674631,
+            -0.502673804
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840882599,
+            0.120219849,
+            -0.031039506
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.326666668,
+          "slot_position": [
+            0.31550349,
+            0.655804275,
+            -0.529112023
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.848949786,
+            0.000838198,
+            -0.042229754
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.373333335,
+          "slot_position": [
+            0.31469515,
+            0.652352129,
+            -0.506494412
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.844150847,
+            0.04780084,
+            -0.087316532
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.392000002,
+          "slot_position": [
+            0.314356826,
+            0.652453858,
+            -0.494821789
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.841314427,
+            0.066362671,
+            -0.101418781
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.420000002,
+          "slot_position": [
+            0.313858709,
+            0.653636926,
+            -0.475109956
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.836524493,
+            0.092940198,
+            -0.118695489
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.448000002,
+          "slot_position": [
+            0.313388629,
+            0.655632948,
+            -0.453269352
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.831491362,
+            0.117387807,
+            -0.131688806
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.466666669,
+          "slot_position": [
+            0.31303688,
+            0.657268562,
+            -0.437919354
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.828043728,
+            0.132711851,
+            -0.138675425
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.485333335,
+          "slot_position": [
+            0.312861064,
+            0.658838558,
+            -0.421491068
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.825378171,
+            0.144716113,
+            -0.142505615
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.513333336,
+          "slot_position": [
+            0.312686616,
+            0.660972129,
+            -0.3963057
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.822004368,
+            0.159531953,
+            -0.146144145
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.560000002,
+          "slot_position": [
+            0.313063516,
+            0.662747495,
+            -0.35306187
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.820168751,
+            0.169857926,
+            -0.144814578
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.653333336,
+          "slot_position": [
+            0.331330788,
+            0.642547194,
+            -0.265850958
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.832748165,
+            0.136408111,
+            -0.102093613
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 0.933333337,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_star_wagerer.glb",
+      "sha256": "2f61e9301d537ed573f7ea3dce7379ace67c768dc2e13be4fb7e7baa1f5ceb1e",
+      "source_model": "Mage.glb",
+      "source_clip": "Spellcast_Shoot",
+      "attack_channel_sha256": "6dc2c9f3c77c792041b03a19b0e5eff6b66baebbe28fa16ca04c98235cc2a775",
+      "duration_seconds": 0.9333333373069763,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Wand",
+        "2H_Staff"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.233333334,
+          "slot_position": [
+            0.311772167,
+            0.716674631,
+            -0.502673804
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840882599,
+            0.120219849,
+            -0.031039506
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.326666668,
+          "slot_position": [
+            0.31550349,
+            0.655804275,
+            -0.529112023
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.848949786,
+            0.000838198,
+            -0.042229754
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.373333335,
+          "slot_position": [
+            0.31469515,
+            0.652352129,
+            -0.506494412
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.844150847,
+            0.04780084,
+            -0.087316532
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.392000002,
+          "slot_position": [
+            0.314356826,
+            0.652453858,
+            -0.494821789
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.841314427,
+            0.066362671,
+            -0.101418781
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.420000002,
+          "slot_position": [
+            0.313858709,
+            0.653636926,
+            -0.475109956
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.836524493,
+            0.092940198,
+            -0.118695489
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.448000002,
+          "slot_position": [
+            0.313388629,
+            0.655632948,
+            -0.453269352
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.831491362,
+            0.117387807,
+            -0.131688806
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.466666669,
+          "slot_position": [
+            0.31303688,
+            0.657268562,
+            -0.437919354
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.828043728,
+            0.132711851,
+            -0.138675425
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.485333335,
+          "slot_position": [
+            0.312861064,
+            0.658838558,
+            -0.421491068
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.825378171,
+            0.144716113,
+            -0.142505615
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.513333336,
+          "slot_position": [
+            0.312686616,
+            0.660972129,
+            -0.3963057
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.822004368,
+            0.159531953,
+            -0.146144145
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.560000002,
+          "slot_position": [
+            0.313063516,
+            0.662747495,
+            -0.35306187
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.820168751,
+            0.169857926,
+            -0.144814578
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.653333336,
+          "slot_position": [
+            0.331330788,
+            0.642547194,
+            -0.265850958
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.832748165,
+            0.136408111,
+            -0.102093613
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 0.933333337,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_frost_oracle.glb",
+      "sha256": "2e1c8163f1bf438de93b62ddc4207137304f15238c3090ac9f96d1a0a698a17a",
+      "source_model": "Mage.glb",
+      "source_clip": "Spellcast_Shoot",
+      "attack_channel_sha256": "6dc2c9f3c77c792041b03a19b0e5eff6b66baebbe28fa16ca04c98235cc2a775",
+      "duration_seconds": 0.9333333373069763,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Wand",
+        "2H_Staff"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.233333334,
+          "slot_position": [
+            0.311772167,
+            0.716674631,
+            -0.502673804
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840882599,
+            0.120219849,
+            -0.031039506
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.326666668,
+          "slot_position": [
+            0.31550349,
+            0.655804275,
+            -0.529112023
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.848949786,
+            0.000838198,
+            -0.042229754
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.373333335,
+          "slot_position": [
+            0.31469515,
+            0.652352129,
+            -0.506494412
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.844150847,
+            0.04780084,
+            -0.087316532
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.392000002,
+          "slot_position": [
+            0.314356826,
+            0.652453858,
+            -0.494821789
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.841314427,
+            0.066362671,
+            -0.101418781
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.420000002,
+          "slot_position": [
+            0.313858709,
+            0.653636926,
+            -0.475109956
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.836524493,
+            0.092940198,
+            -0.118695489
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.448000002,
+          "slot_position": [
+            0.313388629,
+            0.655632948,
+            -0.453269352
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.831491362,
+            0.117387807,
+            -0.131688806
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.466666669,
+          "slot_position": [
+            0.31303688,
+            0.657268562,
+            -0.437919354
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.828043728,
+            0.132711851,
+            -0.138675425
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.485333335,
+          "slot_position": [
+            0.312861064,
+            0.658838558,
+            -0.421491068
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.825378171,
+            0.144716113,
+            -0.142505615
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.513333336,
+          "slot_position": [
+            0.312686616,
+            0.660972129,
+            -0.3963057
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.822004368,
+            0.159531953,
+            -0.146144145
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.560000002,
+          "slot_position": [
+            0.313063516,
+            0.662747495,
+            -0.35306187
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.820168751,
+            0.169857926,
+            -0.144814578
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.653333336,
+          "slot_position": [
+            0.331330788,
+            0.642547194,
+            -0.265850958
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.832748165,
+            0.136408111,
+            -0.102093613
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 0.933333337,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        }
+      ]
+    }
+  ],
+  "left_hands": [
+    {
+      "file": "assets/models/hero_tide_walker.glb",
+      "sha256": "45cd0aeccf23307e01b0d0679d76d001d97630f89443faed5b916e76ca7b7311",
+      "source_model": "Rogue.glb",
+      "source_clip": "Dualwield_Melee_Attack_Slice",
+      "attack_channel_sha256": "51d84508a7eeafc1849c35fd9742515cf9c08549ffc4aa08bcdeb10981061a8b",
+      "duration_seconds": 1.1666666269302368,
+      "bone": "handslot.l",
+      "attached_children": [
+        "Knife_Offhand"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            -0.431602993,
+            0.541199143,
+            0.015742962
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.820107809,
+            3.67e-07,
+            0.223433719
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.291666657,
+          "slot_position": [
+            -0.330562191,
+            0.800444356,
+            -0.214166416
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.832191649,
+            0.165504991,
+            0.050643099
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.408333319,
+          "slot_position": [
+            -0.303756451,
+            0.943300456,
+            -0.256544965
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.832681445,
+            0.168042424,
+            0.030048607
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.466666651,
+          "slot_position": [
+            -0.304338052,
+            0.991333474,
+            -0.258539735
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.838047432,
+            0.138408042,
+            0.031925958
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.489999983,
+          "slot_position": [
+            -0.307951572,
+            0.997823483,
+            -0.264528378
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.833690883,
+            0.154589075,
+            0.059676491
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.524999982,
+          "slot_position": [
+            -0.322135168,
+            0.967080445,
+            -0.333129086
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.795518226,
+            0.247039358,
+            0.169180028
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.559999981,
+          "slot_position": [
+            -0.36675589,
+            0.86710399,
+            -0.49314133
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.618676204,
+            0.486239864,
+            0.321418861
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.583333313,
+          "slot_position": [
+            -0.412200009,
+            0.789166972,
+            -0.605976337
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.400729052,
+            0.684763117,
+            0.304983875
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.606666646,
+          "slot_position": [
+            -0.453118221,
+            0.72221278,
+            -0.699845415
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.180722101,
+            0.816487602,
+            0.152272542
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.641666645,
+          "slot_position": [
+            -0.495339633,
+            0.666011491,
+            -0.804997274
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.026138754,
+            0.844838973,
+            -0.089795577
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.699999976,
+          "slot_position": [
+            -0.57625011,
+            0.646569407,
+            -0.809985049
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.00122945,
+            0.835240206,
+            -0.157707531
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.816666639,
+          "slot_position": [
+            -0.707730548,
+            0.638047923,
+            -0.389930793
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.00031773,
+            0.84969585,
+            -0.022721858
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.166666627,
+          "slot_position": [
+            -0.431602993,
+            0.541199143,
+            0.015742962
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.820107809,
+            3.67e-07,
+            0.223433719
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_rift_dancer.glb",
+      "sha256": "e48c26c814b88c29b50142c569b6a9db7d5d81f5d7001458671822ed541d0588",
+      "source_model": "Rogue_Hooded.glb",
+      "source_clip": "Dualwield_Melee_Attack_Slice",
+      "attack_channel_sha256": "51d84508a7eeafc1849c35fd9742515cf9c08549ffc4aa08bcdeb10981061a8b",
+      "duration_seconds": 1.1666666269302368,
+      "bone": "handslot.l",
+      "attached_children": [
+        "Knife_Offhand"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            -0.431602993,
+            0.541199143,
+            0.015742962
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.820107809,
+            3.67e-07,
+            0.223433719
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.291666657,
+          "slot_position": [
+            -0.330562191,
+            0.800444356,
+            -0.214166416
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.832191649,
+            0.165504991,
+            0.050643099
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.408333319,
+          "slot_position": [
+            -0.303756451,
+            0.943300456,
+            -0.256544965
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.832681445,
+            0.168042424,
+            0.030048607
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.466666651,
+          "slot_position": [
+            -0.304338052,
+            0.991333474,
+            -0.258539735
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.838047432,
+            0.138408042,
+            0.031925958
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.489999983,
+          "slot_position": [
+            -0.307951572,
+            0.997823483,
+            -0.264528378
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.833690883,
+            0.154589075,
+            0.059676491
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.524999982,
+          "slot_position": [
+            -0.322135168,
+            0.967080445,
+            -0.333129086
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.795518226,
+            0.247039358,
+            0.169180028
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.559999981,
+          "slot_position": [
+            -0.36675589,
+            0.86710399,
+            -0.49314133
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.618676204,
+            0.486239864,
+            0.321418861
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.583333313,
+          "slot_position": [
+            -0.412200009,
+            0.789166972,
+            -0.605976337
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.400729052,
+            0.684763117,
+            0.304983875
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.606666646,
+          "slot_position": [
+            -0.453118221,
+            0.72221278,
+            -0.699845415
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.180722101,
+            0.816487602,
+            0.152272542
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.641666645,
+          "slot_position": [
+            -0.495339633,
+            0.666011491,
+            -0.804997274
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.026138754,
+            0.844838973,
+            -0.089795577
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.699999976,
+          "slot_position": [
+            -0.57625011,
+            0.646569407,
+            -0.809985049
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.00122945,
+            0.835240206,
+            -0.157707531
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.816666639,
+          "slot_position": [
+            -0.707730548,
+            0.638047923,
+            -0.389930793
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.00031773,
+            0.84969585,
+            -0.022721858
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.166666627,
+          "slot_position": [
+            -0.431602993,
+            0.541199143,
+            0.015742962
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.820107809,
+            3.67e-07,
+            0.223433719
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_iron_berserker.glb",
+      "sha256": "229f22f40cffe51a879cfc8ea374702ff456e1ca2fee34697ad8e2739d3a20f4",
+      "source_model": "Barbarian.glb",
+      "source_clip": "2H_Melee_Attack_Chop",
+      "attack_channel_sha256": "bac2fb92fc3e2cfa5f3e71181fc7b514353f399dceebe3843428714cc5593951",
+      "duration_seconds": 1.6333333253860474,
+      "bone": "handslot.l",
+      "attached_children": [
+        "1H_Axe_Offhand",
+        "Barbarian_Round_Shield"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            -0.206193679,
+            0.697561464,
+            -0.466873581
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.553269225,
+            -0.611309566,
+            -0.206620704
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.408333331,
+          "slot_position": [
+            -0.398321997,
+            0.908434524,
+            0.089012014
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.553287831,
+            -0.254839945,
+            -0.592813809
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.571666664,
+          "slot_position": [
+            -0.406039863,
+            0.921494504,
+            0.149373536
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.553268562,
+            -0.186790611,
+            -0.617658551
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.65333333,
+          "slot_position": [
+            -0.398678211,
+            0.909908229,
+            -0.013743033
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.550218706,
+            -0.28940731,
+            -0.57965619
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.685999997,
+          "slot_position": [
+            -0.392059221,
+            0.88518815,
+            -0.196824465
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.546440833,
+            -0.403846735,
+            -0.510694073
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.734999996,
+          "slot_position": [
+            -0.341982666,
+            0.8490095,
+            -0.458834796
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.544757943,
+            -0.550681695,
+            -0.349981536
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.783999996,
+          "slot_position": [
+            -0.256724231,
+            0.791207052,
+            -0.678637221
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.543088044,
+            -0.612937436,
+            -0.227731537
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.816666663,
+          "slot_position": [
+            -0.06740861,
+            0.688859409,
+            -0.674879687
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.582616676,
+            -0.561406732,
+            -0.260535373
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.849333329,
+          "slot_position": [
+            0.116604679,
+            0.556182165,
+            -0.603801388
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.540048785,
+            -0.557881938,
+            -0.345851757
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.898333329,
+          "slot_position": [
+            0.192347861,
+            0.491268362,
+            -0.541952636
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.512662588,
+            -0.536120144,
+            -0.415031054
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.979999995,
+          "slot_position": [
+            0.187893311,
+            0.494802939,
+            -0.523167784
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.514079563,
+            -0.536807512,
+            -0.412381372
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 1.143333328,
+          "slot_position": [
+            0.147744478,
+            0.515814181,
+            -0.510880599
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.525563472,
+            -0.543184145,
+            -0.388886179
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.633333325,
+          "slot_position": [
+            -0.206193679,
+            0.697561464,
+            -0.466873581
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.553269225,
+            -0.611309566,
+            -0.206620704
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_void_reaper.glb",
+      "sha256": "f157cbebdb669cfbc72146292d078f8392f3a20b8309ea8000dfecfdb534db7a",
+      "source_model": "Barbarian.glb",
+      "source_clip": "2H_Melee_Attack_Chop",
+      "attack_channel_sha256": "bac2fb92fc3e2cfa5f3e71181fc7b514353f399dceebe3843428714cc5593951",
+      "duration_seconds": 1.6333333253860474,
+      "bone": "handslot.l",
+      "attached_children": [
+        "1H_Axe_Offhand",
+        "Barbarian_Round_Shield"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            -0.206193679,
+            0.697561464,
+            -0.466873581
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.553269225,
+            -0.611309566,
+            -0.206620704
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.408333331,
+          "slot_position": [
+            -0.398321997,
+            0.908434524,
+            0.089012014
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.553287831,
+            -0.254839945,
+            -0.592813809
+          ]
+        },
+        {
+          "fraction": 0.35,
+          "source_seconds": 0.571666664,
+          "slot_position": [
+            -0.406039863,
+            0.921494504,
+            0.149373536
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.553268562,
+            -0.186790611,
+            -0.617658551
+          ]
+        },
+        {
+          "fraction": 0.4,
+          "source_seconds": 0.65333333,
+          "slot_position": [
+            -0.398678211,
+            0.909908229,
+            -0.013743033
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.550218706,
+            -0.28940731,
+            -0.57965619
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.685999997,
+          "slot_position": [
+            -0.392059221,
+            0.88518815,
+            -0.196824465
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.546440833,
+            -0.403846735,
+            -0.510694073
+          ]
+        },
+        {
+          "fraction": 0.45,
+          "source_seconds": 0.734999996,
+          "slot_position": [
+            -0.341982666,
+            0.8490095,
+            -0.458834796
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.544757943,
+            -0.550681695,
+            -0.349981536
+          ]
+        },
+        {
+          "fraction": 0.48,
+          "source_seconds": 0.783999996,
+          "slot_position": [
+            -0.256724231,
+            0.791207052,
+            -0.678637221
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.543088044,
+            -0.612937436,
+            -0.227731537
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.816666663,
+          "slot_position": [
+            -0.06740861,
+            0.688859409,
+            -0.674879687
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.582616676,
+            -0.561406732,
+            -0.260535373
+          ]
+        },
+        {
+          "fraction": 0.52,
+          "source_seconds": 0.849333329,
+          "slot_position": [
+            0.116604679,
+            0.556182165,
+            -0.603801388
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.540048785,
+            -0.557881938,
+            -0.345851757
+          ]
+        },
+        {
+          "fraction": 0.55,
+          "source_seconds": 0.898333329,
+          "slot_position": [
+            0.192347861,
+            0.491268362,
+            -0.541952636
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.512662588,
+            -0.536120144,
+            -0.415031054
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.979999995,
+          "slot_position": [
+            0.187893311,
+            0.494802939,
+            -0.523167784
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.514079563,
+            -0.536807512,
+            -0.412381372
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 1.143333328,
+          "slot_position": [
+            0.147744478,
+            0.515814181,
+            -0.510880599
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.525563472,
+            -0.543184145,
+            -0.388886179
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.633333325,
+          "slot_position": [
+            -0.206193679,
+            0.697561464,
+            -0.466873581
+          ],
+          "slot_local_z_axis_in_model_space": [
+            -0.553269225,
+            -0.611309566,
+            -0.206620704
+          ]
+        }
+      ]
+    }
+  ],
+  "candidate": {
+    "daggers": "Current .42 at both sampled hand apices; inspect real native contact near .48-.60 slice before selecting phase",
+    "axes": "Current .42 in earlier downswing; separate .45-.55 trajectory, do not copy sword or dagger phase",
+    "sword": "Previously native calibrated .60; no new verification here"
+  },
+  "native_verified": false
+}
