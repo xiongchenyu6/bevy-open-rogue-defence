@@ -5,7 +5,7 @@ import unittest
 from contextlib import nullcontext
 from unittest.mock import patch, Mock
 from smoke_runtime import ocr_screenshot
-from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop, tile_name_text, public_panel_state, wait_panel_open
+from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop, tile_name_text, public_panel_state, wait_panel_open, battle_level_pixels
 from campaign_equipment_runtime import battle_seconds
 from pathlib import Path
 from campaign_equipment_runtime import (affordable_gear, market_wallet, inventory_count,
@@ -112,6 +112,34 @@ class EquipmentPolicyParsing(unittest.TestCase):
                 patch('campaign_equipment_runtime.screenshot_wallet',return_value=(89,'LV1 KILLS0089')):
             self.assertEqual(wait_panel_open(policy.ui['shot'],None,policy.key,90,[],'test','market'),market)
         policy.key.assert_not_called()
+
+    def test_level_glyph_hint_requires_real_numeric_pixels_and_never_repairs_text(self):
+        hint=[('LEVELS 20/132XP',487,667,592,680)]
+        self.assertEqual(public_panel_state(hint),'unknown')
+        with patch('campaign_equipment_runtime.battle_level_pixels',side_effect=AssertionError('not numeric')):
+            with self.assertRaises(AssertionError):public_panel_state(hint,Path('screen.png'))
+        with patch('campaign_equipment_runtime.battle_level_pixels') as pixels:
+            self.assertEqual(public_panel_state(hint+[('Choose an encounter',40,80,600,110)],Path('screen.png')),'unknown')
+            self.assertEqual(public_panel_state(hint+[('Level 10 · Recruit a hero',40,80,600,110)],Path('screen.png')),'choice')
+            pixels.assert_not_called()
+        with patch('campaign_equipment_runtime.subprocess.run'), \
+                patch('campaign_equipment_runtime.subprocess.check_output',return_value='LEVELS20/132XP'):
+            with self.assertRaises(AssertionError):battle_level_pixels(Path('screen.png'),None)
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_actual_two_level5_failures_use_numeric_pixel_signature(self):
+        from smoke_runtime import read_toolbar_speed
+        root=Path(__file__).resolve().parents[2]/'docs/verification/battle-level-ocr-2026-11-05'
+        for name,clock,numeric in [('forge-level5.png',21*60+32,'LEVEL520/132XP'),
+                                  ('chapter6-level5.png',21*60+23,'LEVEL59/132XP')]:
+            with self.subTest(name=name):
+                path=root/name;rows=ocr_screenshot(path)
+                self.assertEqual(public_panel_state(rows),'unknown')
+                self.assertEqual(public_panel_state(rows,path,None),'battle')
+                self.assertEqual(battle_level_pixels(path,None),numeric)
+                self.assertEqual(screenshot_battle_seconds(path,None),clock)
+                self.assertEqual(read_toolbar_speed(path,None),1)
 
     def test_inventory_opener_never_toggles_an_open_panel(self):
         rows=[('EQUIPMENT · 2',213,108,400,130)]

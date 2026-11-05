@@ -199,7 +199,27 @@ def choice_pending(rows):
                     'recruitahero', 'chooseanevolution', 'chooseabondtoreplace')) for text, *_ in rows)
 
 
-def public_panel_state(rows):
+def battle_level_pixels(path, env):
+    """Read the tiny level/XP caption without alphabetic substitutes for digits.
+
+    The numeric level and current XP may touch in OCR; their combined decimal
+    payload still proves this exact HUD signature without inferring a level.
+    """
+    with tempfile.TemporaryDirectory(prefix='rogue-level-') as directory:
+        crop = Path(directory) / 'level.png'
+        subprocess.run(['convert', str(path), '-crop', '150x24+475+660',
+                        '-resize', '300%', '-colorspace', 'Gray', '-negate',
+                        '-bordercolor', 'white', '-border', '20', str(crop)],
+                       env=env, check=True, capture_output=True)
+        text = subprocess.check_output(['tesseract', str(crop), 'stdout', '-l', 'eng',
+            '--psm', '7', '-c', 'tessedit_char_whitelist=LEVELXP0123456789/'],
+            env=env, text=True, stderr=subprocess.PIPE).strip()
+    assert re.fullmatch(r'LEVEL\s*\d+(?:\s+\d+)?\s*/\s*\d+\s*XP', text), \
+        f'Unreadable numeric level/XP pixels: {text!r}'
+    return text
+
+
+def public_panel_state(rows, image=None, env=None):
     if any(find_text(rows, title) for title in ('NO LIVES REMAIN', 'CHAPTER CLEARED')):
         return 'terminal'
     if choice_pending(rows):
@@ -217,6 +237,13 @@ def public_panel_state(rows):
            and re.fullmatch(r'LEVEL\s*\d+\s+\d+\s*/\s*\d+\s*XP', text.strip(), re.I)
            for text, x, y, *_ in rows):
         return 'battle'
+    # This narrowly located candidate only requests a fresh numeric pixel read;
+    # the S is never replaced with a guessed5 in the OCR text.
+    if image is not None and any(450 <= x < 650 and 640 <= y < 695
+            and re.fullmatch(r'LEVELS\s+\d+\s*/\s*\d+\s*XP', text.strip(), re.I)
+            for text, x, y, *_ in rows):
+        battle_level_pixels(image, env)
+        return 'battle'
     return 'unknown'
 
 
@@ -226,7 +253,7 @@ def wait_panel_open(shot, env, send, deadline, records, prefix, target_panel, vi
     while time.monotonic() < deadline:
         image = shot(prefix + f'-open-{len(records):02}.png')
         rows = ocr_screenshot(image, env)
-        state = public_panel_state(rows)
+        state = public_panel_state(rows, image, env)
         record = dict(visit=visit, screenshot=image.name, state=state, requests=requests)
         records.append(record)
         if state == target_panel:

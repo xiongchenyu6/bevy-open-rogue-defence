@@ -1,0 +1,12 @@
+forge-level5.png
+raw [('LEVELS 20/132XP', 487, 667, 592, 680), ('LEVELS 201132XP', 487, 667, 592, 679)]
+raw_state unknown
+numeric_pixels LEVEL520/132XP
+pixel_state battle
+clock 1292 speed 1
+chapter6-level5.png
+raw [('LEVELS 9/132 xP', 490, 657, 592, 688), ('LEVELS 91132XP', 490, 667, 589, 679)]
+raw_state unknown
+numeric_pixels LEVEL59/132XP
+pixel_state battle
+clock 1283 speed 1

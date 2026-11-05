@@ -12,11 +12,11 @@ from campaign_equipment_runtime import (TILE_LEFTS, PREVIEW_CROP, tile_name_text
 MATERIALS = frozenset(('Arc Lens', 'Echo Core'))
 
 
-def visible_hud_value(shot, read_value, read_rows, choose, deadline, now=time.monotonic):
+def visible_hud_value(shot, read_value, read_rows, choose, deadline, now=time.monotonic, env=None):
     """Classify same-frame public overlays before accepting any HUD metric."""
     while now() < deadline:
         image = shot()
-        state = public_panel_state(read_rows(image))
+        state = public_panel_state(read_rows(image), image, env)
         if state == 'terminal':
             return None
         assert now() < deadline, 'HUD observation deadline exhausted'
@@ -121,7 +121,7 @@ def main():
                 report.setdefault('hud_choices',[]).append(dict(screenshot=evidence.name,rows=rows))
             return rows
         value=visible_hud_value(lambda:shot(prefix+'-source.png'),
-            lambda image:reader(image,env),rows_for,key,time.monotonic()+90)
+            lambda image:reader(image,env),rows_for,key,time.monotonic()+90,env=env)
         if value is None:
             terminal(lines())
             raise AssertionError('Observed terminal no longer readable; proof remains pending')
