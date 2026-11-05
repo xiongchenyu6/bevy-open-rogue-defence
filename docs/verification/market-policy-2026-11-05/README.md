@@ -37,7 +37,7 @@ public battle countdown to decrease, with strict parsing and the existing visit
 time budget. This directory records the earlier eight-test parser stage.
 Subsequent actual packaged purchasing and three live countdown-resume proofs
 are archived in [the earned-market run](../earned-market-2026-11-05/README.md).
-That newer route has ten equipment-policy regressions, plus nine common
+That newer route has eleven equipment-policy regressions, plus nine common
 campaign checks including the isolated speed-label failure frame.
 
 These earlier pixel-reading tests alone do not prove transactions, progression

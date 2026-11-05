@@ -23,6 +23,11 @@ PREVIEW_CROP = '425x19+695+489'
 TILE_LEFTS = (615, 742, 868, 995, 1122)
 
 
+def tile_name_crop(left):
+    # Exclude both the item art above the caption and the tile's side borders.
+    return f'108x28+{left + 6}+353'
+
+
 def battle_seconds(text):
     match = re.fullmatch(r'(\d{2}):(\d{2})', text.strip())
     assert match and int(match[2]) < 60, f'Unreadable battle countdown: {text!r}'
@@ -188,7 +193,7 @@ class EquipmentPolicy:
         while time.monotonic() < end:
             time.sleep(.2)
             image = self.ui['shot'](prefix + f'-inspect-{index}.png')
-            tile = crop_text(image, f'120x40+{left}+343', self.ui['env'])
+            tile = crop_text(image, tile_name_crop(left), self.ui['env'])
             price = crop_text(image, f'39x23+{left+52}+384', self.ui['env'], digits=True)
             preview = crop_text(image, PREVIEW_CROP, self.ui['env'])
             try:

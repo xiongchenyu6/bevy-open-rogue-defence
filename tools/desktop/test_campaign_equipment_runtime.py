@@ -1,7 +1,7 @@
 import shutil
 import unittest
 from unittest.mock import patch
-from campaign_equipment_runtime import EquipmentPolicy
+from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop
 from campaign_equipment_runtime import battle_seconds
 from pathlib import Path
 from campaign_equipment_runtime import (affordable_gear, market_wallet, inventory_count,
@@ -97,6 +97,16 @@ class EquipmentPolicyParsing(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
                          'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_native_natural_stock_names_exclude_art_and_tile_borders(self):
+        root = Path(__file__).resolve().parents[2]
+        path = root / 'docs/verification/market-name-crop-2026-11-05/natural-stock.png'
+        names = ['Wind Boots', 'Arc Lens', 'Gate Patch', 'Skill Tuner', 'Ember Heart']
+        for left, name in zip(TILE_LEFTS, names):
+            with self.subTest(name=name):
+                self.assertEqual(crop_text(path, tile_name_crop(left), None), name)
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
     def test_real_committed_native_market_pixels(self):
         root=Path(__file__).resolve().parents[2]/'docs/verification/black-market-2026-11-04/en-1280x720'
         for frame,index,wallet,name,category,price in [
@@ -108,7 +118,7 @@ class EquipmentPolicyParsing(unittest.TestCase):
                 path=root/f'frame{frame:05}.png'
                 self.assertEqual(screenshot_wallet(path,None)[0],wallet)
                 left=TILE_LEFTS[index]
-                offer=inspected_offer(crop_text(path,f'120x40+{left}+343',None),
+                offer=inspected_offer(crop_text(path,tile_name_crop(left),None),
                     crop_text(path,f'39x23+{left+52}+384',None,True),
                     crop_text(path,PREVIEW_CROP,None),index)
                 self.assertEqual((offer['name'],offer['category'],offer['price']),(name,category,price))

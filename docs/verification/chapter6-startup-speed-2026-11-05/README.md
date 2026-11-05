@@ -14,4 +14,4 @@ price and result checks are retained; no game state is read or changed.
 Docker tests:19 passed, including OCR of this exact native failure frame,
 strict speed parsing, existing campaign stat/seed checks and equipment-policy
 regressions. This is fixed-geometry test automation, not a new game input path
-or a cross-resolution claim. Live R5 remains a separate pending route.
+or a cross-resolution claim. Subsequent live route outcomes are tracked in `docs/packaged-chapter6.md`.
