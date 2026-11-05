@@ -1,0 +1,39 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `release` profile [optimized] target(s) in 5m 23s
+     Running unittests src/lib.rs (target/release/deps/rogue_commander-37d39db57aeef6a3)
+
+running 1 test
+GATE_STATE reverse=false rows=[27v0, 28v0] first=Vec3(14.900585, 0.0, -2.4891942) second=Vec3(14.80117, 0.0, -2.4783883) gate=0
+GATE_STATE reverse=true rows=[28v0, 27v0] first=Vec3(14.9, 0.0, -2.5) second=Vec3(14.8005905, 0.0, -2.4891474) gate=0
+
+thread 'game::combat::tests::gate_state_is_consistent_for_every_enemy_in_one_movement_pass' (2933864) panicked at src/game/combat/gate_state_tests.rs:61:5:
+assertion `left == right` failed: cosmetic row order must not change gate state seen by the same mover
+  left: (Vec3(14.900585, 0.0, -2.4891942), Vec3(14.80117, 0.0, -2.4783883), 0.0)
+ right: (Vec3(14.9, 0.0, -2.5), Vec3(14.8005905, 0.0, -2.4891474), 0.0)
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<(glam::f32::vec3::Vec3, glam::f32::vec3::Vec3, f32), (glam::f32::vec3::Vec3, glam::f32::vec3::Vec3, f32)>
+   4: rogue_commander::game::combat::tests::gate_state_is_consistent_for_every_enemy_in_one_movement_pass
+   5: <rogue_commander::game::combat::tests::gate_state_is_consistent_for_every_enemy_in_one_movement_pass::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+test game::combat::tests::gate_state_is_consistent_for_every_enemy_in_one_movement_pass ... FAILED
+
+failures:
+
+failures:
+    game::combat::tests::gate_state_is_consistent_for_every_enemy_in_one_movement_pass
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 687 filtered out; finished in 0.03s
+
+error: test failed, to rerun pass `--lib`

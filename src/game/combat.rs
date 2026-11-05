@@ -1113,6 +1113,9 @@ fn move_enemies(
     };
     let hero_position = hero_transform.translation;
     let core_position = core.translation;
+    // Every actor in this movement pass sees the same gate state. Damage still
+    // applies immediately; destination changes become visible on the next pass.
+    let gate_available = session.core_hp > 0.0 && session.gate_revive_remaining <= 0.0;
     let chanters: Vec<(Entity, Vec3)> = enemies
         .p0()
         .iter()
@@ -1173,8 +1176,7 @@ fn move_enemies(
         };
         if (camp.is_some() && hero_position.x >= core_position.x)
             || transform.translation.x < core_position.x
-            || session.core_hp <= 0.0
-            || session.gate_revive_remaining > 0.0
+            || !gate_available
         {
             // Rushers carry their damage in the breach profile; ordinary attackers
             // keep their existing native damage when switching to the exposed hero.
@@ -3431,6 +3433,7 @@ mod tests {
     use super::*;
 
     include!("combat/collision_order_tests.rs");
+    include!("combat/gate_state_tests.rs");
     include!("combat/designated_strike_tests.rs");
     include!("combat/native_aim_tests.rs");
 

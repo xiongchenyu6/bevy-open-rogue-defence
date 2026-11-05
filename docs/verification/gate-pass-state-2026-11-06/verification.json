@@ -1,0 +1,24 @@
+{
+  "scope": "One gate availability state per move_enemies call; immediate damage retained; exact full replay gate separately open; no new pair/matrix",
+  "source_sha256": {
+    "src/game/combat.rs": "884638a9e2426e04e665726a45f4186647bbda2de9c825503e211d38379d6e69",
+    "src/game/combat/gate_state_tests.rs": "cd40b8408f45e43475493a375357713de6ef58e0c880c57fe23626f39420eb9b"
+  },
+  "files_sha256": {
+    "README.md": "66c0bb076c2790a25d5524432a27f55c2d1f7bba5c613acc08c7100f201ebd14",
+    "after-build.log": "fbaeafca3bd4818e3706df1f2b2f8bd82826cbb9b241f03c8f96d137a1d6d9fe",
+    "after-clippy.log": "0280e7ab377225abc27b97895966a413a274c99a36ddc52ea164fbee76dda10f",
+    "after-full-tests.log": "4bb2ca7c9bff6d2d0061bb62b000e0ada70abd4f552f1c4c97d709205b20d28e",
+    "after-sequence.log": "06550dd1b92fd4b870f06dd099336d2f92aca706d85c492ffb32ac6d7cff39c7",
+    "after-source-after.json": "15127ce8ae8ce0f99ee9613129b2406317ce78be7cd0b8042509a33fd70f15d7",
+    "after-source-before.json": "15127ce8ae8ce0f99ee9613129b2406317ce78be7cd0b8042509a33fd70f15d7",
+    "after.py": "f0bf255df9a0c7ccbef9ac3fe0099a27fc55e15b08be002328c13c7e86d57730",
+    "before-exit.txt": "39b8dc3fc8b44765c8e6f1adee04c5b465e555ab791cc42d0d9e810d5b64297c",
+    "before-sequence.log": "8a4146064b8de75255a52c33c9fe22305ddd668fff544be5f1d9d36dc70bf48c",
+    "before-source-hashes.json": "a5d6eefd419a7cad06c2e1ae15b00f63b071457749432533b7f5d57651ce7438",
+    "before-tests.log": "7ce2325ad44fbf4707e4b52c183eb15fdaef2ab0b9f087abe74ba7200539b97c",
+    "before.py": "deff94ef5550f842e9ccc02b979a124fbdd94756330a0387155ae37e5ca9bb6a",
+    "binary.json": "aa07ab5a98f6b087f0202722878b6ec6160e16aa8a2f4b74e97c96aa3a51e681",
+    "verify.py": "da98a37be76cc5f7f5ee70a846234620f66cd809b59c3afd3622842da1522c08"
+  }
+}
