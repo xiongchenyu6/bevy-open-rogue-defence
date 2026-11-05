@@ -1,0 +1,714 @@
+{
+  "method": "Read-only GLB TRS hierarchy; LINEAR vector and shortest-arc NLERP quaternion sampling",
+  "limitations": "Bone trajectory, not an authored release event, weapon-tip collision, native animation trace, or Bevy exact SLERP evaluation",
+  "theoretical_unmodified_build_only": {
+    "attacks_per_second": 1.954,
+    "interval_seconds": 0.5117707267144319,
+    "action_window_seconds": 0.45,
+    "old_contact_seconds": 0.189,
+    "proposed_sword_contact_seconds": 0.27,
+    "warning": "Not the observed hero runtime: hero-derived attack speed changes the window"
+  },
+  "stone_solar_identical_attack_channels_and_samples": true,
+  "models": [
+    {
+      "file": "assets/models/hero_stone_warden.glb",
+      "sha256": "5f68ad845b610a708fdb0b2b495c83c94413c59f327cf3bb36177b49ca93214a",
+      "source_model": "Knight.glb",
+      "source_clip": "1H_Melee_Attack_Chop",
+      "attack_channel_sha256": "826fbb557bd4705dd18467df7fea8dffc01bd3d9294f9532ff8d84f35a57a11b",
+      "duration_seconds": 1.0666667222976685,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Sword",
+        "2H_Sword"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.266666681,
+          "slot_position": [
+            0.399011632,
+            0.850115175,
+            -0.302013552
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840320711,
+            -0.126045111,
+            0.021756016
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.448000023,
+          "slot_position": [
+            0.418336758,
+            0.922892803,
+            -0.270875189
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840452344,
+            -0.12414913,
+            -0.026947713
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.533333361,
+          "slot_position": [
+            0.417398144,
+            0.932301196,
+            -0.250627219
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840508613,
+            -0.121238394,
+            -0.036687051
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.640000033,
+          "slot_position": [
+            0.423121762,
+            0.588408571,
+            -0.350380507
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.839723725,
+            0.016313966,
+            0.130757365
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.746666706,
+          "slot_position": [
+            0.419150454,
+            0.548437482,
+            -0.329326321
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840300408,
+            0.011385312,
+            0.12753508
+          ]
+        },
+        {
+          "fraction": 0.8,
+          "source_seconds": 0.853333378,
+          "slot_position": [
+            0.418630084,
+            0.491405402,
+            -0.222658781
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840339274,
+            0.007235234,
+            0.127581724
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.066666722,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_solar_vanguard.glb",
+      "sha256": "196312426fea75a7197d5102f0957bb578311c76fd466682f302a51881cb7dcd",
+      "source_model": "Knight.glb",
+      "source_clip": "1H_Melee_Attack_Chop",
+      "attack_channel_sha256": "826fbb557bd4705dd18467df7fea8dffc01bd3d9294f9532ff8d84f35a57a11b",
+      "duration_seconds": 1.0666667222976685,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Sword",
+        "2H_Sword"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.266666681,
+          "slot_position": [
+            0.399011632,
+            0.850115175,
+            -0.302013552
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840320711,
+            -0.126045111,
+            0.021756016
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.448000023,
+          "slot_position": [
+            0.418336758,
+            0.922892803,
+            -0.270875189
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840452344,
+            -0.12414913,
+            -0.026947713
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.533333361,
+          "slot_position": [
+            0.417398144,
+            0.932301196,
+            -0.250627219
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840508613,
+            -0.121238394,
+            -0.036687051
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.640000033,
+          "slot_position": [
+            0.423121762,
+            0.588408571,
+            -0.350380507
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.839723725,
+            0.016313966,
+            0.130757365
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.746666706,
+          "slot_position": [
+            0.419150454,
+            0.548437482,
+            -0.329326321
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840300408,
+            0.011385312,
+            0.12753508
+          ]
+        },
+        {
+          "fraction": 0.8,
+          "source_seconds": 0.853333378,
+          "slot_position": [
+            0.418630084,
+            0.491405402,
+            -0.222658781
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840339274,
+            0.007235234,
+            0.127581724
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.066666722,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_iron_berserker.glb",
+      "sha256": "229f22f40cffe51a879cfc8ea374702ff456e1ca2fee34697ad8e2739d3a20f4",
+      "source_model": "Barbarian.glb",
+      "source_clip": "2H_Melee_Attack_Chop",
+      "attack_channel_sha256": "bac2fb92fc3e2cfa5f3e71181fc7b514353f399dceebe3843428714cc5593951",
+      "duration_seconds": 1.6333333253860474,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Axe",
+        "2H_Axe",
+        "Mug"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.235710272,
+            0.587616725,
+            -0.296440327
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.517448677,
+            0.588232239,
+            -0.329740888
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.408333331,
+          "slot_position": [
+            -0.154285284,
+            0.796868049,
+            -0.126948884
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.440367472,
+            0.655602658,
+            -0.31426248
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.685999997,
+          "slot_position": [
+            -0.063483253,
+            0.769171123,
+            -0.267839135
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.446948679,
+            0.71677982,
+            -0.09467207
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.816666663,
+          "slot_position": [
+            0.246285766,
+            0.565254952,
+            -0.443522281
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.723228909,
+            0.426120213,
+            -0.133644143
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.979999995,
+          "slot_position": [
+            0.263410223,
+            0.551175476,
+            -0.283953112
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.563929382,
+            0.608127185,
+            -0.186183222
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 1.143333328,
+          "slot_position": [
+            0.258450339,
+            0.554506496,
+            -0.274487405
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.568578849,
+            0.604399688,
+            -0.184169302
+          ]
+        },
+        {
+          "fraction": 0.8,
+          "source_seconds": 1.30666666,
+          "slot_position": [
+            0.247249606,
+            0.564324098,
+            -0.282116798
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.596959484,
+            0.588178996,
+            -0.142070668
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.633333325,
+          "slot_position": [
+            0.235710272,
+            0.587616725,
+            -0.296440327
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.517448677,
+            0.588232239,
+            -0.329740888
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_ember_ranger.glb",
+      "sha256": "72b57aca948ca319fc4cd1ec7e73d03b876961d541bae4fbc9ea276cd1ae2811",
+      "source_model": "Rogue_Hooded.glb",
+      "source_clip": "2H_Ranged_Shoot",
+      "attack_channel_sha256": "ee027b6ed84c8233dbeaaa18da7c17beb5c807fa569cdc1f58e1d98cf6c2924e",
+      "duration_seconds": 1.0666667222976685,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Crossbow",
+        "2H_Crossbow",
+        "Knife",
+        "Throwable"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.81489833,
+            0.104062873,
+            0.218199876
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.266666681,
+          "slot_position": [
+            0.362475891,
+            0.829503277,
+            -0.052267382
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850941,
+            0.002048064,
+            -0.015761188
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.448000023,
+          "slot_position": [
+            0.363129145,
+            0.828807114,
+            -0.011207184
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850719,
+            0.003977027,
+            -0.015396838
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.533333361,
+          "slot_position": [
+            0.362640541,
+            0.829311883,
+            -0.041629441
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850855,
+            0.002646366,
+            -0.015672114
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.640000033,
+          "slot_position": [
+            0.362502807,
+            0.829175448,
+            -0.05207776
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850813,
+            0.001954758,
+            -0.015774011
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.746666706,
+          "slot_position": [
+            0.362755817,
+            0.826102154,
+            -0.050163276
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850711,
+            0.00107416,
+            -0.015861991
+          ]
+        },
+        {
+          "fraction": 0.8,
+          "source_seconds": 0.853333378,
+          "slot_position": [
+            0.36315,
+            0.821384711,
+            -0.046711652
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850638,
+            -0.000296636,
+            -0.015897535
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 1.066666722,
+          "slot_position": [
+            0.363680159,
+            0.815277636,
+            -0.041202673
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.849850671,
+            -0.002118392,
+            -0.015753066
+          ]
+        }
+      ]
+    },
+    {
+      "file": "assets/models/hero_storm_savant.glb",
+      "sha256": "e69441a01346b6cf0cb358c8470927db2635f976c9d6d53f58ac17440fe09474",
+      "source_model": "Mage.glb",
+      "source_clip": "Spellcast_Shoot",
+      "attack_channel_sha256": "6dc2c9f3c77c792041b03a19b0e5eff6b66baebbe28fa16ca04c98235cc2a775",
+      "duration_seconds": 0.9333333373069763,
+      "bone": "handslot.r",
+      "attached_children": [
+        "1H_Wand",
+        "2H_Staff"
+      ],
+      "samples": [
+        {
+          "fraction": 0.0,
+          "source_seconds": 0.0,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        },
+        {
+          "fraction": 0.25,
+          "source_seconds": 0.233333334,
+          "slot_position": [
+            0.311772167,
+            0.716674631,
+            -0.502673804
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.840882599,
+            0.120219849,
+            -0.031039506
+          ]
+        },
+        {
+          "fraction": 0.42,
+          "source_seconds": 0.392000002,
+          "slot_position": [
+            0.314356826,
+            0.652453858,
+            -0.494821789
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.841314427,
+            0.066362671,
+            -0.101418781
+          ]
+        },
+        {
+          "fraction": 0.5,
+          "source_seconds": 0.466666669,
+          "slot_position": [
+            0.31303688,
+            0.657268562,
+            -0.437919354
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.828043728,
+            0.132711851,
+            -0.138675425
+          ]
+        },
+        {
+          "fraction": 0.6,
+          "source_seconds": 0.560000002,
+          "slot_position": [
+            0.313063516,
+            0.662747495,
+            -0.35306187
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.820168751,
+            0.169857926,
+            -0.144814578
+          ]
+        },
+        {
+          "fraction": 0.7,
+          "source_seconds": 0.653333336,
+          "slot_position": [
+            0.331330788,
+            0.642547194,
+            -0.265850958
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.832748165,
+            0.136408111,
+            -0.102093613
+          ]
+        },
+        {
+          "fraction": 0.8,
+          "source_seconds": 0.74666667,
+          "slot_position": [
+            0.368105855,
+            0.599519719,
+            -0.182649204
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.84676714,
+            0.073020758,
+            -0.012374084
+          ]
+        },
+        {
+          "fraction": 1.0,
+          "source_seconds": 0.933333337,
+          "slot_position": [
+            0.417401658,
+            0.544875306,
+            -0.090606237
+          ],
+          "slot_local_z_axis_in_model_space": [
+            0.8403964,
+            6.2e-08,
+            0.127410554
+          ]
+        }
+      ]
+    }
+  ],
+  "native_baseline": {
+    "file": "docs/verification/attack-rhythm-2026-11-05/before-sword.log",
+    "sha256": "952d15224d0627c476e717b5d0946d069e0dde9160022a642081fc220531e3fb",
+    "note": "Observed trace takes precedence over theoretical unmodified-build timing",
+    "positive_damage_observations": [
+      {
+        "frame": 16,
+        "damage": 83.188,
+        "animation_graph_node": 3,
+        "observed_source_seek_seconds": 0.45297775,
+        "observed_animation_speed": 2.7178667,
+        "observed_source_phase": 0.42466661847690995,
+        "inferred_action_window_seconds": 0.39246469383420035
+      },
+      {
+        "frame": 28,
+        "damage": 83.219,
+        "animation_graph_node": 3,
+        "observed_source_seek_seconds": 0.45297775,
+        "observed_animation_speed": 2.7178667,
+        "observed_source_phase": 0.42466661847690995,
+        "inferred_action_window_seconds": 0.39246469383420035
+      },
+      {
+        "frame": 40,
+        "damage": 83.219,
+        "animation_graph_node": 3,
+        "observed_source_seek_seconds": 0.45297775,
+        "observed_animation_speed": 2.7178667,
+        "observed_source_phase": 0.42466661847690995,
+        "inferred_action_window_seconds": 0.39246469383420035
+      },
+      {
+        "frame": 52,
+        "damage": 83.188,
+        "animation_graph_node": 3,
+        "observed_source_seek_seconds": 0.45297775,
+        "observed_animation_speed": 2.7178667,
+        "observed_source_phase": 0.42466661847690995,
+        "inferred_action_window_seconds": 0.39246469383420035
+      },
+      {
+        "frame": 63,
+        "damage": 83.188,
+        "animation_graph_node": 3,
+        "observed_source_seek_seconds": 0.45297775,
+        "observed_animation_speed": 2.7178667,
+        "observed_source_phase": 0.42466661847690995,
+        "inferred_action_window_seconds": 0.39246469383420035
+      },
+      {
+        "frame": 75,
+        "damage": 83.219,
+        "animation_graph_node": 3,
+        "observed_source_seek_seconds": 0.45297775,
+        "observed_animation_speed": 2.7178667,
+        "observed_source_phase": 0.42466661847690995,
+        "inferred_action_window_seconds": 0.39246469383420035
+      }
+    ]
+  }
+}

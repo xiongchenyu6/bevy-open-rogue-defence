@@ -163,6 +163,57 @@ pub fn install(app: &mut bevy::app::SubApp, scenario: &str) {
         saw_visual: false,
     })
     .add_systems(Last, (verify, revive_fragile_targets));
+    if std::env::var_os("ROGUE_CAPTURE_ATTACK_TRACE").is_some() {
+        app.init_resource::<AttackTimingTrace>()
+            .add_systems(Last, trace_attack_timing);
+    }
+}
+
+#[derive(Resource, Default)]
+struct AttackTimingTrace {
+    frame: u32,
+    previous_health: Option<f32>,
+}
+
+/// Observe actual damage and authored playback together, without injecting hits.
+fn trace_attack_timing(world: &mut World) {
+    let health: f32 = world
+        .query_filtered::<&Enemy, With<AttackTarget>>()
+        .iter(world)
+        .map(|enemy| enemy.hp)
+        .sum();
+    let (frame, damage) = {
+        let mut trace = world.resource_mut::<AttackTimingTrace>();
+        trace.frame += 1;
+        let damage = trace.previous_health.map_or(0.0, |last| last - health);
+        trace.previous_health = Some(health);
+        (trace.frame, damage)
+    };
+    if frame > 80 {
+        return;
+    }
+    let mut players = world.query::<(Entity, &AnimationPlayer)>();
+    let animations: Vec<_> = players
+        .iter(world)
+        .filter(|(entity, _)| {
+            let mut current = Some(*entity);
+            while let Some(entity) = current {
+                if world.get::<Hero>(entity).is_some() {
+                    return true;
+                }
+                current = world.get::<ChildOf>(entity).map(ChildOf::parent);
+            }
+            false
+        })
+        .flat_map(|(_, player)| {
+            player
+                .playing_animations()
+                .map(|(index, active)| (index.index(), active.seek_time(), active.speed()))
+        })
+        .collect();
+    println!(
+        "ATTACK_TIMING frame={frame} health={health:.3} damage={damage:.3} clips={animations:?}"
+    );
 }
 
 fn revive_fragile_targets(mut targets: Query<(&mut Enemy, &mut FragileRevive)>) {

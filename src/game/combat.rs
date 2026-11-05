@@ -2070,7 +2070,10 @@ fn auto_attack(
                     direction: base_direction,
                     damage: build.attack_damage,
                     hit_limit: class_stats.cleave_targets + bonds.melee_cleave(),
-                    remaining: basic_attacks::swing_windup(clock.0.duration().as_secs_f32()),
+                    remaining: basic_attacks::swing_windup(
+                        vitals.kind,
+                        clock.0.duration().as_secs_f32(),
+                    ),
                 });
                 fired = true;
             }

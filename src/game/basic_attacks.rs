@@ -497,8 +497,16 @@ pub(crate) struct SwingTrail {
     direction: Vec3,
 }
 
-pub(crate) fn swing_windup(interval: f32) -> f32 {
-    interval.clamp(0.03, 0.45) * 0.42
+pub(crate) fn swing_windup(kind: HeroKind, interval: f32) -> f32 {
+    // The shared one-handed sword clip is still raising the weapon at 42%.
+    // Contact follows its 50–60% downswing; other authored weapons retain
+    // their existing timing until their own contact phases are verified.
+    let phase = if weapon(kind) == BasicWeapon::Sword {
+        0.60
+    } else {
+        0.42
+    };
+    interval.clamp(0.03, 0.45) * phase
 }
 
 /// Targets are checked at weapon contact, not at attack start; a dodged swing misses.
@@ -942,8 +950,17 @@ mod tests {
     }
     #[test]
     fn faster_attacks_keep_contact_inside_the_animation_window() {
-        assert!((swing_windup(1.0) - 0.189).abs() < 0.0001);
-        assert!(swing_windup(0.1) < 0.1);
+        for kind in HeroKind::ALL {
+            for interval in [0.03, 0.1, 0.45, 1.0] {
+                let contact = swing_windup(kind, interval);
+                assert!(contact > 0.0 && contact < interval.min(0.45));
+            }
+        }
+        assert!(swing_windup(HeroKind::StoneWarden, 1.0) > 0.45 * 0.50);
+        assert_eq!(
+            swing_windup(HeroKind::SolarVanguard, 1.0),
+            swing_windup(HeroKind::StoneWarden, 1.0)
+        );
     }
 
     #[test]

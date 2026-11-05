@@ -1,0 +1,12 @@
+{
+  "sword_hits": 6,
+  "damage_and_intervals_unchanged": true,
+  "contact_shift_frames_at_30hz": 3,
+  "before_observed_phase": 0.42466661847690995,
+  "after_observed_phase": 0.6794665895630558,
+  "controls": {
+    "ember": "80 production observations unchanged",
+    "storm": "80 production observations unchanged"
+  },
+  "solar_contact_checked": true
+}

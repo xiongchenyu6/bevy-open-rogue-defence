@@ -51,8 +51,11 @@ evidence; it provides no release performance result.
 
 ## Further work is separate
 
-Contact alignment of individual authored weapon clips needs its own recorded
-sequence before changing animation timing. More particles, full-screen flashes,
+Sword contact has since been calibrated against its authored clip and paired
+native damage/playback sequences; see
+[the sword timing record](verification/attack-rhythm-2026-11-05/README.md).
+Other weapons still need their own release/contact evidence before timing changes.
+More particles, full-screen flashes,
 universal slow motion or continuous shake are not part of this change. Future
 camera/flash additions should honor reduced-motion and reduced-flash settings.
 

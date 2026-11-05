@@ -1,0 +1,11 @@
+{
+  "sources": {
+    "src/game/basic_attacks.rs": "ae72f61a85e75c10b44545887bd0f955daedece4a7dba1849f62cd5bf3360e3d",
+    "src/game/combat.rs": "36d1128ddf6f9f908880f381eea02cb1256031a168f78e1ce2bc133e05b9c3e8",
+    "src/bin/capture/attacks.rs": "21158ab8c0e1ed125f6ca14cba46d1dcb8d9f8049db25e2d86d6b0e20c065364"
+  },
+  "after_binary_sha256": "e567ac742dc03109ea1a68b14fb3adc5bb0ac677a19753d01ce538460c5d8d58",
+  "baseline_gameplay_commit": "3fec882",
+  "baseline_binary_retained": false,
+  "profile": "dev/dependency opt0, debug0, j1; native visual/timing only"
+}

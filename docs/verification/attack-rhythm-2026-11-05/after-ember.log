@@ -1,0 +1,121 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {20, 25, 30, 32, 34, 36, 38, 40, 45, 50, 55, 60}; all 210 simulation/render updates retained
+[2m2026-11-05T03:27:10.631770Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-05T03:27:10.725194Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-05T03:27:11.518480Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-05T03:27:11.518664Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[capture] scenario=attack-ember
+[capture] seed=0x00000000000A11CE
+[2m2026-11-05T03:27:12.325033Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] attack-ember: centered battlefield, real EmberRanger basic attacks; no Autoplay or ultimate
+ATTACK_TIMING frame=1 health=300000.000 damage=0.000 clips=[(1, 0.03333333, 1.0)]
+ATTACK_TIMING frame=2 health=300000.000 damage=0.000 clips=[(1, 0.06666666, 1.0)]
+ATTACK_TIMING frame=3 health=300000.000 damage=0.000 clips=[(1, 0.099999994, 1.0)]
+ATTACK_TIMING frame=4 health=300000.000 damage=0.000 clips=[(1, 0.13333333, 1.0)]
+ATTACK_TIMING frame=5 health=300000.000 damage=0.000 clips=[(1, 0.16666666, 1.0)]
+ATTACK_TIMING frame=6 health=300000.000 damage=0.000 clips=[(1, 0.19999999, 1.0)]
+ATTACK_TIMING frame=7 health=300000.000 damage=0.000 clips=[(1, 0.23333332, 1.0)]
+ATTACK_TIMING frame=8 health=300000.000 damage=0.000 clips=[(1, 0.26666665, 1.0)]
+ATTACK_TIMING frame=9 health=300000.000 damage=0.000 clips=[(1, 0.29999998, 1.0)]
+ATTACK_TIMING frame=10 health=300000.000 damage=0.000 clips=[(1, 0.3333333, 1.0)]
+ATTACK_TIMING frame=11 health=300000.000 damage=0.000 clips=[(3, 0.10453333, 3.1360002)]
+ATTACK_TIMING frame=12 health=300000.000 damage=0.000 clips=[(3, 0.20906666, 3.1360002)]
+ATTACK_TIMING frame=13 health=300000.000 damage=0.000 clips=[(3, 0.3136, 3.1360002)]
+ATTACK_TIMING frame=14 health=300000.000 damage=0.000 clips=[(3, 0.41813332, 3.1360002)]
+ATTACK_TIMING frame=15 health=300000.000 damage=0.000 clips=[(3, 0.52266663, 3.1360002)]
+ATTACK_TIMING frame=16 health=300000.000 damage=0.000 clips=[(3, 0.62719995, 3.1360002)]
+ATTACK_TIMING frame=17 health=299950.000 damage=50.000 clips=[(3, 0.73173326, 3.1360002)]
+ATTACK_TIMING frame=18 health=299950.000 damage=0.000 clips=[(3, 0.8362666, 3.1360002)]
+ATTACK_TIMING frame=19 health=299950.000 damage=0.000 clips=[(3, 0.9407999, 3.1360002)]
+ATTACK_TIMING frame=20 health=299950.000 damage=0.000 clips=[(3, 1.0453333, 3.1360002)]
+ATTACK_TIMING frame=21 health=299950.000 damage=0.000 clips=[(3, 0.107146665, 3.2144)]
+ATTACK_TIMING frame=22 health=299950.000 damage=0.000 clips=[(3, 0.21429333, 3.2144)]
+[2m2026-11-05T03:27:17.723660Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/attack-rhythm-2026-11-05/after-ember/frame00020.png
+[capture] saved 1/1 target/verification/attack-rhythm-2026-11-05/after-ember/frame00020.png (943283 bytes)
+ATTACK_TIMING frame=23 health=299950.000 damage=0.000 clips=[(3, 0.32143998, 3.2144)]
+ATTACK_TIMING frame=24 health=299950.000 damage=0.000 clips=[(3, 0.42858666, 3.2144)]
+ATTACK_TIMING frame=25 health=299950.000 damage=0.000 clips=[(3, 0.53573334, 3.2144)]
+ATTACK_TIMING frame=26 health=299950.000 damage=0.000 clips=[(3, 0.64288, 3.2144)]
+ATTACK_TIMING frame=27 health=299900.000 damage=50.000 clips=[(3, 0.7500267, 3.2144)]
+[2m2026-11-05T03:27:18.358561Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/attack-rhythm-2026-11-05/after-ember/frame00025.png
+[capture] saved 2/2 target/verification/attack-rhythm-2026-11-05/after-ember/frame00025.png (945867 bytes)
+ATTACK_TIMING frame=28 health=299900.000 damage=0.000 clips=[(3, 0.8571734, 3.2144)]
+ATTACK_TIMING frame=29 health=299900.000 damage=0.000 clips=[(3, 0.96432006, 3.2144)]
+ATTACK_TIMING frame=30 health=299900.000 damage=0.000 clips=[(3, 0.109759994, 3.2928)]
+ATTACK_TIMING frame=31 health=299900.000 damage=0.000 clips=[(3, 0.21951999, 3.2928)]
+ATTACK_TIMING frame=32 health=299900.000 damage=0.000 clips=[(3, 0.32928, 3.2928)]
+[2m2026-11-05T03:27:19.077384Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/attack-rhythm-2026-11-05/after-ember/frame00030.png
+[capture] saved 3/4 target/verification/attack-rhythm-2026-11-05/after-ember/frame00030.png (946460 bytes)
+ATTACK_TIMING frame=33 health=299900.000 damage=0.000 clips=[(3, 0.43903998, 3.2928)]
+ATTACK_TIMING frame=34 health=299900.000 damage=0.000 clips=[(3, 0.5488, 3.2928)]
+[2m2026-11-05T03:27:19.574568Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/attack-rhythm-2026-11-05/after-ember/frame00032.png
+[capture] saved 4/5 target/verification/attack-rhythm-2026-11-05/after-ember/frame00032.png (947597 bytes)
+ATTACK_TIMING frame=35 health=299900.000 damage=0.000 clips=[(3, 0.65856, 3.2928)]
+ATTACK_TIMING frame=36 health=299850.000 damage=50.000 clips=[(3, 0.76831996, 3.2928)]
+[2m2026-11-05T03:27:20.064162Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/attack-rhythm-2026-11-05/after-ember/frame00034.png
+[capture] saved 5/6 target/verification/attack-rhythm-2026-11-05/after-ember/frame00034.png (947048 bytes)
+ATTACK_TIMING frame=37 health=299850.000 damage=0.000 clips=[(3, 0.87807995, 3.2928)]
+ATTACK_TIMING frame=38 health=299850.000 damage=0.000 clips=[(3, 0.98783994, 3.2928)]
+[2m2026-11-05T03:27:20.570955Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/attack-rhythm-2026-11-05/after-ember/frame00036.png
+[capture] saved 6/7 target/verification/attack-rhythm-2026-11-05/after-ember/frame00036.png (943896 bytes)
+ATTACK_TIMING frame=39 health=299850.000 damage=0.000 clips=[(3, 1.0976, 3.2928)]
+ATTACK_TIMING frame=40 health=299850.000 damage=0.000 clips=[(3, 0.112373345, 3.3712006)]
+[2m2026-11-05T03:27:21.094242Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/attack-rhythm-2026-11-05/after-ember/frame00038.png
+[capture] saved 7/8 target/verification/attack-rhythm-2026-11-05/after-ember/frame00038.png (944030 bytes)
+ATTACK_TIMING frame=41 health=299850.000 damage=0.000 clips=[(3, 0.22474669, 3.3712006)]
+ATTACK_TIMING frame=42 health=299850.000 damage=0.000 clips=[(3, 0.33712003, 3.3712006)]
+[2m2026-11-05T03:27:21.594386Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/attack-rhythm-2026-11-05/after-ember/frame00040.png
+[capture] saved 8/8 target/verification/attack-rhythm-2026-11-05/after-ember/frame00040.png (946377 bytes)
+ATTACK_TIMING frame=43 health=299850.000 damage=0.000 clips=[(3, 0.44949338, 3.3712006)]
+ATTACK_TIMING frame=44 health=299850.000 damage=0.000 clips=[(3, 0.5618667, 3.3712006)]
+ATTACK_TIMING frame=45 health=299850.000 damage=0.000 clips=[(3, 0.67424005, 3.3712006)]
+ATTACK_TIMING frame=46 health=299800.000 damage=50.000 clips=[(3, 0.7866134, 3.3712006)]
+ATTACK_TIMING frame=47 health=299800.000 damage=0.000 clips=[(3, 0.89898676, 3.3712006)]
+[2m2026-11-05T03:27:22.188638Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/attack-rhythm-2026-11-05/after-ember/frame00045.png
+[capture] saved 9/9 target/verification/attack-rhythm-2026-11-05/after-ember/frame00045.png (943959 bytes)
+ATTACK_TIMING frame=48 health=299800.000 damage=0.000 clips=[(3, 1.01136, 3.3712006)]
+ATTACK_TIMING frame=49 health=299800.000 damage=0.000 clips=[(3, 0.11498667, 3.4496005)]
+ATTACK_TIMING frame=50 health=299800.000 damage=0.000 clips=[(3, 0.22997335, 3.4496005)]
+ATTACK_TIMING frame=51 health=299800.000 damage=0.000 clips=[(3, 0.34496003, 3.4496005)]
+ATTACK_TIMING frame=52 health=299800.000 damage=0.000 clips=[(3, 0.4599467, 3.4496005)]
+[2m2026-11-05T03:27:22.782296Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/attack-rhythm-2026-11-05/after-ember/frame00050.png
+[capture] saved 10/10 target/verification/attack-rhythm-2026-11-05/after-ember/frame00050.png (946793 bytes)
+ATTACK_TIMING frame=53 health=299800.000 damage=0.000 clips=[(3, 0.57493335, 3.4496005)]
+ATTACK_TIMING frame=54 health=299800.000 damage=0.000 clips=[(3, 0.68992, 3.4496005)]
+ATTACK_TIMING frame=55 health=299750.000 damage=50.000 clips=[(3, 0.80490667, 3.4496005)]
+ATTACK_TIMING frame=56 health=299750.000 damage=0.000 clips=[(3, 0.9198933, 3.4496005)]
+ATTACK_TIMING frame=57 health=299750.000 damage=0.000 clips=[(3, 1.03488, 3.4496005)]
+[2m2026-11-05T03:27:23.387048Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/attack-rhythm-2026-11-05/after-ember/frame00055.png
+[capture] saved 11/11 target/verification/attack-rhythm-2026-11-05/after-ember/frame00055.png (943201 bytes)
+ATTACK_TIMING frame=58 health=299750.000 damage=0.000 clips=[(3, 0.117599994, 3.528)]
+ATTACK_TIMING frame=59 health=299750.000 damage=0.000 clips=[(3, 0.23519999, 3.528)]
+ATTACK_TIMING frame=60 health=299750.000 damage=0.000 clips=[(3, 0.35279998, 3.528)]
+ATTACK_TIMING frame=61 health=299750.000 damage=0.000 clips=[(3, 0.47039998, 3.528)]
+ATTACK_TIMING frame=62 health=299750.000 damage=0.000 clips=[(3, 0.58799994, 3.528)]
+[2m2026-11-05T03:27:24.012755Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/attack-rhythm-2026-11-05/after-ember/frame00060.png
+[capture] saved 12/12 target/verification/attack-rhythm-2026-11-05/after-ember/frame00060.png (947385 bytes)
+ATTACK_TIMING frame=63 health=299750.000 damage=0.000 clips=[(3, 0.7055999, 3.528)]
+ATTACK_TIMING frame=64 health=299700.000 damage=50.000 clips=[(3, 0.82319987, 3.528)]
+ATTACK_TIMING frame=65 health=299700.000 damage=0.000 clips=[(3, 0.94079983, 3.528)]
+ATTACK_TIMING frame=66 health=299700.000 damage=0.000 clips=[(3, 1.0583998, 3.528)]
+ATTACK_TIMING frame=67 health=299700.000 damage=0.000 clips=[(3, 0.120213345, 3.6064005)]
+ATTACK_TIMING frame=68 health=299700.000 damage=0.000 clips=[(3, 0.24042669, 3.6064005)]
+ATTACK_TIMING frame=69 health=299700.000 damage=0.000 clips=[(3, 0.36064005, 3.6064005)]
+ATTACK_TIMING frame=70 health=299700.000 damage=0.000 clips=[(3, 0.48085338, 3.6064005)]
+ATTACK_TIMING frame=71 health=299700.000 damage=0.000 clips=[(3, 0.6010667, 3.6064005)]
+ATTACK_TIMING frame=72 health=299700.000 damage=0.000 clips=[(3, 0.72128004, 3.6064005)]
+ATTACK_TIMING frame=73 health=299650.000 damage=50.000 clips=[(3, 0.84149337, 3.6064005)]
+ATTACK_TIMING frame=74 health=299650.000 damage=0.000 clips=[(3, 0.9617067, 3.6064005)]
+ATTACK_TIMING frame=75 health=299650.000 damage=0.000 clips=[(3, 1.08192, 3.6064005)]
+ATTACK_TIMING frame=76 health=299650.000 damage=0.000 clips=[(3, 0.122826666, 3.6848001)]
+ATTACK_TIMING frame=77 health=299650.000 damage=0.000 clips=[(3, 0.24565333, 3.6848001)]
+ATTACK_TIMING frame=78 health=299650.000 damage=0.000 clips=[(3, 0.36848, 3.6848001)]
+ATTACK_TIMING frame=79 health=299650.000 damage=0.000 clips=[(3, 0.49130666, 3.6848001)]
+ATTACK_TIMING frame=80 health=299650.000 damage=0.000 clips=[(3, 0.61413336, 3.6848001)]
+[capture] PASS: real basic attack damage and weapon visuals; learned skills/ultimate/Autoplay suppressed
+[capture] all 12 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 210 simulation frames to target/verification/attack-rhythm-2026-11-05/after-ember
