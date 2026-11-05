@@ -1,0 +1,10 @@
+test_cheapest_equipment_requires_all_inspected_offers (test_campaign_equipment_runtime.EquipmentPolicyParsing.test_cheapest_equipment_requires_all_inspected_offers) ... ok
+test_current_header_and_ambiguous_wallet (test_campaign_equipment_runtime.EquipmentPolicyParsing.test_current_header_and_ambiguous_wallet) ... ok
+test_fail_closed_on_unreadable_or_wrong_preview (test_campaign_equipment_runtime.EquipmentPolicyParsing.test_fail_closed_on_unreadable_or_wrong_preview) ... ok
+test_inventory_header_and_visible_grid (test_campaign_equipment_runtime.EquipmentPolicyParsing.test_inventory_header_and_visible_grid) ... ok
+test_real_committed_native_market_pixels (test_campaign_equipment_runtime.EquipmentPolicyParsing.test_real_committed_native_market_pixels) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 5.260s
+
+OK

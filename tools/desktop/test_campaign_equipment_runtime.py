@@ -1,56 +1,65 @@
+import shutil
 import unittest
-from campaign_equipment_runtime import affordable_gear, market_wallet, inventory_count, last_owned_icon, has_gear_rows, market_closed
+from pathlib import Path
+from campaign_equipment_runtime import (affordable_gear, market_wallet, inventory_count,
+    last_owned_icon, market_closed, inspected_offer, verify_deduction, crop_text,
+    screenshot_wallet, TILE_LEFTS)
 
 
 class EquipmentPolicyParsing(unittest.TestCase):
-    def test_only_actual_market_header_wallet(self):
-        rows = [('KILLS 0230', 1140, 266, 1240, 280),
-                ('TOTAL KILLS 800', 500, 350, 700, 370)]
-        self.assertEqual(market_wallet(rows), 230)
-        self.assertIsNone(market_wallet(rows[1:]))
-
-    def test_no_refresh_skill_or_unaffordable_purchase(self):
-        rows = [('[R / GEAR] Arc Lens 180 KILLS', 1000, 315, 1250, 340),
-                ('[SR / GEAR] Echo Core 300 KILLS', 1000, 360, 1250, 390),
-                ('[R / SKILL] Arc Spark 30 KILLS', 1000, 405, 1250, 430),
-                ('REFRESH STOCK 20 KILLS', 1000, 470, 1250, 490),
-                ('[R / GEAR] Bogus 10 KILLS', 100, 315, 350, 340)]
-        result = affordable_gear(rows, 200)
-        self.assertEqual([(item['name'], item['price']) for item in result], [('Arc Lens', 180)])
-        self.assertEqual(affordable_gear(rows, 179), [])
-
-    def test_missing_wallet_with_real_gear_offer_is_still_open(self):
-        rows = [('[R/GEAR] Arc Lens 180 KILLS', 922, 474, 1074, 502)]
-        self.assertTrue(has_gear_rows(rows))
-        self.assertIsNone(market_wallet(rows))
-        self.assertFalse(market_closed(rows))
+    def test_current_header_and_ambiguous_wallet(self):
+        self.assertEqual(market_wallet([('LV1 KILLS 99880',1120,205,1209,214)]),99880)
+        self.assertFalse(market_closed([('BLACK MARKET',617,214,759,230)]))
         self.assertTrue(market_closed([]))
-        self.assertFalse(has_gear_rows([('[R/GEAR] Arc Lens 180 KILLS', 100, 474, 400, 502)]))
+        with self.assertRaises(AssertionError):
+            market_wallet([('KILLS 10',1120,205,1209,214),('KILLS 11',1120,205,1209,214)])
 
-    def test_actual_screenshot_wallet_header(self):
-        self.assertEqual(market_wallet([('Wi KILLS 0166', 1174, 270, 1251, 279),
-            ('7 Sn Ia KILis 0166', 368, 248, 1251, 296)]), 166)
-
-    def test_inventory_header_and_wrapped_icon_boundaries(self):
-        self.assertEqual(inventory_count([('EQUIPMENT · 12', 213, 108, 400, 130)]), 12)
-        self.assertEqual(last_owned_icon(1), (245, 184))
-        self.assertEqual(last_owned_icon(10), (1019, 184))
-        self.assertEqual(last_owned_icon(11), (245, 270))
-        self.assertEqual(last_owned_icon(20), (1019, 270))
-        for count in (0, 21):
+    def test_fail_closed_on_unreadable_or_wrong_preview(self):
+        for args in [('Arc Lens','?', 'Arc Lens * Equipment',0),
+                     ('Arc Lens','180','Other Lens * Equipment',0),
+                     ('Arc Lens','180','Arc Lens',0)]:
             with self.assertRaises(AssertionError):
-                last_owned_icon(count)
+                inspected_offer(*args)
         with self.assertRaises(AssertionError):
-            inventory_count([('EQUIPMENT', 213, 108, 400, 130)])
-        with self.assertRaises(AssertionError):
-            inventory_count([('EQUIPMENT 2', 213, 108, 400, 130),
-                             ('EQUIPMENT 3', 213, 109, 400, 130)])
+            affordable_gear([],1000)
 
-    def test_ambiguous_wallet_is_failure(self):
-        with self.assertRaises(AssertionError):
-            market_wallet([('KILLS 10', 1174, 266, 1240, 280),
-                           ('KILLS 11', 1174, 268, 1240, 280)])
+    def test_cheapest_equipment_requires_all_inspected_offers(self):
+        # Transaction constraints; these artificial offers are not native evidence.
+        offers=[dict(name=str(i),index=i,price=p,category=c) for i,(p,c) in enumerate(
+            [(300,'Equipment'),(180,'Equipment'),(120,'Consumable'),(180,'Equipment'),(280,'Equipment')])]
+        self.assertEqual([o['index'] for o in affordable_gear(offers,200)],[1,3])
+        self.assertEqual(affordable_gear(offers,179),[])
+        verify_deduction(200,20,offers[1])
+        for before,after in [(200,80),(179,-1),(200,200)]:
+            with self.assertRaises(AssertionError):
+                verify_deduction(before,after,offers[1])
+
+    def test_inventory_header_and_visible_grid(self):
+        self.assertEqual(inventory_count([('EQUIPMENT · 12',213,108,400,130)]),12)
+        self.assertEqual(last_owned_icon(11),(245,270))
+        for count in (0,21):
+            with self.assertRaises(AssertionError):last_owned_icon(count)
+        with self.assertRaises(AssertionError):inventory_count([])
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_real_committed_native_market_pixels(self):
+        root=Path(__file__).resolve().parents[2]/'docs/verification/black-market-2026-11-04/en-1280x720'
+        for frame,index,wallet,name,category,price in [
+            (35,0,100000,'Guardian Seed','Equipment',300),
+            (96,2,99880,'Skill Tuner','Consumable',140),
+            (125,3,0,'Hardened Plate','Equipment',180),
+            (145,4,0,'Ember Heart','Equipment',280)]:
+            with self.subTest(frame=frame):
+                path=root/f'frame{frame:05}.png'
+                self.assertEqual(screenshot_wallet(path,None)[0],wallet)
+                left=TILE_LEFTS[index]
+                offer=inspected_offer(crop_text(path,f'120x40+{left}+343',None),
+                    crop_text(path,f'39x23+{left+52}+384',None,True),
+                    crop_text(path,'190x30+695+480',None),index)
+                self.assertEqual((offer['name'],offer['category'],offer['price']),(name,category,price))
+                self.assertEqual([int(crop_text(path,f'39x23+{x+52}+384',None,True))
+                                  for x in TILE_LEFTS],[300,180,120 if frame==35 else 140,180,280])
 
 
-if __name__ == '__main__':
-    unittest.main()
+if __name__=='__main__':unittest.main()

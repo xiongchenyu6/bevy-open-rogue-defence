@@ -10,40 +10,75 @@ import json
 import os
 import re
 import time
+import subprocess
+import tempfile
+from pathlib import Path
 from campaign_runtime import GAME, main
 from smoke_runtime import find_text, normalized, read_hud_wallet
 
 
+TILE_LEFTS = (615, 742, 868, 995, 1122)
+
+
 def market_wallet(rows):
     values = {int(match[1]) for text, x, y, *_ in rows
-              if x >= 1130 and 260 <= y < 283
+              if 1110 <= x < 1220 and 201 <= y < 216
               and (match := re.search(r'KILLS\s*(\d+)\b', text, re.I))}
-    if not values:
-        return None
-    assert len(values) == 1, f'Ambiguous market wallet: {values}'
-    return values.pop()
+    assert len(values) <= 1, f'Ambiguous market wallet: {values}'
+    return next(iter(values), None)
 
 
 def has_gear_rows(rows):
-    return any(x > 900 and 290 < y < 600 and re.search(r'\bGEAR\s*\]', text, re.I)
-               for text, x, y, *_ in rows)
+    # The illustrated market has no [GEAR] paragraphs. Keep an unreadable
+    # wallet from making an open panel look closed.
+    return any(600 <= x < 1250 and 200 <= y < 240
+               and 'blackmarket' in normalized(text) for text, x, y, *_ in rows)
 
 
 def market_closed(rows):
     return market_wallet(rows) is None and not has_gear_rows(rows)
 
 
-def affordable_gear(rows, wallet):
-    offers = []
-    for row in rows:
-        text, x, y, *_ = row
-        match = re.search(r'\[[^\]]*\bGEAR\]\s*(.*?)\s+(\d+)\s*KILLS\b', text, re.I)
-        if match and x > 900 and 290 < y < 600:
-            price = int(match[2])
-            if 0 < price <= wallet:
-                offers.append(dict(name=match[1].strip(), price=price, row=row))
-    # Fixed cheapest-first policy, not a claimed optimized human strategy.
-    return sorted(offers, key=lambda offer: (offer['price'], offer['name']))
+def crop_text(path, geometry, env, digits=False):
+    """OCR only public screenshot pixels; never query game state."""
+    with tempfile.TemporaryDirectory(prefix='rogue-market-') as directory:
+        crop = Path(directory) / 'crop.png'
+        subprocess.run(['convert', str(path), '-crop', geometry, '-resize', '600%',
+                        '-colorspace', 'Gray', '-negate', '-bordercolor', 'white',
+                        '-border', '20', str(crop)], env=env, check=True, capture_output=True)
+        args = ['tesseract', str(crop), 'stdout', '-l', 'eng', '--psm', '6']
+        if digits:
+            args += ['-c', 'tessedit_char_whitelist=0123456789']
+        return subprocess.check_output(args, env=env, text=True, stderr=subprocess.PIPE).strip()
+
+
+def screenshot_wallet(path, env):
+    text = crop_text(path, '95x14+1119+202', env)
+    assert re.fullmatch(r'LV\d+\s+KILLS\s*\d+', text), f'Unreadable market wallet: {text!r}'
+    return int(re.search(r'KILLS\s*(\d+)', text)[1]), text
+
+
+def inspected_offer(tile_text, price_text, preview_text, index):
+    assert re.fullmatch(r'\d+', price_text), f'Unreadable tile price: {price_text!r}'
+    match = re.fullmatch(r"(.+?)\s*[·•*+,:.]\s*[‘’']?(Equipment|Consumable)", preview_text)
+    assert match, f'Unreadable item category: {preview_text!r}'
+    name, category = match.groups()
+    assert any(normalized(line) == normalized(name) for line in tile_text.splitlines()), \
+        f'Tile/preview mismatch: {tile_text!r}, {preview_text!r}'
+    return dict(name=name.strip(), price=int(price_text), category=category, index=index,
+                tile_ocr=tile_text, price_ocr=price_text, preview_ocr=preview_text)
+
+
+def affordable_gear(offers, wallet):
+    assert len(offers) == 5 and {item['index'] for item in offers} == set(range(5)), \
+        'All five natural offers must be inspected before choosing cheapest equipment'
+    return sorted((item for item in offers if item['category'] == 'Equipment'
+                   and 0 < item['price'] <= wallet), key=lambda item: (item['price'], item['index']))
+
+
+def verify_deduction(wallet, remaining, offer):
+    assert 0 < offer['price'] <= wallet and wallet - remaining == offer['price'], \
+        ('Wrong purchase deduction', wallet, remaining, offer)
 
 
 def inventory_count(rows):
@@ -112,31 +147,46 @@ class EquipmentPolicy:
             self.key('b')
             rows = self.ui['lines']()
             self.ui['report'].setdefault('equipment_visit_rows', []).append(dict(visit=self.visits, rows=rows))
-            wallet = market_wallet(rows)
-            # B is a toggle: never treat an open market with unreadable header as locked.
-            while wallet is None and has_gear_rows(rows):
-                assert time.monotonic() < deadline, 'Open market wallet never became readable'
-                time.sleep(.3)
-                rows = self.ui['lines']()
-                wallet = market_wallet(rows)
-            if wallet is None:
-                assert not find_text(rows, 'BLACK MARKET'), 'Open market wallet could not be read'
-                # Locked market does not toggle open; retain actual UI for review.
+            if not has_gear_rows(rows):
+                assert market_wallet(rows) is None, 'Market visibility ambiguous'
                 self.ui['shot'](prefix + '-unavailable.png')
                 return
-            self.ui['shot'](prefix + '-market.png')
-            offers = affordable_gear(rows, wallet)
+            market = self.ui['shot'](prefix + '-market.png')
+            wallet, wallet_raw = screenshot_wallet(market, self.ui['env'])
+            inspected = []
+            for index, left in enumerate(TILE_LEFTS):
+                assert time.monotonic() < deadline, 'Offer inspection exceeded visit budget'
+                # Hover only: clicking a desktop tile buys immediately.
+                self.ui['call'](['xdotool', 'mousemove', '--window', self.ui['window'](),
+                                 str(left + 60), '365'])
+                time.sleep(.2)
+                image = self.ui['shot'](prefix + f'-inspect-{index}.png')
+                tile = crop_text(image, f'120x40+{left}+343', self.ui['env'])
+                price = crop_text(image, f'39x23+{left+52}+384', self.ui['env'], digits=True)
+                preview = crop_text(image, '190x30+695+480', self.ui['env'])
+                inspected.append(inspected_offer(tile, price, preview, index))
+            self.ui['report'].setdefault('equipment_inspections', []).append(
+                dict(visit=self.visits, wallet=wallet, wallet_ocr=wallet_raw, offers=inspected))
+            offers = affordable_gear(inspected, wallet)
             if offers:
                 offer = offers[0]
                 before = self.ui['shot'](prefix + '-before.png')
                 hud, _, _ = read_hud_wallet(before, self.ui['env'])
                 assert hud == wallet, ('Market/HUD wallet disagreement', hud, wallet)
-                self.click(offer['row'])
+                left = TILE_LEFTS[offer['index']]
+                self.ui['call'](['xdotool', 'mousemove', '--window', self.ui['window'](), str(left+60), '365'])
+                time.sleep(.2)
+                selected = self.ui['shot'](prefix + '-selected.png')
+                checked = inspected_offer(crop_text(selected, f'120x40+{left}+343', self.ui['env']),
+                    crop_text(selected, f'39x23+{left+52}+384', self.ui['env'], digits=True),
+                    crop_text(selected, '190x30+695+480', self.ui['env']), offer['index'])
+                assert checked == offer, 'Selected offer changed before purchase'
+                self.click(('', 1129, 482, 1239, 530))
                 after = self.ui['shot'](prefix + '-after.png')
                 remaining, _, raw = read_hud_wallet(after, self.ui['env'])
-                assert wallet - remaining == offer['price'], ('Wrong purchase deduction', wallet, remaining, offer)
+                verify_deduction(wallet, remaining, offer)
                 purchase = dict(name=offer['name'], price=offer['price'], wallet_before=wallet,
-                                wallet_after=remaining, offer_ocr=offer['row'], after_wallet_ocr=raw,
+                                wallet_after=remaining, offer_ocr=offer, after_wallet_ocr=raw,
                                 visit=self.visits, before=before.name, after=after.name)
                 self.purchases.append(purchase)
             self.key('b')
