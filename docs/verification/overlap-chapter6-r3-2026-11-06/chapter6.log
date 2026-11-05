@@ -1,0 +1,73 @@
+{"sample": 1, "wall_seconds": 7.6, "terminal": null}
+{"sample": 2, "wall_seconds": 18.1, "terminal": null}
+{"sample": 3, "wall_seconds": 29.0, "terminal": null}
+{"sample": 4, "wall_seconds": 39.9, "terminal": null}
+{"sample": 5, "wall_seconds": 50.3, "terminal": null}
+{"sample": 6, "wall_seconds": 61.7, "terminal": null}
+{"sample": 7, "wall_seconds": 72.7, "terminal": null}
+{"sample": 8, "wall_seconds": 83.4, "terminal": null}
+{"sample": 9, "wall_seconds": 94.1, "terminal": null}
+{"sample": 10, "wall_seconds": 105.5, "terminal": null}
+{"sample": 11, "wall_seconds": 117.4, "terminal": null}
+{"sample": 12, "wall_seconds": 128.8, "terminal": null}
+{"sample": 13, "wall_seconds": 141.7, "terminal": null}
+{"sample": 14, "wall_seconds": 154.0, "terminal": null}
+{"sample": 15, "wall_seconds": 166.7, "terminal": null}
+{"sample": 16, "wall_seconds": 179.6, "terminal": null}
+{"sample": 17, "wall_seconds": 191.0, "terminal": null}
+{"stage": "earned equipment visit", "visit": 1, "purchases": 0, "wallet": 101, "visit_budget_seconds": 180}
+{"sample": 18, "wall_seconds": 260.4, "terminal": null}
+{"sample": 19, "wall_seconds": 271.6, "terminal": null}
+{"sample": 20, "wall_seconds": 281.9, "terminal": null}
+{"sample": 21, "wall_seconds": 291.9, "terminal": null}
+{"sample": 22, "wall_seconds": 302.0, "terminal": null}
+{"sample": 23, "wall_seconds": 311.7, "terminal": null}
+{"stage": "earned equipment visit", "visit": 2, "purchases": 1, "wallet": 175, "visit_budget_seconds": 180}
+{"sample": 24, "wall_seconds": 413.4, "terminal": null}
+{"sample": 25, "wall_seconds": 422.9, "terminal": null}
+{"sample": 26, "wall_seconds": 433.1, "terminal": null}
+{"sample": 27, "wall_seconds": 443.0, "terminal": null}
+{"sample": 28, "wall_seconds": 453.1, "terminal": null}
+{"sample": 29, "wall_seconds": 462.6, "terminal": null}
+{"sample": 30, "wall_seconds": 472.4, "terminal": null}
+{"stage": "earned equipment visit", "visit": 3, "purchases": 2, "wallet": 285, "visit_budget_seconds": 200}
+{"sample": 31, "wall_seconds": 574.5, "terminal": null}
+{"sample": 32, "wall_seconds": 583.9, "terminal": null}
+{"sample": 33, "wall_seconds": 594.1, "terminal": null}
+{"sample": 34, "wall_seconds": 603.7, "terminal": null}
+{"sample": 35, "wall_seconds": 613.7, "terminal": null}
+{"sample": 36, "wall_seconds": 623.7, "terminal": null}
+{"sample": 37, "wall_seconds": 633.9, "terminal": null}
+{"stage": "earned equipment visit", "visit": 4, "purchases": 2, "wallet": 165, "visit_budget_seconds": 220}
+{"sample": 38, "wall_seconds": 699.7, "terminal": null}
+{"sample": 39, "wall_seconds": 710.4, "terminal": null}
+{"sample": 40, "wall_seconds": 721.0, "terminal": null}
+{"sample": 41, "wall_seconds": 731.2, "terminal": null}
+{"sample": 42, "wall_seconds": 741.2, "terminal": null}
+{"sample": 43, "wall_seconds": 751.8, "terminal": null}
+{"stage": "earned equipment visit", "visit": 5, "purchases": 3, "wallet": 284, "visit_budget_seconds": 220}
+{"sample": 44, "wall_seconds": 870.1, "terminal": null}
+{"sample": 45, "wall_seconds": 880.6, "terminal": null}
+{"sample": 46, "wall_seconds": 890.7, "terminal": null}
+{"sample": 47, "wall_seconds": 900.9, "terminal": null}
+{"sample": 48, "wall_seconds": 910.8, "terminal": null}
+{"sample": 49, "wall_seconds": 920.3, "terminal": null}
+{"stage": "earned equipment visit", "visit": 6, "purchases": 4, "wallet": 466, "visit_budget_seconds": 240}
+{"sample": 50, "wall_seconds": 1039.7, "terminal": null}
+{"sample": 51, "wall_seconds": 1050.1, "terminal": null}
+{"sample": 52, "wall_seconds": 1059.9, "terminal": null}
+{"sample": 53, "wall_seconds": 1070.2, "terminal": null}
+{"sample": 54, "wall_seconds": 1080.0, "terminal": null}
+{"sample": 55, "wall_seconds": 1090.2, "terminal": null}
+Traceback (most recent call last):
+  File "/harness/campaign_equipment_runtime.py", line 807, in <module>
+    main(EquipmentPolicy)
+  File "/harness/campaign_runtime.py", line 270, in main
+    policy.observe(text_lines, time.monotonic() - started)
+  File "/harness/campaign_equipment_runtime.py", line 690, in observe
+    after, remaining, market_raw, raw = purchase_market_offer(
+                                        ^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/campaign_equipment_runtime.py", line 297, in purchase_market_offer
+    assert hud == remaining, ('Post-purchase Market/HUD disagreement', remaining, hud)
+           ^^^^^^^^^^^^^^^^
+AssertionError: ('Post-purchase Market/HUD disagreement', 280, 424)

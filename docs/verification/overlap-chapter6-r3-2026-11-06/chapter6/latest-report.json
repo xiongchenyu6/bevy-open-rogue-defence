@@ -1,0 +1,4049 @@
+{
+  "scope": "Packaged public UI; stationary first-card policy plus earned equipment",
+  "stage": 5,
+  "continued": true,
+  "initial_progress": {
+    "unlocked": 6,
+    "currency": 645,
+    "cleared": "111110",
+    "upgrades": [
+      6,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "requested_seed": "0xA11CE",
+  "requested_speed": 1,
+  "strategy": "Stationary keys 1/g/f; cheapest affordable natural gear; no refresh or movement",
+  "completed_run": false,
+  "victory": false,
+  "package_version": {
+    "binary_sha256": "76a6da42c0c9f49289fe77b0caea02ec7a425b793930220a43de2219b0ae72cc",
+    "git_commit": "f5ef6ff8f37ecab467b5ba0baadb6decd8d49aaf",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "equipment_purchases": [
+    {
+      "name": "Wind Boots",
+      "price": 160,
+      "wallet_before": 175,
+      "wallet_after": 15,
+      "offer_ocr": {
+        "name": "Wind Boots",
+        "price": 160,
+        "category": "Equipment",
+        "index": 0,
+        "tile_ocr": "Wind Boots",
+        "price_ocr": "160",
+        "preview_ocr": "Wind Boots + Equipment"
+      },
+      "after_wallet_ocr": "15",
+      "after_market_ocr": "200%: LV1 KILLS 0015 | 300%: LV1 KILLS 0015 | 600%: LV1 KILLS 0015",
+      "visit": 2,
+      "before": "equipment-02-before.png",
+      "after": "equipment-02-after.png",
+      "inventory_count": 1,
+      "inventory_inspections": [
+        {
+          "icon": [
+            261,
+            193
+          ],
+          "detail_ocr": "[R] Wind Boots"
+        }
+      ],
+      "owned_names": [
+        "windboots"
+      ],
+      "selection_observations": [
+        {
+          "input": "mouseDown",
+          "index": 0,
+          "center": [
+            261,
+            193
+          ],
+          "wall": 232749.983231794
+        },
+        {
+          "screenshot": "equipment-02-item-0-ack-001.png",
+          "index": 0,
+          "selected": true
+        },
+        {
+          "input": "mouseUp",
+          "index": 0,
+          "wall": 232750.218536691
+        }
+      ],
+      "selected_icon": [
+        261,
+        193
+      ],
+      "close_observations": [
+        {
+          "phase": "operation_start",
+          "wall": 232750.854171513,
+          "operation_deadline": 232863.298144374,
+          "hold_budget_seconds": 10
+        },
+        {
+          "screenshot": "equipment-02-close-001.png",
+          "rows": [
+            [
+              "Gear",
+              904,
+              110,
+              933,
+              121
+            ],
+            [
+              "Forge",
+              960,
+              110,
+              993,
+              124
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1055,
+              122
+            ],
+            [
+              "EQUIPMENT - 1",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1054,
+              122
+            ],
+            [
+              "EQUIPMENT + 1",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "EQUIPMENT = 1",
+              210,
+              100,
+              410,
+              132
+            ],
+            [
+              "EQUIPMENT +1",
+              210,
+              100,
+              410,
+              132
+            ]
+          ]
+        },
+        {
+          "phase": "header_observed",
+          "wall": 232752.614092262,
+          "elapsed": 1.759920748998411
+        },
+        {
+          "input": "mouseDown",
+          "target": [
+            "Close",
+            1019,
+            110,
+            1055,
+            122
+          ],
+          "wall": 232752.614153793,
+          "dispatch_finished": 232752.624261571,
+          "hold_deadline": 232762.614153793,
+          "operation_deadline": 232863.298144374
+        },
+        {
+          "screenshot": "equipment-02-close-004.png",
+          "rows": [
+            [
+              "Gear",
+              904,
+              110,
+              933,
+              121
+            ],
+            [
+              "Forge",
+              960,
+              110,
+              993,
+              124
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1055,
+              122
+            ],
+            [
+              "EQUIPMENT - 1",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1054,
+              122
+            ],
+            [
+              "EQUIPMENT + 1",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "EQUIPMENT = 1",
+              210,
+              100,
+              410,
+              132
+            ],
+            [
+              "EQUIPMENT +1",
+              210,
+              100,
+              410,
+              132
+            ]
+          ]
+        },
+        {
+          "phase": "held_observation",
+          "wall": 232754.441693443,
+          "held_seconds": 1.8275396499957424,
+          "inventory_open": true,
+          "close": [
+            "Close",
+            1019,
+            110,
+            1055,
+            122
+          ]
+        },
+        {
+          "screenshot": "equipment-02-close-006.png",
+          "rows": [
+            [
+              "CINDER COLOSSUS = | + 51%",
+              516,
+              83,
+              713,
+              107
+            ],
+            [
+              "~~",
+              200,
+              88,
+              343,
+              145
+            ],
+            [
+              "ee Xe,",
+              533,
+              117,
+              708,
+              145
+            ],
+            [
+              "EE CINDER COLOSSUS = | + 51%",
+              339,
+              80,
+              713,
+              108
+            ],
+            [
+              "ss %",
+              282,
+              88,
+              703,
+              144
+            ],
+            [
+              "i ee Xe, fin",
+              200,
+              110,
+              987,
+              145
+            ],
+            [
+              "~~ ae",
+              200,
+              88,
+              443,
+              145
+            ],
+            [
+              "ee,",
+              533,
+              117,
+              708,
+              145
+            ],
+            [
+              "mt CINDER COLOSSUS = | + 51%",
+              343,
+              80,
+              713,
+              109
+            ],
+            [
+              "a ~ satan",
+              200,
+              88,
+              987,
+              145
+            ],
+            [
+              "ee",
+              210,
+              100,
+              410,
+              132
+            ],
+            [
+              "a ae",
+              210,
+              100,
+              410,
+              132
+            ]
+          ]
+        },
+        {
+          "phase": "held_observation",
+          "wall": 232757.789713131,
+          "held_seconds": 5.175559338007588,
+          "inventory_open": false,
+          "close": null
+        },
+        {
+          "input": "mouseUp",
+          "wall": 232757.829861453,
+          "held_seconds": 5.215707660012413
+        },
+        {
+          "phase": "operation_end",
+          "wall": 232757.82986711,
+          "elapsed": 6.975695597007871
+        }
+      ],
+      "inventory_verified": true
+    },
+    {
+      "name": "Storm Coil",
+      "price": 280,
+      "wallet_before": 285,
+      "wallet_after": 5,
+      "offer_ocr": {
+        "name": "Storm Coil",
+        "price": 280,
+        "category": "Equipment",
+        "index": 0,
+        "tile_ocr": "Storm Coil",
+        "price_ocr": "280",
+        "preview_ocr": "Storm Coil + Equipment"
+      },
+      "after_wallet_ocr": "5",
+      "after_market_ocr": "200%: LV2 KILLS 0005 | 300%: LV2 KILLS 0005 | 600%: LV2 KILLS 0005",
+      "visit": 3,
+      "before": "equipment-03-before.png",
+      "after": "equipment-03-after.png",
+      "inventory_count": 2,
+      "inventory_inspections": [
+        {
+          "icon": [
+            261,
+            193
+          ],
+          "detail_ocr": "[R] Wind Boots"
+        },
+        {
+          "icon": [
+            365,
+            193
+          ],
+          "detail_ocr": "[SR] Storm Coil"
+        }
+      ],
+      "owned_names": [
+        "windboots",
+        "stormcoil"
+      ],
+      "selection_observations": [
+        {
+          "input": "mouseDown",
+          "index": 0,
+          "center": [
+            261,
+            193
+          ],
+          "wall": 232907.809367657
+        },
+        {
+          "screenshot": "equipment-03-item-0-ack-001.png",
+          "index": 0,
+          "selected": true
+        },
+        {
+          "input": "mouseUp",
+          "index": 0,
+          "wall": 232908.039392179
+        },
+        {
+          "input": "mouseDown",
+          "index": 1,
+          "center": [
+            365,
+            193
+          ],
+          "wall": 232910.32873845
+        },
+        {
+          "screenshot": "equipment-03-item-1-ack-004.png",
+          "index": 1,
+          "selected": false
+        },
+        {
+          "screenshot": "equipment-03-item-1-ack-005.png",
+          "index": 1,
+          "selected": false
+        },
+        {
+          "screenshot": "equipment-03-item-1-ack-006.png",
+          "index": 1,
+          "selected": true
+        },
+        {
+          "input": "mouseUp",
+          "index": 1,
+          "wall": 232911.196086247
+        }
+      ],
+      "selected_icon": [
+        365,
+        193
+      ],
+      "close_observations": [
+        {
+          "phase": "operation_start",
+          "wall": 232911.811923892,
+          "operation_deadline": 233043.99645993,
+          "hold_budget_seconds": 10
+        },
+        {
+          "screenshot": "equipment-03-close-001.png",
+          "rows": [
+            [
+              "Gear",
+              904,
+              110,
+              933,
+              121
+            ],
+            [
+              "Forge",
+              960,
+              110,
+              993,
+              124
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1055,
+              122
+            ],
+            [
+              "EQUIPMENT - 2",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1054,
+              122
+            ],
+            [
+              "EQUIPMENT \"2",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "EQUIPMENT = 2",
+              210,
+              100,
+              410,
+              132
+            ],
+            [
+              "EQUIPMENT +2",
+              210,
+              100,
+              410,
+              132
+            ]
+          ]
+        },
+        {
+          "phase": "header_observed",
+          "wall": 232913.615406841,
+          "elapsed": 1.8034829490061384
+        },
+        {
+          "input": "mouseDown",
+          "target": [
+            "Close",
+            1019,
+            110,
+            1055,
+            122
+          ],
+          "wall": 232913.615494073,
+          "dispatch_finished": 232913.629089959,
+          "hold_deadline": 232923.615494073,
+          "operation_deadline": 233043.99645993
+        },
+        {
+          "screenshot": "equipment-03-close-004.png",
+          "rows": [
+            [
+              "Gear",
+              904,
+              110,
+              933,
+              121
+            ],
+            [
+              "Forge",
+              960,
+              110,
+              993,
+              124
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1055,
+              122
+            ],
+            [
+              "EQUIPMENT - 2",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1054,
+              122
+            ],
+            [
+              "EQUIPMENT \"2",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "EQUIPMENT = 2",
+              210,
+              100,
+              410,
+              132
+            ],
+            [
+              "EQUIPMENT +2",
+              210,
+              100,
+              410,
+              132
+            ]
+          ]
+        },
+        {
+          "phase": "held_observation",
+          "wall": 232915.435747006,
+          "held_seconds": 1.8202529330155812,
+          "inventory_open": true,
+          "close": [
+            "Close",
+            1019,
+            110,
+            1055,
+            122
+          ]
+        },
+        {
+          "screenshot": "equipment-03-close-006.png",
+          "rows": [
+            [
+              "\u2014 = Oar",
+              200,
+              80,
+              708,
+              145
+            ],
+            [
+              "~~",
+              200,
+              88,
+              343,
+              145
+            ],
+            [
+              "oo",
+              512,
+              80,
+              561,
+              145
+            ],
+            [
+              "\u2014 ot Oe na",
+              200,
+              80,
+              987,
+              145
+            ],
+            [
+              "ee",
+              210,
+              100,
+              410,
+              132
+            ],
+            [
+              "a ae",
+              210,
+              100,
+              410,
+              132
+            ]
+          ]
+        },
+        {
+          "phase": "held_observation",
+          "wall": 232918.704926676,
+          "held_seconds": 5.089432603010209,
+          "inventory_open": false,
+          "close": null
+        },
+        {
+          "input": "mouseUp",
+          "wall": 232918.70831428,
+          "held_seconds": 5.092820207006298
+        },
+        {
+          "phase": "operation_end",
+          "wall": 232918.708318471,
+          "elapsed": 6.896394579001935
+        }
+      ],
+      "inventory_verified": true
+    },
+    {
+      "name": "ArcLens",
+      "price": 180,
+      "wallet_before": 284,
+      "wallet_after": 104,
+      "offer_ocr": {
+        "name": "ArcLens",
+        "price": 180,
+        "category": "Equipment",
+        "index": 0,
+        "tile_ocr": "Arc Lens",
+        "price_ocr": "180",
+        "preview_ocr": "ArcLens + Equipment"
+      },
+      "after_wallet_ocr": "104",
+      "after_market_ocr": "200%: LV2 KILLS 0104 | 300%: LV2 KILLS 0104 | 600%: LV2 KILLS 0104",
+      "visit": 5,
+      "before": "equipment-05-before.png",
+      "after": "equipment-05-after.png",
+      "inventory_count": 3,
+      "inventory_inspections": [
+        {
+          "icon": [
+            261,
+            193
+          ],
+          "detail_ocr": "[R] Arc Lens"
+        },
+        {
+          "icon": [
+            365,
+            193
+          ],
+          "detail_ocr": "[R] Wind Boots"
+        },
+        {
+          "icon": [
+            469,
+            193
+          ],
+          "detail_ocr": "[SR] Storm Coil"
+        }
+      ],
+      "owned_names": [
+        "arclens",
+        "windboots",
+        "stormcoil"
+      ],
+      "selection_observations": [
+        {
+          "input": "mouseDown",
+          "index": 0,
+          "center": [
+            261,
+            193
+          ],
+          "wall": 233195.470152213
+        },
+        {
+          "screenshot": "equipment-05-item-0-ack-001.png",
+          "index": 0,
+          "selected": false
+        },
+        {
+          "screenshot": "equipment-05-item-0-ack-002.png",
+          "index": 0,
+          "selected": false
+        },
+        {
+          "screenshot": "equipment-05-item-0-ack-003.png",
+          "index": 0,
+          "selected": true
+        },
+        {
+          "input": "mouseUp",
+          "index": 0,
+          "wall": 233196.482283195
+        },
+        {
+          "input": "mouseDown",
+          "index": 1,
+          "center": [
+            365,
+            193
+          ],
+          "wall": 233198.99871107
+        },
+        {
+          "screenshot": "equipment-05-item-1-ack-006.png",
+          "index": 1,
+          "selected": false
+        },
+        {
+          "screenshot": "equipment-05-item-1-ack-007.png",
+          "index": 1,
+          "selected": false
+        },
+        {
+          "screenshot": "equipment-05-item-1-ack-008.png",
+          "index": 1,
+          "selected": true
+        },
+        {
+          "input": "mouseUp",
+          "index": 1,
+          "wall": 233200.099505628
+        },
+        {
+          "input": "mouseDown",
+          "index": 2,
+          "center": [
+            469,
+            193
+          ],
+          "wall": 233202.781025687
+        },
+        {
+          "screenshot": "equipment-05-item-2-ack-011.png",
+          "index": 2,
+          "selected": false
+        },
+        {
+          "screenshot": "equipment-05-item-2-ack-012.png",
+          "index": 2,
+          "selected": false
+        },
+        {
+          "screenshot": "equipment-05-item-2-ack-013.png",
+          "index": 2,
+          "selected": true
+        },
+        {
+          "input": "mouseUp",
+          "index": 2,
+          "wall": 233203.801678059
+        }
+      ],
+      "selected_icon": [
+        261,
+        193
+      ],
+      "close_observations": [
+        {
+          "phase": "operation_start",
+          "wall": 233204.51331195,
+          "operation_deadline": 233343.355952204,
+          "hold_budget_seconds": 10
+        },
+        {
+          "screenshot": "equipment-05-close-001.png",
+          "rows": [
+            [
+              "Gear",
+              904,
+              110,
+              933,
+              121
+            ],
+            [
+              "Forge",
+              960,
+              110,
+              993,
+              124
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1055,
+              122
+            ],
+            [
+              "EQUIPMENT - 3",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1054,
+              122
+            ],
+            [
+              "EQUIPMENT .3",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "EQUIPMENT = 3",
+              210,
+              100,
+              410,
+              132
+            ],
+            [
+              "EQUIPMENT + 3",
+              210,
+              100,
+              410,
+              132
+            ]
+          ]
+        },
+        {
+          "phase": "header_observed",
+          "wall": 233206.602812162,
+          "elapsed": 2.0895002119941637
+        },
+        {
+          "input": "mouseDown",
+          "target": [
+            "Close",
+            1019,
+            110,
+            1055,
+            122
+          ],
+          "wall": 233206.602889896,
+          "dispatch_finished": 233206.611271894,
+          "hold_deadline": 233216.602889896,
+          "operation_deadline": 233343.355952204
+        },
+        {
+          "screenshot": "equipment-05-close-004.png",
+          "rows": [
+            [
+              "Gear",
+              904,
+              110,
+              933,
+              121
+            ],
+            [
+              "Forge",
+              960,
+              110,
+              993,
+              124
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1055,
+              122
+            ],
+            [
+              "EQUIPMENT - 3",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1054,
+              122
+            ],
+            [
+              "EQUIPMENT .3",
+              215,
+              108,
+              366,
+              127
+            ],
+            [
+              "EQUIPMENT = 3",
+              210,
+              100,
+              410,
+              132
+            ],
+            [
+              "EQUIPMENT + 3",
+              210,
+              100,
+              410,
+              132
+            ]
+          ]
+        },
+        {
+          "phase": "held_observation",
+          "wall": 233208.645861262,
+          "held_seconds": 2.0429713659978006,
+          "inventory_open": true,
+          "close": [
+            "Close",
+            1019,
+            110,
+            1055,
+            122
+          ]
+        },
+        {
+          "screenshot": "equipment-05-close-006.png",
+          "rows": [
+            [
+              "\u6709",
+              343,
+              80,
+              363,
+              91
+            ],
+            [
+              "ABYSSAL LEVIATHAN \"\u4eba \u201d1696",
+              516,
+              80,
+              726,
+              108
+            ],
+            [
+              "a)",
+              200,
+              88,
+              367,
+              145
+            ],
+            [
+              "a Ly 4K",
+              364,
+              117,
+              710,
+              145
+            ],
+            [
+              "4 ABYSSAL LEVIATHAN * Ih,- 16%",
+              343,
+              80,
+              726,
+              115
+            ],
+            [
+              "~~ ae Ly 4K tsi",
+              200,
+              92,
+              986,
+              145
+            ],
+            [
+              "ABYSSAL LEVIATHAN \"\u4e2d \u201d1696",
+              516,
+              87,
+              726,
+              99
+            ],
+            [
+              "\u65f6 | + Ih 16%",
+              343,
+              80,
+              726,
+              111
+            ],
+            [
+              "~~ pean",
+              200,
+              92,
+              986,
+              145
+            ],
+            [
+              "a ae",
+              210,
+              100,
+              410,
+              132
+            ],
+            [
+              "a ae",
+              210,
+              100,
+              410,
+              132
+            ]
+          ]
+        },
+        {
+          "phase": "held_observation",
+          "wall": 233212.454673743,
+          "held_seconds": 5.851783846999751,
+          "inventory_open": false,
+          "close": null
+        },
+        {
+          "input": "mouseUp",
+          "wall": 233212.460888199,
+          "held_seconds": 5.857998303021304
+        },
+        {
+          "phase": "operation_end",
+          "wall": 233212.460893018,
+          "elapsed": 7.947581068001455
+        }
+      ],
+      "inventory_verified": true
+    },
+    {
+      "name": "Market Badge",
+      "price": 260,
+      "wallet_before": 466,
+      "wallet_after": 206,
+      "offer_ocr": {
+        "name": "Market Badge",
+        "price": 260,
+        "category": "Equipment",
+        "index": 0,
+        "tile_ocr": "Market Badge",
+        "price_ocr": "260",
+        "preview_ocr": "Market Badge + Equipment"
+      },
+      "after_wallet_ocr": "206",
+      "after_market_ocr": "200%: LV3 KILLS 0206 | 300%: LV3 KILLS 0206 | 600%: LV3 KILLS 0206",
+      "visit": 6,
+      "before": "equipment-06-before.png",
+      "after": "equipment-06-after.png",
+      "inventory_count": 4,
+      "inventory_inspections": [
+        {
+          "icon": [
+            261,
+            193
+          ],
+          "detail_ocr": "[R] Arc Lens"
+        },
+        {
+          "icon": [
+            365,
+            193
+          ],
+          "detail_ocr": "[R] Wind Boots"
+        },
+        {
+          "icon": [
+            469,
+            193
+          ],
+          "detail_ocr": "[SR] Storm Coil"
+        },
+        {
+          "icon": [
+            261,
+            297
+          ],
+          "detail_ocr": "[SSR] Market Badge"
+        }
+      ],
+      "owned_names": [
+        "arclens",
+        "windboots",
+        "stormcoil",
+        "marketbadge"
+      ],
+      "selection_observations": [
+        {
+          "input": "mouseDown",
+          "index": 0,
+          "center": [
+            261,
+            193
+          ],
+          "wall": 233362.743747203
+        },
+        {
+          "screenshot": "equipment-06-item-0-ack-001.png",
+          "index": 0,
+          "selected": false
+        },
+        {
+          "screenshot": "equipment-06-item-0-ack-002.png",
+          "index": 0,
+          "selected": false
+        },
+        {
+          "screenshot": "equipment-06-item-0-ack-003.png",
+          "index": 0,
+          "selected": true
+        },
+        {
+          "input": "mouseUp",
+          "index": 0,
+          "wall": 233363.75422151
+        },
+        {
+          "input": "mouseDown",
+          "index": 1,
+          "center": [
+            365,
+            193
+          ],
+          "wall": 233366.466325532
+        },
+        {
+          "screenshot": "equipment-06-item-1-ack-006.png",
+          "index": 1,
+          "selected": false
+        },
+        {
+          "screenshot": "equipment-06-item-1-ack-007.png",
+          "index": 1,
+          "selected": true
+        },
+        {
+          "input": "mouseUp",
+          "index": 1,
+          "wall": 233367.151715361
+        },
+        {
+          "input": "mouseDown",
+          "index": 2,
+          "center": [
+            469,
+            193
+          ],
+          "wall": 233369.99815613
+        },
+        {
+          "screenshot": "equipment-06-item-2-ack-010.png",
+          "index": 2,
+          "selected": false
+        },
+        {
+          "screenshot": "equipment-06-item-2-ack-011.png",
+          "index": 2,
+          "selected": true
+        },
+        {
+          "input": "mouseUp",
+          "index": 2,
+          "wall": 233370.665176999
+        },
+        {
+          "input": "mouseDown",
+          "index": 3,
+          "center": [
+            261,
+            297
+          ],
+          "wall": 233373.375742453
+        },
+        {
+          "screenshot": "equipment-06-item-3-ack-014.png",
+          "index": 3,
+          "selected": false
+        },
+        {
+          "screenshot": "equipment-06-item-3-ack-015.png",
+          "index": 3,
+          "selected": false
+        },
+        {
+          "screenshot": "equipment-06-item-3-ack-016.png",
+          "index": 3,
+          "selected": true
+        },
+        {
+          "input": "mouseUp",
+          "index": 3,
+          "wall": 233374.456090414
+        }
+      ],
+      "selected_icon": [
+        261,
+        297
+      ],
+      "close_observations": [
+        {
+          "phase": "operation_start",
+          "wall": 233375.266149419,
+          "operation_deadline": 233531.845841774,
+          "hold_budget_seconds": 10
+        },
+        {
+          "screenshot": "equipment-06-close-001.png",
+          "rows": [
+            [
+              "Gear",
+              904,
+              110,
+              933,
+              121
+            ],
+            [
+              "Forge",
+              960,
+              110,
+              993,
+              124
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1055,
+              122
+            ],
+            [
+              "EQUIPMENT + 4",
+              215,
+              108,
+              367,
+              127
+            ],
+            [
+              "EQUIPMENT .4",
+              215,
+              108,
+              367,
+              127
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1054,
+              122
+            ],
+            [
+              "EQUIPMENT + 4",
+              210,
+              100,
+              410,
+              132
+            ],
+            [
+              "EQUIPMENT + 4",
+              210,
+              100,
+              410,
+              132
+            ]
+          ]
+        },
+        {
+          "phase": "header_observed",
+          "wall": 233377.347866671,
+          "elapsed": 2.0817172520037275
+        },
+        {
+          "input": "mouseDown",
+          "target": [
+            "Close",
+            1019,
+            110,
+            1055,
+            122
+          ],
+          "wall": 233377.347967941,
+          "dispatch_finished": 233377.357046749,
+          "hold_deadline": 233387.347967941,
+          "operation_deadline": 233531.845841774
+        },
+        {
+          "screenshot": "equipment-06-close-004.png",
+          "rows": [
+            [
+              "Gear",
+              904,
+              110,
+              933,
+              121
+            ],
+            [
+              "Forge",
+              960,
+              110,
+              993,
+              124
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1055,
+              122
+            ],
+            [
+              "EQUIPMENT + 4",
+              215,
+              108,
+              367,
+              127
+            ],
+            [
+              "EQUIPMENT .4",
+              215,
+              108,
+              367,
+              127
+            ],
+            [
+              "Close",
+              1019,
+              110,
+              1054,
+              122
+            ],
+            [
+              "EQUIPMENT + 4",
+              210,
+              100,
+              410,
+              132
+            ],
+            [
+              "EQUIPMENT + 4",
+              210,
+              100,
+              410,
+              132
+            ]
+          ]
+        },
+        {
+          "phase": "held_observation",
+          "wall": 233379.359484732,
+          "held_seconds": 2.0115167910116725,
+          "inventory_open": true,
+          "close": [
+            "Close",
+            1019,
+            110,
+            1055,
+            122
+          ]
+        },
+        {
+          "screenshot": "equipment-06-close-006.png",
+          "rows": [
+            [
+              "\u2014 mt i NG.",
+              200,
+              80,
+              698,
+              145
+            ],
+            [
+              "\u2014 = ON a",
+              200,
+              80,
+              986,
+              145
+            ],
+            [
+              "~~",
+              200,
+              88,
+              343,
+              145
+            ],
+            [
+              "oe.",
+              516,
+              80,
+              698,
+              145
+            ],
+            [
+              "\u2014 =i @ ar. a",
+              200,
+              80,
+              986,
+              145
+            ],
+            [
+              "a ae",
+              210,
+              100,
+              410,
+              132
+            ],
+            [
+              "\u2014 Ze",
+              210,
+              100,
+              410,
+              132
+            ]
+          ]
+        },
+        {
+          "phase": "held_observation",
+          "wall": 233382.828637274,
+          "held_seconds": 5.480669333017431,
+          "inventory_open": false,
+          "close": null
+        },
+        {
+          "input": "mouseUp",
+          "wall": 233382.833092414,
+          "held_seconds": 5.485124472994357
+        },
+        {
+          "phase": "operation_end",
+          "wall": 233382.833097233,
+          "elapsed": 7.566947813989827
+        }
+      ],
+      "inventory_verified": true
+    }
+  ],
+  "equipment_visit_limit": 12,
+  "equipment_visit_base_budget_seconds": 160,
+  "equipment_per_owned_item_budget_seconds": 20,
+  "equipment_visit_max_timeout_seconds": 400,
+  "equipment_pause_budget_seconds": 3480,
+  "equipment_cooldown_after_completion_seconds": 60,
+  "startup_observations": [
+    {
+      "screenshot": "startup-observation-00.png",
+      "guide": null,
+      "skip": null,
+      "commander": null
+    },
+    {
+      "screenshot": "startup-observation-01.png",
+      "guide": [
+        "1/4 + MOVE & DODGE",
+        520,
+        330,
+        762,
+        353
+      ],
+      "skip": [
+        "Skip",
+        476,
+        446,
+        507,
+        463
+      ],
+      "commander": null,
+      "input": "Escape"
+    },
+    {
+      "screenshot": "startup-observation-02.png",
+      "guide": null,
+      "skip": null,
+      "commander": [
+        "Click a basic commander to begin",
+        42,
+        79,
+        599,
+        117
+      ]
+    }
+  ],
+  "base_attributes": {
+    "hero": "StormSavant",
+    "level": 1,
+    "speed": 1,
+    "strength": 32.0,
+    "expected": 32.0,
+    "screenshot": "base-strength.png",
+    "strength_ocr": [
+      [
+        "Strength",
+        203,
+        235,
+        259,
+        250
+      ],
+      [
+        "32.0",
+        457,
+        235,
+        484,
+        247
+      ],
+      [
+        "Strength",
+        204,
+        235,
+        259,
+        250
+      ],
+      [
+        "Strength 32.0 Base attack 48.0 Armor 0.0",
+        204,
+        231,
+        1076,
+        254
+      ]
+    ]
+  },
+  "actual_speed": 1,
+  "battle_timeout_seconds": 5280.0,
+  "equipment_visit_budgets": [
+    {
+      "visit": 1,
+      "owned_item_bound": 1,
+      "seconds": 180
+    },
+    {
+      "visit": 2,
+      "owned_item_bound": 1,
+      "seconds": 180
+    },
+    {
+      "visit": 3,
+      "owned_item_bound": 2,
+      "seconds": 200
+    },
+    {
+      "visit": 4,
+      "owned_item_bound": 3,
+      "seconds": 220
+    },
+    {
+      "visit": 5,
+      "owned_item_bound": 3,
+      "seconds": 220
+    },
+    {
+      "visit": 6,
+      "owned_item_bound": 4,
+      "seconds": 240
+    },
+    {
+      "visit": 7,
+      "owned_item_bound": 5,
+      "seconds": 260
+    }
+  ],
+  "equipment_visit_timings": [
+    {
+      "visit": 1,
+      "phase": "visit started",
+      "wall": 232562.609575541,
+      "elapsed": 1.7529993783682585e-05,
+      "deadline": 232742.609558011,
+      "remaining": 179.99998247000622
+    },
+    {
+      "visit": 1,
+      "phase": "market close started",
+      "wall": 232601.064169548,
+      "elapsed": 38.45461153698852,
+      "deadline": 232742.609558011,
+      "remaining": 141.54538846301148
+    },
+    {
+      "visit": 1,
+      "phase": "market closed",
+      "wall": 232609.548581956,
+      "elapsed": 46.939023945014924,
+      "deadline": 232742.609558011,
+      "remaining": 133.06097605498508
+    },
+    {
+      "visit": 1,
+      "phase": "panels closed",
+      "wall": 232609.548595854,
+      "elapsed": 46.939037842996186,
+      "deadline": 232742.609558011,
+      "remaining": 133.06096215700381
+    },
+    {
+      "visit": 1,
+      "phase": "resume observation started",
+      "wall": 232609.548599207,
+      "elapsed": 46.939041195990285,
+      "deadline": 232742.609558011,
+      "remaining": 133.06095880400972
+    },
+    {
+      "visit": 1,
+      "phase": "resume baseline observed",
+      "wall": 232611.675716212,
+      "elapsed": 49.066158200992504,
+      "deadline": 232742.609558011,
+      "remaining": 130.9338417990075
+    },
+    {
+      "visit": 1,
+      "phase": "resume next countdown observed",
+      "wall": 232621.382350823,
+      "elapsed": 58.77279281200026,
+      "deadline": 232742.609558011,
+      "remaining": 121.22720718799974
+    },
+    {
+      "visit": 1,
+      "phase": "resume verified",
+      "wall": 232621.382366887,
+      "elapsed": 58.772808876005,
+      "deadline": 232742.609558011,
+      "remaining": 121.227191123995
+    },
+    {
+      "visit": 2,
+      "phase": "visit started",
+      "wall": 232683.298155758,
+      "elapsed": 1.1383992386981845e-05,
+      "deadline": 232863.298144374,
+      "remaining": 179.9999886160076
+    },
+    {
+      "visit": 2,
+      "phase": "market close started",
+      "wall": 232728.278916959,
+      "elapsed": 44.980772584996885,
+      "deadline": 232863.298144374,
+      "remaining": 135.01922741500312
+    },
+    {
+      "visit": 2,
+      "phase": "market closed",
+      "wall": 232735.742647185,
+      "elapsed": 52.4445028109767,
+      "deadline": 232863.298144374,
+      "remaining": 127.5554971890233
+    },
+    {
+      "visit": 2,
+      "phase": "inventory open started",
+      "wall": 232735.742656265,
+      "elapsed": 52.444511890993454,
+      "deadline": 232863.298144374,
+      "remaining": 127.55548810900655
+    },
+    {
+      "visit": 2,
+      "phase": "inventory opened",
+      "wall": 232748.167260245,
+      "elapsed": 64.86911587099894,
+      "deadline": 232863.298144374,
+      "remaining": 115.13088412900106
+    },
+    {
+      "visit": 2,
+      "phase": "all owned identities verified",
+      "wall": 232750.66766868,
+      "elapsed": 67.3695243059774,
+      "deadline": 232863.298144374,
+      "remaining": 112.6304756940226
+    },
+    {
+      "visit": 2,
+      "phase": "inventory close started",
+      "wall": 232750.854160128,
+      "elapsed": 67.55601575397304,
+      "deadline": 232863.298144374,
+      "remaining": 112.44398424602696
+    },
+    {
+      "visit": 2,
+      "phase": "inventory close observation ended",
+      "wall": 232757.829873396,
+      "elapsed": 74.53172902198276,
+      "deadline": 232863.298144374,
+      "remaining": 105.46827097801724
+    },
+    {
+      "visit": 2,
+      "phase": "inventory fresh closed verified",
+      "wall": 232764.114934922,
+      "elapsed": 80.8167905479786,
+      "deadline": 232863.298144374,
+      "remaining": 99.1832094520214
+    },
+    {
+      "visit": 2,
+      "phase": "panels closed",
+      "wall": 232764.11494456,
+      "elapsed": 80.81680018597399,
+      "deadline": 232863.298144374,
+      "remaining": 99.18319981402601
+    },
+    {
+      "visit": 2,
+      "phase": "resume observation started",
+      "wall": 232764.114947494,
+      "elapsed": 80.81680311998934,
+      "deadline": 232863.298144374,
+      "remaining": 99.18319688001066
+    },
+    {
+      "visit": 2,
+      "phase": "resume baseline observed",
+      "wall": 232765.996070861,
+      "elapsed": 82.69792648698785,
+      "deadline": 232863.298144374,
+      "remaining": 97.30207351301215
+    },
+    {
+      "visit": 2,
+      "phase": "resume next countdown observed",
+      "wall": 232775.043403921,
+      "elapsed": 91.74525954699493,
+      "deadline": 232863.298144374,
+      "remaining": 88.25474045300507
+    },
+    {
+      "visit": 2,
+      "phase": "resume verified",
+      "wall": 232775.043419566,
+      "elapsed": 91.74527519199182,
+      "deadline": 232863.298144374,
+      "remaining": 88.25472480800818
+    },
+    {
+      "visit": 3,
+      "phase": "visit started",
+      "wall": 232843.996469429,
+      "elapsed": 9.498995495960116e-06,
+      "deadline": 233043.99645993,
+      "remaining": 199.9999905010045
+    },
+    {
+      "visit": 3,
+      "phase": "market close started",
+      "wall": 232886.33623447,
+      "elapsed": 42.33977454001433,
+      "deadline": 233043.99645993,
+      "remaining": 157.66022545998567
+    },
+    {
+      "visit": 3,
+      "phase": "market closed",
+      "wall": 232893.663747846,
+      "elapsed": 49.66728791600326,
+      "deadline": 233043.99645993,
+      "remaining": 150.33271208399674
+    },
+    {
+      "visit": 3,
+      "phase": "inventory open started",
+      "wall": 232893.663755389,
+      "elapsed": 49.66729545898852,
+      "deadline": 233043.99645993,
+      "remaining": 150.33270454101148
+    },
+    {
+      "visit": 3,
+      "phase": "inventory opened",
+      "wall": 232905.982957967,
+      "elapsed": 61.98649803700391,
+      "deadline": 233043.99645993,
+      "remaining": 138.0135019629961
+    },
+    {
+      "visit": 3,
+      "phase": "all owned identities verified",
+      "wall": 232911.630120493,
+      "elapsed": 67.63366056300583,
+      "deadline": 233043.99645993,
+      "remaining": 132.36633943699417
+    },
+    {
+      "visit": 3,
+      "phase": "inventory close started",
+      "wall": 232911.811915791,
+      "elapsed": 67.81545586101129,
+      "deadline": 233043.99645993,
+      "remaining": 132.1845441389887
+    },
+    {
+      "visit": 3,
+      "phase": "inventory close observation ended",
+      "wall": 232918.708323709,
+      "elapsed": 74.71186377899721,
+      "deadline": 233043.99645993,
+      "remaining": 125.28813622100279
+    },
+    {
+      "visit": 3,
+      "phase": "inventory fresh closed verified",
+      "wall": 232925.392264775,
+      "elapsed": 81.39580484500038,
+      "deadline": 233043.99645993,
+      "remaining": 118.60419515499962
+    },
+    {
+      "visit": 3,
+      "phase": "panels closed",
+      "wall": 232925.392272318,
+      "elapsed": 81.39581238798564,
+      "deadline": 233043.99645993,
+      "remaining": 118.60418761201436
+    },
+    {
+      "visit": 3,
+      "phase": "resume observation started",
+      "wall": 232925.392275251,
+      "elapsed": 81.39581532101147,
+      "deadline": 233043.99645993,
+      "remaining": 118.60418467898853
+    },
+    {
+      "visit": 3,
+      "phase": "resume baseline observed",
+      "wall": 232927.233488817,
+      "elapsed": 83.23702888700063,
+      "deadline": 233043.99645993,
+      "remaining": 116.76297111299937
+    },
+    {
+      "visit": 3,
+      "phase": "resume next countdown observed",
+      "wall": 232936.155393112,
+      "elapsed": 92.15893318201415,
+      "deadline": 233043.99645993,
+      "remaining": 107.84106681798585
+    },
+    {
+      "visit": 3,
+      "phase": "resume verified",
+      "wall": 232936.155402681,
+      "elapsed": 92.15894275100436,
+      "deadline": 233043.99645993,
+      "remaining": 107.84105724899564
+    },
+    {
+      "visit": 4,
+      "phase": "visit started",
+      "wall": 233005.507117251,
+      "elapsed": 1.1872994946315885e-05,
+      "deadline": 233225.507105378,
+      "remaining": 219.99998812700505
+    },
+    {
+      "visit": 4,
+      "phase": "market close started",
+      "wall": 233041.78848407,
+      "elapsed": 36.281378692016006,
+      "deadline": 233225.507105378,
+      "remaining": 183.718621307984
+    },
+    {
+      "visit": 4,
+      "phase": "market closed",
+      "wall": 233049.399531134,
+      "elapsed": 43.892425755999284,
+      "deadline": 233225.507105378,
+      "remaining": 176.10757424400072
+    },
+    {
+      "visit": 4,
+      "phase": "panels closed",
+      "wall": 233049.399541959,
+      "elapsed": 43.8924365809944,
+      "deadline": 233225.507105378,
+      "remaining": 176.1075634190056
+    },
+    {
+      "visit": 4,
+      "phase": "resume observation started",
+      "wall": 233049.399546219,
+      "elapsed": 43.892440841009375,
+      "deadline": 233225.507105378,
+      "remaining": 176.10755915899063
+    },
+    {
+      "visit": 4,
+      "phase": "resume baseline observed",
+      "wall": 233051.388615393,
+      "elapsed": 45.881510014995,
+      "deadline": 233225.507105378,
+      "remaining": 174.118489985005
+    },
+    {
+      "visit": 4,
+      "phase": "resume next countdown observed",
+      "wall": 233061.041474537,
+      "elapsed": 55.534369158995105,
+      "deadline": 233225.507105378,
+      "remaining": 164.4656308410049
+    },
+    {
+      "visit": 4,
+      "phase": "resume verified",
+      "wall": 233061.041483966,
+      "elapsed": 55.53437858799589,
+      "deadline": 233225.507105378,
+      "remaining": 164.4656214120041
+    },
+    {
+      "visit": 5,
+      "phase": "visit started",
+      "wall": 233123.355966731,
+      "elapsed": 1.4527002349495888e-05,
+      "deadline": 233343.355952204,
+      "remaining": 219.99998547299765
+    },
+    {
+      "visit": 5,
+      "phase": "market close started",
+      "wall": 233171.009968321,
+      "elapsed": 47.65401611701236,
+      "deadline": 233343.355952204,
+      "remaining": 172.34598388298764
+    },
+    {
+      "visit": 5,
+      "phase": "market closed",
+      "wall": 233179.093260763,
+      "elapsed": 55.73730855900794,
+      "deadline": 233343.355952204,
+      "remaining": 164.26269144099206
+    },
+    {
+      "visit": 5,
+      "phase": "inventory open started",
+      "wall": 233179.093267049,
+      "elapsed": 55.737314844998764,
+      "deadline": 233343.355952204,
+      "remaining": 164.26268515500124
+    },
+    {
+      "visit": 5,
+      "phase": "inventory opened",
+      "wall": 233193.436055047,
+      "elapsed": 70.08010284299962,
+      "deadline": 233343.355952204,
+      "remaining": 149.91989715700038
+    },
+    {
+      "visit": 5,
+      "phase": "all owned identities verified",
+      "wall": 233204.29553547,
+      "elapsed": 80.93958326600841,
+      "deadline": 233343.355952204,
+      "remaining": 139.0604167339916
+    },
+    {
+      "visit": 5,
+      "phase": "inventory close started",
+      "wall": 233204.513295676,
+      "elapsed": 81.15734347200487,
+      "deadline": 233343.355952204,
+      "remaining": 138.84265652799513
+    },
+    {
+      "visit": 5,
+      "phase": "inventory close observation ended",
+      "wall": 233212.460900142,
+      "elapsed": 89.10494793800171,
+      "deadline": 233343.355952204,
+      "remaining": 130.89505206199829
+    },
+    {
+      "visit": 5,
+      "phase": "inventory fresh closed verified",
+      "wall": 233219.67232193,
+      "elapsed": 96.31636972600245,
+      "deadline": 233343.355952204,
+      "remaining": 123.68363027399755
+    },
+    {
+      "visit": 5,
+      "phase": "panels closed",
+      "wall": 233219.67233052,
+      "elapsed": 96.31637831599801,
+      "deadline": 233343.355952204,
+      "remaining": 123.68362168400199
+    },
+    {
+      "visit": 5,
+      "phase": "resume observation started",
+      "wall": 233219.672332895,
+      "elapsed": 96.31638069098699,
+      "deadline": 233343.355952204,
+      "remaining": 123.68361930901301
+    },
+    {
+      "visit": 5,
+      "phase": "resume baseline observed",
+      "wall": 233221.538464069,
+      "elapsed": 98.18251186498674,
+      "deadline": 233343.355952204,
+      "remaining": 121.81748813501326
+    },
+    {
+      "visit": 5,
+      "phase": "resume next countdown observed",
+      "wall": 233231.186390211,
+      "elapsed": 107.83043800698943,
+      "deadline": 233343.355952204,
+      "remaining": 112.16956199301057
+    },
+    {
+      "visit": 5,
+      "phase": "resume verified",
+      "wall": 233231.186402642,
+      "elapsed": 107.83045043799211,
+      "deadline": 233343.355952204,
+      "remaining": 112.16954956200789
+    },
+    {
+      "visit": 6,
+      "phase": "visit started",
+      "wall": 233291.84585239,
+      "elapsed": 1.0616000508889556e-05,
+      "deadline": 233531.845841774,
+      "remaining": 239.9999893839995
+    },
+    {
+      "visit": 6,
+      "phase": "market close started",
+      "wall": 233334.155299266,
+      "elapsed": 42.3094574920251,
+      "deadline": 233531.845841774,
+      "remaining": 197.6905425079749
+    },
+    {
+      "visit": 6,
+      "phase": "market closed",
+      "wall": 233341.945715507,
+      "elapsed": 50.09987373300828,
+      "deadline": 233531.845841774,
+      "remaining": 189.90012626699172
+    },
+    {
+      "visit": 6,
+      "phase": "inventory open started",
+      "wall": 233341.945722561,
+      "elapsed": 50.09988078702008,
+      "deadline": 233531.845841774,
+      "remaining": 189.90011921297992
+    },
+    {
+      "visit": 6,
+      "phase": "inventory opened",
+      "wall": 233360.559525591,
+      "elapsed": 68.71368381701177,
+      "deadline": 233531.845841774,
+      "remaining": 171.28631618298823
+    },
+    {
+      "visit": 6,
+      "phase": "all owned identities verified",
+      "wall": 233375.008267374,
+      "elapsed": 83.16242560002138,
+      "deadline": 233531.845841774,
+      "remaining": 156.83757439997862
+    },
+    {
+      "visit": 6,
+      "phase": "inventory close started",
+      "wall": 233375.266139921,
+      "elapsed": 83.42029814701527,
+      "deadline": 233531.845841774,
+      "remaining": 156.57970185298473
+    },
+    {
+      "visit": 6,
+      "phase": "inventory close observation ended",
+      "wall": 233382.833104496,
+      "elapsed": 90.98726272201748,
+      "deadline": 233531.845841774,
+      "remaining": 149.01273727798252
+    },
+    {
+      "visit": 6,
+      "phase": "inventory fresh closed verified",
+      "wall": 233389.849169813,
+      "elapsed": 98.00332803901983,
+      "deadline": 233531.845841774,
+      "remaining": 141.99667196098017
+    },
+    {
+      "visit": 6,
+      "phase": "panels closed",
+      "wall": 233389.849180219,
+      "elapsed": 98.0033384450071,
+      "deadline": 233531.845841774,
+      "remaining": 141.9966615549929
+    },
+    {
+      "visit": 6,
+      "phase": "resume observation started",
+      "wall": 233389.849184061,
+      "elapsed": 98.00334228700376,
+      "deadline": 233531.845841774,
+      "remaining": 141.99665771299624
+    },
+    {
+      "visit": 6,
+      "phase": "resume baseline observed",
+      "wall": 233391.785082389,
+      "elapsed": 99.93924061500002,
+      "deadline": 233531.845841774,
+      "remaining": 140.06075938499998
+    },
+    {
+      "visit": 6,
+      "phase": "resume next countdown observed",
+      "wall": 233401.226762862,
+      "elapsed": 109.38092108801357,
+      "deadline": 233531.845841774,
+      "remaining": 130.61907891198643
+    },
+    {
+      "visit": 6,
+      "phase": "resume verified",
+      "wall": 233401.22677725,
+      "elapsed": 109.38093547601602,
+      "deadline": 233531.845841774,
+      "remaining": 130.61906452398398
+    },
+    {
+      "visit": 7,
+      "phase": "visit started",
+      "wall": 233461.777694772,
+      "elapsed": 2.1580985048785806e-05,
+      "deadline": 233721.777673191,
+      "remaining": 259.99997841901495
+    }
+  ],
+  "equipment_unlock_checks": [
+    {
+      "visit": 1,
+      "countdown": 1288,
+      "unlocked": true
+    },
+    {
+      "visit": 2,
+      "countdown": 1197,
+      "unlocked": true
+    },
+    {
+      "visit": 3,
+      "countdown": 1083,
+      "unlocked": true
+    },
+    {
+      "visit": 4,
+      "countdown": 968,
+      "unlocked": true
+    },
+    {
+      "visit": 5,
+      "countdown": 878,
+      "unlocked": true
+    },
+    {
+      "visit": 6,
+      "countdown": 767,
+      "unlocked": true
+    },
+    {
+      "visit": 7,
+      "countdown": 663,
+      "unlocked": true
+    }
+  ],
+  "equipment_open_attempts": [
+    {
+      "visit": 1,
+      "screenshot": "equipment-01-market-open-00.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1286,
+      "input": "b"
+    },
+    {
+      "visit": 1,
+      "screenshot": "equipment-01-market-open-01.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": 2,
+      "screenshot": "equipment-02-market-open-02.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1195,
+      "input": "b"
+    },
+    {
+      "visit": 2,
+      "screenshot": "equipment-02-market-open-03.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": 2,
+      "screenshot": "equipment-02-inventory-open-04.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1180,
+      "input": "i"
+    },
+    {
+      "visit": 2,
+      "screenshot": "equipment-02-inventory-open-05.png",
+      "state": "inventory",
+      "requests": 1
+    },
+    {
+      "visit": 3,
+      "screenshot": "equipment-03-market-open-06.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1081,
+      "input": "b"
+    },
+    {
+      "visit": 3,
+      "screenshot": "equipment-03-market-open-07.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": 3,
+      "screenshot": "equipment-03-inventory-open-08.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1066,
+      "input": "i"
+    },
+    {
+      "visit": 3,
+      "screenshot": "equipment-03-inventory-open-09.png",
+      "state": "inventory",
+      "requests": 1
+    },
+    {
+      "visit": 4,
+      "screenshot": "equipment-04-market-open-10.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 966,
+      "input": "b"
+    },
+    {
+      "visit": 4,
+      "screenshot": "equipment-04-market-open-11.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": 5,
+      "screenshot": "equipment-05-market-open-12.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 876,
+      "input": "b"
+    },
+    {
+      "visit": 5,
+      "screenshot": "equipment-05-market-open-13.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": 5,
+      "screenshot": "equipment-05-inventory-open-14.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 860,
+      "input": "i"
+    },
+    {
+      "visit": 5,
+      "screenshot": "equipment-05-inventory-open-15.png",
+      "state": "inventory",
+      "requests": 1
+    },
+    {
+      "visit": 6,
+      "screenshot": "equipment-06-market-open-16.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 765,
+      "input": "b"
+    },
+    {
+      "visit": 6,
+      "screenshot": "equipment-06-market-open-17.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": 6,
+      "screenshot": "equipment-06-inventory-open-18.png",
+      "state": "choice",
+      "requests": 0,
+      "input": "1"
+    },
+    {
+      "visit": 6,
+      "screenshot": "equipment-06-inventory-open-19.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 753,
+      "input": "i"
+    },
+    {
+      "visit": 6,
+      "screenshot": "equipment-06-inventory-open-20.png",
+      "state": "inventory",
+      "requests": 1
+    },
+    {
+      "visit": 7,
+      "screenshot": "equipment-07-market-open-21.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 661,
+      "input": "b"
+    },
+    {
+      "visit": 7,
+      "screenshot": "equipment-07-market-open-22.png",
+      "state": "battle",
+      "requests": 1,
+      "clock": 653
+    },
+    {
+      "visit": 7,
+      "screenshot": "equipment-07-market-open-23.png",
+      "state": "market",
+      "requests": 1
+    }
+  ],
+  "equipment_hover_checks": [
+    {
+      "visit": 1,
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "equipment-01-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Wind Boots + Equipment"
+        }
+      ],
+      "stale_attempts": []
+    },
+    {
+      "visit": 1,
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "equipment-01-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Wind Boots + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Wind Boots + Equipment'"
+        },
+        {
+          "screenshot": "equipment-01-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "ArcLens + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-01-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Wind Boots + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Wind Boots + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 1,
+      "index": 2,
+      "observations": [
+        {
+          "screenshot": "equipment-01-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'ArcLens + Equipment'"
+        },
+        {
+          "screenshot": "equipment-01-inspect-2-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Gate Patch \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-01-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'ArcLens + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 1,
+      "index": 3,
+      "observations": [
+        {
+          "screenshot": "equipment-01-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Gate Patch \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-01-inspect-3-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Skill Tuner \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-01-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Gate Patch \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 1,
+      "index": 4,
+      "observations": [
+        {
+          "screenshot": "equipment-01-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Skill Tuner \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-01-inspect-4-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Ember Heart + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-01-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Skill Tuner \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "equipment-02-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Wind Boots', 'Ember Heart + Equipment'"
+        },
+        {
+          "screenshot": "equipment-02-inspect-0-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Wind Boots + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-02-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Wind Boots', 'Ember Heart + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "equipment-02-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Wind Boots + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Wind Boots + Equipment'"
+        },
+        {
+          "screenshot": "equipment-02-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "ArcLens + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-02-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Wind Boots + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Wind Boots + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 2,
+      "observations": [
+        {
+          "screenshot": "equipment-02-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'ArcLens + Equipment'"
+        },
+        {
+          "screenshot": "equipment-02-inspect-2-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Gate Patch \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-02-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'ArcLens + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 3,
+      "observations": [
+        {
+          "screenshot": "equipment-02-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Gate Patch \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-02-inspect-3-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Skill Tuner \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-02-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Gate Patch \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 4,
+      "observations": [
+        {
+          "screenshot": "equipment-02-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Skill Tuner \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-02-inspect-4-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Ember Heart + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-02-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Skill Tuner \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "equipment-02-selected-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Wind Boots', 'Ember Heart + Equipment'"
+        },
+        {
+          "screenshot": "equipment-02-selected-inspect-0-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Wind Boots + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-02-selected-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Wind Boots', 'Ember Heart + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 3,
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "equipment-03-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Storm Coil",
+          "price": "280",
+          "preview": "Storm Coil + Equipment"
+        }
+      ],
+      "stale_attempts": []
+    },
+    {
+      "visit": 3,
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "equipment-03-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Storm Coil + Equipment",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Storm Coil + Equipment'"
+        },
+        {
+          "screenshot": "equipment-03-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Ember Heart + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-03-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Storm Coil + Equipment",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Storm Coil + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 3,
+      "index": 2,
+      "observations": [
+        {
+          "screenshot": "equipment-03-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Bond Compass",
+          "price": "180",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Bond Compass', 'Ember Heart + Equipment'"
+        },
+        {
+          "screenshot": "equipment-03-inspect-2-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Bond Compass",
+          "price": "180",
+          "preview": "Bond Compass \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-03-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Bond Compass",
+          "price": "180",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Bond Compass', 'Ember Heart + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 3,
+      "index": 3,
+      "observations": [
+        {
+          "screenshot": "equipment-03-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Threefold Relic",
+          "price": "340",
+          "preview": "Bond Compass \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Threefold Relic', 'Bond Compass \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-03-inspect-3-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Threefold Relic",
+          "price": "340",
+          "preview": "Threefold Relic + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-03-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Threefold Relic",
+          "price": "340",
+          "preview": "Bond Compass \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Threefold Relic', 'Bond Compass \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 3,
+      "index": 4,
+      "observations": [
+        {
+          "screenshot": "equipment-03-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Threefold Relic + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'Threefold Relic + Equipment'"
+        },
+        {
+          "screenshot": "equipment-03-inspect-4-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Gate Patch \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-03-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Threefold Relic + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'Threefold Relic + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 3,
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "equipment-03-selected-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Storm Coil",
+          "price": "280",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Storm Coil', 'Gate Patch \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-03-selected-inspect-0-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Storm Coil",
+          "price": "280",
+          "preview": "Storm Coil + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-03-selected-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Storm Coil",
+          "price": "280",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Storm Coil', 'Gate Patch \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 4,
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "equipment-04-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "ArcLens + Equipment"
+        }
+      ],
+      "stale_attempts": []
+    },
+    {
+      "visit": 4,
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "equipment-04-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Hardened Plate",
+          "price": "180",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Hardened Plate', 'ArcLens + Equipment'"
+        },
+        {
+          "screenshot": "equipment-04-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Hardened Plate",
+          "price": "180",
+          "preview": "Hardened Plate + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-04-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Hardened Plate",
+          "price": "180",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Hardened Plate', 'ArcLens + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 4,
+      "index": 2,
+      "observations": [
+        {
+          "screenshot": "equipment-04-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Hardened Plate + Equipment",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Hardened Plate + Equipment'"
+        },
+        {
+          "screenshot": "equipment-04-inspect-2-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Skill Tuner \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-04-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Hardened Plate + Equipment",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Hardened Plate + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 4,
+      "index": 3,
+      "observations": [
+        {
+          "screenshot": "equipment-04-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'Skill Tuner \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-04-inspect-3-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Gate Patch \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-04-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'Skill Tuner \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 4,
+      "index": 4,
+      "observations": [
+        {
+          "screenshot": "equipment-04-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Frost Mirror",
+          "price": "280",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Frost Mirror', 'Gate Patch \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-04-inspect-4-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Frost Mirror",
+          "price": "280",
+          "preview": "Frost Mirror + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-04-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Frost Mirror",
+          "price": "280",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Frost Mirror', 'Gate Patch \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 5,
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "equipment-05-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Frost Mirror + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Frost Mirror + Equipment'"
+        },
+        {
+          "screenshot": "equipment-05-inspect-0-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "ArcLens + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-05-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Frost Mirror + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Frost Mirror + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 5,
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "equipment-05-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Hardened Plate",
+          "price": "180",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Hardened Plate', 'ArcLens + Equipment'"
+        },
+        {
+          "screenshot": "equipment-05-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Hardened Plate",
+          "price": "180",
+          "preview": "Hardened Plate + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-05-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Hardened Plate",
+          "price": "180",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Hardened Plate', 'ArcLens + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 5,
+      "index": 2,
+      "observations": [
+        {
+          "screenshot": "equipment-05-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Hardened Plate + Equipment",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Hardened Plate + Equipment'"
+        },
+        {
+          "screenshot": "equipment-05-inspect-2-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Skill Tuner \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-05-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Hardened Plate + Equipment",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Hardened Plate + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 5,
+      "index": 3,
+      "observations": [
+        {
+          "screenshot": "equipment-05-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'Skill Tuner \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-05-inspect-3-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Gate Patch \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-05-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'Skill Tuner \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 5,
+      "index": 4,
+      "observations": [
+        {
+          "screenshot": "equipment-05-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Frost Mirror",
+          "price": "280",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Frost Mirror', 'Gate Patch \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-05-inspect-4-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Frost Mirror",
+          "price": "280",
+          "preview": "Frost Mirror + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-05-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Frost Mirror",
+          "price": "280",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Frost Mirror', 'Gate Patch \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 5,
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "equipment-05-selected-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Frost Mirror + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Frost Mirror + Equipment'"
+        },
+        {
+          "screenshot": "equipment-05-selected-inspect-0-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "ArcLens + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-05-selected-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Frost Mirror + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Frost Mirror + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 6,
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "equipment-06-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Market Badge",
+          "price": "260",
+          "preview": "Market Badge + Equipment"
+        }
+      ],
+      "stale_attempts": []
+    },
+    {
+      "visit": 6,
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "equipment-06-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ascendant Crown",
+          "price": "480",
+          "preview": "Market Badge + Equipment",
+          "error": "Tile/preview mismatch: 'Ascendant Crown', 'Market Badge + Equipment'"
+        },
+        {
+          "screenshot": "equipment-06-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Ascendant Crown",
+          "price": "480",
+          "preview": "Ascendant Crown + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-06-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ascendant Crown",
+          "price": "480",
+          "preview": "Market Badge + Equipment",
+          "error": "Tile/preview mismatch: 'Ascendant Crown', 'Market Badge + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 6,
+      "index": 2,
+      "observations": [
+        {
+          "screenshot": "equipment-06-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Revival Seed",
+          "price": "180",
+          "preview": "Ascendant Crown + Equipment",
+          "error": "Tile/preview mismatch: 'Revival Seed', 'Ascendant Crown + Equipment'"
+        },
+        {
+          "screenshot": "equipment-06-inspect-2-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Revival Seed",
+          "price": "180",
+          "preview": "Revival Seed \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-06-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Revival Seed",
+          "price": "180",
+          "preview": "Ascendant Crown + Equipment",
+          "error": "Tile/preview mismatch: 'Revival Seed', 'Ascendant Crown + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 6,
+      "index": 3,
+      "observations": [
+        {
+          "screenshot": "equipment-06-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Frost Mirror",
+          "price": "280",
+          "preview": "Revival Seed \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Frost Mirror', 'Revival Seed \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-06-inspect-3-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Frost Mirror",
+          "price": "280",
+          "preview": "Frost Mirror + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-06-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Frost Mirror",
+          "price": "280",
+          "preview": "Revival Seed \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Frost Mirror', 'Revival Seed \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 6,
+      "index": 4,
+      "observations": [
+        {
+          "screenshot": "equipment-06-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Guardian Seed",
+          "price": "300",
+          "preview": "Frost Mirror + Equipment",
+          "error": "Tile/preview mismatch: 'Guardian Seed', 'Frost Mirror + Equipment'"
+        },
+        {
+          "screenshot": "equipment-06-inspect-4-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Guardian Seed",
+          "price": "300",
+          "preview": "Guardian Seed + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-06-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Guardian Seed",
+          "price": "300",
+          "preview": "Frost Mirror + Equipment",
+          "error": "Tile/preview mismatch: 'Guardian Seed', 'Frost Mirror + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 6,
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "equipment-06-selected-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Market Badge",
+          "price": "260",
+          "preview": "Guardian Seed + Equipment",
+          "error": "Tile/preview mismatch: 'Market Badge', 'Guardian Seed + Equipment'"
+        },
+        {
+          "screenshot": "equipment-06-selected-inspect-0-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Market Badge",
+          "price": "260",
+          "preview": "Market Badge + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-06-selected-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Market Badge",
+          "price": "260",
+          "preview": "Guardian Seed + Equipment",
+          "error": "Tile/preview mismatch: 'Market Badge', 'Guardian Seed + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 7,
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "equipment-07-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Hardened Plate",
+          "price": "144",
+          "preview": "Hardened Plate + Equipment"
+        }
+      ],
+      "stale_attempts": []
+    },
+    {
+      "visit": 7,
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "equipment-07-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ascendant Crown",
+          "price": "384",
+          "preview": "Hardened Plate + Equipment",
+          "error": "Tile/preview mismatch: 'Ascendant Crown', 'Hardened Plate + Equipment'"
+        },
+        {
+          "screenshot": "equipment-07-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Ascendant Crown",
+          "price": "384",
+          "preview": "Ascendant Crown + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-07-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ascendant Crown",
+          "price": "384",
+          "preview": "Hardened Plate + Equipment",
+          "error": "Tile/preview mismatch: 'Ascendant Crown', 'Hardened Plate + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 7,
+      "index": 2,
+      "observations": [
+        {
+          "screenshot": "equipment-07-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Revival Seed",
+          "price": "144",
+          "preview": "Ascendant Crown + Equipment",
+          "error": "Tile/preview mismatch: 'Revival Seed', 'Ascendant Crown + Equipment'"
+        },
+        {
+          "screenshot": "equipment-07-inspect-2-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Revival Seed",
+          "price": "144",
+          "preview": "Revival Seed \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-07-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Revival Seed",
+          "price": "144",
+          "preview": "Ascendant Crown + Equipment",
+          "error": "Tile/preview mismatch: 'Revival Seed', 'Ascendant Crown + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 7,
+      "index": 3,
+      "observations": [
+        {
+          "screenshot": "equipment-07-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Frost Mirror",
+          "price": "224",
+          "preview": "Revival Seed \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Frost Mirror', 'Revival Seed \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-07-inspect-3-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Frost Mirror",
+          "price": "224",
+          "preview": "Frost Mirror + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-07-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Frost Mirror",
+          "price": "224",
+          "preview": "Revival Seed \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Frost Mirror', 'Revival Seed \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 7,
+      "index": 4,
+      "observations": [
+        {
+          "screenshot": "equipment-07-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Guardian Seed",
+          "price": "240",
+          "preview": "Frost Mirror + Equipment",
+          "error": "Tile/preview mismatch: 'Guardian Seed', 'Frost Mirror + Equipment'"
+        },
+        {
+          "screenshot": "equipment-07-inspect-4-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Guardian Seed",
+          "price": "240",
+          "preview": "Guardian Seed + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-07-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Guardian Seed",
+          "price": "240",
+          "preview": "Frost Mirror + Equipment",
+          "error": "Tile/preview mismatch: 'Guardian Seed', 'Frost Mirror + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 7,
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "equipment-07-selected-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Hardened Plate",
+          "price": "144",
+          "preview": "Guardian Seed + Equipment",
+          "error": "Tile/preview mismatch: 'Hardened Plate', 'Guardian Seed + Equipment'"
+        },
+        {
+          "screenshot": "equipment-07-selected-inspect-0-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Hardened Plate",
+          "price": "144",
+          "preview": "Hardened Plate + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-07-selected-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Hardened Plate",
+          "price": "144",
+          "preview": "Guardian Seed + Equipment",
+          "error": "Tile/preview mismatch: 'Hardened Plate', 'Guardian Seed + Equipment'"
+        }
+      ]
+    }
+  ],
+  "equipment_inspections": [
+    {
+      "visit": 1,
+      "wallet": 101,
+      "wallet_ocr": "200%: LV1 KILLS 0101 | 300%: LV1 KILLS 0101 | 600%: LV1 KILLS 0101",
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "wallet": 175,
+      "wallet_ocr": "200%: LV1 KILLS 0175 | 300%: LV1 KILLS 0175 | 600%: LV1 KILLS 0175",
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "visit": 3,
+      "wallet": 285,
+      "wallet_ocr": "200%: LV2 KILLS 0285 | 300%: LV2 KILLS 0285 | 600%: LV2 KILLS 0285",
+      "offers": [
+        {
+          "name": "Storm Coil",
+          "price": 280,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Storm Coil",
+          "price_ocr": "280",
+          "preview_ocr": "Storm Coil + Equipment"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        },
+        {
+          "name": "Bond Compass",
+          "price": 180,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Bond Compass",
+          "price_ocr": "180",
+          "preview_ocr": "Bond Compass \u00bb Consumable"
+        },
+        {
+          "name": "Threefold Relic",
+          "price": 340,
+          "category": "Equipment",
+          "index": 3,
+          "tile_ocr": "Threefold Relic",
+          "price_ocr": "340",
+          "preview_ocr": "Threefold Relic + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 4,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        }
+      ]
+    },
+    {
+      "visit": 4,
+      "wallet": 165,
+      "wallet_ocr": "200%: LV2 KILLS 0165 | 300%: LV2 KILLS 0165 | 600%: LV2 KILLS 0165",
+      "offers": [
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Hardened Plate",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Hardened Plate",
+          "price_ocr": "180",
+          "preview_ocr": "Hardened Plate + Equipment"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Frost Mirror",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Frost Mirror",
+          "price_ocr": "280",
+          "preview_ocr": "Frost Mirror + Equipment"
+        }
+      ]
+    },
+    {
+      "visit": 5,
+      "wallet": 284,
+      "wallet_ocr": "200%: LV2 KILLS 0284 | 300%: LV2 KILLS 0284 | 600%: LV2 KILLS 0284",
+      "offers": [
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Hardened Plate",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Hardened Plate",
+          "price_ocr": "180",
+          "preview_ocr": "Hardened Plate + Equipment"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Frost Mirror",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Frost Mirror",
+          "price_ocr": "280",
+          "preview_ocr": "Frost Mirror + Equipment"
+        }
+      ]
+    },
+    {
+      "visit": 6,
+      "wallet": 466,
+      "wallet_ocr": "200%: LV3 KILLS 0466 | 300%: LV3 KILLS 0466 | 600%: LV3 KILLS 0466",
+      "offers": [
+        {
+          "name": "Market Badge",
+          "price": 260,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Market Badge",
+          "price_ocr": "260",
+          "preview_ocr": "Market Badge + Equipment"
+        },
+        {
+          "name": "Ascendant Crown",
+          "price": 480,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Ascendant Crown",
+          "price_ocr": "480",
+          "preview_ocr": "Ascendant Crown + Equipment"
+        },
+        {
+          "name": "Revival Seed",
+          "price": 180,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Revival Seed",
+          "price_ocr": "180",
+          "preview_ocr": "Revival Seed \u00bb Consumable"
+        },
+        {
+          "name": "Frost Mirror",
+          "price": 280,
+          "category": "Equipment",
+          "index": 3,
+          "tile_ocr": "Frost Mirror",
+          "price_ocr": "280",
+          "preview_ocr": "Frost Mirror + Equipment"
+        },
+        {
+          "name": "Guardian Seed",
+          "price": 300,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Guardian Seed",
+          "price_ocr": "300",
+          "preview_ocr": "Guardian Seed + Equipment"
+        }
+      ]
+    },
+    {
+      "visit": 7,
+      "wallet": 424,
+      "wallet_ocr": "200%: LV3 KILLS 0424 | 300%: LV3 KILLS 0424 | 600%: LV3 KILLS 0424",
+      "offers": [
+        {
+          "name": "Hardened Plate",
+          "price": 144,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Hardened Plate",
+          "price_ocr": "144",
+          "preview_ocr": "Hardened Plate + Equipment"
+        },
+        {
+          "name": "Ascendant Crown",
+          "price": 384,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Ascendant Crown",
+          "price_ocr": "384",
+          "preview_ocr": "Ascendant Crown + Equipment"
+        },
+        {
+          "name": "Revival Seed",
+          "price": 144,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Revival Seed",
+          "price_ocr": "144",
+          "preview_ocr": "Revival Seed \u00bb Consumable"
+        },
+        {
+          "name": "Frost Mirror",
+          "price": 224,
+          "category": "Equipment",
+          "index": 3,
+          "tile_ocr": "Frost Mirror",
+          "price_ocr": "224",
+          "preview_ocr": "Frost Mirror + Equipment"
+        },
+        {
+          "name": "Guardian Seed",
+          "price": 240,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Guardian Seed",
+          "price_ocr": "240",
+          "preview_ocr": "Guardian Seed + Equipment"
+        }
+      ]
+    }
+  ],
+  "equipment_resume_proofs": [
+    {
+      "visit": 1,
+      "before": 1270,
+      "after": 1260
+    },
+    {
+      "visit": 2,
+      "before": 1161,
+      "after": 1152
+    },
+    {
+      "visit": 3,
+      "before": 1047,
+      "after": 1039
+    },
+    {
+      "visit": 4,
+      "before": 951,
+      "after": 941
+    },
+    {
+      "visit": 5,
+      "before": 838,
+      "after": 828
+    },
+    {
+      "visit": 6,
+      "before": 734,
+      "after": 724
+    }
+  ],
+  "equipment_purchase_observations": [
+    {
+      "input": "buy_click",
+      "wall": 232725.610564901
+    },
+    {
+      "screenshot": "equipment-02-purchase-00.png",
+      "wall": 232728.277902648,
+      "header": "BLACK MARKET",
+      "wallet": 15,
+      "wallet_ocr": "200%: LV1 KILLS 0015 | 300%: LV1 KILLS 0015 | 600%: LV1 KILLS 0015",
+      "hud": 15,
+      "hud_ocr": "15",
+      "exact_debit": true
+    },
+    {
+      "input": "buy_click",
+      "wall": 232883.626272525
+    },
+    {
+      "screenshot": "equipment-03-purchase-00.png",
+      "wall": 232886.335605685,
+      "header": "BLACK MARKET",
+      "wallet": 5,
+      "wallet_ocr": "200%: LV2 KILLS 0005 | 300%: LV2 KILLS 0005 | 600%: LV2 KILLS 0005",
+      "hud": 5,
+      "hud_ocr": "5",
+      "exact_debit": true
+    },
+    {
+      "input": "buy_click",
+      "wall": 233168.27255586
+    },
+    {
+      "screenshot": "equipment-05-purchase-00.png",
+      "wall": 233171.009366634,
+      "header": "BLACK MARKET",
+      "wallet": 104,
+      "wallet_ocr": "200%: LV2 KILLS 0104 | 300%: LV2 KILLS 0104 | 600%: LV2 KILLS 0104",
+      "hud": 104,
+      "hud_ocr": "104",
+      "exact_debit": true
+    },
+    {
+      "input": "buy_click",
+      "wall": 233331.48194394
+    },
+    {
+      "screenshot": "equipment-06-purchase-00.png",
+      "wall": 233334.154669084,
+      "header": "BLACK MARKET",
+      "wallet": 206,
+      "wallet_ocr": "200%: LV3 KILLS 0206 | 300%: LV3 KILLS 0206 | 600%: LV3 KILLS 0206",
+      "hud": 206,
+      "hud_ocr": "206",
+      "exact_debit": true
+    },
+    {
+      "input": "buy_click",
+      "wall": 233510.276394884
+    },
+    {
+      "screenshot": "equipment-07-purchase-00.png",
+      "wall": 233512.973240439,
+      "header": "BLACK MARKET",
+      "wallet": 280,
+      "wallet_ocr": "200%: LV3 KILLS 0280 | 300%: LV3 KILLS 0280 | 600%: LV3 KILLS 0280",
+      "hud": 424,
+      "hud_ocr": "424"
+    }
+  ]
+}

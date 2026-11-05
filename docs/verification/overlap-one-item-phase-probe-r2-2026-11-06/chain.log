@@ -1,0 +1,6 @@
+PHASE_R2_START 2ec797051aeccee75d46f7bdd930858d0987f8ea
+{"stage": "launch", "harness_commit": "2ec797051aeccee75d46f7bdd930858d0987f8ea", "package_commit": "f5ef6ff8f37ecab467b5ba0baadb6decd8d49aaf", "container": "rogue-overlap-one-item-phase-r2-nov6", "outer_budget": 1200}
+{"stage": "terminal", "exit": 0, "elapsed": 523.4306130409241}
+PHASE_R2_PASS_START_FRESH_C6_R3
+Running as unit: rogue-overlap-chapter6-r3-nov6.service; invocation ID: 8c2e598372fc4eb2bc0ed45ab1590a26
+C6_R3_LAUNCHED

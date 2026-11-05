@@ -1,0 +1,2 @@
+{"stage": "launch", "harness_commit": "2ec797051aeccee75d46f7bdd930858d0987f8ea", "package_commit": "f5ef6ff8f37ecab467b5ba0baadb6decd8d49aaf", "container": "rogue-overlap-c6-r3-nov6", "outer_budget": 6000}
+{"stage": "terminal", "exit": 1, "elapsed": 1222.8383190631866}
