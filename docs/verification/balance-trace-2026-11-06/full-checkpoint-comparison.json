@@ -1,0 +1,84 @@
+{
+  "complete": true,
+  "all_checkpoint_fields_equal": false,
+  "left_count": 28,
+  "right_count": 56,
+  "strict_comparator_exit": 1,
+  "matrix_started": false,
+  "scope": "recorded checkpoints only; not proof of all internal state determinism",
+  "first_difference": {
+    "checkpoint": 18,
+    "frame_left": 32400,
+    "frame_right": 32400,
+    "fields": {
+      "attacks": [
+        1133,
+        1145
+      ],
+      "damage_skill_casts": [
+        286,
+        287
+      ],
+      "enemy_peak": [
+        18,
+        17
+      ],
+      "gold": [
+        698,
+        694
+      ],
+      "hero_hp": [
+        2558.3,
+        2230.7
+      ],
+      "kills": [
+        316,
+        314
+      ],
+      "max_hero_hp": [
+        4331.3774,
+        4003.7773
+      ],
+      "owned_bond_ids": [
+        [
+          0,
+          1,
+          2,
+          3,
+          9,
+          11,
+          12,
+          14,
+          15,
+          16,
+          18,
+          19,
+          27,
+          28,
+          29
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          9,
+          11,
+          14,
+          15,
+          16,
+          18,
+          19,
+          27,
+          28,
+          29,
+          50
+        ]
+      ],
+      "rng_state": [
+        10229017993148525311,
+        8058488476366043607
+      ]
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "scope": "Full exact trace archive and limited identity-free numeric projection; divergence remains, cause unproven, no matrix or tuning",
+  "files_sha256": {
+    "README.md": "8597d15807074d7fbe6125c43c3310d17d7b71f699fc0c7a331b3be145db90cd",
+    "bin-tests.log": "824e102f861617229b99338ef8b12e7c041fc0666faf9ba271b66a010b98e291",
+    "binary.json": "166744c2b864b05b29e344ce2cf6be95b7b85a16d12e6b4e52033eae7a7c4fb4",
+    "build.log": "1f8bd7ae67bd0fdc1ebe94caa8b1fdcf5c7674eb3af277bfe8e564f8a2277b2a",
+    "clippy.log": "2a7a48324a3aed8c0b4af0c5a60f346f7bd628d8f499428cf5dc97207018b21a",
+    "comparison.json": "0675ad1513c10ec3d437510e87aab90b82ebb91746d5c3bbfd6e5eb54d617b06",
+    "comparison.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic-commit.json": "52cee11f4ae81dd12cc8641ccb595c6bea2351d40d8c660497d194cd82d98d61",
+    "diagnostic-commit.log": "6f1b8b28466018686f57cbe3d37586af3200378d7b268ac45312bde99059422f",
+    "full-checkpoint-comparison.json": "8ed3d652ff4f9ee3c4e6440aabfe1643da40ed368026fb80ce2e95e95dce9d26",
+    "numeric-projection-comparison.json": "f1329624d8880a22e9306bea42f9990c52bef004260ba98adbbd20bdf93c0577",
+    "raw-receipts.json": "ce2703e71ca1fde69184c6d2bdbf47e554a6db95bbbe171eea2a87afa3ff0936",
+    "replay-a/active-h2-behind-sa11ce-c5-t0.jsonl.gz": "b889f31b4947e3281c6e4ba2d09d0eebdbdceac45c7a4568f09eab80d99b4cf0",
+    "replay-a/active-h2-behind-sa11ce-c5-t0.stderr": "1a70deccca53ca5aa83a3246adaa5bc73cee03c319a088488ec312dce4fd4d1e",
+    "replay-a/summary.json": "a4618bca6ec564eebecb66353f4580efeb97c2607e4740f6f425b02ed616fe16",
+    "replay-b/active-h2-behind-sa11ce-c5-t0.jsonl.gz": "d5b0936aa4722e44e009e87426130a4eb0045a07013cf8b195f680918bf588ee",
+    "replay-b/active-h2-behind-sa11ce-c5-t0.stderr": "a930e2b45901ce8aa71f4b5a84192f84d522d4b95e564bd93a405d4b6417d885",
+    "replay-b/summary.json": "3bcc72f8510b4f913c7a7683d9c1a226ccb656f28e21153fb5c999d0256d0176",
+    "run.py": "807a8a145cd1ae5b1a9f0dbeb92a6ab93b3144a82facd12563b87e41d0c00ea9",
+    "semantic-timeline.json": "64ed4339aaf62343259520568f447fb41a03275cb4b8d43d91710b0bf247af2f",
+    "sequence.log": "d7cbdb50e40720ed4ac4648fc4b6ce3e6242f448a24aa3491d55ac74eb666be9",
+    "source-after-build.json": "61ec48c10993b7198d3809bfa0805357608d4b733bdb70a833638e95ebc94cf1",
+    "source-before-build.json": "e0d0ee0c8320f05c8763a5d22d955b81891ff01537374475b7c0cd894c8afcfb",
+    "trace-comparison.json": "a3c779c67ea5dae044692a1518ad042c69ee2347e7fd5d0b74b35aa16c93a490",
+    "transition-context.json": "0a3ecfd2d07310017958b0ce7f6bb71edc60c42d61f08d8ceec0084dad67bc67"
+  }
+}
