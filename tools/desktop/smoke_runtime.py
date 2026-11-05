@@ -23,7 +23,7 @@ def normalized(text):
 def ocr_lines(tsv):
     """Group real OCR words into visible lines, keeping their click bounds."""
     groups = {}
-    for row in csv.DictReader(io.StringIO(tsv), delimiter='\t'):
+    for row in csv.DictReader(io.StringIO(tsv), delimiter='\t', quoting=csv.QUOTE_NONE):
         if row['level'] != '5' or not row['text'].strip():
             continue
         key = tuple(row[name] for name in ('page_num', 'block_num', 'par_num', 'line_num'))

@@ -1,6 +1,7 @@
 import shutil
 import unittest
 from unittest.mock import patch
+from smoke_runtime import ocr_screenshot
 from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop
 from campaign_equipment_runtime import battle_seconds
 from pathlib import Path
@@ -90,8 +91,17 @@ class EquipmentPolicyParsing(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 verify_deduction(before,after,offers[1])
 
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_actual_two_item_inventory_header_survives_quote_and_plus_ocr(self):
+        root = Path(__file__).resolve().parents[2]
+        path = root / 'docs/verification/inventory-ocr-2026-11-05/two-items.png'
+        self.assertEqual(inventory_count(ocr_screenshot(path)), 2)
+
     def test_inventory_header_and_visible_grid(self):
         self.assertEqual(inventory_count([('EQUIPMENT · 12',213,108,400,130)]),12)
+        self.assertEqual(inventory_count([('EQUIPMENT + 2',215,108,367,127)]),2)
+        self.assertEqual(inventory_count([('EQUIPMENT \" 2',215,108,367,127)]),2)
         self.assertEqual(inventory_icons(11)[10],(245,270))
         for count in (0,21):
             with self.assertRaises(AssertionError):inventory_icons(count)

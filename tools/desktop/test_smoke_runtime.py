@@ -47,6 +47,18 @@ class VisibleActionTests(unittest.TestCase):
         self.assertEqual(smoke.find_text(lines, '退出游戏')[1:], (710, 400, 810, 416))
         self.assertIsNone(smoke.find_text(lines, '退出'))
 
+    def test_literal_ocr_quote_cannot_consume_later_tsv_lines(self):
+        tsv = ('level\tpage_num\tblock_num\tpar_num\tline_num\tword_num\tleft\ttop\twidth\theight\tconf\ttext\n'
+               '5\t1\t1\t1\t1\t1\t215\t108\t120\t20\t95\tEQUIPMENT\n'
+               '5\t1\t1\t1\t1\t2\t340\t108\t5\t20\t95\t"\n'
+               '5\t1\t1\t1\t1\t3\t355\t108\t12\t20\t95\t2\n'
+               '5\t1\t2\t1\t1\t1\t904\t110\t29\t11\t95\tGear\n'
+               '5\t1\t3\t1\t1\t1\t1019\t109\t36\t13\t95\tClose\n')
+        lines = smoke.ocr_lines(tsv)
+        self.assertEqual([row[0] for row in lines], ['EQUIPMENT " 2', 'Gear', 'Close'])
+        self.assertEqual(smoke.find_text(lines, 'Close')[1:], (1019,109,1055,122))
+        self.assertFalse(any('\n' in row[0] or '\t' in row[0] for row in lines))
+
     def test_readiness_background_is_not_a_guide_or_recruitment_confirmation(self):
         lines = [('Preparing expedition', 100, 100, 400, 120), ('8 / 14', 100, 125, 150, 145)]
         self.assertIsNone(smoke.find_text(lines, '1 / 4 · MOVE & DODGE'))

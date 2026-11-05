@@ -122,7 +122,7 @@ def verify_deduction(wallet, remaining, offer):
 def inventory_count(rows):
     counts = {int(match[1]) for text, x, y, *_ in rows
               if 200 <= x < 600 and 80 <= y < 145
-              and (match := re.fullmatch(r'EQUIPMENT\s*[·•.:-]?\s*(\d+)', text.strip(), re.I))}
+              and (match := re.fullmatch(r"EQUIPMENT\s*[·•.:+\"'-]?\s*(\d+)", text.strip(), re.I))}
     assert len(counts) == 1, f'Actual equipment header count missing/ambiguous: {counts}'
     return counts.pop()
 
