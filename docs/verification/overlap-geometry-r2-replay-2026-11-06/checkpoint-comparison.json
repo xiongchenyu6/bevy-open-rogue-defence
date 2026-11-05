@@ -1,0 +1,20 @@
+{
+  "comparison_scope": "recorded checkpoints, not all internal simulation state",
+  "left": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/overlap-geometry-r2-repeat-a-nov6/active-h2-behind-sa11ce-c5-t0.jsonl",
+  "right": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/overlap-geometry-r2-repeat-b-nov6/active-h2-behind-sa11ce-c5-t0.jsonl",
+  "binary_sha256": "95c035f0ffd0f3be2fb8866c8c93c94b21035f4b9227939a5b53b7e31b4e6e7f",
+  "checkpoint_counts": [
+    56,
+    56
+  ],
+  "prefix_equal": false,
+  "complete_replay": false,
+  "first_divergence": {
+    "field": "checkpoint[37].hero_hp",
+    "left": 13792.28,
+    "right": 13794.67,
+    "reason": "value differs",
+    "frame": 66600,
+    "right_frame": 66600
+  }
+}

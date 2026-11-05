@@ -1,0 +1,36 @@
+{
+  "scope": "Isolated geometry comparator verified separately; complete normal numeric repeat gate fails at61703, no matrix/tuning",
+  "actor_counts": [
+    97519,
+    97706
+  ],
+  "contact_counts": [
+    47863,
+    54131
+  ],
+  "first_numeric": 61703,
+  "files_sha256": {
+    "README.md": "85c5574a209a1a8f89562469d27065d380dab1f50a7430b00afdfa8cd85a111f",
+    "actor-comparison.json": "5dad155ef8dce108afe5e447d823b65b89f611deccc5b9fb57cbf88f44275972",
+    "archive-verification.log": "22e7e65cc6f61a7c5025468cb87af4770aa6da535c13dc0fb5ac7e91c3d71f28",
+    "binary.json": "42ea1f40b720b361e9065175ef866d65b8d7296258690641062f28cb5911274b",
+    "checkpoint-comparison.json": "9e7a40b5bcf023eabbb8033bb4ccf10c2a71d1d51f9f3a989dbfca01a958248a",
+    "contact-counts.json": "6a41d6e157afa03c9faa5225037ba103df2261116b2d63742ac5fd3ff54c27d7",
+    "first-difference-contacts-a.json": "0310aec9ee487512382a63a9db24c897859ba0e1318ec2ee0ac620d467085d44",
+    "first-difference-contacts-b.json": "64677cce6bad16bc17977f62e3b4c5ac82d60a6e83b394f12bf6f5fcf5db1ea4",
+    "first-difference-context.json": "b039b217210db7096d64331ed816d441278056eb0428007a3ca91c138652a4e4",
+    "probe-a.log": "ad59db2c7695b876fa88226b134362ad3aed31dc74b34b848aa2bce4a10858d1",
+    "probe-b.log": "50b4046396b87108251fac5ed98150fb6b733c85c4b5e47871f370403c0a086f",
+    "raw-receipts.json": "9819740fa4ec408703e9fe9a8ad56f1e144fa80b996d870bddc93fe7a04215f7",
+    "replay-a/active-h2-behind-sa11ce-c5-t0.jsonl.gz": "b8dbe60e4b19c73d0f105213ef9cba18bcee66c26e37695e81c62037434e89cd",
+    "replay-a/active-h2-behind-sa11ce-c5-t0.stderr.gz": "2265361fe9aecb4f06b647e552884539d29bcd775df15539acdd5401fa8171ae",
+    "replay-a/summary.json": "369eedd3266c4845fa22a03e1ae9c9188613444eb1b9b7aa590378d153e34120",
+    "replay-b/active-h2-behind-sa11ce-c5-t0.jsonl.gz": "229ee4f31548f4b39d2db698a694b12f58422027d67ce500c408f0987d365808",
+    "replay-b/active-h2-behind-sa11ce-c5-t0.stderr.gz": "561d30dbba4f5c38228825a0d0f539811b456de3f9134d6e17d0bb7fe29c3afe",
+    "replay-b/summary.json": "7ec754d9e945a7981ccdf0782e103f8d6969951048ac17ff4b8bbdd3522af2c2",
+    "run.py": "3d22049bf8a8399d78a02d56644ed27c3b770721dd659d71c32342f32fcd4103",
+    "scope.json": "8bfdad0261fe3ba0651b541094528f80aa65d8273362c19519143e50717dc559",
+    "sequence.log": "970701835091386df87257d63030c6c06256c8e8544b469d3e6d5ce7311895a5",
+    "verify.py": "868b894ad0be75ad1dd936128f81ec9014ad72297b9f8ca4e3deee39431c6dbe"
+  }
+}
