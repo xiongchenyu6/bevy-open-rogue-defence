@@ -1,0 +1,82 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {10, 12, 14, 18, 30, 40, 46, 60}; all 180 simulation/render updates retained
+[2m2026-11-05T03:46:15.477941Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-05T03:46:15.555040Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-05T03:46:16.332380Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-05T03:46:16.332638Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-05T03:46:17.068997Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] impact frame=10 scale=Vec3(1.7946718, 1.1316602, 1.7946718) punch=Some(HitPunch { elapsed: 0.03333333, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.6 })
+[capture] authored-hit frame=10 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=11 elapsed=0.266666651 seek=0.666666687
+[capture] impact frame=12 scale=Vec3(1.4502198, 1.5622255, 1.4502198) punch=Some(HitPunch { elapsed: 0.099999994, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.6 })
+[capture] authored-hit frame=12 elapsed=0.266666651 seek=0.666666687
+[2m2026-11-05T03:46:21.670300Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/authored-hit-2026-11-05/after-8x/frame00010.png
+[capture] saved 1/2 target/verification/authored-hit-2026-11-05/after-8x/frame00010.png (941705 bytes)
+[capture] authored-hit frame=13 elapsed=0.266666651 seek=0.666666687
+[capture] impact frame=14 scale=Vec3(1.6841698, 1.2697877, 1.6841698) punch=Some(HitPunch { elapsed: 0.03333333, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.0 })
+[capture] authored-hit frame=14 elapsed=0.266666651 seek=0.666666687
+[2m2026-11-05T03:46:22.160401Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/authored-hit-2026-11-05/after-8x/frame00012.png
+[capture] saved 2/3 target/verification/authored-hit-2026-11-05/after-8x/frame00012.png (941728 bytes)
+[capture] authored-hit frame=15 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=16 elapsed=0.266666651 seek=0.666666687
+[2m2026-11-05T03:46:22.654999Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/authored-hit-2026-11-05/after-8x/frame00014.png
+[capture] saved 3/3 target/verification/authored-hit-2026-11-05/after-8x/frame00014.png (941912 bytes)
+[capture] authored-hit frame=17 elapsed=0.266666651 seek=0.666666687
+[capture] impact frame=18 scale=Vec3(1.6841698, 1.2697877, 1.6841698) punch=Some(HitPunch { elapsed: 0.03333333, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.0 })
+[capture] authored-hit frame=18 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=19 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=20 elapsed=0.266666651 seek=0.666666687
+[2m2026-11-05T03:46:23.227094Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/authored-hit-2026-11-05/after-8x/frame00018.png
+[capture] saved 4/4 target/verification/authored-hit-2026-11-05/after-8x/frame00018.png (941980 bytes)
+[capture] authored-hit frame=21 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=22 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=23 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=24 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=25 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=26 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=27 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=28 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=29 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=30 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=31 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=32 elapsed=0.266666651 seek=0.666666687
+[2m2026-11-05T03:46:24.079125Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/authored-hit-2026-11-05/after-8x/frame00030.png
+[capture] saved 5/5 target/verification/authored-hit-2026-11-05/after-8x/frame00030.png (942002 bytes)
+[capture] authored-hit frame=33 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=34 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=35 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=36 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=37 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=38 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=39 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=40 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=41 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=42 elapsed=0.266666651 seek=0.666666687
+[2m2026-11-05T03:46:24.834950Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/authored-hit-2026-11-05/after-8x/frame00040.png
+[capture] saved 6/6 target/verification/authored-hit-2026-11-05/after-8x/frame00040.png (941468 bytes)
+[capture] authored-hit frame=43 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=44 elapsed=0.266666651 seek=0.666666687
+[capture] authored-hit frame=45 elapsed=0.266666651 seek=0.666666687
+[capture] impact frame=46 scale=Vec3(1.5, 1.5, 1.5) punch=None
+[2m2026-11-05T03:46:25.456069Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/authored-hit-2026-11-05/after-8x/frame00046.png
+[capture] saved 7/7 target/verification/authored-hit-2026-11-05/after-8x/frame00046.png (942030 bytes)
+[capture] impact frame=60 scale=Vec3(1.5, 1.5, 1.5) punch=None
+[capture] PASS dense-hit impact peak and exact production recovery
+[capture] PASS authored-hit recovery max_elapsed=0.266666651 samples=36
+[2m2026-11-05T03:46:26.338586Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/authored-hit-2026-11-05/after-8x/frame00060.png
+[capture] saved 8/8 target/verification/authored-hit-2026-11-05/after-8x/frame00060.png (941768 bytes)
+[capture] impact frame=90 scale=Vec3(1.6841698, 1.2697877, 1.6841698) punch=Some(HitPunch { elapsed: 0.03333333, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.0 })
+[capture] PASS ordinary contact does not inherit critical strength
+[capture] impact frame=92 scale=Vec3(1.4688873, 1.538891, 1.4688873) punch=Some(HitPunch { elapsed: 0.099999994, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.0 })
+[capture] impact frame=120 scale=Vec3(1.7946718, 1.1316602, 1.7946718) punch=Some(HitPunch { elapsed: 0.03333333, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.6 })
+[capture] impact frame=122 scale=Vec3(1.4502198, 1.5622255, 1.4502198) punch=Some(HitPunch { elapsed: 0.099999994, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.6 })
+[capture] impact frame=150 scale=Vec3(1.5, 1.5, 1.5) punch=None
+[capture] impact frame=152 scale=Vec3(1.5, 1.5, 1.5) punch=None
+[capture] impact frame=165 scale=Vec3(1.5, 1.5, 1.5) punch=None
+[capture] PASS heavy-kill sequence leaves requested 8x battle speed
+[capture] all 8 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 180 simulation frames to target/verification/authored-hit-2026-11-05/after-8x

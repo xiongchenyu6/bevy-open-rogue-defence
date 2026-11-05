@@ -287,8 +287,13 @@ fn animate_cast(
                 .is_some_and(|(current, previous)| current > previous)
         };
         let previous = state.pose;
-        // Let a real hostile attack finish rather than restarting Hit on every damage tick.
+        // Finish the current authored Hit instead of pinning it to its first
+        // frame under damage-over-time or rapid attacks. This is presentation
+        // recovery, not a gameplay stun or a change to damage/control rules.
         let react_to_hit = hurt
+            && !(previous == Some(Pose::Hit)
+                && state.reaction_remaining > time.delta_secs())
+            // Keep the existing protection for a real hostile attack.
             && !(enemy.is_some()
                 && (attacked
                     || (previous == Some(Pose::Attack)
@@ -549,6 +554,89 @@ mod tests {
         assert_eq!(
             choose_pose(true, false, false, Some(Pose::Hit), &mut remaining, 0.2),
             Pose::Walk
+        );
+    }
+
+    #[test]
+    fn consecutive_damage_preserves_hit_progress_then_allows_a_fresh_reaction() {
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<super::super::skills::SkillRuntime>()
+            .init_resource::<Assets<AnimationClip>>()
+            .add_systems(Update, animate_cast);
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(50));
+        let source_clips = (0..4)
+            .map(|_| {
+                let mut clip = AnimationClip::default();
+                clip.set_duration(1.0);
+                app.world_mut()
+                    .resource_mut::<Assets<AnimationClip>>()
+                    .add(clip)
+            })
+            .collect();
+        let actor = app.world_mut().spawn((Hero, Transform::default())).id();
+        let player = app
+            .world_mut()
+            .spawn((
+                AnimationPlayer::default(),
+                CastPlayer {
+                    actor,
+                    clips: (0..4).map(AnimationNodeIndex::new).collect(),
+                    source_clips,
+                    pose: None,
+                    previous_position: None,
+                    previous_health: None,
+                    previous_cooldown: None,
+                    reaction_remaining: 0.0,
+                    enemy_attack_target: None,
+                    enemy_attack_pending: false,
+                },
+            ))
+            .id();
+        app.update();
+        app.world_mut().resource_mut::<HeroVitals>().health -= 1.0;
+        app.update();
+        let hit = AnimationNodeIndex::new(Pose::Hit as usize);
+        app.world_mut()
+            .get_mut::<AnimationPlayer>(player)
+            .unwrap()
+            .animation_mut(hit)
+            .unwrap()
+            .set_seek_time(0.4);
+        app.world_mut().resource_mut::<HeroVitals>().health -= 1.0;
+        app.update();
+        assert_eq!(
+            app.world()
+                .get::<AnimationPlayer>(player)
+                .unwrap()
+                .animation(hit)
+                .unwrap()
+                .seek_time(),
+            0.4,
+            "another damage tick must not rewind the authored reaction"
+        );
+        for _ in 0..4 {
+            app.update();
+        }
+        assert_eq!(
+            app.world().get::<CastPlayer>(player).unwrap().pose,
+            Some(Pose::Idle)
+        );
+        app.world_mut().resource_mut::<HeroVitals>().health -= 1.0;
+        app.update();
+        assert_eq!(
+            app.world()
+                .get::<AnimationPlayer>(player)
+                .unwrap()
+                .animation(hit)
+                .unwrap()
+                .seek_time(),
+            0.0,
+            "damage after recovery must start a fresh authored reaction"
         );
     }
 

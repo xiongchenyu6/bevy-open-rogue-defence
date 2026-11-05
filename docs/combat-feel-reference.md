@@ -51,6 +51,11 @@ evidence; it provides no release performance result.
 
 ## Further work is separate
 
+The authored skeletal Hit path has also been corrected: continuous HP loss no
+longer restarts its first frame. Native before/after playback and the 659-test
+library result are recorded in
+[the authored-hit verification](verification/authored-hit-2026-11-05/README.md).
+
 Sword contact has since been calibrated against its authored clip and paired
 native damage/playback sequences; see
 [the sword timing record](verification/attack-rhythm-2026-11-05/README.md).

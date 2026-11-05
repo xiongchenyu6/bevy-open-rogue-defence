@@ -1,0 +1,35 @@
+{
+  "before": {
+    "samples": 36,
+    "max_hit_elapsed": 0.033333331,
+    "elapsed_values": [
+      0.033333331
+    ]
+  },
+  "after": {
+    "samples": 36,
+    "max_hit_elapsed": 0.266666651,
+    "elapsed_values": [
+      0.033333331,
+      0.066666663,
+      0.099999994,
+      0.133333325,
+      0.166666657,
+      0.199999988,
+      0.233333319,
+      0.266666651
+    ]
+  },
+  "after-8x": {
+    "samples": 36,
+    "max_hit_elapsed": 0.266666651,
+    "elapsed_values": [
+      0.266666651
+    ]
+  },
+  "sources": {
+    "src/game/model_animation.rs": "12f08bad10299cc21392ca1b86835482f3407c2e2897679ce3cdfdf656cb2660",
+    "src/game/hit_feedback/capture.rs": "6f149cae962d95023d2af667cd588d6b60d4ce9e6495bb827f849c7423bb84b2"
+  },
+  "after_binary_sha256": "0a205eacfb2f79473500c3d7319194c646c82cf7aea62cf020a884bed0a34f61"
+}

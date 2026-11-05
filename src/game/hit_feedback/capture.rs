@@ -1,5 +1,7 @@
 //! Deterministic contact inputs; all reactions, audio, FX and camera are production systems.
 //! No gameplay damage is simulated here: this isolates the presentation contract.
+//! Optional authored-hit mode changes fixture HP directly to exercise the production
+//! health observer. That is a presentation diagnostic, not a real damage-resolver test.
 use super::*;
 use crate::game::{ActiveSkill, AttackClock, GameAssets, PlayerBuild, SpawnDirector};
 
@@ -12,6 +14,10 @@ struct Probe {
     recovered: bool,
     peaked: bool,
     last_elapsed: f32,
+    authored_hits: bool,
+    expect_hit_restart: bool,
+    max_hit_elapsed: f32,
+    authored_samples: u32,
 }
 
 /// Debug/native capture only; no shipped gameplay entry point.
@@ -73,6 +79,10 @@ pub fn install(app: &mut bevy::app::SubApp, speed: f32) {
         recovered: false,
         peaked: false,
         last_elapsed: 0.0,
+        authored_hits: std::env::var_os("ROGUE_CAPTURE_AUTHORED_HITS").is_some(),
+        expect_hit_restart: std::env::var_os("ROGUE_CAPTURE_EXPECT_HIT_RESTART").is_some(),
+        max_hit_elapsed: 0.0,
+        authored_samples: 0,
     });
     app.add_systems(
         Update,
@@ -81,6 +91,7 @@ pub fn install(app: &mut bevy::app::SubApp, speed: f32) {
             .before(HitFeedbackSet),
     );
     app.add_systems(PostUpdate, observe);
+    app.add_systems(Last, observe_authored_hit);
 }
 
 fn feed(world: &mut World) {
@@ -89,7 +100,10 @@ fn feed(world: &mut World) {
     }
     world.resource_mut::<Probe>().frame += 1;
     let p = world.resource::<Probe>();
-    let (frame, target) = (p.frame, p.target);
+    let (frame, target, authored_hits) = (p.frame, p.target, p.authored_hits);
+    if authored_hits && (10..=45).contains(&frame) {
+        world.get_mut::<Enemy>(target).unwrap().hp -= 1.0;
+    }
     // Record a critical, then ordinary contact every render frame for half a second.
     // This remains denser than the 120ms real-time reaction even at 8x.
     let critical = matches!(frame, 10 | 120);
@@ -111,6 +125,70 @@ fn feed(world: &mut World) {
                 critical: is_critical,
                 killed,
             });
+        }
+    }
+}
+
+/// Last runs after production model animation and Bevy's actual clip advancement.
+fn observe_authored_hit(world: &mut World) {
+    let probe = world.resource::<Probe>();
+    if !probe.authored_hits || world.resource::<GameSession>().paused {
+        return;
+    }
+    let (frame, target) = (probe.frame, probe.target);
+    if (10..=45).contains(&frame) {
+        let mut players = world.query::<(Entity, &AnimationPlayer)>();
+        let clips: Vec<_> = players
+            .iter(world)
+            .filter(|(entity, _)| {
+                let mut current = Some(*entity);
+                while let Some(entity) = current {
+                    if entity == target {
+                        return true;
+                    }
+                    current = world.get::<ChildOf>(entity).map(ChildOf::parent);
+                }
+                false
+            })
+            .flat_map(|(_, player)| {
+                player
+                    .playing_animations()
+                    // Cast graphs have their root at zero, then Idle/Walk/Attack/Hit.
+                    .filter(|(node, _)| node.index() == 4)
+                    .map(|(_, clip)| (clip.elapsed(), clip.seek_time()))
+            })
+            .collect();
+        let probe = &mut *world.resource_mut::<Probe>();
+        for (elapsed, seek) in clips {
+            probe.authored_samples += 1;
+            probe.max_hit_elapsed = probe.max_hit_elapsed.max(elapsed);
+            println!("[capture] authored-hit frame={frame} elapsed={elapsed:.9} seek={seek:.9}");
+        }
+    }
+    if frame == 60 {
+        let probe = world.resource::<Probe>();
+        assert!(
+            probe.authored_samples > 0,
+            "actual target Hit playback required"
+        );
+        if probe.expect_hit_restart {
+            assert!(
+                probe.max_hit_elapsed <= 0.04,
+                "baseline must reproduce continuous Hit restarts"
+            );
+            println!(
+                "[capture] PASS authored-hit baseline restarts max_elapsed={:.9} samples={}",
+                probe.max_hit_elapsed, probe.authored_samples
+            );
+        } else {
+            assert!(
+                probe.max_hit_elapsed >= 0.20,
+                "authored Hit must progress through recovery under continuous HP loss"
+            );
+            println!(
+                "[capture] PASS authored-hit recovery max_elapsed={:.9} samples={}",
+                probe.max_hit_elapsed, probe.authored_samples
+            );
         }
     }
 }
