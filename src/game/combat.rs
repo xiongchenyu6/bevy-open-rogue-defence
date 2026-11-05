@@ -2703,16 +2703,19 @@ fn projectile_hits(
         .map(|(entity, position, _)| (*entity, *position))
         .collect();
     for (
-        projectile_entity,
-        mut projectile,
-        mut projectile_transform,
-        profile,
-        mut hit_memory,
-        first_frame,
-        flight,
-        fusion,
-        mut ricochet,
-    ) in &mut projectiles
+        outer_ordinal,
+        (
+            projectile_entity,
+            mut projectile,
+            mut projectile_transform,
+            profile,
+            mut hit_memory,
+            first_frame,
+            flight,
+            fusion,
+            mut ricochet,
+        ),
+    ) in (&mut projectiles).into_iter().enumerate()
     {
         let profile = profile.copied().unwrap_or(DamageProfile::PHYSICAL_ATTACK);
         let simulation_seconds = first_frame.map_or(delta, |travel| travel.0.clamp(0.0, delta));
@@ -2754,7 +2757,9 @@ fn projectile_hits(
         });
         let mut consumed = false;
         let mut first_frame_hits = HashSet::new();
-        for (_, ordered_enemy) in collision_order {
+        for (candidate_ordinal, (progress, ordered_enemy)) in
+            collision_order.into_iter().enumerate()
+        {
             let Ok((
                 enemy_entity,
                 mut enemy,
@@ -2801,12 +2806,17 @@ fn projectile_hits(
                     && projectile.velocity.length_squared() > 0.01
                     && archetype.is_some_and(|kind| kind.0 == 2);
                 let frozen = skill_runtime.is_frozen(enemy_entity);
-                let mut raw_damage = projectile.damage * bond_runtime.damage_multiplier(profile);
+                let scaled_base_damage =
+                    projectile.damage * bond_runtime.damage_multiplier(profile);
+                let mut raw_damage = scaled_base_damage;
+                let rng_before_crit = rng.state();
+                let critical_roll = rng.unit();
+                let rng_after_crit = rng.state();
                 let crit_multiplier = critical_multiplier(
                     &bond_runtime,
                     market_effects.burns_can_crit(),
                     profile,
-                    rng.unit(),
+                    critical_roll,
                 );
                 let critical = crit_multiplier > 1.0;
                 raw_damage *= crit_multiplier;
@@ -2840,11 +2850,43 @@ fn projectile_hits(
                 } else {
                     raw_damage
                 };
+                let hp_before = enemy.hp;
                 let resolution = apply_enemy_damage(
                     &mut enemy,
                     affix.as_deref_mut(),
                     damage,
                     Some(&mut damage_meter),
+                );
+                // Opt-in resolver observation only. The one critical RNG draw
+                // above stays in its original position; trace arguments allocate
+                // nothing and are evaluated only when this target is enabled.
+                trace!(
+                    target: "rogue_commander::projectile_hit",
+                    outer_ordinal,
+                    candidate_ordinal,
+                    progress_bits = progress.to_bits(),
+                    projectile = ?projectile_entity,
+                    projectile_bits = projectile_entity.to_bits(),
+                    enemy = ?enemy_entity,
+                    enemy_bits = enemy_entity.to_bits(),
+                    profile = ?profile,
+                    base_damage = projectile.damage,
+                    scaled_base_damage,
+                    raw_damage,
+                    final_damage = damage,
+                    critical_roll,
+                    critical_roll_bits = critical_roll.to_bits(),
+                    crit_multiplier,
+                    hp_before,
+                    hp_after = enemy.hp,
+                    hp_before_bits = hp_before.to_bits(),
+                    hp_after_bits = enemy.hp.to_bits(),
+                    hp_damage = resolution.hp_damage,
+                    rng_before_crit,
+                    rng_after_crit,
+                    rng_after_resolution = rng.state(),
+                    elapsed_bits = session.elapsed.to_bits(),
+                    "PROJECTILE_HIT"
                 );
                 if resolution.hp_damage > 0.0 {
                     pools.show_damage_number(

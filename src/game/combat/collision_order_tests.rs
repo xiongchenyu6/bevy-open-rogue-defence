@@ -57,6 +57,10 @@ fn cosmetic_collision_outcome(reverse: bool, moving: bool) -> ([Entity; 2], [f32
     app.world_mut().run_system_once(projectile_hits).unwrap();
     let health = targets.map(|target| app.world().get::<Enemy>(target).unwrap().hp);
     let rng = app.world().resource::<RunRng>().state();
+    assert_eq!(
+        rng, 11_083_784_628_768_264_341,
+        "opt-in observation must preserve the pre-trace single-contact RNG budget"
+    );
     println!(
         "COSMETIC_COLLISION reverse={reverse} moving={moving} targets={targets:?} query_order={actual_order:?} hp={health:?} rng={rng}"
     );
