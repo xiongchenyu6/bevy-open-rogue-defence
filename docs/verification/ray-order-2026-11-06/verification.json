@@ -1,0 +1,30 @@
+{
+  "scope": "Ray single-point batch semantic order verified; frozen normal duplicate pending, no numerical tuning/matrix",
+  "source_sha256": {
+    "src/game/skills.rs": "d661c256b2f944827959289c71a389adb5bd336eba7b21280efcba1c90ff5418",
+    "src/game/skills/reference_skills.rs": "735186761a832eafce6d5fe6787843e65b26927a15a6f28c76bbe829d2862e18",
+    "src/game/combat/collision_order_tests.rs": "b52288f978410276eac85b3e6a67f0b2829b2cdce6f973d67e77e2a0c72f447a"
+  },
+  "files_sha256": {
+    "README.md": "9dcdae331f97e83d1bbc6c010267c515dd0f2e514fce5c1a6d27bba7763906af",
+    "r1-after-clippy.log": "921b9adabb6d0973f983cc731f3ab345ef0e1da369d261140eb2c15310eb5065",
+    "r1-after-full-tests.log": "c5aba8d0f50ad99400488e64edffba8aed8223a4b3df76cfd53fac8a92954a71",
+    "r1-after-sequence.log": "d876382c94454af675f700186c0c4fbdb69fe2381345864e05b8e09f6aeec1dc",
+    "r1-after-source-before.json": "97d9cec8231230c01bb82eb1c69820e5c3775f544b5ca653a05c2250449773eb",
+    "r1-after.py": "2d0a74462c8f5f95ddb909a407daac484e8455977d835624840b26a89ca117a0",
+    "r1-before-exit.txt": "39b8dc3fc8b44765c8e6f1adee04c5b465e555ab791cc42d0d9e810d5b64297c",
+    "r1-before-sequence.log": "8a4146064b8de75255a52c33c9fe22305ddd668fff544be5f1d9d36dc70bf48c",
+    "r1-before-source-hashes.json": "cb9091ab519cc8efe4cb391d8e941461a553754d295b38a6e2d0166223a5d66f",
+    "r1-before-tests.log": "403b42072575074513f31928516a1d8c1d40792d6207520ecd85cfcdbdbc7440",
+    "r1-before.py": "38fd6d795cc323312f540a5012dc64c2b09e5fae6402b30413a478d71a66a258",
+    "r2-after-build.log": "06084ad1c489c9633b145a3532a782dd2bd94f80c6e0b8fb789aebcafb57ae3e",
+    "r2-after-clippy.log": "1a31e5e3d60834147d67c3d1a197d50443bb794f6e922205a01029b7a346d46f",
+    "r2-after-full-tests.log": "ab9a1b4d45903abcb8ba29acd2d35dbbb129401520e024894ee789c37682944a",
+    "r2-after-sequence.log": "323ad518b5176e8bf111d7bc10fcbfdbb462903936bfdf084c977d86bc6976bd",
+    "r2-after-source-after.json": "5b5daab33289a27251464b72b8185f2b4a0b47b7ca38680ca3d84e5afd193ddc",
+    "r2-after-source-before.json": "077d59c1624934b0ea026080db5f02165ec74c2ccad126fccf460fa63763f11c",
+    "r2-after.py": "f97161240e9dcedef7672ac875090b1625fd40f5000fa36ae4d3a7dfa9782732",
+    "r2-binary.json": "59afbb44cc41c6e5c19613ffc1fedd9b74c958d224177e45d65137acdb1ca87d",
+    "verify.py": "52b877bd43a44630fe8c13b26d488953097e9fb6b4d1b47a2d91bdf2a350e348"
+  }
+}

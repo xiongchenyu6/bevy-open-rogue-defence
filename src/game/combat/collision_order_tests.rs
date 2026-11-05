@@ -300,3 +300,69 @@ fn overlap_geometry_preserves_nonzero_entry_progress_before_distance() {
         );
     }
 }
+
+fn ray_order_outcome(reverse: bool, reallocate: bool) -> ([f32; 2], u64) {
+    let mut app = projectile_test_app();
+    app.world_mut().resource_mut::<PlayerBuild>().skills[30] = 1;
+    app.world_mut()
+        .insert_resource(RunRng(12_628_136_444_139_491_497));
+    let mut targets = [Entity::PLACEHOLDER; 2];
+    for i in if reverse && reallocate {
+        [1, 0]
+    } else {
+        [0, 1]
+    } {
+        let mut enemy = test_enemy(if i == 0 { 1000. } else { 1500. });
+        enemy.elite = false;
+        targets[i] = app
+            .world_mut()
+            .spawn((enemy, Transform::from_xyz(3. + i as f32, 0., 0.)))
+            .id();
+    }
+    for target in if reverse {
+        [targets[1], targets[0]]
+    } else {
+        targets
+    } {
+        app.world_mut().entity_mut(target).insert(CosmeticReaction);
+    }
+    let (strikes, remaining, pulse) = crate::game::skills::test_ray_order_damage(app.world_mut());
+    assert_eq!((strikes, remaining, pulse), (2, 2., 0.25));
+    assert_eq!(
+        app.world_mut()
+            .query::<&Projectile>()
+            .iter(app.world())
+            .count(),
+        2
+    );
+    app.world_mut().run_system_once(projectile_hits).unwrap();
+    let hp = targets.map(|entity| app.world().get::<Enemy>(entity).unwrap().hp);
+    let rng = app.world().resource::<RunRng>().state();
+    assert_eq!(
+        rng, 16_263_334_312_487_546_840,
+        "exact four production critical/proc draws"
+    );
+    assert_eq!(
+        app.world_mut()
+            .query::<&Projectile>()
+            .iter(app.world())
+            .count(),
+        0
+    );
+    println!(
+        "RAY_ORDER reverse={reverse} reallocate={reallocate} targets={targets:?} hp={hp:?} rng={rng}"
+    );
+    (hp, rng)
+}
+
+#[test]
+fn ray_pulse_damage_ignores_cosmetic_query_order() {
+    let outcomes = [false, true].map(|reverse| ray_order_outcome(reverse, false));
+    assert_eq!(outcomes[0], outcomes[1]);
+}
+
+#[test]
+fn ray_pulse_damage_follows_geometry_across_entity_allocations() {
+    let outcomes = [false, true].map(|reverse| ray_order_outcome(reverse, true));
+    assert_eq!(outcomes[0], outcomes[1]);
+}

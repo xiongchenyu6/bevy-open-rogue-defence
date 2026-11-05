@@ -1,0 +1,11 @@
+# Stable semantic order for Flame Ray pulses
+
+The [prior complete repeat diagnostic](../overlap-geometry-r2-replay-2026-11-06/README.md) localized first numeric drift to Flame Spell skill30 contacts: raw Enemy order assigned identical critical/noncritical draws to opposite physical enemies. This is separate from the independently verified native aim/collision changes; upstream allocation origins are not inferred.
+
+The real production Ray pulse regression runs Ray update→typed strikes→pooled carriers→authoritative projectile damage. It tests both same-ID cosmetic row migration and reversed actor allocation with identical physical positions/distinct HP. Both worlds are collected before comparisons. Before, each pair changes actual semantic HP [900,1325]→[825,1400], with exactly two real strikes/two projectiles, duration2, pulse.25 and identical four-draw RNG16263334312487546840; 0 pass/2 fail. No mirrored critical formula is used.
+
+Only Ray target batch order changes: preserve the exact living/range/beam predicate, then sort actual target positions by squared distance from beam origin, Z/X/Y, and Entity last. Pulse .25, duration, per-target damage/profile/burn, range and total RNG calls stay unchanged. Entity-only sorting would not satisfy the reversed-allocation semantic case. Two tiny cfg(test)-only bridges connect real production systems to the combat fixture; no runtime public API or new framework.
+
+First after full library passes686/0/1ignored, but strict Clippy rejects the bridge after a test module. That real log remains. A formatter also completed after its initial manifest capture; this invalid boundary is explicitly excluded. Clippy stopped the manager before build/final source gate, so it is not misreported as a completed manifest failure. Bridges were relocated before tests, formatter terminal exit0 awaited, and R2 performs the complete final gate with frozen source.
+
+R2 full library686/0/1ignored, strict all-target Clippy and optimized simulator build/source-hash gate are recorded in the final receipts. A separate frozen full-prefix normal pair remains pending at this scoped archive boundary; no24-case matrix, other raw-batch modifications or numerical tuning is authorized by these tests.

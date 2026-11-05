@@ -1,0 +1,8 @@
+START after-full-tests.log
+PASS after-full-tests.log
+START after-clippy.log
+Traceback (most recent call last):
+  File "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ray-order-2026-11-06/after.py", line 11, in <module>
+    assert p.returncode==0,(name,p.returncode)
+           ^^^^^^^^^^^^^^^
+AssertionError: ('after-clippy.log', 101)

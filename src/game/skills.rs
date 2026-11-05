@@ -3494,6 +3494,14 @@ pub(crate) fn reset_run(world: &mut World) {
 }
 
 #[cfg(test)]
+pub(crate) fn test_ray_order_damage(world: &mut World) -> (usize, f32, f32) {
+    use bevy::ecs::system::RunSystemOnce;
+    let pulse = reference_skills::test_ray_order_pulse(world);
+    world.run_system_once(resolve_skill_strikes).unwrap();
+    pulse
+}
+
+#[cfg(test)]
 mod tests {
     use bevy::ecs::system::RunSystemOnce;
 

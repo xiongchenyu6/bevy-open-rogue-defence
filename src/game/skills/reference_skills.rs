@@ -235,27 +235,39 @@ fn tick(
         );
         while ray.pulse <= 0.0 {
             ray.pulse += 0.25;
-            for (target, t, enemy) in &enemies {
-                if enemy.hp > 0.0
-                    && in_beam(
-                        t.translation,
-                        ray.origin,
-                        direction,
-                        12.0 * rank_size(build.skills[RAY]),
-                        ray.width + 0.35,
-                    )
-                {
-                    schedule_typed_strike(
-                        &mut commands,
-                        target,
-                        ray.damage,
-                        0.0,
-                        0.0,
-                        false,
-                        0.3,
-                        DamageProfile::for_skill(RAY).with_burn(),
-                    );
-                }
+            let mut targets: Vec<_> = enemies
+                .iter()
+                .filter(|(_, t, enemy)| {
+                    enemy.hp > 0.0
+                        && in_beam(
+                            t.translation,
+                            ray.origin,
+                            direction,
+                            12.0 * rank_size(build.skills[RAY]),
+                            ray.width + 0.35,
+                        )
+                })
+                .map(|(target, t, _)| (target, t.translation))
+                .collect();
+            targets.sort_by(|a, b| {
+                a.1.distance_squared(ray.origin)
+                    .total_cmp(&b.1.distance_squared(ray.origin))
+                    .then_with(|| a.1.z.total_cmp(&b.1.z))
+                    .then_with(|| a.1.x.total_cmp(&b.1.x))
+                    .then_with(|| a.1.y.total_cmp(&b.1.y))
+                    .then_with(|| a.0.to_bits().cmp(&b.0.to_bits()))
+            });
+            for (target, _) in targets {
+                schedule_typed_strike(
+                    &mut commands,
+                    target,
+                    ray.damage,
+                    0.0,
+                    0.0,
+                    false,
+                    0.3,
+                    DamageProfile::for_skill(RAY).with_burn(),
+                );
             }
         }
         if ray.remaining <= 0.0 {
@@ -346,6 +358,28 @@ fn falling_ice(
             }
         }
     }
+}
+
+#[cfg(test)]
+pub(crate) fn test_ray_order_pulse(world: &mut World) -> (usize, f32, f32) {
+    use bevy::ecs::system::RunSystemOnce;
+    let ray = world
+        .spawn((
+            Ray {
+                origin: Vec3::ZERO,
+                direction: Vec3::X,
+                remaining: 2.0,
+                pulse: 0.0,
+                width: 1.0,
+                damage: 100.0,
+            },
+            Transform::default(),
+        ))
+        .id();
+    world.run_system_once(tick).unwrap();
+    let count = world.query::<&SkillStrike>().iter(world).count();
+    let ray = world.get::<Ray>(ray).unwrap();
+    (count, ray.remaining, ray.pulse)
 }
 
 #[cfg(test)]
