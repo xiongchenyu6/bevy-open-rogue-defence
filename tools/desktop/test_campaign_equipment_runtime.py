@@ -42,6 +42,10 @@ class EquipmentPolicyParsing(unittest.TestCase):
             policy.visible_countdown('resume', 10)
         self.assertEqual(keys, [])
 
+    def test_replacement_bond_modal_is_an_in_scope_public_choice(self):
+        self.assertTrue(choice_pending([('Choose a bond to replace', 40, 80, 600, 110)]))
+        self.assertFalse(choice_pending([('Choose an encounter', 40, 80, 600, 110)]))
+
     def test_current_header_and_ambiguous_wallet(self):
         self.assertEqual(market_wallet([('LV1 KILLS 99880',1120,205,1209,214)]),99880)
         self.assertFalse(market_closed([('BLACK MARKET',617,214,759,230)]))

@@ -148,7 +148,7 @@ def selected_inventory_name(text):
 def choice_pending(rows):
     return any(any(token in normalized(text) for token in
                    ('forgeanewbond', 'chooseyour', 'shapeyourarsenal',
-                    'recruitahero', 'chooseanevolution')) for text, *_ in rows)
+                    'recruitahero', 'chooseanevolution', 'chooseabondtoreplace')) for text, *_ in rows)
 
 
 class EquipmentPolicy:
