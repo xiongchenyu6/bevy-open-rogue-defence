@@ -1,0 +1,18 @@
+{
+  "harness_commit": "453310d883b5861e59b581a7b3e736c3e59c1338",
+  "files": {
+    "equipment_runtime.py": "3f57be3c6ed5da0052fd255d65d5e74d019a156905021a6b06d6bec0a0f1cd5d",
+    "test_campaign_runtime.py": "12ffba264a72efa9f8c6997e59bd7df9c3dc3838d34768711e6d80c8d909312e",
+    "test_campaign_equipment_runtime.py": "3e77d63afafd8964c7aed026e78e722fad29a3a0629858982a8a635c6915160a",
+    "campaign_runtime.py": "1357928e4b5f05a8da035580105498adee0b250fe6e998bb5cd8db0a78fa59f7",
+    "test_forge_runtime.py": "95ea529e80cf88fcc79f2975c82c2c05a87fd0ae4636cec4b8faa1b0d5c6ffc7",
+    "verify_perf_probe.py": "a65f77191f31e250ec0793c33cd3ffa29b18c4568dfc98a788880b4fe9b744fe",
+    "forge_runtime.py": "9838d97e7524389f2d924e48e679fd247aba1eee6818d764cf7f7cac83a5c07c",
+    "earned_restart_runtime.py": "4cd442640baa52cfc3783433dea0b214b178fc370c06dfe8919e9ec5ad5124c4",
+    "test_smoke_runtime.py": "b063a9d62d5d0e6fc7372bc2978dca18f0af8e11307f5a4720ba0b044dd17a4a",
+    "campaign_equipment_runtime.py": "518dd860016de1633aae1ec345256bdc0480eec1964190fd012d3225764cae28",
+    "smoke_runtime.py": "4adad46813fefb10e034968b1fe705cb4b9ab20cf7b8cdd5c452f7bae33cc1e5"
+  },
+  "package_commit": "040ce5c1084634f3e8d886b65d1f5c2c467997af",
+  "scope": "Frozen public UI only, read-only offline package and unchanged earned checkpoint; independent chapter6 continues in its own container"
+}

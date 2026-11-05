@@ -1,0 +1,9 @@
+# Natural earned Astral Prism, current040ce5c package — 2026-11-05
+
+The public-only route completed in933.42wallseconds, using the unchanged read-only040ce5c Linux package in an offline Ubuntu24/X11/softwareVulkan container. No source/Rust/Nix, stock injection, resource grant, paid refresh, progression editing or save editing was used. It began from the byte-identical real earned5/575/111100/Strength5 checkpoint documented in initial-save-provenance.json.
+
+Actual same-run purchases: Arc Lens183→3(cost180), then Echo Core300→0(cost300), with exact tile/preview/price and independently checked header/HUD wallets. Inventory inspection identified Arc Lens alone, then both ingredients. Actual recipe action consumed both items and produced exactly one[SSR]Astral Prism with its distinct illustration; the recipe became Already forged and charged no extra kill credit. The inherited effects and extra recipe effects are visible in the screenshot, not independently numerically isolated in this run's combat.
+
+After closing inventory, the actual battle countdown advanced1019→1010seconds (16:59→16:50). Settings Quit completed with gameexit0; result.completed=true is assigned only after all assertions. Campaign bytes before/after remained SHA256da5bf0a9ca3f4032a265425f9989bda292d8c0c2622848157df6d2c0223ba825. Unfinished per-run gear is not meant to persist across a new expedition.
+
+Root inspected two-ingredient inventory, ready recipe, consumed recipe, one-item crafted inventory and resumed battle images. Raw result, game/driver logs, package hashes and the actual frozen source snapshot support the proof. The game log has no panic. A source-same-profile restart follow-up is still required; this result alone is not a full chapter clear, new earned permanent upgrade, physical audio/performance or every recipe proof. Earlier interrupted runs remain preserved separately.
