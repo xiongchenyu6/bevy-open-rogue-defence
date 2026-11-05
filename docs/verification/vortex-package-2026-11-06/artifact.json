@@ -1,0 +1,9 @@
+{
+  "source_commit": "86cb08498e446a27b31554f8cb6dd3eb641e214b",
+  "package_directory": "target/desktop-packages-vortex-nov6/rogue-commander-linux",
+  "tar": "target/desktop-packages-vortex-nov6/rogue-commander-linux-0.1.0.tar.gz",
+  "tar_bytes": 60763871,
+  "tar_sha256": "d4323b0bc59ac5434e772d97eaceb699f9919263f0950837c2611f95cd4e7880",
+  "binary_sha256": "b5bc6c351bf5a781ae43dd6bb8c21ffc015549b70ddd46aa297692e1feea9cf0",
+  "scope": "Offline read-only Ubuntu24/X11/software Vulkan short runtime; no full chapter, natural forge, Steam or hardware-performance claim"
+}

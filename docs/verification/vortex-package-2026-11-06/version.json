@@ -1,0 +1,27 @@
+{
+  "binary_sha256": "b5bc6c351bf5a781ae43dd6bb8c21ffc015549b70ddd46aa297692e1feea9cf0",
+  "git_commit": "86cb08498e446a27b31554f8cb6dd3eb641e214b",
+  "linux_linkage": {
+    "checked": true,
+    "interpreter": [
+      "/lib64/ld-linux-x86-64.so.2"
+    ],
+    "needed": [
+      "libwayland-client.so.0",
+      "libdl.so.2",
+      "libudev.so.1",
+      "libasound.so.2",
+      "libgcc_s.so.1",
+      "libpthread.so.0",
+      "libm.so.6",
+      "libc.so.6",
+      "ld-linux-x86-64.so.2"
+    ],
+    "nix_dependencies": [],
+    "search_paths": []
+  },
+  "profile": "release",
+  "release_package": true,
+  "target": "x86_64-unknown-linux-gnu",
+  "version": "0.1.0"
+}
