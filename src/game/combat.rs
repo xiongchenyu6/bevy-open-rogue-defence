@@ -2120,6 +2120,11 @@ fn auto_attack(
                     DamageProfile::PHYSICAL_ATTACK,
                     WeaponFlight::new(vitals.kind),
                 ));
+                if basic_attacks::is_starter_ember_arrow(vitals.kind, vitals.level) {
+                    commands
+                        .entity(entity)
+                        .insert(super::skill_lighting::NoGroundProjection);
+                }
                 if class_stats.bounces > 0 {
                     commands
                         .entity(entity)
@@ -4379,7 +4384,7 @@ mod tests {
 
     #[test]
     fn archer_single_enemy_never_receives_duplicate_initial_arrows() {
-        for level in [1, 10, 40] {
+        for level in [1, 9, 10, 20, 40] {
             let mut app = projectile_test_app();
             app.init_resource::<AttackClock>()
                 .init_resource::<AttackVolleyRuntime>();
@@ -4400,12 +4405,24 @@ mod tests {
                 .resource_mut::<Time>()
                 .advance_by(std::time::Duration::from_secs(1));
             app.world_mut().run_system_once(auto_attack).unwrap();
-            let mut arrows = app
-                .world_mut()
-                .query::<(&Projectile, Option<&basic_attacks::Ricochet>)>();
+            let mut arrows = app.world_mut().query::<(
+                &Projectile,
+                Option<&basic_attacks::Ricochet>,
+                Has<super::super::skill_lighting::NoGroundProjection>,
+            )>();
             let arrows: Vec<_> = arrows.iter(app.world()).collect();
             assert_eq!(arrows.len(), 1, "level {level}");
             assert_eq!(arrows[0].1.is_some(), level >= 10);
+            assert_eq!(
+                arrows[0].2,
+                level < 10,
+                "only starter native arrows suppress ground glow"
+            );
+            assert_eq!(arrows[0].0.radius, 0.48);
+            assert_eq!(
+                arrows[0].0.velocity,
+                Vec3::X * app.world().resource::<PlayerBuild>().projectile_speed
+            );
             assert_eq!(
                 arrows[0].0.damage,
                 app.world().resource::<PlayerBuild>().attack_damage

@@ -94,6 +94,8 @@ pub(crate) struct BasicAttackAim(pub(crate) Option<Vec3>);
 #[derive(Resource)]
 pub(crate) struct BasicAttackArt {
     arrow: Handle<Mesh>,
+    starter_arrow: Handle<Mesh>,
+    starter_arrow_material: Handle<StandardMaterial>,
     mechanical_bolt: Handle<Mesh>,
     storm: Handle<Mesh>,
     spirit: Handle<Mesh>,
@@ -107,6 +109,10 @@ pub(crate) struct BasicAttackArt {
 }
 
 const STARTER_SWORD_ALPHA: [f32; 6] = [0.78, 0.64, 0.46, 0.28, 0.12, 0.03];
+
+pub(crate) fn is_starter_ember_arrow(kind: HeroKind, level: u32) -> bool {
+    kind == HeroKind::EmberRanger && basic_attack_visual_tier(level).index == 0
+}
 
 fn starter_sword_palette(kind: HeroKind, tier: usize) -> Option<usize> {
     if tier != 0 {
@@ -131,13 +137,8 @@ impl BasicAttackArt {
         )
     }
     pub(crate) fn projectile(&self, kind: HeroKind) -> (Handle<Mesh>, Handle<StandardMaterial>) {
-        self.projectile_at_level(kind, 1)
-    }
-    pub(crate) fn projectile_at_level(
-        &self,
-        kind: HeroKind,
-        level: u32,
-    ) -> (Handle<Mesh>, Handle<StandardMaterial>) {
+        // Signature/release effects retain their original authored geometry.
+        // Actual ordinary shots select their visual tier explicitly below.
         let mesh = match weapon(kind) {
             BasicWeapon::Crossbow if kind == HeroKind::GroveArtificer => &self.mechanical_bolt,
             BasicWeapon::Crossbow => &self.arrow,
@@ -147,8 +148,22 @@ impl BasicAttackArt {
             BasicWeapon::Frost => &self.frost,
             _ => unreachable!("melee weapons do not emit visible projectiles"),
         };
+        (mesh.clone(), self.materials[kind.index()].clone())
+    }
+    pub(crate) fn projectile_at_level(
+        &self,
+        kind: HeroKind,
+        level: u32,
+    ) -> (Handle<Mesh>, Handle<StandardMaterial>) {
+        if is_starter_ember_arrow(kind, level) {
+            return (
+                self.starter_arrow.clone(),
+                self.starter_arrow_material.clone(),
+            );
+        }
+        let (mesh, _) = self.projectile(kind);
         (
-            mesh.clone(),
+            mesh,
             self.tier_materials[basic_attack_visual_tier(level).index][kind.index()].clone(),
         )
     }
@@ -159,6 +174,13 @@ pub(crate) fn setup_attack_art(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
+    let starter_arrow_material = materials.add(StandardMaterial {
+        base_color: Color::WHITE,
+        emissive: LinearRgba::BLACK,
+        perceptual_roughness: 0.9,
+        reflectance: 0.2,
+        ..default()
+    });
     let mut arrow = Mesh::from(Cuboid::new(0.075, 0.075, 1.12));
     arrow
         .merge(&crystal(Vec3::new(0.26, 0.12, 0.52)).translated_by(Vec3::new(0.0, 0.0, -0.65)))
@@ -295,6 +317,8 @@ pub(crate) fn setup_attack_art(
     });
     commands.insert_resource(BasicAttackArt {
         arrow: meshes.add(arrow),
+        starter_arrow: meshes.add(starter_arrow_mesh()),
+        starter_arrow_material,
         mechanical_bolt: meshes.add(mechanical_bolt),
         storm: meshes.add(storm.scaled_by(Vec3::splat(1.55))),
         spirit: meshes.add(spirit.scaled_by(Vec3::splat(1.50))),
@@ -306,6 +330,39 @@ pub(crate) fn setup_attack_art(
         materials: palette,
         tier_materials,
     });
+}
+
+fn starter_arrow_mesh() -> Mesh {
+    let colored = |mesh: Mesh, color: Color| {
+        let count = mesh.count_vertices();
+        mesh.with_inserted_attribute(
+            Mesh::ATTRIBUTE_COLOR,
+            vec![color.to_linear().to_f32_array(); count],
+        )
+    };
+    let mut arrow = colored(
+        Mesh::from(Cuboid::new(0.035, 0.035, 1.08)),
+        Color::srgb(0.46, 0.28, 0.12),
+    );
+    arrow
+        .merge(&colored(
+            Mesh::from(Cone::new(0.10, 0.24).mesh().resolution(3))
+                .rotated_by(Quat::from_rotation_x(-std::f32::consts::FRAC_PI_2))
+                .translated_by(Vec3::new(0.0, 0.0, -0.55)),
+            Color::srgb(0.65, 0.68, 0.70),
+        ))
+        .expect("plain arrowhead shares vertex attributes");
+    for side in [-1.0, 1.0] {
+        arrow
+            .merge(&colored(
+                Mesh::from(Cuboid::new(0.11, 0.012, 0.22))
+                    .rotated_by(Quat::from_rotation_y(side * 0.3))
+                    .translated_by(Vec3::new(side * 0.055, 0.0, 0.36)),
+                Color::srgb(0.72, 0.65, 0.51),
+            ))
+            .expect("plain arrow feathers share vertex attributes");
+    }
+    arrow
 }
 
 /// All projectile shapes face local -Z, matching the pooled projectile orientation.
@@ -806,6 +863,7 @@ mod tests {
         let mesh_assets = app.world().resource::<Assets<Mesh>>();
         for handle in [
             &art.arrow,
+            &art.starter_arrow,
             &art.mechanical_bolt,
             &art.storm,
             &art.spirit,
@@ -872,10 +930,87 @@ mod tests {
             mesh_assets.get(&ember).unwrap().count_vertices(),
             mesh_assets.get(&grove).unwrap().count_vertices()
         );
-        assert_eq!(mesh_assets.len(), 13);
+        assert_eq!(mesh_assets.len(), 14);
         assert_eq!(
             app.world().resource::<Assets<StandardMaterial>>().len(),
-            HeroKind::COUNT * 4 + 12
+            HeroKind::COUNT * 4 + 13
+        );
+    }
+
+    #[test]
+    fn starter_ember_arrow_is_plain_colored_geometry_and_upgrades_at_level_ten() {
+        let app = slash_test_app(HeroKind::EmberRanger, 1);
+        let art = app.world().resource::<BasicAttackArt>();
+        let meshes = app.world().resource::<Assets<Mesh>>();
+        let materials = app.world().resource::<Assets<StandardMaterial>>();
+        let starter = art.projectile_at_level(HeroKind::EmberRanger, 1);
+        assert_eq!(starter, art.projectile_at_level(HeroKind::EmberRanger, 9));
+        assert_ne!(starter.0, art.arrow);
+        let mesh = meshes.get(&starter.0).unwrap();
+        let Some(bevy::mesh::VertexAttributeValues::Float32x4(colors)) =
+            mesh.attribute(Mesh::ATTRIBUTE_COLOR)
+        else {
+            panic!("wood, metal and feathers use a single vertex-colored mesh");
+        };
+        assert_eq!(colors.len(), mesh.count_vertices());
+        assert!(
+            colors
+                .iter()
+                .flatten()
+                .all(|value| value.is_finite() && (0.0..=1.0).contains(value))
+        );
+        let unique: std::collections::HashSet<_> =
+            colors.iter().map(|color| color.map(f32::to_bits)).collect();
+        assert_eq!(unique.len(), 3);
+        let width = |mesh: &Mesh| {
+            let points = mesh
+                .attribute(Mesh::ATTRIBUTE_POSITION)
+                .unwrap()
+                .as_float3()
+                .unwrap();
+            points
+                .iter()
+                .map(|point| point[0])
+                .fold(f32::NEG_INFINITY, f32::max)
+                - points
+                    .iter()
+                    .map(|point| point[0])
+                    .fold(f32::INFINITY, f32::min)
+        };
+        assert!(width(mesh) < width(meshes.get(&art.arrow).unwrap()) * 0.6);
+        let material = materials.get(&starter.1).unwrap();
+        assert_eq!(material.emissive, LinearRgba::BLACK);
+        assert_eq!(material.alpha_mode, AlphaMode::Opaque);
+        assert!(!material.unlit);
+        for level in [10, 20, 40] {
+            assert_eq!(
+                art.projectile_at_level(HeroKind::EmberRanger, level),
+                (
+                    art.arrow.clone(),
+                    art.tier_materials[basic_attack_visual_tier(level).index]
+                        [HeroKind::EmberRanger.index()]
+                    .clone()
+                )
+            );
+        }
+        for level in [1, 9, 10, 40] {
+            assert_eq!(
+                art.projectile_at_level(HeroKind::GroveArtificer, level).0,
+                art.mechanical_bolt
+            );
+        }
+        assert_eq!(
+            art.arrow(),
+            (
+                art.arrow.clone(),
+                art.materials[HeroKind::EmberRanger.index()].clone()
+            ),
+            "earned supporting arrows retain their original art"
+        );
+        assert_eq!(
+            art.projectile(HeroKind::EmberRanger).0,
+            art.arrow,
+            "signature release effects retain the ornate geometry"
         );
     }
 

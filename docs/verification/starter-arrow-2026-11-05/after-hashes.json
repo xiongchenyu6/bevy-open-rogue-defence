@@ -1,0 +1,6 @@
+{
+  "src/game/basic_attacks.rs": "cc5bda62bfeb9336fd8a967b777bbd7878550b3cb5137dc6503864a3495aa7b4",
+  "src/game/combat.rs": "a545b4888791352b134aa51922930d9cbcf16f30d6a7b2cd0b2d1e7b03e464b8",
+  "src/game/hero_fusion.rs": "0f99d570fd729f0926a0c7daabe60f2fdb32e019626e9c4396928b147fcbe176",
+  "target/market-visual/debug/capture": "e7547edeb20fc3776fa683e2677bf68e81bd0c447492e22c344001fe9bd90481"
+}

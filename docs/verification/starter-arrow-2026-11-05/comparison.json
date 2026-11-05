@@ -1,0 +1,30 @@
+{
+  "attack-ember": {
+    "first_80_damage_hp_animation_records_identical": true,
+    "after_250_complete": true,
+    "baseline_reused_from_sword_trail": true
+  },
+  "weapon-growth-archer-starter-single": {
+    "first_80_damage_hp_animation_records_identical": true,
+    "after_250_complete": true,
+    "baseline_reused_from_sword_trail": false,
+    "actual_first_volley_arrows": 1
+  },
+  "weapon-growth-archer-upgraded-single": {
+    "first_80_damage_hp_animation_records_identical": true,
+    "after_250_complete": true,
+    "baseline_reused_from_sword_trail": false,
+    "actual_first_volley_arrows": 1
+  },
+  "weapon-growth-archer-upgraded": {
+    "first_80_damage_hp_animation_records_identical": true,
+    "after_250_complete": true,
+    "baseline_reused_from_sword_trail": false,
+    "actual_first_volley_arrows": 3
+  },
+  "attack-sword": {
+    "first_80_damage_hp_animation_records_identical": true,
+    "after_250_complete": true,
+    "baseline_reused_from_sword_trail": true
+  }
+}

@@ -297,6 +297,11 @@ fn emit(
                     WeaponFlight::new(request.kind),
                     profile(request.kind),
                 ));
+                if basic_attacks::is_starter_ember_arrow(request.kind, vitals.level) {
+                    commands
+                        .entity(projectile)
+                        .insert(super::skill_lighting::NoGroundProjection);
+                }
                 cues.push(request.kind, hero.translation, direction, false);
                 if class_stats.bounces > 0 {
                     commands
