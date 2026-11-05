@@ -1,0 +1,5 @@
+{
+  "src/game/basic_attacks.rs": "f5e40eb0fdaf4563da97bfafa9834eaafcd5c3038999a63e62543328f02459cb",
+  "src/bin/capture/attacks.rs": "5307cedb17022bade21a381746ea055dab773dd693fd4bd8d50966a6b40bb585",
+  "target/market-visual/debug/capture": "e7cffd852b701c1bf7d08e9891933b95b241d5d101f9d817b464249a9d46d025"
+}

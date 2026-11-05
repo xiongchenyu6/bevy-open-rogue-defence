@@ -1,0 +1,33 @@
+{
+  "attack-sword": {
+    "damage_and_playback_80_frames_identical": true,
+    "after_completed_250": true,
+    "trail_samples": 43,
+    "actual_alpha_range": [
+      0.03,
+      0.78
+    ],
+    "per_entity_fade_monotonic": true
+  },
+  "attack-solar": {
+    "damage_and_playback_80_frames_identical": true,
+    "after_completed_250": true,
+    "trail_samples": 39,
+    "actual_alpha_range": [
+      0.03,
+      0.78
+    ],
+    "per_entity_fade_monotonic": true
+  },
+  "weapon-growth-sword-upgraded": {
+    "damage_and_playback_80_frames_identical": true,
+    "after_completed_250": true,
+    "trail_samples": 43,
+    "advanced_material_unchanged": true
+  },
+  "attack-ember": {
+    "damage_and_playback_80_frames_identical": true,
+    "after_completed_250": true,
+    "trail_samples": 0
+  }
+}

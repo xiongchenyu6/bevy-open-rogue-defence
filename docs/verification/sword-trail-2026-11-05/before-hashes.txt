@@ -1,0 +1,2 @@
+c0049589017ace57880971dd50ee34215b1ac5900a1a0fd0f0de28ab4c25b318  target/market-visual/debug/capture
+ae72f61a85e75c10b44545887bd0f955daedece4a7dba1849f62cd5bf3360e3d  src/game/basic_attacks.rs

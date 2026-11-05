@@ -1,0 +1,140 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+[capture] selective PNG frames: {18, 19, 20, 21, 22, 23, 24, 25, 30, 35, 40, 45, 50, 55, 60, 65}; all 250 simulation/render updates retained
+[2m2026-11-05T09:07:24.235240Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-05T09:07:24.414650Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-05T09:07:25.624340Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-05T09:07:25.624544Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[capture] scenario=weapon-growth-sword-upgraded
+[capture] seed=0x00000000000A11CE
+[2m2026-11-05T09:07:26.807303Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] weapon-growth-sword-upgraded: centered battlefield, real StoneWarden basic attacks; no Autoplay or ultimate
+ATTACK_TIMING frame=1 health=300000.000 damage=0.000 clips=[(1, 0.03333333, 1.0)]
+ATTACK_TIMING frame=2 health=300000.000 damage=0.000 clips=[(1, 0.06666666, 1.0)]
+ATTACK_TIMING frame=3 health=300000.000 damage=0.000 clips=[(1, 0.099999994, 1.0)]
+ATTACK_TIMING frame=4 health=300000.000 damage=0.000 clips=[(1, 0.13333333, 1.0)]
+ATTACK_TIMING frame=5 health=300000.000 damage=0.000 clips=[(1, 0.16666666, 1.0)]
+ATTACK_TIMING frame=6 health=300000.000 damage=0.000 clips=[(1, 0.19999999, 1.0)]
+ATTACK_TIMING frame=7 health=300000.000 damage=0.000 clips=[(1, 0.23333332, 1.0)]
+ATTACK_TIMING frame=8 health=300000.000 damage=0.000 clips=[(1, 0.26666665, 1.0)]
+ATTACK_TIMING frame=9 health=300000.000 damage=0.000 clips=[(1, 0.29999998, 1.0)]
+ATTACK_TIMING frame=10 health=300000.000 damage=0.000 clips=[(1, 0.3333333, 1.0)]
+ATTACK_TIMING frame=11 health=300000.000 damage=0.000 clips=[(1, 0.36666664, 1.0)]
+ATTACK_TIMING frame=12 health=300000.000 damage=0.000 clips=[(3, 0.09059555, 2.7178667)]
+ATTACK_TIMING frame=13 health=300000.000 damage=0.000 clips=[(3, 0.1811911, 2.7178667)]
+ATTACK_TIMING frame=14 health=300000.000 damage=0.000 clips=[(3, 0.27178666, 2.7178667)]
+ATTACK_TIMING frame=15 health=300000.000 damage=0.000 clips=[(3, 0.3623822, 2.7178667)]
+ATTACK_TIMING frame=16 health=300000.000 damage=0.000 clips=[(3, 0.45297775, 2.7178667)]
+ATTACK_TIMING frame=17 health=300000.000 damage=0.000 clips=[(3, 0.5435733, 2.7178667)]
+ATTACK_TIMING frame=18 health=300000.000 damage=0.000 clips=[(3, 0.63416886, 2.7178667)]
+ATTACK_TIMING frame=19 health=299901.188 damage=98.812 clips=[(3, 0.7247644, 2.7178667)]
+[capture] weapon-growth-stage actual-flight frame=19
+[capture] weapon-growth-stage actual-impact frame=19
+ATTACK_TIMING frame=20 health=299901.188 damage=0.000 clips=[(3, 0.81535995, 2.7178667)]
+[2m2026-11-05T09:07:34.340544Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00018.png
+[capture] saved 1/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00018.png (1014221 bytes)
+ATTACK_TIMING frame=21 health=299901.188 damage=0.000 clips=[(3, 0.9059555, 2.7178667)]
+[2m2026-11-05T09:07:35.070284Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00019.png
+[capture] saved 2/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00019.png (1015340 bytes)
+ATTACK_TIMING frame=22 health=299901.188 damage=0.000 clips=[(3, 0.99655104, 2.7178667)]
+[2m2026-11-05T09:07:35.765511Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00020.png
+[capture] saved 3/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00020.png (1015436 bytes)
+ATTACK_TIMING frame=23 health=299901.188 damage=0.000 clips=[(3, 1.0871466, 2.7178667)]
+[2m2026-11-05T09:07:36.490452Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00021.png
+[capture] saved 4/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00021.png (1015940 bytes)
+ATTACK_TIMING frame=24 health=299901.188 damage=0.000 clips=[(3, 0.09059555, 2.7178667)]
+[2m2026-11-05T09:07:37.178333Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00022.png
+[capture] saved 5/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00022.png (1015841 bytes)
+ATTACK_TIMING frame=25 health=299901.188 damage=0.000 clips=[(3, 0.1811911, 2.7178667)]
+[2m2026-11-05T09:07:37.916690Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00023.png
+[capture] saved 6/8 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00023.png (1015942 bytes)
+ATTACK_TIMING frame=26 health=299901.188 damage=0.000 clips=[(3, 0.27178666, 2.7178667)]
+[2m2026-11-05T09:07:38.642299Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00024.png
+[capture] saved 7/8 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00024.png (1015617 bytes)
+ATTACK_TIMING frame=27 health=299901.188 damage=0.000 clips=[(3, 0.3623822, 2.7178667)]
+[2m2026-11-05T09:07:39.331248Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00025.png
+[capture] saved 8/8 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00025.png (1015332 bytes)
+ATTACK_TIMING frame=28 health=299901.188 damage=0.000 clips=[(3, 0.45297775, 2.7178667)]
+ATTACK_TIMING frame=29 health=299901.188 damage=0.000 clips=[(3, 0.5435733, 2.7178667)]
+ATTACK_TIMING frame=30 health=299901.188 damage=0.000 clips=[(3, 0.63416886, 2.7178667)]
+ATTACK_TIMING frame=31 health=299802.406 damage=98.781 clips=[(3, 0.7247644, 2.7178667)]
+ATTACK_TIMING frame=32 health=299802.406 damage=0.000 clips=[(3, 0.81535995, 2.7178667)]
+[2m2026-11-05T09:07:40.263187Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00030.png
+[capture] saved 9/9 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00030.png (1016848 bytes)
+ATTACK_TIMING frame=33 health=299802.406 damage=0.000 clips=[(3, 0.9059555, 2.7178667)]
+ATTACK_TIMING frame=34 health=299802.406 damage=0.000 clips=[(3, 0.99655104, 2.7178667)]
+ATTACK_TIMING frame=35 health=299802.406 damage=0.000 clips=[(3, 1.0871466, 2.7178667)]
+ATTACK_TIMING frame=36 health=299802.406 damage=0.000 clips=[(3, 0.09059555, 2.7178667)]
+ATTACK_TIMING frame=37 health=299802.406 damage=0.000 clips=[(3, 0.1811911, 2.7178667)]
+[2m2026-11-05T09:07:41.263333Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00035.png
+[capture] saved 10/10 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00035.png (1016927 bytes)
+ATTACK_TIMING frame=38 health=299802.406 damage=0.000 clips=[(3, 0.27178666, 2.7178667)]
+ATTACK_TIMING frame=39 health=299802.406 damage=0.000 clips=[(3, 0.3623822, 2.7178667)]
+ATTACK_TIMING frame=40 health=299802.406 damage=0.000 clips=[(3, 0.45297775, 2.7178667)]
+ATTACK_TIMING frame=41 health=299802.406 damage=0.000 clips=[(3, 0.5435733, 2.7178667)]
+ATTACK_TIMING frame=42 health=299802.406 damage=0.000 clips=[(3, 0.63416886, 2.7178667)]
+[2m2026-11-05T09:07:42.270676Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00040.png
+[capture] saved 11/11 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00040.png (1012662 bytes)
+ATTACK_TIMING frame=43 health=299703.625 damage=98.781 clips=[(3, 0.7247644, 2.7178667)]
+ATTACK_TIMING frame=44 health=299703.625 damage=0.000 clips=[(3, 0.81535995, 2.7178667)]
+ATTACK_TIMING frame=45 health=299703.625 damage=0.000 clips=[(3, 0.9059555, 2.7178667)]
+ATTACK_TIMING frame=46 health=299703.625 damage=0.000 clips=[(3, 0.99655104, 2.7178667)]
+ATTACK_TIMING frame=47 health=299703.625 damage=0.000 clips=[(3, 1.0871466, 2.7178667)]
+[2m2026-11-05T09:07:43.275259Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00045.png
+[capture] saved 12/12 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00045.png (1017184 bytes)
+ATTACK_TIMING frame=48 health=299703.625 damage=0.000 clips=[(3, 0.09059555, 2.7178667)]
+ATTACK_TIMING frame=49 health=299703.625 damage=0.000 clips=[(3, 0.1811911, 2.7178667)]
+ATTACK_TIMING frame=50 health=299703.625 damage=0.000 clips=[(3, 0.27178666, 2.7178667)]
+ATTACK_TIMING frame=51 health=299703.625 damage=0.000 clips=[(3, 0.3623822, 2.7178667)]
+ATTACK_TIMING frame=52 health=299703.625 damage=0.000 clips=[(3, 0.45297775, 2.7178667)]
+[2m2026-11-05T09:07:44.246181Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00050.png
+[capture] saved 13/13 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00050.png (1012557 bytes)
+ATTACK_TIMING frame=53 health=299703.625 damage=0.000 clips=[(3, 0.5435733, 2.7178667)]
+ATTACK_TIMING frame=54 health=299703.625 damage=0.000 clips=[(3, 0.63416886, 2.7178667)]
+ATTACK_TIMING frame=55 health=299604.812 damage=98.812 clips=[(3, 0.7247644, 2.7178667)]
+ATTACK_TIMING frame=56 health=299604.812 damage=0.000 clips=[(3, 0.81535995, 2.7178667)]
+ATTACK_TIMING frame=57 health=299604.812 damage=0.000 clips=[(3, 0.9059555, 2.7178667)]
+[2m2026-11-05T09:07:45.184395Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00055.png
+[capture] saved 14/14 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00055.png (1016609 bytes)
+ATTACK_TIMING frame=58 health=299604.812 damage=0.000 clips=[(3, 0.99655104, 2.7178667)]
+ATTACK_TIMING frame=59 health=299604.812 damage=0.000 clips=[(3, 0.09059555, 2.7178667)]
+ATTACK_TIMING frame=60 health=299604.812 damage=0.000 clips=[(3, 0.1811911, 2.7178667)]
+ATTACK_TIMING frame=61 health=299604.812 damage=0.000 clips=[(3, 0.27178666, 2.7178667)]
+ATTACK_TIMING frame=62 health=299604.812 damage=0.000 clips=[(3, 0.3623822, 2.7178667)]
+[2m2026-11-05T09:07:46.261939Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00060.png
+[capture] saved 15/15 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00060.png (1017127 bytes)
+ATTACK_TIMING frame=63 health=299604.812 damage=0.000 clips=[(3, 0.45297775, 2.7178667)]
+ATTACK_TIMING frame=64 health=299604.812 damage=0.000 clips=[(3, 0.5435733, 2.7178667)]
+ATTACK_TIMING frame=65 health=299604.812 damage=0.000 clips=[(3, 0.63416886, 2.7178667)]
+ATTACK_TIMING frame=66 health=299506.000 damage=98.812 clips=[(3, 0.7247644, 2.7178667)]
+ATTACK_TIMING frame=67 health=299506.000 damage=0.000 clips=[(3, 0.81535995, 2.7178667)]
+[2m2026-11-05T09:07:47.266571Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00065.png
+[capture] saved 16/16 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded/frame00065.png (1016922 bytes)
+ATTACK_TIMING frame=68 health=299506.000 damage=0.000 clips=[(3, 0.9059555, 2.7178667)]
+ATTACK_TIMING frame=69 health=299506.000 damage=0.000 clips=[(3, 0.99655104, 2.7178667)]
+ATTACK_TIMING frame=70 health=299506.000 damage=0.000 clips=[(3, 1.0871466, 2.7178667)]
+ATTACK_TIMING frame=71 health=299506.000 damage=0.000 clips=[(3, 0.09059555, 2.7178667)]
+ATTACK_TIMING frame=72 health=299506.000 damage=0.000 clips=[(3, 0.1811911, 2.7178667)]
+ATTACK_TIMING frame=73 health=299506.000 damage=0.000 clips=[(3, 0.27178666, 2.7178667)]
+ATTACK_TIMING frame=74 health=299506.000 damage=0.000 clips=[(3, 0.3623822, 2.7178667)]
+ATTACK_TIMING frame=75 health=299506.000 damage=0.000 clips=[(3, 0.45297775, 2.7178667)]
+ATTACK_TIMING frame=76 health=299506.000 damage=0.000 clips=[(3, 0.5435733, 2.7178667)]
+ATTACK_TIMING frame=77 health=299506.000 damage=0.000 clips=[(3, 0.63416886, 2.7178667)]
+ATTACK_TIMING frame=78 health=299407.219 damage=98.781 clips=[(3, 0.7247644, 2.7178667)]
+ATTACK_TIMING frame=79 health=299407.219 damage=0.000 clips=[(3, 0.81535995, 2.7178667)]
+ATTACK_TIMING frame=80 health=299407.219 damage=0.000 clips=[(3, 0.9059555, 2.7178667)]
+[capture] PASS: real basic attack damage and weapon visuals; learned skills/ultimate/Autoplay suppressed
+[capture] PASS weapon-growth-sword-upgraded: production attack flight+damage, actual material peak_emissive=16, no learnedskills/ultimate
+[capture] all 16 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 250 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sword-trail-2026-11-05/before-upgraded-full/weapon-growth-sword-upgraded

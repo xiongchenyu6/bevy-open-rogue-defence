@@ -192,6 +192,30 @@ fn trace_attack_timing(world: &mut World) {
     if frame > 80 {
         return;
     }
+    let trails: Vec<_> = world
+        .query::<(
+            Entity,
+            &Name,
+            &MeshMaterial3d<StandardMaterial>,
+            &Visibility,
+        )>()
+        .iter(world)
+        .filter(|(_, name, _, visibility)| {
+            name.as_str() == "Weapon swing trail" && **visibility != Visibility::Hidden
+        })
+        .map(|(entity, _, material, _)| (entity, material.0.clone()))
+        .collect();
+    let materials = world.resource::<Assets<StandardMaterial>>();
+    for (entity, handle) in trails {
+        if let Some(material) = materials.get(&handle) {
+            println!(
+                "SWORD_TRAIL frame={frame} entity={entity:?} alpha={:.6} mode={:?} material_count={}",
+                material.base_color.alpha(),
+                material.alpha_mode,
+                materials.len()
+            );
+        }
+    }
     let mut players = world.query::<(Entity, &AnimationPlayer)>();
     let animations: Vec<_> = players
         .iter(world)

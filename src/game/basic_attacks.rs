@@ -100,8 +100,23 @@ pub(crate) struct BasicAttackArt {
     star: Handle<Mesh>,
     frost: Handle<Mesh>,
     melee_shapes: [Handle<Mesh>; 6],
+    starter_stone_swing: Handle<Mesh>,
+    starter_sword_fades: [[Handle<StandardMaterial>; 6]; 2],
     pub(crate) materials: [Handle<StandardMaterial>; HeroKind::COUNT],
     tier_materials: [[Handle<StandardMaterial>; HeroKind::COUNT]; 4],
+}
+
+const STARTER_SWORD_ALPHA: [f32; 6] = [0.78, 0.64, 0.46, 0.28, 0.12, 0.03];
+
+fn starter_sword_palette(kind: HeroKind, tier: usize) -> Option<usize> {
+    if tier != 0 {
+        return None;
+    }
+    match kind {
+        HeroKind::StoneWarden => Some(0),
+        HeroKind::SolarVanguard => Some(1),
+        _ => None,
+    }
 }
 
 impl BasicAttackArt {
@@ -264,6 +279,20 @@ pub(crate) fn setup_attack_art(
         })
     });
     let palette = tier_materials[0].clone();
+    // Immutable, bounded palettes: fading one slash never changes another
+    // slash or its weapon projectile, and creates no per-attack material assets.
+    let starter_sword_fades = [HeroKind::StoneWarden, HeroKind::SolarVanguard].map(|kind| {
+        let base = materials
+            .get(&tier_materials[0][kind.index()])
+            .expect("starter weapon material exists")
+            .clone();
+        STARTER_SWORD_ALPHA.map(|alpha| {
+            let mut material = base.clone();
+            material.base_color = material.base_color.with_alpha(alpha);
+            material.alpha_mode = AlphaMode::Blend;
+            materials.add(material)
+        })
+    });
     commands.insert_resource(BasicAttackArt {
         arrow: meshes.add(arrow),
         mechanical_bolt: meshes.add(mechanical_bolt),
@@ -272,6 +301,8 @@ pub(crate) fn setup_attack_art(
         star: meshes.add(star.scaled_by(Vec3::splat(1.45))),
         frost: meshes.add(frost.scaled_by(Vec3::splat(1.65))),
         melee_shapes: melee_meshes().map(|mesh| meshes.add(mesh)),
+        starter_stone_swing: meshes.add(slash_mesh(1.16, 0.22, 0.0, 1.0)),
+        starter_sword_fades,
         materials: palette,
         tier_materials,
     });
@@ -495,6 +526,7 @@ pub(crate) struct SwingTrail {
     layer: u8,
     origin: Vec3,
     direction: Vec3,
+    starter_fade: Option<usize>,
 }
 
 pub(crate) fn swing_windup(kind: HeroKind, interval: f32) -> f32 {
@@ -599,7 +631,17 @@ pub(crate) fn resolve_swings(
         let range = stats.range;
         if let Some(art) = art.as_deref() {
             let style = swing_style(swing.kind);
-            let mesh = &art.melee_shapes[melee_shape_index(swing.kind)];
+            let tier = basic_attack_visual_tier(vitals.level).index;
+            let starter_fade = starter_sword_palette(swing.kind, tier);
+            let mesh = if starter_fade == Some(0) {
+                &art.starter_stone_swing
+            } else {
+                &art.melee_shapes[melee_shape_index(swing.kind)]
+            };
+            let material = starter_fade.map_or_else(
+                || art.tier_materials[tier][swing.kind.index()].clone(),
+                |palette| art.starter_sword_fades[palette][0].clone(),
+            );
             let duration = style.duration;
             for layer in 0..style
                 .layers
@@ -612,11 +654,7 @@ pub(crate) fn resolve_swings(
                 commands.spawn((
                     Name::new("Weapon swing trail"),
                     Mesh3d(mesh.clone()),
-                    MeshMaterial3d(
-                        art.tier_materials[basic_attack_visual_tier(vitals.level).index]
-                            [swing.kind.index()]
-                        .clone(),
-                    ),
+                    MeshMaterial3d(material.clone()),
                     transform.with_scale(Vec3::splat(range * style.start)),
                     if delay > 0.0 {
                         Visibility::Hidden
@@ -633,6 +671,7 @@ pub(crate) fn resolve_swings(
                         layer,
                         origin: transform.translation,
                         direction: swing.direction,
+                        starter_fade,
                     },
                 ));
             }
@@ -679,12 +718,19 @@ pub(crate) fn animate_swings(
     mut commands: Commands,
     time: Res<Time>,
     session: Res<GameSession>,
-    mut trails: Query<(Entity, &mut SwingTrail, &mut Transform, &mut Visibility)>,
+    art: Option<Res<BasicAttackArt>>,
+    mut trails: Query<(
+        Entity,
+        &mut SwingTrail,
+        &mut Transform,
+        &mut Visibility,
+        Option<&mut MeshMaterial3d<StandardMaterial>>,
+    )>,
 ) {
     if session.paused && !session.finished {
         return;
     }
-    for (entity, mut trail, mut transform, mut visibility) in &mut trails {
+    for (entity, mut trail, mut transform, mut visibility, material) in &mut trails {
         trail.remaining -= time.delta_secs();
         if trail.remaining <= 0.0 || session.finished {
             commands.entity(entity).despawn();
@@ -696,6 +742,16 @@ pub(crate) fn animate_swings(
         }
         *visibility = Visibility::Visible;
         let progress = (1.0 - trail.remaining / trail.duration).clamp(0.0, 1.0);
+        if let (Some(palette), Some(art), Some(mut material)) =
+            (trail.starter_fade, art.as_deref(), material)
+        {
+            let phase = ((progress * STARTER_SWORD_ALPHA.len() as f32) as usize)
+                .min(STARTER_SWORD_ALPHA.len() - 1);
+            let next = &art.starter_sword_fades[palette][phase];
+            if material.0 != *next {
+                material.0 = next.clone();
+            }
+        }
         let ease = 1.0 - (1.0 - progress).powi(3);
         let style = swing_style(trail.kind);
         let radius = trail.radius * (style.start + (style.end - style.start) * ease);
@@ -816,10 +872,10 @@ mod tests {
             mesh_assets.get(&ember).unwrap().count_vertices(),
             mesh_assets.get(&grove).unwrap().count_vertices()
         );
-        assert_eq!(mesh_assets.len(), 12);
+        assert_eq!(mesh_assets.len(), 13);
         assert_eq!(
             app.world().resource::<Assets<StandardMaterial>>().len(),
-            HeroKind::COUNT * 4
+            HeroKind::COUNT * 4 + 12
         );
     }
 
@@ -867,6 +923,7 @@ mod tests {
                             layer: 0,
                             origin: Vec3::ZERO,
                             direction: Vec3::NEG_Z,
+                            starter_fade: None,
                         },
                         Transform::default(),
                         Visibility::Visible,
@@ -880,6 +937,170 @@ mod tests {
         assert!(outward.scale.x > 2.6 * swing_style(HeroKind::IronBerserker).start);
         assert!(inward.scale.x < 2.6 * swing_style(HeroKind::VoidReaper).start);
         assert_ne!(outward.rotation, inward.rotation);
+    }
+
+    fn slash_test_app(kind: HeroKind, level: u32) -> App {
+        use bevy::ecs::system::RunSystemOnce;
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<GameSession>()
+            .init_resource::<CombatPools>()
+            .init_resource::<Assets<Mesh>>()
+            .init_resource::<Assets<StandardMaterial>>()
+            .insert_resource(HeroVitals::for_hero(kind, level));
+        app.world_mut().run_system_once(setup_attack_art).unwrap();
+        app.world_mut().spawn((Hero, Transform::default()));
+        app
+    }
+
+    fn emit_test_slash(app: &mut App) -> Entity {
+        use bevy::ecs::system::RunSystemOnce;
+        let kind = app.world().resource::<HeroVitals>().kind;
+        let hero = app
+            .world_mut()
+            .query_filtered::<Entity, With<Hero>>()
+            .single(app.world())
+            .unwrap();
+        app.world_mut().spawn(PendingSwing {
+            hero,
+            target: hero,
+            kind,
+            direction: Vec3::X,
+            damage: 10.0,
+            hit_limit: 1,
+            remaining: 0.0,
+        });
+        app.world_mut().run_system_once(resolve_swings).unwrap();
+        app.world_mut()
+            .query::<(Entity, &SwingTrail)>()
+            .iter(app.world())
+            .find(|(_, trail)| trail.layer == 0 && trail.remaining == trail.duration)
+            .expect("production contact spawns the main trail")
+            .0
+    }
+
+    #[test]
+    fn starter_sword_fade_is_instance_local_freezes_and_creates_no_per_swing_assets() {
+        use bevy::ecs::system::RunSystemOnce;
+        use std::time::Duration;
+        let mut app = slash_test_app(HeroKind::StoneWarden, 1);
+        let assets_before = app.world().resource::<Assets<StandardMaterial>>().len();
+        let first = emit_test_slash(&mut app);
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(Duration::from_millis(90));
+        app.world_mut().run_system_once(animate_swings).unwrap();
+        let second = emit_test_slash(&mut app);
+        let alpha = |app: &App, entity: Entity| {
+            let handle = &app
+                .world()
+                .get::<MeshMaterial3d<StandardMaterial>>(entity)
+                .unwrap()
+                .0;
+            app.world()
+                .resource::<Assets<StandardMaterial>>()
+                .get(handle)
+                .unwrap()
+                .base_color
+                .alpha()
+        };
+        assert!(
+            alpha(&app, first) < alpha(&app, second),
+            "a new slash cannot brighten an older afterimage"
+        );
+        let before_pause = app.world().get::<Transform>(first).copied().unwrap();
+        let material_before = app
+            .world()
+            .get::<MeshMaterial3d<StandardMaterial>>(first)
+            .unwrap()
+            .0
+            .clone();
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(Duration::from_secs(1));
+        app.world_mut().run_system_once(animate_swings).unwrap();
+        assert_eq!(*app.world().get::<Transform>(first).unwrap(), before_pause);
+        assert_eq!(
+            app.world()
+                .get::<MeshMaterial3d<StandardMaterial>>(first)
+                .unwrap()
+                .0,
+            material_before
+        );
+        app.world_mut().resource_mut::<GameSession>().paused = false;
+        for _ in 0..20 {
+            app.world_mut()
+                .resource_mut::<Time>()
+                .advance_by(Duration::ZERO);
+            let _ = emit_test_slash(&mut app);
+            app.world_mut()
+                .resource_mut::<Time>()
+                .advance_by(Duration::from_millis(250));
+            app.world_mut().run_system_once(animate_swings).unwrap();
+            app.world_mut()
+                .resource_mut::<Time>()
+                .advance_by(Duration::from_millis(20));
+            app.world_mut().run_system_once(animate_swings).unwrap();
+        }
+        app.world_mut().resource_mut::<GameSession>().finished = true;
+        app.world_mut().run_system_once(animate_swings).unwrap();
+        assert_eq!(
+            app.world_mut()
+                .query::<&SwingTrail>()
+                .iter(app.world())
+                .count(),
+            0
+        );
+        assert_eq!(
+            app.world().resource::<Assets<StandardMaterial>>().len(),
+            assets_before
+        );
+    }
+
+    #[test]
+    fn smooth_fading_sword_trails_leave_upgraded_tiers_and_other_weapons_unchanged() {
+        for kind in [
+            HeroKind::StoneWarden,
+            HeroKind::SolarVanguard,
+            HeroKind::IronBerserker,
+            HeroKind::TideWalker,
+            HeroKind::VoidReaper,
+        ] {
+            for level in [1, 10, 20, 40] {
+                let mut app = slash_test_app(kind, level);
+                let entity = emit_test_slash(&mut app);
+                let art = app.world().resource::<BasicAttackArt>();
+                let mesh = &app.world().get::<Mesh3d>(entity).unwrap().0;
+                let handle = &app
+                    .world()
+                    .get::<MeshMaterial3d<StandardMaterial>>(entity)
+                    .unwrap()
+                    .0;
+                let material = app
+                    .world()
+                    .resource::<Assets<StandardMaterial>>()
+                    .get(handle)
+                    .unwrap();
+                if level == 1 && matches!(kind, HeroKind::StoneWarden | HeroKind::SolarVanguard) {
+                    assert_eq!(material.alpha_mode, AlphaMode::Blend);
+                    assert!(material.base_color.alpha() < 1.0);
+                    if kind == HeroKind::StoneWarden {
+                        assert_eq!(mesh, &art.starter_stone_swing);
+                        assert_ne!(mesh, &art.melee_shapes[0]);
+                    } else {
+                        assert_eq!(mesh, &art.melee_shapes[1]);
+                    }
+                } else {
+                    assert_eq!(
+                        handle,
+                        &art.tier_materials[basic_attack_visual_tier(level).index][kind.index()]
+                    );
+                    assert_eq!(mesh, &art.melee_shapes[melee_shape_index(kind)]);
+                    assert_eq!(material.alpha_mode, AlphaMode::Opaque);
+                }
+            }
+        }
     }
 
     #[test]
