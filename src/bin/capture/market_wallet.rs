@@ -31,13 +31,50 @@ pub fn install_fixture(app: &mut bevy::app::SubApp) {
 }
 pub fn install(app: &mut bevy::app::SubApp) {
     install_fixture(app);
-    app.init_resource::<WalletCapture>().add_systems(
-        PreUpdate,
-        exercise
-            .after(UiSystems::Focus)
-            .before(rogue_commander::game::SettingsInputSet),
+    app.init_resource::<WalletCapture>()
+        .add_systems(
+            PreUpdate,
+            exercise
+                .after(UiSystems::Focus)
+                .before(rogue_commander::game::SettingsInputSet),
+        )
+        .add_systems(PostUpdate, verify_first_purchase_frame);
+}
+fn verify_first_purchase_frame(world: &mut World) {
+    if world.resource::<WalletCapture>().frame != 45 {
+        return;
+    }
+    let actual = world.resource::<GameSession>().kills;
+    let fixture = world.resource::<WalletCapture>();
+    assert_eq!(fixture.before - actual, fixture.price);
+    let mut hud = None;
+    let mut header = None;
+    let mut feedback = None;
+    for (name, text) in world.query::<(&Name, &Text)>().iter(world) {
+        match name.as_str() {
+            "HUD skull counter" => hud = Some(text.0.clone()),
+            "Market wallet" => header = Some(text.0.clone()),
+            "Market feedback" => feedback = Some(text.0.clone()),
+            _ => {}
+        }
+    }
+    assert_eq!(hud.as_deref(), Some(actual.to_string().as_str()));
+    assert!(
+        header.as_ref().unwrap().contains(&format!("KILLS {actual:04}"))
+            || header.as_ref().unwrap().contains(&format!("击杀 {actual:04}"))
+    );
+    assert!(
+        feedback.as_ref().unwrap().contains("Bought")
+            || feedback.as_ref().unwrap().contains("已购买")
+    );
+    println!(
+        "[capture] PASS first purchase frame session={actual} HUD={} header={} notice={}",
+        hud.unwrap(),
+        header.unwrap().replace('\n', " / "),
+        feedback.unwrap()
     );
 }
+
 fn wallet(world: &mut World) -> String {
     let texts: Vec<_> = world
         .query::<(&Name, &Text)>()

@@ -1,0 +1,40 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `release` profile [optimized] target(s) in 4m 10s
+     Running unittests src/lib.rs (target/release/deps/rogue_commander-37d39db57aeef6a3)
+
+running 1 test
+test game::market::tests::paused_purchase_updates_hud_and_market_wallet_in_the_purchase_frame ... FAILED
+
+failures:
+
+---- game::market::tests::paused_purchase_updates_hud_and_market_wallet_in_the_purchase_frame stdout ----
+
+thread 'game::market::tests::paused_purchase_updates_hud_and_market_wallet_in_the_purchase_frame' (3174586) panicked at src/game/market.rs:2525:9:
+assertion `left == right` failed: HUD must show the same actual post-purchase balance as the market in this frame
+  left: "424"
+ right: "280"
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<alloc::string::String, &str>
+   4: rogue_commander::game::market::tests::paused_purchase_updates_hud_and_market_wallet_in_the_purchase_frame
+   5: <rogue_commander::game::market::tests::paused_purchase_updates_hud_and_market_wallet_in_the_purchase_frame::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+
+failures:
+    game::market::tests::paused_purchase_updates_hud_and_market_wallet_in_the_purchase_frame
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 688 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--lib`

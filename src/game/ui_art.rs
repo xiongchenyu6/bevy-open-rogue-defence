@@ -4,7 +4,7 @@ use super::super::{BondId, PlayerBuild};
 use super::*;
 
 #[derive(Component, Clone, Copy)]
-pub(super) enum HudValue {
+pub(crate) enum HudValue {
     Gold,
     Wood,
     Kills,
@@ -70,6 +70,23 @@ impl BondReview {
     }
 }
 
+pub(crate) fn update_resource_counters(
+    session: Res<GameSession>,
+    mut values: Query<(&HudValue, &mut Text)>,
+) {
+    for (value, mut text) in &mut values {
+        let amount = match value {
+            HudValue::Gold => session.gold,
+            HudValue::Wood => session.wood,
+            HudValue::Kills => session.kills,
+            _ => continue,
+        };
+        text.reborrow()
+            .map_unchanged(|value| &mut value.0)
+            .set_if_neq(amount.to_string());
+    }
+}
+
 #[allow(clippy::type_complexity)]
 pub(super) fn update_icon_hud(
     session: Res<GameSession>,
@@ -97,9 +114,6 @@ pub(super) fn update_icon_hud(
         text.reborrow()
             .map_unchanged(|value| &mut value.0)
             .set_if_neq(match value {
-                HudValue::Gold => session.gold.to_string(),
-                HudValue::Wood => session.wood.to_string(),
-                HudValue::Kills => session.kills.to_string(),
                 HudValue::Health if vitals.lives_remaining() == 0 => {
                     language.pick("NO LIVES LEFT", "生命已耗尽").into()
                 }
@@ -111,6 +125,7 @@ pub(super) fn update_icon_hud(
                 ),
                 HudValue::Health => format!("{:.0} / {:.0}", vitals.health, vitals.max_health),
                 HudValue::Energy => format!("{:.0} / {:.0}", vitals.energy, vitals.max_energy),
+                _ => continue,
             });
     }
     for (gauge, mut node) in &mut gauges {

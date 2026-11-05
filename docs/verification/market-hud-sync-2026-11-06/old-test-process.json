@@ -1,0 +1,16 @@
+{
+  "command": [
+    "nix",
+    "develop",
+    "--command",
+    "cargo",
+    "test",
+    "--locked",
+    "--release",
+    "--lib",
+    "paused_purchase_updates_hud_and_market_wallet_in_the_purchase_frame",
+    "-j2"
+  ],
+  "exit": 101,
+  "elapsed": 264.07368552000844
+}

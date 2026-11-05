@@ -17,6 +17,7 @@ use super::{
 #[path = "ui_art.rs"]
 mod ui_art;
 use ui_art::*;
+pub(crate) use ui_art::{HudValue, update_resource_counters};
 
 #[path = "bond_collection_ui.rs"]
 mod bond_collection_ui;
@@ -50,6 +51,7 @@ impl Plugin for GameUiPlugin {
                     update_joystick_visual,
                     update_hud,
                     update_icon_hud,
+                    update_resource_counters,
                     update_bond_strip,
                     update_small_controls,
                     update_fruit_button,
@@ -334,6 +336,7 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
                                 hud_icon(counter, &assets, icon, 22.0);
                                 counter.spawn((
                                     value,
+                                    Name::new(format!("HUD {icon} counter")),
                                     Text::new("0"),
                                     TextFont {
                                         font_size: FontSize::Px(13.0),

@@ -1,0 +1,15 @@
+# Same-frame market and HUD wallet synchronization
+
+Real public C6 R3 screenshot in sibling overlap-chapter6-r3-2026-11-06/32df463 displayed HUD424 and marketheader280 with BoughtHardenedPlate and changedstock. Strict observer correctly failed rather than accepting conflicting public balances. No old public route was retried or promoted to victory.
+
+Rootcause reproduced with actual production systems: old legal HUDconsumer-before-market order was explicitly imposed in a paused purchase fixture. Before424,20%discount,HardenedPlatefee144; actualPreviewBuy changedInteraction produced session280,marketheader0280,actualownedPlate,noticeBoughtPlate and rerolledslot, while HUDremained424 in that sameupdate. Focused release test failed exactly424!=280 (exit101); fullrawlog and compiledtest excerpt preserved. This is controlledECS fixture economy, not naturally earned publicgameplay.
+
+Minimal fix extracts only Gold/Wood/Kills resourcecounter rendering from the combined vitals/tooltip updater into one narrow production consumer, registered once. Existing set_if_neq behavior and numberformatting remain; old updater no longer writes those threevalues. MarketPlugin's existing complete action/notice/stock/presentation chain explicitly runs before that consumer. No numericbalance,prices,pausepolicy,purchaseinput or publichelperassertion changes. The finalregression uses realMarketPlugin scheduling (not forcedlegacyorder) and verifies sameframe session/header/HUD280 plusnotice,ownership,slotchange and pausedstate. Actualcounterentities have internalNames for nativeobservation.
+
+Validation: releasefull library688PASS/1ignored/0FAIL; Clippy releasealltargets-Dwarnings exit0; capturebuild exit0. Exactcommands/durations retained. No schedulingcycle was observed in complete tests/nativeproductionplugin execution.
+
+Nativecontrolledfixture cases: EN1280x720 and ZH667x375,200updates each,exit0. At firstpurchaseframe actualsession/HUDText/headerText all99700 after100000-300GuardianSeed; native PostUpdate assertion checks firstsameframe rather than waiting20frames. Both also retainednotice,changedslot,pausedclock,feedbackexpiry and actualclose/resume checks. Full14selectedframes and rawlogs retained. This is fixture100000 economy, not earnedchapterproof.
+
+ENframe44 visibly shows HUD99700 and header99700 plusBoughtGuardianSeed/changedSpiritDrumslot; independent pixelOCR readsbefore100000/100000 and after99700/99700. ZHcompactframe44 visibly shows header99700/ChineseBoughtnotice/changedslot, but fullscreenmodal obscuresHUD: its HUD99700 equality is an actualUITextentity assertion, NOT a claim bothnumbers are visually readable in that compactimage.
+
+final-input-receipt.json measures369 source/runtimeinputs and binarySHA immediately AFTER nativecompletion; it is explicitly not a prebuildattestation. source-hashes.json pins the fourownedfinalfiles. No new completepublicC6/Forge route was launched for this fix. Existing f5package remains an older binary until separately rebuilt. Cargo/native lane returned to attack_timing audit after bothcases terminal; no further sourceedits by this task.

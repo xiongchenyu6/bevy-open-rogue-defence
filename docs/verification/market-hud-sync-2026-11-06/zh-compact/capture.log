@@ -1,0 +1,33 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {35, 44, 45, 46, 65, 145, 185}; all 200 simulation/render updates retained
+[2m2026-11-05T22:12:54.914665Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-05T22:12:55.011282Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-05T22:12:55.890667Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-05T22:12:55.890914Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-05T22:12:56.788670Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[2m2026-11-05T22:13:02.326379Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact/frame00035.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact/frame00035.png (128610 bytes)
+[capture] PASS first purchase frame session=99700 HUD=99700 header=等级1｜击杀 99700｜补货 02:59 notice=已购买 守护种子
+[2m2026-11-05T22:13:02.781206Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact/frame00044.png
+[capture] saved 2/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact/frame00044.png (126187 bytes)
+[2m2026-11-05T22:13:02.916437Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact/frame00045.png
+[capture] saved 3/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact/frame00045.png (126187 bytes)
+[2m2026-11-05T22:13:03.065655Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact/frame00046.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact/frame00046.png (126187 bytes)
+[capture] PASS paused purchase wallet and restock retained, all offers/refresh fit: 等级1｜击杀 99700｜补货 02:59
+已购买 守护种子
+[2m2026-11-05T22:13:03.892125Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact/frame00065.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact/frame00065.png (126187 bytes)
+[capture] PASS real-time feedback expired while battle stayed paused: 等级1｜击杀 99700｜补货 02:59
+查看商品 · 装备效果在英雄吞噬后保留
+[2m2026-11-05T22:13:07.507339Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact/frame00145.png
+[capture] saved 6/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact/frame00145.png (129734 bytes)
+[capture] PASS accessible close toggle, battle resumed, closed-market hover hint visible
+[2m2026-11-05T22:13:09.338917Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact/frame00185.png
+[capture] saved 7/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact/frame00185.png (284935 bytes)
+[capture] all 7 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 200 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact

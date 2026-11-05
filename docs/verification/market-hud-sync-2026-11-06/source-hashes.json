@@ -1,0 +1,6 @@
+{
+  "src/game/market.rs": "6ccb3df2d827e5380cbcfdcb15d0daee84bfa43009cb7e3ebaaa944f59843f4f",
+  "src/game/ui.rs": "2c4be911fefbf3449c403c097e885b39879c026e08ad63d3db37c146c952e8ad",
+  "src/game/ui_art.rs": "7e1a94a28a73e44267ca56df9796a9d12e80274167581264e34b9ff9a6aa6faa",
+  "src/bin/capture/market_wallet.rs": "5e6f30aa2fd36ecb4315d787da63c957e777dc82943602bff70e394a90fc4490"
+}

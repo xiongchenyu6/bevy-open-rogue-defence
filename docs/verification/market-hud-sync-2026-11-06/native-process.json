@@ -1,0 +1,38 @@
+[
+  {
+    "name": "en-desktop",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "target/market-visual/debug/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/en-desktop",
+      "200",
+      "market-wallet",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "passed": true,
+    "elapsed": 18.356823252979666
+  },
+  {
+    "name": "zh-compact",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "target/market-visual/debug/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/market-hud-sync-2026-11-06/zh-compact",
+      "200",
+      "market-wallet",
+      "0xA11CE",
+      "667x375"
+    ],
+    "exit": 0,
+    "passed": true,
+    "elapsed": 15.553020259016193
+  }
+]
