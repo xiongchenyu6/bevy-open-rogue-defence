@@ -1,0 +1,138 @@
+{
+  "gameplay_commit": "358ff50",
+  "main_binary_sha256": "b96d0248f77d5ec2fc824df86d2b0a48181e7c60b0f7e12a04f6fea2f9c40868",
+  "probe_binary_sha256": "0c13c2190d97a95f03205a2c220a2d89fe1dffffe482350ea8af6e9878d30ba8",
+  "sources": {
+    "src/bin/perf_probe.rs": "6927d8082b0874c8a356283f143a6ee239ec1734d8446dc47bd776e9d2f23067",
+    "tools/desktop/verify_perf_probe.py": "a65f77191f31e250ec0793c33cd3ffa29b18c4568dfc98a788880b4fe9b744fe",
+    "Cargo.toml": "49306b95ce321a57f58bf9026a5d41bbbbc7b4b35234d4cbbb6cd36c54516c28",
+    "Cargo.lock": "d9716fd0d02528871aa31b44b1dcb0bb36938b625d171158d4c94e31e22efce1",
+    "flake.lock": "88d347f8e55f4fdf83aed46f71651a0c9bec6200e079ad8784b876b2f568c6a1"
+  },
+  "cpu": "AMD Ryzen 7 5800H;8 cores16 threads",
+  "gpu": "NVIDIA GeForce RTX3070 Laptop GPU;driver615.78.08;Vulkan",
+  "os": "NixOS Linux7.3.0 x86_64",
+  "build": "standard cargo --release profile; local Nix-linked, not portable SteamRuntime candidate",
+  "cases": [
+    {
+      "name": "final-fifo-1x",
+      "display": "Xvfb X11",
+      "result": {
+        "speed": 1,
+        "surface": "1280x720 Fifo format=Some(Bgra8UnormSrgb) frame_latency=None",
+        "adapter": "WgpuWrapper(AdapterInfo { name: \"NVIDIA GeForce RTX 3070 Laptop GPU\", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: \"0000:01:00.0\", driver: \"NVIDIA\", driver_info: \"615.78.08\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false })",
+        "sample_intervals": 955,
+        "p50_ms": 30.615192,
+        "p95_ms": 36.220807,
+        "p99_ms": 40.587317999999996,
+        "max_ms": 44.638276999999995,
+        "sample_skill_casts": [
+          7,
+          0,
+          5,
+          4,
+          0,
+          0
+        ],
+        "damage_observed": true,
+        "projectiles_observed": true
+      }
+    },
+    {
+      "name": "final-fifo-32x",
+      "display": "Xvfb X11",
+      "result": {
+        "speed": 32,
+        "surface": "1280x720 Fifo format=Some(Bgra8UnormSrgb) frame_latency=None",
+        "adapter": "WgpuWrapper(AdapterInfo { name: \"NVIDIA GeForce RTX 3070 Laptop GPU\", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: \"0000:01:00.0\", driver: \"NVIDIA\", driver_info: \"615.78.08\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false })",
+        "sample_intervals": 956,
+        "p50_ms": 30.723116,
+        "p95_ms": 35.999575,
+        "p99_ms": 38.03131,
+        "max_ms": 45.114267,
+        "sample_skill_casts": [
+          192,
+          0,
+          159,
+          133,
+          0,
+          0
+        ],
+        "damage_observed": true,
+        "projectiles_observed": true
+      }
+    },
+    {
+      "name": "final-immediate-1x",
+      "display": "Xvfb X11",
+      "result": {
+        "speed": 1,
+        "surface": "1280x720 Immediate format=Some(Bgra8UnormSrgb) frame_latency=None",
+        "adapter": "WgpuWrapper(AdapterInfo { name: \"NVIDIA GeForce RTX 3070 Laptop GPU\", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: \"0000:01:00.0\", driver: \"NVIDIA\", driver_info: \"615.78.08\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false })",
+        "sample_intervals": 961,
+        "p50_ms": 30.545106999999998,
+        "p95_ms": 35.635796,
+        "p99_ms": 39.836924,
+        "max_ms": 46.281338999999996,
+        "sample_skill_casts": [
+          7,
+          0,
+          5,
+          4,
+          0,
+          0
+        ],
+        "damage_observed": true,
+        "projectiles_observed": true
+      }
+    },
+    {
+      "name": "desktop-1x",
+      "display": "Wayland desktop",
+      "result": {
+        "speed": 1,
+        "surface": "1920x1080 Fifo format=Some(Bgra8UnormSrgb) frame_latency=None",
+        "adapter": "WgpuWrapper(AdapterInfo { name: \"NVIDIA GeForce RTX 3070 Laptop GPU\", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: \"0000:01:00.0\", driver: \"NVIDIA\", driver_info: \"615.78.08\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false })",
+        "sample_intervals": 3203,
+        "p50_ms": 9.067794000000001,
+        "p95_ms": 11.248577,
+        "p99_ms": 14.248943,
+        "max_ms": 17.213899,
+        "sample_skill_casts": [
+          7,
+          0,
+          5,
+          4,
+          0,
+          0
+        ],
+        "damage_observed": true,
+        "projectiles_observed": true
+      }
+    },
+    {
+      "name": "desktop-32x",
+      "display": "Wayland desktop",
+      "result": {
+        "speed": 32,
+        "surface": "1920x1080 Fifo format=Some(Bgra8UnormSrgb) frame_latency=None",
+        "adapter": "WgpuWrapper(AdapterInfo { name: \"NVIDIA GeForce RTX 3070 Laptop GPU\", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: \"0000:01:00.0\", driver: \"NVIDIA\", driver_info: \"615.78.08\", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false })",
+        "sample_intervals": 3194,
+        "p50_ms": 9.033446000000001,
+        "p95_ms": 11.474528,
+        "p99_ms": 14.397094,
+        "max_ms": 17.016763,
+        "sample_skill_casts": [
+          198,
+          0,
+          164,
+          138,
+          0,
+          0
+        ],
+        "damage_observed": true,
+        "projectiles_observed": true
+      }
+    }
+  ]
+}

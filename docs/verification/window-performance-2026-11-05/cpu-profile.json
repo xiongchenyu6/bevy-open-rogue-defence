@@ -1,0 +1,164 @@
+{
+  "method": "perf cpu-clock:u 99Hz, user callchains only; enabled after PERF_SAMPLE_BEGIN; instrumented Xvfb case, not baseline",
+  "samples": 2295,
+  "lost_samples": 0,
+  "event_count_approx_ns": 23181817950,
+  "top_self_cpu": [
+    {
+      "self_percent": 17.3,
+      "object": "perf_probe",
+      "symbol": "<core::panic::unwind_safe::AssertUnwindSafe<bevy_transform::systems::parallel::propagate_parent_transforms::{closure#2}::{closure#0}::{closure#0}> as core::future::future::Future>::poll"
+    },
+    {
+      "self_percent": 3.09,
+      "object": "perf_probe",
+      "symbol": "<bevy_ecs::query::par_iter::QueryParIter<(bevy_ecs::entity::Entity, &bevy_animation::AnimationTargetId, &bevy_animation::AnimatedBy, bevy_ecs::world::entity_access::except::EntityMutExcept<(bevy_animation::AnimationTargetId, bevy_animation::AnimatedBy, bevy_animation::AnimationPlayer, bevy_animation::graph::AnimationGraphHandle)>), bevy_ecs::query::filter::Without<bevy_ecs::resource::IsResource>>>::for_each_init::<<bevy_ecs::query::par_iter::QueryParIter<(bevy_ecs::entity::Entity, &bevy_animation::AnimationTargetId, &bevy_animation::AnimatedBy, bevy_ecs::world::entity_access::except::EntityMutExcept<(bevy_animation::AnimationTargetId, bevy_animation::AnimatedBy, bevy_animation::AnimationPlayer, bevy_animation::graph::AnimationGraphHandle)>), bevy_ecs::query::filter::Without<bevy_ecs::resource::IsResource>>>::for_each<bevy_animation::animate_targets::{closure#0}>::{closure#1}, <bevy_ecs::query::par_iter::QueryParIter<(bevy_ecs::entity::Entity, &bevy_animation::AnimationTargetId, &bevy_animation::AnimatedBy, bevy_ecs::world::entity_access::except::EntityMutExcept<(bevy_animation::AnimationTargetId, bevy_animation::AnimatedBy, bevy_animation::AnimationPlayer, bevy_animation::graph::AnimationGraphHandle)>), bevy_ecs::query::filter::Without<bevy_ecs::resource::IsResource>>>::for_each<bevy_animation::animate_targets::{closure#0}>::{closure#0}, ()>::{closure#0}"
+    },
+    {
+      "self_percent": 3.05,
+      "object": "libc.so.6",
+      "symbol": "__memmove_avx_unaligned_erms"
+    },
+    {
+      "self_percent": 2.0,
+      "object": "perf_probe",
+      "symbol": "bevy_pbr::render::skin::extract_skins"
+    },
+    {
+      "self_percent": 1.53,
+      "object": "perf_probe",
+      "symbol": "<indexmap::map::IndexMap<core::any::TypeId, bevy_ecs::component::info::ComponentId, bevy_platform::hash::NoOpHash>>::get::<core::any::TypeId>"
+    },
+    {
+      "self_percent": 1.48,
+      "object": "perf_probe",
+      "symbol": "<bevy_animation::AnimationEvaluationState>::blend_all"
+    },
+    {
+      "self_percent": 1.44,
+      "object": "[vdso]",
+      "symbol": "__vdso_clock_gettime"
+    },
+    {
+      "self_percent": 1.35,
+      "object": "libc.so.6",
+      "symbol": "syscall"
+    },
+    {
+      "self_percent": 1.31,
+      "object": "perf_probe",
+      "symbol": "<alloc::vec::Vec<bevy_ecs::entity::Entity>>::extend_desugared::<core::iter::adapters::filter_map::FilterMap<bevy_ecs::query::iter::QueryManyUniqueIter<(bevy_ecs::entity::Entity, (bevy_ecs::change_detection::params::Ref<bevy_transform::components::transform::Transform>, bevy_ecs::change_detection::params::Mut<bevy_transform::components::global_transform::GlobalTransform>, bevy_ecs::change_detection::params::Ref<bevy_transform::components::transform::TransformTreeChanged>), (core::option::Option<&bevy_ecs::hierarchy::Children>, &bevy_ecs::hierarchy::ChildOf)), (), bevy_ecs::entity::entity_set::UniqueEntityIter<core::slice::iter::Iter<bevy_ecs::entity::Entity>>>, bevy_transform::systems::parallel::propagate_descendants_unchecked::{closure#0}>>"
+    },
+    {
+      "self_percent": 1.22,
+      "object": "perf_probe",
+      "symbol": "<bevy_tasks::task_pool::TaskPool>::scope_with_executor_inner::<bevy_transform::systems::parallel::propagate_parent_transforms::{closure#2}, ()>"
+    },
+    {
+      "self_percent": 1.09,
+      "object": "perf_probe",
+      "symbol": "<bevy_ecs::schedule::executor::multi_threaded::Context>::tick_executor"
+    },
+    {
+      "self_percent": 1.09,
+      "object": "perf_probe",
+      "symbol": "bevy_math::curve::cores::uneven_interp"
+    },
+    {
+      "self_percent": 1.05,
+      "object": "perf_probe",
+      "symbol": "<fixedbitset::FixedBitSet>::is_disjoint"
+    },
+    {
+      "self_percent": 1.05,
+      "object": "perf_probe",
+      "symbol": "bevy_pbr::render::mesh::extract_mesh_for_gpu_building"
+    },
+    {
+      "self_percent": 1.0,
+      "object": "perf_probe",
+      "symbol": "<bevy_ecs::world::entity_access::except::EntityMutExcept<(bevy_animation::AnimationTargetId, bevy_animation::AnimatedBy, bevy_animation::AnimationPlayer, bevy_animation::graph::AnimationGraphHandle)>>::get_mut::<bevy_transform::components::transform::Transform>"
+    },
+    {
+      "self_percent": 0.96,
+      "object": "perf_probe",
+      "symbol": "<&mut bevy_transform::systems::parallel::propagate_descendants_unchecked::{closure#0} as core::ops::function::FnMut<((bevy_ecs::entity::Entity, (bevy_ecs::change_detection::params::Ref<bevy_transform::components::transform::Transform>, bevy_ecs::change_detection::params::Mut<bevy_transform::components::global_transform::GlobalTransform>, bevy_ecs::change_detection::params::Ref<bevy_transform::components::transform::TransformTreeChanged>), (core::option::Option<&bevy_ecs::hierarchy::Children>, &bevy_ecs::hierarchy::ChildOf)),)>>::call_mut"
+    },
+    {
+      "self_percent": 0.96,
+      "object": "perf_probe",
+      "symbol": "<core::panic::unwind_safe::AssertUnwindSafe<bevy_transform::systems::mark_dirty_trees::{closure#0}::{closure#1}> as core::future::future::Future>::poll"
+    },
+    {
+      "self_percent": 0.92,
+      "object": "libc.so.6",
+      "symbol": "__memset_avx2_unaligned_erms"
+    },
+    {
+      "self_percent": 0.87,
+      "object": "libc.so.6",
+      "symbol": "_int_malloc"
+    },
+    {
+      "self_percent": 0.87,
+      "object": "libc.so.6",
+      "symbol": "malloc"
+    },
+    {
+      "self_percent": 0.78,
+      "object": "perf_probe",
+      "symbol": "<bevy_ecs::query::iter::QueryIter<bevy_ecs::entity::Entity, bevy_ecs::query::filter::Or<(bevy_ecs::query::filter::Changed<bevy_transform::components::transform::Transform>, bevy_ecs::query::filter::Changed<bevy_ecs::hierarchy::ChildOf>, bevy_ecs::query::filter::Added<bevy_transform::components::global_transform::GlobalTransform>)>>>::fold_over_storage_range::<(bevy_utils::buffered_channel::BufferedSender<bevy_ecs::entity::Entity>, bevy_utils::buffered_channel::BufferedSender<bevy_ecs::entity::Entity>), <bevy_ecs::query::par_iter::QueryParIter<bevy_ecs::entity::Entity, bevy_ecs::query::filter::Or<(bevy_ecs::query::filter::Changed<bevy_transform::components::transform::Transform>, bevy_ecs::query::filter::Changed<bevy_ecs::hierarchy::ChildOf>, bevy_ecs::query::filter::Added<bevy_transform::components::global_transform::GlobalTransform>)>>>::for_each_init<bevy_transform::systems::mark_dirty_trees::{closure#0}::{closure#2}::{closure#1}, bevy_transform::systems::mark_dirty_trees::{closure#0}::{closure#2}::{closure#0}, (bevy_utils::buffered_channel::BufferedSender<bevy_ecs::entity::Entity>, bevy_utils::buffered_channel::BufferedSender<bevy_ecs::entity::Entity>)>::{closure#0}>"
+    },
+    {
+      "self_percent": 0.74,
+      "object": "perf_probe",
+      "symbol": "<bevy_animation::AnimationEvaluationState>::commit_all"
+    },
+    {
+      "self_percent": 0.7,
+      "object": "perf_probe",
+      "symbol": "<futures_lite::future::Or<futures_lite::future::Or<<bevy_tasks::task_pool::TaskPool>::new_internal::{closure#0}::{closure#0}::{closure#0}::{closure#0}::{closure#0}, async_channel::Recv<()>>, <async_executor::State>::run<core::result::Result<(), async_channel::RecvError>, futures_lite::future::Or<<bevy_tasks::task_pool::TaskPool>::new_internal::{closure#0}::{closure#0}::{closure#0}::{closure#0}::{closure#0}, async_channel::Recv<()>>>::{closure#0}::{closure#0}> as core::future::future::Future>::poll"
+    },
+    {
+      "self_percent": 0.7,
+      "object": "perf_probe",
+      "symbol": "bevy_mesh::skinning::entity_aabb_from_skinned_mesh_bounds"
+    },
+    {
+      "self_percent": 0.65,
+      "object": "perf_probe",
+      "symbol": "<bevy_animation::animation_curves::AnimatableCurve<bevy_animation::animation_curves::AnimatedField<bevy_transform::components::transform::Transform, glam::f32::sse2::quat::Quat, <bevy_gltf::loader::GltfLoader>::load_gltf::{closure#0}::{closure#32}>, bevy_math::curve::sample_curves::UnevenSampleAutoCurve<glam::f32::sse2::quat::Quat>> as bevy_animation::animation_curves::AnimationCurve>::apply"
+    },
+    {
+      "self_percent": 0.57,
+      "object": "libxcb.so.1.1.0",
+      "symbol": "discard_reply"
+    },
+    {
+      "self_percent": 0.57,
+      "object": "perf_probe",
+      "symbol": "<bevy_ecs::query::iter::QueryIter<(bevy_ecs::entity::Entity, &bevy_animation::AnimationTargetId, &bevy_animation::AnimatedBy, bevy_ecs::world::entity_access::except::EntityMutExcept<(bevy_animation::AnimationTargetId, bevy_animation::AnimatedBy, bevy_animation::AnimationPlayer, bevy_animation::graph::AnimationGraphHandle)>), bevy_ecs::query::filter::Without<bevy_ecs::resource::IsResource>>>::fold_over_storage_range::<(), <bevy_ecs::query::par_iter::QueryParIter<(bevy_ecs::entity::Entity, &bevy_animation::AnimationTargetId, &bevy_animation::AnimatedBy, bevy_ecs::world::entity_access::except::EntityMutExcept<(bevy_animation::AnimationTargetId, bevy_animation::AnimatedBy, bevy_animation::AnimationPlayer, bevy_animation::graph::AnimationGraphHandle)>), bevy_ecs::query::filter::Without<bevy_ecs::resource::IsResource>>>::for_each_init<<bevy_ecs::query::par_iter::QueryParIter<(bevy_ecs::entity::Entity, &bevy_animation::AnimationTargetId, &bevy_animation::AnimatedBy, bevy_ecs::world::entity_access::except::EntityMutExcept<(bevy_animation::AnimationTargetId, bevy_animation::AnimatedBy, bevy_animation::AnimationPlayer, bevy_animation::graph::AnimationGraphHandle)>), bevy_ecs::query::filter::Without<bevy_ecs::resource::IsResource>>>::for_each<bevy_animation::animate_targets::{closure#0}>::{closure#1}, <bevy_ecs::query::par_iter::QueryParIter<(bevy_ecs::entity::Entity, &bevy_animation::AnimationTargetId, &bevy_animation::AnimatedBy, bevy_ecs::world::entity_access::except::EntityMutExcept<(bevy_animation::AnimationTargetId, bevy_animation::AnimatedBy, bevy_animation::AnimationPlayer, bevy_animation::graph::AnimationGraphHandle)>), bevy_ecs::query::filter::Without<bevy_ecs::resource::IsResource>>>::for_each<bevy_animation::animate_targets::{closure#0}>::{closure#0}, ()>::{closure#0}>"
+    },
+    {
+      "self_percent": 0.57,
+      "object": "perf_probe",
+      "symbol": "<bevy_ecs::query::par_iter::QueryParIter<(bevy_ecs::entity::Entity, &bevy_camera::visibility::InheritedVisibility, &mut bevy_camera::visibility::ViewVisibility, core::option::Option<&bevy_camera::visibility::VisibilityClass>, core::option::Option<&bevy_camera::visibility::render_layers::RenderLayers>, core::option::Option<&bevy_camera::primitives::Aabb>, core::option::Option<&bevy_camera::primitives::Sphere>, &bevy_transform::components::global_transform::GlobalTransform, bevy_ecs::query::fetch::Has<bevy_camera::visibility::NoFrustumCulling>, bevy_ecs::query::fetch::Has<bevy_camera::visibility::range::VisibilityRange>), bevy_ecs::query::filter::Without<bevy_camera::visibility::NoCpuCulling>>>::for_each_init::<bevy_camera::visibility::check_visibility_cpu_culling::{closure#1}, bevy_camera::visibility::check_visibility_cpu_culling::{closure#0}, core::cell::RefMut<indexmap::map::IndexMap<core::any::TypeId, alloc::vec::Vec<bevy_ecs::entity::Entity>, bevy_platform::hash::NoOpHash>>>::{closure#0}"
+    },
+    {
+      "self_percent": 0.57,
+      "object": "perf_probe",
+      "symbol": "<bevy_math::curve::sample_curves::UnevenSampleAutoCurve<glam::f32::vec3::Vec3> as bevy_math::curve::Curve<glam::f32::vec3::Vec3>>::sample_clamped"
+    },
+    {
+      "self_percent": 0.52,
+      "object": "perf_probe",
+      "symbol": "<core::panic::unwind_safe::AssertUnwindSafe<bevy_pbr::render::mesh::collect_meshes_for_gpu_building::{closure#0}::{closure#1}> as core::future::future::Future>::poll"
+    }
+  ],
+  "raw_data_path": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/window-perf-profile-child-2026-11-05/cpu.data",
+  "raw_data_sha256": "49d52175fabd92f0c168abe4dc1cbd0afe6e96803733b5e15461bbc7dbfd661f",
+  "producer_identity": {
+    "binary_sha256": "1f04507e580228ed38aadcbe69583acf3067d5b98a450f5d43c204260a0d0192",
+    "source_sha256": "5817ea4e37dc65ce32853357c0fda5600d0517654a6d32bff52eaaa4ec232163"
+  }
+}
