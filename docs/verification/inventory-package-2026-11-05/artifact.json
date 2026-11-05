@@ -1,0 +1,9 @@
+{
+  "source_commit": "49562e6fa1f1cf781eb9f0b8a4155e7a15ec22cb",
+  "package_directory": "target/desktop-packages-inventory-nov5/rogue-commander-linux",
+  "tar": "target/desktop-packages-inventory-nov5/rogue-commander-linux-0.1.0.tar.gz",
+  "tar_bytes": 60724593,
+  "tar_sha256": "74df0ce8e2313249a5283fb3ed6ac53de85a6f221fd8c91186835c73a6549246",
+  "binary_sha256": "dd603128de8f280c2e9b515fe7e7836969f03d412e9a122eb95dccb73f4b7106",
+  "scope": "Ubuntu24 X11 software Vulkan, offline read-only package. No Steam/hardware FPS/physical audio claim."
+}
