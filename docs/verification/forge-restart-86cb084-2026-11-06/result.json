@@ -1,0 +1,812 @@
+{
+  "scope": "Same earned profile restart; no purchase, training, save copy or resource grant",
+  "package_version": {
+    "binary_sha256": "b5bc6c351bf5a781ae43dd6bb8c21ffc015549b70ddd46aa297692e1feea9cf0",
+    "git_commit": "86cb08498e446a27b31554f8cb6dd3eb641e214b",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "source_profile": "/earned-state",
+  "previous_proof": "/previous-proof/result.json",
+  "progress_before": {
+    "unlocked": 5,
+    "currency": 575,
+    "cleared": "111100",
+    "upgrades": [
+      5,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "save_before_sha256": "da5bf0a9ca3f4032a265425f9989bda292d8c0c2622848157df6d2c0223ba825",
+  "operation_budget_seconds": 180,
+  "completed": true,
+  "result": "PASS",
+  "menu_shards_ocr": [
+    "575 LEGACY SHARDS",
+    120,
+    91,
+    256,
+    103
+  ],
+  "selected_caption_ocr": [
+    "STORM SAVANT",
+    173,
+    483,
+    295,
+    497
+  ],
+  "attributes": {
+    "hero": "StormSavant",
+    "level": 1,
+    "speed": 1,
+    "strength": 30.0,
+    "strength_ocr": [
+      [
+        "Strength",
+        203,
+        235,
+        259,
+        250
+      ],
+      [
+        "30.0",
+        457,
+        235,
+        484,
+        247
+      ],
+      [
+        "Strength",
+        204,
+        235,
+        259,
+        250
+      ],
+      [
+        "Strength 30.0 Base attack 48.0 Armor 0.0",
+        204,
+        231,
+        1076,
+        254
+      ]
+    ]
+  },
+  "panel_open_attempts": [
+    {
+      "visit": null,
+      "screenshot": "restart-inventory-open-00.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1483,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "restart-inventory-open-01.png",
+      "state": "inventory",
+      "requests": 1
+    }
+  ],
+  "equipment_count": 0,
+  "empty_inventory_ocr": [
+    [
+      "Settings",
+      615,
+      25,
+      664,
+      39
+    ],
+    [
+      "24:35",
+      1209,
+      27,
+      1257,
+      42
+    ],
+    [
+      "& om",
+      24,
+      34,
+      79,
+      54
+    ],
+    [
+      "oe",
+      169,
+      48,
+      193,
+      58
+    ],
+    [
+      "+ lax | ou",
+      993,
+      25,
+      1107,
+      67
+    ],
+    [
+      "e 4,",
+      597,
+      58,
+      643,
+      74
+    ],
+    [
+      "ROUND 0/5,",
+      1155,
+      50,
+      1257,
+      66
+    ],
+    [
+      "LVES3",
+      23,
+      87,
+      61,
+      96
+    ],
+    [
+      "@ 940/940",
+      25,
+      107,
+      101,
+      124
+    ],
+    [
+      "EQUIPMENT - 0",
+      215,
+      108,
+      366,
+      127
+    ],
+    [
+      "Gear",
+      904,
+      110,
+      933,
+      121
+    ],
+    [
+      "Forge",
+      960,
+      110,
+      993,
+      124
+    ],
+    [
+      "Close",
+      1019,
+      109,
+      1055,
+      122
+    ],
+    [
+      "f",
+      39,
+      134,
+      43,
+      136
+    ],
+    [
+      "504/504",
+      53,
+      135,
+      101,
+      144
+    ],
+    [
+      "7",
+      49,
+      170,
+      54,
+      174
+    ],
+    [
+      "7",
+      51,
+      175,
+      52,
+      179
+    ],
+    [
+      "20 Be",
+      83,
+      164,
+      161,
+      183
+    ],
+    [
+      "No equipment yet.",
+      226,
+      160,
+      362,
+      177
+    ],
+    [
+      "=",
+      174,
+      204,
+      181,
+      207
+    ],
+    [
+      "Visit the Black Market (B) to buy",
+      225,
+      179,
+      460,
+      196
+    ],
+    [
+      "equipment with kill tokens.",
+      225,
+      198,
+      427,
+      215
+    ],
+    [
+      "\u00a9",
+      175,
+      209,
+      192,
+      226
+    ],
+    [
+      "No equipment",
+      748,
+      236,
+      880,
+      257
+    ],
+    [
+      "@>",
+      53,
+      250,
+      95,
+      276
+    ],
+    [
+      "The Black Market opens after 3 minutes.",
+      556,
+      341,
+      815,
+      374
+    ],
+    [
+      ">",
+      1201,
+      350,
+      1218,
+      362
+    ],
+    [
+      "All owned equipment stays active. Inspect an icon; scroll details to read more.",
+      209,
+      592,
+      643,
+      620
+    ],
+    [
+      "No slot limit. Forge consumes materials and inherits all their effects.",
+      214,
+      614,
+      589,
+      627
+    ],
+    [
+      "LEVEL 1 24/60 xP",
+      490,
+      658,
+      588,
+      686
+    ],
+    [
+      "& a",
+      682,
+      666,
+      730,
+      688
+    ],
+    [
+      "> Shift",
+      783,
+      670,
+      833,
+      685
+    ],
+    [
+      "36",
+      1236,
+      674,
+      1245,
+      683
+    ],
+    [
+      "\u4e00",
+      432,
+      686,
+      518,
+      690
+    ],
+    [
+      "y GATE 1000 /1000 Settngs (4x | 24:35",
+      42,
+      21,
+      1257,
+      54
+    ],
+    [
+      "& sum | AY - :",
+      24,
+      22,
+      1234,
+      58
+    ],
+    [
+      "Ci ae, * [ ~ | \u4e0a RouNDO/5",
+      169,
+      29,
+      1257,
+      78
+    ],
+    [
+      "Lives A conences",
+      19,
+      70,
+      1231,
+      108
+    ],
+    [
+      "yg 504/504",
+      28,
+      134,
+      101,
+      144
+    ],
+    [
+      "en 20 Be No equipment yet.",
+      24,
+      151,
+      365,
+      184
+    ],
+    [
+      "Visit the Black Market (B) to buy",
+      225,
+      179,
+      460,
+      201
+    ],
+    [
+      "& Qy | eauipment with kill tokens.",
+      33,
+      189,
+      427,
+      230
+    ],
+    [
+      "@ No equipment",
+      53,
+      236,
+      880,
+      276
+    ],
+    [
+      "0",
+      90,
+      259,
+      95,
+      268
+    ],
+    [
+      "The Black Market opens after 3 minutes. \u00a2 >",
+      556,
+      343,
+      1218,
+      383
+    ],
+    [
+      "fa y",
+      1085,
+      373,
+      1236,
+      411
+    ],
+    [
+      "Allowned equipment stays active. Inspect an icon; scroll details to read more.",
+      209,
+      596,
+      643,
+      618
+    ],
+    [
+      "No slot limit. Forge consumes materials and inherits all their effects.",
+      210,
+      610,
+      589,
+      632
+    ],
+    [
+      "LEVEL 1 24/60 xP &u > shift B 02:36",
+      490,
+      655,
+      1248,
+      687
+    ],
+    [
+      "24:35",
+      1209,
+      28,
+      1257,
+      42
+    ],
+    [
+      "+",
+      993,
+      44,
+      999,
+      50
+    ],
+    [
+      "1x",
+      1038,
+      42,
+      1056,
+      52
+    ],
+    [
+      "\u5916",
+      1101,
+      41,
+      1107,
+      53
+    ],
+    [
+      "ROUND 0/5",
+      1156,
+      46,
+      1257,
+      73
+    ],
+    [
+      "LIVE:",
+      24,
+      95,
+      45,
+      96
+    ],
+    [
+      "by",
+      1138,
+      77,
+      1163,
+      93
+    ],
+    [
+      ".",
+      1220,
+      84,
+      1223,
+      85
+    ],
+    [
+      "94",
+      83,
+      111,
+      94,
+      117
+    ],
+    [
+      "Close",
+      1019,
+      110,
+      1054,
+      122
+    ],
+    [
+      "71",
+      51,
+      175,
+      61,
+      179
+    ],
+    [
+      "2 \u00ab0 Ae",
+      89,
+      152,
+      160,
+      190
+    ],
+    [
+      "The Black Market opens after 3 minutes.",
+      556,
+      345,
+      815,
+      373
+    ],
+    [
+      "Allowned equipment stays active. Inspect an icon; scroll details to read more.",
+      213,
+      591,
+      643,
+      620
+    ],
+    [
+      "12",
+      527,
+      676,
+      546,
+      677
+    ],
+    [
+      "%",
+      690,
+      675,
+      695,
+      680
+    ],
+    [
+      "+",
+      717,
+      674,
+      729,
+      683
+    ],
+    [
+      "> Shift",
+      783,
+      673,
+      833,
+      683
+    ],
+    [
+      "\u2018 Py ROUND 0/5",
+      170,
+      42,
+      1257,
+      74
+    ],
+    [
+      "LIVE: Aj CHALLENGES",
+      24,
+      77,
+      1230,
+      96
+    ],
+    [
+      "On co Be No equipment yet.",
+      24,
+      152,
+      366,
+      184
+    ],
+    [
+      "by || Bo Qn\u00bb | equipment with kill tokens.",
+      38,
+      190,
+      427,
+      225
+    ],
+    [
+      "> No equipment",
+      63,
+      236,
+      880,
+      257
+    ],
+    [
+      "The Black Market opens after 3 minutes.",
+      556,
+      347,
+      815,
+      371
+    ],
+    [
+      "Allowned equipment stays active. Inspect an icon; scroll details to read more.",
+      213,
+      592,
+      643,
+      618
+    ],
+    [
+      "LEVEL1 24/60 en Sr Shift & 023",
+      491,
+      664,
+      1241,
+      688
+    ]
+  ],
+  "inventory_close_observations": [
+    {
+      "phase": "operation_start",
+      "wall": 221294.536671431,
+      "operation_deadline": 221314.536666612,
+      "hold_budget_seconds": 10
+    },
+    {
+      "screenshot": "restart-close-001.png",
+      "rows": [
+        [
+          "Gear",
+          904,
+          110,
+          933,
+          121
+        ],
+        [
+          "Forge",
+          960,
+          110,
+          993,
+          124
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1055,
+          122
+        ],
+        [
+          "EQUIPMENT - 0",
+          215,
+          108,
+          366,
+          127
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1054,
+          122
+        ]
+      ]
+    },
+    {
+      "phase": "header_observed",
+      "wall": 221296.336730027,
+      "elapsed": 1.8000585959816817
+    },
+    {
+      "input": "mouseDown",
+      "target": [
+        "Close",
+        1019,
+        110,
+        1055,
+        122
+      ],
+      "wall": 221296.336781571,
+      "dispatch_finished": 221296.346280461,
+      "hold_deadline": 221306.336781571,
+      "operation_deadline": 221314.536666612
+    },
+    {
+      "screenshot": "restart-close-004.png",
+      "rows": [
+        [
+          "Gear",
+          904,
+          110,
+          933,
+          121
+        ],
+        [
+          "Forge",
+          960,
+          110,
+          993,
+          124
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1055,
+          122
+        ],
+        [
+          "EQUIPMENT - 0",
+          215,
+          108,
+          366,
+          127
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1054,
+          122
+        ]
+      ]
+    },
+    {
+      "phase": "held_observation",
+      "wall": 221298.037790272,
+      "held_seconds": 1.7010087009985,
+      "inventory_open": true,
+      "close": [
+        "Close",
+        1019,
+        110,
+        1055,
+        122
+      ]
+    },
+    {
+      "screenshot": "restart-close-006.png",
+      "rows": [
+        [
+          "a tl (ie DS NE.",
+          200,
+          80,
+          696,
+          145
+        ],
+        [
+          "=~",
+          200,
+          88,
+          343,
+          145
+        ],
+        [
+          "\u00a9. Ne",
+          516,
+          80,
+          697,
+          145
+        ]
+      ]
+    },
+    {
+      "phase": "held_observation",
+      "wall": 221301.092597957,
+      "held_seconds": 4.755816385993967,
+      "inventory_open": false,
+      "close": null
+    },
+    {
+      "input": "mouseUp",
+      "wall": 221301.096832249,
+      "held_seconds": 4.760050677985419
+    },
+    {
+      "phase": "operation_end",
+      "wall": 221301.096836999,
+      "elapsed": 6.560165567992954
+    }
+  ],
+  "resume_countdown": {
+    "before": 1464,
+    "after": 1454
+  },
+  "quit_exit": 0,
+  "save_after_sha256": "da5bf0a9ca3f4032a265425f9989bda292d8c0c2622848157df6d2c0223ba825"
+}
