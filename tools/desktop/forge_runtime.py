@@ -4,7 +4,7 @@ import hashlib,json,os,re,shutil,subprocess,threading,time
 from pathlib import Path
 from smoke_runtime import ocr_screenshot,find_text,normalized,read_hud_wallet,read_toolbar_speed,wait_basic_commander
 from campaign_runtime import read_progress
-from campaign_equipment_runtime import (TILE_LEFTS, INVENTORY_TITLE_CROP, close_visible_inventory, inventory_header_rows,
+from campaign_equipment_runtime import (TILE_LEFTS, INVENTORY_TITLE_CROP, close_visible_inventory, inventory_header_rows, select_visible_inventory_item,
     screenshot_wallet, choice_pending, crop_text, inventory_count,
     inventory_icons, inventory_open, selected_inventory_name, market_closed,
     has_gear_rows, verify_deduction, screenshot_battle_seconds, wait_panel_open, public_panel_state, poll_market_offer, offer_identity)
@@ -165,7 +165,10 @@ def main():
         end = time.monotonic() + 90
         for index, (x, y) in enumerate(inventory_icons(count)):
             assert time.monotonic() < end, 'Inventory search exceeded90seconds'
-            click(x, y)
+            select_visible_inventory_item(
+                lambda name: shot(prefix+'-'+name), call, win, env, index,
+                min(end, time.monotonic()+10),
+                report.setdefault('inventory_selection_observations', []))
             image = shot(f'{prefix}-icon-{index}.png')
             text = crop_text(image, INVENTORY_TITLE_CROP, env)
             details.append(selected_inventory_name(text))

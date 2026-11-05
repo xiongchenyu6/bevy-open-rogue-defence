@@ -286,6 +286,50 @@ def inventory_header_rows(image, env=None):
                 for text,x,y,right,bottom in ocr_screenshot(crop, env)]
 
 
+def inventory_item_selected(image, index, count, env=None):
+    """Selection ACK only: one padding pixel, never an equipment identity."""
+    assert 0 <= index < count, 'Item index outside actual owned count'
+    x, y = inventory_icons(count)[index]
+    pixel = subprocess.check_output(['convert', str(image), '-crop',
+        f'1x1+{x-45}+{y-45}', '+repage', 'RGB:-'], env=env)
+    assert pixel in (bytes((56,49,26)), bytes((9,14,17))), \
+        ('Unknown inventory card padding; selection not acknowledged', index, list(pixel))
+    return pixel == bytes((56,49,26))
+
+
+def select_visible_inventory_item(shot, call, window, env, index, deadline, observations,
+                                  now=time.monotonic, pause=time.sleep):
+    """One held OS press, acknowledged by the actual selected-card background."""
+    image = shot(f'item-{index}-before.png')
+    rows = inventory_header_rows(image, env)
+    assert inventory_open(rows), 'Actual inventory must be visible before item selection'
+    count = inventory_count(rows)
+    assert 0 <= index < count, 'Item index outside actual owned count'
+    x, y = inventory_icons(count)[index]
+    # Reject unknown/background pixels before any OS input, even on a stale header.
+    inventory_item_selected(image, index, count, env)
+    assert now() < deadline, 'Inventory selection deadline expired before input'
+    pressed = False
+    try:
+        call(['xdotool','mousemove','--window',window,str(x),str(y)])
+        pressed = True
+        call(['xdotool','mousedown','1'])
+        observations.append(dict(input='mouseDown', index=index, center=[x,y], wall=now()))
+        while now() < deadline:
+            image = shot(f'item-{index}-ack-{len(observations):03}.png')
+            selected = inventory_item_selected(image, index, count, env)
+            observations.append(dict(screenshot=image.name, index=index, selected=selected))
+            assert now() < deadline, 'Inventory selection observation exceeded deadline'
+            if selected:
+                return
+            pause(.1)
+        raise AssertionError('Actual inventory card selection not acknowledged within budget')
+    finally:
+        if pressed:
+            call(['xdotool','mouseup','1'])
+            observations.append(dict(input='mouseUp', index=index, wall=now()))
+
+
 def close_visible_inventory(read_rows, mouse_down, mouse_up, deadline, observations,
                             now=time.monotonic, pause=time.sleep):
     """One visible Close press; release even if observation or deadline fails."""
@@ -608,7 +652,11 @@ class EquipmentPolicy:
                 purchase['owned_names'] = names
                 for index, (x, y) in enumerate(inventory_icons(count)):
                     assert time.monotonic() < deadline, 'Inventory inspection exceeded visit budget'
-                    self.click(('', x, y, x, y))
+                    select_visible_inventory_item(
+                        lambda name: self.ui['shot'](prefix + '-' + name),
+                        self.ui['call'], self.ui['window'](), self.ui['env'], index,
+                        min(deadline, time.monotonic()+10),
+                        purchase.setdefault('selection_observations', []))
                     image = self.ui['shot'](prefix + f'-inventory-icon-{index}.png')
                     text = crop_text(image, INVENTORY_TITLE_CROP, self.ui['env'])
                     name = selected_inventory_name(text)
