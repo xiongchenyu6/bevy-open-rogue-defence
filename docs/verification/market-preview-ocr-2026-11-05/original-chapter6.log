@@ -1,0 +1,29 @@
+{"sample": 1, "wall_seconds": 6.7, "terminal": null}
+{"sample": 2, "wall_seconds": 17.1, "terminal": null}
+{"sample": 3, "wall_seconds": 27.4, "terminal": null}
+{"sample": 4, "wall_seconds": 37.4, "terminal": null}
+{"sample": 5, "wall_seconds": 47.7, "terminal": null}
+{"sample": 6, "wall_seconds": 58.3, "terminal": null}
+{"sample": 7, "wall_seconds": 69.1, "terminal": null}
+{"sample": 8, "wall_seconds": 80.1, "terminal": null}
+{"sample": 9, "wall_seconds": 90.6, "terminal": null}
+{"sample": 10, "wall_seconds": 101.4, "terminal": null}
+{"sample": 11, "wall_seconds": 112.2, "terminal": null}
+{"sample": 12, "wall_seconds": 123.0, "terminal": null}
+{"sample": 13, "wall_seconds": 133.6, "terminal": null}
+{"sample": 14, "wall_seconds": 145.0, "terminal": null}
+{"sample": 15, "wall_seconds": 156.7, "terminal": null}
+{"sample": 16, "wall_seconds": 167.7, "terminal": null}
+{"sample": 17, "wall_seconds": 179.9, "terminal": null}
+{"sample": 18, "wall_seconds": 191.4, "terminal": null}
+Traceback (most recent call last):
+  File "/harness/campaign_equipment_runtime.py", line 530, in <module>
+    main(EquipmentPolicy)
+  File "/harness/campaign_runtime.py", line 268, in main
+    policy.observe(text_lines, time.monotonic() - started)
+  File "/harness/campaign_equipment_runtime.py", line 428, in observe
+    inspected.append(self.inspect_offer(index, prefix, deadline))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/campaign_equipment_runtime.py", line 378, in inspect_offer
+    raise AssertionError(f'Offer {index} did not show a matching preview within budget: {attempts}')
+AssertionError: Offer 1 did not show a matching preview within budget: [{'tile': 'Arc Lens', 'price': '180', 'preview': 'Wind Boots + Equipment', 'error': "Tile/preview mismatch: 'Arc Lens', 'Wind Boots + Equipment'"}]

@@ -179,6 +179,42 @@ def inspected_offer(tile_text, price_text, preview_text, index):
                 tile_ocr=tile_text, price_ocr=price_text, preview_ocr=preview_text)
 
 
+def offer_identity(offer):
+    return (normalized(offer['name']), offer['price'], normalized(offer['category']), offer['index'])
+
+
+def market_header_text(path, env):
+    text = crop_text(path, '150x24+612+209', env)
+    assert text == 'BLACK MARKET', f'Current pixels do not show the market header: {text!r}'
+    return text
+
+
+def poll_market_offer(shot, env, index, prefix, deadline, observations, expected=None,
+                      now=time.monotonic, pause=time.sleep):
+    end = min(deadline, now() + 20)
+    left = TILE_LEFTS[index]
+    for attempt in range(10):
+        assert now() < end, f'Offer {index} preview deadline exhausted: {observations}'
+        image = shot(prefix + f'-inspect-{index}-{attempt}.png')
+        header = market_header_text(image, env)  # Reject battle/unknown pixels before item reads.
+        tile = tile_name_text(image, left, env)
+        price = crop_text(image, f'39x23+{left+52}+384', env, digits=True)
+        preview = crop_text(image, PREVIEW_CROP, env)
+        record = dict(screenshot=image.name, header=header, tile=tile, price=price, preview=preview)
+        observations.append(record)
+        try:
+            offer = inspected_offer(tile, price, preview, index)
+            if expected is not None:
+                assert offer_identity(offer) == offer_identity(expected), 'Selected offer identity changed'
+        except AssertionError as error:
+            record['error'] = str(error)
+            pause(.2)
+            continue
+        assert now() < end, 'Offer verification exceeded remaining preview budget'
+        return offer
+    raise AssertionError(f'Offer {index} preview never matched exact tile/price/category: {observations}')
+
+
 def affordable_gear(offers, wallet):
     assert len(offers) == 5 and {item['index'] for item in offers} == set(range(5)), \
         'All five natural offers must be inspected before choosing cheapest equipment'
@@ -351,31 +387,18 @@ class EquipmentPolicy:
         left = TILE_LEFTS[index]
         self.ui['call'](['xdotool', 'mousemove', '--window', self.ui['window'](),
                          str(left + 60), '365'])
-        # A software-rendered UI may need more than one 200ms frame to process
-        # pointer motion. Require the actual preview to catch up, never buy an
-        # earlier selection or loosen the name/price/category checks.
-        end = min(deadline, time.monotonic() + 5)
-        attempts = []
-        while time.monotonic() < end:
-            time.sleep(.2)
-            image = self.ui['shot'](prefix + f'-inspect-{index}.png')
-            assert public_panel_state(ocr_screenshot(image, self.ui['env'])) == 'market', \
-                'Market disappeared before current offer inspection'
-            tile = tile_name_text(image, left, self.ui['env'])
-            price = crop_text(image, f'39x23+{left+52}+384', self.ui['env'], digits=True)
-            preview = crop_text(image, PREVIEW_CROP, self.ui['env'])
-            try:
-                offer = inspected_offer(tile, price, preview, index)
-            except AssertionError as error:
-                attempts.append(dict(tile=tile, price=price, preview=preview, error=str(error)))
-                continue
-            self.ui['report'].setdefault('equipment_hover_checks', []).append(
-                dict(visit=self.visits, index=index, stale_attempts=attempts))
-            return offer
-        self.ui['report'].setdefault('equipment_hover_failures', []).append(
-            dict(visit=self.visits, index=index, attempts=attempts,
-                 pointer=self.ui['call'](['xdotool', 'getmouselocation', '--shell'])))
-        raise AssertionError(f'Offer {index} did not show a matching preview within budget: {attempts}')
+        observations = []
+        try:
+            offer = poll_market_offer(self.ui['shot'], self.ui['env'], index, prefix,
+                                      deadline, observations)
+        except AssertionError:
+            self.ui['report'].setdefault('equipment_hover_failures', []).append(
+                dict(visit=self.visits, index=index, observations=observations))
+            raise
+        self.ui['report'].setdefault('equipment_hover_checks', []).append(
+            dict(visit=self.visits, index=index, observations=observations,
+                 stale_attempts=[row for row in observations if 'error' in row]))
+        return offer
 
     def visible_countdown(self, prefix, deadline):
         while time.monotonic() < deadline:
@@ -435,8 +458,7 @@ class EquipmentPolicy:
                 hud, _, _ = read_hud_wallet(before, self.ui['env'])
                 assert hud == wallet, ('Market/HUD wallet disagreement', hud, wallet)
                 checked = self.inspect_offer(offer['index'], prefix + '-selected', deadline)
-                identity = lambda item: (normalized(item['name']), item['price'], item['category'], item['index'])
-                assert identity(checked) == identity(offer), 'Selected offer changed before purchase'
+                assert offer_identity(checked) == offer_identity(offer), 'Selected offer changed before purchase'
                 self.click(('', 1129, 482, 1239, 530))
                 after = self.ui['shot'](prefix + '-after.png')
                 remaining, _, raw = read_hud_wallet(after, self.ui['env'])

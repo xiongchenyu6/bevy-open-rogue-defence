@@ -4,10 +4,10 @@ import hashlib,json,os,re,shutil,subprocess,threading,time
 from pathlib import Path
 from smoke_runtime import ocr_screenshot,find_text,normalized,read_hud_wallet,read_toolbar_speed
 from campaign_runtime import read_progress
-from campaign_equipment_runtime import (TILE_LEFTS, PREVIEW_CROP, tile_name_text,
-    screenshot_wallet, inspected_offer, choice_pending, crop_text, inventory_count,
+from campaign_equipment_runtime import (TILE_LEFTS,
+    screenshot_wallet, choice_pending, crop_text, inventory_count,
     inventory_icons, inventory_open, selected_inventory_name, market_closed,
-    has_gear_rows, verify_deduction, screenshot_battle_seconds, wait_panel_open, public_panel_state)
+    has_gear_rows, verify_deduction, screenshot_battle_seconds, wait_panel_open, public_panel_state, poll_market_offer, offer_identity)
 
 MATERIALS = frozenset(('Arc Lens', 'Echo Core'))
 
@@ -34,26 +34,6 @@ def material_name(name):
     return next((canonical for canonical in MATERIALS if normalized(name) == normalized(canonical)), None)
 
 
-def offer_identity(offer):
-    return (normalized(offer['name']), offer['price'], normalized(offer['category']), offer['index'])
-
-
-def poll_preview(sample, index, expected=None, timeout=8, pause=time.sleep):
-    """Retry stale/public unreadable preview pixels; never click to select."""
-    deadline = time.monotonic() + timeout
-    errors = []
-    for _ in range(10):
-        assert time.monotonic() < deadline, ('Preview polling expired', errors)
-        try:
-            tile, price, preview = sample()
-            offer = inspected_offer(tile, price, preview, index)
-            if expected is not None:
-                assert offer_identity(offer) == offer_identity(expected), 'Selected offer identity changed'
-            return offer
-        except AssertionError as error:
-            errors.append(str(error))
-            pause(.2)
-    raise AssertionError(('Preview never matched exact visible tile/expected identity', errors))
 
 
 def natural_material(offers, wallet, acquired):
@@ -148,16 +128,12 @@ def main():
             assert time.monotonic() < end, 'Choice queue exceeded90seconds'
             key('1')
         assert not choice_pending(lines()), 'Choice queue not drained after30selections'
-    def inspect_offer(index, prefix, expected=None):
+    def inspect_offer(index, prefix, deadline, expected=None):
         left = TILE_LEFTS[index]
         call(['xdotool','mousemove','--window',win,str(left+60),'365'])
-        def sample():
-            image=shot(prefix+'.png')
-            assert public_panel_state(ocr_screenshot(image,env)) == 'market', 'Market disappeared before current offer inspection'
-            return (tile_name_text(image,left,env),
-                    crop_text(image,f'39x23+{left+52}+384',env,True),
-                    crop_text(image,PREVIEW_CROP,env))
-        return poll_preview(sample,index,expected)
+        observations=[]
+        report.setdefault('offer_preview_observations',[]).append(dict(index=index,observations=observations))
+        return poll_market_offer(shot,env,index,prefix,deadline,observations,expected)
     def close_market_panel():
         key('b')
         end = time.monotonic() + 20
@@ -271,12 +247,12 @@ def main():
             visit_end=time.monotonic()+120
             for index,left in enumerate(TILE_LEFTS):
                 assert time.monotonic()<visit_end, 'Natural market inspection exceeded120seconds'
-                offers.append(inspect_offer(index,f'market-{attempt:02}-inspect-{index}'))
+                offers.append(inspect_offer(index,f'market-{attempt:02}',visit_end))
             report.setdefault('market_inspections',[]).append(dict(attempt=attempt,wallet=before,offers=offers))
             offer=natural_material(offers,before,report['acquired_materials'])
             if offer is not None:
                 name,price=offer['name'],offer['price'];left=TILE_LEFTS[offer['index']]
-                checked=inspect_offer(offer['index'],'before-purchase',offer)
+                checked=inspect_offer(offer['index'],'before-purchase',visit_end,offer)
                 report['selected_material_ocr']=checked
                 assert hud_wallet()==before==wallet(), 'HUD/header wallet disagreement'
                 report['pending_purchase']=dict(name=name,price=price,wallet_before=before,offer_ocr=offer)

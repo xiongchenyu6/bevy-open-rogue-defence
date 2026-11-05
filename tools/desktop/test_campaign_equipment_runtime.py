@@ -5,7 +5,7 @@ import unittest
 from contextlib import nullcontext
 from unittest.mock import patch, Mock
 from smoke_runtime import ocr_screenshot
-from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop, tile_name_text, public_panel_state, wait_panel_open, battle_level_pixels
+from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop, tile_name_text, public_panel_state, wait_panel_open, battle_level_pixels, market_header_text, poll_market_offer
 from campaign_equipment_runtime import battle_seconds
 from pathlib import Path
 from campaign_equipment_runtime import (affordable_gear, market_wallet, inventory_count,
@@ -226,6 +226,48 @@ class EquipmentPolicyParsing(unittest.TestCase):
         self.assertEqual(battle_level_pixels(path,None),'LEVEL111/240XP')
         self.assertEqual(screenshot_battle_seconds(path,None),17*60+44)
         self.assertEqual(read_toolbar_speed(path,None),1)
+
+    def test_shared_preview_poll_uses_current_header_and_reobserves_stale_selection(self):
+        observations=[]
+        expected=dict(name='Arc Lens',price=180,category='Equipment',index=1)
+        with patch('campaign_equipment_runtime.market_header_text',return_value='BLACK MARKET'), \
+                patch('campaign_equipment_runtime.tile_name_text',return_value='Arc Lens'), \
+                patch('campaign_equipment_runtime.crop_text',side_effect=['180','Wind Boots + Equipment','180','ArcLens + Equipment']), \
+                patch('campaign_equipment_runtime.ocr_screenshot',side_effect=AssertionError('expensive scene OCR forbidden')):
+            offer=poll_market_offer(lambda name:Path(name),None,1,'test',90,observations,expected,
+                                    now=lambda:0,pause=lambda _:None)
+        self.assertEqual(offer['price'],180)
+        self.assertEqual(len(observations),2)
+        self.assertIn('error',observations[0]);self.assertNotIn('error',observations[1])
+        self.assertNotEqual(observations[0]['screenshot'],observations[1]['screenshot'])
+
+    def test_shared_preview_rejects_unknown_header_wrong_price_and_deadline(self):
+        with patch('campaign_equipment_runtime.market_header_text',side_effect=AssertionError('battle')), \
+                patch('campaign_equipment_runtime.tile_name_text') as tile,self.assertRaises(AssertionError):
+            poll_market_offer(lambda name:Path(name),None,1,'test',90,[],now=lambda:0)
+        tile.assert_not_called()
+        expected=dict(name='Arc Lens',price=180,category='Equipment',index=1)
+        with patch('campaign_equipment_runtime.market_header_text',return_value='BLACK MARKET'), \
+                patch('campaign_equipment_runtime.tile_name_text',return_value='Arc Lens'), \
+                patch('campaign_equipment_runtime.crop_text',side_effect=lambda path,crop,env,digits=False:'181' if digits else 'Arc Lens + Equipment'), \
+                self.assertRaises(AssertionError):
+            poll_market_offer(lambda name:Path(name),None,1,'test',90,[],expected,now=lambda:0,pause=lambda _:None)
+        with self.assertRaises(AssertionError):
+            poll_market_offer(Mock(),None,1,'test',0,[],now=lambda:0)
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_actual_stale_preview_title_pixels_and_battle_modal_negatives(self):
+        root=Path(__file__).resolve().parents[2]/'docs/verification'
+        stale=root/'market-preview-ocr-2026-11-05/stale-arc-lens.png'
+        initial=root/'market-preview-ocr-2026-11-05/initial-market.png'
+        for path in (stale,initial):self.assertEqual(market_header_text(path,None),'BLACK MARKET')
+        self.assertEqual(tile_name_text(stale,TILE_LEFTS[1],None),'Arc Lens')
+        self.assertEqual(crop_text(stale,'39x23+794+384',None,True),'180')
+        self.assertEqual(crop_text(stale,PREVIEW_CROP,None),'Wind Boots + Equipment')
+        for path in (root/'panel-toggle-2026-11-05/09-fresh-battle.png',
+                     root/'hud-recruitment-2026-11-05/level10-over-speed.png'):
+            with self.assertRaises(AssertionError):market_header_text(path,None)
 
     def test_inventory_opener_never_toggles_an_open_panel(self):
         rows=[('EQUIPMENT · 2',213,108,400,130)]

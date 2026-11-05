@@ -6,7 +6,7 @@ from unittest.mock import Mock, patch
 from pathlib import Path
 from smoke_runtime import normalized
 from smoke_runtime import ocr_screenshot
-from forge_runtime import natural_material, verify_recipe_selection, verify_crafted_inventory, poll_preview, offer_identity, visible_hud_value
+from forge_runtime import natural_material, verify_recipe_selection, verify_crafted_inventory, poll_market_offer, offer_identity, visible_hud_value
 from campaign_equipment_runtime import (crop_text, screenshot_wallet, inspected_offer,
     tile_name_crop, PREVIEW_CROP, TILE_LEFTS, selected_inventory_name, choice_pending, screenshot_battle_seconds)
 
@@ -29,15 +29,15 @@ class ForgePolicyTests(unittest.TestCase):
         self.assertEqual(natural_material(offers,180,[])['name'],'Arc Lens')
         self.assertEqual(natural_material(offers,180,['Arc Lens'])['name'],'Echo Core')
         self.assertIsNone(natural_material(offers,180,['ArcLens','Echo Core']))
-        samples=iter([('Arc Lens','180','Echo Core + Equipment'),
-                      ('ArcLens','180','ArcLens * Equipment')])
-        expected=dict(name='Arc Lens',price=180,category='Equipment',index=0,tile_ocr='old noise')
-        result=poll_preview(lambda:next(samples),0,expected,pause=lambda _:None)
+        expected=dict(name='Arc Lens',price=180,category='Equipment',index=0)
+        with patch('campaign_equipment_runtime.market_header_text',return_value='BLACK MARKET'), \
+                patch('campaign_equipment_runtime.tile_name_text',return_value='ArcLens'), \
+                patch('campaign_equipment_runtime.crop_text',side_effect=['180','Echo Core + Equipment','180','ArcLens * Equipment']):
+            observations=[]
+            result=forge_runtime.poll_market_offer(lambda name:Path(name),None,0,'forge',90,
+                observations,expected,now=lambda:0,pause=lambda _:None)
         self.assertEqual(offer_identity(result),offer_identity(expected))
-        with self.assertRaises(AssertionError):
-            poll_preview(lambda:('ArcLens','180','Echo Core + Equipment'),0,expected,pause=lambda _:None)
-        with self.assertRaises(AssertionError):
-            poll_preview(lambda:('ArcLens','181','ArcLens + Equipment'),0,expected,pause=lambda _:None)
+        self.assertEqual(len(observations),2)
         verify_recipe_selection('[SSR] AstralPrism','✓ ArcLens + ✓ EchoCore','Forge equipment')
         for bad in ('ArcLens + Echo Core + Other','EchoCore + ArcLens','ArcLens Extra + EchoCore'):
             with self.assertRaises(AssertionError):
