@@ -27,12 +27,14 @@
 
 ## 2026-11-05 当前源码与交付状态
 
-当前游戏源码已包含[敌人受击短闪与材质隔离](verification/enemy-flash-2026-11-05/README.md)，以及：初始剑平滑渐隐残影、初始木箭与升级箭分档、同帧雷／冰被动和普攻回响完整结算，以及六件合成装备独立插画。优化库测试 **674通过、0失败、1忽略**，严格全目标release Clippy通过；分别有[剑残影](verification/sword-trail-2026-11-05/README.md)、[普通箭](verification/starter-arrow-2026-11-05/README.md)、[触发结算](verification/passive-batch-2026-11-05/README.md)和[六件合成装备／缺图重试](verification/recipe-art-2026-11-05/README.md)的原生证据。它们覆盖对应受控场景，不能替代完整长局和主观手感验收。
+当前游戏源码已包含[敌人受击短闪与材质隔离](verification/enemy-flash-2026-11-05/README.md)，以及：初始剑平滑渐隐残影、初始木箭与升级箭分档、同帧雷／冰被动和普攻回响完整结算，以及六件合成装备独立插画。截至`ecd1723`优化库测试 **678通过、0失败、1忽略**，严格全目标release Clippy通过；分别有[剑残影](verification/sword-trail-2026-11-05/README.md)、[普通箭](verification/starter-arrow-2026-11-05/README.md)、[触发结算](verification/passive-batch-2026-11-05/README.md)和[六件合成装备／缺图重试](verification/recipe-art-2026-11-05/README.md)的原生证据。它们覆盖对应受控场景，不能替代完整长局和主观手感验收。
 
-最新独立短流程通过的SDK包为`86cb084`：882项文件哈希、断网只读Ubuntu/X11启动／征募／战斗／中文设置／全屏／偏好重启与两次正常退出通过，见[发行证据](verification/vortex-package-2026-11-06/README.md)。新包包含[装备收藏与大图详情、固定合成操作及手柄跨焦点选择修正](verification/inventory-split-2026-11-05/README.md)，源码已通过8880次原生更新。新布局公开驱动已通过89项脚本测试；自然获取材料／合成与完整第六章胜利仍待实际验收。此前040ce5c的[自然合成](verification/earned-forge-040ce5c-2026-11-05/README.md)和[同存档重启](verification/forge-restart-2026-11-05/README.md)已通过，但不替代新包流程。[窗口性能基线](verification/window-performance-2026-11-05/README.md)是旧Nix构建的有限场景，不代表此包或长局性能。
+最新独立短流程通过的SDK包为`86cb084`：882项文件哈希、断网只读Ubuntu/X11启动／征募／战斗／中文设置／全屏／偏好重启与两次正常退出通过，见[发行证据](verification/vortex-package-2026-11-06/README.md)。新包包含[装备收藏与大图详情、固定合成操作及手柄跨焦点选择修正](verification/inventory-split-2026-11-05/README.md)，源码已通过8880次原生更新。新布局公开驱动已通过91项脚本测试；86cb084的[自然材料合成](verification/earned-forge-86cb084-2026-11-06/README.md)和[同目录重启](verification/forge-restart-86cb084-2026-11-06/README.md)已通过。完整第六章与更多配方仍待验收。此前040ce5c的[自然合成](verification/earned-forge-040ce5c-2026-11-05/README.md)和[同存档重启](verification/forge-restart-2026-11-05/README.md)已通过，但不替代新包流程。[窗口性能基线](verification/window-performance-2026-11-05/README.md)是旧Nix构建的有限场景，不代表此包或长局性能。
 
 自然获取证据仍按二进制区分：旧`37fe665`第六章路线核验了五件自然装备；另一独立同局路线实际购入两件材料、消耗为星界棱镜并核验库存，但其恢复战斗／正常退出步骤被后到征募中断，见[自然合成](verification/earned-forge-2026-11-05/README.md)。后续`32cf594`整局与合成路线也被公开UI脚本读数或面板开启时序中断，没有完整结算或退出结论。不得把这些中断称为游戏失败或通关。
 
 脚本已保留全部失败证据，并修正[彩色卡名](verification/market-red-label-2026-11-05/README.md)、[小额补零余额](verification/market-wallet-0089-2026-11-05/README.md)、后到征募时钟和[有界装备界面开启](verification/inventory-open-2026-11-05/README.md)；69项Python测试通过（包含[实际LEVEL5识别失败回归](verification/battle-level-ocr-2026-11-05/README.md)），[实际倒计时像素识别](verification/battle-timer-ocr-2026-11-05/README.md)、[面板单次开关与同截图读取](verification/panel-toggle-2026-11-05/README.md)、同截图HUD／双面板等待已统一，[装备核验预算](verification/inventory-budget-2026-11-05/README.md)按120秒基础＋每件20秒、最多12次访问推导，累计暂停上限3000秒，1×整局上限4800秒；全部已购身份逐件核验为新增加强项；[商品预览等待](verification/market-preview-ocr-2026-11-05/README.md)已统一并减少整屏识别开销；新的完整原生路线仍待完成。所有后续章节、永久成长边界、更多种子／构筑、真实Steam客户端、手柄／音频设备、SteamDeck、其他平台与长局性能门槛保持未完成。
 
 当前模拟器已[移除过期抽卡价格预测](verification/simulator-prices-2026-11-05/README.md)：修复前两项策略回归失败，修复后4项bin测试与严格全目标Clippy通过。重建已通过，[同种子完整重复已完成且出现构筑／轨迹分歧](verification/balance-price-repeat-2026-11-05/README.md)，因此未启动批量矩阵，不据此调整游戏数值。
+
+定点技能曾被邻近精英的更大碰撞范围截获；`ecd1723`已加入指定目标约束、目标消失不转打旁人及所有投射物池复用清理，真实失败→通过和678项测试见[定点命中回归](verification/designated-strike-2026-11-06/README.md)。此修正不代表完整重复回放已经一致，矩阵仍未启动。
