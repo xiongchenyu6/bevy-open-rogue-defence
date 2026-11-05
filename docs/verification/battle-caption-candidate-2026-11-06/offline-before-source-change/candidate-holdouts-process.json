@@ -1,0 +1,22 @@
+{
+  "args": [
+    "docker",
+    "run",
+    "--rm",
+    "--network",
+    "none",
+    "--mount",
+    "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence,dst=/repo,readonly",
+    "--mount",
+    "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/overlap-earned-forge-2026-11-06/forge,dst=/proof,readonly",
+    "--mount",
+    "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/overlap-earned-forge-2026-11-06/forge/harness-source,dst=/harness,readonly",
+    "--mount",
+    "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/overlap-earned-forge-2026-11-06/audit,dst=/audit,readonly",
+    "sha256:0d4cccee982b31492e0f7b01a50afc1a0ec710d3166dab22e02322ce64832715",
+    "python3",
+    "/audit/holdouts.py"
+  ],
+  "exit": 0,
+  "elapsed": 154.5914427220123
+}
