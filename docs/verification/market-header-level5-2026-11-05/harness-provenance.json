@@ -1,0 +1,19 @@
+{
+  "scope": "New isolated public UI run; exact earned profile copy; no resource, stock, health or outcome injection",
+  "harness_commit": "6995368c86cba8d21fb566b8a7b17a9580031b4d",
+  "harness_files": {
+    "campaign_equipment_runtime.py": "61ebf83a4184cac4f030002886390e4f3ab0901d1001edc7c1c09b804fc1c495",
+    "campaign_runtime.py": "1357928e4b5f05a8da035580105498adee0b250fe6e998bb5cd8db0a78fa59f7",
+    "smoke_runtime.py": "bc39787ecf1a79444f0bce887829913607a2a26d084c5a51b889f26c7bbd6425"
+  },
+  "source_profile": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/chapter6-all-owned-2026-11-05/chapter6/state",
+  "canonical_earned_checkpoint": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/packaged-chapter6-2026-10-09/initial-campaign.save",
+  "incoming_save_sha256": "4c9a0973fa90b3f75838ccb1999267be31ff8ff9b896a8c9b165ae5ac3e129f9",
+  "incoming_save_bytes": "RCAMPAIGN1\n6\n645\n111110\n6,0,0,0,0,0\n45fbb0dedb4919ce\n",
+  "package_commit": "040ce5c1084634f3e8d886b65d1f5c2c467997af",
+  "internal_battle_budget_seconds": 4800,
+  "outer_case_budget_seconds": 5400,
+  "driver": "campaign_equipment_runtime.py",
+  "speed": 1,
+  "seed": "0xA11CE"
+}

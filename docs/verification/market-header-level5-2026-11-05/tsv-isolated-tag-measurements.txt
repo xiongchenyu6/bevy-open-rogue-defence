@@ -1,0 +1,3 @@
+200 word LVS bounds (46, 27, 34, 18) isolated 'LV5'
+300 word LVS bounds (59, 31, 50, 27) isolated 'LV5'
+600 word LVS bounds (97, 42, 101, 53) isolated 'LV5'

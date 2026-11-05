@@ -5,7 +5,7 @@ import unittest
 from contextlib import nullcontext
 from unittest.mock import patch, Mock
 from smoke_runtime import ocr_screenshot
-from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop, tile_name_text, public_panel_state, wait_panel_open, battle_level_pixels, verify_owned_inventory, market_header_text, poll_market_offer
+from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop, tile_name_text, public_panel_state, wait_panel_open, battle_level_pixels, verify_owned_inventory, market_level_pixel_reads, wallet_header_reads, market_header_text, poll_market_offer
 from campaign_equipment_runtime import battle_seconds
 from pathlib import Path
 from campaign_equipment_runtime import (affordable_gear, market_wallet, inventory_count,
@@ -413,6 +413,44 @@ class EquipmentPolicyParsing(unittest.TestCase):
         self.assertEqual(opener.call_args.args[-2], 'market')
         self.assertTrue(policy.ui['report']['equipment_unlock_checks'][0]['unlocked'])
         policy.key.assert_not_called()
+
+    def test_lvs_needs_actual_numeric_tag_and_all_header_identities_must_agree(self):
+        pixels=[(200,'LV5'),(300,'LV5'),(600,'LV5')]
+        with patch('campaign_equipment_runtime.wallet_header_reads',return_value=[(200,'LVS KILLS 1757'),(300,'LVS KILLS 1757')]), \
+                patch('campaign_equipment_runtime.market_level_pixel_reads',return_value=pixels):
+            self.assertEqual(screenshot_wallet(Path('public.png'),None)[0],1757)
+        cases=[([(200,'LVS KILLS1757'),(300,'LVS KILLS1758')],pixels),
+               ([(200,'LV4 KILLS1757'),(300,'LVS KILLS1757')],pixels),
+               ([(200,'LVS KILLS1757')],[(200,'LV5'),(300,'LV6')]),
+               ([(200,'LVS KILLS1757')],[(200,'LV5'),(300,'')]),
+               ([(200,'LV5 KILLS1757'),(300,'LVS KILLS1757')],[(200,'LVS'),(300,'LV')])]
+        for headers,levels in cases:
+            with patch('campaign_equipment_runtime.wallet_header_reads',return_value=headers), \
+                    patch('campaign_equipment_runtime.market_level_pixel_reads',return_value=levels),self.assertRaises(AssertionError):
+                screenshot_wallet(Path('public.png'),None)
+        # The tag number comes from numeric pixels, never from the S character.
+        with patch('campaign_equipment_runtime.wallet_header_reads',return_value=[(200,'LVS KILLS0042')]), \
+                patch('campaign_equipment_runtime.market_level_pixel_reads',return_value=[(200,'LV3'),(300,'LV3')]):
+            self.assertEqual(screenshot_wallet(Path('public.png'),None)[0],42)
+        with patch('campaign_equipment_runtime.wallet_header_reads',return_value=[(200,'BAD KILLS1757')]), \
+                patch('campaign_equipment_runtime.market_level_pixel_reads') as pixels_reader,self.assertRaises(AssertionError):
+            screenshot_wallet(Path('public.png'),None)
+        pixels_reader.assert_not_called()
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_actual_market_lv5_tag_pixels_retain_independent_wallet_proof(self):
+        from smoke_runtime import read_hud_wallet
+        root=Path(__file__).resolve().parents[2]/'docs/verification'
+        path=root/'market-header-level5-2026-11-05/market-lv5.png'
+        self.assertEqual(wallet_header_reads(path,None),[(200,'LVS KILLS 1757'),(300,'LVS KILLS 1757'),(600,'LVS KILLS 1757')])
+        self.assertEqual(market_level_pixel_reads(path,None),[(200,'LV5'),(300,'LV5'),(600,'LV5')])
+        self.assertEqual(screenshot_wallet(path,None)[0],1757)
+        self.assertEqual(read_hud_wallet(path,None)[0],1757)
+        for relative,wallet in [('black-market-2026-11-04/en-1280x720/frame00035.png',100000),
+                                ('hud-wallet-2026-11-05/before.png',291),
+                                ('market-red-label-2026-11-05/red-label.png',969)]:
+            self.assertEqual(screenshot_wallet(root/relative,None)[0],wallet)
 
     def test_current_header_and_ambiguous_wallet(self):
         self.assertEqual(market_wallet([('LV1 KILLS 99880',1120,205,1209,214)]),99880)

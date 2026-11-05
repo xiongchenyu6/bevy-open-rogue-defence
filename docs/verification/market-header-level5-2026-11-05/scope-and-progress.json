@@ -1,0 +1,70 @@
+{
+  "scope": "Actual run interrupted by strict market level-tag OCR; not a game win or loss",
+  "purchases": 9,
+  "owned_names": [
+    "serrateddisc",
+    "arclens",
+    "hardenedplate",
+    "spiritdrum",
+    "windboots",
+    "echocore",
+    "emberheart",
+    "stormcoil",
+    "frostmirror"
+  ],
+  "resumed_visits": [
+    {
+      "visit": 1,
+      "before": 1266,
+      "after": 1257
+    },
+    {
+      "visit": 2,
+      "before": 1161,
+      "after": 1152
+    },
+    {
+      "visit": 3,
+      "before": 1044,
+      "after": 1034
+    },
+    {
+      "visit": 4,
+      "before": 931,
+      "after": 921
+    },
+    {
+      "visit": 5,
+      "before": 818,
+      "after": 808
+    },
+    {
+      "visit": 6,
+      "before": 706,
+      "after": 696
+    },
+    {
+      "visit": 7,
+      "before": 595,
+      "after": 585
+    },
+    {
+      "visit": 8,
+      "before": 490,
+      "after": 480
+    },
+    {
+      "visit": 9,
+      "before": 386,
+      "after": 376
+    },
+    {
+      "visit": 10,
+      "before": 282,
+      "after": 272
+    }
+  ],
+  "completed_run": false,
+  "victory_claim": false,
+  "save_sha256": "4c9a0973fa90b3f75838ccb1999267be31ff8ff9b896a8c9b165ae5ac3e129f9"
+}

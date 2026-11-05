@@ -8,6 +8,8 @@ inspection/resume budgets and a 60-second cooldown after completion; the report
 records the visit, cumulative pause, and total battle bounds.
 """
 import json
+import csv
+import io
 import os
 import re
 import time
@@ -136,16 +138,62 @@ def wallet_header_reads(path, env):
     return results
 
 
+def market_level_pixel_reads(path, env):
+    """Locate the observed LV word, then read that pixel field without S letters."""
+    results = []
+    with tempfile.TemporaryDirectory(prefix='rogue-market-level-') as directory:
+        for scale in (200, 300, 600):
+            header = Path(directory) / f'header-{scale}.png'
+            tag = Path(directory) / f'tag-{scale}.png'
+            subprocess.run(['convert', str(path), '-crop', '95x14+1119+202',
+                '-resize', f'{scale}%', '-colorspace', 'Gray', '-negate',
+                '-bordercolor', 'white', '-border', '20', str(header)],
+                env=env, check=True, capture_output=True)
+            tsv = subprocess.check_output(['tesseract', str(header), 'stdout', '-l', 'eng',
+                '--psm', '7', 'tsv'], env=env, text=True, stderr=subprocess.PIPE)
+            words = [row for row in csv.DictReader(io.StringIO(tsv), delimiter='\t')
+                     if row['level'] == '5' and re.fullmatch(r'LV(?:\d+|S)', row['text'], re.I)]
+            assert len(words) <= 1, f'Ambiguous level word positions: {words}'
+            if not words:
+                results.append((scale, ''))
+                continue
+            x, y, width, height = (int(words[0][key]) for key in ('left', 'top', 'width', 'height'))
+            subprocess.run(['convert', str(header), '+repage', '-crop',
+                f'{width+4}x{height+4}+{x-2}+{y-2}', '+repage',
+                '-bordercolor', 'white', '-border', '10', str(tag)],
+                env=env, check=True, capture_output=True)
+            text = subprocess.check_output(['tesseract', str(tag), 'stdout', '-l', 'eng',
+                '--psm', '7', '-c', 'tessedit_char_whitelist=LV0123456789'],
+                env=env, text=True, stderr=subprocess.PIPE).strip()
+            results.append((scale, text))
+    return results
+
+
 def screenshot_wallet(path, env):
     reads = wallet_header_reads(path, env)
+    level_reads = []
+    level = None
+    if any(re.fullmatch(r'LVS\s+KILLS\s*\d{4,}', text, re.I) for _, text in reads):
+        level_reads = market_level_pixel_reads(path, env)
+        numeric = [(scale, int(match[1])) for scale, text in level_reads
+                   if (match := re.fullmatch(r'LV(\d+)', text, re.I))]
+        levels = {value for _, value in numeric}
+        assert len({scale for scale, _ in numeric}) >= 2 and len(levels) == 1, \
+            f'Unreadable/ambiguous isolated market level pixels: {level_reads}'
+        level = levels.pop()
     values = set()
     for _, text in reads:
         match = re.fullmatch(r'LV(\d+)\s+KILLS\s*(\d{4,})', text, re.I)
         if match:
             values.add((int(match[1]), int(match[2])))
+        elif level is not None and (match := re.fullmatch(r'LVS\s+KILLS\s*(\d{4,})', text, re.I)):
+            values.add((level, int(match[1])))
     assert len(values) == 1, f'Unreadable/ambiguous complete market wallet: {reads!r}'
     _, wallet = values.pop()
-    return wallet, ' | '.join(f'{scale}%: {text}' for scale, text in reads)
+    evidence = ' | '.join(f'{scale}%: {text}' for scale, text in reads)
+    if level_reads:
+        evidence += ' | isolated level pixels: ' + repr(level_reads)
+    return wallet, evidence
 
 
 def tile_name_matches(tile_text, name):
