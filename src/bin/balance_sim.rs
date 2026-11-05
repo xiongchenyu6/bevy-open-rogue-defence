@@ -484,11 +484,18 @@ fn main() {
     let trace_range = env::var("ROGUE_SIM_TRACE_RANGE")
         .ok()
         .map(|value| TraceRange::parse(&value, frames).expect("invalid ROGUE_SIM_TRACE_RANGE"));
+    let asset_root = env::var("ROGUE_SIM_ASSET_ROOT")
+        .unwrap_or_else(|_| format!("{}/assets", env!("CARGO_MANIFEST_DIR")));
+    assert!(
+        std::path::Path::new(&asset_root).is_dir(),
+        "simulation asset root is not a directory: {asset_root}"
+    );
+    println!("BALANCE_ASSET_ROOT {asset_root}");
     let mut app = App::new();
     app.add_plugins(
         DefaultPlugins
             .set(AssetPlugin {
-                file_path: format!("{}/assets", env!("CARGO_MANIFEST_DIR")),
+                file_path: asset_root,
                 ..default()
             })
             .set(WindowPlugin {

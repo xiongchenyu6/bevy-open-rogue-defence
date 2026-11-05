@@ -1,0 +1,16 @@
+{
+  "args": [
+    "nix",
+    "develop",
+    "--command",
+    "cargo",
+    "test",
+    "--locked",
+    "--release",
+    "--bin",
+    "balance_sim",
+    "-j2"
+  ],
+  "exit": 0,
+  "elapsed": 22.70904386098846
+}

@@ -1,0 +1,12 @@
+{
+  "args": [
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sim-asset-root-r2-2026-11-06/balance-sim-snapshot",
+    "passive",
+    "A11CE",
+    "2",
+    "behind",
+    "1"
+  ],
+  "exit": 101,
+  "elapsed": 0.016241768025793135
+}

@@ -1,0 +1,13 @@
+{
+  "args": [
+    "nix",
+    "develop",
+    "--command",
+    "rustfmt",
+    "--edition",
+    "2024",
+    "src/bin/balance_sim.rs"
+  ],
+  "exit": 0,
+  "elapsed": 9.786027643014677
+}

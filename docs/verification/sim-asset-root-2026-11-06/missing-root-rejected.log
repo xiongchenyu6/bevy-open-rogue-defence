@@ -1,0 +1,4 @@
+
+thread 'main' (3052689) panicked at src/bin/balance_sim.rs:489:5:
+simulation asset root is not a directory: /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sim-asset-root-r2-2026-11-06/does-not-exist
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

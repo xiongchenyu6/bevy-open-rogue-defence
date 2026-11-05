@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "scope": "Tool-only optional frozen asset root; existing bin tests, strict Clippy, build, actual finite startup with byte-identical185 assets and invalid-root rejection; not a full game outcome",
+  "asset_files": 185,
+  "asset_root": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-descriptive-inputs-2026-11-06/assets",
+  "binary_sha256": "75c69149c8d211daf9a4a5d37b0f1ee3755449fb70e79296dd665577ba0d95fc"
+}

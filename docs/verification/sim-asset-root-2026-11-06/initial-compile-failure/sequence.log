@@ -1,0 +1,10 @@
+format {'args': ['nix', 'develop', '--command', 'rustfmt', '--edition', '2024', 'src/bin/balance_sim.rs'], 'exit': 0, 'elapsed': 9.786027643014677}
+bin-tests {'args': ['nix', 'develop', '--command', 'cargo', 'test', '--locked', '--release', '--bin', 'balance_sim', '-j2'], 'exit': 101, 'elapsed': 226.43080832398846}
+Traceback (most recent call last):
+  File "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sim-asset-root-2026-11-06/run.py", line 17, in <module>
+    run(['nix','develop','--command','cargo','test','--locked','--release','--bin','balance_sim','-j2'],'bin-tests')
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sim-asset-root-2026-11-06/run.py", line 11, in run
+    assert p.returncode==expected,(name,result)
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('bin-tests', {'args': ['nix', 'develop', '--command', 'cargo', 'test', '--locked', '--release', '--bin', 'balance_sim', '-j2'], 'exit': 101, 'elapsed': 226.43080832398846})

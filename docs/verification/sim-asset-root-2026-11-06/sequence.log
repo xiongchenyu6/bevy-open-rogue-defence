@@ -1,0 +1,7 @@
+format {'args': ['nix', 'develop', '--command', 'rustfmt', '--edition', '2024', 'src/bin/balance_sim.rs'], 'exit': 0, 'elapsed': 17.549590593989706}
+bin-tests {'args': ['nix', 'develop', '--command', 'cargo', 'test', '--locked', '--release', '--bin', 'balance_sim', '-j2'], 'exit': 0, 'elapsed': 22.70904386098846}
+clippy {'args': ['nix', 'develop', '--command', 'cargo', 'clippy', '--locked', '--release', '--all-targets', '-j2', '--', '-D', 'warnings'], 'exit': 0, 'elapsed': 2.005055858986452}
+build {'args': ['nix', 'develop', '--command', 'cargo', 'build', '--locked', '--release', '--bin', 'balance_sim', '-j2'], 'exit': 0, 'elapsed': 316.9682176189963}
+snapshot-root-smoke {'args': ['/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sim-asset-root-r2-2026-11-06/balance-sim-snapshot', 'passive', 'A11CE', '2', 'behind', '1200'], 'exit': 0, 'elapsed': 7.10593253801926}
+missing-root-rejected {'args': ['/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/sim-asset-root-r2-2026-11-06/balance-sim-snapshot', 'passive', 'A11CE', '2', 'behind', '1'], 'exit': 101, 'elapsed': 0.016241768025793135}
+SIM_ASSET_ROOT_FREEZE_PASS

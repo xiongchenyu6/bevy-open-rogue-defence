@@ -1,0 +1,18 @@
+{
+  "args": [
+    "nix",
+    "develop",
+    "--command",
+    "cargo",
+    "clippy",
+    "--locked",
+    "--release",
+    "--all-targets",
+    "-j2",
+    "--",
+    "-D",
+    "warnings"
+  ],
+  "exit": 0,
+  "elapsed": 2.005055858986452
+}
