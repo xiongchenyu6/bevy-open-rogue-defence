@@ -1,0 +1,36 @@
+{"sample": 1, "wall_seconds": 7.4, "terminal": null}
+{"sample": 2, "wall_seconds": 18.7, "terminal": null}
+{"sample": 3, "wall_seconds": 30.0, "terminal": null}
+{"sample": 4, "wall_seconds": 40.8, "terminal": null}
+{"sample": 5, "wall_seconds": 52.2, "terminal": null}
+{"sample": 6, "wall_seconds": 64.2, "terminal": null}
+{"sample": 7, "wall_seconds": 75.3, "terminal": null}
+{"sample": 8, "wall_seconds": 87.1, "terminal": null}
+{"sample": 9, "wall_seconds": 98.1, "terminal": null}
+{"sample": 10, "wall_seconds": 109.6, "terminal": null}
+{"sample": 11, "wall_seconds": 121.2, "terminal": null}
+{"sample": 12, "wall_seconds": 131.8, "terminal": null}
+{"sample": 13, "wall_seconds": 142.5, "terminal": null}
+{"sample": 14, "wall_seconds": 153.9, "terminal": null}
+{"sample": 15, "wall_seconds": 164.7, "terminal": null}
+{"sample": 16, "wall_seconds": 175.7, "terminal": null}
+{"sample": 17, "wall_seconds": 187.5, "terminal": null}
+{"stage": "earned equipment visit", "visit": 1, "purchases": 0, "wallet": 102}
+{"sample": 18, "wall_seconds": 257.7, "terminal": null}
+{"sample": 19, "wall_seconds": 268.0, "terminal": null}
+{"sample": 20, "wall_seconds": 278.8, "terminal": null}
+{"sample": 21, "wall_seconds": 289.3, "terminal": null}
+{"sample": 22, "wall_seconds": 299.9, "terminal": null}
+{"sample": 23, "wall_seconds": 310.6, "terminal": null}
+Traceback (most recent call last):
+  File "/harness/campaign_equipment_runtime.py", line 379, in <module>
+    main(EquipmentPolicy)
+  File "/harness/campaign_runtime.py", line 268, in main
+    policy.observe(text_lines, time.monotonic() - started)
+  File "/harness/campaign_equipment_runtime.py", line 317, in observe
+    count = inventory_count(inventory)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/campaign_equipment_runtime.py", line 145, in inventory_count
+    assert len(counts) == 1, f'Actual equipment header count missing/ambiguous: {counts}'
+           ^^^^^^^^^^^^^^^^
+AssertionError: Actual equipment header count missing/ambiguous: set()

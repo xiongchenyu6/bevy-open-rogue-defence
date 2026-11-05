@@ -1,9 +1,10 @@
+from campaign_equipment_runtime import screenshot_battle_seconds
 from smoke_runtime import normalized
 import shutil
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 from smoke_runtime import ocr_screenshot
-from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop, tile_name_text
+from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop, tile_name_text, inventory_view
 from campaign_equipment_runtime import battle_seconds
 from pathlib import Path
 from campaign_equipment_runtime import (affordable_gear, market_wallet, inventory_count,
@@ -64,6 +65,94 @@ class EquipmentPolicyParsing(unittest.TestCase):
         with patch('campaign_equipment_runtime.wallet_header_reads',return_value=[
                 (200,'LV1 KILLS 0089'),(300,'LV1 KILLS 0089'),(600,'LV1 KILLS')]):
             self.assertEqual(screenshot_wallet(Path('public.png'),None)[0],89)
+
+    def inventory_opener(self, rows, clocks=()):
+        policy=EquipmentPolicy.__new__(EquipmentPolicy)
+        policy.visits=2
+        policy.ui=dict(report={},env=None,shot=Mock(return_value=Path('public.png')))
+        policy.key=Mock()
+        return policy, patch('campaign_equipment_runtime.ocr_screenshot',side_effect=rows), \
+            patch('campaign_equipment_runtime.screenshot_battle_seconds',side_effect=clocks)
+
+    def test_battle_level_anchor_is_exact_spatial_and_blocked_by_optional_modal(self):
+        level=('LEVEL1 12/60XP',490,657,600,680)
+        self.assertEqual(inventory_view([level]),'battle')
+        for row in [('LEVEL1 12/60XP',100,300,300,320),
+                    ('LEVEL1 12 XP',490,657,600,680),
+                    ('LEVEL1 unknown/60XP',490,657,600,680),
+                    ('Something LEVEL1 12/60XP',490,657,600,680)]:
+            self.assertEqual(inventory_view([row]),'unknown')
+        encounter=('Choose an encounter',40,80,600,110)
+        self.assertEqual(inventory_view([level,encounter]),'unknown')
+        self.assertEqual(inventory_view([('LIVES3',23,87,70,98),encounter]),'unknown')
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_actual_packaged_battle_uses_level_anchor_without_correcting_lives(self):
+        from smoke_runtime import read_toolbar_speed
+        path=Path(__file__).resolve().parents[2]/'docs/verification/sword-package-2026-11-05/smoke/battle.png'
+        rows=ocr_screenshot(path)
+        self.assertEqual(inventory_view(rows),'battle')
+        self.assertEqual(screenshot_battle_seconds(path,None),24*60+46)
+        self.assertEqual(read_toolbar_speed(path,None),1)
+
+    def test_inventory_opener_never_toggles_an_open_panel(self):
+        rows=[('EQUIPMENT · 2',213,108,400,130)]
+        policy,ocr,clock=self.inventory_opener([rows])
+        with ocr,clock,patch('campaign_equipment_runtime.time.monotonic',return_value=0):
+            self.assertEqual(policy.open_inventory('test',90),rows)
+        policy.key.assert_not_called()
+
+    def test_inventory_opener_handles_choice_and_waits_for_clock_before_retry(self):
+        battle=[('LIVES 2',23,87,70,98)]
+        choice=[('Level 20 · Recruit a hero',40,80,500,110)]
+        inventory=[('EQUIPMENT · 2',213,108,400,130)]
+        policy,ocr,clock=self.inventory_opener([choice,battle,battle,battle,inventory],[1167,1167,1166])
+        with ocr,clock,patch('campaign_equipment_runtime.time.monotonic',return_value=0), \
+                patch('campaign_equipment_runtime.read_toolbar_speed',return_value=1):
+            self.assertEqual(policy.open_inventory('test',90),inventory)
+        self.assertEqual([call.args[0] for call in policy.key.call_args_list],['1','i','i'])
+        records=policy.ui['report']['equipment_open_attempts']
+        self.assertEqual([row.get('clock') for row in records],[None,1167,1167,1166,None])
+        self.assertNotIn('input',records[2])
+
+    def test_inventory_opener_unknown_or_deadline_never_sends_input(self):
+        for rows in ([('Unknown overlay',200,200,500,230)],
+                     [('Settings',300,100,500,130),('LIVES2',23,87,70,98)],
+                     [('BLACK MARKET',617,214,759,230),('LIVES2',23,87,70,98)]):
+            policy,ocr,clock=self.inventory_opener([rows])
+            with ocr,clock,patch('campaign_equipment_runtime.time.monotonic',return_value=0), self.assertRaises(AssertionError):
+                policy.open_inventory('test',90)
+            policy.key.assert_not_called()
+        policy,ocr,clock=self.inventory_opener([])
+        with ocr,clock,patch('campaign_equipment_runtime.time.monotonic',return_value=90), self.assertRaises(AssertionError):
+            policy.open_inventory('test',90)
+        policy.key.assert_not_called()
+
+    def test_inventory_opener_limits_requests_and_defers_real_terminal(self):
+        self.assertEqual(inventory_view([('CHAPTER CLEARED',400,200,800,250),
+            ('EQUIPMENT · 2',213,108,400,130)]), 'terminal')
+        battle=[('LIVES2',23,87,70,98)]
+        policy,ocr,clock=self.inventory_opener([battle]*4,[10,9,8,7])
+        with ocr,clock,patch('campaign_equipment_runtime.time.monotonic',return_value=0), \
+                patch('campaign_equipment_runtime.read_toolbar_speed',return_value=1),self.assertRaises(AssertionError):
+            policy.open_inventory('test',90)
+        self.assertEqual([call.args[0] for call in policy.key.call_args_list],['i']*3)
+        policy,ocr,clock=self.inventory_opener([[('NO LIVES REMAIN',400,300,800,350)]])
+        with ocr,clock,patch('campaign_equipment_runtime.time.monotonic',return_value=0):
+            self.assertIsNone(policy.open_inventory('test',90))
+        policy.key.assert_not_called()
+        self.assertIn('equipment_inventory_terminal',policy.ui['report'])
+        self.assertNotIn('victory',policy.ui['report'])
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_actual_missed_inventory_open_is_live_battle_not_inventory_or_terminal(self):
+        from smoke_runtime import read_toolbar_speed
+        path=Path(__file__).resolve().parents[2]/'docs/verification/inventory-open-2026-11-05/missed-open-battle.png'
+        self.assertEqual(inventory_view(ocr_screenshot(path)), 'battle')
+        self.assertEqual(screenshot_battle_seconds(path,None),19*60+27)
+        self.assertEqual(read_toolbar_speed(path,None),1)
 
     def test_current_header_and_ambiguous_wallet(self):
         self.assertEqual(market_wallet([('LV1 KILLS 99880',1120,205,1209,214)]),99880)

@@ -7,7 +7,7 @@ from campaign_runtime import read_progress
 from campaign_equipment_runtime import (TILE_LEFTS, PREVIEW_CROP, tile_name_text,
     screenshot_wallet, inspected_offer, choice_pending, crop_text, inventory_count,
     inventory_icons, inventory_open, selected_inventory_name, market_closed,
-    has_gear_rows, verify_deduction, screenshot_battle_seconds)
+    has_gear_rows, verify_deduction, screenshot_battle_seconds, wait_inventory_open)
 
 MATERIALS = frozenset(('Arc Lens', 'Echo Core'))
 
@@ -285,7 +285,13 @@ def main():
                 verify_deduction(before,after,offer)
                 report['purchases'].append(dict(name=name,price=price,wallet_before=before,wallet_after=after,offer_ocr=offer))
                 shot('purchase.png');close_market_panel();drain_choices()
-                key('i');count,details=inspect_inventory(f'material-{len(report["purchases"])}')
+                opened=wait_inventory_open(shot,env,key,time.monotonic()+90,
+                    report.setdefault('inventory_open_attempts',[]),
+                    f'material-{len(report["purchases"])}')
+                if opened is None:
+                    terminal(lines())
+                    raise AssertionError('Terminal inventory observation no longer readable; craft proof remains pending')
+                count,details=inspect_inventory(f'material-{len(report["purchases"])}')
                 expected=[normalized(item) for item in [*report['acquired_materials'],name]]
                 assert count==len(expected) and set(details)==set(expected), ('Purchased materials not owned',count,details,expected)
                 shot(f'inventory-material-{len(report["purchases"])}.png')

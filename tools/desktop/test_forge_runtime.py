@@ -1,7 +1,8 @@
 """Public pixel parser checks; no test here claims a new earned live craft."""
 import shutil
+import forge_runtime
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 from pathlib import Path
 from smoke_runtime import normalized
 from smoke_runtime import ocr_screenshot
@@ -56,6 +57,20 @@ class ForgePolicyTests(unittest.TestCase):
                 (1,['astralprism'],['Arc Lens']),
                 (1,['astralprism'],['Arc Lens','Arc Lens','Echo Core'])]:
             with self.assertRaises(AssertionError):verify_crafted_inventory(count,details,acquired)
+
+    def test_forge_shared_inventory_opener_settles_missed_input_without_toggling_open_panel(self):
+        battle=[('LIVES2',23,87,70,98)]
+        owned=[('EQUIPMENT · 1',213,108,400,130)]
+        send=Mock();records=[]
+        with patch('campaign_equipment_runtime.ocr_screenshot',side_effect=[battle,battle,battle,owned]), \
+                patch('campaign_equipment_runtime.screenshot_battle_seconds',side_effect=[1167,1167,1166]), \
+                patch('campaign_equipment_runtime.read_toolbar_speed',return_value=1), \
+                patch('campaign_equipment_runtime.time.monotonic',return_value=0):
+            result=forge_runtime.wait_inventory_open(lambda name:Path(name),None,send,90,records,'forge-owned')
+        self.assertEqual(result,owned)
+        self.assertEqual([call.args[0] for call in send.call_args_list],['i','i'])
+        self.assertEqual([record['state'] for record in records],['battle','battle','battle','inventory'])
+        self.assertNotIn('input',records[-1])
 
     def test_visible_timer_recovers_late_recruitment_before_each_read(self):
         # A modal appears after an earlier drain returned. Each timer read

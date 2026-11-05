@@ -14,7 +14,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 from campaign_runtime import GAME, main
-from smoke_runtime import find_text, normalized, read_hud_wallet
+from smoke_runtime import find_text, normalized, read_hud_wallet, read_toolbar_speed, ocr_screenshot
 
 
 PREVIEW_CROP = '425x19+695+489'
@@ -198,6 +198,56 @@ def choice_pending(rows):
                     'recruitahero', 'chooseanevolution', 'chooseabondtoreplace')) for text, *_ in rows)
 
 
+def inventory_view(rows):
+    if any(find_text(rows, title) for title in ('NO LIVES REMAIN', 'CHAPTER CLEARED')):
+        return 'terminal'
+    if inventory_open(rows):
+        return 'inventory'
+    if choice_pending(rows):
+        return 'choice'
+    if has_gear_rows(rows) or any(70 <= y < 650 and normalized(text) in
+            ('attributes', 'legacytraining', 'expeditions', 'settings', 'paused', 'chooseanencounter')
+            for text, _, y, *_ in rows):
+        return 'unknown'
+    if any(x < 100 and 70 <= y < 110 and re.match(r'^LIVES\s*\d+', text, re.I)
+           or 450 <= x < 650 and 640 <= y < 695
+           and re.fullmatch(r'LEVEL\s*\d+\s+\d+\s*/\s*\d+\s*XP', text.strip(), re.I)
+           for text, x, y, *_ in rows):
+        return 'battle'
+    return 'unknown'
+
+
+def wait_inventory_open(shot, env, send, deadline, records, prefix, visit=None):
+    requests, previous_clock = 0, None
+    while time.monotonic() < deadline:
+        image = shot(prefix + f'-open-{len(records):02}.png')
+        rows = ocr_screenshot(image, env)
+        state = inventory_view(rows)
+        record = dict(visit=visit, screenshot=image.name, state=state, requests=requests)
+        records.append(record)
+        if state == 'inventory':
+            inventory_count(rows)  # An ambiguous visible header never permits another I.
+            return rows
+        if state == 'terminal':
+            return None  # Outer campaign loop owns the actual result/reward flow.
+        assert time.monotonic() < deadline, 'Inventory open observation exceeded visit budget'
+        if state == 'choice':
+            send('1')
+            continue
+        assert state == 'battle', f'Unknown public screen while opening inventory: {rows}'
+        clock = screenshot_battle_seconds(image, env)
+        assert read_toolbar_speed(image, env) == 1, 'Inventory route requires actual1x'
+        record['clock'] = clock
+        assert time.monotonic() < deadline, 'Inventory open OCR exceeded visit budget'
+        if previous_clock is None or clock < previous_clock:
+            assert requests < 3, 'Inventory failed to open after three public requests'
+            send('i')
+            requests += 1
+            previous_clock = clock
+            record['input'] = 'i'
+    raise AssertionError('Inventory did not open within remaining visit budget')
+
+
 class EquipmentPolicy:
     def __init__(self, ui):
         assert os.environ.get('CAMPAIGN_STAGE') == '5'
@@ -274,6 +324,14 @@ class EquipmentPolicy:
                 self.key('1')
         raise AssertionError('Choice queue did not expose a battle countdown within visit budget')
 
+    def open_inventory(self, prefix, deadline):
+        records = self.ui['report'].setdefault('equipment_open_attempts', [])
+        rows = wait_inventory_open(self.ui['shot'], self.ui['env'], self.key,
+                                   deadline, records, prefix, self.visits)
+        if rows is None:
+            self.ui['report']['equipment_inventory_terminal'] = records[-1]
+        return rows
+
     def observe(self, rows, elapsed):
         if elapsed < self.next_visit or self.visits >= 12:
             return
@@ -338,10 +396,9 @@ class EquipmentPolicy:
                 self.ui['shot'](prefix + '-close-failure.png')
                 raise AssertionError('Market failed to close within visit budget')
             if offers:
-                if choice_pending(closed_rows):
-                    self.visible_countdown(prefix + '-before-inventory', deadline)
-                self.key('i')
-                inventory = self.ui['lines']()
+                inventory = self.open_inventory(prefix, deadline)
+                if inventory is None:
+                    return
                 count = inventory_count(inventory)
                 details = []
                 found = None
