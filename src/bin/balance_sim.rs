@@ -10,9 +10,9 @@ use bevy::{
 };
 use rogue_commander::game::{
     BasicAttackCounter, BondCardId, BondDrawButton, CombatPools, DraftButton, DraftState,
-    EncounterState, EnemyPressureSettings, GamePlugin, GameSession, Hero, HeroVitals, PlayerBuild,
-    RecruitmentProgress, RunRng, RunSeed, SelectedHero, SkillCastTelemetry, SkillDrawButton,
-    SkillEconomy, bond_cost, skill_cost,
+    EncounterState, Enemy, EnemyPressureSettings, GamePlugin, GameSession, Hero, HeroVitals,
+    PlayerBuild, Projectile, RecruitmentProgress, RunRng, RunSeed, SelectedHero,
+    SkillCastTelemetry, SkillDrawButton, SkillEconomy, bond_cost, skill_cost,
 };
 use std::{env, time::Duration};
 
@@ -192,6 +192,149 @@ fn policy(world: &mut World) {
         press(world, e);
     }
 }
+/// Optional diagnostic output only; schedules and simulated time stay unchanged.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct TraceRange {
+    first: u32,
+    last: u32,
+}
+impl TraceRange {
+    fn parse(value: &str, frame_cap: u32) -> Result<Self, &'static str> {
+        let (first, last) = value.split_once(':').ok_or("expected FIRST:LAST")?;
+        let first = first.parse::<u32>().map_err(|_| "invalid first frame")?;
+        let last = last.parse::<u32>().map_err(|_| "invalid last frame")?;
+        if first == 0 || first > last || last > frame_cap {
+            return Err("trace must satisfy 1 <= FIRST <= LAST <= frame cap");
+        }
+        Ok(Self { first, last })
+    }
+    fn contains(self, frame: u32) -> bool {
+        (self.first..=self.last).contains(&frame)
+    }
+}
+
+#[derive(Debug)]
+struct TraceActors {
+    hero_positions: Vec<[u64; 4]>,
+    enemy_order: Vec<u64>,
+    // Entity bits, health/max-health bits, position XYZ bits, speed bits.
+    enemies: Vec<[u64; 7]>,
+    // Entity bits, position XYZ, velocity XYZ, damage/radius/lifetime bits, hits.
+    projectiles: Vec<[u64; 11]>,
+}
+fn trace_actors(world: &mut World) -> TraceActors {
+    let mut hero_positions: Vec<_> = world
+        .query_filtered::<(Entity, &Transform), With<Hero>>()
+        .iter(world)
+        .map(|(entity, transform)| {
+            [
+                entity.to_bits(),
+                u64::from(transform.translation.x.to_bits()),
+                u64::from(transform.translation.y.to_bits()),
+                u64::from(transform.translation.z.to_bits()),
+            ]
+        })
+        .collect();
+    hero_positions.sort_unstable_by_key(|row| row[0]);
+    let mut enemies: Vec<_> = world
+        .query::<(Entity, &Enemy, &Transform)>()
+        .iter(world)
+        .map(|(entity, enemy, transform)| {
+            [
+                entity.to_bits(),
+                u64::from(enemy.hp.to_bits()),
+                u64::from(enemy.max_hp.to_bits()),
+                u64::from(transform.translation.x.to_bits()),
+                u64::from(transform.translation.y.to_bits()),
+                u64::from(transform.translation.z.to_bits()),
+                u64::from(enemy.speed.to_bits()),
+            ]
+        })
+        .collect();
+    let enemy_order = enemies.iter().map(|row| row[0]).collect();
+    enemies.sort_unstable_by_key(|row| row[0]);
+    let mut projectiles: Vec<_> = world
+        .query::<(Entity, &Projectile, &Transform)>()
+        .iter(world)
+        .map(|(entity, projectile, transform)| {
+            [
+                entity.to_bits(),
+                u64::from(transform.translation.x.to_bits()),
+                u64::from(transform.translation.y.to_bits()),
+                u64::from(transform.translation.z.to_bits()),
+                u64::from(projectile.velocity.x.to_bits()),
+                u64::from(projectile.velocity.y.to_bits()),
+                u64::from(projectile.velocity.z.to_bits()),
+                u64::from(projectile.damage.to_bits()),
+                u64::from(projectile.radius.to_bits()),
+                u64::from(projectile.lifetime.to_bits()),
+                u64::from(projectile.remaining_hits),
+            ]
+        })
+        .collect();
+    projectiles.sort_unstable_by_key(|row| row[0]);
+    TraceActors {
+        hero_positions,
+        enemy_order,
+        enemies,
+        projectiles,
+    }
+}
+fn trace_update(world: &mut World, frame: u32) {
+    let actors = trace_actors(world);
+    let session = world.resource::<GameSession>();
+    let hero = world.resource::<HeroVitals>();
+    let build = world.resource::<PlayerBuild>();
+    let rng = world.resource::<RunRng>().state();
+    let attacks = world.resource::<BasicAttackCounter>().count();
+    let casts = world.resource::<SkillCastTelemetry>().total;
+    let hero_bits = [
+        hero.health,
+        hero.max_health,
+        hero.energy,
+        hero.max_energy,
+        hero.strength,
+        hero.agility,
+        hero.intelligence,
+        hero.revive_remaining,
+        hero.invulnerable_remaining,
+        hero.stunned_remaining,
+        build.attack_damage,
+        build.attacks_per_second,
+    ]
+    .map(f32::to_bits);
+    let owned_bonds: Vec<_> = BondCardId::ALL
+        .iter()
+        .filter(|id| build.owned_bond_cards[id.index()])
+        .map(|id| id.index())
+        .collect();
+    let economy = world.resource::<SkillEconomy>();
+    println!(
+        "{{\"type\":\"trace\",\"frame\":{frame},\"elapsed_bits\":{},\"gate_bits\":{},\"gate_revive_bits\":{},\"rng_state\":{rng},\"attacks\":{attacks},\"casts\":{casts},\"hero_id\":{},\"hero_bits\":{hero_bits:?},\"hero_alive\":{},\"deaths\":{},\"level\":{},\"xp\":{},\"gold\":{},\"wood\":{},\"kills\":{},\"skill_points\":{},\"paid_skill_draws\":{},\"paid_bond_draws\":{},\"skill_ranks\":{:?},\"owned_bonds\":{owned_bonds:?},\"paused\":{},\"finished\":{},\"hero_positions\":{:?},\"enemy_order\":{:?},\"enemies\":{:?},\"projectiles\":{:?}}}",
+        session.elapsed.to_bits(),
+        session.core_hp.to_bits(),
+        session.gate_revive_remaining.to_bits(),
+        hero.kind.index(),
+        hero.alive,
+        hero.deaths,
+        session.level,
+        session.xp,
+        session.gold,
+        session.wood,
+        session.total_kills,
+        session.skill_points,
+        economy.paid_draws,
+        session.bond_draws,
+        build.skills,
+        session.paused,
+        session.finished,
+        actors.hero_positions,
+        actors.enemy_order,
+        actors.enemies,
+        actors.projectiles,
+    );
+}
+
 struct Metrics {
     gate_breaks: u32,
     gate_down: bool,
@@ -338,6 +481,9 @@ fn main() {
     if let Some(v) = args.get(11) {
         pressure.health_cap = v.parse().expect("health cap");
     }
+    let trace_range = env::var("ROGUE_SIM_TRACE_RANGE")
+        .ok()
+        .map(|value| TraceRange::parse(&value, frames).expect("invalid ROGUE_SIM_TRACE_RANGE"));
     let mut app = App::new();
     app.add_plugins(
         DefaultPlugins
@@ -433,6 +579,9 @@ fn main() {
     for frame in 1..=frames {
         app.update();
         metrics.observe(app.world());
+        if trace_range.is_some_and(|range| range.contains(frame)) {
+            trace_update(app.world_mut(), frame);
+        }
         if frame == 32
             || frame.is_multiple_of(1800)
             || frame == frames
@@ -449,6 +598,91 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn trace_range_rejects_unbounded_or_invalid_payloads() {
+        let range = TraceRange::parse("19000:32400", 120000).unwrap();
+        assert!(!range.contains(18999));
+        assert!(range.contains(19000) && range.contains(32400));
+        assert!(!range.contains(32401));
+        for invalid in [
+            "",
+            "19000",
+            "0:10",
+            "20:10",
+            "1:120001",
+            "1:2:3",
+            "1:NaN",
+            "1:4294967296",
+        ] {
+            assert!(TraceRange::parse(invalid, 120000).is_err(), "{invalid}");
+        }
+    }
+
+    #[test]
+    fn trace_actor_payload_keeps_exact_bits_and_separates_raw_order_from_canonical_state() {
+        #[derive(Component)]
+        struct Cosmetic;
+        fn world(reverse: bool) -> World {
+            let mut world = World::new();
+            let actors: [Entity; 2] = std::array::from_fn(|_| {
+                world
+                    .spawn((
+                        Enemy {
+                            hp: 1.000_000_1,
+                            max_hp: 100.,
+                            speed: 0.25,
+                            damage: 0.,
+                            xp: 0,
+                            wood: 0,
+                            gold: 0,
+                            kill_credit: 0,
+                            elite: false,
+                        },
+                        Transform::from_xyz(-0., 0., 2.),
+                    ))
+                    .id()
+            });
+            world.spawn((
+                Projectile {
+                    velocity: Vec3::X,
+                    damage: 7.25,
+                    radius: 0.5,
+                    remaining_hits: 2,
+                    lifetime: 1.5,
+                },
+                Transform::default(),
+            ));
+            for entity in if reverse {
+                [actors[1], actors[0]]
+            } else {
+                actors
+            } {
+                world.entity_mut(entity).insert(Cosmetic);
+            }
+            world
+        }
+        let forward = trace_actors(&mut world(false));
+        let reverse = trace_actors(&mut world(true));
+        assert_ne!(forward.enemy_order, reverse.enemy_order);
+        assert_eq!(forward.enemies, reverse.enemies);
+        assert_eq!(forward.projectiles, reverse.projectiles);
+        assert_eq!(forward.hero_positions, reverse.hero_positions);
+        assert!(
+            forward
+                .enemies
+                .windows(2)
+                .all(|pair| pair[0][0] < pair[1][0])
+        );
+        assert!(
+            forward
+                .enemies
+                .iter()
+                .all(|row| row[1] == u64::from(1.000_000_1_f32.to_bits())
+                    && row[3] == u64::from((-0.0_f32).to_bits()))
+        );
+        assert_eq!(forward.projectiles[0][7], u64::from(7.25_f32.to_bits()));
+    }
 
     fn policy_fixture(
         gold: u32,
