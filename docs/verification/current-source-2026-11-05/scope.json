@@ -1,0 +1,23 @@
+{
+  "head": "1fe2a6a7b3eee3edce9b7b2416066d4d852d5587",
+  "packaged_game_source": "8f4084b22b55be0040a8cb0f7f5a50bd470eb126",
+  "source_trees": {
+    "8f4084b22b55be0040a8cb0f7f5a50bd470eb126": {
+      "src": "e4555f3264731093e8e00b576b02919c19133e7e",
+      "Cargo.toml": "1325da56900ca4715b3f60c6a4a8d304dbee2e8c",
+      "Cargo.lock": "8f537382c6a763be767b4ad6fc0b4d83cf9fec53",
+      "vendor": "f6d5055582c563543b518298f6354654b871136a",
+      "assets": "d498087c23e44c0009be06a29c9e9e5c3458b139"
+    },
+    "1fe2a6a7b3eee3edce9b7b2416066d4d852d5587": {
+      "src": "e4555f3264731093e8e00b576b02919c19133e7e",
+      "Cargo.toml": "1325da56900ca4715b3f60c6a4a8d304dbee2e8c",
+      "Cargo.lock": "8f537382c6a763be767b4ad6fc0b4d83cf9fec53",
+      "vendor": "f6d5055582c563543b518298f6354654b871136a",
+      "assets": "d498087c23e44c0009be06a29c9e9e5c3458b139"
+    }
+  },
+  "command": "nix develop --command cargo clippy --locked --release --all-targets -j2 -- -D warnings",
+  "result": "Finished release profile; no Rust warnings or errors",
+  "scope": "Local Linux optimized all-target lint, not cross-platform or subjective gameplay verification"
+}
