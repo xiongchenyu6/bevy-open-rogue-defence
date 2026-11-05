@@ -282,8 +282,20 @@ def inventory_header_rows(image, env=None):
         crop = Path(directory) / 'header.png'
         subprocess.run(['convert', str(image), '-crop', '880x65+200+80', '+repage', str(crop)],
                        env=env, check=True, capture_output=True)
-        return [(text, x+200, y+80, right+200, bottom+80)
+        rows = [(text, x+200, y+80, right+200, bottom+80)
                 for text,x,y,right,bottom in ocr_screenshot(crop, env)]
+        # Isolate the actual single title line from the three header buttons.
+        # No numeric whitelist: EQUIPMENT and its count must both be observed.
+        title = Path(directory) / 'title.png'
+        subprocess.run(['convert', str(image), '-crop', '200x32+210+100', '+repage',
+                        '-colorspace', 'Gray', '-negate', '-resize', '200%',
+                        '-bordercolor', 'white', '-border', '10', str(title)],
+                       env=env, check=True, capture_output=True)
+        for mode in ('7', '13'):
+            text = subprocess.check_output(['tesseract', str(title), 'stdout', '-l', 'eng',
+                '--psm', mode], env=env, text=True, stderr=subprocess.PIPE).strip()
+            rows.append((text, 210, 100, 410, 132))
+        return rows
 
 
 def inventory_item_selected(image, index, count, env=None):

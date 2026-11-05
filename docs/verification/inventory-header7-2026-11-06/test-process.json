@@ -1,0 +1,19 @@
+{
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "-v",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence:/project:ro",
+    "-w",
+    "/project/tools/desktop",
+    "rogue-commander-linux-smoke:ubuntu24-oct8",
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-v"
+  ],
+  "exit": 0,
+  "elapsed": 100.25326139599201
+}

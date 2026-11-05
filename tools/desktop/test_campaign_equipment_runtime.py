@@ -1,4 +1,4 @@
-from campaign_equipment_runtime import screenshot_battle_seconds
+from campaign_equipment_runtime import screenshot_battle_seconds, inventory_header_rows
 from smoke_runtime import normalized
 import shutil
 import unittest
@@ -512,6 +512,31 @@ class EquipmentPolicyParsing(unittest.TestCase):
         root = Path(__file__).resolve().parents[2]
         path = root / 'docs/verification/inventory-ocr-2026-11-05/two-items.png'
         self.assertEqual(inventory_count(ocr_screenshot(path)), 2)
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_isolated_native_inventory_titles_and_noninventory_controls(self):
+        root = Path(__file__).resolve().parents[2] / 'docs/verification'
+        for relative, expected in [
+                ('vortex-chapter6-r2-2026-11-06/chapter6/equipment-08-item-0-before.png', 7),
+                ('forge-restart-86cb084-2026-11-06/restart-empty-inventory.png', 0),
+                ('inventory-ocr-2026-11-05/two-items.png', 2),
+                ('inventory-split-2026-11-05/after/equipment-en-desktop/frame00230.png', 5)]:
+            with self.subTest(path=relative):
+                self.assertEqual(inventory_count(inventory_header_rows(root/relative)), expected)
+        for relative in ('inventory-open-2026-11-05/missed-open-battle.png',
+                         'hud-recruitment-2026-11-05/level10-over-speed.png',
+                         'vortex-chapter6-r2-2026-11-06/chapter6/equipment-08-market.png'):
+            with self.subTest(noninventory=relative), self.assertRaises(AssertionError):
+                inventory_count(inventory_header_rows(root/relative))
+
+    def test_inventory_count_rejects_conflicting_or_non_numeric_title_reads(self):
+        for rows in ([('EQUIPMENT · 7',210,100,410,132), ('EQUIPMENT + 1',215,108,367,127)],
+                     [('EQUIPMENT "了',215,108,367,127)],
+                     [('EQUIPMENT · 7 extra',210,100,410,132)],
+                     [('EQUIPMENT · 7',210,400,410,432)]):
+            with self.subTest(rows=rows), self.assertRaises(AssertionError):
+                inventory_count(rows)
 
     def test_inventory_header_and_visible_grid(self):
         self.assertEqual(inventory_count([('EQUIPMENT · 12',213,108,400,130)]),12)
