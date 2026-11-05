@@ -1,0 +1,21 @@
+{
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "-v",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence:/project:ro",
+    "-w",
+    "/project/tools/desktop",
+    "rogue-commander-linux-smoke:ubuntu24-oct8",
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-v"
+  ],
+  "exit": 0,
+  "wait_stderr": "",
+  "log_follow_exit": 0,
+  "scope": "Original exec client terminated143; same container remained alive, not restarted; durable watcher recovered docker logs and actual wait exit"
+}

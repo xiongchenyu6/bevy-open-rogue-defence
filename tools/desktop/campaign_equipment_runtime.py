@@ -648,6 +648,12 @@ class EquipmentPolicy:
         self.ui['report'].setdefault('equipment_visit_budgets', []).append(
             dict(visit=self.visits, owned_item_bound=owned_bound, seconds=visit_budget))
         prefix = f'equipment-{self.visits:02}'
+        def phase(name):
+            wall = time.monotonic()
+            self.ui['report'].setdefault('equipment_visit_timings', []).append(
+                dict(visit=self.visits, phase=name, wall=wall, elapsed=wall-visit_started,
+                     deadline=deadline, remaining=deadline-wall))
+        phase('visit started')
         with self.ui['input_lock']:
             clock = self.visible_countdown(prefix + '-unlock-clock', deadline)
             self.ui['report'].setdefault('equipment_unlock_checks', []).append(
@@ -692,6 +698,7 @@ class EquipmentPolicy:
                                 wallet_after=remaining, offer_ocr=offer, after_wallet_ocr=raw, after_market_ocr=market_raw,
                                 visit=self.visits, before=before.name, after=after.name)
                 self.purchases.append(purchase)
+            phase('market close started')
             self.key('b')
             while time.monotonic() < deadline:
                 closed_rows = self.ui['lines']()
@@ -702,12 +709,15 @@ class EquipmentPolicy:
                 self.ui['report']['market_close_failure_rows'] = closed_rows
                 self.ui['shot'](prefix + '-close-failure.png')
                 raise AssertionError('Market failed to close within visit budget')
+            phase('market closed')
             if offers:
+                phase('inventory open started')
                 opened = wait_panel_open(self.ui['shot'], self.ui['env'], self.key,
                     deadline, records, prefix + '-inventory', 'inventory', self.visits)
                 if opened is None:
                     self.ui['report']['equipment_panel_terminal'] = records[-1]
                     return
+                phase('inventory opened')
                 _, inventory = opened
                 count = inventory_count(inventory)
                 details = []
@@ -733,7 +743,7 @@ class EquipmentPolicy:
                 verify_owned_inventory(count, names, self.purchases)
                 assert found is not None, 'Purchased item not found in visible selected inventory details'
                 purchase['selected_icon'] = found
-                inventory = self.ui['lines']()
+                phase('all owned identities verified')
                 self.ui['shot'](prefix + '-inventory.png')
                 close_observations = purchase.setdefault('close_observations', [])
                 def close_rows():
@@ -744,19 +754,25 @@ class EquipmentPolicy:
                 def close_down(x, y):
                     self.ui['call'](['xdotool','mousemove','--window',self.ui['window'](),str(x),str(y)])
                     self.ui['call'](['xdotool','mousedown','1'])
-                close_visible_inventory(close_rows, close_down,
-                    lambda: self.ui['call'](['xdotool','mouseup','1']),
-                    deadline, close_observations)
+                phase('inventory close started')
+                try:
+                    close_visible_inventory(close_rows, close_down,
+                        lambda: self.ui['call'](['xdotool','mouseup','1']),
+                        deadline, close_observations)
+                finally:
+                    phase('inventory close observation ended')
                 closed_inventory = self.ui['lines']()
                 assert not inventory_open(closed_inventory) and not find_text(closed_inventory, 'Close'), \
                     'Equipment did not close'
                 purchase['inventory_verified'] = True
+                phase('inventory fresh closed verified')
             # Header absence alone can be OCR failure. Prove actual simulation
             # resumes through the public countdown after both panels are closed.
             assert time.monotonic() < deadline, 'Visit budget exhausted before battle-resume verification'
-            self.ui['report'].setdefault('equipment_visit_timings', []).append(
-                dict(visit=self.visits, phase='panels closed', elapsed=time.monotonic()-visit_started))
+            phase('panels closed')
+            phase('resume observation started')
             before_seconds = self.visible_countdown(prefix + '-resume-before', deadline)
+            phase('resume baseline observed')
             # Modal recognition/settlement shares the remaining visit budget;
             # a separate ten-second window can expire before the next frame.
             resume_deadline = deadline
@@ -767,6 +783,7 @@ class EquipmentPolicy:
                     self.key('1')
                     continue
                 after_seconds = self.visible_countdown(prefix + '-resume-after', resume_deadline)
+                phase('resume next countdown observed')
                 if after_seconds < before_seconds:
                     self.ui['report'].setdefault('equipment_resume_proofs', []).append(
                         dict(visit=self.visits, before=before_seconds, after=after_seconds))
@@ -774,8 +791,7 @@ class EquipmentPolicy:
             else:
                 raise AssertionError('Battle countdown did not resume after market/equipment closure')
             assert time.monotonic() < deadline, f'Market visit exceeded {visit_budget} seconds'
-            self.ui['report']['equipment_visit_timings'].append(
-                dict(visit=self.visits, phase='resume verified', elapsed=time.monotonic()-visit_started))
+            phase('resume verified')
             # Leave a full minute of battle after a slow software-render visit.
             self.next_visit = elapsed + (time.monotonic()-visit_started) + 60
             print(json.dumps(dict(stage='earned equipment visit', visit=self.visits,
