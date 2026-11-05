@@ -1,0 +1,20 @@
+{
+  "comparison_scope": "recorded checkpoints, not all internal simulation state",
+  "left": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/vortex-fix-repeat-a-nov6/active-h2-behind-sa11ce-c5-t0.jsonl",
+  "right": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/vortex-fix-repeat-b-nov6/active-h2-behind-sa11ce-c5-t0.jsonl",
+  "binary_sha256": "2c543f8f9b6800623e44e972ad0910c1f98519f7eb9961d0db633b84a14ff76d",
+  "checkpoint_counts": [
+    56,
+    12
+  ],
+  "prefix_equal": false,
+  "complete_replay": false,
+  "first_divergence": {
+    "field": "checkpoint[8].damage_skill_casts",
+    "left": 93,
+    "right": 90,
+    "reason": "value differs",
+    "frame": 14400,
+    "right_frame": 14400
+  }
+}

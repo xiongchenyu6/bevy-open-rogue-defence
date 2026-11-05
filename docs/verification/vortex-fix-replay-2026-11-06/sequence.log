@@ -1,0 +1,6 @@
+WAIT after-fix verification gate
+START full replay a
+PASS normal replay a win
+START full replay b
+PASS normal replay b loss
+TERMINAL NORMAL FULL-PREFIX REPLAYS {"first_strict": 24, "first_numeric": 12716, "counts": [98664, 710]}

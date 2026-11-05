@@ -1,0 +1,47 @@
+[
+  {
+    "raw": "2026-11-05T17:26:15.654319Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2849v1 projectile_bits=8589931742 enemy=4007v0 enemy_bits=4294963288 profile=DamageProfile { element: Storm, class: Spell, applies_burn: false, burn_tick: false, skill_index: Some(0), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=300.158203125 scaled_base_damage=345.1819152832031 raw_damage=345.1819152832031 final_damage=345.1819152832031 critical_roll=0.4421054422855377 critical_roll_bits=1055021989 crit_multiplier=1.0 hp_before=1160.320068359375 hp_after=815.13818359375 hp_before_bits=1150356030 hp_after_bits=1145817304 hp_damage=345.1819152832031 rng_before_crit=141447887973586335 rng_after_crit=13323179514262607988 rng_after_resolution=13323179514262607988 elapsed_bits=1129369687",
+    "outer_ordinal": 0,
+    "candidate_ordinal": 0,
+    "progress_bits": 0,
+    "projectile": 2849,
+    "projectile_bits": 8589931742,
+    "enemy": 4007,
+    "enemy_bits": 4294963288,
+    "base_damage": 300.158203125,
+    "scaled_base_damage": 345.1819152832031,
+    "raw_damage": 345.1819152832031,
+    "final_damage": 345.1819152832031,
+    "critical_roll": 0.4421054422855377,
+    "critical_roll_bits": 1055021989,
+    "crit_multiplier": 1.0,
+    "hp_before": 1160.320068359375,
+    "hp_after": 815.13818359375,
+    "hp_before_bits": 1150356030,
+    "hp_after_bits": 1145817304,
+    "hp_damage": 345.1819152832031,
+    "rng_before_crit": 141447887973586335,
+    "rng_after_crit": 13323179514262607988,
+    "rng_after_resolution": 13323179514262607988,
+    "elapsed_bits": 1129369687,
+    "profile": "DamageProfile { element: Storm, class: Spell, applies_burn: false, burn_tick: false, skill_index: Some(0), market_proc: false, card_proc: false, melee: false, arrow: false }",
+    "target_previous_enemy_row": [
+      4294963288,
+      1150356030,
+      1150356030,
+      3224927046,
+      0,
+      1066207224,
+      1078641274
+    ],
+    "target_after_enemy_row": [
+      4294963288,
+      1145817304,
+      1150356030,
+      3225155158,
+      0,
+      1066207224,
+      1078641274
+    ]
+  }
+]

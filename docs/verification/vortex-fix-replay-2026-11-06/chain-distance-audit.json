@@ -1,0 +1,115 @@
+{
+  "scope": "Read-only distance audit; telemetry lag from source scheduling; elite flag is unrecorded and eligibility remains conditional",
+  "cases": {
+    "a": {
+      "cast_frame_inferred_from_precast_telemetry_copy": 12710,
+      "telemetry_update_frame": 12711,
+      "primary_actual_contact_id": 21474833370,
+      "primary_xyz_at_cast": [
+        -3.299999713897705,
+        0.0,
+        1.7704253196716309
+      ],
+      "unvisited_distance_candidates": [
+        [
+          0.9223333597183228,
+          4294963288
+        ],
+        [
+          11.079911231994629,
+          4294964356
+        ],
+        [
+          15.775364875793457,
+          8589931994
+        ],
+        [
+          16.534181594848633,
+          8589931827
+        ],
+        [
+          24.160158157348633,
+          34359734819
+        ],
+        [
+          24.330211639404297,
+          4294964584
+        ],
+        [
+          304.030517578125,
+          12884898443
+        ]
+      ],
+      "unique_nearest_intended_id": 4294963288,
+      "strike_origin_using_previous_frame_target_plus_y018": [
+        -2.882524013519287,
+        0.18000000715255737,
+        1.1018056869506836
+      ],
+      "neighbor_distance_squared": 0.6537381410598755,
+      "normal_radius_squared": 0.2809000015258789,
+      "elite_radius_squared": 1.0,
+      "normal_target_id": 4294963288,
+      "neighbor_id": 21474833370,
+      "lower_entity_bits_if_both_overlap": 4294963288,
+      "actual_contact_target_id": 4294963288,
+      "actual_progress_bits": 0,
+      "neighbor_elite_flag_recorded": false
+    },
+    "b": {
+      "cast_frame_inferred_from_precast_telemetry_copy": 12710,
+      "telemetry_update_frame": 12711,
+      "primary_actual_contact_id": 17179866065,
+      "primary_xyz_at_cast": [
+        -3.299999713897705,
+        0.0,
+        1.7704253196716309
+      ],
+      "unvisited_distance_candidates": [
+        [
+          0.9223333597183228,
+          30064767331
+        ],
+        [
+          11.079911231994629,
+          4294964379
+        ],
+        [
+          15.775364875793457,
+          12884899516
+        ],
+        [
+          16.534181594848633,
+          8589931850
+        ],
+        [
+          24.160158157348633,
+          25769800003
+        ],
+        [
+          24.330211639404297,
+          4294964602
+        ],
+        [
+          304.030517578125,
+          47244637089
+        ]
+      ],
+      "unique_nearest_intended_id": 30064767331,
+      "strike_origin_using_previous_frame_target_plus_y018": [
+        -2.882524013519287,
+        0.18000000715255737,
+        1.1018056869506836
+      ],
+      "neighbor_distance_squared": 0.6537381410598755,
+      "normal_radius_squared": 0.2809000015258789,
+      "elite_radius_squared": 1.0,
+      "normal_target_id": 30064767331,
+      "neighbor_id": 17179866065,
+      "lower_entity_bits_if_both_overlap": 17179866065,
+      "actual_contact_target_id": 17179866065,
+      "actual_progress_bits": 0,
+      "neighbor_elite_flag_recorded": false
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "scope": "Normal full-prefix duplicate replay diagnostics; no automatic balance matrix or tuning",
+  "binary": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/vortex-order-2026-11-06/balance-sim-snapshot",
+  "binary_sha256": "2c543f8f9b6800623e44e972ad0910c1f98519f7eb9961d0db633b84a14ff76d",
+  "frame_cap": 120000,
+  "actor_range": [
+    1,
+    120000
+  ],
+  "matrix_started": false
+}
