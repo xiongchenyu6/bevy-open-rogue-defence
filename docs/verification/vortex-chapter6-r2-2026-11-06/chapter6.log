@@ -1,0 +1,85 @@
+{"sample": 1, "wall_seconds": 7.6, "terminal": null}
+{"sample": 2, "wall_seconds": 18.3, "terminal": null}
+{"sample": 3, "wall_seconds": 29.2, "terminal": null}
+{"sample": 4, "wall_seconds": 39.9, "terminal": null}
+{"sample": 5, "wall_seconds": 50.8, "terminal": null}
+{"sample": 6, "wall_seconds": 61.5, "terminal": null}
+{"sample": 7, "wall_seconds": 71.8, "terminal": null}
+{"sample": 8, "wall_seconds": 81.8, "terminal": null}
+{"sample": 9, "wall_seconds": 91.9, "terminal": null}
+{"sample": 10, "wall_seconds": 102.0, "terminal": null}
+{"sample": 11, "wall_seconds": 111.9, "terminal": null}
+{"sample": 12, "wall_seconds": 121.9, "terminal": null}
+{"sample": 13, "wall_seconds": 132.0, "terminal": null}
+{"sample": 14, "wall_seconds": 141.9, "terminal": null}
+{"sample": 15, "wall_seconds": 151.7, "terminal": null}
+{"sample": 16, "wall_seconds": 161.8, "terminal": null}
+{"sample": 17, "wall_seconds": 171.8, "terminal": null}
+{"sample": 18, "wall_seconds": 181.7, "terminal": null}
+{"sample": 19, "wall_seconds": 191.7, "terminal": null}
+{"stage": "earned equipment visit", "visit": 1, "purchases": 0, "wallet": 119, "visit_budget_seconds": 160}
+{"sample": 20, "wall_seconds": 254.0, "terminal": null}
+{"sample": 21, "wall_seconds": 264.1, "terminal": null}
+{"sample": 22, "wall_seconds": 273.8, "terminal": null}
+{"sample": 23, "wall_seconds": 283.6, "terminal": null}
+{"sample": 24, "wall_seconds": 294.1, "terminal": null}
+{"sample": 25, "wall_seconds": 304.0, "terminal": null}
+{"sample": 26, "wall_seconds": 314.1, "terminal": null}
+{"stage": "earned equipment visit", "visit": 2, "purchases": 1, "wallet": 333, "visit_budget_seconds": 160}
+{"sample": 27, "wall_seconds": 429.6, "terminal": null}
+{"sample": 28, "wall_seconds": 439.8, "terminal": null}
+{"sample": 29, "wall_seconds": 450.5, "terminal": null}
+{"sample": 30, "wall_seconds": 460.8, "terminal": null}
+{"sample": 31, "wall_seconds": 470.8, "terminal": null}
+{"sample": 32, "wall_seconds": 480.8, "terminal": null}
+{"stage": "earned equipment visit", "visit": 3, "purchases": 2, "wallet": 312, "visit_budget_seconds": 180}
+{"sample": 33, "wall_seconds": 590.9, "terminal": null}
+{"sample": 34, "wall_seconds": 600.5, "terminal": null}
+{"sample": 35, "wall_seconds": 610.3, "terminal": null}
+{"sample": 36, "wall_seconds": 620.9, "terminal": null}
+{"sample": 37, "wall_seconds": 630.9, "terminal": null}
+{"sample": 38, "wall_seconds": 641.0, "terminal": null}
+{"sample": 39, "wall_seconds": 651.3, "terminal": null}
+{"stage": "earned equipment visit", "visit": 4, "purchases": 3, "wallet": 287, "visit_budget_seconds": 200}
+{"sample": 40, "wall_seconds": 769.2, "terminal": null}
+{"sample": 41, "wall_seconds": 779.0, "terminal": null}
+{"sample": 42, "wall_seconds": 789.5, "terminal": null}
+{"sample": 43, "wall_seconds": 800.0, "terminal": null}
+{"sample": 44, "wall_seconds": 810.8, "terminal": null}
+{"sample": 45, "wall_seconds": 821.4, "terminal": null}
+{"stage": "earned equipment visit", "visit": 5, "purchases": 4, "wallet": 478, "visit_budget_seconds": 220}
+{"sample": 46, "wall_seconds": 938.5, "terminal": null}
+{"sample": 47, "wall_seconds": 948.2, "terminal": null}
+{"sample": 48, "wall_seconds": 958.2, "terminal": null}
+{"sample": 49, "wall_seconds": 968.0, "terminal": null}
+{"sample": 50, "wall_seconds": 978.2, "terminal": null}
+{"sample": 51, "wall_seconds": 988.4, "terminal": null}
+{"stage": "earned equipment visit", "visit": 6, "purchases": 5, "wallet": 473, "visit_budget_seconds": 240}
+{"sample": 52, "wall_seconds": 1111.5, "terminal": null}
+{"sample": 53, "wall_seconds": 1121.3, "terminal": null}
+{"sample": 54, "wall_seconds": 1131.3, "terminal": null}
+{"sample": 55, "wall_seconds": 1141.4, "terminal": null}
+{"sample": 56, "wall_seconds": 1151.2, "terminal": null}
+{"sample": 57, "wall_seconds": 1161.0, "terminal": null}
+{"sample": 58, "wall_seconds": 1171.1, "terminal": null}
+{"stage": "earned equipment visit", "visit": 7, "purchases": 6, "wallet": 550, "visit_budget_seconds": 260}
+{"sample": 59, "wall_seconds": 1294.3, "terminal": null}
+{"sample": 60, "wall_seconds": 1304.4, "terminal": null}
+{"sample": 61, "wall_seconds": 1314.7, "terminal": null}
+{"sample": 62, "wall_seconds": 1324.7, "terminal": null}
+{"sample": 63, "wall_seconds": 1334.9, "terminal": null}
+{"sample": 64, "wall_seconds": 1344.6, "terminal": null}
+Traceback (most recent call last):
+  File "/harness/campaign_equipment_runtime.py", line 744, in <module>
+    main(EquipmentPolicy)
+  File "/harness/campaign_runtime.py", line 270, in main
+    policy.observe(text_lines, time.monotonic() - started)
+  File "/harness/campaign_equipment_runtime.py", line 674, in observe
+    select_visible_inventory_item(
+  File "/harness/campaign_equipment_runtime.py", line 306, in select_visible_inventory_item
+    count = inventory_count(rows)
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/campaign_equipment_runtime.py", line 390, in inventory_count
+    assert len(counts) == 1, f'Actual equipment header count missing/ambiguous: {counts}'
+           ^^^^^^^^^^^^^^^^
+AssertionError: Actual equipment header count missing/ambiguous: set()

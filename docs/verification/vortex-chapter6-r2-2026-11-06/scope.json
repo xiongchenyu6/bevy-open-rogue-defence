@@ -1,0 +1,146 @@
+{
+  "process": {
+    "exit": 1,
+    "elapsed": 1492.6620318889618
+  },
+  "completed_run": false,
+  "victory": false,
+  "purchases": [
+    {
+      "visit": 2,
+      "name": "Wind Boots",
+      "price": 160,
+      "wallet_before": 333,
+      "wallet_after": 173,
+      "inventory_count": 1,
+      "owned_names": [
+        "windboots"
+      ],
+      "inventory_verified": true
+    },
+    {
+      "visit": 3,
+      "name": "Serrated Disc",
+      "price": 180,
+      "wallet_before": 312,
+      "wallet_after": 132,
+      "inventory_count": 2,
+      "owned_names": [
+        "serrateddisc",
+        "windboots"
+      ],
+      "inventory_verified": true
+    },
+    {
+      "visit": 4,
+      "name": "Hardened Plate",
+      "price": 180,
+      "wallet_before": 287,
+      "wallet_after": 107,
+      "inventory_count": 3,
+      "owned_names": [
+        "serrateddisc",
+        "hardenedplate",
+        "windboots"
+      ],
+      "inventory_verified": true
+    },
+    {
+      "visit": 5,
+      "name": "ArcLens",
+      "price": 180,
+      "wallet_before": 478,
+      "wallet_after": 298,
+      "inventory_count": 4,
+      "owned_names": [
+        "serrateddisc",
+        "arclens",
+        "hardenedplate",
+        "windboots"
+      ],
+      "inventory_verified": true
+    },
+    {
+      "visit": 6,
+      "name": "Spirit Drum",
+      "price": 200,
+      "wallet_before": 473,
+      "wallet_after": 273,
+      "inventory_count": 5,
+      "owned_names": [
+        "serrateddisc",
+        "arclens",
+        "hardenedplate",
+        "spiritdrum",
+        "windboots"
+      ],
+      "inventory_verified": true
+    },
+    {
+      "visit": 7,
+      "name": "Ember Heart",
+      "price": 280,
+      "wallet_before": 550,
+      "wallet_after": 270,
+      "inventory_count": 6,
+      "owned_names": [
+        "serrateddisc",
+        "arclens",
+        "hardenedplate",
+        "spiritdrum",
+        "windboots",
+        "emberheart"
+      ],
+      "inventory_verified": true
+    },
+    {
+      "visit": 8,
+      "name": "Storm Coil",
+      "price": 280,
+      "wallet_before": 821,
+      "wallet_after": 541,
+      "inventory_count": 7,
+      "owned_names": [],
+      "inventory_verified": null
+    }
+  ],
+  "resume_proofs": [
+    {
+      "visit": 1,
+      "before": 1264,
+      "after": 1255
+    },
+    {
+      "visit": 2,
+      "before": 1152,
+      "after": 1142
+    },
+    {
+      "visit": 3,
+      "before": 1044,
+      "after": 1035
+    },
+    {
+      "visit": 4,
+      "before": 928,
+      "after": 919
+    },
+    {
+      "visit": 5,
+      "before": 820,
+      "after": 810
+    },
+    {
+      "visit": 6,
+      "before": 712,
+      "after": 703
+    },
+    {
+      "visit": 7,
+      "before": 596,
+      "after": 587
+    }
+  ],
+  "save_sha256": "4c9a0973fa90b3f75838ccb1999267be31ff8ff9b896a8c9b165ae5ac3e129f9",
+  "save_unchanged": true
+}

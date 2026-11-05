@@ -1,0 +1,2 @@
+{"stage": "launch", "harness_commit": "c166e8856f24bbff635a3a4e0e555fba42cb1a92", "package_commit": "86cb08498e446a27b31554f8cb6dd3eb641e214b", "container": "rogue-vortex-c6-r2-nov6", "outer_budget": 5400}
+{"stage": "terminal", "exit": 1, "elapsed": 1492.6620318889618}
