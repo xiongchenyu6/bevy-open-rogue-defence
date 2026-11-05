@@ -11,6 +11,8 @@ use bevy::{
 mod panel;
 use panel::panel;
 
+const EMPTY_ARMORY_IMAGE: &str = "ui/armory/empty-rack.png";
+
 const GOLD: Color = Color::srgb(0.90, 0.72, 0.42);
 const PANEL: Color = Color::srgb(0.035, 0.055, 0.065);
 const IVORY: Color = Color::srgb(0.95, 0.93, 0.85);
@@ -80,6 +82,8 @@ struct SelectedArt {
     max: f32,
 }
 #[derive(Component)]
+struct EmptyArmory;
+#[derive(Component)]
 struct Grid;
 #[derive(Component)]
 struct DetailScroll;
@@ -93,7 +97,7 @@ pub(crate) fn install(app: &mut App) {
                 .after(bevy::ui::UiSystems::Focus)
                 .after(SettingsInputSet),
         )
-        .add_systems(Update, (feedback, details, scroll).chain());
+        .add_systems(Update, (feedback, details, scroll, reveal_empty_armory).chain());
 }
 
 pub(crate) fn spawn_entry(parent: &mut ChildSpawnerCommands, assets: &AssetServer) {
@@ -471,6 +475,20 @@ fn feedback(
         }
     }
 }
+// Decorative art never replaces the useful empty-state copy or blocks play.
+// Do not draw an unloaded image: Bevy's default white image is not a fallback.
+fn reveal_empty_armory(
+    images: Option<Res<Assets<Image>>>,
+    mut art: Query<(&ImageNode, &mut Node), With<EmptyArmory>>,
+) {
+    for (image, mut node) in &mut art {
+        let ready = images.as_ref().is_some_and(|images| images.contains(&image.image));
+        node.reborrow()
+            .map_unchanged(|node| &mut node.display)
+            .set_if_neq(if ready { Display::Flex } else { Display::None });
+    }
+}
+
 fn details(
     mut commands: Commands,
     confirmations: Query<

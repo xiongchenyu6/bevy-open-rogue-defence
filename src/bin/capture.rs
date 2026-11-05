@@ -161,6 +161,8 @@ mod crafting_capture;
 mod equipment_capture;
 #[path = "capture/equipment_mouse.rs"]
 mod equipment_mouse_capture;
+#[path = "capture/equipment_empty.rs"]
+mod equipment_empty_capture;
 
 #[cfg(any(debug_assertions, feature = "dev-tools"))]
 #[path = "capture/hit_feedback.rs"]
@@ -440,6 +442,9 @@ fn main() {
     });
 
     let mut app = App::new();
+    if scenario == "equipment-empty-missing" {
+        equipment_empty_capture::prepare(&mut app);
+    }
     if scenario == "asset-readiness-recruit" {
         recruitment_readiness_capture::prepare(&mut app);
     }
@@ -648,6 +653,9 @@ fn main() {
     }
     if scenario.starts_with("crafting-") {
         crafting_capture::install(&mut apps.main);
+    }
+    if scenario.starts_with("equipment-empty") {
+        equipment_empty_capture::install(&mut apps.main);
     }
     if scenario == "equipment-mouse" {
         equipment_mouse_capture::install(&mut apps.main);
@@ -1135,6 +1143,10 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     }
     if scenario.starts_with("crafting-") {
         crafting_capture::configure(world, scenario);
+        return;
+    }
+    if scenario.starts_with("equipment-empty") {
+        equipment_capture::configure(world);
         return;
     }
     if scenario == "equipment-mouse" {

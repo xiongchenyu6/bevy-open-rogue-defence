@@ -1,0 +1,8 @@
+{
+  "src/game/equipment_ui.rs": "f644251fd963738abdeb24f77ac7bee599bfe5018dfa0a257856e85f87f938a1",
+  "src/game/equipment_ui/panel.rs": "c7fd718935312c8f808166c2a4c1ae2f41b702b28533bbfe7a80eccd5877506d",
+  "src/bin/capture.rs": "e0aaa9625151c2e48c77554993febd94d4fdd2ab7f4998aca5ac3d3855121f41",
+  "src/bin/capture/equipment_empty.rs": "98faa996a245a28c28f0a698d138325a0f3dbca8fe94db417184c9f94bf9acc6",
+  "assets/ui/armory/empty-rack.png": "f2194a2247f41d8931748b6aa7af50090f65080dabfbd5e505aa2027e3b40d35",
+  "target/market-visual/debug/capture": "7cafe7b29ba43d192703d1142fe42c4695626a76ccc34a739ec4057f70d09304"
+}

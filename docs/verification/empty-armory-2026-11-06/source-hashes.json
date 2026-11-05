@@ -1,0 +1,17 @@
+{
+  "base_commit": "b839894cb0496519f383f4a2add90c0ce0f51d34",
+  "state": "UI/capture changes uncommitted during final R2 verification",
+  "sha256": {
+    "src/game/equipment_ui.rs": "f644251fd963738abdeb24f77ac7bee599bfe5018dfa0a257856e85f87f938a1",
+    "src/game/equipment_ui/panel.rs": "6043c7d7fca560d2c6de4cd99197821a5739d60afc48eba5eeab3daef5082d1b",
+    "src/bin/capture.rs": "e0aaa9625151c2e48c77554993febd94d4fdd2ab7f4998aca5ac3d3855121f41",
+    "src/bin/capture/equipment_empty.rs": "8c450372d5ae35fa7d9dd7855158b0f08e14c3ea7874cda61043dbd3e2d85bd1",
+    "assets/ui/armory/empty-rack.png": "f2194a2247f41d8931748b6aa7af50090f65080dabfbd5e505aa2027e3b40d35",
+    "tools/verify_empty_armory_art.py": "4be84edf9f14ec4a6aea37decd606b42f2afcea97ea828e17f81cd6bf5d7be47",
+    "target/market-visual/debug/capture": "24a592724aaed004e3d76461fb1caf886490c041017200e6ce22ebe73f0ab389"
+  },
+  "existing_atlases_unchanged": {
+    "assets/ui/recipes/recipe-atlas.png": "37346eb5ee66513da7b055fea351b74da27e7ab20a44c9d0081b3c4858882e82",
+    "assets/ui/market/equipment-atlas.png": "ea9c22a92ce0d3c251e928e04464d76b3a422fa8a677d02dcd80f933774e2160"
+  }
+}

@@ -1,0 +1,23 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {35, 65, 125}; all 150 simulation/render updates retained
+[2m2026-11-05T19:06:47.694892Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-05T19:06:47.760827Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-05T19:06:48.514709Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-05T19:06:48.514922Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-05T19:06:49.251621Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[2m2026-11-05T19:06:54.148869Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/empty-armory-r2-2026-11-06/missing-recovery/frame00035.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/empty-armory-r2-2026-11-06/missing-recovery/frame00035.png (400961 bytes)
+[2m2026-11-05T19:06:54.207116Z[0m [31mERROR[0m [2mbevy_asset::server[0m[2m:[0m Path not found: /tmp/nix-shell.KglREI/rogue-readiness-2666657-1793905607670871354/ui/armory/empty-rack.png
+EQUIPMENT_EMPTY_MISSING_PASS actual image load failed; art hidden; original empty copy visible
+[2m2026-11-05T19:06:55.398698Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/empty-armory-r2-2026-11-06/missing-recovery/frame00065.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/empty-armory-r2-2026-11-06/missing-recovery/frame00065.png (400961 bytes)
+EQUIPMENT_EMPTY_ART_PASS frame=125 actual image ready and visible size=Vec2(220.0, 147.0); empty copy retained
+EQUIPMENT_EMPTY_PASS original empty art, no owned items, retained copy and controls; missing=true
+[2m2026-11-05T19:06:57.626024Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/empty-armory-r2-2026-11-06/missing-recovery/frame00125.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/empty-armory-r2-2026-11-06/missing-recovery/frame00125.png (433766 bytes)
+[capture] all 3 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 150 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/empty-armory-r2-2026-11-06/missing-recovery

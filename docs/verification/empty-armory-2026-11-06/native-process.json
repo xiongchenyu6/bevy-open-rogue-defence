@@ -1,0 +1,112 @@
+[
+  {
+    "name": "en-desktop",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "target/market-visual/debug/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/empty-armory-r2-2026-11-06/en-desktop",
+      "150",
+      "equipment-empty",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "scene": "equipment-empty",
+    "lang": "en",
+    "size": "1280x720",
+    "count": 150,
+    "exit": 0,
+    "passed": true,
+    "elapsed": 18.203351046016905
+  },
+  {
+    "name": "zh-compact",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "target/market-visual/debug/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/empty-armory-r2-2026-11-06/zh-compact",
+      "150",
+      "equipment-empty",
+      "0xA11CE",
+      "667x375"
+    ],
+    "scene": "equipment-empty",
+    "lang": "zh-CN",
+    "size": "667x375",
+    "count": 150,
+    "exit": 0,
+    "passed": true,
+    "elapsed": 11.68925698599196
+  },
+  {
+    "name": "en-portrait",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "target/market-visual/debug/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/empty-armory-r2-2026-11-06/en-portrait",
+      "150",
+      "equipment-empty",
+      "0xA11CE",
+      "390x844"
+    ],
+    "scene": "equipment-empty",
+    "lang": "en",
+    "size": "390x844",
+    "count": 150,
+    "exit": 0,
+    "passed": true,
+    "elapsed": 10.286680213001091
+  },
+  {
+    "name": "missing-recovery",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "target/market-visual/debug/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/empty-armory-r2-2026-11-06/missing-recovery",
+      "150",
+      "equipment-empty-missing",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "scene": "equipment-empty-missing",
+    "lang": "en",
+    "size": "1280x720",
+    "count": 150,
+    "exit": 0,
+    "passed": true,
+    "elapsed": 11.238386534998426
+  },
+  {
+    "name": "owned-regression",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "target/market-visual/debug/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/empty-armory-r2-2026-11-06/owned-regression",
+      "310",
+      "equipment",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "scene": "equipment",
+    "lang": "en",
+    "size": "1280x720",
+    "count": 310,
+    "exit": 0,
+    "passed": true,
+    "elapsed": 17.302706179994857
+  }
+]

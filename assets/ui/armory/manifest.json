@@ -1,0 +1,28 @@
+{
+  "image": "empty-rack.png",
+  "sha256": "f2194a2247f41d8931748b6aa7af50090f65080dabfbd5e505aa2027e3b40d35",
+  "bytes": 106233,
+  "size": [
+    384,
+    256
+  ],
+  "source_path": "/home/freeman.xiong/.codex/generated_images/01a1ab1d-bcb5-71c2-952f-ddf6846f9e9f/exec-f840bf17-4467-4ef0-ad81-5bb65d0dd55b.png",
+  "source_sha256": "48400da02e0c0b9ea8fc7a27ea87b4ba5c9ad7013a03de24753e19f4f1ed7961",
+  "source_size": [
+    1536,
+    1024
+  ],
+  "source_alpha_crop": [
+    92,
+    38,
+    1435,
+    1015
+  ],
+  "packing": "alpha>8 bounds crop, proportional Lanczos fit360x240, center384x256; original alpha retained",
+  "packed_bounds": [
+    27,
+    8,
+    357,
+    248
+  ]
+}

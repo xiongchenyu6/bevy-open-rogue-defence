@@ -19,6 +19,12 @@ pub(super) fn panel(
         320.0
     };
     let preview_size = if compact { 88.0 } else { 176.0 };
+    let empty = !crafting_tab && owned.is_empty() && crafted.is_empty();
+    let preview_box = if empty {
+        if compact { Vec2::new(110.0, 73.0) } else { Vec2::new(220.0, 147.0) }
+    } else {
+        Vec2::splat(preview_size)
+    };
     commands.spawn((
         Name::new("Equipment panel"),
         Node {
@@ -71,14 +77,31 @@ pub(super) fn panel(
                         column_gap: px(if compact { 8.0 } else { 14.0 }), ..default()
                     }).with_children(|showcase| {
                         showcase.spawn(Node {
-                            width: px(preview_size), height: px(preview_size), flex_shrink: 0.0,
+                            width: px(preview_box.x), height: px(preview_box.y), flex_shrink: 0.0,
                             align_items: AlignItems::Center, justify_content: JustifyContent::Center,
                             ..default()
-                        }).with_child((
-                            SelectedArt { max: preview_size }, Name::new("Equipment selected art"),
-                            ImageNode::default(), Node { display: Display::None, ..default() },
-                            Pickable::IGNORE,
-                        ));
+                        }).with_children(|preview| {
+                            if empty {
+                                preview.spawn((
+                                    EmptyArmory, Name::new("Equipment empty armory"),
+                                    ImageNode {
+                                        color: Color::srgba(1.0, 1.0, 1.0, 0.85),
+                                        ..ImageNode::new(assets.load(EMPTY_ARMORY_IMAGE))
+                                    },
+                                    Node {
+                                        display: Display::None, width: percent(100),
+                                        height: percent(100), ..default()
+                                    },
+                                    Pickable::IGNORE,
+                                ));
+                            } else {
+                                preview.spawn((
+                                    SelectedArt { max: preview_size }, Name::new("Equipment selected art"),
+                                    ImageNode::default(), Node { display: Display::None, ..default() },
+                                    Pickable::IGNORE,
+                                ));
+                            }
+                        });
                         showcase.spawn(Node {
                             flex_grow: 1.0, min_width: px(0), flex_direction: FlexDirection::Column,
                             row_gap: px(8), ..default()
@@ -105,11 +128,14 @@ pub(super) fn panel(
                             overflow: Overflow::scroll_y(), flex_direction: FlexDirection::Column,
                             padding: UiRect::top(px(8)), border: UiRect::top(px(1)), ..default()
                         }, BorderColor::all(Color::srgba(0.90, 0.72, 0.42, 0.35)),
-                    )).with_child((
-                        DetailEffect, Name::new("Equipment detail effect"), Text::new(""),
-                        TextFont { font_size: FontSize::Px(14.0), ..default() },
-                        TextColor(IVORY), TextLayout::linebreak(LineBreak::WordOrCharacter),
-                    ));
+                    )).with_children(|details| {
+                        details.spawn((
+                            DetailEffect, Name::new("Equipment detail effect"), Text::new(""),
+                            TextFont { font_size: FontSize::Px(14.0), ..default() },
+                            TextColor(IVORY), TextLayout::linebreak(LineBreak::WordOrCharacter),
+                        ));
+
+                    });
                     if crafting_tab {
                         selected.spawn((
                             Button, ConfirmCraft, Name::new("Crafting confirm"),
