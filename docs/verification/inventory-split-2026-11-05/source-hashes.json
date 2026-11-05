@@ -1,0 +1,13 @@
+{
+  "base_commit": "6995368c86cba8d21fb566b8a7b17a9580031b4d",
+  "source_state": "UI source changes uncommitted during capture; hashes identify exact files",
+  "sha256": {
+    "src/game/equipment_ui.rs": "6797ff61cf4f951b08aef40ceb57bb6db8459e3b8acaf4e9d3eddb269c38c3d4",
+    "src/game/equipment_ui/panel.rs": "544dceab834f3da644c5db5b1c3a9ba0bc98a4fac2ecf6293ed6c4a57e9a50d5",
+    "src/bin/capture/controller_input.rs": "d0c43caefdf09077dd34022919f3b800adbc9659f2a51b289d6388f1f98089c5",
+    "src/bin/capture/equipment.rs": "d89d3e1eea085eab66b646e6736719e1ef6c42dda0f352f5f40c6512f63b2ff9",
+    "src/bin/capture/crafting.rs": "495d8db436ce482bafba1e49e2a06ee6860b0654aa56c4952fb819cde06bc3aa",
+    "src/bin/capture.rs": "8c91c651d925d50c354ac00f5b6c7f8b61f62eea843bd91fdef6bc1b6dbe99f2",
+    "target/market-visual/debug/capture": "ccb3cc7528c90f9a99db42d3eeca7e1b9290c5f277cb48d175381d28721b374f"
+  }
+}

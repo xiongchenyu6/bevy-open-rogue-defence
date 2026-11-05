@@ -1,0 +1,6 @@
+START full-tests.log
+PASS full-tests.log
+START clippy.log
+PASS clippy.log
+START capture-build.log
+PASS capture-build.log

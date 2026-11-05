@@ -21,6 +21,9 @@ pub(crate) struct EquipmentPanelState {
     selected: Option<MarketItem>,
     selected_crafted: Option<RecipeId>,
     recipe: Option<RecipeId>,
+    /// Hover/focus previews until a click/A selection; navigating toward its
+    /// action must not silently select a different card on the way.
+    selection_committed: bool,
     crafting_tab: bool,
     crafting_revision: u32,
     known_crafted: Vec<RecipeId>,
@@ -41,6 +44,7 @@ impl EquipmentPanelState {
             commands.entity(root).despawn();
         }
         session.paused = self.prior_paused || session.finished;
+        self.selection_committed = false;
     }
 }
 #[derive(Component)]
@@ -71,6 +75,10 @@ struct Item(MarketItem);
 struct DetailName;
 #[derive(Component)]
 struct DetailEffect;
+#[derive(Component)]
+struct SelectedArt {
+    max: f32,
+}
 #[derive(Component)]
 struct Grid;
 #[derive(Component)]
@@ -255,6 +263,7 @@ fn input(
         for (interaction, tab) in &tabs {
             if *interaction == Interaction::Pressed && state.crafting_tab != tab.0 {
                 state.crafting_tab = tab.0;
+                state.selection_committed = false;
                 if state.recipe.is_none() {
                     state.recipe = Some(RecipeId::Bloodreaver);
                 }
@@ -262,14 +271,22 @@ fn input(
             }
         }
         for (interaction, recipe, focused) in &recipes {
-            if focused || matches!(interaction, Interaction::Pressed | Interaction::Hovered) {
+            let committed = *interaction == Interaction::Pressed;
+            if committed
+                || (!state.selection_committed && (focused || *interaction == Interaction::Hovered))
+            {
                 state.recipe = Some(recipe.0);
+                state.selection_committed |= committed;
             }
         }
         for (interaction, item, focused) in &crafted_items {
-            if focused || matches!(interaction, Interaction::Pressed | Interaction::Hovered) {
+            let committed = *interaction == Interaction::Pressed;
+            if committed
+                || (!state.selection_committed && (focused || *interaction == Interaction::Hovered))
+            {
                 state.selected_crafted = Some(item.0);
                 state.selected = None;
+                state.selection_committed |= committed;
             }
         }
         if craft_buttons
@@ -283,9 +300,13 @@ fn input(
             });
         }
         for (interaction, item, focused) in &items {
-            if focused || matches!(interaction, Interaction::Pressed | Interaction::Hovered) {
+            let committed = *interaction == Interaction::Pressed;
+            if committed
+                || (!state.selection_committed && (focused || *interaction == Interaction::Hovered))
+            {
                 state.selected = Some(item.0);
                 state.selected_crafted = None;
+                state.selection_committed |= committed;
             }
         }
         if !rebuild
@@ -311,6 +332,7 @@ fn input(
             return;
         }
         state.prior_paused = session.paused;
+        state.selection_committed = false;
         session.paused = true;
         keyboard.clear();
     }
@@ -459,7 +481,9 @@ fn details(
     language: Res<GameLanguage>,
     crafting: Res<CraftingState>,
     market: Res<MarketEffects>,
+    assets: Res<AssetServer>,
     mut texts: Query<(&Name, &mut Text)>,
+    mut selected_art: Query<(&SelectedArt, &mut ImageNode, &mut Node)>,
     mut cards: Query<(
         Option<&Item>,
         Option<&Crafted>,
@@ -472,6 +496,36 @@ fn details(
         return;
     }
     let recipe = state.recipe.unwrap_or(RecipeId::Bloodreaver);
+    for (art, mut image, mut node) in &mut selected_art {
+        let selected = if state.crafting_tab {
+            Some((recipe.image_node(&assets), recipe.art_size(art.max)))
+        } else if let Some(item) = state.selected {
+            Some((item.image_node(&assets), item.art_size(art.max)))
+        } else {
+            state
+                .selected_crafted
+                .map(|item| (item.image_node(&assets), item.art_size(art.max)))
+        };
+        if let Some((next, size)) = selected {
+            if image.image != next.image || image.rect != next.rect {
+                image.image = next.image;
+                image.rect = next.rect;
+            }
+            node.reborrow()
+                .map_unchanged(|node| &mut node.display)
+                .set_if_neq(Display::Flex);
+            node.reborrow()
+                .map_unchanged(|node| &mut node.width)
+                .set_if_neq(px(size.x));
+            node.reborrow()
+                .map_unchanged(|node| &mut node.height)
+                .set_if_neq(px(size.y));
+        } else {
+            node.reborrow()
+                .map_unchanged(|node| &mut node.display)
+                .set_if_neq(Display::None);
+        }
+    }
     let detail_name = if state.crafting_tab {
         format!("[{}] {}", recipe.rarity().label(), recipe.name(*language))
     } else if let Some(item) = state.selected {
@@ -592,6 +646,119 @@ pub(crate) fn reset_run(world: &mut World) {
 mod tests {
     use super::*;
     use bevy::ecs::system::RunSystemOnce;
+    #[test]
+    fn committed_recipe_survives_focus_navigation_to_confirm_and_fresh_press_reselects() {
+        use crate::game::controller_input::{ControllerDisabled, ControllerFocused};
+        let (_, _, equipment) = super::super::market::purchased_attribute_equipment_for_test();
+        let known = equipment.equipment();
+        let crafting = CraftingState::default();
+        assert!(crafting.ready(RecipeId::Bloodreaver, &equipment));
+        assert!(!crafting.ready(RecipeId::Suncoil, &equipment));
+        let mut app = App::new();
+        app.add_plugins((MinimalPlugins, AssetPlugin::default()))
+            .insert_resource(equipment)
+            .insert_resource(crafting)
+            .insert_resource(GameLanguage::English)
+            .init_resource::<EquipmentPanelState>()
+            .init_resource::<GameSession>()
+            .init_resource::<SelectedHero>()
+            .init_resource::<ButtonInput<KeyCode>>()
+            .init_resource::<super::super::settings::SettingsState>()
+            .init_resource::<super::super::ui::hero_stats_ui::HeroStatsPanelState>()
+            .add_systems(Update, (input, details).chain());
+        let root = app.world_mut().spawn(Name::new("Equipment panel")).id();
+        {
+            let mut state = app.world_mut().resource_mut::<EquipmentPanelState>();
+            state.root = Some(root);
+            state.size = Vec2::new(1280.0, 720.0);
+            state.language = Some(GameLanguage::English);
+            state.known = known;
+            state.crafting_tab = true;
+            state.recipe = Some(RecipeId::Bloodreaver);
+        }
+        let bloodreaver = app
+            .world_mut()
+            .spawn((
+                Button,
+                Recipe(RecipeId::Bloodreaver),
+                Interaction::None,
+                BackgroundColor(PANEL),
+            ))
+            .id();
+        let suncoil = app
+            .world_mut()
+            .spawn((
+                Button,
+                Recipe(RecipeId::Suncoil),
+                Interaction::Hovered,
+                ControllerFocused,
+                BackgroundColor(PANEL),
+            ))
+            .id();
+        let confirm = app
+            .world_mut()
+            .spawn((
+                Button,
+                ConfirmCraft,
+                Interaction::None,
+                BackgroundColor(PANEL),
+            ))
+            .id();
+        // Before explicit selection, ordinary focus continues to preview recipes.
+        app.update();
+        assert_eq!(
+            app.world().resource::<EquipmentPanelState>().recipe,
+            Some(RecipeId::Suncoil)
+        );
+        assert!(app.world().get::<ControllerDisabled>(confirm).is_some());
+        app.world_mut()
+            .entity_mut(suncoil)
+            .remove::<ControllerFocused>();
+        *app.world_mut().get_mut::<Interaction>(suncoil).unwrap() = Interaction::None;
+        app.world_mut()
+            .entity_mut(bloodreaver)
+            .insert(ControllerFocused);
+        *app.world_mut().get_mut::<Interaction>(bloodreaver).unwrap() = Interaction::Pressed;
+        app.update();
+        assert_eq!(
+            app.world().resource::<EquipmentPanelState>().recipe,
+            Some(RecipeId::Bloodreaver)
+        );
+        assert!(app.world().get::<ControllerDisabled>(confirm).is_none());
+        // The compact route crosses an unready recipe en route to confirmation.
+        // Focus/hover must not silently replace the recipe selected with A/click.
+        app.world_mut()
+            .entity_mut(bloodreaver)
+            .remove::<ControllerFocused>();
+        *app.world_mut().get_mut::<Interaction>(bloodreaver).unwrap() = Interaction::None;
+        app.world_mut()
+            .entity_mut(suncoil)
+            .insert(ControllerFocused);
+        *app.world_mut().get_mut::<Interaction>(suncoil).unwrap() = Interaction::Hovered;
+        app.update();
+        assert_eq!(
+            app.world().resource::<EquipmentPanelState>().recipe,
+            Some(RecipeId::Bloodreaver)
+        );
+        assert!(app.world().get::<ControllerDisabled>(confirm).is_none());
+        // A fresh explicit selection still changes both the preview and action.
+        *app.world_mut().get_mut::<Interaction>(suncoil).unwrap() = Interaction::Pressed;
+        app.update();
+        assert_eq!(
+            app.world().resource::<EquipmentPanelState>().recipe,
+            Some(RecipeId::Suncoil)
+        );
+        assert!(app.world().get::<ControllerDisabled>(confirm).is_some());
+        app.world_mut().spawn((Close, Interaction::Pressed));
+        app.update();
+        assert!(!app.world().resource::<EquipmentPanelState>().open());
+        assert!(
+            !app.world()
+                .resource::<EquipmentPanelState>()
+                .selection_committed
+        );
+    }
+
     #[test]
     fn close_preserves_the_pause_it_did_not_own_and_run_reset_clears_its_entities() {
         for prior_paused in [false, true] {
