@@ -1,0 +1,12 @@
+{
+  "a": {
+    "path": "target/verification/gate-descriptive-inputs-2026-11-06/target/verification/gate-descriptive-a-2026-11-06/simulator-snapshot",
+    "sha256": "75c69149c8d211daf9a4a5d37b0f1ee3755449fb70e79296dd665577ba0d95fc",
+    "bytes": 181681944
+  },
+  "b": {
+    "path": "target/verification/gate-descriptive-inputs-2026-11-06/target/verification/gate-descriptive-b-2026-11-06/simulator-snapshot",
+    "sha256": "75c69149c8d211daf9a4a5d37b0f1ee3755449fb70e79296dd665577ba0d95fc",
+    "bytes": 181681944
+  }
+}

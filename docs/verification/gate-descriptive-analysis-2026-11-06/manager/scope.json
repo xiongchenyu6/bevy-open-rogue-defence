@@ -1,0 +1,40 @@
+{
+  "scope": "Descriptive repeated balance observations only; exact numeric repeat gate remains open. No pressure overrides, tuning, real save-unlock or rendered-player acceptance claim.",
+  "gameplay_commit": "237e65086af203da66900bb12d86e6e7a70b8bdf",
+  "simulator_commit": "5f357900c5619891dcbcaeab0e8f76870001a9a4",
+  "binary_sha256": "75c69149c8d211daf9a4a5d37b0f1ee3755449fb70e79296dd665577ba0d95fc",
+  "frozen_inputs": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-descriptive-inputs-2026-11-06",
+  "batches": 2,
+  "cases_per_batch": 24,
+  "frames": 120000,
+  "jobs": 1,
+  "case_timeout": 900,
+  "chapter_indices": [
+    4,
+    5
+  ],
+  "training": 0,
+  "seeds": [
+    "A11CE",
+    "BEEF"
+  ],
+  "policies": [
+    "active",
+    "passive"
+  ],
+  "starters": [
+    0,
+    1,
+    2
+  ],
+  "positions": [
+    "behind"
+  ],
+  "profile": "Simulator prior-chapters-cleared and zero six-upgrade fixture; not a normally earned checkpoint",
+  "trace": "Full actor/contact tracing disabled; actual checkpoints and damage-skill telemetry retained",
+  "limitations": [
+    "Two seeds and two repetitions per configuration are descriptive, not population win rates.",
+    "Passive still accepts mandatory recruitment; active chooses first cards, absorbs and attempts purchases.",
+    "Censored/frame-cap/invalid cases must remain explicit; never count them as completed wins or losses."
+  ]
+}

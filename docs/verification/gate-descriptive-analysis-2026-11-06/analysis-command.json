@@ -1,0 +1,17 @@
+{
+  "base_analysis": [
+    "python3",
+    "tools/analyze_balance.py",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-descriptive-inputs-2026-11-06/target/verification/gate-descriptive-a-2026-11-06",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-descriptive-inputs-2026-11-06/target/verification/gate-descriptive-b-2026-11-06",
+    "--output",
+    "target/verification/gate-descriptive-analysis-2026-11-06/base-analysis"
+  ],
+  "descriptive_analysis": [
+    "python3",
+    "target/verification/gate-descriptive-analysis-2026-11-06/analyze_descriptive.py"
+  ],
+  "exit": 0,
+  "plots": "Not generated: optional matplotlib unavailable; complete checkpoint CSV curves retained",
+  "note": "Additional reviewer assertion originally assumed pressure_override null; actual frozen runner format is emptylist, corrected without changing data."
+}

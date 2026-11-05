@@ -1,0 +1,202 @@
+{
+  "scope": "First descriptive replica only; two seeds per starter/policy/chapter, zero permanent upgrades and artificial prior-chapters-cleared fixture. Frozen pre-dagger gameplay; no population win-rate, causal tuning, current-package or normally earned unlock claim. Second replica still running.",
+  "binary_sha256": "75c69149c8d211daf9a4a5d37b0f1ee3755449fb70e79296dd665577ba0d95fc",
+  "summary_sha256": "721af9901c05e82b237c42329fe91c44270aaaa40ed5eeb2b95c390e03772106",
+  "requested": 24,
+  "completed": 24,
+  "censored": 0,
+  "groups": [
+    {
+      "chapter_number": 5,
+      "policy": "active",
+      "outcomes": [
+        {
+          "case": "active-h0-behind-sa11ce-c4-t0",
+          "outcome": "win",
+          "final_wave": 25,
+          "deaths": 0,
+          "elapsed": 1546.771
+        },
+        {
+          "case": "active-h0-behind-sbeef-c4-t0",
+          "outcome": "win",
+          "final_wave": 25,
+          "deaths": 0,
+          "elapsed": 1529.648
+        },
+        {
+          "case": "active-h1-behind-sa11ce-c4-t0",
+          "outcome": "win",
+          "final_wave": 25,
+          "deaths": 0,
+          "elapsed": 1537.29
+        },
+        {
+          "case": "active-h1-behind-sbeef-c4-t0",
+          "outcome": "win",
+          "final_wave": 25,
+          "deaths": 0,
+          "elapsed": 1541.575
+        },
+        {
+          "case": "active-h2-behind-sa11ce-c4-t0",
+          "outcome": "win",
+          "final_wave": 25,
+          "deaths": 0,
+          "elapsed": 1542.024
+        },
+        {
+          "case": "active-h2-behind-sbeef-c4-t0",
+          "outcome": "win",
+          "final_wave": 25,
+          "deaths": 0,
+          "elapsed": 1566.89
+        }
+      ]
+    },
+    {
+      "chapter_number": 5,
+      "policy": "passive",
+      "outcomes": [
+        {
+          "case": "passive-h0-behind-sa11ce-c4-t0",
+          "outcome": "loss",
+          "final_wave": 2,
+          "deaths": 3,
+          "elapsed": 71.667
+        },
+        {
+          "case": "passive-h0-behind-sbeef-c4-t0",
+          "outcome": "loss",
+          "final_wave": 2,
+          "deaths": 3,
+          "elapsed": 85.287
+        },
+        {
+          "case": "passive-h1-behind-sa11ce-c4-t0",
+          "outcome": "loss",
+          "final_wave": 4,
+          "deaths": 3,
+          "elapsed": 213.213
+        },
+        {
+          "case": "passive-h1-behind-sbeef-c4-t0",
+          "outcome": "loss",
+          "final_wave": 4,
+          "deaths": 3,
+          "elapsed": 234.928
+        },
+        {
+          "case": "passive-h2-behind-sa11ce-c4-t0",
+          "outcome": "loss",
+          "final_wave": 4,
+          "deaths": 3,
+          "elapsed": 210.726
+        },
+        {
+          "case": "passive-h2-behind-sbeef-c4-t0",
+          "outcome": "loss",
+          "final_wave": 4,
+          "deaths": 3,
+          "elapsed": 198.866
+        }
+      ]
+    },
+    {
+      "chapter_number": 6,
+      "policy": "active",
+      "outcomes": [
+        {
+          "case": "active-h0-behind-sa11ce-c5-t0",
+          "outcome": "win",
+          "final_wave": 25,
+          "deaths": 0,
+          "elapsed": 1545.191
+        },
+        {
+          "case": "active-h0-behind-sbeef-c5-t0",
+          "outcome": "win",
+          "final_wave": 25,
+          "deaths": 0,
+          "elapsed": 1557.623
+        },
+        {
+          "case": "active-h1-behind-sa11ce-c5-t0",
+          "outcome": "win",
+          "final_wave": 25,
+          "deaths": 0,
+          "elapsed": 1539.618
+        },
+        {
+          "case": "active-h1-behind-sbeef-c5-t0",
+          "outcome": "win",
+          "final_wave": 25,
+          "deaths": 0,
+          "elapsed": 1569.433
+        },
+        {
+          "case": "active-h2-behind-sa11ce-c5-t0",
+          "outcome": "loss",
+          "final_wave": 21,
+          "deaths": 3,
+          "elapsed": 1229.754
+        },
+        {
+          "case": "active-h2-behind-sbeef-c5-t0",
+          "outcome": "win",
+          "final_wave": 25,
+          "deaths": 0,
+          "elapsed": 1542.295
+        }
+      ]
+    },
+    {
+      "chapter_number": 6,
+      "policy": "passive",
+      "outcomes": [
+        {
+          "case": "passive-h0-behind-sa11ce-c5-t0",
+          "outcome": "loss",
+          "final_wave": 2,
+          "deaths": 3,
+          "elapsed": 67.233
+        },
+        {
+          "case": "passive-h0-behind-sbeef-c5-t0",
+          "outcome": "loss",
+          "final_wave": 2,
+          "deaths": 3,
+          "elapsed": 72.284
+        },
+        {
+          "case": "passive-h1-behind-sa11ce-c5-t0",
+          "outcome": "loss",
+          "final_wave": 4,
+          "deaths": 3,
+          "elapsed": 208.814
+        },
+        {
+          "case": "passive-h1-behind-sbeef-c5-t0",
+          "outcome": "loss",
+          "final_wave": 4,
+          "deaths": 3,
+          "elapsed": 189.369
+        },
+        {
+          "case": "passive-h2-behind-sa11ce-c5-t0",
+          "outcome": "loss",
+          "final_wave": 3,
+          "deaths": 3,
+          "elapsed": 175.518
+        },
+        {
+          "case": "passive-h2-behind-sbeef-c5-t0",
+          "outcome": "loss",
+          "final_wave": 4,
+          "deaths": 3,
+          "elapsed": 192.701
+        }
+      ]
+    }
+  ]
+}

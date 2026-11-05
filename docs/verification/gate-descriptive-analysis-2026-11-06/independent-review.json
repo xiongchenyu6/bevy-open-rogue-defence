@@ -1,0 +1,302 @@
+{
+  "observed_hero_switch_cases": 23,
+  "active_observed_hero_switch_cases": 23,
+  "scope": "48 descriptive observations, 24 matched A/B configurations, not independent population trials or exact internal replay",
+  "binary_sha256": "75c69149c8d211daf9a4a5d37b0f1ee3755449fb70e79296dd665577ba0d95fc",
+  "inputs": {
+    "asset-manifest.json": {
+      "files": 185,
+      "manifest_sha256": "76cc02f1e760a61048c149898e7dc758f43ba84964e194cd3a9ea02507ee0564",
+      "all_files_verified": true
+    },
+    "runner-inputs.json": {
+      "files": 2,
+      "manifest_sha256": "5bd0993c4d0b603504467d3965b6c5807eed00f593fe7cf05ceb3af577eb5f47",
+      "all_files_verified": true
+    }
+  },
+  "requested": 48,
+  "valid": 48,
+  "completed": 48,
+  "censored": 0,
+  "actual_nonzero_exits": 0,
+  "matched_pairs": 24,
+  "outcome_differences": 1,
+  "terminal_different_pairs": 15,
+  "any_common_checkpoint_different_pairs": 14,
+  "different_checkpoint_metric_rows": 5884,
+  "groups": [
+    {
+      "replica": "a",
+      "chapter_number": 5,
+      "policy": "active",
+      "cases": 6,
+      "outcome_counts": {
+        "win": 6
+      },
+      "final_wave_counts": {
+        "25": 6
+      },
+      "deaths_counts": {
+        "0": 6
+      },
+      "elapsed_min": 1529.648,
+      "elapsed_max": 1566.89,
+      "learned_count_min": 8,
+      "learned_count_max": 9,
+      "rank_sum_min": 28,
+      "rank_sum_max": 31,
+      "rank_at_least5_count_counts": {
+        "2": 5,
+        "3": 1
+      },
+      "first_at_least5_observed_cases": 6,
+      "first_at_least5_observed_min": 617.863,
+      "first_at_least5_observed_max": 1321.669,
+      "final_hero_counts": {
+        "2": 3,
+        "7": 3
+      }
+    },
+    {
+      "replica": "a",
+      "chapter_number": 5,
+      "policy": "passive",
+      "cases": 6,
+      "outcome_counts": {
+        "loss": 6
+      },
+      "final_wave_counts": {
+        "2": 2,
+        "4": 4
+      },
+      "deaths_counts": {
+        "3": 6
+      },
+      "elapsed_min": 71.667,
+      "elapsed_max": 234.928,
+      "learned_count_min": 1,
+      "learned_count_max": 1,
+      "rank_sum_min": 1,
+      "rank_sum_max": 1,
+      "rank_at_least5_count_counts": {
+        "0": 6
+      },
+      "first_at_least5_observed_cases": 0,
+      "first_at_least5_observed_min": null,
+      "first_at_least5_observed_max": null,
+      "final_hero_counts": {
+        "0": 2,
+        "1": 2,
+        "2": 2
+      }
+    },
+    {
+      "replica": "a",
+      "chapter_number": 6,
+      "policy": "active",
+      "cases": 6,
+      "outcome_counts": {
+        "loss": 1,
+        "win": 5
+      },
+      "final_wave_counts": {
+        "21": 1,
+        "25": 5
+      },
+      "deaths_counts": {
+        "0": 5,
+        "3": 1
+      },
+      "elapsed_min": 1229.754,
+      "elapsed_max": 1569.433,
+      "learned_count_min": 7,
+      "learned_count_max": 9,
+      "rank_sum_min": 24,
+      "rank_sum_max": 30,
+      "rank_at_least5_count_counts": {
+        "1": 4,
+        "2": 1,
+        "3": 1
+      },
+      "first_at_least5_observed_cases": 6,
+      "first_at_least5_observed_min": 471.174,
+      "first_at_least5_observed_max": 1440.535,
+      "final_hero_counts": {
+        "0": 1,
+        "2": 3,
+        "7": 2
+      }
+    },
+    {
+      "replica": "a",
+      "chapter_number": 6,
+      "policy": "passive",
+      "cases": 6,
+      "outcome_counts": {
+        "loss": 6
+      },
+      "final_wave_counts": {
+        "2": 2,
+        "3": 1,
+        "4": 3
+      },
+      "deaths_counts": {
+        "3": 6
+      },
+      "elapsed_min": 67.233,
+      "elapsed_max": 208.814,
+      "learned_count_min": 1,
+      "learned_count_max": 1,
+      "rank_sum_min": 1,
+      "rank_sum_max": 1,
+      "rank_at_least5_count_counts": {
+        "0": 6
+      },
+      "first_at_least5_observed_cases": 0,
+      "first_at_least5_observed_min": null,
+      "first_at_least5_observed_max": null,
+      "final_hero_counts": {
+        "0": 2,
+        "1": 2,
+        "2": 2
+      }
+    },
+    {
+      "replica": "b",
+      "chapter_number": 5,
+      "policy": "active",
+      "cases": 6,
+      "outcome_counts": {
+        "win": 6
+      },
+      "final_wave_counts": {
+        "25": 6
+      },
+      "deaths_counts": {
+        "0": 6
+      },
+      "elapsed_min": 1537.29,
+      "elapsed_max": 1562.642,
+      "learned_count_min": 8,
+      "learned_count_max": 9,
+      "rank_sum_min": 28,
+      "rank_sum_max": 32,
+      "rank_at_least5_count_counts": {
+        "2": 6
+      },
+      "first_at_least5_observed_cases": 6,
+      "first_at_least5_observed_min": 617.863,
+      "first_at_least5_observed_max": 1321.669,
+      "final_hero_counts": {
+        "2": 3,
+        "7": 3
+      }
+    },
+    {
+      "replica": "b",
+      "chapter_number": 5,
+      "policy": "passive",
+      "cases": 6,
+      "outcome_counts": {
+        "loss": 6
+      },
+      "final_wave_counts": {
+        "2": 2,
+        "4": 4
+      },
+      "deaths_counts": {
+        "3": 6
+      },
+      "elapsed_min": 71.667,
+      "elapsed_max": 234.928,
+      "learned_count_min": 1,
+      "learned_count_max": 1,
+      "rank_sum_min": 1,
+      "rank_sum_max": 1,
+      "rank_at_least5_count_counts": {
+        "0": 6
+      },
+      "first_at_least5_observed_cases": 0,
+      "first_at_least5_observed_min": null,
+      "first_at_least5_observed_max": null,
+      "final_hero_counts": {
+        "0": 2,
+        "1": 2,
+        "2": 2
+      }
+    },
+    {
+      "replica": "b",
+      "chapter_number": 6,
+      "policy": "active",
+      "cases": 6,
+      "outcome_counts": {
+        "loss": 2,
+        "win": 4
+      },
+      "final_wave_counts": {
+        "6": 1,
+        "21": 1,
+        "25": 4
+      },
+      "deaths_counts": {
+        "0": 4,
+        "3": 2
+      },
+      "elapsed_min": 316.254,
+      "elapsed_max": 1557.69,
+      "learned_count_min": 6,
+      "learned_count_max": 9,
+      "rank_sum_min": 9,
+      "rank_sum_max": 31,
+      "rank_at_least5_count_counts": {
+        "0": 1,
+        "1": 1,
+        "2": 4
+      },
+      "first_at_least5_observed_cases": 5,
+      "first_at_least5_observed_min": 471.174,
+      "first_at_least5_observed_max": 1116.136,
+      "final_hero_counts": {
+        "0": 2,
+        "2": 2,
+        "7": 2
+      }
+    },
+    {
+      "replica": "b",
+      "chapter_number": 6,
+      "policy": "passive",
+      "cases": 6,
+      "outcome_counts": {
+        "loss": 6
+      },
+      "final_wave_counts": {
+        "2": 2,
+        "3": 1,
+        "4": 3
+      },
+      "deaths_counts": {
+        "3": 6
+      },
+      "elapsed_min": 67.3,
+      "elapsed_max": 208.814,
+      "learned_count_min": 1,
+      "learned_count_max": 1,
+      "rank_sum_min": 1,
+      "rank_sum_max": 1,
+      "rank_at_least5_count_counts": {
+        "0": 6
+      },
+      "first_at_least5_observed_cases": 0,
+      "first_at_least5_observed_min": null,
+      "first_at_least5_observed_max": null,
+      "final_hero_counts": {
+        "0": 2,
+        "1": 2,
+        "2": 2
+      }
+    }
+  ]
+}

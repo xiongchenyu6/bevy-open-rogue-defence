@@ -1,0 +1,14 @@
+{
+  "commit": "5f357900c5619891dcbcaeab0e8f76870001a9a4",
+  "files": [
+    {
+      "file": "tools/run_balance_matrix.py",
+      "sha256": "50eff0681feb775984932ec4d9876a5ec1f4b67a9678a3fe73c0b71b23027d9a"
+    },
+    {
+      "file": "src/game/campaign_progress.rs",
+      "sha256": "6cd722aa53e900dd0d447c47f2b3cab56b7fc98f81da5298d91287e668a2cc73"
+    }
+  ],
+  "scope": "Unmodified existing runner and campaign configuration frozen beside185 byte-identical tracked assets"
+}

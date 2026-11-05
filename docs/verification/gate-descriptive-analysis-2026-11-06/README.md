@@ -1,0 +1,11 @@
+# Frozen gate descriptive sample archive
+
+Two complete24case replicas,48actualexecutions. Fullinterpretation is docs/analysis/gate-descriptive-2026-11-06.md. This is gate237+simulator/root5f, binary75c691…,185fixedassets, pre-dagger. Prior-chapters-cleared/zero-upgrades fixture is NOT an earned checkpoint, and these results do not describe currentd454package or humanwinning rates.
+
+Independentreview:48valid/finished/exit0,0censored.24matchedpairs:1outcomeflip,15differentterminalobservations,14withdifferentcommoncheckpoints. Partial first10review's zerooutcomeflips is superseded, not silently retained as finalconclusion. Rawpartialreviews remain verbatim under manager/ for provenance.
+
+raw/a and raw/b contain every original JSONL(48),stderr(48),summary(2),and allcase fixturestate files, byte-exact. Repetitive174MB simulator-snapshot binaries are NOT duplicated in Git; originalthreebinary copies remain in target with SHA75c691…; A/B bytehash/path/size are in binary-references.json, and upstream binary-origin-result.json records rootasset calibration. All185asset and2runner/config bytes were independentlyrehash-verified before analysis; frozenmanifests and runner/config sources included. Originalassets stay at frozen targetroot and are reconstructible from recordedtracked copy source; no substituteasset was generated.
+
+Files: matched-ab-terminal.csv includes all24pairs/terminalvalues/deltas, checkpoint-differences.csv includes5884 perfield commonframe differences, checkpoint-curves.csv retains all1440points including eachunmatchedterminal, case-metrics.csv includes percase rankhistograms/first-observedrank5brackets/observedheropaths. base-analysis is the unmodified tools/analyze_balance.py output; optionalmatplotlib was unavailable, so plots omitted while fullcurveCSV remains.
+
+Checkpointinterval is1800updates atfixed1/60nominaltime, not guaranteed30actualgame seconds becausepausedchoices consumeupdates. rankfirst-observation brackets are coarse, not exactevents. Exactnumeric/internalreplay is NOT proven even where sampledfieldsagree. No source/Rust/Cargo/new simulatorjob or balancevalue change occurred; actual parentForge/C6 routes remained separateimmutablepackages.

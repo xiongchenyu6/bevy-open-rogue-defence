@@ -1,0 +1,5 @@
+START descriptive replica a
+COMPLETE descriptive replica a censored 0
+START descriptive replica b
+COMPLETE descriptive replica b censored 0
+DESCRIPTIVE_SAMPLING_EXECUTION_COMPLETE

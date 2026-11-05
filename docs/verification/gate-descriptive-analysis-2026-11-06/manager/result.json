@@ -1,0 +1,9 @@
+{
+  "execution_complete": true,
+  "requested_cases": 48,
+  "replicas": [
+    "a",
+    "b"
+  ],
+  "scope": "Completed descriptive sampling execution only; inspect raw outcomes/censoring before interpretation. Exact numeric determinism and release quality remain unproven."
+}
