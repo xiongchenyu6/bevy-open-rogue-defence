@@ -1,4 +1,4 @@
-//! Real later recruitment over missing catalog scenes; only level 10 is awarded.
+//! Real later recruitment over missing catalog scenes; level/fruit awards are synthetic.
 use super::{
     asset_io_capture::{self, ReadGate},
     asset_readiness_capture,
@@ -33,6 +33,9 @@ const LATE_MODELS: [&str; 9] = [
 #[derive(Resource)]
 struct Probe {
     frame: u32,
+    source: RecruitmentSource,
+    prior_claims: u8,
+    opened_frame: Option<u32>,
     root: PathBuf,
     gate: Arc<ReadGate>,
     old: Option<HeroKind>,
@@ -47,7 +50,18 @@ struct Probe {
 }
 pub fn prepare(app: &mut App) {
     let (root, gate) = asset_io_capture::prepare(app, &LATE_MODELS, true);
+    let route = std::env::var("ROGUE_CAPTURE_RECRUIT_ROUTE").unwrap_or_else(|_| "10".into());
+    let (source, prior_claims) = match route.as_str() {
+        "10" => (RecruitmentSource::Milestone(10), 0),
+        "20" => (RecruitmentSource::Milestone(20), 1),
+        "40" => (RecruitmentSource::Milestone(40), 3),
+        "fruit" => (RecruitmentSource::Fruit, 0),
+        _ => panic!("ROGUE_CAPTURE_RECRUIT_ROUTE must be 10,20,40,fruit"),
+    };
     app.insert_resource(Probe {
+        source,
+        prior_claims,
+        opened_frame: None,
         frame: 0,
         root,
         gate,
@@ -94,7 +108,11 @@ fn input(world: &mut World) {
         .iter(world)
         .filter_map(|(e, i)| (*i == Interaction::Pressed).then_some(e))
         .collect();
-    if frame != 66 {
+    let retry_press_frame = world
+        .resource::<Probe>()
+        .opened_frame
+        .is_some_and(|opened| frame - opened + 35 == 66);
+    if !retry_press_frame {
         for entity in pressed {
             *world.get_mut::<Interaction>(entity).unwrap() = Interaction::None;
         }
@@ -119,10 +137,30 @@ fn input(world: &mut World) {
             p.cards = cards;
             p.fusion_count = fusion_count;
         }
-        world.resource_mut::<GameSession>().level = 10;
-        println!("RECRUIT_READINESS_AWARD level=10 old={old:?} clock={elapsed}");
+        let p = world.resource::<Probe>();
+        let (source, prior_claims) = (p.source, p.prior_claims);
+        world
+            .resource_mut::<RecruitmentProgress>()
+            .claimed_milestones = prior_claims;
+        match source {
+            RecruitmentSource::Milestone(level) => {
+                world.resource_mut::<GameSession>().level = level
+            }
+            RecruitmentSource::Fruit => world.resource_mut::<RecruitmentProgress>().fruit_count = 1,
+        }
+        println!("RECRUIT_READINESS_AWARD synthetic={source:?} old={old:?} clock={elapsed}");
     }
-    if [20, 36, 42, 72, 92].contains(&frame) {
+    if frame == 20 {
+        asset_readiness_capture::press(world, "Commander card 0");
+    }
+    if frame == 42 && world.resource::<Probe>().source == RecruitmentSource::Fruit {
+        asset_readiness_capture::press(world, "Fruit recruit");
+    }
+    let Some(opened) = world.resource::<Probe>().opened_frame else {
+        return;
+    };
+    let frame = frame - opened + 35;
+    if [36, 42, 72, 92].contains(&frame) {
         asset_readiness_capture::press(world, "Commander card 0");
     }
     if [36, 43, 73, 93].contains(&frame) {
@@ -151,7 +189,11 @@ fn input(world: &mut World) {
     }
 }
 fn repeat_click(world: &mut World) {
-    let frame = world.resource::<Probe>().frame + 1;
+    let p = world.resource::<Probe>();
+    let Some(opened) = p.opened_frame else {
+        return;
+    };
+    let frame = p.frame + 1 - opened + 35;
     if ![66, 67].contains(&frame) {
         return;
     }
@@ -206,7 +248,27 @@ fn offer_paths(world: &mut World) -> Vec<String> {
     paths
 }
 fn audit(world: &mut World) {
-    let frame = world.resource::<Probe>().frame;
+    let physical_frame = world.resource::<Probe>().frame;
+    if world.resource::<Probe>().opened_frame.is_none()
+        && world.resource::<RecruitmentProgress>().pending.is_some()
+    {
+        let elapsed = world.resource::<GameSession>().elapsed;
+        let mut p = world.resource_mut::<Probe>();
+        p.opened_frame = Some(physical_frame);
+        p.elapsed = elapsed;
+        println!(
+            "RECRUIT_READINESS_OPEN physical_frame={physical_frame} route={:?}",
+            p.source
+        );
+    }
+    let frame = if physical_frame <= 30 {
+        physical_frame
+    } else {
+        let Some(opened) = world.resource::<Probe>().opened_frame else {
+            return;
+        };
+        physical_frame - opened + 35
+    };
     if frame == 15 {
         assert!(
             world.resource::<AssetReadiness>().ready,
@@ -261,11 +323,18 @@ fn audit(world: &mut World) {
         );
         assert_eq!(
             world.resource::<RecruitmentProgress>().claimed_milestones,
-            0
+            p.prior_claims
         );
+        if p.source == RecruitmentSource::Fruit {
+            assert_eq!(
+                world.resource::<RecruitmentProgress>().fruit_count,
+                1,
+                "blocked picker cannot consume fruit"
+            );
+        }
         assert_eq!(
             world.resource::<RecruitmentProgress>().pending,
-            Some(RecruitmentSource::Milestone(10))
+            Some(p.source)
         );
         assert_eq!(world.resource::<HeroFusion>().count(), p.fusion_count);
         assert_eq!(world.resource::<PlayerBuild>().skills, p.skills);
@@ -349,15 +418,51 @@ fn audit(world: &mut World) {
         let old = p.old.unwrap();
         let selected = world.resource::<SelectedHero>();
         assert!(selected.locked && selected.kind != old);
+        let scene = &world.resource::<GameAssets>().hero_scenes[selected.kind.index()];
+        let path = world
+            .resource::<AssetServer>()
+            .get_path(scene.id())
+            .expect("committed hero scene has its real asset path");
+        let file = path.path().to_string_lossy().into_owned();
+        assert!(
+            p.offers.contains(&file),
+            "committed hero must come from actual visible offers"
+        );
+        assert!(
+            LATE_MODELS.contains(&file.as_str()),
+            "commit must select a genuinely reloaded non-R model"
+        );
         assert_eq!(
-            selected.kind,
-            HeroKind::GroveArtificer,
-            "fixed seed must select a genuinely reloaded non-R model"
+            p.retry_reads
+                .as_ref()
+                .expect("held retry read snapshot")
+                .get(&file),
+            Some(&2),
+            "committed hero GLB must have one failed read and one real retry before recovery"
+        );
+        assert!(
+            world
+                .resource::<AssetServer>()
+                .is_loaded_with_dependencies(scene.id()),
+            "committed hero scene and dependencies must actually be loaded"
         );
         assert_eq!(
             world.resource::<RecruitmentProgress>().claimed_milestones,
-            1
+            match p.source {
+                RecruitmentSource::Milestone(10) => 1,
+                RecruitmentSource::Milestone(20) => 3,
+                RecruitmentSource::Milestone(40) => 7,
+                RecruitmentSource::Fruit => p.prior_claims,
+                _ => unreachable!(),
+            }
         );
+        if p.source == RecruitmentSource::Fruit {
+            assert_eq!(
+                world.resource::<RecruitmentProgress>().fruit_count,
+                0,
+                "one fresh card consumes exactly one fruit"
+            );
+        }
         assert_eq!(world.resource::<RecruitmentProgress>().pending, None);
         assert!(world.resource::<HeroFusion>().has(old));
         assert_eq!(world.resource::<HeroFusion>().count(), p.fusion_count + 1);
@@ -370,6 +475,10 @@ fn audit(world: &mut World) {
         }
     }
     if frame == 150 {
+        println!(
+            "RECRUIT_READINESS_TIMELINE physical_frame={physical_frame} phase={frame} route={:?}",
+            world.resource::<Probe>().source
+        );
         assert!(world.resource::<GameSession>().elapsed > world.resource::<Probe>().elapsed);
         println!(
             "RECRUIT_READINESS_PASS initial ready, six late offers blocked, genuine held retry >1.1s, one commitment, retained skills/bonds/legacy, resumed clock"

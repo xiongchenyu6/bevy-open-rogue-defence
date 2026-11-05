@@ -1,0 +1,51 @@
+{
+  "cases": [
+    {
+      "case": "10-en-1280x720",
+      "updates": 180,
+      "open": "RECRUIT_READINESS_OPEN physical_frame=35 route=Milestone(10)",
+      "pass": true
+    },
+    {
+      "case": "20-en-667x375",
+      "updates": 180,
+      "open": "RECRUIT_READINESS_OPEN physical_frame=35 route=Milestone(20)",
+      "pass": true
+    },
+    {
+      "case": "20-zh-CN-1280x720",
+      "updates": 180,
+      "open": "RECRUIT_READINESS_OPEN physical_frame=35 route=Milestone(20)",
+      "pass": true
+    },
+    {
+      "case": "40-en-667x375",
+      "updates": 180,
+      "open": "RECRUIT_READINESS_OPEN physical_frame=35 route=Milestone(40)",
+      "pass": true
+    },
+    {
+      "case": "40-zh-CN-1280x720",
+      "updates": 180,
+      "open": "RECRUIT_READINESS_OPEN physical_frame=35 route=Milestone(40)",
+      "pass": true
+    },
+    {
+      "case": "fruit-en-667x375",
+      "updates": 180,
+      "open": "RECRUIT_READINESS_OPEN physical_frame=42 route=Fruit",
+      "pass": true
+    },
+    {
+      "case": "fruit-zh-CN-1280x720",
+      "updates": 180,
+      "open": "RECRUIT_READINESS_OPEN physical_frame=42 route=Fruit",
+      "pass": true
+    }
+  ],
+  "updates": 1260,
+  "files": {
+    "src/bin/capture/recruitment_readiness.rs": "9fbeef6af734aceda0031f5048ab57bcdb122b1efa37d40d8899b630fdf4cc4e",
+    "target/market-visual/debug/capture": "a13512fadff68d3558d80149af2c5743eb1096e0bcf1bc2ba72b3fececede789"
+  }
+}

@@ -1,0 +1,11 @@
+START clippy.log
+PASS clippy.log
+START build.log
+PASS build.log
+PASS 10-en-1280x720
+PASS 20-zh-CN-1280x720
+PASS 20-en-667x375
+PASS 40-zh-CN-1280x720
+PASS 40-en-667x375
+PASS fruit-zh-CN-1280x720
+PASS fruit-en-667x375
