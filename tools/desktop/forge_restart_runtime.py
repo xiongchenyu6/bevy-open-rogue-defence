@@ -14,7 +14,7 @@ from forge_runtime import visible_hud_value
 from smoke_runtime import find_text, normalized, ocr_screenshot, read_toolbar_speed
 
 GAME, OUT, STATE, PREVIOUS = map(Path, ('/game', '/verify', '/earned-state', '/previous-proof'))
-EXPECTED_COMMIT = '040ce5c1084634f3e8d886b65d1f5c2c467997af'
+EXPECTED_COMMIT = '49562e6fa1f1cf781eb9f0b8a4155e7a15ec22cb'
 EXPECTED_SAVE = 'da5bf0a9ca3f4032a265425f9989bda292d8c0c2622848157df6d2c0223ba825'
 EXPECTED_PROGRESS = dict(unlocked=5, currency=575, cleared='111100', upgrades=[5, 0, 0, 0, 0, 0])
 
