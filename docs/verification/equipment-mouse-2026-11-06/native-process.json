@@ -1,0 +1,42 @@
+[
+  {
+    "name": "en-desktop",
+    "language": "en",
+    "size": "1280x720",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "target/market-visual/debug/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop",
+      "380",
+      "equipment-mouse",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "passed": true,
+    "elapsed": 21.660276241978863
+  },
+  {
+    "name": "zh-compact",
+    "language": "zh-CN",
+    "size": "667x375",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "target/market-visual/debug/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/zh-compact",
+      "380",
+      "equipment-mouse",
+      "0xA11CE",
+      "667x375"
+    ],
+    "exit": 0,
+    "passed": true,
+    "elapsed": 19.158533665991854
+  }
+]

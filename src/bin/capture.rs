@@ -159,6 +159,8 @@ mod crafting_capture;
 
 #[path = "capture/equipment.rs"]
 mod equipment_capture;
+#[path = "capture/equipment_mouse.rs"]
+mod equipment_mouse_capture;
 
 #[cfg(any(debug_assertions, feature = "dev-tools"))]
 #[path = "capture/hit_feedback.rs"]
@@ -647,6 +649,9 @@ fn main() {
     if scenario.starts_with("crafting-") {
         crafting_capture::install(&mut apps.main);
     }
+    if scenario == "equipment-mouse" {
+        equipment_mouse_capture::install(&mut apps.main);
+    }
     if scenario == "equipment" {
         equipment_capture::install(&mut apps.main);
     }
@@ -1130,6 +1135,10 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     }
     if scenario.starts_with("crafting-") {
         crafting_capture::configure(world, scenario);
+        return;
+    }
+    if scenario == "equipment-mouse" {
+        equipment_capture::configure(world);
         return;
     }
     if scenario == "equipment" {

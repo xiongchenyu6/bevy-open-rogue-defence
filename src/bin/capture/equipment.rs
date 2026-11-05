@@ -11,6 +11,14 @@ use rogue_commander::game::{
     ActiveSkill, AttackClock, Autoplay, GameSession, HeroStatsSnapshot, PlayerBuild, SelectedHero,
     SpawnDirector, prepare_attribute_growth_market,
 };
+#[derive(Resource)]
+struct MouseFixture;
+
+pub fn install_mouse_fixture(app: &mut bevy::app::SubApp) {
+    install(app);
+    app.insert_resource(MouseFixture);
+}
+
 #[derive(Resource, Default)]
 struct EquipmentCapture {
     frame: u32,
@@ -76,6 +84,11 @@ fn exists(world: &mut World, wanted: &str) -> bool {
 fn exercise(world: &mut World) {
     world.resource_mut::<EquipmentCapture>().frame += 1;
     let frame = world.resource::<EquipmentCapture>().frame;
+    // Only acquisitions/opening use the existing direct-interaction fixture.
+    // All selection and closing after this boundary use real mouse messages.
+    if frame >= 200 && world.contains_resource::<MouseFixture>() {
+        return;
+    }
     world
         .resource_mut::<ButtonInput<KeyCode>>()
         .release(KeyCode::KeyB);

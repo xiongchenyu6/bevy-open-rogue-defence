@@ -1,0 +1,67 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {210, 222, 242, 262, 282, 302, 322, 355}; all 380 simulation/render updates retained
+[2m2026-11-05T17:11:50.851183Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-05T17:11:50.941846Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-05T17:11:51.862229Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-05T17:11:51.862468Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-05T17:11:52.805024Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] baseline real hero: armor=0 evasion=0 leech=0 physical_pen=0 spell_pen=0
+[capture] PASS actual market purchase frame=93: remaining kill currency=99820; stats=HeroStatsSnapshot { level: 1, strength: 20.0, agility: 18.0, intelligence: 28.0, health: 800.0, max_health: 800.0, energy: 504.0, max_energy: 504.0, attack_damage: 58.56, basic_hit_damage: 58.56, basic_hit_min: 58.56, basic_hit_max: 58.56, attacks_per_second: 1.954, attack_range: 9.2, cleave_target_bonus: 0, move_speed: 6.03, armor: 0.0, physical_damage_reduction: 0.0, magic_resistance: 0.1, spell_power: 76.0, summon_power: 77.2, crit_chance: 0.05, crit_multiplier: 1.75, life_leech: 0.0, physical_penetration: 3.0, spell_penetration: 0.0, evasion: 0.0, spell_echo_chance: 0.0, summon_cap: 18 }
+[capture] PASS actual market purchase frame=113: remaining kill currency=99640; stats=HeroStatsSnapshot { level: 1, strength: 20.0, agility: 18.0, intelligence: 28.0, health: 800.0, max_health: 800.0, energy: 504.0, max_energy: 504.0, attack_damage: 58.56, basic_hit_damage: 58.56, basic_hit_min: 58.56, basic_hit_max: 58.56, attacks_per_second: 1.954, attack_range: 9.2, cleave_target_bonus: 0, move_speed: 6.03, armor: 0.0, physical_damage_reduction: 0.0, magic_resistance: 0.1, spell_power: 83.6, summon_power: 82.52, crit_chance: 0.05, crit_multiplier: 1.75, life_leech: 0.0, physical_penetration: 3.0, spell_penetration: 0.1, evasion: 0.0, spell_echo_chance: 0.0, summon_cap: 18 }
+[capture] PASS actual market purchase frame=133: remaining kill currency=99480; stats=HeroStatsSnapshot { level: 1, strength: 20.0, agility: 18.0, intelligence: 28.0, health: 800.0, max_health: 800.0, energy: 504.0, max_energy: 504.0, attack_damage: 58.56, basic_hit_damage: 58.56, basic_hit_min: 58.56, basic_hit_max: 58.56, attacks_per_second: 1.954, attack_range: 9.2, cleave_target_bonus: 0, move_speed: 6.9345, armor: 0.0, physical_damage_reduction: 0.0, magic_resistance: 0.1, spell_power: 83.6, summon_power: 82.52, crit_chance: 0.05, crit_multiplier: 1.75, life_leech: 0.0, physical_penetration: 3.0, spell_penetration: 0.1, evasion: 0.08, spell_echo_chance: 0.0, summon_cap: 18 }
+[capture] PASS actual market purchase frame=153: remaining kill currency=99300; stats=HeroStatsSnapshot { level: 1, strength: 20.0, agility: 18.0, intelligence: 28.0, health: 960.00006, max_health: 960.00006, energy: 504.0, max_energy: 504.0, attack_damage: 58.56, basic_hit_damage: 58.56, basic_hit_min: 58.56, basic_hit_max: 58.56, attacks_per_second: 1.954, attack_range: 9.2, cleave_target_bonus: 0, move_speed: 6.9345, armor: 6.0, physical_damage_reduction: 0.23076922, magic_resistance: 0.1, spell_power: 83.6, summon_power: 82.52, crit_chance: 0.05, crit_multiplier: 1.75, life_leech: 0.0, physical_penetration: 3.0, spell_penetration: 0.1, evasion: 0.08, spell_echo_chance: 0.0, summon_cap: 18 }
+[capture] PASS actual market purchase frame=173: remaining kill currency=98980; stats=HeroStatsSnapshot { level: 1, strength: 20.0, agility: 18.0, intelligence: 28.0, health: 960.00006, max_health: 960.00006, energy: 504.0, max_energy: 504.0, attack_damage: 58.56, basic_hit_damage: 58.56, basic_hit_min: 58.56, basic_hit_max: 58.56, attacks_per_second: 1.954, attack_range: 9.2, cleave_target_bonus: 0, move_speed: 6.9345, armor: 6.0, physical_damage_reduction: 0.23076922, magic_resistance: 0.1, spell_power: 83.6, summon_power: 82.52, crit_chance: 0.05, crit_multiplier: 1.75, life_leech: 0.05, physical_penetration: 3.0, spell_penetration: 0.1, evasion: 0.08, spell_echo_chance: 0.0, summon_cap: 18 }
+[2m2026-11-05T17:12:03.843579Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00210.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00210.png (520257 bytes)
+EQUIPMENT_MOUSE_CURSOR Equipment item 0 center=Vec2(261.0, 193.0)
+EQUIPMENT_MOUSE_INPUT same-tick item=0 frame=220
+EQUIPMENT_MOUSE_PASS same-tick item=0 title=Serrated Disc
+[2m2026-11-05T17:12:04.590941Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00222.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00222.png (520257 bytes)
+EQUIPMENT_MOUSE_CURSOR Equipment item 1 center=Vec2(365.0, 193.0)
+EQUIPMENT_MOUSE_INPUT same-tick item=1 frame=230
+EQUIPMENT_MOUSE_PASS same-tick item=1 title=Arc Lens
+EQUIPMENT_MOUSE_CURSOR Equipment item 2 center=Vec2(469.0, 193.0)
+EQUIPMENT_MOUSE_INPUT same-tick item=2 frame=240
+EQUIPMENT_MOUSE_PASS same-tick item=2 title=Hardened Plate
+[2m2026-11-05T17:12:05.626653Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00242.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00242.png (530148 bytes)
+EQUIPMENT_MOUSE_CURSOR Equipment item 3 center=Vec2(261.0, 297.0)
+EQUIPMENT_MOUSE_INPUT same-tick item=3 frame=250
+EQUIPMENT_MOUSE_PASS same-tick item=3 title=Wind Boots
+EQUIPMENT_MOUSE_CURSOR Equipment item 4 center=Vec2(365.0, 297.0)
+EQUIPMENT_MOUSE_INPUT same-tick item=4 frame=260
+EQUIPMENT_MOUSE_PASS same-tick item=4 title=Blood Contract
+[2m2026-11-05T17:12:06.644253Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00262.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00262.png (514815 bytes)
+EQUIPMENT_MOUSE_CURSOR Equipment item 0 center=Vec2(261.0, 193.0)
+EQUIPMENT_MOUSE_INPUT held item=0 frame=280
+EQUIPMENT_MOUSE_PASS held item=0 title=Serrated Disc
+[2m2026-11-05T17:12:07.652610Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00282.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00282.png (520257 bytes)
+EQUIPMENT_MOUSE_CURSOR Equipment item 1 center=Vec2(365.0, 193.0)
+EQUIPMENT_MOUSE_INPUT held item=1 frame=290
+EQUIPMENT_MOUSE_PASS held item=1 title=Arc Lens
+EQUIPMENT_MOUSE_CURSOR Equipment item 2 center=Vec2(469.0, 193.0)
+EQUIPMENT_MOUSE_INPUT held item=2 frame=300
+EQUIPMENT_MOUSE_PASS held item=2 title=Hardened Plate
+[2m2026-11-05T17:12:08.667197Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00302.png
+[capture] saved 6/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00302.png (530148 bytes)
+EQUIPMENT_MOUSE_CURSOR Equipment item 3 center=Vec2(261.0, 297.0)
+EQUIPMENT_MOUSE_INPUT held item=3 frame=310
+EQUIPMENT_MOUSE_PASS held item=3 title=Wind Boots
+EQUIPMENT_MOUSE_CURSOR Equipment item 4 center=Vec2(365.0, 297.0)
+EQUIPMENT_MOUSE_INPUT held item=4 frame=320
+EQUIPMENT_MOUSE_PASS held item=4 title=Blood Contract
+[2m2026-11-05T17:12:09.697437Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00322.png
+[capture] saved 7/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00322.png (514815 bytes)
+EQUIPMENT_MOUSE_CURSOR Equipment close center=Vec2(1037.0, 115.0)
+EQUIPMENT_MOUSE_PASS all 5 same-tick + 5 held Item selections, exact titles/art, real mouse Close; synthetic native only
+[2m2026-11-05T17:12:11.170075Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00355.png
+[capture] saved 8/8 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop/frame00355.png (1005869 bytes)
+[capture] all 8 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 380 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/equipment-mouse-r3-2026-11-06/en-desktop

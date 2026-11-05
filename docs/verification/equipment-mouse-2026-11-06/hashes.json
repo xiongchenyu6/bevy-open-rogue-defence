@@ -1,0 +1,10 @@
+{
+  "base_commit": "cbcb1d157e18115ac06368954cee69674fe63953",
+  "state": "capture scenario changes uncommitted during runs",
+  "sha256": {
+    "src/bin/capture.rs": "41083eca2f2fcfdbb3bb27d77ba7404e462aa60362f3d69034ae802448273ade",
+    "src/bin/capture/equipment.rs": "9b973dc5598d345ff644a500c613fd4ebd6ba31be3f622681371b0f17590a0e3",
+    "src/bin/capture/equipment_mouse.rs": "707e14153191811efa4ed319e5bae9a0813d3a413011c7e4eeb318e0023329b6",
+    "target/market-visual/debug/capture": "bfec737d8fa8db3eecb07c569f7677aa982619e9921a47d75473e67de52336b7"
+  }
+}
