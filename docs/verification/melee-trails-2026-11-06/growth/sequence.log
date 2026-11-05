@@ -1,0 +1,5 @@
+PASS capture-clippy.log
+PASS capture-build.log
+PASS actual level40 growth void
+PASS actual level40 growth daggers
+TERMINAL GROWTH PASS

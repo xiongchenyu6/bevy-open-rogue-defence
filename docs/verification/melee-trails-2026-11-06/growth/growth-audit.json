@@ -1,0 +1,109 @@
+{
+  "void": {
+    "actual_level40_fixture_passed": true,
+    "first_trail": [
+      {
+        "frame": 13,
+        "entity": "2831v0",
+        "alpha": 0.68,
+        "mode": "Blend",
+        "materials": 408
+      },
+      {
+        "frame": 14,
+        "entity": "2831v0",
+        "alpha": 0.5,
+        "mode": "Blend",
+        "materials": 408
+      },
+      {
+        "frame": 15,
+        "entity": "2831v0",
+        "alpha": 0.5,
+        "mode": "Blend",
+        "materials": 408
+      },
+      {
+        "frame": 16,
+        "entity": "2831v0",
+        "alpha": 0.34,
+        "mode": "Blend",
+        "materials": 408
+      },
+      {
+        "frame": 17,
+        "entity": "2831v0",
+        "alpha": 0.2,
+        "mode": "Blend",
+        "materials": 408
+      },
+      {
+        "frame": 18,
+        "entity": "2831v0",
+        "alpha": 0.2,
+        "mode": "Blend",
+        "materials": 408
+      },
+      {
+        "frame": 19,
+        "entity": "2831v0",
+        "alpha": 0.09,
+        "mode": "Blend",
+        "materials": 408
+      },
+      {
+        "frame": 20,
+        "entity": "2831v0",
+        "alpha": 0.02,
+        "mode": "Blend",
+        "materials": 408
+      },
+      {
+        "frame": 21,
+        "entity": "2831v0",
+        "alpha": 0.02,
+        "mode": "Blend",
+        "materials": 408
+      }
+    ],
+    "first_trail_disappears_while_later_trails_continue": true,
+    "peak_simultaneous_visible_trails": 2,
+    "material_count": 408
+  },
+  "daggers": {
+    "actual_level40_fixture_passed": true,
+    "first_trail": [
+      {
+        "frame": 14,
+        "entity": "2656v0",
+        "alpha": 0.5,
+        "mode": "Blend",
+        "materials": 408
+      },
+      {
+        "frame": 15,
+        "entity": "2656v0",
+        "alpha": 0.34,
+        "mode": "Blend",
+        "materials": 408
+      },
+      {
+        "frame": 16,
+        "entity": "2656v0",
+        "alpha": 0.2,
+        "mode": "Blend",
+        "materials": 408
+      },
+      {
+        "frame": 17,
+        "entity": "2656v0",
+        "alpha": 0.02,
+        "mode": "Blend",
+        "materials": 408
+      }
+    ],
+    "first_trail_disappears_while_later_trails_continue": true,
+    "peak_simultaneous_visible_trails": 3,
+    "material_count": 408
+  }
+}

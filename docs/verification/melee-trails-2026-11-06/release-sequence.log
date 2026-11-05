@@ -1,0 +1,5 @@
+START full-tests.log
+PASS full-tests.log
+START clippy.log
+PASS clippy.log
+TERMINAL RELEASE PASS

@@ -1,0 +1,8 @@
+AFTER build gate PASS
+AFTER native PASS axe
+AFTER native PASS void
+AFTER native PASS rift
+AFTER native PASS tide
+AFTER native PASS sword
+AFTER native PASS ember
+TERMINAL AFTER PASS

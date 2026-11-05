@@ -1,0 +1,323 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 120, 160, 200, 230, 249}; all 250 simulation/render updates retained
+[2m2026-11-05T23:07:06.520385Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-05T23:07:06.903812Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-05T23:07:07.825804Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-05T23:07:07.826052Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[capture] scenario=weapon-growth-void-upgraded
+[capture] seed=0x00000000000A11CE
+[2m2026-11-05T23:07:08.667956Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] weapon-growth-void-upgraded: centered battlefield, real VoidReaper basic attacks; no Autoplay or ultimate
+ATTACK_TIMING frame=1 health=300000.000 damage=0.000 clips=[(1, 0.03333333, 1.0)]
+ATTACK_TIMING frame=2 health=300000.000 damage=0.000 clips=[(1, 0.06666666, 1.0)]
+ATTACK_TIMING frame=3 health=300000.000 damage=0.000 clips=[(1, 0.099999994, 1.0)]
+ATTACK_TIMING frame=4 health=300000.000 damage=0.000 clips=[(1, 0.13333333, 1.0)]
+ATTACK_TIMING frame=5 health=300000.000 damage=0.000 clips=[(1, 0.16666666, 1.0)]
+ATTACK_TIMING frame=6 health=300000.000 damage=0.000 clips=[(1, 0.19999999, 1.0)]
+[2m2026-11-05T23:07:13.341119Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00004.png
+[capture] saved 1/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00004.png (1011891 bytes)
+ATTACK_TIMING frame=7 health=300000.000 damage=0.000 clips=[(1, 0.23333332, 1.0)]
+ATTACK_TIMING frame=8 health=300000.000 damage=0.000 clips=[(1, 0.26666665, 1.0)]
+[2m2026-11-05T23:07:13.861854Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00006.png
+[capture] saved 2/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00006.png (1011465 bytes)
+ATTACK_TIMING frame=9 health=300000.000 damage=0.000 clips=[(1, 0.29999998, 1.0)]
+ATTACK_TIMING frame=10 health=300000.000 damage=0.000 clips=[(3, 0.18064664, 5.4193997)]
+[2m2026-11-05T23:07:14.355335Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00008.png
+[capture] saved 3/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00008.png (1011349 bytes)
+ATTACK_TIMING frame=11 health=300000.000 damage=0.000 clips=[(3, 0.3612933, 5.4193997)]
+ATTACK_TIMING frame=12 health=300000.000 damage=0.000 clips=[(3, 0.5419399, 5.4193997)]
+[2m2026-11-05T23:07:14.858370Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00010.png
+[capture] saved 4/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00010.png (1011821 bytes)
+SWORD_TRAIL frame=13 entity=2831v0 alpha=0.680000 mode=Blend material_count=408
+ATTACK_TIMING frame=13 health=299822.188 damage=177.812 clips=[(3, 0.7225866, 5.4193997)]
+[capture] weapon-growth-stage actual-flight frame=13
+[capture] weapon-growth-stage actual-impact frame=13
+SWORD_TRAIL frame=14 entity=2831v0 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=14 entity=2832v0 alpha=0.680000 mode=Blend material_count=408
+ATTACK_TIMING frame=14 health=299822.188 damage=0.000 clips=[(3, 0.90323323, 5.4193997)]
+[2m2026-11-05T23:07:15.526843Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00012.png
+[capture] saved 5/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00012.png (1013462 bytes)
+SWORD_TRAIL frame=15 entity=2831v0 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=15 entity=2832v0 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=15 health=299822.188 damage=0.000 clips=[(3, 1.0838798, 5.4193997)]
+SWORD_TRAIL frame=16 entity=2831v0 alpha=0.340000 mode=Blend material_count=408
+SWORD_TRAIL frame=16 entity=2832v0 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=16 health=299822.188 damage=0.000 clips=[(3, 1.2645265, 5.4193997)]
+[2m2026-11-05T23:07:16.046537Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00014.png
+[capture] saved 6/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00014.png (1015735 bytes)
+SWORD_TRAIL frame=17 entity=2831v0 alpha=0.200000 mode=Blend material_count=408
+SWORD_TRAIL frame=17 entity=2832v0 alpha=0.340000 mode=Blend material_count=408
+ATTACK_TIMING frame=17 health=299822.188 damage=0.000 clips=[(3, 1.4451731, 5.4193997)]
+SWORD_TRAIL frame=18 entity=2831v0 alpha=0.200000 mode=Blend material_count=408
+SWORD_TRAIL frame=18 entity=2832v0 alpha=0.200000 mode=Blend material_count=408
+ATTACK_TIMING frame=18 health=299822.188 damage=0.000 clips=[(3, 1.6258198, 5.4193997)]
+[2m2026-11-05T23:07:16.580582Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00016.png
+[capture] saved 7/8 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00016.png (1018165 bytes)
+SWORD_TRAIL frame=19 entity=2831v0 alpha=0.090000 mode=Blend material_count=408
+SWORD_TRAIL frame=19 entity=2832v0 alpha=0.200000 mode=Blend material_count=408
+ATTACK_TIMING frame=19 health=299822.188 damage=0.000 clips=[(3, 0.18064664, 5.4193997)]
+SWORD_TRAIL frame=20 entity=2831v0 alpha=0.020000 mode=Blend material_count=408
+SWORD_TRAIL frame=20 entity=2832v0 alpha=0.090000 mode=Blend material_count=408
+ATTACK_TIMING frame=20 health=299822.188 damage=0.000 clips=[(3, 0.3612933, 5.4193997)]
+[2m2026-11-05T23:07:17.089230Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00018.png
+[capture] saved 8/9 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00018.png (1016076 bytes)
+SWORD_TRAIL frame=21 entity=2831v0 alpha=0.020000 mode=Blend material_count=408
+SWORD_TRAIL frame=21 entity=2832v0 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=21 health=299822.188 damage=0.000 clips=[(3, 0.5419399, 5.4193997)]
+SWORD_TRAIL frame=22 entity=2832v0 alpha=0.020000 mode=Blend material_count=408
+SWORD_TRAIL frame=22 entity=3038v0 alpha=0.680000 mode=Blend material_count=408
+ATTACK_TIMING frame=22 health=299644.406 damage=177.781 clips=[(3, 0.7225866, 5.4193997)]
+[2m2026-11-05T23:07:17.610672Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00020.png
+[capture] saved 9/10 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00020.png (1013265 bytes)
+SWORD_TRAIL frame=23 entity=3039v0 alpha=0.680000 mode=Blend material_count=408
+SWORD_TRAIL frame=23 entity=3038v0 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=23 health=299644.406 damage=0.000 clips=[(3, 0.90323323, 5.4193997)]
+SWORD_TRAIL frame=24 entity=3039v0 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=24 entity=3038v0 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=24 health=299644.406 damage=0.000 clips=[(3, 1.0838798, 5.4193997)]
+[2m2026-11-05T23:07:18.121429Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00022.png
+[capture] saved 10/11 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00022.png (1015325 bytes)
+SWORD_TRAIL frame=25 entity=3039v0 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=25 entity=3038v0 alpha=0.340000 mode=Blend material_count=408
+ATTACK_TIMING frame=25 health=299644.406 damage=0.000 clips=[(3, 1.2645265, 5.4193997)]
+SWORD_TRAIL frame=26 entity=3039v0 alpha=0.340000 mode=Blend material_count=408
+SWORD_TRAIL frame=26 entity=3038v0 alpha=0.200000 mode=Blend material_count=408
+ATTACK_TIMING frame=26 health=299644.406 damage=0.000 clips=[(3, 1.4451731, 5.4193997)]
+[2m2026-11-05T23:07:18.633736Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00024.png
+[capture] saved 11/12 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00024.png (1018453 bytes)
+SWORD_TRAIL frame=27 entity=3039v0 alpha=0.200000 mode=Blend material_count=408
+SWORD_TRAIL frame=27 entity=3038v0 alpha=0.200000 mode=Blend material_count=408
+ATTACK_TIMING frame=27 health=299644.406 damage=0.000 clips=[(3, 1.6258198, 5.4193997)]
+SWORD_TRAIL frame=28 entity=3039v0 alpha=0.200000 mode=Blend material_count=408
+SWORD_TRAIL frame=28 entity=3038v0 alpha=0.090000 mode=Blend material_count=408
+ATTACK_TIMING frame=28 health=299644.406 damage=0.000 clips=[(3, 0.18064664, 5.4193997)]
+[2m2026-11-05T23:07:19.153031Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00026.png
+[capture] saved 12/13 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00026.png (1018892 bytes)
+SWORD_TRAIL frame=29 entity=3039v0 alpha=0.090000 mode=Blend material_count=408
+SWORD_TRAIL frame=29 entity=3038v0 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=29 health=299644.406 damage=0.000 clips=[(3, 0.3612933, 5.4193997)]
+SWORD_TRAIL frame=30 entity=3039v0 alpha=0.020000 mode=Blend material_count=408
+SWORD_TRAIL frame=30 entity=3038v0 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=30 health=299644.406 damage=0.000 clips=[(3, 0.5419399, 5.4193997)]
+[2m2026-11-05T23:07:19.694554Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00028.png
+[capture] saved 13/14 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00028.png (1016338 bytes)
+SWORD_TRAIL frame=31 entity=3039v0 alpha=0.020000 mode=Blend material_count=408
+SWORD_TRAIL frame=31 entity=2988v1 alpha=0.680000 mode=Blend material_count=408
+ATTACK_TIMING frame=31 health=299466.625 damage=177.781 clips=[(3, 0.7225866, 5.4193997)]
+SWORD_TRAIL frame=32 entity=2986v1 alpha=0.680000 mode=Blend material_count=408
+SWORD_TRAIL frame=32 entity=2988v1 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=32 health=299466.625 damage=0.000 clips=[(3, 0.90323323, 5.4193997)]
+[2m2026-11-05T23:07:20.223698Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00030.png
+[capture] saved 14/15 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00030.png (1016685 bytes)
+SWORD_TRAIL frame=33 entity=2986v1 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=33 entity=2988v1 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=33 health=299466.625 damage=0.000 clips=[(3, 1.0838798, 5.4193997)]
+SWORD_TRAIL frame=34 entity=2986v1 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=34 entity=2988v1 alpha=0.340000 mode=Blend material_count=408
+ATTACK_TIMING frame=34 health=299466.625 damage=0.000 clips=[(3, 1.2645265, 5.4193997)]
+[2m2026-11-05T23:07:20.751508Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00032.png
+[capture] saved 15/16 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00032.png (1017862 bytes)
+SWORD_TRAIL frame=35 entity=2986v1 alpha=0.340000 mode=Blend material_count=408
+SWORD_TRAIL frame=35 entity=2988v1 alpha=0.200000 mode=Blend material_count=408
+ATTACK_TIMING frame=35 health=299466.625 damage=0.000 clips=[(3, 1.4451731, 5.4193997)]
+SWORD_TRAIL frame=36 entity=2986v1 alpha=0.200000 mode=Blend material_count=408
+SWORD_TRAIL frame=36 entity=2988v1 alpha=0.200000 mode=Blend material_count=408
+ATTACK_TIMING frame=36 health=299466.625 damage=0.000 clips=[(3, 1.6258198, 5.4193997)]
+[2m2026-11-05T23:07:21.297192Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00034.png
+[capture] saved 16/17 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00034.png (1019996 bytes)
+SWORD_TRAIL frame=37 entity=2986v1 alpha=0.200000 mode=Blend material_count=408
+SWORD_TRAIL frame=37 entity=2988v1 alpha=0.090000 mode=Blend material_count=408
+ATTACK_TIMING frame=37 health=299466.625 damage=0.000 clips=[(3, 0.18064664, 5.4193997)]
+SWORD_TRAIL frame=38 entity=2986v1 alpha=0.090000 mode=Blend material_count=408
+SWORD_TRAIL frame=38 entity=2988v1 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=38 health=299466.625 damage=0.000 clips=[(3, 0.3612933, 5.4193997)]
+[2m2026-11-05T23:07:21.795079Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00036.png
+[capture] saved 17/18 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00036.png (1017661 bytes)
+SWORD_TRAIL frame=39 entity=2986v1 alpha=0.020000 mode=Blend material_count=408
+SWORD_TRAIL frame=39 entity=2988v1 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=39 health=299466.625 damage=0.000 clips=[(3, 0.5419399, 5.4193997)]
+SWORD_TRAIL frame=40 entity=2986v1 alpha=0.020000 mode=Blend material_count=408
+SWORD_TRAIL frame=40 entity=2930v1 alpha=0.680000 mode=Blend material_count=408
+ATTACK_TIMING frame=40 health=299288.812 damage=177.812 clips=[(3, 0.7225866, 5.4193997)]
+[2m2026-11-05T23:07:22.296063Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00038.png
+[capture] saved 18/19 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00038.png (1014907 bytes)
+SWORD_TRAIL frame=41 entity=2931v1 alpha=0.680000 mode=Blend material_count=408
+SWORD_TRAIL frame=41 entity=2930v1 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=41 health=299288.812 damage=0.000 clips=[(3, 0.90323323, 5.4193997)]
+SWORD_TRAIL frame=42 entity=2931v1 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=42 entity=2930v1 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=42 health=299288.812 damage=0.000 clips=[(3, 1.0838798, 5.4193997)]
+[2m2026-11-05T23:07:22.830412Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00040.png
+[capture] saved 19/20 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00040.png (1017568 bytes)
+SWORD_TRAIL frame=43 entity=2931v1 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=43 entity=2930v1 alpha=0.340000 mode=Blend material_count=408
+ATTACK_TIMING frame=43 health=299288.812 damage=0.000 clips=[(3, 1.2645265, 5.4193997)]
+SWORD_TRAIL frame=44 entity=2931v1 alpha=0.340000 mode=Blend material_count=408
+SWORD_TRAIL frame=44 entity=2930v1 alpha=0.200000 mode=Blend material_count=408
+ATTACK_TIMING frame=44 health=299288.812 damage=0.000 clips=[(3, 1.4451731, 5.4193997)]
+[2m2026-11-05T23:07:23.390148Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00042.png
+[capture] saved 20/21 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00042.png (1019769 bytes)
+SWORD_TRAIL frame=45 entity=2931v1 alpha=0.200000 mode=Blend material_count=408
+SWORD_TRAIL frame=45 entity=2930v1 alpha=0.200000 mode=Blend material_count=408
+ATTACK_TIMING frame=45 health=299288.812 damage=0.000 clips=[(3, 1.6258198, 5.4193997)]
+SWORD_TRAIL frame=46 entity=2931v1 alpha=0.200000 mode=Blend material_count=408
+SWORD_TRAIL frame=46 entity=2930v1 alpha=0.090000 mode=Blend material_count=408
+ATTACK_TIMING frame=46 health=299288.812 damage=0.000 clips=[(3, 0.18064664, 5.4193997)]
+[2m2026-11-05T23:07:23.909011Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00044.png
+[capture] saved 21/22 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00044.png (1019187 bytes)
+SWORD_TRAIL frame=47 entity=2931v1 alpha=0.090000 mode=Blend material_count=408
+SWORD_TRAIL frame=47 entity=2930v1 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=47 health=299183.062 damage=105.750 clips=[(3, 0.3612933, 5.4193997)]
+SWORD_TRAIL frame=48 entity=2931v1 alpha=0.020000 mode=Blend material_count=408
+SWORD_TRAIL frame=48 entity=2930v1 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=48 health=299183.062 damage=0.000 clips=[(3, 0.5419399, 5.4193997)]
+[2m2026-11-05T23:07:24.430195Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00046.png
+[capture] saved 22/23 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00046.png (1016999 bytes)
+SWORD_TRAIL frame=49 entity=3100v1 alpha=0.680000 mode=Blend material_count=408
+SWORD_TRAIL frame=49 entity=2931v1 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=49 health=299005.281 damage=177.781 clips=[(3, 0.7225866, 5.4193997)]
+SWORD_TRAIL frame=50 entity=2847v2 alpha=0.680000 mode=Blend material_count=408
+SWORD_TRAIL frame=50 entity=3100v1 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=50 health=299005.281 damage=0.000 clips=[(3, 0.90323323, 5.4193997)]
+[2m2026-11-05T23:07:24.959679Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00048.png
+[capture] saved 23/24 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00048.png (1017007 bytes)
+SWORD_TRAIL frame=51 entity=2847v2 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=51 entity=3100v1 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=51 health=299005.281 damage=0.000 clips=[(3, 1.0838798, 5.4193997)]
+SWORD_TRAIL frame=52 entity=2847v2 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=52 entity=3100v1 alpha=0.340000 mode=Blend material_count=408
+ATTACK_TIMING frame=52 health=299005.281 damage=0.000 clips=[(3, 1.2645265, 5.4193997)]
+[2m2026-11-05T23:07:25.485458Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00050.png
+[capture] saved 24/25 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00050.png (1017862 bytes)
+SWORD_TRAIL frame=53 entity=2847v2 alpha=0.340000 mode=Blend material_count=408
+SWORD_TRAIL frame=53 entity=3100v1 alpha=0.200000 mode=Blend material_count=408
+ATTACK_TIMING frame=53 health=299005.281 damage=0.000 clips=[(3, 1.4451731, 5.4193997)]
+SWORD_TRAIL frame=54 entity=2847v2 alpha=0.200000 mode=Blend material_count=408
+SWORD_TRAIL frame=54 entity=3100v1 alpha=0.200000 mode=Blend material_count=408
+ATTACK_TIMING frame=54 health=299005.281 damage=0.000 clips=[(3, 1.6258198, 5.4193997)]
+[2m2026-11-05T23:07:26.009250Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00052.png
+[capture] saved 25/26 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00052.png (1019472 bytes)
+SWORD_TRAIL frame=55 entity=2847v2 alpha=0.200000 mode=Blend material_count=408
+SWORD_TRAIL frame=55 entity=3100v1 alpha=0.090000 mode=Blend material_count=408
+ATTACK_TIMING frame=55 health=299005.281 damage=0.000 clips=[(3, 0.18064664, 5.4193997)]
+SWORD_TRAIL frame=56 entity=2847v2 alpha=0.090000 mode=Blend material_count=408
+SWORD_TRAIL frame=56 entity=3100v1 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=56 health=299005.281 damage=0.000 clips=[(3, 0.3612933, 5.4193997)]
+[2m2026-11-05T23:07:26.522099Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00054.png
+[capture] saved 26/27 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00054.png (1017670 bytes)
+SWORD_TRAIL frame=57 entity=2847v2 alpha=0.020000 mode=Blend material_count=408
+SWORD_TRAIL frame=57 entity=3100v1 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=57 health=299005.281 damage=0.000 clips=[(3, 0.5419399, 5.4193997)]
+SWORD_TRAIL frame=58 entity=3067v2 alpha=0.680000 mode=Blend material_count=408
+SWORD_TRAIL frame=58 entity=2847v2 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=58 health=298827.500 damage=177.781 clips=[(3, 0.7225866, 5.4193997)]
+[2m2026-11-05T23:07:27.023321Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00056.png
+[capture] saved 27/28 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00056.png (1015236 bytes)
+SWORD_TRAIL frame=59 entity=3039v2 alpha=0.680000 mode=Blend material_count=408
+SWORD_TRAIL frame=59 entity=3067v2 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=59 health=298827.500 damage=0.000 clips=[(3, 0.90323323, 5.4193997)]
+SWORD_TRAIL frame=60 entity=3039v2 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=60 entity=3067v2 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=60 health=298827.500 damage=0.000 clips=[(3, 1.0838798, 5.4193997)]
+[2m2026-11-05T23:07:27.539819Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00058.png
+[capture] saved 28/29 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00058.png (1018031 bytes)
+SWORD_TRAIL frame=61 entity=3039v2 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=61 entity=3067v2 alpha=0.340000 mode=Blend material_count=408
+ATTACK_TIMING frame=61 health=298827.500 damage=0.000 clips=[(3, 1.2645265, 5.4193997)]
+SWORD_TRAIL frame=62 entity=3039v2 alpha=0.340000 mode=Blend material_count=408
+SWORD_TRAIL frame=62 entity=3067v2 alpha=0.200000 mode=Blend material_count=408
+ATTACK_TIMING frame=62 health=298827.500 damage=0.000 clips=[(3, 1.4451731, 5.4193997)]
+[2m2026-11-05T23:07:28.051838Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00060.png
+[capture] saved 29/30 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00060.png (1019993 bytes)
+SWORD_TRAIL frame=63 entity=3039v2 alpha=0.200000 mode=Blend material_count=408
+SWORD_TRAIL frame=63 entity=3067v2 alpha=0.200000 mode=Blend material_count=408
+ATTACK_TIMING frame=63 health=298827.500 damage=0.000 clips=[(3, 1.6258198, 5.4193997)]
+SWORD_TRAIL frame=64 entity=3039v2 alpha=0.200000 mode=Blend material_count=408
+SWORD_TRAIL frame=64 entity=3067v2 alpha=0.090000 mode=Blend material_count=408
+ATTACK_TIMING frame=64 health=298827.500 damage=0.000 clips=[(3, 0.18064664, 5.4193997)]
+[2m2026-11-05T23:07:28.558473Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00062.png
+[capture] saved 30/31 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00062.png (1019527 bytes)
+SWORD_TRAIL frame=65 entity=3039v2 alpha=0.090000 mode=Blend material_count=408
+SWORD_TRAIL frame=65 entity=3067v2 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=65 health=298827.500 damage=0.000 clips=[(3, 0.3612933, 5.4193997)]
+SWORD_TRAIL frame=66 entity=3039v2 alpha=0.020000 mode=Blend material_count=408
+SWORD_TRAIL frame=66 entity=3067v2 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=66 health=298827.500 damage=0.000 clips=[(3, 0.5419399, 5.4193997)]
+[2m2026-11-05T23:07:29.064780Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00064.png
+[capture] saved 31/32 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00064.png (1016927 bytes)
+SWORD_TRAIL frame=67 entity=2907v1 alpha=0.680000 mode=Blend material_count=408
+SWORD_TRAIL frame=67 entity=3039v2 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=67 health=298606.812 damage=220.688 clips=[(3, 0.7225866, 5.4193997)]
+SWORD_TRAIL frame=68 entity=2908v1 alpha=0.680000 mode=Blend material_count=408
+SWORD_TRAIL frame=68 entity=2907v1 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=68 health=298606.812 damage=0.000 clips=[(3, 0.90323323, 5.4193997)]
+[2m2026-11-05T23:07:29.610497Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00066.png
+[capture] saved 32/33 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00066.png (1017107 bytes)
+SWORD_TRAIL frame=69 entity=2908v1 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=69 entity=2907v1 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=69 health=298606.812 damage=0.000 clips=[(3, 1.0838798, 5.4193997)]
+SWORD_TRAIL frame=70 entity=2908v1 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=70 entity=2907v1 alpha=0.340000 mode=Blend material_count=408
+ATTACK_TIMING frame=70 health=298606.812 damage=0.000 clips=[(3, 1.2645265, 5.4193997)]
+[2m2026-11-05T23:07:30.123652Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00068.png
+[capture] saved 33/34 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00068.png (1017434 bytes)
+SWORD_TRAIL frame=71 entity=2908v1 alpha=0.340000 mode=Blend material_count=408
+SWORD_TRAIL frame=71 entity=2907v1 alpha=0.200000 mode=Blend material_count=408
+ATTACK_TIMING frame=71 health=298606.812 damage=0.000 clips=[(3, 1.4451731, 5.4193997)]
+SWORD_TRAIL frame=72 entity=2908v1 alpha=0.200000 mode=Blend material_count=408
+SWORD_TRAIL frame=72 entity=2907v1 alpha=0.200000 mode=Blend material_count=408
+ATTACK_TIMING frame=72 health=298606.812 damage=0.000 clips=[(3, 1.6258198, 5.4193997)]
+[2m2026-11-05T23:07:30.632944Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00070.png
+[capture] saved 34/35 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00070.png (1019747 bytes)
+SWORD_TRAIL frame=73 entity=2908v1 alpha=0.200000 mode=Blend material_count=408
+SWORD_TRAIL frame=73 entity=2907v1 alpha=0.090000 mode=Blend material_count=408
+ATTACK_TIMING frame=73 health=298606.812 damage=0.000 clips=[(3, 0.18064664, 5.4193997)]
+SWORD_TRAIL frame=74 entity=2908v1 alpha=0.090000 mode=Blend material_count=408
+SWORD_TRAIL frame=74 entity=2907v1 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=74 health=298606.812 damage=0.000 clips=[(3, 0.3612933, 5.4193997)]
+[2m2026-11-05T23:07:31.155516Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00072.png
+[capture] saved 35/36 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00072.png (1018611 bytes)
+SWORD_TRAIL frame=75 entity=2908v1 alpha=0.020000 mode=Blend material_count=408
+SWORD_TRAIL frame=75 entity=2907v1 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=75 health=298606.812 damage=0.000 clips=[(3, 0.5419399, 5.4193997)]
+SWORD_TRAIL frame=76 entity=3044v3 alpha=0.680000 mode=Blend material_count=408
+SWORD_TRAIL frame=76 entity=2908v1 alpha=0.020000 mode=Blend material_count=408
+ATTACK_TIMING frame=76 health=298429.031 damage=177.781 clips=[(3, 0.7225866, 5.4193997)]
+[2m2026-11-05T23:07:31.662566Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00074.png
+[capture] saved 36/37 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00074.png (1015313 bytes)
+SWORD_TRAIL frame=77 entity=3068v3 alpha=0.680000 mode=Blend material_count=408
+SWORD_TRAIL frame=77 entity=3044v3 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=77 health=298429.031 damage=0.000 clips=[(3, 0.90323323, 5.4193997)]
+SWORD_TRAIL frame=78 entity=3068v3 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=78 entity=3044v3 alpha=0.500000 mode=Blend material_count=408
+ATTACK_TIMING frame=78 health=298429.031 damage=0.000 clips=[(3, 1.0838798, 5.4193997)]
+[2m2026-11-05T23:07:32.181868Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00076.png
+[capture] saved 37/38 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00076.png (1017892 bytes)
+SWORD_TRAIL frame=79 entity=3068v3 alpha=0.500000 mode=Blend material_count=408
+SWORD_TRAIL frame=79 entity=3044v3 alpha=0.340000 mode=Blend material_count=408
+ATTACK_TIMING frame=79 health=298429.031 damage=0.000 clips=[(3, 1.2645265, 5.4193997)]
+SWORD_TRAIL frame=80 entity=3068v3 alpha=0.340000 mode=Blend material_count=408
+SWORD_TRAIL frame=80 entity=3044v3 alpha=0.200000 mode=Blend material_count=408
+ATTACK_TIMING frame=80 health=298429.031 damage=0.000 clips=[(3, 1.4451731, 5.4193997)]
+[2m2026-11-05T23:07:32.703431Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00078.png
+[capture] saved 38/39 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00078.png (1018966 bytes)
+[2m2026-11-05T23:07:33.226638Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00080.png
+[capture] saved 39/39 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00080.png (1019449 bytes)
+[2m2026-11-05T23:07:35.172782Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00120.png
+[capture] saved 40/40 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00120.png (1016242 bytes)
+[2m2026-11-05T23:07:37.148612Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00160.png
+[capture] saved 41/41 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00160.png (1019878 bytes)
+[2m2026-11-05T23:07:39.122686Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00200.png
+[capture] saved 42/42 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00200.png (1014993 bytes)
+[capture] PASS: real basic attack damage and weapon visuals; learned skills/ultimate/Autoplay suppressed
+[capture] PASS weapon-growth-void-upgraded: production attack flight+damage, actual material peak_emissive=16, no learnedskills/ultimate
+[2m2026-11-05T23:07:40.861766Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00230.png
+[capture] saved 43/43 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00230.png (1016853 bytes)
+[2m2026-11-05T23:07:42.052832Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00249.png
+[capture] saved 44/44 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void/frame00249.png (1017662 bytes)
+[capture] all 44 screenshot(s) saved after 2 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 250 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-trails-growth-2026-11-06/void

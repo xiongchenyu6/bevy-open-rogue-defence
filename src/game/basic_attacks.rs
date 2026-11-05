@@ -1,6 +1,7 @@
 //! Weapon-led basic attacks. Melee contact uses the same damage resolver as ranged hits.
 use bevy::{
     asset::RenderAssetUsages,
+    light::NotShadowCaster,
     mesh::{Indices, PrimitiveTopology},
     prelude::*,
 };
@@ -103,26 +104,15 @@ pub(crate) struct BasicAttackArt {
     frost: Handle<Mesh>,
     melee_shapes: [Handle<Mesh>; 6],
     starter_stone_swing: Handle<Mesh>,
-    starter_sword_fades: [[Handle<StandardMaterial>; 6]; 2],
+    melee_fades: [[[Handle<StandardMaterial>; 6]; 4]; 6],
     pub(crate) materials: [Handle<StandardMaterial>; HeroKind::COUNT],
     tier_materials: [[Handle<StandardMaterial>; HeroKind::COUNT]; 4],
 }
 
-const STARTER_SWORD_ALPHA: [f32; 6] = [0.78, 0.64, 0.46, 0.28, 0.12, 0.03];
+const MELEE_TRAIL_ALPHA: [f32; 6] = [0.68, 0.50, 0.34, 0.20, 0.09, 0.02];
 
 pub(crate) fn is_starter_ember_arrow(kind: HeroKind, level: u32) -> bool {
     kind == HeroKind::EmberRanger && basic_attack_visual_tier(level).index == 0
-}
-
-fn starter_sword_palette(kind: HeroKind, tier: usize) -> Option<usize> {
-    if tier != 0 {
-        return None;
-    }
-    match kind {
-        HeroKind::StoneWarden => Some(0),
-        HeroKind::SolarVanguard => Some(1),
-        _ => None,
-    }
 }
 
 impl BasicAttackArt {
@@ -303,16 +293,26 @@ pub(crate) fn setup_attack_art(
     let palette = tier_materials[0].clone();
     // Immutable, bounded palettes: fading one slash never changes another
     // slash or its weapon projectile, and creates no per-attack material assets.
-    let starter_sword_fades = [HeroKind::StoneWarden, HeroKind::SolarVanguard].map(|kind| {
-        let base = materials
-            .get(&tier_materials[0][kind.index()])
-            .expect("starter weapon material exists")
-            .clone();
-        STARTER_SWORD_ALPHA.map(|alpha| {
-            let mut material = base.clone();
-            material.base_color = material.base_color.with_alpha(alpha);
-            material.alpha_mode = AlphaMode::Blend;
-            materials.add(material)
+    let melee_fades = [
+        HeroKind::StoneWarden,
+        HeroKind::SolarVanguard,
+        HeroKind::TideWalker,
+        HeroKind::RiftDancer,
+        HeroKind::IronBerserker,
+        HeroKind::VoidReaper,
+    ]
+    .map(|kind| {
+        std::array::from_fn(|tier| {
+            let base = materials
+                .get(&tier_materials[tier][kind.index()])
+                .expect("melee tier material exists")
+                .clone();
+            MELEE_TRAIL_ALPHA.map(|alpha| {
+                let mut material = base.clone();
+                material.base_color = material.base_color.with_alpha(alpha);
+                material.alpha_mode = AlphaMode::Blend;
+                materials.add(material)
+            })
         })
     });
     commands.insert_resource(BasicAttackArt {
@@ -326,7 +326,7 @@ pub(crate) fn setup_attack_art(
         frost: meshes.add(frost.scaled_by(Vec3::splat(1.65))),
         melee_shapes: melee_meshes().map(|mesh| meshes.add(mesh)),
         starter_stone_swing: meshes.add(slash_mesh(1.16, 0.22, 0.0, 1.0)),
-        starter_sword_fades,
+        melee_fades,
         materials: palette,
         tier_materials,
     });
@@ -583,7 +583,7 @@ pub(crate) struct SwingTrail {
     layer: u8,
     origin: Vec3,
     direction: Vec3,
-    starter_fade: Option<usize>,
+    tier: usize,
 }
 
 pub(crate) fn swing_windup(kind: HeroKind, interval: f32) -> f32 {
@@ -688,16 +688,12 @@ pub(crate) fn resolve_swings(
         if let Some(art) = art.as_deref() {
             let style = swing_style(swing.kind);
             let tier = basic_attack_visual_tier(vitals.level).index;
-            let starter_fade = starter_sword_palette(swing.kind, tier);
-            let mesh = if starter_fade == Some(0) {
+            let mesh = if swing.kind == HeroKind::StoneWarden && tier == 0 {
                 &art.starter_stone_swing
             } else {
                 &art.melee_shapes[melee_shape_index(swing.kind)]
             };
-            let material = starter_fade.map_or_else(
-                || art.tier_materials[tier][swing.kind.index()].clone(),
-                |palette| art.starter_sword_fades[palette][0].clone(),
-            );
+            let material = art.melee_fades[melee_shape_index(swing.kind)][tier][0].clone();
             let duration = style.duration;
             for layer in 0..style
                 .layers
@@ -711,6 +707,7 @@ pub(crate) fn resolve_swings(
                     Name::new("Weapon swing trail"),
                     Mesh3d(mesh.clone()),
                     MeshMaterial3d(material.clone()),
+                    NotShadowCaster,
                     transform.with_scale(Vec3::splat(range * style.start)),
                     if delay > 0.0 {
                         Visibility::Hidden
@@ -727,7 +724,7 @@ pub(crate) fn resolve_swings(
                         layer,
                         origin: transform.translation,
                         direction: swing.direction,
-                        starter_fade,
+                        tier,
                     },
                 ));
             }
@@ -797,12 +794,10 @@ pub(crate) fn animate_swings(
         }
         *visibility = Visibility::Visible;
         let progress = (1.0 - trail.remaining / trail.duration).clamp(0.0, 1.0);
-        if let (Some(palette), Some(art), Some(mut material)) =
-            (trail.starter_fade, art.as_deref(), material)
-        {
-            let phase = ((progress * STARTER_SWORD_ALPHA.len() as f32) as usize)
-                .min(STARTER_SWORD_ALPHA.len() - 1);
-            let next = &art.starter_sword_fades[palette][phase];
+        if let (Some(art), Some(mut material)) = (art.as_deref(), material) {
+            let phase = ((progress * MELEE_TRAIL_ALPHA.len() as f32) as usize)
+                .min(MELEE_TRAIL_ALPHA.len() - 1);
+            let next = &art.melee_fades[melee_shape_index(trail.kind)][trail.tier][phase];
             if material.0 != *next {
                 material.0 = next.clone();
             }
@@ -931,7 +926,7 @@ mod tests {
         assert_eq!(mesh_assets.len(), 14);
         assert_eq!(
             app.world().resource::<Assets<StandardMaterial>>().len(),
-            HeroKind::COUNT * 4 + 13
+            HeroKind::COUNT * 4 + 1 + 6 * 4 * 6
         );
     }
 
@@ -1056,7 +1051,7 @@ mod tests {
                             layer: 0,
                             origin: Vec3::ZERO,
                             direction: Vec3::NEG_Z,
-                            starter_fade: None,
+                            tier: 0,
                         },
                         Transform::default(),
                         Visibility::Visible,
@@ -1113,7 +1108,7 @@ mod tests {
     }
 
     #[test]
-    fn starter_sword_fade_is_instance_local_freezes_and_creates_no_per_swing_assets() {
+    fn melee_fade_is_instance_local_freezes_and_creates_no_per_swing_assets() {
         use bevy::ecs::system::RunSystemOnce;
         use std::time::Duration;
         let mut app = slash_test_app(HeroKind::StoneWarden, 1);
@@ -1192,46 +1187,87 @@ mod tests {
     }
 
     #[test]
-    fn smooth_fading_sword_trails_leave_upgraded_tiers_and_other_weapons_unchanged() {
-        for kind in [
-            HeroKind::StoneWarden,
-            HeroKind::SolarVanguard,
-            HeroKind::IronBerserker,
-            HeroKind::TideWalker,
-            HeroKind::VoidReaper,
-        ] {
+    fn all_melee_trails_fade_without_changing_projectile_materials_or_class_geometry() {
+        use bevy::ecs::system::RunSystemOnce;
+        use std::time::Duration;
+        for kind in HeroKind::ALL
+            .into_iter()
+            .filter(|kind| weapon(*kind).melee())
+        {
             for level in [1, 10, 20, 40] {
                 let mut app = slash_test_app(kind, level);
+                let before = app.world().resource::<Assets<StandardMaterial>>().len();
                 let entity = emit_test_slash(&mut app);
-                let art = app.world().resource::<BasicAttackArt>();
+                assert!(app.world().get::<NotShadowCaster>(entity).is_some());
                 let mesh = &app.world().get::<Mesh3d>(entity).unwrap().0;
-                let handle = &app
+                let art = app.world().resource::<BasicAttackArt>();
+                let tier = basic_attack_visual_tier(level).index;
+                assert_eq!(
+                    mesh,
+                    if kind == HeroKind::StoneWarden && tier == 0 {
+                        &art.starter_stone_swing
+                    } else {
+                        &art.melee_shapes[melee_shape_index(kind)]
+                    }
+                );
+                let handle = app
+                    .world()
+                    .get::<MeshMaterial3d<StandardMaterial>>(entity)
+                    .unwrap()
+                    .0
+                    .clone();
+                assert_eq!(handle, art.melee_fades[melee_shape_index(kind)][tier][0]);
+                let materials = app.world().resource::<Assets<StandardMaterial>>();
+                let material = materials.get(&handle).unwrap();
+                let original = materials
+                    .get(&art.tier_materials[tier][kind.index()])
+                    .unwrap();
+                assert_eq!(material.alpha_mode, AlphaMode::Blend);
+                assert_eq!(material.base_color.alpha(), MELEE_TRAIL_ALPHA[0]);
+                assert_eq!(material.emissive, original.emissive, "no added glow");
+                assert_eq!(
+                    original.alpha_mode,
+                    AlphaMode::Opaque,
+                    "projectile/tier base untouched"
+                );
+                app.world_mut()
+                    .resource_mut::<Time>()
+                    .advance_by(Duration::from_millis(90));
+                app.world_mut().run_system_once(animate_swings).unwrap();
+                let aged = &app
                     .world()
                     .get::<MeshMaterial3d<StandardMaterial>>(entity)
                     .unwrap()
                     .0;
-                let material = app
-                    .world()
-                    .resource::<Assets<StandardMaterial>>()
-                    .get(handle)
-                    .unwrap();
-                if level == 1 && matches!(kind, HeroKind::StoneWarden | HeroKind::SolarVanguard) {
-                    assert_eq!(material.alpha_mode, AlphaMode::Blend);
-                    assert!(material.base_color.alpha() < 1.0);
-                    if kind == HeroKind::StoneWarden {
-                        assert_eq!(mesh, &art.starter_stone_swing);
-                        assert_ne!(mesh, &art.melee_shapes[0]);
-                    } else {
-                        assert_eq!(mesh, &art.melee_shapes[1]);
-                    }
-                } else {
-                    assert_eq!(
-                        handle,
-                        &art.tier_materials[basic_attack_visual_tier(level).index][kind.index()]
-                    );
-                    assert_eq!(mesh, &art.melee_shapes[melee_shape_index(kind)]);
-                    assert_eq!(material.alpha_mode, AlphaMode::Opaque);
-                }
+                assert!(
+                    app.world()
+                        .resource::<Assets<StandardMaterial>>()
+                        .get(aged)
+                        .unwrap()
+                        .base_color
+                        .alpha()
+                        < MELEE_TRAIL_ALPHA[0]
+                );
+                assert_eq!(
+                    app.world().resource::<Assets<StandardMaterial>>().len(),
+                    before
+                );
+                app.world_mut()
+                    .resource_mut::<Time>()
+                    .advance_by(Duration::from_secs(1));
+                app.world_mut().run_system_once(animate_swings).unwrap();
+                assert_eq!(
+                    app.world_mut()
+                        .query::<&SwingTrail>()
+                        .iter(app.world())
+                        .count(),
+                    0,
+                    "all real spawned layers clean up at every tier"
+                );
+                assert_eq!(
+                    app.world().resource::<Assets<StandardMaterial>>().len(),
+                    before
+                );
             }
         }
     }

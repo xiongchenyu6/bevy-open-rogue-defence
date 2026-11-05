@@ -1,0 +1,21 @@
+{
+  "scope": "All actual resolver numeric/profile fields match for77contacts; IDs/outerordinal differ. Reconstructed frame67 actual HP multiset equal; f32 query sum permits both observed totals.",
+  "contacts": 77,
+  "actual_contact_fields_equal": true,
+  "frame67_hp_multisets": [
+    [
+      99449.765625,
+      99704.71875,
+      99733.2890625
+    ],
+    [
+      99449.765625,
+      99704.71875,
+      99733.2890625
+    ]
+  ],
+  "possible_f32_query_sums": [
+    298887.75,
+    298887.78125
+  ]
+}

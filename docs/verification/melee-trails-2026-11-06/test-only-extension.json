@@ -1,0 +1,4 @@
+{
+  "scope": "After visual acceptance only cfg(test) lifecycle asserts extended for all24class/tier cases; production bytes identical",
+  "native_production_sha256": "4016c48e75c800ee775e3327c29900fc533eaff0e8e26d0aa1b30b9939d8b654"
+}

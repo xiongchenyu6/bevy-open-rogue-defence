@@ -31,6 +31,8 @@ pub fn configure_growth(world: &mut World, scenario: &str) {
         "sword" => HeroKind::StoneWarden,
         "archer" => HeroKind::EmberRanger,
         "mage" => HeroKind::StormSavant,
+        "void" => HeroKind::VoidReaper,
+        "daggers" => HeroKind::RiftDancer,
         _ => panic!("unknown weapon class"),
     };
     assert!(matches!(tier, "starter" | "upgraded"));
