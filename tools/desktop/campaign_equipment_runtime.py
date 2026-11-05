@@ -17,7 +17,20 @@ from campaign_runtime import GAME, main
 from smoke_runtime import find_text, normalized, read_hud_wallet
 
 
+PREVIEW_CROP = '425x19+695+489'
+
+
 TILE_LEFTS = (615, 742, 868, 995, 1122)
+
+
+def battle_seconds(text):
+    match = re.fullmatch(r'(\d{2}):(\d{2})', text.strip())
+    assert match and int(match[2]) < 60, f'Unreadable battle countdown: {text!r}'
+    return int(match[1]) * 60 + int(match[2])
+
+
+def screenshot_battle_seconds(path, env):
+    return battle_seconds(crop_text(path, '100x28+1170+20', env))
 
 
 def market_wallet(rows):
@@ -58,12 +71,32 @@ def screenshot_wallet(path, env):
     return int(re.search(r'KILLS\s*(\d+)', text)[1]), text
 
 
+def tile_name_matches(tile_text, name):
+    # Name-only crop excludes price/rank/category. Real labels can wrap;
+    # accept at most two contiguous alphabetic lines, never a substring or
+    # a join across noisy/non-name rows.
+    lines = tile_text.splitlines()
+    expected = normalized(name)
+    for start in range(len(lines)):
+        for length in (1, 2):
+            part = lines[start:start + length]
+            if len(part) != length or not all(re.fullmatch(r"[A-Za-z][A-Za-z '-]*", line.strip())
+                                               for line in part):
+                continue
+            if any(line.strip().lower() in ('equipment', 'consumable', 'r', 'sr', 'ssr', 'ur')
+                   for line in part):
+                continue
+            if normalized(' '.join(part)) == expected:
+                return True
+    return False
+
+
 def inspected_offer(tile_text, price_text, preview_text, index):
     assert re.fullmatch(r'\d+', price_text), f'Unreadable tile price: {price_text!r}'
-    match = re.fullmatch(r"(.+?)\s*[·•*+,:.]\s*[‘’']?(Equipment|Consumable)", preview_text)
+    match = re.fullmatch(r"(.+?)\s*[·•*+,:.»]\s*[‘’']?(Equipment|Consumable)", preview_text)
     assert match, f'Unreadable item category: {preview_text!r}'
     name, category = match.groups()
-    assert any(normalized(line) == normalized(name) for line in tile_text.splitlines()), \
+    assert tile_name_matches(tile_text, name), \
         f'Tile/preview mismatch: {tile_text!r}, {preview_text!r}'
     return dict(name=name.strip(), price=int(price_text), category=category, index=index,
                 tile_ocr=tile_text, price_ocr=price_text, preview_ocr=preview_text)
@@ -89,12 +122,28 @@ def inventory_count(rows):
     return counts.pop()
 
 
-def last_owned_icon(count):
-    # Fixed verified 1280x720 Gear grid: 10 columns; first two rows visible.
-    # Fail truthfully instead of guessing a clipped icon when inventory grows.
+def inventory_icons(count):
+    # Public 1280x720 visible grid, catalog order rather than purchase order.
     assert 1 <= count <= 20, f'Inventory count {count} exceeds verified visible grid bound 1..20'
-    index = count - 1
-    return 245 + 86 * (index % 10), 184 + 86 * (index // 10)
+    return [(245 + 86 * (index % 10), 184 + 86 * (index // 10)) for index in range(count)]
+
+
+def inventory_open(rows):
+    return any(200 <= x < 600 and 80 <= y < 145
+               and re.match(r'^EQUIPMENT\b', text.strip(), re.I)
+               for text, x, y, *_ in rows)
+
+
+def selected_inventory_name(text):
+    match = re.fullmatch(r'\[(?:R|SR|SSR|UR)\]\s+([A-Za-z][A-Za-z -]+)', text.strip())
+    assert match, f'Unreadable selected inventory detail: {text!r}'
+    return normalized(match[1])
+
+
+def choice_pending(rows):
+    return any(any(token in normalized(text) for token in
+                   ('forgeanewbond', 'chooseyour', 'shapeyourarsenal',
+                    'recruitahero', 'chooseanevolution')) for text, *_ in rows)
 
 
 class EquipmentPolicy:
@@ -137,13 +186,12 @@ class EquipmentPolicy:
             # Drain only already queued choices; never draw or refresh here.
             for _ in range(20):
                 rows = self.ui['lines']()
-                if any(any(token in normalized(text) for token in
-                           ('forgeanewbond', 'chooseyour', 'shapeyourarsenal', 'recruitahero'))
-                       for text, *_ in rows):
+                if choice_pending(rows):
                     self.key('1')
                 else:
                     break
                 assert time.monotonic() < deadline, 'Existing card queue exceeded market visit budget'
+            assert not choice_pending(self.ui['lines']()), 'Existing choice queue not drained after 20 selections'
             self.key('b')
             rows = self.ui['lines']()
             self.ui['report'].setdefault('equipment_visit_rows', []).append(dict(visit=self.visits, rows=rows))
@@ -163,7 +211,7 @@ class EquipmentPolicy:
                 image = self.ui['shot'](prefix + f'-inspect-{index}.png')
                 tile = crop_text(image, f'120x40+{left}+343', self.ui['env'])
                 price = crop_text(image, f'39x23+{left+52}+384', self.ui['env'], digits=True)
-                preview = crop_text(image, '190x30+695+480', self.ui['env'])
+                preview = crop_text(image, PREVIEW_CROP, self.ui['env'])
                 inspected.append(inspected_offer(tile, price, preview, index))
             self.ui['report'].setdefault('equipment_inspections', []).append(
                 dict(visit=self.visits, wallet=wallet, wallet_ocr=wallet_raw, offers=inspected))
@@ -179,7 +227,7 @@ class EquipmentPolicy:
                 selected = self.ui['shot'](prefix + '-selected.png')
                 checked = inspected_offer(crop_text(selected, f'120x40+{left}+343', self.ui['env']),
                     crop_text(selected, f'39x23+{left+52}+384', self.ui['env'], digits=True),
-                    crop_text(selected, '190x30+695+480', self.ui['env']), offer['index'])
+                    crop_text(selected, PREVIEW_CROP, self.ui['env']), offer['index'])
                 assert checked == offer, 'Selected offer changed before purchase'
                 self.click(('', 1129, 482, 1239, 530))
                 after = self.ui['shot'](prefix + '-after.png')
@@ -203,23 +251,50 @@ class EquipmentPolicy:
                 self.key('i')
                 inventory = self.ui['lines']()
                 count = inventory_count(inventory)
-                x, y = last_owned_icon(count)
-                self.click(('', x, y, x, y))
-                purchase['inventory_count'] = count
-                purchase['selected_icon'] = [x, y]
-                while time.monotonic() < deadline:
-                    inventory = self.ui['lines']()
-                    if any(normalized(offer['name']) in normalized(text) for text, *_ in inventory):
+                details = []
+                found = None
+                for index, (x, y) in enumerate(inventory_icons(count)):
+                    assert time.monotonic() < deadline, 'Inventory inspection exceeded visit budget'
+                    self.click(('', x, y, x, y))
+                    image = self.ui['shot'](prefix + f'-inventory-icon-{index}.png')
+                    text = crop_text(image, '840x25+220+445', self.ui['env'])
+                    name = selected_inventory_name(text)
+                    details.append(dict(icon=[x, y], detail_ocr=text))
+                    if name == normalized(offer['name']):
+                        found = [x, y]
                         break
-                    time.sleep(.3)
-                else:
-                    raise AssertionError('Purchased item not visible in actual inventory')
+                assert found is not None, 'Purchased item not found in visible selected inventory details'
+                purchase['inventory_count'] = count
+                purchase['selected_icon'] = found
+                purchase['inventory_inspections'] = details
+                inventory = self.ui['lines']()
                 self.ui['shot'](prefix + '-inventory.png')
                 close = find_text(inventory, 'Close')
                 assert close, 'Actual equipment Close button not visible'
                 self.click(close)
-                assert not find_text(self.ui['lines'](), 'EQUIPMENT'), 'Equipment did not close'
+                closed_inventory = self.ui['lines']()
+                assert not inventory_open(closed_inventory) and not find_text(closed_inventory, 'Close'), \
+                    'Equipment did not close'
                 purchase['inventory_verified'] = True
+            # Header absence alone can be OCR failure. Prove actual simulation
+            # resumes through the public countdown after both panels are closed.
+            resumed = self.ui['shot'](prefix + '-resume-before.png')
+            before_seconds = screenshot_battle_seconds(resumed, self.ui['env'])
+            resume_deadline = min(deadline, time.monotonic() + 10)
+            while time.monotonic() < resume_deadline:
+                time.sleep(.5)
+                rows = self.ui['lines']()
+                if choice_pending(rows):
+                    self.key('1')
+                    continue
+                resumed = self.ui['shot'](prefix + '-resume-after.png')
+                after_seconds = screenshot_battle_seconds(resumed, self.ui['env'])
+                if after_seconds < before_seconds:
+                    self.ui['report'].setdefault('equipment_resume_proofs', []).append(
+                        dict(visit=self.visits, before=before_seconds, after=after_seconds))
+                    break
+            else:
+                raise AssertionError('Battle countdown did not resume after market/equipment closure')
             assert time.monotonic() < deadline, 'Market visit exceeded 45 seconds'
             print(json.dumps(dict(stage='earned equipment visit', visit=self.visits,
                                   purchases=len(self.purchases), wallet=wallet)), flush=True)

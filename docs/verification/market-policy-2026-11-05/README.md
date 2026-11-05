@@ -21,10 +21,20 @@ docker run --rm --network none \
   python3 -m unittest -v test_campaign_equipment_runtime
 ```
 
-**5 passed**, including real Tesseract OCR of committed native market frames
+**8 passed**, including real Tesseract OCR of committed native market frames
 35/96/125/145 under `black-market-2026-11-04/en-1280x720`. They verify wallets
 100000/99880/0/0, all five prices and selected item name/category. Artificial
 rows only test parsing/transaction constraints, and are not native evidence.
+The actual committed Arc Lens inventory screenshot also verifies selected-detail
+OCR at the unchanged panel geometry. Current-build live inventory is not yet proven.
+
+The policy searches visible inventory icons using exact selected-detail names;
+it does not assume new purchases append to the grid. Header closure recognizes
+`EQUIPMENT · N`, queues include evolution choices and must drain before opening
+the market. Wrapped tile names must match exactly across at most two contiguous
+name lines. After closing both panels, the live policy additionally requires the
+public battle countdown to decrease, with strict parsing and the existing visit
+time budget; this runtime resume check remains unverified until a live run.
 
 This verifies reading existing native pixels, not a live campaign transaction,
 progression, equipment affordability in a natural run or chapter-six victory.

@@ -1,12 +1,19 @@
 import shutil
 import unittest
+from campaign_equipment_runtime import battle_seconds
 from pathlib import Path
 from campaign_equipment_runtime import (affordable_gear, market_wallet, inventory_count,
-    last_owned_icon, market_closed, inspected_offer, verify_deduction, crop_text,
-    screenshot_wallet, TILE_LEFTS)
+    inventory_icons, inventory_open, selected_inventory_name, choice_pending, PREVIEW_CROP, market_closed, inspected_offer, verify_deduction, crop_text,
+    screenshot_wallet, TILE_LEFTS, tile_name_matches)
 
 
 class EquipmentPolicyParsing(unittest.TestCase):
+    def test_battle_countdown_requires_complete_valid_time(self):
+        self.assertEqual(battle_seconds('24:59'), 1499)
+        for text in ('24:99', '24:5', 'ROUND 0/5', '', '24:59 0/5'):
+            with self.assertRaises(AssertionError):
+                battle_seconds(text)
+
     def test_current_header_and_ambiguous_wallet(self):
         self.assertEqual(market_wallet([('LV1 KILLS 99880',1120,205,1209,214)]),99880)
         self.assertFalse(market_closed([('BLACK MARKET',617,214,759,230)]))
@@ -23,6 +30,16 @@ class EquipmentPolicyParsing(unittest.TestCase):
         with self.assertRaises(AssertionError):
             affordable_gear([],1000)
 
+    def test_wrapped_tile_name_is_exact_and_contiguous(self):
+        self.assertTrue(tile_name_matches('Prismatic\nEngine','Prismatic Engine'))
+        self.assertTrue(tile_name_matches('ae\nLegion\nStandard','Legion Standard'))
+        for text in ('Prismatic Extra\nEngine', 'Prismatic\n180\nEngine',
+                     'Prismatic\nEquipment\nEngine', 'Prismatic\n?\nEngine',
+                     'Prismatic\nEngine Extra', 'Prismatic\nThree\nEngine'):
+            self.assertFalse(tile_name_matches(text,'Prismatic Engine'), text)
+        offer=inspected_offer('Prismatic\nEngine','300','Prismatic Engine + Equipment',0)
+        self.assertEqual(offer['name'],'Prismatic Engine')
+
     def test_cheapest_equipment_requires_all_inspected_offers(self):
         # Transaction constraints; these artificial offers are not native evidence.
         offers=[dict(name=str(i),index=i,price=p,category=c) for i,(p,c) in enumerate(
@@ -36,10 +53,19 @@ class EquipmentPolicyParsing(unittest.TestCase):
 
     def test_inventory_header_and_visible_grid(self):
         self.assertEqual(inventory_count([('EQUIPMENT · 12',213,108,400,130)]),12)
-        self.assertEqual(last_owned_icon(11),(245,270))
+        self.assertEqual(inventory_icons(11)[10],(245,270))
         for count in (0,21):
-            with self.assertRaises(AssertionError):last_owned_icon(count)
+            with self.assertRaises(AssertionError):inventory_icons(count)
         with self.assertRaises(AssertionError):inventory_count([])
+
+    def test_queue_and_inventory_require_exact_evidence(self):
+        self.assertTrue(choice_pending([('Arc Spark · Choose an evolution',300,200,800,240)]))
+        self.assertTrue(inventory_open([('EQUIPMENT · 12',213,108,400,130)]))
+        self.assertFalse(inventory_open([('Equipment acquired',500,400,800,420)]))
+        self.assertEqual(selected_inventory_name('[R] Arc Lens'),'arclens')
+        for text in ('Arc Lens','+10% Arc Lens damage','[R] Arc Lens\nOther'):
+            with self.assertRaises(AssertionError):selected_inventory_name(text)
+        self.assertEqual(len(inventory_icons(20)),20)
 
     @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
                          'Native screenshot OCR requires Tesseract and ImageMagick')
@@ -56,10 +82,13 @@ class EquipmentPolicyParsing(unittest.TestCase):
                 left=TILE_LEFTS[index]
                 offer=inspected_offer(crop_text(path,f'120x40+{left}+343',None),
                     crop_text(path,f'39x23+{left+52}+384',None,True),
-                    crop_text(path,'190x30+695+480',None),index)
+                    crop_text(path,PREVIEW_CROP,None),index)
                 self.assertEqual((offer['name'],offer['category'],offer['price']),(name,category,price))
                 self.assertEqual([int(crop_text(path,f'39x23+{x+52}+384',None,True))
                                   for x in TILE_LEFTS],[300,180,120 if frame==35 else 140,180,280])
+
+        detail = root.parent.parent/'chapter6-equipment-interrupted-2026-10-16/equipment-04-inventory.png'
+        self.assertEqual(selected_inventory_name(crop_text(detail,'840x25+220+445',None)), 'arclens')
 
 
 if __name__=='__main__':unittest.main()
