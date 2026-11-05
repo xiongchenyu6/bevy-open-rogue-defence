@@ -1,21 +1,22 @@
-# Final expedition: earned route fails
+# 第六章实际战役验收
 
-The700d221 package continued the actual first-five-chapter save:645shards, Strength upgrade6 and chapter six unlocked. At1×, the stationary public1/g/f strategy lost all lives atLevel35/1549kills. The required victory assertion returned1; chapter six remains uncleared.
+**完整通关仍未验证。** 当前独立 Linux 包来自 `8f4084b`，短启动／设置／退出流程已通过。第六章使用真实前五章通关存档的隔离副本：645战果、力量强化6级、前五章已通关，文件 SHA256 为 `4c9a0973fa90b3f75838ccb1999267be31ff8ff9b896a8c9b165ae5ac3e129f9`。[存档来源与前五章奖励证明](verification/earned-market-2026-11-05/input-provenance.json)。没有注入局内货币、生命、技能或胜利。
 
-The failure earned82shards. A real255-shard Strength purchase left472shards and upgrade7. Both normal game exits returned0; restart retained progress and a newLevel1StormSavant showedStrength34. Actual seed was0x00000000000A11CF. Ten screenshots were inspected across117ordered samples. No currency, health or victory was injected. [Evidence](verification/packaged-chapter6-2026-10-09/verification.json).
+## 已观察结果
 
-This is a genuine failed route with verified reward persistence, not a timeout or chapter completion. It does not establish the cause of defeat, whether an active player or another build can win, or balanced difficulty. The artifact predates inherited ranged reach, forge readability and the initial market stock correction. Equipment acquisition, deliberate builds, more seeds and a complete sixth-chapter victory remain required evidence.
+| 版本／路线 | 实际结果 | 证据与边界 |
+| --- | --- | --- |
+| 2026-10-09，`700d221` | 1×静止1/g/f路线在35级、1549击杀时失去全部生命；真实失败 | [结算与重启](verification/packaged-chapter6-2026-10-09/verification.json)：赚取82战果，实际花255购买力量强化，余额472、强化7级；两次正常退出、重启力量34。版本早于继承射程和库存修正 |
+| 2026-10-14，`3922b11` | 同类路线在22级、754击杀时真实失败，赚取42战果至514 | [失败记录](verification/packaged-chapter6-2026-10-14/summary.json)：严格种子OCR随后失败，未完成强化／重启／正常退出检查；未购买装备 |
+| 2026-11-05，`8f4084b` R1 | 首次黑市悬停后详情尚未更新，脚本停止；无购买、无胜败结果 | [现场](verification/chapter6-equipment-2026-11-05-r1/summary.json)。后续改为限时等待卡名／价格／详情一致 |
+| 同包 R2 | 五个自然商品均成功识别；关闭后倒计时1257→1251，实际恢复战斗 | [现场](verification/chapter6-equipment-2026-11-05-r2/summary.json)。45秒访问预算耗尽，仍是脚本中断；访问上限改90秒 |
+| 同包 R3 | 实际花160战功购买疾风靴，307→147；装备栏图标／名称正确，关闭后倒计时1164→1155 | [购买与独立像素复核](verification/earned-market-2026-11-05/README.md)。后续关闭黑市时10级征募遮住时钟，脚本停止，未到胜败结算 |
+| 同包 R4 | 开局整屏OCR漏读实际1×，脚本在属性核验前停止 | [原生失败帧与回归测试](verification/chapter6-startup-speed-2026-11-05/README.md)。改用固定工具栏区域严格识别；19项相关测试通过 |
 
-## Current candidate: another genuine failed route
+## 当前复跑与剩余验收
 
-The3922b11 Linux candidate continued an isolated copy of the actual earned save472shards/Strength7 at1×. The stationary public1/g/f route reachedLevel22/754kills and lost all lives after979.95wallseconds (85samples). The result awarded42shards; save now514, chapter six still uncleared. Root inspected terminal and seed-row screenshots; actual seed is0x000000000000BEF0 (requested0xBEEF increments on expedition reset).
+R5 已用同一候选包和未改动的真实存档开始1×复跑，已通过实际倍速和开局属性检查。后台任务为 `rogue-chapter6-equipment-r5-nov5`，原始日志在 `target/verification/desktop-release-2026-11-05/chapter6-r5-harness.log`。在真实结算、奖励与正常退出／重启检查完成前，保持未通关状态。
 
-The harness then failed strict seed OCR, which read an invalid string. It did not finish training/restart/normal-exit checks; those are unverified, and the failure is retained. No equipment purchases or movement occurred, so this does not establish a human win rate or justify a difficulty change. [Current failure evidence](verification/packaged-chapter6-2026-10-14/summary.json). This save copy does not replace the original historical progress.
+脚本只通过公共键盘、鼠标与截图操作，采用静止1/g/f和最便宜可负担自然装备的策略，不移动、不刷新库存。黑市访问后至少冷却60秒，上限12次、每次90秒；整局2400秒上限。读取倒计时前若识别到征募／选牌则用公共数字键处理，普通HUD无法识别时仍严格失败。
 
-## 2026-11-05 新包装备路线 R1
-
-`8f4084b` 新 SDK 独立包通过短流程验收后，使用已归档的真实前五章通关存档（645战果、力量6级、校验和不变）开始第六章1×装备路线。首次访问黑市时，鼠标已移到奥术透镜卡位，但共享详情仍显示疾风靴，严格校验因此停止。零购买、未到结算，不计为胜利或失败，也不能据此判断平衡。
-
-现场与日志见[中断证据](verification/chapter6-equipment-2026-11-05-r1/summary.json)。固定200ms悬停等待已改为有上限的实际卡名／价格／详情一致性轮询；没有放宽匹配、注入资源或修改玩法。焦点还是渲染更新时延导致该现象尚未证明，需由后续原生复跑确认。
-
-R2 的有上限悬停轮询已识别全部五个自然商品，并记录四次旧详情随后追上指针的情况；没有可负担装备，未购买。面板关闭后，原生截图倒计时从1257秒降至1251秒（Root重新OCR核对），证明战斗实际恢复。脚本45秒总访问预算已耗尽，来不及完成其新增的第二张恢复取样，因此仍按中断保留，未到胜败结算。见[R2证据](verification/chapter6-equipment-2026-11-05-r2/summary.json)。软件渲染的访问上限调整到90秒，并记录关闭／恢复阶段真实耗时；总战役仍有2400秒上限。
+这些路线不能推断真实玩家胜率，也不能单独证明难度合理或需要削弱。仍需当前版本完整第六章胜利、更多种子与英雄／构筑路线，以及新版自然合成和完整长期回归。

@@ -34,8 +34,13 @@ it does not assume new purchases append to the grid. Header closure recognizes
 the market. Wrapped tile names must match exactly across at most two contiguous
 name lines. After closing both panels, the live policy additionally requires the
 public battle countdown to decrease, with strict parsing and the existing visit
-time budget; this runtime resume check remains unverified until a live run.
+time budget. This directory records the earlier eight-test parser stage.
+Subsequent actual packaged purchasing and three live countdown-resume proofs
+are archived in [the earned-market run](../earned-market-2026-11-05/README.md).
+That newer route has ten equipment-policy regressions, plus nine common
+campaign checks including the isolated speed-label failure frame.
 
-This verifies reading existing native pixels, not a live campaign transaction,
-progression, equipment affordability in a natural run or chapter-six victory.
-The live packaged route remains an open gate. Scope is fixed 1280×720 English.
+These earlier pixel-reading tests alone do not prove transactions, progression
+or chapter-six victory. Use the newer earned-market evidence for the natural
+purchase claim; complete chapter-six victory remains unverified. Fixed scope:
+1280×720 English UI.
