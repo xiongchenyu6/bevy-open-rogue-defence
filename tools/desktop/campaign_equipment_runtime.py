@@ -558,7 +558,7 @@ def wait_panel_open(shot, env, send, deadline, records, prefix, target_panel, vi
 
 class EquipmentPolicy:
     visit_limit = 12
-    visit_base_budget_seconds = 140
+    visit_base_budget_seconds = 160
     per_owned_item_budget_seconds = 20
     pause_budget_seconds = (visit_limit * visit_base_budget_seconds
                             + per_owned_item_budget_seconds * sum(range(1, visit_limit + 1)))

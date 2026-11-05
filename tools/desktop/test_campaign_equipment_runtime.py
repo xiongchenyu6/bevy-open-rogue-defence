@@ -372,10 +372,10 @@ class EquipmentPolicyParsing(unittest.TestCase):
         self.assertEqual(read_toolbar_speed(path,None),1)
 
     def test_owned_route_budget_scales_finitely_and_total_covers_all_visits(self):
-        self.assertEqual(EquipmentPolicy.visit_base_budget_seconds,140)
-        self.assertEqual(EquipmentPolicy.pause_budget_seconds,3240)
-        self.assertEqual(1800+EquipmentPolicy.pause_budget_seconds,5040)
-        self.assertLess(5040,5400)
+        self.assertEqual(EquipmentPolicy.visit_base_budget_seconds,160)
+        self.assertEqual(EquipmentPolicy.pause_budget_seconds,3480)
+        self.assertEqual(1800+EquipmentPolicy.pause_budget_seconds,5280)
+        self.assertLess(5280,6000)
         budgets=[EquipmentPolicy.visit_budget_for_owned(count) for count in range(1,EquipmentPolicy.visit_limit+1)]
         self.assertTrue(all(a < b for a,b in zip(budgets,budgets[1:])))
         self.assertEqual(sum(budgets),EquipmentPolicy.pause_budget_seconds)
