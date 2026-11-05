@@ -82,7 +82,9 @@ fn area_and_ordinary_unrestricted_carriers_keep_spatial_collisions() {
                             &mut commands,
                             Handle::default(),
                             Handle::default(),
-                            Transform::from_xyz(0., 0.18, 0.),
+                            // Ordinary interception control has a unique spatial
+                            // victim: inside elite, outside normal's hit volume.
+                            Transform::from_xyz(0.7, 0.18, 0.),
                             Projectile {
                                 velocity: Vec3::ZERO,
                                 damage: 100.,

@@ -190,3 +190,113 @@ fn vortex_pulse_damage_ignores_cosmetic_enemy_archetype_order() {
         "a purely cosmetic archetype migration must not reassign a zone's critical damage"
     );
 }
+
+fn overlap_geometry_outcome(
+    reverse: bool,
+    points: [Vec3; 2],
+    start: Vec3,
+    end: Vec3,
+) -> ([f32; 2], u64) {
+    let mut app = projectile_test_app();
+    let mut targets = [Entity::PLACEHOLDER; 2];
+    for i in if reverse { [1, 0] } else { [0, 1] } {
+        let mut enemy = test_enemy(100.);
+        enemy.elite = false;
+        targets[i] = app
+            .world_mut()
+            .spawn((enemy, Transform::from_translation(points[i])))
+            .id();
+    }
+    app.world_mut()
+        .run_system_once(
+            move |mut commands: Commands, mut pools: ResMut<CombatPools>| {
+                let entity = pools
+                    .rent_projectile(
+                        &mut commands,
+                        Handle::default(),
+                        Handle::default(),
+                        Transform::from_translation(end),
+                        Projectile {
+                            velocity: (end - start) * 10.,
+                            damage: 25.,
+                            radius: 0.48,
+                            remaining_hits: 0,
+                            lifetime: 2.,
+                        },
+                    )
+                    .unwrap();
+                commands
+                    .entity(entity)
+                    .insert(DamageProfile::PHYSICAL_ATTACK);
+            },
+        )
+        .unwrap();
+    app.world_mut()
+        .resource_mut::<Time>()
+        .advance_by(std::time::Duration::from_millis(100));
+    app.world_mut().run_system_once(projectile_hits).unwrap();
+    let hp = targets.map(|entity| app.world().get::<Enemy>(entity).unwrap().hp);
+    let rng = app.world().resource::<RunRng>().state();
+    assert_eq!(
+        rng, 11_083_784_628_768_264_341,
+        "one actual noncritical attack contact retains RNG budget"
+    );
+    assert_eq!(
+        app.world_mut()
+            .query::<&Projectile>()
+            .iter(app.world())
+            .count(),
+        0,
+        "single-hit carrier retires"
+    );
+    println!("OVERLAP_GEOMETRY reverse={reverse} points={points:?} hp={hp:?} rng={rng}");
+    (hp, rng)
+}
+
+#[test]
+fn overlap_geometry_prefers_nearest_sweep_start_center() {
+    let start = Vec3::new(-8.507_8, 0.25, 1.457_371_5);
+    let points = [
+        Vec3::new(-8.478_959, 0., 2.158_846),
+        Vec3::new(-8.519_881, 0., 2.369_858_7),
+    ];
+    let end = start + Vec3::new(1.703_585, 0., 58.303_28) * 0.1;
+    let outcomes =
+        [false, true].map(|reverse| overlap_geometry_outcome(reverse, points, start, end));
+    for outcome in outcomes {
+        assert_eq!(outcome.0, [75., 100.]);
+    }
+}
+
+#[test]
+fn overlap_geometry_symmetric_tie_uses_visible_coordinates() {
+    let outcomes = [false, true].map(|reverse| {
+        overlap_geometry_outcome(
+            reverse,
+            [Vec3::new(0., 0., -0.3), Vec3::new(0., 0., 0.3)],
+            Vec3::ZERO,
+            Vec3::X,
+        )
+    });
+    for outcome in outcomes {
+        assert_eq!(outcome.0, [75., 100.]);
+    }
+}
+
+#[test]
+fn overlap_geometry_preserves_nonzero_entry_progress_before_distance() {
+    // The first sphere is entered at x=.34, while the closer-center
+    // second sphere is entered at x≈.469. Start-center distance must not override entry.
+    for reverse in [false, true] {
+        assert_eq!(
+            overlap_geometry_outcome(
+                reverse,
+                [Vec3::new(1.3, 0., 0.), Vec3::new(1., 0., 0.8)],
+                Vec3::ZERO,
+                Vec3::X * 3.
+            )
+            .0,
+            [75., 100.]
+        );
+    }
+}

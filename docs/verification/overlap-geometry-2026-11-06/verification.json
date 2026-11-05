@@ -1,0 +1,40 @@
+{
+  "scope": "Scoped equal-entry collision geometric tie policy; full normal duplicate pending; no matrix or numerical tuning",
+  "tests": {
+    "passed": 684,
+    "failed": 0,
+    "ignored": 1
+  },
+  "strict_clippy": "passed",
+  "balance_build": "passed",
+  "files_sha256": {
+    "README.md": "04e55a35205c8a05ec6ad3eb5e23acb052e293acd1a6b76c21af6bd8d79c74b8",
+    "r1-after-full-tests.log": "012e0727f17a6889a567fa4a5380f3577251baface22d13c47fb1c228cb8b0a0",
+    "r1-after-sequence.log": "93c8fdc92ca39e8ef50a8bdfe31876c140ff4de47bc413e1ba9ddd1cd58a47fb",
+    "r1-after-source-before.json": "6e7a796ddec88aea380b7e01319ebf5e3dd37bb4c4638adbf0cd82e2023669f1",
+    "r1-after.py": "a845e39228c088a6f47ee5c8c4faaf415e0d084836d101fede4d4d638e9d3c79",
+    "r1-before-exit.txt": "39b8dc3fc8b44765c8e6f1adee04c5b465e555ab791cc42d0d9e810d5b64297c",
+    "r1-before-paired-exit.txt": "39b8dc3fc8b44765c8e6f1adee04c5b465e555ab791cc42d0d9e810d5b64297c",
+    "r1-before-paired-sequence.log": "8a4146064b8de75255a52c33c9fe22305ddd668fff544be5f1d9d36dc70bf48c",
+    "r1-before-paired-tests.log": "7ae90f81111471eead21a2a9cba22d4157d287c5a4c45dbcf2ebd4b1c5783123",
+    "r1-before-paired.py": "65f33fa48ff060491883dddf0960b0727c707c112fc55a6b8af94a466e3cc5ab",
+    "r1-before-sequence.log": "8a4146064b8de75255a52c33c9fe22305ddd668fff544be5f1d9d36dc70bf48c",
+    "r1-before-source-hashes.json": "d99be7a0c0d307cd694921b089288ad90df97641bc16373a71923d4d7440d477",
+    "r1-before-tests.log": "ec3c2dd8597cef566d236ba7d846042ccd8f3b3bedf1b0fd150536c760a3b274",
+    "r1-before.py": "fbc30bf853b4935bc41b3bcc4e417fff303d7750848b0a65b184e1e462c6874b",
+    "r2-after-build.log": "0893cc3a28d3c41811c4ffec045cddb58e9858c4ad6b7f750e0a9dba8eb98aaf",
+    "r2-after-clippy.log": "cbdc5cdb208a2a0acb2afea456ee2db003bb4711800b63c4f18a68fdb7931216",
+    "r2-after-full-tests.log": "2acfbfbc31d3ce9d7373b0dcf3201b44eafc10dfbe43b372575070c2b837fc5b",
+    "r2-after-sequence.log": "5e45b94d78cbae139230e7635311ff21aec615e40684afc88b60bd4a39dab248",
+    "r2-after-source-after.json": "a0becfcfd81c46fcc21b26b2a528e6fbdb9227958e1f38e5e05e6cc4521164fa",
+    "r2-after-source-before.json": "a0becfcfd81c46fcc21b26b2a528e6fbdb9227958e1f38e5e05e6cc4521164fa",
+    "r2-after.py": "0dc7cdbfbdbdc0dce80e5235b2d2e397a35176ef48a88aeb84f6e03a831dac0f",
+    "r2-binary.json": "42ea1f40b720b361e9065175ef866d65b8d7296258690641062f28cb5911274b",
+    "verify.py": "1ac7c27128368d082434212e8d6be545ad5cb5b66b18484b60ec118547ac0c12"
+  },
+  "source_sha256": {
+    "src/game/combat.rs": "6871ffc1d2898f10ea7a59f4a0e966043218e5fe7554340a09610adf35f8bf9a",
+    "src/game/combat/collision_order_tests.rs": "26b611a6c8a95d96b17d9011d957b8d7a5435d9557f2f06b249e84cfcb8797d8",
+    "src/game/combat/designated_strike_tests.rs": "6cb7f9f27543feb7a7876630de2d4cb684fbcbe6dfd00350e9071b34a1de1a6f"
+  }
+}

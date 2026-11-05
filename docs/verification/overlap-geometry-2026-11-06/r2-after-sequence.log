@@ -1,0 +1,7 @@
+START after-full-tests.log
+PASS after-full-tests.log
+START after-clippy.log
+PASS after-clippy.log
+START after-build.log
+PASS after-build.log
+TERMINAL PASS; overlap collision geometry verification; no numerical matrix

@@ -1,0 +1,59 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `release` profile [optimized] target(s) in 2m 58s
+     Running unittests src/lib.rs (target/release/deps/rogue_commander-37d39db57aeef6a3)
+
+running 3 tests
+OVERLAP_GEOMETRY reverse=false points=[Vec3(0.0, 0.0, -0.3), Vec3(0.0, 0.0, 0.3)] hp=[100.0, 75.0] rng=11083784628768264341
+OVERLAP_GEOMETRY reverse=false points=[Vec3(-8.478959, 0.0, 2.158846), Vec3(-8.519881, 0.0, 2.3698587)] hp=[100.0, 75.0] rng=11083784628768264341
+OVERLAP_GEOMETRY reverse=false points=[Vec3(1.3, 0.0, 0.0), Vec3(1.0, 0.0, 0.8)] hp=[75.0, 100.0] rng=11083784628768264341
+OVERLAP_GEOMETRY reverse=true points=[Vec3(1.3, 0.0, 0.0), Vec3(1.0, 0.0, 0.8)] hp=[75.0, 100.0] rng=11083784628768264341
+OVERLAP_GEOMETRY reverse=true points=[Vec3(-8.478959, 0.0, 2.158846), Vec3(-8.519881, 0.0, 2.3698587)] hp=[75.0, 100.0] rng=11083784628768264341
+OVERLAP_GEOMETRY reverse=true points=[Vec3(0.0, 0.0, -0.3), Vec3(0.0, 0.0, 0.3)] hp=[75.0, 100.0] rng=11083784628768264341
+
+thread 'game::combat::tests::overlap_geometry_symmetric_tie_uses_visible_coordinates' (2689996) panicked at src/game/combat/collision_order_tests.rs:272:31:
+assertion `left == right` failed
+  left: [100.0, 75.0]
+ right: [75.0, 100.0]
+stack backtrace:
+test game::combat::tests::overlap_geometry_preserves_nonzero_entry_progress_before_distance ... ok
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<[f32; 2], [f32; 2]>
+   4: rogue_commander::game::combat::tests::overlap_geometry_symmetric_tie_uses_visible_coordinates
+   5: <rogue_commander::game::combat::tests::overlap_geometry_symmetric_tie_uses_visible_coordinates::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+thread 'game::combat::tests::overlap_geometry_prefers_nearest_sweep_start_center' (2689994) panicked at src/game/combat/collision_order_tests.rs:265:31:
+assertion `left == right` failed
+  left: [100.0, 75.0]
+ right: [75.0, 100.0]
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panickingtest game::combat::tests::overlap_geometry_symmetric_tie_uses_visible_coordinates ... ::FAILEDpanic_fmt
+
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<[f32; 2], [f32; 2]>
+   4: rogue_commander::game::combat::tests::overlap_geometry_prefers_nearest_sweep_start_center
+   5: <rogue_commander::game::combat::tests::overlap_geometry_prefers_nearest_sweep_start_center::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+test game::combat::tests::overlap_geometry_prefers_nearest_sweep_start_center ... FAILED
+
+failures:
+
+failures:
+    game::combat::tests::overlap_geometry_prefers_nearest_sweep_start_center
+    game::combat::tests::overlap_geometry_symmetric_tie_uses_visible_coordinates
+
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 682 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--lib`

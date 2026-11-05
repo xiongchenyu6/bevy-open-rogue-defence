@@ -2733,7 +2733,7 @@ fn projectile_hits(
         } else {
             projectile.radius
         };
-        let mut collision_order: Vec<(f32, Entity)> = collision_targets
+        let mut collision_order: Vec<(f32, Entity, Vec3)> = collision_targets
             .iter()
             .filter_map(|(entity, position, elite)| {
                 if target_lock.is_some_and(|target| target.0 != *entity) {
@@ -2752,19 +2752,27 @@ fn projectile_hits(
                     *position,
                     hit_radius,
                 )
-                .map(|progress| (progress, *entity))
+                .map(|progress| (progress, *entity, *position))
             })
             .collect();
-        // Stationary overlaps also need stable ties: cosmetic components may
-        // migrate enemy archetypes and change query order without moving actors.
+        // Entry time remains primary. Initially overlapping volumes share zero
+        // entry time; prefer visible geometry before unrelated entity allocation.
         collision_order.sort_by(|left, right| {
             left.0
                 .total_cmp(&right.0)
+                .then_with(|| {
+                    sweep_start
+                        .distance_squared(left.2)
+                        .total_cmp(&sweep_start.distance_squared(right.2))
+                })
+                .then_with(|| left.2.z.total_cmp(&right.2.z))
+                .then_with(|| left.2.x.total_cmp(&right.2.x))
+                .then_with(|| left.2.y.total_cmp(&right.2.y))
                 .then_with(|| left.1.to_bits().cmp(&right.1.to_bits()))
         });
         let mut consumed = false;
         let mut first_frame_hits = HashSet::new();
-        for (candidate_ordinal, (progress, ordered_enemy)) in
+        for (candidate_ordinal, (progress, ordered_enemy, _)) in
             collision_order.into_iter().enumerate()
         {
             let Ok((

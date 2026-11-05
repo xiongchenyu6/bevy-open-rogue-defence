@@ -1,0 +1,4 @@
+{
+  "src/game/combat.rs": "3df0cfcb056c13d84113fc652fbfd10f50df35c5a5b43273eb9f49f548f7e6fa",
+  "src/game/combat/collision_order_tests.rs": "3d4e4d49621ccdaac51293c0745437c656adcc9f4f6a42975e45951a057bfc73"
+}

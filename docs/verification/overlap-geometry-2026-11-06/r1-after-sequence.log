@@ -1,0 +1,6 @@
+START after-full-tests.log
+Traceback (most recent call last):
+  File "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/overlap-geometry-2026-11-06/after.py", line 11, in <module>
+    assert p.returncode==0,(name,p.returncode)
+           ^^^^^^^^^^^^^^^
+AssertionError: ('after-full-tests.log', 101)
