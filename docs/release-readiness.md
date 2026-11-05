@@ -25,16 +25,14 @@
 - 发布候选版本需覆盖从首次启动到选择章节、征募、战斗、选卡、黑市、支线、死亡、结算、永久强化、重试和退出的完整流程。每个目标平台独立验收。
 - 没有当前证据的项保持未完成。其他平台显示设置、完整新手体验及其他平台与真实Steam安装验收是明确剩余工作，不能把第一章验证称为已可上架。
 
-## 2026-11-05 当前源码与交付状态
+## 2026-11-06 当前源码与交付状态
 
-当前游戏源码已包含[敌人受击短闪与材质隔离](verification/enemy-flash-2026-11-05/README.md)，以及：初始剑平滑渐隐残影、初始木箭与升级箭分档、同帧雷／冰被动和普攻回响完整结算，以及六件合成装备独立插画。截至`ecd1723`优化库测试 **678通过、0失败、1忽略**，严格全目标release Clippy通过；分别有[剑残影](verification/sword-trail-2026-11-05/README.md)、[普通箭](verification/starter-arrow-2026-11-05/README.md)、[触发结算](verification/passive-batch-2026-11-05/README.md)和[六件合成装备／缺图重试](verification/recipe-art-2026-11-05/README.md)的原生证据。它们覆盖对应受控场景，不能替代完整长局和主观手感验收。
+已提交的`ecd1723`包含区域技能稳定目标排程、定点伤害的指定目标约束及投射物池复用清理，真实失败→通过见[区域排程](verification/vortex-order-2026-11-06/README.md)和[定点命中](verification/designated-strike-2026-11-06/README.md)。该版本优化库测试678通过、0失败、1忽略，严格全目标release Clippy通过。完整重复仍有前沿同线选敌分歧，见[实际回放](verification/designated-fix-replay-2026-11-06/README.md)；当前正在验证选敌设计优化，24组矩阵尚未启动，未据此调伤害或敌人成长数值。
 
-最新独立短流程通过的SDK包为`86cb084`：882项文件哈希、断网只读Ubuntu/X11启动／征募／战斗／中文设置／全屏／偏好重启与两次正常退出通过，见[发行证据](verification/vortex-package-2026-11-06/README.md)。新包包含[装备收藏与大图详情、固定合成操作及手柄跨焦点选择修正](verification/inventory-split-2026-11-05/README.md)，源码已通过8880次原生更新。新布局公开驱动已通过91项脚本测试；86cb084的[自然材料合成](verification/earned-forge-86cb084-2026-11-06/README.md)和[同目录重启](verification/forge-restart-86cb084-2026-11-06/README.md)已通过。完整第六章与更多配方仍待验收。此前040ce5c的[自然合成](verification/earned-forge-040ce5c-2026-11-05/README.md)和[同存档重启](verification/forge-restart-2026-11-05/README.md)已通过，但不替代新包流程。[窗口性能基线](verification/window-performance-2026-11-05/README.md)是旧Nix构建的有限场景，不代表此包或长局性能。
+最新独立短流程通过的SDK包为`86cb084`：[882项文件哈希、断网只读Ubuntu/X11运行、中文设置／全屏／偏好重启与两次正常退出](verification/vortex-package-2026-11-06/README.md)。该包含[装备收藏与大图详情、固定合成操作及手柄选择修正](verification/inventory-split-2026-11-05/README.md)。[自然购买两材料并合成星界棱镜](verification/earned-forge-86cb084-2026-11-06/README.md)及[同一实际用户目录重启](verification/forge-restart-86cb084-2026-11-06/README.md)均已通过：长期进度和Strength30保留，局内装备正确清空。完整第六章和更多配方仍待验收。
 
-自然获取证据仍按二进制区分：旧`37fe665`第六章路线核验了五件自然装备；另一独立同局路线实际购入两件材料、消耗为星界棱镜并核验库存，但其恢复战斗／正常退出步骤被后到征募中断，见[自然合成](verification/earned-forge-2026-11-05/README.md)。后续`32cf594`整局与合成路线也被公开UI脚本读数或面板开启时序中断，没有完整结算或退出结论。不得把这些中断称为游戏失败或通关。
+公开界面驱动已通过91项Docker测试，包含[新布局实际PNG几何](verification/inventory-public-geometry-2026-11-05/README.md)、[选中状态视觉确认](verification/inventory-selection-ack-2026-11-06/README.md)及[关闭阶段预算](verification/inventory-phase-budgets-2026-11-06/README.md)。所有已购装备仍逐项核对真实标题和完整集合，独立HUD与黑市余额严格一致。预算为140秒基础＋每件20秒，最多12次访问，累计暂停上限3240秒，1×整局内部上限5040秒；外部执行上限5400秒。此前[86第六章截止时间中断](verification/vortex-chapter6-2026-11-06/README.md)保留原始失败，新的完整路线仍在运行。
 
-脚本已保留全部失败证据，并修正[彩色卡名](verification/market-red-label-2026-11-05/README.md)、[小额补零余额](verification/market-wallet-0089-2026-11-05/README.md)、后到征募时钟和[有界装备界面开启](verification/inventory-open-2026-11-05/README.md)；69项Python测试通过（包含[实际LEVEL5识别失败回归](verification/battle-level-ocr-2026-11-05/README.md)），[实际倒计时像素识别](verification/battle-timer-ocr-2026-11-05/README.md)、[面板单次开关与同截图读取](verification/panel-toggle-2026-11-05/README.md)、同截图HUD／双面板等待已统一，[装备核验预算](verification/inventory-budget-2026-11-05/README.md)按120秒基础＋每件20秒、最多12次访问推导，累计暂停上限3000秒，1×整局上限4800秒；全部已购身份逐件核验为新增加强项；[商品预览等待](verification/market-preview-ocr-2026-11-05/README.md)已统一并减少整屏识别开销；新的完整原生路线仍待完成。所有后续章节、永久成长边界、更多种子／构筑、真实Steam客户端、手柄／音频设备、SteamDeck、其他平台与长局性能门槛保持未完成。
+现有原生证据覆盖[敌人短闪与材质隔离](verification/enemy-flash-2026-11-05/README.md)、[剑残影](verification/sword-trail-2026-11-05/README.md)、[普通箭](verification/starter-arrow-2026-11-05/README.md)、[批量触发结算](verification/passive-batch-2026-11-05/README.md)、[六件合成装备插画与缺图重试](verification/recipe-art-2026-11-05/README.md)，以及[装备Item鼠标消息集成](verification/equipment-mouse-2026-11-06/README.md)。这些是对应场景的验证，完整长局与主观手感仍需验收。
 
-当前模拟器已[移除过期抽卡价格预测](verification/simulator-prices-2026-11-05/README.md)：修复前两项策略回归失败，修复后4项bin测试与严格全目标Clippy通过。重建已通过，[同种子完整重复已完成且出现构筑／轨迹分歧](verification/balance-price-repeat-2026-11-05/README.md)，因此未启动批量矩阵，不据此调整游戏数值。
-
-定点技能曾被邻近精英的更大碰撞范围截获；`ecd1723`已加入指定目标约束、目标消失不转打旁人及所有投射物池复用清理，真实失败→通过和678项测试见[定点命中回归](verification/designated-strike-2026-11-06/README.md)。此修正不代表完整重复回放已经一致，矩阵仍未启动。
+[窗口性能基线](verification/window-performance-2026-11-05/README.md)来自旧构建的有限场景；当前包长局硬件性能、真实Steam客户端、实体手柄／音频设备、SteamDeck、其他平台、全部英雄与更广的种子／构筑覆盖尚未完成。历史版本证据保留在各自归档中，当前结论以本节标注的版本和范围为准。
