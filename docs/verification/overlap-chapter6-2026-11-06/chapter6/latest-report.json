@@ -1,0 +1,648 @@
+{
+  "scope": "Packaged public UI; stationary first-card policy plus earned equipment",
+  "stage": 5,
+  "continued": true,
+  "initial_progress": {
+    "unlocked": 6,
+    "currency": 645,
+    "cleared": "111110",
+    "upgrades": [
+      6,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "requested_seed": "0xA11CE",
+  "requested_speed": 1,
+  "strategy": "Stationary keys 1/g/f; cheapest affordable natural gear; no refresh or movement",
+  "completed_run": false,
+  "victory": false,
+  "package_version": {
+    "binary_sha256": "76a6da42c0c9f49289fe77b0caea02ec7a425b793930220a43de2219b0ae72cc",
+    "git_commit": "f5ef6ff8f37ecab467b5ba0baadb6decd8d49aaf",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "equipment_purchases": [],
+  "equipment_visit_limit": 12,
+  "equipment_visit_base_budget_seconds": 140,
+  "equipment_per_owned_item_budget_seconds": 20,
+  "equipment_visit_max_timeout_seconds": 380,
+  "equipment_pause_budget_seconds": 3240,
+  "equipment_cooldown_after_completion_seconds": 60,
+  "startup_observations": [
+    {
+      "screenshot": "startup-observation-00.png",
+      "guide": null,
+      "skip": null,
+      "commander": null
+    },
+    {
+      "screenshot": "startup-observation-01.png",
+      "guide": [
+        "1/4 + MOVE & DODGE",
+        520,
+        330,
+        762,
+        353
+      ],
+      "skip": [
+        "Skip",
+        476,
+        446,
+        507,
+        463
+      ],
+      "commander": null,
+      "input": "Escape"
+    },
+    {
+      "screenshot": "startup-observation-02.png",
+      "guide": null,
+      "skip": null,
+      "commander": [
+        "Click a basic commander to begin",
+        42,
+        79,
+        599,
+        117
+      ]
+    }
+  ],
+  "base_attributes": {
+    "hero": "StormSavant",
+    "level": 1,
+    "speed": 1,
+    "strength": 32.0,
+    "expected": 32.0,
+    "screenshot": "base-strength.png",
+    "strength_ocr": [
+      [
+        "Strength",
+        203,
+        235,
+        259,
+        250
+      ],
+      [
+        "32.0",
+        457,
+        235,
+        484,
+        247
+      ],
+      [
+        "Strength",
+        204,
+        235,
+        259,
+        250
+      ],
+      [
+        "Strength 32.0 Base attack 480 Armor 00",
+        204,
+        223,
+        1076,
+        257
+      ]
+    ]
+  },
+  "actual_speed": 1,
+  "battle_timeout_seconds": 5040.0,
+  "equipment_visit_budgets": [
+    {
+      "visit": 1,
+      "owned_item_bound": 1,
+      "seconds": 160
+    },
+    {
+      "visit": 2,
+      "owned_item_bound": 1,
+      "seconds": 160
+    }
+  ],
+  "equipment_unlock_checks": [
+    {
+      "visit": 1,
+      "countdown": 1283,
+      "unlocked": true
+    },
+    {
+      "visit": 2,
+      "countdown": 1185,
+      "unlocked": true
+    }
+  ],
+  "equipment_open_attempts": [
+    {
+      "visit": 1,
+      "screenshot": "equipment-01-market-open-00.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1281,
+      "input": "b"
+    },
+    {
+      "visit": 1,
+      "screenshot": "equipment-01-market-open-01.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": 2,
+      "screenshot": "equipment-02-market-open-02.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1184,
+      "input": "b"
+    },
+    {
+      "visit": 2,
+      "screenshot": "equipment-02-market-open-03.png",
+      "state": "battle",
+      "requests": 1,
+      "clock": 1175
+    },
+    {
+      "visit": 2,
+      "screenshot": "equipment-02-market-open-04.png",
+      "state": "market",
+      "requests": 1
+    }
+  ],
+  "equipment_hover_checks": [
+    {
+      "visit": 1,
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "equipment-01-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Wind Boots + Equipment"
+        }
+      ],
+      "stale_attempts": []
+    },
+    {
+      "visit": 1,
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "equipment-01-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Wind Boots + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Wind Boots + Equipment'"
+        },
+        {
+          "screenshot": "equipment-01-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "ArcLens + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-01-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Wind Boots + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Wind Boots + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 1,
+      "index": 2,
+      "observations": [
+        {
+          "screenshot": "equipment-01-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'ArcLens + Equipment'"
+        },
+        {
+          "screenshot": "equipment-01-inspect-2-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Gate Patch \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-01-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'ArcLens + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 1,
+      "index": 3,
+      "observations": [
+        {
+          "screenshot": "equipment-01-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Gate Patch \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-01-inspect-3-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Skill Tuner \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-01-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Gate Patch \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 1,
+      "index": 4,
+      "observations": [
+        {
+          "screenshot": "equipment-01-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Skill Tuner \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-01-inspect-4-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Ember Heart + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-01-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Skill Tuner \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "equipment-02-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Wind Boots', 'Ember Heart + Equipment'"
+        },
+        {
+          "screenshot": "equipment-02-inspect-0-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Wind Boots + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-02-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Wind Boots', 'Ember Heart + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "equipment-02-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Wind Boots + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Wind Boots + Equipment'"
+        },
+        {
+          "screenshot": "equipment-02-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "ArcLens + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-02-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Wind Boots + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Wind Boots + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 2,
+      "observations": [
+        {
+          "screenshot": "equipment-02-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'ArcLens + Equipment'"
+        },
+        {
+          "screenshot": "equipment-02-inspect-2-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Gate Patch \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-02-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'ArcLens + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 3,
+      "observations": [
+        {
+          "screenshot": "equipment-02-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Gate Patch \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-02-inspect-3-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Skill Tuner \u00bb Consumable"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-02-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Gate Patch \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 4,
+      "observations": [
+        {
+          "screenshot": "equipment-02-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Skill Tuner \u00bb Consumable'"
+        },
+        {
+          "screenshot": "equipment-02-inspect-4-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Ember Heart + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-02-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Skill Tuner \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "equipment-02-selected-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Wind Boots', 'Ember Heart + Equipment'"
+        },
+        {
+          "screenshot": "equipment-02-selected-inspect-0-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Wind Boots + Equipment"
+        }
+      ],
+      "stale_attempts": [
+        {
+          "screenshot": "equipment-02-selected-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Wind Boots', 'Ember Heart + Equipment'"
+        }
+      ]
+    }
+  ],
+  "equipment_inspections": [
+    {
+      "visit": 1,
+      "wallet": 102,
+      "wallet_ocr": "200%: LV1 KILLS 0102 | 300%: LV1 KILLS 0102 | 600%: LV1 KILLS 0102",
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "visit": 2,
+      "wallet": 164,
+      "wallet_ocr": "200%: LV1 KILLS 0164 | 300%: LV1 KILLS 0164 | 600%: LV1 KILLS 0164",
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    }
+  ],
+  "equipment_visit_timings": [
+    {
+      "visit": 1,
+      "phase": "panels closed",
+      "elapsed": 42.20908031400177
+    },
+    {
+      "visit": 1,
+      "phase": "resume verified",
+      "elapsed": 53.84050178399775
+    }
+  ],
+  "equipment_resume_proofs": [
+    {
+      "visit": 1,
+      "before": 1266,
+      "after": 1257
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+# Overlap package C6 — unchanged-wallet purchase interruption
+
+Actual Docker child exited1 after455.449seconds; systemd wrapper0 only records that result. Raw completed_run=false/victory=false retained. No restart or source change followed.
+
+Immutable package f5ef6ff8f37ecab467b5ba0baadb6decd8d49aaf, binary76a6da42c0c9f49289fe77b0caea02ec7a425b793930220a43de2219b0ae72cc,886manifest entries verified; frozen f186058 helpers and hashes retained. Freshprofile initialized only canonical4c9a save; bytes remained unchanged.
+
+Visit1 had no affordable equipment and actual resume1266→1257 passed. Visit2 exact public WindBoots tile/preview/category/price160 and wallet164 were verified. After the Buy click, BOTH independentHUD and marketheader still read164; strict deduction correctly failed164→164. No purchase was appended, no equipment inventory was opened/verified, no game outcome/reward/quit proof exists.
+
+The actual after.png visibly retains WindBoots tile160, matching preview, Buy160, wallet164, with restock00:36 and battle19:35. No stock replacement or Bought feedback is visible. The current driver sends mousemove to(1184,506), then xdotool click1 with no held duration, then waits0.5sec before screenshot. No OS input event timestamps/acknowledgement or subsequent observation exist. Thus this evidence shows no completed transaction, but cannot distinguish missed input, delayed processing, or production purchase handling failure. It does not establish a currency deduction bug.
+
+Minimal next actualOS observation proposal (not executed): preserve frozen failing route; in a separate explicitly authorized disposable real-earned session, observe exact affordable tile/preview/button and independent wallet, log one ordinary click plus bounded successive samepanel screenshots; if still unchanged, perform at most one observed held Buy press with finally-release and timestamped frames, stopping immediately on exact expected debit or stock/ownership transition. Do not retry if debit/identity becomes ambiguous and never infer a successful purchase from button feedback alone. Strict debit and complete inventory identity proof remain required. No probing, helper or game edits are included here.
