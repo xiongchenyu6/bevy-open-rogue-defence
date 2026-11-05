@@ -1,0 +1,41 @@
+{"sample": 1, "wall_seconds": 6.7, "terminal": null}
+{"sample": 2, "wall_seconds": 16.4, "terminal": null}
+{"sample": 3, "wall_seconds": 26.2, "terminal": null}
+{"sample": 4, "wall_seconds": 35.9, "terminal": null}
+{"sample": 5, "wall_seconds": 45.7, "terminal": null}
+{"sample": 6, "wall_seconds": 55.5, "terminal": null}
+{"sample": 7, "wall_seconds": 65.3, "terminal": null}
+{"sample": 8, "wall_seconds": 75.3, "terminal": null}
+{"sample": 9, "wall_seconds": 85.3, "terminal": null}
+{"sample": 10, "wall_seconds": 94.9, "terminal": null}
+{"sample": 11, "wall_seconds": 104.7, "terminal": null}
+{"sample": 12, "wall_seconds": 114.6, "terminal": null}
+{"sample": 13, "wall_seconds": 124.7, "terminal": null}
+{"sample": 14, "wall_seconds": 134.7, "terminal": null}
+{"sample": 15, "wall_seconds": 144.9, "terminal": null}
+{"sample": 16, "wall_seconds": 155.1, "terminal": null}
+{"sample": 17, "wall_seconds": 165.6, "terminal": null}
+{"sample": 18, "wall_seconds": 175.6, "terminal": null}
+{"sample": 19, "wall_seconds": 185.8, "terminal": null}
+{"stage": "earned equipment visit", "visit": 1, "purchases": 0, "wallet": 101, "visit_budget_seconds": 140}
+{"sample": 20, "wall_seconds": 247.7, "terminal": null}
+{"sample": 21, "wall_seconds": 257.3, "terminal": null}
+{"sample": 22, "wall_seconds": 266.8, "terminal": null}
+{"sample": 23, "wall_seconds": 276.6, "terminal": null}
+{"sample": 24, "wall_seconds": 286.3, "terminal": null}
+{"sample": 25, "wall_seconds": 296.4, "terminal": null}
+{"sample": 26, "wall_seconds": 306.0, "terminal": null}
+Traceback (most recent call last):
+  File "/harness/campaign_equipment_runtime.py", line 575, in <module>
+    main(EquipmentPolicy)
+  File "/harness/campaign_runtime.py", line 268, in main
+    policy.observe(text_lines, time.monotonic() - started)
+  File "/harness/campaign_equipment_runtime.py", line 484, in observe
+    remaining, _, raw = read_hud_wallet(after, self.ui['env'])
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/smoke_runtime.py", line 109, in read_hud_wallet
+    text = wallet_text(results)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/harness/smoke_runtime.py", line 65, in wallet_text
+    raise ValueError(f'Unreadable or conflicting HUD wallet OCR: {results!r}')
+ValueError: Unreadable or conflicting HUD wallet OCR: ['17', '7']

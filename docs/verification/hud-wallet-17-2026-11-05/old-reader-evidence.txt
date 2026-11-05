@@ -1,0 +1,6 @@
+before177.png independent_header (177, '200%: LV1 KILLS 0177 | 300%: LV1 KILLS 0177 | 600%: LV1 KILLS 0177')
+old_hud (177, (155, 174), '177')
+after17.png independent_header (17, '200%: LV1 KILLS 0017 | 300%: LV1 KILLS 0017 | 600%: LV1 KILLS 0017')
+old_hud_error ValueError("Unreadable or conflicting HUD wallet OCR: ['17', '7']")
+before_tile Wind Boots
+before_price 160

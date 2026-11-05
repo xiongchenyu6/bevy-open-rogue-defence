@@ -1,0 +1,7 @@
+# Independent HUD wallet raster basis
+
+The original public run stopped after the Wind Boots purchase because the HUD readers disagreed: single-line mode read `17`, while raw-line mode read `7`. The independent market header showed `0017`; it was not used to select a HUD result. The preserved before image independently reads 177 in both locations and shows the 160-price Wind Boots offer. The after image shows the purchase notice and rerolled slot. This interruption did not establish subsequent inventory, resume or campaign completion.
+
+The detected HUD ink bounds already included the leading digit. A foreground-mask experiment fixed 17 but damaged repeated ones and other holdouts, so it was rejected. A single global grayscale basis at 300% scale with a two-pixel white border reads all eleven measured native cases correctly in both segmentation modes, including 17, 111, zero, 100000, 99880 and the dimmed 169/54 fixtures. The crop locator, gold-color predicates, thresholds, segmentation modes and strict numeric agreement rule remain unchanged. No expected balance, market header or offer price enters the HUD reader.
+
+The regression captures both real OCR outputs as `['17', '17']`, independently checks HUD/header readings and the actual offer price, and verifies the 177 → 17 deduction. Conflicting `['17', '7']` still raises an error. The existing repeated-one, zero, dimmed and conflicting-read tests remain required. These are pixel/parser checks, not a new live campaign run.

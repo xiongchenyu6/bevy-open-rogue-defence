@@ -3,6 +3,7 @@ import importlib.util
 from pathlib import Path
 import unittest
 import shutil
+from unittest.mock import patch
 
 spec = importlib.util.spec_from_file_location('smoke_runtime', Path(__file__).with_name('smoke_runtime.py'))
 smoke = importlib.util.module_from_spec(spec)
@@ -29,10 +30,27 @@ class VisibleActionTests(unittest.TestCase):
             with self.subTest(dimmed_frame=name):
                 self.assertEqual(smoke.read_hud_wallet(root / name, dimmed=True)[0], expected)
 
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_real17_hud_modes_agree_without_using_header_or_expected_price(self):
+        from campaign_equipment_runtime import screenshot_wallet, crop_text, verify_deduction
+        root=Path(__file__).resolve().parents[2]/'docs/verification/hud-wallet-17-2026-11-05'
+        with patch.object(smoke,'wallet_text',wraps=smoke.wallet_text) as consensus:
+            after,_,_=smoke.read_hud_wallet(root/'after17.png')
+        self.assertEqual(consensus.call_args.args[0],['17','17'])
+        self.assertEqual(after,17)
+        before,_,_=smoke.read_hud_wallet(root/'before177.png')
+        self.assertEqual(before,177)
+        self.assertEqual(screenshot_wallet(root/'before177.png',None)[0],before)
+        self.assertEqual(screenshot_wallet(root/'after17.png',None)[0],after)
+        price=int(crop_text(root/'before177.png','39x23+667+384',None,True))
+        self.assertEqual(price,160)
+        verify_deduction(before,after,dict(price=price))
+
     def test_conflicting_numeric_reads_never_choose_an_expected_balance(self):
         self.assertEqual(smoke.wallet_text(['111', '']), '111')
         self.assertEqual(smoke.wallet_text(['0', '0']), '0')
-        for results in (['111', '11'], ['', ''], ['0', 'O']):
+        for results in (['111', '11'], ['17', '7'], ['', ''], ['0', 'O']):
             with self.assertRaises(ValueError):
                 smoke.wallet_text(results)
 

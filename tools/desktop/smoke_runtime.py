@@ -96,12 +96,12 @@ def read_hud_wallet(path, env=None, dimmed=False):
     with tempfile.TemporaryDirectory(prefix='rogue-wallet-ocr-') as directory:
         crop = Path(directory) / 'digits.png'
         subprocess.run(['convert', str(path), '-crop', f'{right-left+5}x18+{left-2}+163',
-                        '-resize', '800%', '-colorspace', 'Gray', '-negate',
+                        '-resize', '300%', '-colorspace', 'Gray', '-negate',
                         '-threshold', '70%' if dimmed else '35%',
-                        '-bordercolor', 'white', '-border', '20', str(crop)],
+                        '-bordercolor', 'white', '-border', '2', str(crop)],
                        env=env, check=True, capture_output=True)
-        # Raw-line segmentation retains a lone zero; single-line mode reads
-        # repeated ones. Accept only one unique complete numeric result.
+        # Measured 300% glyphs and 2px padding preserve 17, 111 and 0 in both
+        # segmentation modes. Never choose between conflicting numeric reads.
         results = [subprocess.check_output(
             ['tesseract', str(crop), 'stdout', '-l', 'eng', '--psm', mode,
              '-c', 'tessedit_char_whitelist=0123456789'], env=env, text=True,
