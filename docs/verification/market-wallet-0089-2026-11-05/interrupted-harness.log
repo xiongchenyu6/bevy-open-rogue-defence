@@ -1,0 +1,50 @@
+stage: battle started; resetting actual toolbar to1x
+stage: earn kills and wait for real3min unlock
+stage: real unlock countdown 1476
+stage: real unlock countdown 1473
+stage: real unlock countdown 1460
+stage: real unlock countdown 1456
+stage: real unlock countdown 1451
+stage: real unlock countdown 1447
+stage: real unlock countdown 1442
+stage: real unlock countdown 1438
+stage: real unlock countdown 1426
+stage: real unlock countdown 1421
+stage: real unlock countdown 1417
+stage: real unlock countdown 1412
+stage: real unlock countdown 1407
+stage: real unlock countdown 1403
+stage: real unlock countdown 1398
+stage: real unlock countdown 1396
+stage: real unlock countdown 1391
+stage: real unlock countdown 1387
+stage: real unlock countdown 1382
+stage: real unlock countdown 1377
+stage: real unlock countdown 1373
+stage: real unlock countdown 1368
+stage: real unlock countdown 1364
+stage: real unlock countdown 1359
+stage: real unlock countdown 1355
+stage: real unlock countdown 1350
+stage: real unlock countdown 1347
+stage: real unlock countdown 1343
+stage: real unlock countdown 1338
+stage: real unlock countdown 1334
+stage: real unlock countdown 1329
+stage: real unlock countdown 1325
+stage: real unlock countdown 1320
+stage: real unlock countdown 1316
+Traceback (most recent call last):
+  File "/harness/forge_runtime.py", line 342, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/harness/forge_runtime.py", line 268, in main
+    before=wallet();shot(f'market-{attempt:02}.png')
+           ^^^^^^^^
+  File "/harness/forge_runtime.py", line 139, in wallet
+    value, raw = screenshot_wallet(shot('wallet-source.png'), env)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/campaign_equipment_runtime.py", line 94, in screenshot_wallet
+    assert re.fullmatch(r'LV\d+\s+KILLS\s*\d{4,}', text), f'Unreadable market wallet: {text!r}'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Unreadable market wallet: 'LV1 KILLS'

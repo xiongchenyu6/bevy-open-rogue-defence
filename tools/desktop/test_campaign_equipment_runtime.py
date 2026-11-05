@@ -49,11 +49,21 @@ class EquipmentPolicyParsing(unittest.TestCase):
         self.assertFalse(choice_pending([('Choose an encounter', 40, 80, 600, 110)]))
 
     def test_market_header_requires_its_actual_zero_padded_digit_count(self):
-        with patch('campaign_equipment_runtime.crop_text', return_value='LV2 KILLS 0111'):
+        with patch('campaign_equipment_runtime.wallet_header_reads', return_value=[(200,'LV2 KILLS 0111')]):
             self.assertEqual(screenshot_wallet(Path('public.png'), None)[0], 111)
-        with patch('campaign_equipment_runtime.crop_text', return_value='LV2 KILLS 111'), \
+        with patch('campaign_equipment_runtime.wallet_header_reads', return_value=[(200,'LV2 KILLS 111')]), \
              self.assertRaises(AssertionError):
             screenshot_wallet(Path('public.png'), None)
+
+    def test_multiscale_header_rejects_conflicting_complete_values(self):
+        for reads in ([(200,'LV1 KILLS 0089'),(300,'LV1 KILLS 0088')],
+                      [(200,'LV1 KILLS 0089'),(300,'LV2 KILLS 0089')],
+                      [(200,'LVI KILLS 0089 _'),(300,'LV1 KILLS')]):
+            with patch('campaign_equipment_runtime.wallet_header_reads',return_value=reads), self.assertRaises(AssertionError):
+                screenshot_wallet(Path('public.png'),None)
+        with patch('campaign_equipment_runtime.wallet_header_reads',return_value=[
+                (200,'LV1 KILLS 0089'),(300,'LV1 KILLS 0089'),(600,'LV1 KILLS')]):
+            self.assertEqual(screenshot_wallet(Path('public.png'),None)[0],89)
 
     def test_current_header_and_ambiguous_wallet(self):
         self.assertEqual(market_wallet([('LV1 KILLS 99880',1120,205,1209,214)]),99880)
@@ -91,6 +101,19 @@ class EquipmentPolicyParsing(unittest.TestCase):
         for before,after in [(200,80),(179,-1),(200,200)]:
             with self.assertRaises(AssertionError):
                 verify_deduction(before,after,offers[1])
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_actual_padded_wallet0089_and_prior_market_headers(self):
+        root=Path(__file__).resolve().parents[2]/'docs/verification'
+        for relative,expected in [
+                ('market-wallet-0089-2026-11-05/wallet0089.png',89),
+                ('hud-wallet-2026-11-05/before.png',291),
+                ('hud-wallet-2026-11-05/after.png',111),
+                ('market-name-crop-2026-11-05/natural-stock.png',110),
+                ('market-red-label-2026-11-05/red-label.png',969)]:
+            with self.subTest(path=relative):
+                self.assertEqual(screenshot_wallet(root/relative,None)[0],expected)
 
     @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
                          'Native screenshot OCR requires Tesseract and ImageMagick')

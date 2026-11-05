@@ -1,0 +1,298 @@
+{
+  "package_version": {
+    "binary_sha256": "f2af1f1a768935d17da4c7305a92938e7da90e94bf167e5da5947db7ad268e35",
+    "git_commit": "32cf5941c92faf465202d8c4895707d83394dffb",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "initial_progress": {
+    "unlocked": 5,
+    "currency": 575,
+    "cleared": "111100",
+    "upgrades": [
+      5,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "scope": "Packaged public X11 UI, earned kills, random market stock",
+  "purchases": [],
+  "crafting": "Pending same-run Arc Lens + Echo Core -> Astral Prism",
+  "acquired_materials": [],
+  "speed_ocr_values": [
+    1,
+    1,
+    1
+  ],
+  "actual_speed": 1,
+  "unlock_timer_reads": [
+    1476,
+    1473,
+    1460,
+    1456,
+    1451,
+    1447,
+    1442,
+    1438,
+    1426,
+    1421,
+    1417,
+    1412,
+    1407,
+    1403,
+    1398,
+    1396,
+    1391,
+    1387,
+    1382,
+    1377,
+    1373,
+    1368,
+    1364,
+    1359,
+    1355,
+    1350,
+    1347,
+    1343,
+    1338,
+    1334,
+    1329,
+    1325,
+    1320,
+    1316
+  ],
+  "clock_progress": [
+    {
+      "stage": "unlock",
+      "remaining": 1476,
+      "stall_seconds": 0.0,
+      "wall": 191429.974164269
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1473,
+      "stall_seconds": 0.0,
+      "wall": 191434.345134005
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1460,
+      "stall_seconds": 0.0,
+      "wall": 191449.057311364
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1456,
+      "stall_seconds": 0.0,
+      "wall": 191453.506416425
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1451,
+      "stall_seconds": 0.0,
+      "wall": 191457.959409403
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1447,
+      "stall_seconds": 0.0,
+      "wall": 191462.644243054
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1442,
+      "stall_seconds": 0.0,
+      "wall": 191467.154068314
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1438,
+      "stall_seconds": 0.0,
+      "wall": 191471.655479945
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1426,
+      "stall_seconds": 0.0,
+      "wall": 191485.202644889
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1421,
+      "stall_seconds": 0.0,
+      "wall": 191489.813031682
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1417,
+      "stall_seconds": 0.0,
+      "wall": 191494.525153817
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1412,
+      "stall_seconds": 0.0,
+      "wall": 191499.164711978
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1407,
+      "stall_seconds": 0.0,
+      "wall": 191503.898826843
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1403,
+      "stall_seconds": 0.0,
+      "wall": 191508.539047573
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1398,
+      "stall_seconds": 0.0,
+      "wall": 191513.142638583
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1396,
+      "stall_seconds": 0.0,
+      "wall": 191517.749853367
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1391,
+      "stall_seconds": 0.0,
+      "wall": 191522.296601641
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1387,
+      "stall_seconds": 0.0,
+      "wall": 191526.823169655
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1382,
+      "stall_seconds": 0.0,
+      "wall": 191531.506879077
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1377,
+      "stall_seconds": 0.0,
+      "wall": 191536.085156602
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1373,
+      "stall_seconds": 0.0,
+      "wall": 191540.688647106
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1368,
+      "stall_seconds": 0.0,
+      "wall": 191545.189279038
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1364,
+      "stall_seconds": 0.0,
+      "wall": 191549.743334591
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1359,
+      "stall_seconds": 0.0,
+      "wall": 191554.219651708
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1355,
+      "stall_seconds": 0.0,
+      "wall": 191558.694460048
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1350,
+      "stall_seconds": 0.0,
+      "wall": 191563.192866129
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1347,
+      "stall_seconds": 0.0,
+      "wall": 191567.703117571
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1343,
+      "stall_seconds": 0.0,
+      "wall": 191572.339984028
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1338,
+      "stall_seconds": 0.0,
+      "wall": 191576.919431526
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1334,
+      "stall_seconds": 0.0,
+      "wall": 191581.445978071
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1329,
+      "stall_seconds": 0.0,
+      "wall": 191586.017934986
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1325,
+      "stall_seconds": 0.0,
+      "wall": 191590.543240966
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1320,
+      "stall_seconds": 0.0,
+      "wall": 191595.108595408
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1316,
+      "stall_seconds": 0.0,
+      "wall": 191599.668034882
+    }
+  ],
+  "unreadable_unlock_clock": [
+    "Unreadable battle countdown: ''",
+    "Unreadable battle countdown: ''"
+  ]
+}

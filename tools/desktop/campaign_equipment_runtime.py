@@ -89,10 +89,38 @@ def tile_name_text(path, left, env):
                                        stderr=subprocess.PIPE).strip()
 
 
+def wallet_header_reads(path, env):
+    """Read the complete public header at multiple measured raster scales.
+
+    A 600% enlargement can merge/lose tiny adjacent digits even when the
+    native header is clear. Smaller 200/300% reads retain those glyphs; every
+    accepted whole-line reading must agree, rather than choosing a balance.
+    """
+    results = []
+    with tempfile.TemporaryDirectory(prefix='rogue-market-wallet-') as directory:
+        for scale in (200, 300, 600):
+            crop = Path(directory) / f'header-{scale}.png'
+            subprocess.run(['convert', str(path), '-crop', '95x14+1119+202',
+                            '-resize', f'{scale}%', '-colorspace', 'Gray', '-negate',
+                            '-bordercolor', 'white', '-border', '20', str(crop)],
+                           env=env, check=True, capture_output=True)
+            text = subprocess.check_output(['tesseract', str(crop), 'stdout', '-l', 'eng',
+                                            '--psm', '7'], env=env, text=True,
+                                           stderr=subprocess.PIPE).strip()
+            results.append((scale, text))
+    return results
+
+
 def screenshot_wallet(path, env):
-    text = crop_text(path, '95x14+1119+202', env)
-    assert re.fullmatch(r'LV\d+\s+KILLS\s*\d{4,}', text), f'Unreadable market wallet: {text!r}'
-    return int(re.search(r'KILLS\s*(\d+)', text)[1]), text
+    reads = wallet_header_reads(path, env)
+    values = set()
+    for _, text in reads:
+        match = re.fullmatch(r'LV(\d+)\s+KILLS\s*(\d{4,})', text, re.I)
+        if match:
+            values.add((int(match[1]), int(match[2])))
+    assert len(values) == 1, f'Unreadable/ambiguous complete market wallet: {reads!r}'
+    _, wallet = values.pop()
+    return wallet, ' | '.join(f'{scale}%: {text}' for scale, text in reads)
 
 
 def tile_name_matches(tile_text, name):
