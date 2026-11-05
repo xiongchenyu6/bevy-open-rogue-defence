@@ -105,6 +105,9 @@ mod orbit_blade_capture;
 #[path = "capture/skill_growth.rs"]
 mod skill_growth_capture;
 
+#[path = "capture/hit_material.rs"]
+mod hit_material;
+
 #[path = "capture/attacks.rs"]
 mod attack_capture;
 

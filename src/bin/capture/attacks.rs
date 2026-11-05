@@ -6,7 +6,7 @@ use rogue_commander::game::{
 };
 
 #[derive(Component)]
-struct AttackTarget;
+pub(super) struct AttackTarget;
 
 #[derive(Resource)]
 struct WeaponGrowthProbe {
@@ -163,6 +163,9 @@ pub fn install(app: &mut bevy::app::SubApp, scenario: &str) {
         saw_visual: false,
     })
     .add_systems(Last, (verify, revive_fragile_targets));
+    if std::env::var_os("ROGUE_CAPTURE_HIT_MATERIAL_TRACE").is_some() {
+        super::hit_material::install(app);
+    }
     if std::env::var_os("ROGUE_CAPTURE_ATTACK_TRACE").is_some() {
         app.init_resource::<AttackTimingTrace>()
             .add_systems(Last, trace_attack_timing);

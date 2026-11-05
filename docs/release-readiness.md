@@ -27,7 +27,7 @@
 
 ## 2026-11-05 当前源码与交付状态
 
-当前游戏源码已包含：初始剑平滑渐隐残影、初始木箭与升级箭分档、同帧雷／冰被动和普攻回响完整结算，以及六件合成装备独立插画。优化库测试 **663通过、0失败、1忽略**，严格全目标release Clippy通过；分别有[剑残影](verification/sword-trail-2026-11-05/README.md)、[普通箭](verification/starter-arrow-2026-11-05/README.md)、[触发结算](verification/passive-batch-2026-11-05/README.md)和[六件合成装备／缺图重试](verification/recipe-art-2026-11-05/README.md)的原生证据。它们覆盖对应受控场景，不能替代完整长局和主观手感验收。
+当前游戏源码已包含[敌人受击短闪与材质隔离](verification/enemy-flash-2026-11-05/README.md)（尚未进入下述安装包），以及：初始剑平滑渐隐残影、初始木箭与升级箭分档、同帧雷／冰被动和普攻回响完整结算，以及六件合成装备独立插画。优化库测试 **670通过、0失败、1忽略**，严格全目标release Clippy通过；分别有[剑残影](verification/sword-trail-2026-11-05/README.md)、[普通箭](verification/starter-arrow-2026-11-05/README.md)、[触发结算](verification/passive-batch-2026-11-05/README.md)和[六件合成装备／缺图重试](verification/recipe-art-2026-11-05/README.md)的原生证据。它们覆盖对应受控场景，不能替代完整长局和主观手感验收。
 
 最新独立短流程通过的SDK包为`b1d7dd1`：882项文件哈希、断网只读Ubuntu/X11启动／征募／战斗／中文设置／全屏／偏好重启与两次正常退出通过，见[发行证据](verification/relic-package-2026-11-05/README.md)。该包已包含上述普通木箭和六件合成插画；最新整局与自然合成复验尚未完成。[本机窗口性能基线](verification/window-performance-2026-11-05/README.md)仍是旧Nix构建的有限受控场景，不代表此包、其他硬件或长局性能。
 

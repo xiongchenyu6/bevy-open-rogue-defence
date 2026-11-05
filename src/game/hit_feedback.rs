@@ -9,6 +9,8 @@ use std::collections::HashMap;
 
 use bevy::prelude::*;
 
+mod enemy_flash;
+
 #[cfg(any(debug_assertions, feature = "dev-tools"))]
 #[path = "hit_feedback/capture.rs"]
 pub mod capture;
@@ -47,6 +49,7 @@ pub(crate) struct HitFeedbackSet;
 impl Plugin for HitFeedbackPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<HitFeedback>()
+            .init_resource::<enemy_flash::EnemyFlash>()
             .init_resource::<ScreenShake>()
             .init_resource::<HitStop>()
             .configure_sets(Update, HitFeedbackSet.after(CombatSet).after(SurvivalSet))
@@ -56,6 +59,7 @@ impl Plugin for HitFeedbackPlugin {
                 (
                     detect_hero_hurt,
                     react_to_hits,
+                    enemy_flash::collect,
                     start_hero_flinch,
                     animate_hero_flinch,
                     animate_hit_punch,
@@ -66,6 +70,7 @@ impl Plugin for HitFeedbackPlugin {
                     .chain()
                     .in_set(HitFeedbackSet),
             )
+            .add_systems(PostUpdate, enemy_flash::animate)
             .add_systems(Last, clear_frame_events);
     }
 }

@@ -1,0 +1,10 @@
+{
+  "1": {
+    "identical_contact_records_ignoring_entity_iteration_order": 32,
+    "updates_per_run": 200
+  },
+  "8": {
+    "identical_contact_records_ignoring_entity_iteration_order": 270,
+    "updates_per_run": 200
+  }
+}
