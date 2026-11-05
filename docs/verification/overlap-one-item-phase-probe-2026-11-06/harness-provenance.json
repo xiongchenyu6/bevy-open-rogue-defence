@@ -1,0 +1,34 @@
+{
+  "scope": "One natural item phase probe; shared single-click passive Buy; strict ALLowned/Close/resume/quit; no chapter outcome",
+  "harness_commit": "9bf313c832750aab0568ede2953c641258ad46a6",
+  "harness_files": {
+    "campaign_equipment_runtime.py": "c7bd97d9a3a9e56ba003b9f96b678a36b279a9fa214a9951fffb10a1b3ce91f4",
+    "campaign_runtime.py": "cdf1166f56fbdee5c0664b5eca0a20a932848f35e0de73d6540e74b963702f59",
+    "smoke_runtime.py": "b836e98f55fe7997112145d72250b19bf2ff67f13fe441cab5d4d1320af4f4f6"
+  },
+  "canonical_earned_checkpoint": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/packaged-chapter6-2026-10-09/initial-campaign.save",
+  "incoming_save_sha256": "4c9a0973fa90b3f75838ccb1999267be31ff8ff9b896a8c9b165ae5ac3e129f9",
+  "incoming_progress": {
+    "unlocked": 6,
+    "currency": 645,
+    "cleared": "111110",
+    "upgrades": [
+      6,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "profile_initial_files": [
+    "campaign.save"
+  ],
+  "package_commit": "f5ef6ff8f37ecab467b5ba0baadb6decd8d49aaf",
+  "package_binary_sha256": "76a6da42c0c9f49289fe77b0caea02ec7a425b793930220a43de2219b0ae72cc",
+  "internal_battle_budget_seconds": 900,
+  "outer_case_budget_seconds": 1200,
+  "equipment_pause_budget_seconds": 3240,
+  "launch_authorized": true,
+  "target_only_probe_runtime": true
+}

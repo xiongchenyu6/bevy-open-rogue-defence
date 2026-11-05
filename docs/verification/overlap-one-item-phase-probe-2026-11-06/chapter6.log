@@ -1,0 +1,35 @@
+{"sample": 1, "wall_seconds": 11.3, "terminal": null}
+{"sample": 2, "wall_seconds": 25.7, "terminal": null}
+{"sample": 3, "wall_seconds": 40.6, "terminal": null}
+{"sample": 4, "wall_seconds": 54.6, "terminal": null}
+{"sample": 5, "wall_seconds": 68.6, "terminal": null}
+{"sample": 6, "wall_seconds": 82.6, "terminal": null}
+{"sample": 7, "wall_seconds": 96.2, "terminal": null}
+{"sample": 8, "wall_seconds": 110.6, "terminal": null}
+{"sample": 9, "wall_seconds": 125.8, "terminal": null}
+{"sample": 10, "wall_seconds": 140.1, "terminal": null}
+{"sample": 11, "wall_seconds": 154.4, "terminal": null}
+{"sample": 12, "wall_seconds": 168.1, "terminal": null}
+{"sample": 13, "wall_seconds": 181.7, "terminal": null}
+{"sample": 14, "wall_seconds": 196.2, "terminal": null}
+{"sample": 15, "wall_seconds": 215.4, "terminal": null}
+{"sample": 16, "wall_seconds": 229.5, "terminal": null}
+{"sample": 17, "wall_seconds": 243.7, "terminal": null}
+{"sample": 18, "wall_seconds": 256.6, "terminal": null}
+{"stage": "earned equipment visit", "visit": 2, "purchases": 0, "wallet": 121, "visit_budget_seconds": 160}
+{"sample": 19, "wall_seconds": 371.4, "terminal": null}
+{"sample": 20, "wall_seconds": 383.7, "terminal": null}
+{"sample": 21, "wall_seconds": 397.4, "terminal": null}
+{"sample": 22, "wall_seconds": 410.8, "terminal": null}
+{"sample": 23, "wall_seconds": 425.1, "terminal": null}
+Traceback (most recent call last):
+  File "/harness/campaign_equipment_runtime.py", line 807, in <module>
+    main(EquipmentPolicy)
+  File "/harness/campaign_runtime.py", line 270, in main
+    policy.observe(text_lines, time.monotonic() - started)
+  File "/harness/campaign_equipment_runtime.py", line 785, in observe
+    after_seconds = self.visible_countdown(prefix + '-resume-after', resume_deadline)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/campaign_equipment_runtime.py", line 637, in visible_countdown
+    raise AssertionError('Choice queue did not expose a battle countdown within visit budget')
+AssertionError: Choice queue did not expose a battle countdown within visit budget

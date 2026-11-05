@@ -1,0 +1,141 @@
+{
+  "child": {
+    "exit": 1,
+    "elapsed": 708.5472655296326
+  },
+  "purchase": {
+    "name": "Wind Boots",
+    "wallet_before": 299,
+    "wallet_after": 139,
+    "price": 160,
+    "inventory_count": 1,
+    "owned_names": [
+      "windboots"
+    ],
+    "inventory_verified": true
+  },
+  "close_inputs": [
+    {
+      "input": "mouseDown",
+      "target": [
+        "Close",
+        1019,
+        110,
+        1055,
+        122
+      ],
+      "wall": 230975.640094436,
+      "dispatch_finished": 230975.653595978,
+      "hold_deadline": 230985.640094436,
+      "operation_deadline": 230996.334183689
+    },
+    {
+      "input": "mouseUp",
+      "wall": 230982.517254128,
+      "held_seconds": 6.877159691997804
+    }
+  ],
+  "phase_timings": [
+    {
+      "visit": 3,
+      "phase": "visit started",
+      "wall": 230836.334200382,
+      "elapsed": 1.669299672357738e-05,
+      "deadline": 230996.334183689,
+      "remaining": 159.99998330700328
+    },
+    {
+      "visit": 3,
+      "phase": "market close started",
+      "wall": 230916.224380799,
+      "elapsed": 79.890197109984,
+      "deadline": 230996.334183689,
+      "remaining": 80.109802890016
+    },
+    {
+      "visit": 3,
+      "phase": "market closed",
+      "wall": 230938.340839538,
+      "elapsed": 102.00665584899252,
+      "deadline": 230996.334183689,
+      "remaining": 57.99334415100748
+    },
+    {
+      "visit": 3,
+      "phase": "inventory open started",
+      "wall": 230938.34084764,
+      "elapsed": 102.00666395100416,
+      "deadline": 230996.334183689,
+      "remaining": 57.99333604899584
+    },
+    {
+      "visit": 3,
+      "phase": "inventory opened",
+      "wall": 230968.83421186,
+      "elapsed": 132.50002817099448,
+      "deadline": 230996.334183689,
+      "remaining": 27.499971829005517
+    },
+    {
+      "visit": 3,
+      "phase": "all owned identities verified",
+      "wall": 230972.633191349,
+      "elapsed": 136.29900766001083,
+      "deadline": 230996.334183689,
+      "remaining": 23.70099233998917
+    },
+    {
+      "visit": 3,
+      "phase": "inventory close started",
+      "wall": 230972.948604706,
+      "elapsed": 136.61442101700231,
+      "deadline": 230996.334183689,
+      "remaining": 23.385578982997686
+    },
+    {
+      "visit": 3,
+      "phase": "inventory close observation ended",
+      "wall": 230982.517272566,
+      "elapsed": 146.1830888770055,
+      "deadline": 230996.334183689,
+      "remaining": 13.816911122994497
+    },
+    {
+      "visit": 3,
+      "phase": "inventory fresh closed verified",
+      "wall": 230993.403235931,
+      "elapsed": 157.06905224200455,
+      "deadline": 230996.334183689,
+      "remaining": 2.9309477579954546
+    },
+    {
+      "visit": 3,
+      "phase": "panels closed",
+      "wall": 230993.403250109,
+      "elapsed": 157.06906641999376,
+      "deadline": 230996.334183689,
+      "remaining": 2.93093358000624
+    },
+    {
+      "visit": 3,
+      "phase": "resume observation started",
+      "wall": 230993.403253461,
+      "elapsed": 157.06906977199833,
+      "deadline": 230996.334183689,
+      "remaining": 2.930930228001671
+    },
+    {
+      "visit": 3,
+      "phase": "resume baseline observed",
+      "wall": 230996.038422087,
+      "elapsed": 159.7042383980006,
+      "deadline": 230996.334183689,
+      "remaining": 0.29576160199940205
+    }
+  ],
+  "prior_resume_next_observation_seconds": 13.391363317001378,
+  "estimated_complete_elapsed_using_prior_same_run_cost": 173.09560171500198,
+  "estimated_extra_vs160": 13.095601715001976,
+  "estimate_is_not_observed_completion": true,
+  "baseline_actual_pixel_seconds": 1139
+}
