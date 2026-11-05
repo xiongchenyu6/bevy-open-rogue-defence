@@ -1,0 +1,37 @@
+{
+  "scope": "Independent public UI chapter six; canonical actual earned save only; no tutorial/audio preferences copied, resources or outcomes injected",
+  "harness_commit": "4fa93e8976e2b37abe7d5fe181c906c1c03b246f",
+  "harness_files": {
+    "campaign_equipment_runtime.py": "e9b5ca9710e20e436945115c2dc428bdc7b63cd4474466085004cd6dfb33a26a",
+    "campaign_runtime.py": "76ce1daa5939dbbbdcbc0b68162f62b59ce178c14228e1cecb1c8f50684c0591",
+    "smoke_runtime.py": "b836e98f55fe7997112145d72250b19bf2ff67f13fe441cab5d4d1320af4f4f6"
+  },
+  "canonical_earned_checkpoint": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/packaged-chapter6-2026-10-09/initial-campaign.save",
+  "incoming_save_sha256": "4c9a0973fa90b3f75838ccb1999267be31ff8ff9b896a8c9b165ae5ac3e129f9",
+  "incoming_progress": {
+    "unlocked": 6,
+    "currency": 645,
+    "cleared": "111110",
+    "upgrades": [
+      6,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "profile_initial_files": [
+    "campaign.save"
+  ],
+  "package_commit": "49562e6fa1f1cf781eb9f0b8a4155e7a15ec22cb",
+  "package_binary_sha256": "dd603128de8f280c2e9b515fe7e7836969f03d412e9a122eb95dccb73f4b7106",
+  "internal_battle_budget_seconds": 4800,
+  "outer_case_budget_seconds": 5400,
+  "startup_gate": {
+    "source": "recipe_art_nov5 direct confirmation",
+    "guide_png": "target/verification/inventory-earned-forge-r2-2026-11-06/forge/startup-observation-00.png",
+    "commander_png": "target/verification/inventory-earned-forge-r2-2026-11-06/forge/startup-observation-01.png",
+    "battle_log": "target/verification/inventory-earned-forge-r2-2026-11-06/forge.log"
+  }
+}

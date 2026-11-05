@@ -1,0 +1,30 @@
+{
+  "initial_save_sha256": "4c9a0973fa90b3f75838ccb1999267be31ff8ff9b896a8c9b165ae5ac3e129f9",
+  "final_save_sha256": "4c9a0973fa90b3f75838ccb1999267be31ff8ff9b896a8c9b165ae5ac3e129f9",
+  "progress_bytes_unchanged": true,
+  "files": {
+    "chapter6.log": "dd4957968efa8353f28d9ce6d05746ff23a865aa3d78d4f531333d39be71c514",
+    "sequence.log": "1f4350b14156e996d2a8e0df67417d19fa986ab445afbacaad503a58d6e335f3",
+    "chapter6-process.json": "6026bd171560f17fa56ca2c8396bd60a437c4b58c2c6ff1e3e5309507da4b9c5",
+    "package-check.json": "1e36c38a428cc75282b89374e1e019e07b9c87546d016041b3168dc144e3fe00",
+    "harness-provenance.json": "87ccc8b027a917812deb649e1c35c728e11718b03a5dcc354cd1138f7cc9ca8e",
+    "launch-command.json": "7c6dc436a660cef9b8a6bd4a0ac26508af543620d9e8bfeb7f5223661f26c987",
+    "run.py": "7deb6ab54b8c234b7587cbb3837757ea764923a7d5048fea08905910bfe8ced2",
+    "chapter6/latest-report.json": "411939336185d0a33fc894ac5b773645cd45d6307eff6e8b9891e1fd9c62d404",
+    "chapter6/startup-observation-01.png": "07ed2255fa7c975127760cae4891d86d229ee3068cdc26a33a4f0360a84e9aa2",
+    "chapter6/startup-observation-03.png": "741e78576e9a10aa22a20c340d3b689a5d73e887a557f679a38dc44773ab7a49",
+    "chapter6/base-strength.png": "9a37221e8b417db840af7eea0e5847504f791773ebf8c0c5235c76e3155da6c0",
+    "chapter6/equipment-05-inventory-open-17.png": "a11a2b4f6892931da5f23d6239d62053e505d77243fcb98e87d02afe30ab56a0",
+    "chapter6/equipment-05-inventory-icon-2.png": "4cb478be10207905493c36f07341106d052b9a75002f3c9f103b308978a9f49a",
+    "chapter6/equipment-05-inventory-open-18.png": "8ce07509e1479855c4a721447c859bf32fba8c0b9613e28b65f590667a7540e0",
+    "chapter6/equipment-05-inventory-open-19.png": "4cb478be10207905493c36f07341106d052b9a75002f3c9f103b308978a9f49a",
+    "chapter6/equipment-05-inventory-icon-0.png": "4cb478be10207905493c36f07341106d052b9a75002f3c9f103b308978a9f49a",
+    "chapter6/equipment-05-inventory-icon-1.png": "4cb478be10207905493c36f07341106d052b9a75002f3c9f103b308978a9f49a",
+    "chapter6/equipment-03-before.png": "bbe15b3e748e7b9d97f5bed026dacfa59021a292484712f4eb68e73ee98ba8e6",
+    "chapter6/equipment-03-after.png": "ca0ba652986180e37a248713e628efc376d17a2ddb9eca0bf9c371f50bb695b4",
+    "chapter6/equipment-04-before.png": "c7c17ee4ab23eeda19a74f433c70dc7c57d7106b2d5e5489695850933047e676",
+    "chapter6/equipment-04-after.png": "6fe1ff5b3b2f89720de76a44ad58a26d1d9266e1d3cb834e2decda0f8b98ece1",
+    "chapter6/equipment-05-before.png": "b0fcc05a3615de56b9fd74d313c46753c729bd8e185c880797ded2dfb99cfba0",
+    "chapter6/equipment-05-after.png": "80d9af66018f2c16c0e445e693f7771d21b6f0306db9cbce189ac50cde394e57"
+  }
+}

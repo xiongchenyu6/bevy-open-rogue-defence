@@ -1,0 +1,2 @@
+{"stage": "launch", "harness_commit": "4fa93e8976e2b37abe7d5fe181c906c1c03b246f", "package_commit": "49562e6fa1f1cf781eb9f0b8a4155e7a15ec22cb", "container": "rogue-inventory-c6-nov6", "outer_budget": 5400}
+{"stage": "terminal", "exit": 1, "elapsed": 981.535046339035}
