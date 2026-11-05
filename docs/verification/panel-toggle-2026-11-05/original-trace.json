@@ -1,0 +1,24 @@
+[
+  {
+    "visit": 3,
+    "screenshot": "equipment-03-market-open-06.png",
+    "state": "battle",
+    "requests": 0,
+    "clock": 1097,
+    "input": "b"
+  },
+  {
+    "visit": 3,
+    "screenshot": "equipment-03-market-open-07.png",
+    "state": "battle",
+    "requests": 1,
+    "clock": 1090,
+    "input": "b"
+  },
+  {
+    "visit": 3,
+    "screenshot": "equipment-03-market-open-08.png",
+    "state": "market",
+    "requests": 2
+  }
+]

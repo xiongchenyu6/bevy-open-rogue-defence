@@ -13,6 +13,7 @@ import re
 import time
 import subprocess
 import tempfile
+import shutil
 from pathlib import Path
 from campaign_runtime import GAME, main
 from smoke_runtime import find_text, normalized, read_hud_wallet, read_toolbar_speed, ocr_screenshot
@@ -260,10 +261,10 @@ def public_panel_state(rows, image=None, env=None):
            and re.fullmatch(r'LEVEL\s*\d+\s+\d+\s*/\s*\d+\s*XP', text.strip(), re.I)
            for text, x, y, *_ in rows):
         return 'battle'
-    # This narrowly located candidate only requests a fresh numeric pixel read;
-    # the S is never replaced with a guessed5 in the OCR text.
+    # A spatial LEVEL/numeric/XP candidate only requests fresh pixel validation;
+    # missing separators or an S glyph never become guessed numeric values.
     if image is not None and any(450 <= x < 650 and 640 <= y < 695
-            and re.fullmatch(r'LEVELS\s+\d+\s*/\s*\d+\s*XP', text.strip(), re.I)
+            and re.fullmatch(r'LEVEL\s*(?:\d+|S)(?:\s+\d+)?(?:\s*/\s*\d+)?\s*XP', text.strip(), re.I)
             for text, x, y, *_ in rows):
         battle_level_pixels(image, env)
         return 'battle'
@@ -273,6 +274,7 @@ def public_panel_state(rows, image=None, env=None):
 def wait_panel_open(shot, env, send, deadline, records, prefix, target_panel, visit=None):
     assert target_panel in ('inventory', 'market')
     requests, previous_clock = 0, None
+    request_allowed = True
     while time.monotonic() < deadline:
         image = shot(prefix + f'-open-{len(records):02}.png')
         rows = ocr_screenshot(image, env)
@@ -284,23 +286,28 @@ def wait_panel_open(shot, env, send, deadline, records, prefix, target_panel, vi
                 inventory_count(rows)
             else:
                 screenshot_wallet(image, env)
-            return rows
+            return image, rows
         if state == 'terminal':
             return None  # Outer campaign loop owns the actual result/reward flow.
         assert time.monotonic() < deadline, 'Panel open observation exceeded visit budget'
         if state == 'choice':
             send('1')
+            request_allowed = True  # Positive choice settlement permits a new battle epoch.
+            record['input'] = '1'
             continue
         assert state == 'battle', f'Unexpected public screen while opening {target_panel}: {rows}'
         clock = screenshot_battle_seconds(image, env)
         assert read_toolbar_speed(image, env) == 1, 'Panel route requires actual1x'
         record['clock'] = clock
         assert time.monotonic() < deadline, 'Panel open OCR exceeded visit budget'
-        if previous_clock is None or clock < previous_clock:
+        # Advancing simulation time alone does not prove a queued toggle was
+        # ignored. Never enqueue a second toggle within the same battle epoch.
+        if request_allowed and (previous_clock is None or clock < previous_clock):
             assert requests < 3, f'{target_panel} failed to open after three public requests'
             send({'inventory': 'i', 'market': 'b'}[target_panel])
             requests += 1
             previous_clock = clock
+            request_allowed = False
             record['input'] = {'inventory': 'i', 'market': 'b'}[target_panel]
     raise AssertionError(f'{target_panel} did not open within remaining visit budget')
 
@@ -352,6 +359,8 @@ class EquipmentPolicy:
         while time.monotonic() < end:
             time.sleep(.2)
             image = self.ui['shot'](prefix + f'-inspect-{index}.png')
+            assert public_panel_state(ocr_screenshot(image, self.ui['env'])) == 'market', \
+                'Market disappeared before current offer inspection'
             tile = tile_name_text(image, left, self.ui['env'])
             price = crop_text(image, f'39x23+{left+52}+384', self.ui['env'], digits=True)
             preview = crop_text(image, PREVIEW_CROP, self.ui['env'])
@@ -402,12 +411,15 @@ class EquipmentPolicy:
                 self.ui['shot'](prefix + '-unavailable.png')
                 return
             records = self.ui['report'].setdefault('equipment_open_attempts', [])
-            rows = wait_panel_open(self.ui['shot'], self.ui['env'], self.key,
+            opened = wait_panel_open(self.ui['shot'], self.ui['env'], self.key,
                                    deadline, records, prefix + '-market', 'market', self.visits)
-            if rows is None:
+            if opened is None:
                 self.ui['report']['equipment_panel_terminal'] = records[-1]
                 return
-            market = self.ui['shot'](prefix + '-market.png')
+            market, rows = opened
+            verified_market = market.with_name(prefix + '-market.png')
+            shutil.copy2(market, verified_market)
+            market = verified_market
             wallet, wallet_raw = screenshot_wallet(market, self.ui['env'])
             inspected = []
             for index, left in enumerate(TILE_LEFTS):
@@ -446,11 +458,12 @@ class EquipmentPolicy:
                 self.ui['shot'](prefix + '-close-failure.png')
                 raise AssertionError('Market failed to close within visit budget')
             if offers:
-                inventory = wait_panel_open(self.ui['shot'], self.ui['env'], self.key,
+                opened = wait_panel_open(self.ui['shot'], self.ui['env'], self.key,
                     deadline, records, prefix + '-inventory', 'inventory', self.visits)
-                if inventory is None:
+                if opened is None:
                     self.ui['report']['equipment_panel_terminal'] = records[-1]
                     return
+                _, inventory = opened
                 count = inventory_count(inventory)
                 details = []
                 found = None

@@ -1,0 +1,4 @@
+speed-level7.png [('LEVEL7 281168XP', 487, 667, 592, 680), ('LEVEL 28/168XP', 487, 667, 592, 679), ('LEVEL 25/1680', 487, 667, 592, 679)]
+raw_state unknown numeric LEVEL728/168XP pixel_state battle clock 1213
+unlock-level4.png [('LEVEL4 65/114XP', 487, 667, 592, 680), ('LEVEL 4 65/114 xP & 2 站 se shite a»', 487, 655, 1237, 691), ('LEVEL 4 65/114XxP', 487, 659, 592, 687)]
+raw_state battle numeric LEVEL465/114XP pixel_state battle clock 1311

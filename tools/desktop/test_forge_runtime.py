@@ -67,8 +67,8 @@ class ForgePolicyTests(unittest.TestCase):
                 patch('campaign_equipment_runtime.read_toolbar_speed',return_value=1), \
                 patch('campaign_equipment_runtime.time.monotonic',return_value=0):
             result=forge_runtime.wait_panel_open(lambda name:Path(name),None,send,90,records,'forge-owned','inventory')
-        self.assertEqual(result,owned)
-        self.assertEqual([call.args[0] for call in send.call_args_list],['i','i'])
+        self.assertEqual(result[1],owned)
+        self.assertEqual([call.args[0] for call in send.call_args_list],['i'])
         self.assertEqual([record['state'] for record in records],['battle','battle','battle','inventory'])
         self.assertNotIn('input',records[-1])
 

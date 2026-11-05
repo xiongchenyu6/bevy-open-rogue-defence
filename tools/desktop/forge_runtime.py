@@ -153,6 +153,7 @@ def main():
         call(['xdotool','mousemove','--window',win,str(left+60),'365'])
         def sample():
             image=shot(prefix+'.png')
+            assert public_panel_state(ocr_screenshot(image,env)) == 'market', 'Market disappeared before current offer inspection'
             return (tile_name_text(image,left,env),
                     crop_text(image,f'39x23+{left+52}+384',env,True),
                     crop_text(image,PREVIEW_CROP,env))
@@ -257,12 +258,15 @@ def main():
             if actual != 1:
                 click(1045,44)
                 assert read_speed() == 1, 'Actual reset speed did not reach1x'
-            rows=wait_panel_open(shot,env,key,time.monotonic()+90,
+            opened=wait_panel_open(shot,env,key,time.monotonic()+90,
                 report.setdefault('panel_open_attempts',[]),f'market-{attempt:02}','market')
-            if rows is None:
+            if opened is None:
                 terminal(lines())
                 raise AssertionError('Observed terminal no longer readable; proof remains pending')
-            before=wallet();shot(f'market-{attempt:02}.png')
+            market,rows=opened
+            before,raw=screenshot_wallet(market,env)
+            report.setdefault('wallet_ocr',[]).append(raw)
+            shutil.copy2(market,OUT/f'market-{attempt:02}.png')
             offers=[]
             visit_end=time.monotonic()+120
             for index,left in enumerate(TILE_LEFTS):
