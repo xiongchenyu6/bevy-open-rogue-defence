@@ -59,6 +59,13 @@ def ocr_screenshot(path, env=None):
     # Matching results from both passes need only one click rectangle.
     return list(dict.fromkeys(lines))
 
+def wallet_text(results):
+    nonempty = {text.strip() for text in results if text.strip()}
+    if len(nonempty) != 1 or not all(re.fullmatch(r'\d+', text) for text in nonempty):
+        raise ValueError(f'Unreadable or conflicting HUD wallet OCR: {results!r}')
+    return nonempty.pop()
+
+
 def read_hud_wallet(path, env=None, dimmed=False):
     """Locate the last gold-colored resource number in the 1280x720 HUD.
 
@@ -89,15 +96,17 @@ def read_hud_wallet(path, env=None, dimmed=False):
     with tempfile.TemporaryDirectory(prefix='rogue-wallet-ocr-') as directory:
         crop = Path(directory) / 'digits.png'
         subprocess.run(['convert', str(path), '-crop', f'{right-left+5}x18+{left-2}+163',
-                        '-resize', '600%', '-colorspace', 'Gray', '-negate',
+                        '-resize', '800%', '-colorspace', 'Gray', '-negate',
                         '-threshold', '70%' if dimmed else '35%',
                         '-bordercolor', 'white', '-border', '20', str(crop)],
                        env=env, check=True, capture_output=True)
-        text = subprocess.check_output(['tesseract', str(crop), 'stdout', '-l', 'eng',
-                                        '--psm', '7', '-c', 'tessedit_char_whitelist=0123456789'], env=env, text=True,
-                                       stderr=subprocess.PIPE).strip()
-    if not re.fullmatch(r'\d+', text):
-        raise ValueError(f'Unreadable HUD wallet: {text!r}')
+        # Raw-line segmentation retains a lone zero; single-line mode reads
+        # repeated ones. Accept only one unique complete numeric result.
+        results = [subprocess.check_output(
+            ['tesseract', str(crop), 'stdout', '-l', 'eng', '--psm', mode,
+             '-c', 'tessedit_char_whitelist=0123456789'], env=env, text=True,
+            stderr=subprocess.PIPE).strip() for mode in ('7', '13')]
+    text = wallet_text(results)
     return int(text), (left, right), text
 
 

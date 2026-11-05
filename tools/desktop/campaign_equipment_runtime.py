@@ -72,7 +72,7 @@ def crop_text(path, geometry, env, digits=False):
 
 def screenshot_wallet(path, env):
     text = crop_text(path, '95x14+1119+202', env)
-    assert re.fullmatch(r'LV\d+\s+KILLS\s*\d+', text), f'Unreadable market wallet: {text!r}'
+    assert re.fullmatch(r'LV\d+\s+KILLS\s*\d{4,}', text), f'Unreadable market wallet: {text!r}'
     return int(re.search(r'KILLS\s*(\d+)', text)[1]), text
 
 
@@ -272,9 +272,11 @@ class EquipmentPolicy:
                 self.click(('', 1129, 482, 1239, 530))
                 after = self.ui['shot'](prefix + '-after.png')
                 remaining, _, raw = read_hud_wallet(after, self.ui['env'])
+                market_remaining, market_raw = screenshot_wallet(after, self.ui['env'])
+                assert remaining == market_remaining, ('Post-purchase Market/HUD disagreement', market_remaining, remaining)
                 verify_deduction(wallet, remaining, offer)
                 purchase = dict(name=offer['name'], price=offer['price'], wallet_before=wallet,
-                                wallet_after=remaining, offer_ocr=offer, after_wallet_ocr=raw,
+                                wallet_after=remaining, offer_ocr=offer, after_wallet_ocr=raw, after_market_ocr=market_raw,
                                 visit=self.visits, before=before.name, after=after.name)
                 self.purchases.append(purchase)
             self.key('b')
@@ -288,6 +290,8 @@ class EquipmentPolicy:
                 self.ui['shot'](prefix + '-close-failure.png')
                 raise AssertionError('Market failed to close within visit budget')
             if offers:
+                if choice_pending(closed_rows):
+                    self.visible_countdown(prefix + '-before-inventory', deadline)
                 self.key('i')
                 inventory = self.ui['lines']()
                 count = inventory_count(inventory)

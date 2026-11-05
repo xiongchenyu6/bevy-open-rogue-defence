@@ -46,6 +46,13 @@ class EquipmentPolicyParsing(unittest.TestCase):
         self.assertTrue(choice_pending([('Choose a bond to replace', 40, 80, 600, 110)]))
         self.assertFalse(choice_pending([('Choose an encounter', 40, 80, 600, 110)]))
 
+    def test_market_header_requires_its_actual_zero_padded_digit_count(self):
+        with patch('campaign_equipment_runtime.crop_text', return_value='LV2 KILLS 0111'):
+            self.assertEqual(screenshot_wallet(Path('public.png'), None)[0], 111)
+        with patch('campaign_equipment_runtime.crop_text', return_value='LV2 KILLS 111'), \
+             self.assertRaises(AssertionError):
+            screenshot_wallet(Path('public.png'), None)
+
     def test_current_header_and_ambiguous_wallet(self):
         self.assertEqual(market_wallet([('LV1 KILLS 99880',1120,205,1209,214)]),99880)
         self.assertFalse(market_closed([('BLACK MARKET',617,214,759,230)]))
