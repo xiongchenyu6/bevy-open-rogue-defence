@@ -175,6 +175,34 @@ class EquipmentPolicy:
         self.ui['call'](['xdotool', 'click', '1'])
         time.sleep(.5)
 
+    def inspect_offer(self, index, prefix, deadline):
+        left = TILE_LEFTS[index]
+        self.ui['call'](['xdotool', 'mousemove', '--window', self.ui['window'](),
+                         str(left + 60), '365'])
+        # A software-rendered UI may need more than one 200ms frame to process
+        # pointer motion. Require the actual preview to catch up, never buy an
+        # earlier selection or loosen the name/price/category checks.
+        end = min(deadline, time.monotonic() + 5)
+        attempts = []
+        while time.monotonic() < end:
+            time.sleep(.2)
+            image = self.ui['shot'](prefix + f'-inspect-{index}.png')
+            tile = crop_text(image, f'120x40+{left}+343', self.ui['env'])
+            price = crop_text(image, f'39x23+{left+52}+384', self.ui['env'], digits=True)
+            preview = crop_text(image, PREVIEW_CROP, self.ui['env'])
+            try:
+                offer = inspected_offer(tile, price, preview, index)
+            except AssertionError as error:
+                attempts.append(dict(tile=tile, price=price, preview=preview, error=str(error)))
+                continue
+            self.ui['report'].setdefault('equipment_hover_checks', []).append(
+                dict(visit=self.visits, index=index, stale_attempts=attempts))
+            return offer
+        self.ui['report'].setdefault('equipment_hover_failures', []).append(
+            dict(visit=self.visits, index=index, attempts=attempts,
+                 pointer=self.ui['call'](['xdotool', 'getmouselocation', '--shell'])))
+        raise AssertionError(f'Offer {index} did not show a matching preview within budget: {attempts}')
+
     def observe(self, rows, elapsed):
         if elapsed < self.next_visit or self.visits >= 12:
             return
@@ -205,14 +233,7 @@ class EquipmentPolicy:
             for index, left in enumerate(TILE_LEFTS):
                 assert time.monotonic() < deadline, 'Offer inspection exceeded visit budget'
                 # Hover only: clicking a desktop tile buys immediately.
-                self.ui['call'](['xdotool', 'mousemove', '--window', self.ui['window'](),
-                                 str(left + 60), '365'])
-                time.sleep(.2)
-                image = self.ui['shot'](prefix + f'-inspect-{index}.png')
-                tile = crop_text(image, f'120x40+{left}+343', self.ui['env'])
-                price = crop_text(image, f'39x23+{left+52}+384', self.ui['env'], digits=True)
-                preview = crop_text(image, PREVIEW_CROP, self.ui['env'])
-                inspected.append(inspected_offer(tile, price, preview, index))
+                inspected.append(self.inspect_offer(index, prefix, deadline))
             self.ui['report'].setdefault('equipment_inspections', []).append(
                 dict(visit=self.visits, wallet=wallet, wallet_ocr=wallet_raw, offers=inspected))
             offers = affordable_gear(inspected, wallet)
@@ -221,14 +242,9 @@ class EquipmentPolicy:
                 before = self.ui['shot'](prefix + '-before.png')
                 hud, _, _ = read_hud_wallet(before, self.ui['env'])
                 assert hud == wallet, ('Market/HUD wallet disagreement', hud, wallet)
-                left = TILE_LEFTS[offer['index']]
-                self.ui['call'](['xdotool', 'mousemove', '--window', self.ui['window'](), str(left+60), '365'])
-                time.sleep(.2)
-                selected = self.ui['shot'](prefix + '-selected.png')
-                checked = inspected_offer(crop_text(selected, f'120x40+{left}+343', self.ui['env']),
-                    crop_text(selected, f'39x23+{left+52}+384', self.ui['env'], digits=True),
-                    crop_text(selected, PREVIEW_CROP, self.ui['env']), offer['index'])
-                assert checked == offer, 'Selected offer changed before purchase'
+                checked = self.inspect_offer(offer['index'], prefix + '-selected', deadline)
+                identity = lambda item: (normalized(item['name']), item['price'], item['category'], item['index'])
+                assert identity(checked) == identity(offer), 'Selected offer changed before purchase'
                 self.click(('', 1129, 482, 1239, 530))
                 after = self.ui['shot'](prefix + '-after.png')
                 remaining, _, raw = read_hud_wallet(after, self.ui['env'])

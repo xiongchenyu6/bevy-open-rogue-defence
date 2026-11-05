@@ -1,0 +1,32 @@
+{"sample": 1, "wall_seconds": 7.1, "terminal": null}
+{"sample": 2, "wall_seconds": 17.1, "terminal": null}
+{"sample": 3, "wall_seconds": 24.8, "terminal": null}
+{"sample": 4, "wall_seconds": 34.7, "terminal": null}
+{"sample": 5, "wall_seconds": 44.6, "terminal": null}
+{"sample": 6, "wall_seconds": 54.4, "terminal": null}
+{"sample": 7, "wall_seconds": 64.4, "terminal": null}
+{"sample": 8, "wall_seconds": 74.7, "terminal": null}
+{"sample": 9, "wall_seconds": 84.7, "terminal": null}
+{"sample": 10, "wall_seconds": 94.2, "terminal": null}
+{"sample": 11, "wall_seconds": 104.0, "terminal": null}
+{"sample": 12, "wall_seconds": 113.7, "terminal": null}
+{"sample": 13, "wall_seconds": 123.6, "terminal": null}
+{"sample": 14, "wall_seconds": 133.4, "terminal": null}
+{"sample": 15, "wall_seconds": 143.3, "terminal": null}
+{"sample": 16, "wall_seconds": 153.2, "terminal": null}
+{"sample": 17, "wall_seconds": 163.2, "terminal": null}
+{"sample": 18, "wall_seconds": 173.2, "terminal": null}
+{"sample": 19, "wall_seconds": 182.9, "terminal": null}
+{"sample": 20, "wall_seconds": 193.1, "terminal": null}
+Traceback (most recent call last):
+  File "/harness/campaign_equipment_runtime.py", line 308, in <module>
+    main(EquipmentPolicy)
+  File "/harness/campaign_runtime.py", line 268, in main
+    policy.observe(text_lines, time.monotonic() - started)
+  File "/harness/campaign_equipment_runtime.py", line 215, in observe
+    inspected.append(inspected_offer(tile, price, preview, index))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/campaign_equipment_runtime.py", line 99, in inspected_offer
+    assert tile_name_matches(tile_text, name), \
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tile/preview mismatch: 'a.F\nArc Lens', 'Wind Boots + Equipment'

@@ -1,0 +1,11 @@
+{
+  "game_source": "8f4084b22b55be0040a8cb0f7f5a50bd470eb126",
+  "completed_run": false,
+  "victory": false,
+  "terminal": null,
+  "purchases": 0,
+  "scope": "Actual earned chapter6 at1x, interrupted by strict tile/preview mismatch, not an observed win/loss",
+  "error": "Arc Lens tile OCR disagrees with Wind Boots shared preview after fixed200ms hover",
+  "persistent_progress_unchanged": true,
+  "followup": "Replace fixed hover delay with bounded exact tile/preview polling; cause remains unproven pending native rerun"
+}
