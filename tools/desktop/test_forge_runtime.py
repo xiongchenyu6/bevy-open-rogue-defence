@@ -12,6 +12,10 @@ from campaign_equipment_runtime import (crop_text, screenshot_wallet, inspected_
 
 
 class ForgePolicyTests(unittest.TestCase):
+    def test_forge_uses_the_same_single_click_purchase_observer(self):
+        from campaign_equipment_runtime import purchase_market_offer
+        self.assertIs(forge_runtime.purchase_market_offer,purchase_market_offer)
+
     def test_startup_only_skips_real_guide_with_visible_skip_and_never_repeats_escape(self):
         guide=[('1/4 + MOVE & DODGE',520,326,762,360),('Skip',476,446,507,463)]
         commander=[('Click a basic commander to begin',400,100,800,130)]

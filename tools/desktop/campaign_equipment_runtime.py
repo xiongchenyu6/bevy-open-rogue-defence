@@ -276,6 +276,39 @@ def verify_deduction(wallet, remaining, offer):
         ('Wrong purchase deduction', wallet, remaining, offer)
 
 
+def purchase_market_offer(click, shot, env, offer, wallet, deadline, observations, prefix,
+                          now=time.monotonic, pause=time.sleep):
+    """One Buy click, then only public observations until the exact debit appears."""
+    end = min(deadline, now() + 20)
+    assert now() < end, 'Purchase observation deadline expired before input'
+    observations.append(dict(input='buy_click', wall=now()))
+    click()
+    left = TILE_LEFTS[offer['index']]
+    for attempt in range(20):
+        assert now() < end, 'Purchase observation deadline exhausted'
+        image = shot(prefix + f'-purchase-{attempt:02}.png')
+        header = market_header_text(image, env)
+        remaining, raw = screenshot_wallet(image, env)
+        hud, _, hud_raw = read_hud_wallet(image, env)
+        record = dict(screenshot=image.name, wall=now(), header=header,
+                      wallet=remaining, wallet_ocr=raw, hud=hud, hud_ocr=hud_raw)
+        observations.append(record)
+        assert now() < end, 'Purchase observation exceeded deadline'
+        assert hud == remaining, ('Post-purchase Market/HUD disagreement', remaining, hud)
+        if remaining != wallet:
+            verify_deduction(wallet, remaining, offer)
+            record['exact_debit'] = True
+            return image, remaining, raw, hud_raw
+        current = inspected_offer(tile_name_text(image, left, env),
+            crop_text(image, f'39x23+{left+52}+384', env, digits=True),
+            crop_text(image, PREVIEW_CROP, env), offer['index'])
+        record['offer'] = current
+        assert offer_identity(current) == offer_identity(offer), \
+            'Stock changed without exact purchase debit'
+        pause(.2)
+    raise AssertionError('Purchase exact debit not observed within bounded observations')
+
+
 def inventory_header_rows(image, env=None):
     """Read only the actual equipment header; preserve full-screen coordinates."""
     with tempfile.TemporaryDirectory(prefix='rogue-inventory-header-') as directory:
@@ -648,12 +681,13 @@ class EquipmentPolicy:
                 assert hud == wallet, ('Market/HUD wallet disagreement', hud, wallet)
                 checked = self.inspect_offer(offer['index'], prefix + '-selected', deadline)
                 assert offer_identity(checked) == offer_identity(offer), 'Selected offer changed before purchase'
-                self.click(('', 1129, 482, 1239, 530))
-                after = self.ui['shot'](prefix + '-after.png')
-                remaining, _, raw = read_hud_wallet(after, self.ui['env'])
-                market_remaining, market_raw = screenshot_wallet(after, self.ui['env'])
-                assert remaining == market_remaining, ('Post-purchase Market/HUD disagreement', market_remaining, remaining)
-                verify_deduction(wallet, remaining, offer)
+                after, remaining, market_raw, raw = purchase_market_offer(
+                    lambda: self.click(('', 1129, 482, 1239, 530)),
+                    self.ui['shot'], self.ui['env'], offer, wallet, deadline,
+                    self.ui['report'].setdefault('equipment_purchase_observations', []), prefix)
+                verified_after = after.with_name(prefix + '-after.png')
+                shutil.copy2(after, verified_after)
+                after = verified_after
                 purchase = dict(name=offer['name'], price=offer['price'], wallet_before=wallet,
                                 wallet_after=remaining, offer_ocr=offer, after_wallet_ocr=raw, after_market_ocr=market_raw,
                                 visit=self.visits, before=before.name, after=after.name)

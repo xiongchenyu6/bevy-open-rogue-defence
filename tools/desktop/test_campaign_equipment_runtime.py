@@ -1,4 +1,4 @@
-from campaign_equipment_runtime import screenshot_battle_seconds, inventory_header_rows
+from campaign_equipment_runtime import screenshot_battle_seconds, inventory_header_rows, purchase_market_offer
 from smoke_runtime import normalized
 import shutil
 import unittest
@@ -14,6 +14,78 @@ from campaign_equipment_runtime import (affordable_gear, market_wallet, inventor
 
 
 class EquipmentPolicyParsing(unittest.TestCase):
+    def test_purchase_passively_waits_for_exact_debit_with_one_input(self):
+        offer=dict(name='Wind Boots',price=160,category='Equipment',index=0)
+        click=Mock();shot=Mock(side_effect=[Path('early.png'),Path('settled.png')]);records=[]
+        with patch('campaign_equipment_runtime.market_header_text',return_value='BLACK MARKET'), \
+             patch('campaign_equipment_runtime.screenshot_wallet',side_effect=[(336,'0336'),(176,'0176')]), \
+             patch('campaign_equipment_runtime.read_hud_wallet',side_effect=[(336,None,'336'),(176,None,'176')]), \
+             patch('campaign_equipment_runtime.tile_name_text',return_value='Wind Boots'), \
+             patch('campaign_equipment_runtime.crop_text',side_effect=['160','Wind Boots + Equipment']):
+            result=purchase_market_offer(click,shot,None,offer,336,100,records,'visit',now=lambda:0,pause=lambda _:None)
+        click.assert_called_once_with()
+        self.assertEqual(result,(Path('settled.png'),176,'0176','176'))
+        self.assertEqual([r['wallet'] for r in records if 'wallet' in r],[336,176])
+        self.assertTrue(records[-1]['exact_debit'])
+
+    def test_purchase_never_reclicks_on_wrong_debit_conflict_stock_or_unknown_panel(self):
+        offer=dict(name='Wind Boots',price=160,category='Equipment',index=0)
+        for header,wallet,hud,tile,preview in [
+                ('BLACK MARKET',175,175,'Wind Boots','Wind Boots + Equipment'),
+                ('BLACK MARKET',176,336,'Wind Boots','Wind Boots + Equipment'),
+                ('BLACK MARKET',336,336,'Arc Lens','Arc Lens + Equipment'),
+                (None,336,336,'Wind Boots','Wind Boots + Equipment')]:
+            with self.subTest(header=header,wallet=wallet,hud=hud,tile=tile):
+                click=Mock()
+                with patch('campaign_equipment_runtime.market_header_text',side_effect=AssertionError('Unknown panel') if header is None else None,return_value=header), \
+                     patch('campaign_equipment_runtime.screenshot_wallet',return_value=(wallet,'raw')), \
+                     patch('campaign_equipment_runtime.read_hud_wallet',return_value=(hud,None,'raw')), \
+                     patch('campaign_equipment_runtime.tile_name_text',return_value=tile), \
+                     patch('campaign_equipment_runtime.crop_text',side_effect=['160',preview]), self.assertRaises(AssertionError):
+                    purchase_market_offer(click,lambda _:Path('screen.png'),None,offer,336,100,[],'visit',now=lambda:0,pause=lambda _:None)
+                click.assert_called_once_with()
+
+    def test_purchase_unchanged_offer_exhausts_bound_without_another_click(self):
+        offer=dict(name='Wind Boots',price=160,category='Equipment',index=0)
+        click=Mock();records=[]
+        with patch('campaign_equipment_runtime.market_header_text',return_value='BLACK MARKET'), \
+             patch('campaign_equipment_runtime.screenshot_wallet',return_value=(336,'0336')), \
+             patch('campaign_equipment_runtime.read_hud_wallet',return_value=(336,None,'336')), \
+             patch('campaign_equipment_runtime.tile_name_text',return_value='Wind Boots'), \
+             patch('campaign_equipment_runtime.crop_text',side_effect=['160','Wind Boots + Equipment']*20), self.assertRaises(AssertionError):
+            purchase_market_offer(click,lambda _:Path('unchanged.png'),None,offer,336,100,records,'visit',now=lambda:0,pause=lambda _:None)
+        click.assert_called_once_with()
+        self.assertEqual(len([r for r in records if 'wallet' in r]),20)
+
+    def test_purchase_deadline_bounds_all_observation_and_no_input_after_expiry(self):
+        offer=dict(name='Wind Boots',price=160,category='Equipment',index=0)
+        click=Mock()
+        with self.assertRaises(AssertionError):
+            purchase_market_offer(click,Mock(),None,offer,336,0,[],'visit',now=lambda:0)
+        click.assert_not_called()
+        clock=[0]
+        def hud(*args):
+            clock[0]=21
+            return (176,None,'176')
+        with patch('campaign_equipment_runtime.market_header_text',return_value='BLACK MARKET'), \
+             patch('campaign_equipment_runtime.screenshot_wallet',return_value=(176,'0176')), \
+             patch('campaign_equipment_runtime.read_hud_wallet',side_effect=hud), self.assertRaises(AssertionError):
+            purchase_market_offer(click,lambda _:Path('late.png'),None,offer,336,100,[],'visit',now=lambda:clock[0])
+        click.assert_called_once_with()
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_actual_one_click_probe_frames_keep_early_wallet_then_exact_debit(self):
+        root=Path(__file__).resolve().parents[2]/'docs/verification/overlap-buy-probe-2026-11-06/chapter6'
+        frames=iter([root/'buy-probe-ordinary-02.png',root/'buy-probe-ordinary-03.png'])
+        click=Mock();records=[]
+        result=purchase_market_offer(click,lambda _:next(frames),None,
+            dict(name='Wind Boots',price=160,category='Equipment',index=0),336,100,records,'native',
+            now=lambda:0,pause=lambda _:None)
+        click.assert_called_once_with()
+        self.assertEqual(result[1],176)
+        self.assertEqual([r['wallet'] for r in records if 'wallet' in r],[336,176])
+
     def test_battle_countdown_requires_complete_valid_time(self):
         self.assertEqual(battle_seconds('24:59'), 1499)
         for text in ('24:99', '24:5', 'ROUND 0/5', '', '24:59 0/5'):

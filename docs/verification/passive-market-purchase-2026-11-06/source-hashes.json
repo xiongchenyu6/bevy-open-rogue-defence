@@ -1,0 +1,6 @@
+{
+  "tools/desktop/campaign_equipment_runtime.py": "806ec83bdf9ed96202afad5f7c5ace80c8de8a32eddf34a0690e73aa1c0c802b",
+  "tools/desktop/forge_runtime.py": "4185842ce51580d68c1749ec66fdc7c5ed8c62fe1f3bfcfe781935fc2495e48b",
+  "tools/desktop/test_campaign_equipment_runtime.py": "55fa64d3aed8506b4083893b7d07887a146d6f7f81af6023ac78491046b3f859",
+  "tools/desktop/test_forge_runtime.py": "5e6b0b43288ffa48c3af508b630394664a5732ffedad9c52e66fb42399ff57de"
+}

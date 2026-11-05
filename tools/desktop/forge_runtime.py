@@ -7,7 +7,7 @@ from campaign_runtime import read_progress
 from campaign_equipment_runtime import (TILE_LEFTS, INVENTORY_TITLE_CROP, close_visible_inventory, inventory_header_rows, select_visible_inventory_item,
     screenshot_wallet, choice_pending, crop_text, inventory_count,
     inventory_icons, inventory_open, selected_inventory_name, market_closed,
-    has_gear_rows, verify_deduction, screenshot_battle_seconds, wait_panel_open, public_panel_state, poll_market_offer, offer_identity)
+    has_gear_rows, screenshot_battle_seconds, wait_panel_open, public_panel_state, poll_market_offer, offer_identity, purchase_market_offer)
 
 FORGE_RECIPE_PRISM_CENTER = (443, 207)
 FORGE_MATERIALS_CROP = '310x46+744+253'
@@ -274,12 +274,12 @@ def main():
                 report['selected_material_ocr']=checked
                 assert hud_wallet()==before==wallet(), 'HUD/header wallet disagreement'
                 report['pending_purchase']=dict(name=name,price=price,wallet_before=before,offer_ocr=offer)
-                click(1184,506)
-                after=hud_wallet()
-                assert wallet()==after, 'After-buy shared header/HUD wallet disagreement'
-                verify_deduction(before,after,offer)
+                purchased,after,_,_=purchase_market_offer(
+                    lambda:click(1184,506),shot,env,offer,before,visit_end,
+                    report.setdefault('purchase_observations',[]),f'material-{attempt:02}')
+                shutil.copy2(purchased,OUT/'purchase.png')
                 report['purchases'].append(dict(name=name,price=price,wallet_before=before,wallet_after=after,offer_ocr=offer))
-                shot('purchase.png');close_market_panel();drain_choices()
+                close_market_panel();drain_choices()
                 opened=wait_panel_open(shot,env,key,time.monotonic()+90,
                     report.setdefault('inventory_open_attempts',[]),
                     f'material-{len(report["purchases"])}','inventory')
