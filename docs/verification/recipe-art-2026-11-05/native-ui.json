@@ -1,0 +1,43 @@
+{
+  "native_ui_verified": true,
+  "total_frames": 1540,
+  "cases": {
+    "crafting-0-en-desktop": {
+      "completed_frames": 310,
+      "pass": true,
+      "scope": "funded real crafting UI/effects fixture; not earned progression"
+    },
+    "crafting-1-zh-desktop": {
+      "completed_frames": 310,
+      "pass": true,
+      "scope": "funded real crafting UI/effects fixture; not earned progression"
+    },
+    "crafting-1-en-compact": {
+      "completed_frames": 310,
+      "pass": true,
+      "scope": "funded real crafting UI/effects fixture; not earned progression"
+    },
+    "crafting-0-zh-compact": {
+      "completed_frames": 310,
+      "pass": true,
+      "scope": "funded real crafting UI/effects fixture; not earned progression"
+    },
+    "recipe-atlas-readiness": {
+      "completed_frames": 150,
+      "pass": true,
+      "scope": "controlled real asset I/O failure/retry"
+    },
+    "recipe-atlas-readiness-confirm": {
+      "completed_frames": 150,
+      "pass": true,
+      "scope": "controlled real asset I/O failure/retry"
+    }
+  },
+  "manual_views": [
+    "desktop recipe gallery and crafted crown",
+    "Chinese desktop crafted world engine",
+    "English compact prism gallery",
+    "Chinese compact crafted crown",
+    "pending/error retry and recovered battle"
+  ]
+}

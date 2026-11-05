@@ -35,21 +35,20 @@ impl RecipeId {
         };
         language.pick(en, zh)
     }
-    fn art_item(self) -> MarketItem {
-        match self {
-            Self::Bloodreaver => MarketItem::SerratedDisc,
-            Self::AstralPrism => MarketItem::ArcLens,
-            Self::StormBastion => MarketItem::HardenedPlate,
-            Self::Suncoil => MarketItem::StormCoil,
-            Self::NightCrown => MarketItem::AscendantCrown,
-            Self::WorldEngine => MarketItem::PrismaticEngine,
+    pub(crate) fn image_node(self, assets: &AssetServer) -> ImageNode {
+        let path = "ui/recipes/recipe-atlas.png";
+        let image = assets.get_handle(path).unwrap_or_else(|| assets.load(path));
+        let origin = Vec2::new(
+            (self.index() % 3) as f32 * 256.0,
+            (self.index() / 3) as f32 * 256.0,
+        );
+        ImageNode {
+            rect: Some(Rect::from_corners(origin, origin + Vec2::splat(256.0))),
+            ..ImageNode::new(image)
         }
     }
-    pub(crate) fn image_node(self, assets: &AssetServer) -> ImageNode {
-        self.art_item().image_node(assets)
-    }
     pub(crate) fn art_size(self, max: f32) -> Vec2 {
-        self.art_item().art_size(max)
+        Vec2::splat(max)
     }
     pub(crate) fn rarity(self) -> super::content::Rarity {
         if self.index() >= 4 {

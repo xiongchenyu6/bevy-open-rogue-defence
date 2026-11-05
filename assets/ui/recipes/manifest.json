@@ -1,0 +1,212 @@
+{
+  "image": "recipe-atlas.png",
+  "sha256": "37346eb5ee66513da7b055fea351b74da27e7ab20a44c9d0081b3c4858882e82",
+  "size": [
+    768,
+    512
+  ],
+  "columns": 3,
+  "rows": 2,
+  "cell_size": 256,
+  "packing": "alpha>8 bbox trim only; proportional Lanczos fit224; centered in256cell; alpha retained",
+  "items": [
+    {
+      "item": "Bloodreaver",
+      "index": 0,
+      "rect": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "379229ede160623c32e5e767e135e9ae437d0f5f7a4fdbb428c146cb3d57f407",
+      "source_alpha_crop": [
+        85,
+        15,
+        1454,
+        1005
+      ],
+      "packed_bounds": [
+        16,
+        47,
+        240,
+        209
+      ],
+      "subject_bounds": [
+        16,
+        47,
+        240,
+        209
+      ]
+    },
+    {
+      "item": "AstralPrism",
+      "index": 1,
+      "rect": [
+        256,
+        0,
+        512,
+        256
+      ],
+      "source_size": [
+        1312,
+        1199
+      ],
+      "source_sha256": "4d436f6aafc9e8d748dd43f1febb13e0e12005a78324b8b010ce25b02dbe7ba3",
+      "source_alpha_crop": [
+        197,
+        7,
+        1110,
+        1181
+      ],
+      "packed_bounds": [
+        297,
+        16,
+        471,
+        240
+      ],
+      "subject_bounds": [
+        297,
+        16,
+        471,
+        240
+      ]
+    },
+    {
+      "item": "StormBastion",
+      "index": 2,
+      "rect": [
+        512,
+        0,
+        768,
+        256
+      ],
+      "source_size": [
+        1199,
+        1312
+      ],
+      "source_sha256": "b3a132ae885f08ec07ac826048068e1bcb4b08e81234f72c889fe17a1c21305d",
+      "source_alpha_crop": [
+        92,
+        0,
+        1109,
+        1312
+      ],
+      "packed_bounds": [
+        553,
+        16,
+        727,
+        240
+      ],
+      "subject_bounds": [
+        553,
+        16,
+        727,
+        240
+      ]
+    },
+    {
+      "item": "Suncoil",
+      "index": 3,
+      "rect": [
+        0,
+        256,
+        256,
+        512
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "3c0875e5aa1eb0583def1e6244faa6546a274fcedea43fb7ad06a4a40a9f7f29",
+      "source_alpha_crop": [
+        232,
+        11,
+        1313,
+        987
+      ],
+      "packed_bounds": [
+        16,
+        283,
+        240,
+        485
+      ],
+      "subject_bounds": [
+        16,
+        283,
+        240,
+        485
+      ]
+    },
+    {
+      "item": "NightCrown",
+      "index": 4,
+      "rect": [
+        256,
+        256,
+        512,
+        512
+      ],
+      "source_size": [
+        1536,
+        1024
+      ],
+      "source_sha256": "a0ce616cb58ed0925f20af68a2537599de0b8b5e167eb17258a12dc517acd0eb",
+      "source_alpha_crop": [
+        9,
+        12,
+        1529,
+        1011
+      ],
+      "packed_bounds": [
+        272,
+        310,
+        496,
+        457
+      ],
+      "subject_bounds": [
+        272,
+        310,
+        496,
+        457
+      ]
+    },
+    {
+      "item": "WorldEngine",
+      "index": 5,
+      "rect": [
+        512,
+        256,
+        768,
+        512
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "source_sha256": "de3ee1656e79527e4da13569fac938c37fcf92ea609117928dd82e472dc3fb03",
+      "source_alpha_crop": [
+        55,
+        9,
+        1186,
+        1216
+      ],
+      "packed_bounds": [
+        535,
+        272,
+        745,
+        496
+      ],
+      "subject_bounds": [
+        535,
+        272,
+        745,
+        496
+      ]
+    }
+  ]
+}

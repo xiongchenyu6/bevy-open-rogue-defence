@@ -1,0 +1,114 @@
+{
+  "catalog_matches": true,
+  "icons": 6,
+  "image": "recipe-atlas.png",
+  "alpha": true,
+  "nonblank": true,
+  "distinct": true,
+  "cells_safe": true,
+  "scope": "Bitmap/catalog validation only; native UI acceptance is recorded separately",
+  "items": [
+    {
+      "item": "Bloodreaver",
+      "rect": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "subject_bounds": [
+        16,
+        47,
+        240,
+        209
+      ],
+      "transparent_gutter": 16,
+      "cell_pixel_sha256": "b7ed6081e61cfe9626997e97d76b57ff1e3882c8d28a01347c1ceff5b4a412cb"
+    },
+    {
+      "item": "AstralPrism",
+      "rect": [
+        256,
+        0,
+        512,
+        256
+      ],
+      "subject_bounds": [
+        297,
+        16,
+        471,
+        240
+      ],
+      "transparent_gutter": 16,
+      "cell_pixel_sha256": "37cc9f100b7369adebe3ea34f8c6161951d35b39643b17cc5615fbc01790807b"
+    },
+    {
+      "item": "StormBastion",
+      "rect": [
+        512,
+        0,
+        768,
+        256
+      ],
+      "subject_bounds": [
+        553,
+        16,
+        727,
+        240
+      ],
+      "transparent_gutter": 16,
+      "cell_pixel_sha256": "347311ca4cf86ab063a2946af9098c71edcc7a2a85d648bd148e9e117eba54d8"
+    },
+    {
+      "item": "Suncoil",
+      "rect": [
+        0,
+        256,
+        256,
+        512
+      ],
+      "subject_bounds": [
+        16,
+        283,
+        240,
+        485
+      ],
+      "transparent_gutter": 16,
+      "cell_pixel_sha256": "e7e76e6563245204ac4db96317b7285eb35b5633ad4c359540bdeb6dc816412e"
+    },
+    {
+      "item": "NightCrown",
+      "rect": [
+        256,
+        256,
+        512,
+        512
+      ],
+      "subject_bounds": [
+        272,
+        310,
+        496,
+        457
+      ],
+      "transparent_gutter": 16,
+      "cell_pixel_sha256": "9d9ffc5f7ae79313d8c9a7d8644bb01cc7e03b0bbace307a6684e1837607f0f8"
+    },
+    {
+      "item": "WorldEngine",
+      "rect": [
+        512,
+        256,
+        768,
+        512
+      ],
+      "subject_bounds": [
+        535,
+        272,
+        745,
+        496
+      ],
+      "transparent_gutter": 16,
+      "cell_pixel_sha256": "d96475f2b60d479295f74b632e149604e06b13d1124b944c4bfaadd140a36179"
+    }
+  ]
+}

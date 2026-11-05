@@ -1,0 +1,54 @@
+{
+  "date": "2026-11-05",
+  "intent": "original distinct crafted-equipment illustrations",
+  "sources": [
+    {
+      "id": "bloodreaver",
+      "path": "/home/freeman.xiong/.codex/generated_images/01a1ab1d-bcb5-71c2-952f-ddf6846f9e9f/exec-7efaebf7-d221-41d8-b4a0-80a5a62eb026.png",
+      "prompt": "Create ONE original fantasy RPG equipment inventory icon, transparent background. Subject: BLOODREAVER, a heavy crescent battle cleaver forged from dark worn iron, a single deep red garnet set where the blade meets the short leather-wrapped hilt, restrained red channels along the cutting edge suggesting life steal. A distinct broad hooked blade silhouette, diagonally tilted, entire item visible. Hand-painted high-end fantasy inventory illustration, crisp readable silhouette, tactile scuffed metal, leather, tiny engraved edges, soft diffuse upper-left lighting, restrained jeweled highlights, matte surfaces, no plastic or photoreal product render. Consistent with the classic painted equipment icons in this project, bronze/dark iron and muted rich colors. One item only, no frame, no UI, no letters, no labels, no numbers, no hands, no scene, no ground shadow, no scattered particles. Center the item with generous transparent margins on all sides, clear at 64px. Not copied from any existing game. Use real alpha transparency.",
+      "transparent_background": true,
+      "tool": "built-in image_gen",
+      "seed": null
+    },
+    {
+      "id": "astral_prism",
+      "path": "/home/freeman.xiong/.codex/generated_images/01a1ab1d-bcb5-71c2-952f-ddf6846f9e9f/exec-a54b9e14-255d-4c20-8133-86f6f8c7597d.png",
+      "prompt": "Create ONE original fantasy RPG inventory equipment icon with TRUE transparent alpha background. Hand-painted high-end fantasy equipment illustration: crisp readable shape, textured scuffed aged metal, restrained jewel highlights, tactile matte surfaces, soft diffuse upper-left lighting, rich muted colors. Match a painted worn-bronze/dark-iron fantasy inventory set, NOT a glossy plastic 3D render. Entire object visible, center with generous transparent margins, readable at64px. One item only, no frame, no UI, no letters/numbers/labels, no character or hands, no scene, no ground shadow, no fog/haze/background glow, no scattered particles. No third-party game designs. Subject: ASTRAL PRISM, a suspended large faceted six-point violet-blue crystal held within a delicate antique brass open cage, two thin elliptical orbital rings crossing around the crystal, tiny pale-blue echo crystals on the rings. A clearly angular prismatic crystal silhouette, no handle and no mirror. Restrained luminous crystal center. This is an upgraded magical focus.",
+      "transparent_background": true,
+      "tool": "built-in image_gen",
+      "seed": null
+    },
+    {
+      "id": "storm_bastion",
+      "path": "/home/freeman.xiong/.codex/generated_images/01a1ab1d-bcb5-71c2-952f-ddf6846f9e9f/exec-42d5f63e-d87d-4ce7-b888-0ee10b4aacc7.png",
+      "prompt": "Create ONE original fantasy RPG inventory equipment icon with TRUE transparent alpha background. Hand-painted high-end fantasy equipment illustration: crisp readable shape, textured scuffed aged metal, restrained jewel highlights, tactile matte surfaces, soft diffuse upper-left lighting, rich muted colors. Match a painted worn-bronze/dark-iron fantasy inventory set, NOT a glossy plastic 3D render. Entire object visible, center with generous transparent margins, readable at64px. One item only, no frame, no UI, no letters/numbers/labels, no character or hands, no scene, no ground shadow, no fog/haze/background glow, no scattered particles. No third-party game designs. Subject: STORM BASTION, a heavy battered midnight-blue iron tower shield, thick antique silver rim, three swept silver wing-blades extending from its sides, a small cyan lightning-shaped rune/crystal in the central boss, rivets and battle wear. Broad protective shield silhouette, wind-swept cloth tassels beneath, no coat of armor, no person.",
+      "transparent_background": true,
+      "tool": "built-in image_gen",
+      "seed": null
+    },
+    {
+      "id": "suncoil",
+      "path": "/home/freeman.xiong/.codex/generated_images/01a1ab1d-bcb5-71c2-952f-ddf6846f9e9f/exec-f5962ea6-f578-447a-9d2d-385d05df472b.png",
+      "prompt": "Create ONE original fantasy RPG inventory equipment icon with TRUE transparent alpha background. Hand-painted high-end fantasy equipment illustration: crisp readable shape, textured scuffed aged metal, restrained jewel highlights, tactile matte surfaces, soft diffuse upper-left lighting, rich muted colors. Match a painted worn-bronze/dark-iron fantasy inventory set, NOT a glossy plastic 3D render. Entire object visible, center with generous transparent margins, readable at64px. One item only, no frame, no UI, no letters/numbers/labels, no character or hands, no scene, no ground shadow, no fog/haze/background glow, no scattered particles. No third-party game designs. Subject: SUNCOIL, a compact antique bronze solar-electrical device: a radiant amber sun crystal enclosed in a circular toothed brass armature with two copper coil pillars on either side, small restrained arcs of blue-white electricity connecting the coils to the glowing warm sun center. Clear golden sun-and-coils silhouette, mechanical base, worn not glossy. No shield or crown.",
+      "transparent_background": true,
+      "tool": "built-in image_gen",
+      "seed": null
+    },
+    {
+      "id": "night_crown",
+      "path": "/home/freeman.xiong/.codex/generated_images/01a1ab1d-bcb5-71c2-952f-ddf6846f9e9f/exec-1e76d8f5-5203-4490-96c3-e8528731fb42.png",
+      "prompt": "Create ONE original fantasy RPG inventory equipment icon with TRUE transparent alpha background. Hand-painted high-end fantasy equipment illustration: crisp readable shape, textured scuffed aged metal, restrained jewel highlights, tactile matte surfaces, soft diffuse upper-left lighting, rich muted colors. Match a painted worn-bronze/dark-iron fantasy inventory set, NOT a glossy plastic 3D render. Entire object visible, center with generous transparent margins, readable at64px. One item only, no frame, no UI, no letters/numbers/labels, no character or hands, no scene, no ground shadow, no fog/haze/background glow, no scattered particles. No third-party game designs. Subject: NIGHT CROWN, a regal dark blackened-iron crown, five swept sharp points with aged silver edging, one deep red central garnet, small purple amethyst side stones, dark wine-red lining, subtle engraved runes that are ornamental rather than letters. Broad ominous crown silhouette, asymmetrical battle chips, rare and powerful. Distinct from an ordinary bright gold royal crown.",
+      "transparent_background": true,
+      "tool": "built-in image_gen",
+      "seed": null
+    },
+    {
+      "id": "world_engine",
+      "path": "/home/freeman.xiong/.codex/generated_images/01a1ab1d-bcb5-71c2-952f-ddf6846f9e9f/exec-0ea16e9c-7ffa-4527-ab72-0a7e8d98054f.png",
+      "prompt": "Create ONE original fantasy RPG inventory equipment icon with TRUE transparent alpha background. Hand-painted high-end fantasy equipment illustration: crisp readable shape, textured scuffed aged metal, restrained jewel highlights, tactile matte surfaces, soft diffuse upper-left lighting, rich muted colors. Match a painted worn-bronze/dark-iron fantasy inventory set, NOT a glossy plastic 3D render. Entire object visible, center with generous transparent margins, readable at64px. One item only, no frame, no UI, no letters/numbers/labels, no character or hands, no scene, no ground shadow, no fog/haze/background glow, no scattered particles. No third-party game designs. Subject: WORLD ENGINE, a powerful ancient brass astronomical engine: a teal-violet faceted crystal globe suspended inside three thick interlocking circular bronze gyroscope rings, small gears and two short support feet beneath, etched radial mechanical detailing, one ruby control jewel. Broad circular orbital-machine silhouette, center jewel hints at magical echoes. Restrained colored light, aged metal, not an upright pedestal crystal or a handheld lens.",
+      "transparent_background": true,
+      "tool": "built-in image_gen",
+      "seed": null
+    }
+  ]
+}

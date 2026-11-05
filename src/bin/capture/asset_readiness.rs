@@ -35,6 +35,7 @@ pub fn prepare(app: &mut App, scenario: &str) {
     let target = match scenario {
         "asset-readiness-font" => UI_FONT,
         "market-atlas-readiness" => "ui/market/equipment-atlas.png",
+        "recipe-atlas-readiness" => "ui/recipes/recipe-atlas.png",
         _ => BACKDROP,
     };
     let (root, gate) = asset_io_capture::prepare(app, &[target], false);

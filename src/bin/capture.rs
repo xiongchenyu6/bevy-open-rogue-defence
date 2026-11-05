@@ -442,6 +442,7 @@ fn main() {
             | "asset-readiness-font"
             | "controller-readiness"
             | "market-atlas-readiness"
+            | "recipe-atlas-readiness"
     ) {
         asset_readiness_capture::prepare(&mut app, scenario);
     }
@@ -486,6 +487,7 @@ fn main() {
             | "asset-readiness-font"
             | "controller-readiness"
             | "market-atlas-readiness"
+            | "recipe-atlas-readiness"
     ) {
         asset_readiness_capture::plugin(&mut app);
     }
@@ -539,6 +541,7 @@ fn main() {
             | "asset-readiness-font"
             | "controller-readiness"
             | "market-atlas-readiness"
+            | "recipe-atlas-readiness"
     ) {
         asset_readiness_capture::install(&mut apps.main);
         println!(
@@ -1002,6 +1005,7 @@ fn configure_scenario(world: &mut World, scenario: &str) {
             | "asset-readiness-font"
             | "controller-readiness"
             | "market-atlas-readiness"
+            | "recipe-atlas-readiness"
     ) {
         asset_readiness_capture::configure(world);
         return;

@@ -166,7 +166,9 @@ fn inspect(
     }
     ids.insert(art.backdrop.id().untyped());
     if let Some(market_art) = market_art {
-        ids.insert(market_art.0.id().untyped());
+        for image in &market_art.0 {
+            ids.insert(image.id().untyped());
+        }
     } else {
         gate.ready = false;
         return;

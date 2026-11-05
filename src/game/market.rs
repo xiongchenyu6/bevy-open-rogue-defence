@@ -10,7 +10,7 @@ use super::{Autoplay, GameLanguage, GameSession, HeroVitals, PlayerBuild, RunRng
 mod presentation;
 
 #[derive(Resource, Default)]
-pub(crate) struct MarketArt(pub Handle<Image>);
+pub(crate) struct MarketArt(pub [Handle<Image>; 2]);
 
 pub struct MarketPlugin;
 
@@ -1081,7 +1081,10 @@ fn setup_market(
     mut rng: ResMut<RunRng>,
 ) {
     if let Some(server) = assets.as_deref() {
-        commands.insert_resource(MarketArt(server.load("ui/market/equipment-atlas.png")));
+        commands.insert_resource(MarketArt([
+            server.load("ui/market/equipment-atlas.png"),
+            server.load("ui/recipes/recipe-atlas.png"),
+        ]));
     }
     let level = state.level;
     reroll_all(&mut state, &effects, &mut rng, level);

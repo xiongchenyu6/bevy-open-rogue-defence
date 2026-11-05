@@ -1,0 +1,9 @@
+{
+  "src/game/crafting.rs": "fb2bf0b3bddf11b04c558c83f4b5909e2ad795e393e0d526202ba541ee16a107",
+  "src/game/market.rs": "b807d5e8415e96b23c44353918d5ca4b54cfa619c1f38e8879ef13c8b9b26b11",
+  "src/game/asset_readiness.rs": "5bb416a9aa9195b2aeb28a6c41ccb4debb7178bdc0d505b529e195c93ce30605",
+  "src/bin/capture.rs": "2b2ffcbcf352e550994f97c7cee4effaccf8bebca31268548ac6b56014be8207",
+  "src/bin/capture/asset_readiness.rs": "94d9054547ac003b4b9e710e0eb81b6cab4fa5ee41d65956bf391a4732dbb6af",
+  "assets/ui/recipes/recipe-atlas.png": "37346eb5ee66513da7b055fea351b74da27e7ab20a44c9d0081b3c4858882e82",
+  "target/market-visual/debug/capture": "12d879560aa03e69c3ac49b4e7909b6d44a62d4a116ae2bf384fc9f95deb4143"
+}
