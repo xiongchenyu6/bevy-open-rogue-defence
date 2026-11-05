@@ -1,0 +1,8 @@
+{
+  "exit": 0,
+  "elapsed": 124.34966524600168,
+  "args": [
+    "tools/build_desktop_linux.sh",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/desktop-packages-overlap-nov6"
+  ]
+}
