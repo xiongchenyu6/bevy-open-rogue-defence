@@ -70,6 +70,25 @@ def crop_text(path, geometry, env, digits=False):
         return subprocess.check_output(args, env=env, text=True, stderr=subprocess.PIPE).strip()
 
 
+def tile_name_text(path, left, env):
+    """Preserve colored rarity labels using their brightest RGB channel.
+
+    Luminance grayscale dims saturated red/blue lettering. Channel maximum
+    retains the original antialiasing without guessing the equipment name or
+    selecting a color threshold. Crop excludes art, rank, borders and price.
+    """
+    with tempfile.TemporaryDirectory(prefix='rogue-tile-name-') as directory:
+        crop = Path(directory) / 'name.png'
+        subprocess.run(['convert', str(path), '-crop', tile_name_crop(left),
+                        '-channel', 'RGB', '-separate', '+channel',
+                        '-evaluate-sequence', 'Max', '-resize', '600%', '-negate',
+                        '-bordercolor', 'white', '-border', '20', str(crop)],
+                       env=env, check=True, capture_output=True)
+        return subprocess.check_output(['tesseract', str(crop), 'stdout', '-l', 'eng',
+                                        '--psm', '6'], env=env, text=True,
+                                       stderr=subprocess.PIPE).strip()
+
+
 def screenshot_wallet(path, env):
     text = crop_text(path, '95x14+1119+202', env)
     assert re.fullmatch(r'LV\d+\s+KILLS\s*\d{4,}', text), f'Unreadable market wallet: {text!r}'
@@ -193,7 +212,7 @@ class EquipmentPolicy:
         while time.monotonic() < end:
             time.sleep(.2)
             image = self.ui['shot'](prefix + f'-inspect-{index}.png')
-            tile = crop_text(image, tile_name_crop(left), self.ui['env'])
+            tile = tile_name_text(image, left, self.ui['env'])
             price = crop_text(image, f'39x23+{left+52}+384', self.ui['env'], digits=True)
             preview = crop_text(image, PREVIEW_CROP, self.ui['env'])
             try:

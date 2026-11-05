@@ -1,8 +1,9 @@
+from smoke_runtime import normalized
 import shutil
 import unittest
 from unittest.mock import patch
 from smoke_runtime import ocr_screenshot
-from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop
+from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop, tile_name_text
 from campaign_equipment_runtime import battle_seconds
 from pathlib import Path
 from campaign_equipment_runtime import (affordable_gear, market_wallet, inventory_count,
@@ -124,7 +125,22 @@ class EquipmentPolicyParsing(unittest.TestCase):
         names = ['Wind Boots', 'Arc Lens', 'Gate Patch', 'Skill Tuner', 'Ember Heart']
         for left, name in zip(TILE_LEFTS, names):
             with self.subTest(name=name):
-                self.assertEqual(crop_text(path, tile_name_crop(left), None), name)
+                self.assertEqual(tile_name_text(path, left, None), name)
+
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
+                         'Native screenshot OCR requires Tesseract and ImageMagick')
+    def test_native_red_ur_tile_contrast_without_fuzzy_matching(self):
+        path = Path(__file__).resolve().parents[2] / 'docs/verification/market-red-label-2026-11-05/red-label.png'
+        # This unchanged public screenshot previously produced "| Chaosie"
+        # under luminance grayscale. Preserve red glyph contrast, then still
+        # require the independently read exact tile/preview/price agreement.
+        self.assertEqual(tile_name_text(path, TILE_LEFTS[1], None), 'Chaos Die')
+        offer = inspected_offer(tile_name_text(path, TILE_LEFTS[1], None),
+            crop_text(path, f'39x23+{TILE_LEFTS[1]+52}+384', None, True),
+            crop_text(path, PREVIEW_CROP, None), 1)
+        self.assertEqual(normalized(offer['name']), 'chaosdie')
+        self.assertEqual(offer['category'], 'Equipment')
+        self.assertEqual(offer['price'], 450)
 
     @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
                          'Native screenshot OCR requires Tesseract and ImageMagick')
@@ -139,7 +155,7 @@ class EquipmentPolicyParsing(unittest.TestCase):
                 path=root/f'frame{frame:05}.png'
                 self.assertEqual(screenshot_wallet(path,None)[0],wallet)
                 left=TILE_LEFTS[index]
-                offer=inspected_offer(crop_text(path,tile_name_crop(left),None),
+                offer=inspected_offer(tile_name_text(path,left,None),
                     crop_text(path,f'39x23+{left+52}+384',None,True),
                     crop_text(path,PREVIEW_CROP,None),index)
                 self.assertEqual((offer['name'],offer['category'],offer['price']),(name,category,price))

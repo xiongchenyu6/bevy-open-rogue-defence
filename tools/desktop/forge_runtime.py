@@ -4,7 +4,7 @@ import hashlib,json,os,re,shutil,subprocess,threading,time
 from pathlib import Path
 from smoke_runtime import ocr_screenshot,find_text,normalized,read_hud_wallet,read_toolbar_speed
 from campaign_runtime import read_progress
-from campaign_equipment_runtime import (TILE_LEFTS, PREVIEW_CROP, tile_name_crop,
+from campaign_equipment_runtime import (TILE_LEFTS, PREVIEW_CROP, tile_name_text,
     screenshot_wallet, inspected_offer, choice_pending, crop_text, inventory_count,
     inventory_icons, inventory_open, selected_inventory_name, market_closed,
     has_gear_rows, verify_deduction, screenshot_battle_seconds)
@@ -121,7 +121,7 @@ def main():
         call(['xdotool','mousemove','--window',win,str(left+60),'365'])
         def sample():
             image=shot(prefix+'.png')
-            return (crop_text(image,tile_name_crop(left),env),
+            return (tile_name_text(image,left,env),
                     crop_text(image,f'39x23+{left+52}+384',env,True),
                     crop_text(image,PREVIEW_CROP,env))
         return poll_preview(sample,index,expected)
