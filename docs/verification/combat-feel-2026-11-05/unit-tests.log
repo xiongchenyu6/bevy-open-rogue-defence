@@ -1,0 +1,28 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `release` profile [optimized] target(s) in 2m 55s
+     Running unittests src/lib.rs (target/release/deps/rogue_commander-37d39db57aeef6a3)
+
+running 11 tests
+test game::hit_feedback::tests::heavier_kills_shake_and_freeze_harder ... ok
+test game::hit_feedback::tests::hero_is_knocked_away_from_the_nearest_attacker ... ok
+test game::hit_feedback::tests::punch_returns_exactly_to_base_scale ... ok
+test game::hit_feedback::tests::flinch_leans_back_away_from_the_blow_and_fully_recovers ... ok
+test game::hit_feedback::tests::hero_hurt_ignores_healing_and_chip_damage ... ok
+test game::hit_feedback::tests::simultaneous_critical_volley_does_not_multiply_camera_shake ... ok
+test game::hit_feedback::tests::dense_hits_complete_recovery_and_next_normal_does_not_keep_critical_strength ... ok
+test game::hit_feedback::tests::hits_punch_survivors_and_kills_leave_a_burst ... ok
+test game::hit_feedback::tests::fast_forwarded_battles_skip_hit_stop ... ok
+test game::hit_feedback::tests::hit_stop_slows_then_restores_battle_speed ... ok
+test game::hit_feedback::tests::simultaneous_punches_use_strongest_hit_in_either_order ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 643 filtered out; finished in 0.01s
+

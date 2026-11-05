@@ -313,6 +313,7 @@ fn react_to_hits(
             }
         }
     }
+    let mut frame_trauma = 0.0_f32;
     for event in feedback.events() {
         if let Some(art) = art.as_deref()
             && pools.impact_fx_metrics().active() < BURST_POOL_HEADROOM
@@ -320,18 +321,21 @@ fn react_to_hits(
             spawn_burst(&mut commands, &mut pools, art, *event);
         }
         if autoplay.is_none() {
-            shake.add(shake_trauma(*event));
+            frame_trauma = frame_trauma.max(shake_trauma(*event));
             hit_stop.requested = hit_stop.requested.max(hit_stop_seconds(*event));
         }
     }
     if autoplay.is_none() && feedback.hero_hurt() {
-        shake.add(0.32);
+        frame_trauma = frame_trauma.max(0.32);
     }
     if let Some(strength) = gate.as_deref().and_then(GateImpact::struck)
         && autoplay.is_none()
     {
-        shake.add(0.16 * strength * strength);
+        frame_trauma = frame_trauma.max(0.16 * strength * strength);
     }
+    // A volley has one readable impact, not one camera impulse per projectile.
+    // Keep the strongest hero, gate or enemy impact in this frame.
+    shake.add(frame_trauma);
 }
 
 fn punch_strength(event: HitEvent) -> f32 {
@@ -811,6 +815,29 @@ mod tests {
         let next = app.world().get::<HitPunch>(target).unwrap();
         assert_eq!(next.strength, 1.0);
         assert_eq!(next.base_scale, base);
+    }
+
+    #[test]
+    fn simultaneous_critical_volley_does_not_multiply_camera_shake() {
+        let (mut app, target) = punch_app();
+        for _ in 0..100 {
+            app.world_mut()
+                .resource_mut::<HitFeedback>()
+                .push(HitEvent {
+                    target,
+                    ..event(HitWeight::Normal, true, false)
+                });
+        }
+        app.world_mut().run_system_cached(react_to_hits).unwrap();
+        assert_eq!(app.world().resource::<ScreenShake>().trauma, 0.07);
+        app.world_mut()
+            .resource_mut::<HitFeedback>()
+            .push(HitEvent {
+                target,
+                ..event(HitWeight::Boss, false, true)
+            });
+        app.world_mut().run_system_cached(react_to_hits).unwrap();
+        assert_eq!(app.world().resource::<ScreenShake>().trauma, 1.0);
     }
 
     #[test]
