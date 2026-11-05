@@ -1,0 +1,46 @@
+{
+  "passive-storm-batch": {
+    "completed": true,
+    "checks": [
+      "PASSIVE_BATCH_CHECK frame=20 outputs=2 full_groups_and_recursion_exclusion=PASS",
+      "PASSIVE_BATCH_CHECK frame=25 outputs=2 full_groups_and_recursion_exclusion=PASS",
+      "PASSIVE_BATCH_CHECK frame=35 outputs=3 exact_remainder_idle_stability=PASS target_hp=99942.390625 unrelated_attacks_suppressed=true",
+      "PASSIVE_BATCH_CHECK frame=45 outputs=3 exact_remainder_idle_stability=PASS target_hp=99942.390625 unrelated_attacks_suppressed=true"
+    ]
+  },
+  "passive-storm-split": {
+    "completed": true,
+    "checks": [
+      "PASSIVE_BATCH_CHECK frame=20 outputs=2 full_groups_and_recursion_exclusion=PASS",
+      "PASSIVE_BATCH_CHECK frame=25 outputs=2 full_groups_and_recursion_exclusion=PASS",
+      "PASSIVE_BATCH_CHECK frame=35 outputs=3 exact_remainder_idle_stability=PASS target_hp=99961.593750 unrelated_attacks_suppressed=true",
+      "PASSIVE_BATCH_CHECK frame=45 outputs=3 exact_remainder_idle_stability=PASS target_hp=99942.390625 unrelated_attacks_suppressed=true"
+    ]
+  },
+  "passive-frost-batch": {
+    "completed": true,
+    "checks": [
+      "PASSIVE_BATCH_CHECK frame=20 outputs=2 full_groups_and_recursion_exclusion=PASS",
+      "PASSIVE_BATCH_CHECK frame=25 outputs=2 full_groups_and_recursion_exclusion=PASS",
+      "PASSIVE_BATCH_CHECK frame=35 outputs=3 exact_remainder_idle_stability=PASS target_hp=99857.218750 unrelated_attacks_suppressed=true",
+      "PASSIVE_BATCH_CHECK frame=45 outputs=3 exact_remainder_idle_stability=PASS target_hp=99857.218750 unrelated_attacks_suppressed=true"
+    ]
+  },
+  "passive-frost-split": {
+    "completed": true,
+    "checks": [
+      "PASSIVE_BATCH_CHECK frame=20 outputs=2 full_groups_and_recursion_exclusion=PASS",
+      "PASSIVE_BATCH_CHECK frame=25 outputs=2 full_groups_and_recursion_exclusion=PASS",
+      "PASSIVE_BATCH_CHECK frame=35 outputs=3 exact_remainder_idle_stability=PASS target_hp=99857.218750 unrelated_attacks_suppressed=true",
+      "PASSIVE_BATCH_CHECK frame=45 outputs=3 exact_remainder_idle_stability=PASS target_hp=99857.218750 unrelated_attacks_suppressed=true"
+    ]
+  },
+  "ur28-surge": {
+    "completed": true,
+    "checks": [
+      "[capture] PASS UR 28 Surge: real 3-way selection exclusive; actions=5 damage=true pull=false summons_max=0 wood=60 core=500 pause frozen"
+    ]
+  },
+  "storm_final_hp_parity": "99942.390625",
+  "frost_final_hp_parity": "99857.218750"
+}

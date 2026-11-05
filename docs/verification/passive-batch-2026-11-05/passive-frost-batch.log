@@ -1,0 +1,45 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {9, 10, 11, 12, 13, 14, 20, 25, 26, 27, 35, 45}; all 50 simulation/render updates retained
+[2m2026-11-05T08:50:20.708098Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-05T08:50:20.799749Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-05T08:50:21.551640Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-05T08:50:21.551837Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-05T08:50:22.277696Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+PASSIVE_BATCH_FIXTURE scenario=passive-frost-batch step_hz=10 speed=1 synthetic_spell_inputs=true production_observer_and_pools=true
+PASSIVE_BATCH_OUTPUT frame=10 kind=FrostOracle entity=2852v0 damage=47.594803 element=Frost cumulative=1
+PASSIVE_BATCH_OUTPUT frame=10 kind=FrostOracle entity=2854v0 damage=47.594803 element=Frost cumulative=2
+[2m2026-11-05T08:50:26.471691Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00009.png
+[capture] saved 1/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00009.png (929352 bytes)
+[2m2026-11-05T08:50:26.967631Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00010.png
+[capture] saved 2/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00010.png (932045 bytes)
+[2m2026-11-05T08:50:27.432010Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00011.png
+[capture] saved 3/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00011.png (934447 bytes)
+[2m2026-11-05T08:50:27.885563Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00012.png
+[capture] saved 4/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00012.png (933837 bytes)
+[2m2026-11-05T08:50:28.339700Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00013.png
+[capture] saved 5/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00013.png (930003 bytes)
+[2m2026-11-05T08:50:28.798867Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00014.png
+[capture] saved 6/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00014.png (930060 bytes)
+PASSIVE_BATCH_CHECK frame=20 outputs=2 full_groups_and_recursion_exclusion=PASS
+[2m2026-11-05T08:50:29.419135Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00020.png
+[capture] saved 7/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00020.png (929219 bytes)
+PASSIVE_BATCH_CHECK frame=25 outputs=2 full_groups_and_recursion_exclusion=PASS
+PASSIVE_BATCH_OUTPUT frame=26 kind=FrostOracle entity=2854v0 damage=47.594803 element=Frost cumulative=3
+[2m2026-11-05T08:50:30.031002Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00025.png
+[capture] saved 8/10 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00025.png (929217 bytes)
+[2m2026-11-05T08:50:30.497316Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00026.png
+[capture] saved 9/10 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00026.png (931948 bytes)
+[2m2026-11-05T08:50:30.957227Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00027.png
+[capture] saved 10/10 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00027.png (934419 bytes)
+PASSIVE_BATCH_CHECK frame=35 outputs=3 exact_remainder_idle_stability=PASS target_hp=99857.218750 unrelated_attacks_suppressed=true
+[2m2026-11-05T08:50:31.625896Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00035.png
+[capture] saved 11/11 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00035.png (929392 bytes)
+PASSIVE_BATCH_CHECK frame=45 outputs=3 exact_remainder_idle_stability=PASS target_hp=99857.218750 unrelated_attacks_suppressed=true
+[2m2026-11-05T08:50:32.360554Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00045.png
+[capture] saved 12/12 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch/frame00045.png (929264 bytes)
+[capture] all 12 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 50 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/passive-batch-2026-11-05/native/passive-frost-batch

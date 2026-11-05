@@ -1,0 +1,8 @@
+{
+  "src/game/hero_abilities.rs": "c381ecf24aa61ac00995b948fbf8801025e68da7806a9b2c6b64af322702fdab",
+  "src/game/hero_abilities/capture.rs": "bd11f63437e83476fcc928b3a7194a453af5a12f3d9304d89c90cebc0f0bac74",
+  "src/game/skills/ur_evolutions.rs": "a59617dd0a862caee9fc93d5be777d44c84bcaa8379b637ccf7b8010ef2d84fc",
+  "src/game/mod.rs": "fa71cfc46d7a4efe656ecdf5217c18b12cfe1fde9765f78bfe078f3a1b74bff2",
+  "src/bin/capture.rs": "17e4d7befb95473dfc603f006b3886e1617c4a3195eec6fabc666321f37dc55a",
+  "target/market-visual/debug/capture": "c0049589017ace57880971dd50ee34215b1ac5900a1a0fd0f0de28ab4c25b318"
+}

@@ -147,14 +147,16 @@ fn activate(
                 pools.retire_summon(&mut commands, entity);
             }
         }
+        let mut attack_echoes = 0;
         if index == 28 && branch == UrEvolutionPath::Surge {
-            clock.attack_progress = clock
-                .attack_progress
-                .saturating_add(attack_delta.min(4) as u8);
-            if clock.attack_progress < 4 {
+            // Count every fourth-attack group without narrowing a batched
+            // counter delta or overflowing when carrying the remainder.
+            let remainder = attack_delta % 4 + u64::from(clock.attack_progress);
+            attack_echoes = attack_delta / 4 + remainder / 4;
+            clock.attack_progress = (remainder % 4) as u8;
+            if attack_echoes == 0 {
                 continue;
             }
-            clock.attack_progress -= 4;
         } else if !ready(&mut clock.remaining[index - 26], delta, period) {
             continue;
         }
@@ -281,17 +283,19 @@ fn activate(
                 }
             }
             (28, UrEvolutionPath::Surge) => {
-                emit(hero.translation, primary.position);
-                schedule_typed_strike(
-                    &mut commands,
-                    primary.entity,
-                    build.attack_damage * 0.7,
-                    0.0,
-                    0.5,
-                    false,
-                    1.2,
-                    DamageProfile::new(DamageElement::Physical, DamageClass::Attack),
-                );
+                for _ in 0..attack_echoes {
+                    emit(hero.translation, primary.position);
+                    schedule_typed_strike(
+                        &mut commands,
+                        primary.entity,
+                        build.attack_damage * 0.7,
+                        0.0,
+                        0.5,
+                        false,
+                        1.2,
+                        DamageProfile::new(DamageElement::Physical, DamageClass::Attack),
+                    );
+                }
             }
             (28, UrEvolutionPath::Control) => {
                 for (n, target) in targets.iter().take(4).enumerate() {
@@ -551,6 +555,67 @@ mod tests {
                 .iter(app.world())
                 .count(),
             1
+        );
+    }
+    #[test]
+    fn martial_wheel_preserves_eight_attacks_split_or_batched_in_update() {
+        fn observe(totals: &[u64]) -> (usize, usize) {
+            let (mut app, enemy) = test_app(28, UrEvolutionPath::Surge);
+            app.world_mut().resource_mut::<PlayerBuild>().attack_damage = 100.0;
+            // Exercise the production Update producer with its real counter
+            // input. This is not an auto_attack or damage-resolution fixture.
+            app.add_systems(Update, activate);
+            let mut cues = Vec::new();
+            for &total in totals {
+                app.world_mut().resource_mut::<BasicAttackCounter>().0 = total;
+                app.update();
+                cues.extend(
+                    app.world_mut()
+                        .resource_mut::<Messages<UrBranchCue>>()
+                        .drain(),
+                );
+            }
+            let before_idle = app
+                .world_mut()
+                .query::<&SkillStrike>()
+                .iter(app.world())
+                .count();
+            app.update();
+            assert_eq!(
+                app.world_mut()
+                    .query::<&SkillStrike>()
+                    .iter(app.world())
+                    .count(),
+                before_idle,
+                "unchanged attack counter must not generate another echo",
+            );
+            assert_eq!(app.world().resource::<Messages<UrBranchCue>>().len(), 0);
+            for strike in app.world_mut().query::<&SkillStrike>().iter(app.world()) {
+                assert_eq!(strike.target, enemy);
+                assert_eq!(strike.damage, 70.0);
+                assert_eq!(strike.delay, 0.0);
+                assert_eq!(strike.radius, 0.5);
+                assert!(!strike.area);
+                assert_eq!(strike.profile, DamageProfile::PHYSICAL_ATTACK);
+            }
+            for cue in &cues {
+                assert_eq!(cue.skill, 28);
+                assert_eq!(cue.path, UrEvolutionPath::Surge);
+                assert_eq!(cue.origin, Vec3::ZERO);
+                assert_eq!(cue.target, Vec3::new(3.0, 0.0, 0.0));
+            }
+            (before_idle, cues.len())
+        }
+        let split = observe(&[4, 8]);
+        let batched = observe(&[8]);
+        assert_eq!(
+            split,
+            (2, 2),
+            "four plus four attacks must produce two real echoes/cues"
+        );
+        assert_eq!(
+            batched, split,
+            "batching eight actual counter increments must preserve both echoes/cues"
         );
     }
     fn summon_entity(app: &mut App, index: usize) -> Entity {

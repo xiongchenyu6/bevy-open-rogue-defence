@@ -1,0 +1,51 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `release` profile [optimized] target(s) in 3m 37s
+     Running unittests src/lib.rs (target/release/deps/rogue_commander-37d39db57aeef6a3)
+
+running 3 tests
+
+thread 'game::hero_abilities::tests::spell_signal_frost_batch_parity_at_60hz_and_10hz' (765938) panicked at src/game/hero_abilities.rs:1963:9:
+assertion `left == right` failed: batching the same spell events must preserve Frost outputs
+  left: 1
+ right: 2
+stack backtrace:
+test game::hero_abilities::tests::spell_signal_generated_outputs_do_not_recursively_count ... ok
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<usize, usize>
+   4: <rogue_commander::game::hero_abilities::tests::spell_signal_frost_batch_parity_at_60hz_and_10hz::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+thread 'game::hero_abilities::tests::spell_signal_storm_batch_parity_at_60hz_and_10hz' (765940) panicked at src/game/hero_abilities.rs:1955:9:
+assertion `left == right` failed: batching the same spell events must preserve Storm outputs
+  left: 1
+ right: 2
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<usize, usize>
+   4: <rogue_commander::game::hero_abilities::tests::spell_signal_storm_batch_parity_at_60hz_and_10hz::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+test game::hero_abilities::tests::spell_signal_frost_batch_parity_at_60hz_and_10hz ... note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+FAILED
+test game::hero_abilities::tests::spell_signal_storm_batch_parity_at_60hz_and_10hz ... FAILED
+
+failures:
+
+failures:
+    game::hero_abilities::tests::spell_signal_frost_batch_parity_at_60hz_and_10hz
+    game::hero_abilities::tests::spell_signal_storm_batch_parity_at_60hz_and_10hz
+
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 655 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--lib`

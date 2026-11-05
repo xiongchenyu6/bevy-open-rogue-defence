@@ -14,6 +14,8 @@ use super::{
     HeroVitals, ImpactFx, MoveIntent, PlayerBuild, PlayerSummon, Projectile, SelectedHero,
 };
 
+#[cfg(any(debug_assertions, feature = "dev-tools"))]
+pub mod capture;
 #[path = "hero_abilities/ultimates.rs"]
 mod ultimates;
 #[cfg(test)]
@@ -138,8 +140,8 @@ struct HeroAbilityRuntime {
     ultimate_gap: f32,
     ultimate_cursor: usize,
     sequence: Option<UltimateSequence>,
-    storm_spell_signals: u8,
-    frost_spell_signals: u8,
+    storm_spell_signals: u64,
+    frost_spell_signals: u64,
     void_attack_signals: u8,
     ember_stacks: u8,
     ember_decay_timer: f32,
@@ -456,7 +458,7 @@ fn observe_projectile_passives(
     if !vitals.can_act() {
         return;
     }
-    let mut spell_signals = 0_u8;
+    let mut spell_signals = 0_u64;
     for (_, profile) in &projectiles {
         if is_storm_spell_signal(profile) {
             spell_signals = spell_signals.saturating_add(1);
@@ -466,18 +468,18 @@ fn observe_projectile_passives(
         return;
     }
 
+    // Consume complete groups before target checks: a missing target must not
+    // bank a later burst. Only the genuine sub-threshold remainder persists.
     for kind in runtime.kinds(selected.kind) {
         match kind {
             HeroKind::StormSavant => {
-                if spell_signals == 0 {
-                    continue;
-                }
                 runtime.storm_spell_signals =
                     runtime.storm_spell_signals.saturating_add(spell_signals);
-                if runtime.storm_spell_signals < 6 {
+                let due = runtime.storm_spell_signals / 6;
+                runtime.storm_spell_signals %= 6;
+                if due == 0 {
                     continue;
                 }
-                runtime.storm_spell_signals -= 6;
                 let (Some(assets), Ok(hero), Some(target)) = (
                     assets.as_deref(),
                     hero.single(),
@@ -485,49 +487,54 @@ fn observe_projectile_passives(
                 ) else {
                     continue;
                 };
-                spawn_projectile_fan(
-                    &mut commands,
-                    &mut pools,
-                    assets,
-                    HeroKind::StormSavant,
-                    hero.translation,
-                    target,
-                    1,
-                    build.attack_damage * 0.4,
-                    &build,
-                );
-                spawn_ability_fx(
-                    &mut commands,
-                    &mut pools,
-                    assets,
-                    HeroKind::StormSavant,
-                    target,
-                    1.4,
-                    0.26,
-                );
+                for _ in 0..due {
+                    spawn_projectile_fan(
+                        &mut commands,
+                        &mut pools,
+                        assets,
+                        HeroKind::StormSavant,
+                        hero.translation,
+                        target,
+                        1,
+                        build.attack_damage * 0.4,
+                        &build,
+                    );
+                    spawn_ability_fx(
+                        &mut commands,
+                        &mut pools,
+                        assets,
+                        HeroKind::StormSavant,
+                        target,
+                        1.4,
+                        0.26,
+                    );
+                }
             }
             HeroKind::FrostOracle => {
                 runtime.frost_spell_signals =
                     runtime.frost_spell_signals.saturating_add(spell_signals);
-                if runtime.frost_spell_signals < 5 {
+                let due = runtime.frost_spell_signals / 5;
+                runtime.frost_spell_signals %= 5;
+                if due == 0 {
                     continue;
                 }
-                runtime.frost_spell_signals -= 5;
                 let (Some(assets), Some(target)) = (
                     assets.as_deref(),
                     preferred_target(hero.single().ok(), &enemies),
                 ) else {
                     continue;
                 };
-                spawn_damage_zone(
-                    &mut commands,
-                    &mut pools,
-                    assets,
-                    HeroKind::FrostOracle,
-                    target,
-                    build.attack_damage * 0.55,
-                    2.4,
-                );
+                for _ in 0..due {
+                    spawn_damage_zone(
+                        &mut commands,
+                        &mut pools,
+                        assets,
+                        HeroKind::FrostOracle,
+                        target,
+                        build.attack_damage * 0.55,
+                        2.4,
+                    );
+                }
             }
             _ => {}
         }
@@ -1877,6 +1884,160 @@ mod tests {
         assert!(is_storm_spell_signal(Some(&spell)));
         assert!(!is_storm_spell_signal(Some(&attack)));
         assert!(!is_storm_spell_signal(None));
+    }
+
+    fn spell_signal_test_app(kind: HeroKind, step: std::time::Duration) -> App {
+        let mut app = App::new();
+        app.add_plugins(MinimalPlugins)
+            .insert_resource(bevy::time::TimeUpdateStrategy::ManualDuration(step))
+            .init_resource::<HeroAbilityRuntime>()
+            .insert_resource(HeroVitals::for_hero(kind, 1))
+            .init_resource::<PlayerBuild>()
+            .init_resource::<CombatPools>()
+            .insert_resource(SelectedHero { kind, locked: true })
+            .insert_resource(test_game_assets())
+            .add_systems(PostUpdate, observe_projectile_passives);
+        app.world_mut().spawn((Hero, Transform::default()));
+        app.world_mut().spawn((
+            Enemy {
+                hp: 1000.0,
+                max_hp: 1000.0,
+                speed: 0.0,
+                damage: 0.0,
+                xp: 0,
+                wood: 0,
+                gold: 0,
+                kill_credit: 0,
+                elite: false,
+            },
+            Transform::from_xyz(1.0, 0.0, 0.0),
+        ));
+        app
+    }
+
+    fn add_spell_signals(app: &mut App, count: usize) {
+        for _ in 0..count {
+            app.world_mut().spawn((
+                Projectile {
+                    velocity: Vec3::ZERO,
+                    damage: 1.0,
+                    radius: 0.1,
+                    remaining_hits: 0,
+                    lifetime: 1.0,
+                },
+                DamageProfile::new(DamageElement::Arcane, DamageClass::Spell),
+                Transform::default(),
+            ));
+        }
+    }
+
+    fn generated_spell_outputs(app: &mut App) -> usize {
+        app.world_mut()
+            .query_filtered::<&Projectile, With<AbilityGenerated>>()
+            .iter(app.world())
+            .count()
+    }
+
+    fn spell_outputs_for_frame_batches(kind: HeroKind, batches: &[usize], hz: u32) -> usize {
+        let mut app = spell_signal_test_app(
+            kind,
+            std::time::Duration::from_secs_f64(1.0 / f64::from(hz)),
+        );
+        // TimePlugin's first update initializes its clock. Start both measured
+        // sequences after that empty update, with no input or passive output.
+        app.update();
+        for &count in batches {
+            add_spell_signals(&mut app, count);
+            app.update();
+        }
+        // No collision/expiry system runs: these are cumulative actual outputs
+        // of the production passive and production CombatPools spawn helpers.
+        generated_spell_outputs(&mut app)
+    }
+
+    #[test]
+    fn spell_signal_storm_batch_parity_at_60hz_and_10hz() {
+        // Same twelve spell events within 100ms: two six-event groups at 60Hz,
+        // or all twelve observed in one 10Hz frame.
+        let split = spell_outputs_for_frame_batches(HeroKind::StormSavant, &[6, 0, 6, 0, 0, 0], 60);
+        let batch = spell_outputs_for_frame_batches(HeroKind::StormSavant, &[12], 10);
+        assert_eq!(split, 2, "control must emit actual passive projectiles");
+        assert_eq!(
+            batch, split,
+            "batching the same spell events must preserve Storm outputs"
+        );
+    }
+
+    #[test]
+    fn spell_signal_frost_batch_parity_at_60hz_and_10hz() {
+        let split = spell_outputs_for_frame_batches(HeroKind::FrostOracle, &[5, 0, 5, 0, 0, 0], 60);
+        let batch = spell_outputs_for_frame_batches(HeroKind::FrostOracle, &[10], 10);
+        assert_eq!(split, 2, "control must emit actual passive damage zones");
+        assert_eq!(
+            batch, split,
+            "batching the same spell events must preserve Frost outputs"
+        );
+    }
+
+    #[test]
+    fn spell_signal_storm_large_batch_does_not_truncate_at_u8() {
+        // One second, same 300 external spell events. Only the input signal
+        // entities are synthetic; all fifty outputs use the production pool.
+        let mut split_batches = vec![6; 50];
+        split_batches.resize(60, 0);
+        let mut batch_frames = vec![0; 10];
+        batch_frames[0] = 300;
+        let split = spell_outputs_for_frame_batches(HeroKind::StormSavant, &split_batches, 60);
+        let batch = spell_outputs_for_frame_batches(HeroKind::StormSavant, &batch_frames, 10);
+        assert_eq!(split, 50, "split control must emit all real Storm outputs");
+        assert_eq!(
+            batch, split,
+            "more than 255 same-frame spells cannot truncate Storm outputs"
+        );
+    }
+
+    #[test]
+    fn spell_signal_frost_large_batch_does_not_truncate_at_u8() {
+        let split_batches = vec![5; 60];
+        let mut batch_frames = vec![0; 10];
+        batch_frames[0] = 300;
+        let split = spell_outputs_for_frame_batches(HeroKind::FrostOracle, &split_batches, 60);
+        let batch = spell_outputs_for_frame_batches(HeroKind::FrostOracle, &batch_frames, 10);
+        assert_eq!(split, 60, "split control must emit all real Frost zones");
+        assert_eq!(
+            batch, split,
+            "more than 255 same-frame spells cannot truncate Frost outputs"
+        );
+    }
+
+    #[test]
+    fn spell_signal_generated_outputs_do_not_recursively_count() {
+        for (kind, threshold) in [(HeroKind::StormSavant, 6), (HeroKind::FrostOracle, 5)] {
+            let mut app = spell_signal_test_app(kind, std::time::Duration::from_millis(100));
+            add_spell_signals(&mut app, threshold);
+            app.update();
+            assert_eq!(generated_spell_outputs(&mut app), 1);
+            // The genuine generated spell is newly Added on this update, but
+            // must not complete the next group of external spell signals.
+            add_spell_signals(&mut app, threshold - 1);
+            app.update();
+            assert_eq!(
+                generated_spell_outputs(&mut app),
+                1,
+                "generated {kind:?} output cannot fund itself"
+            );
+            add_spell_signals(&mut app, 1);
+            app.update();
+            assert_eq!(generated_spell_outputs(&mut app), 2);
+            for _ in 0..12 {
+                app.update();
+            }
+            assert_eq!(
+                generated_spell_outputs(&mut app),
+                2,
+                "idle frames cannot recursively emit {kind:?} passives"
+            );
+        }
     }
 
     #[test]

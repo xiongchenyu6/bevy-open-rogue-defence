@@ -646,6 +646,10 @@ fn main() {
     if matches!(scenario, "hit-feedback" | "hit-feedback-8x") {
         hit_feedback_capture::install(&mut apps.main, scenario);
     }
+    #[cfg(any(debug_assertions, feature = "dev-tools"))]
+    if scenario.starts_with("passive-storm-") || scenario.starts_with("passive-frost-") {
+        rogue_commander::game::passive_batch_capture::install(&mut apps.main, scenario);
+    }
     if scenario == "market-art" {
         market_art_capture::install(&mut apps.main);
     }
@@ -1116,6 +1120,12 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     #[cfg(any(debug_assertions, feature = "dev-tools"))]
     if matches!(scenario, "hit-feedback" | "hit-feedback-8x") {
         hit_feedback_capture::configure(world);
+        return;
+    }
+    #[cfg(any(debug_assertions, feature = "dev-tools"))]
+    if scenario.starts_with("passive-storm-") || scenario.starts_with("passive-frost-") {
+        rogue_commander::game::passive_batch_capture::configure(world, scenario);
+        world.resource_mut::<CaptureControls>().suppress_drafts = true;
         return;
     }
     if scenario == "market-art" {

@@ -105,6 +105,8 @@ pub use components::*;
 pub use crafting::{CraftingState, RecipeId, craft_recipe};
 pub use encounters::{EncounterId, EncounterState};
 pub use hero_abilities::BasicAttackCounter;
+#[cfg(any(debug_assertions, feature = "dev-tools"))]
+pub use hero_abilities::capture as passive_batch_capture;
 pub use hero_fusion::HeroFusion;
 pub use hero_stats::HeroStatsSnapshot;
 pub use localization::{GameLanguage, LocalizationPlugin};
