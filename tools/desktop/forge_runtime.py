@@ -12,6 +12,28 @@ from campaign_equipment_runtime import (TILE_LEFTS, PREVIEW_CROP, tile_name_text
 MATERIALS = frozenset(('Arc Lens', 'Echo Core'))
 
 
+def visible_timer(shot, read_timer, read_rows, choose, deadline, now=time.monotonic):
+    """Handle a late automatic choice using the same public screenshot.
+
+    A missing timer alone never authorizes input. Only a positively recognized
+    choice heading permits one ordinal; other unreadable HUDs fail unchanged.
+    """
+    while now() < deadline:
+        image = shot()
+        try:
+            value = read_timer(image)
+        except AssertionError:
+            rows = read_rows(image)
+            if not choice_pending(rows):
+                raise
+            assert now() < deadline, 'Choice timer deadline exhausted before input'
+            choose('1')
+        else:
+            assert now() < deadline, 'Timer read exceeded deadline'
+            return value
+    raise AssertionError('Recognized choices did not expose a timer within90seconds')
+
+
 def material_name(name):
     return next((canonical for canonical in MATERIALS if normalized(name) == normalized(canonical)), None)
 
@@ -95,7 +117,16 @@ def main():
             time.sleep(.3)
         raise RuntimeError('Missing UI: '+text)
     def timer_seconds():
-        value=screenshot_battle_seconds(shot('resume-timer-source.png'),env)
+        def choice_rows(image):
+            rows=ocr_screenshot(image,env)
+            if choice_pending(rows):
+                evidence=OUT/f'resume-choice-{len(report.get("resume_clock_choices",[]))}.png'
+                shutil.copy2(image,evidence)
+                report.setdefault('resume_clock_choices',[]).append(dict(screenshot=evidence.name,rows=rows))
+            return rows
+        value=visible_timer(lambda:shot('resume-timer-source.png'),
+            lambda image:screenshot_battle_seconds(image,env),choice_rows,key,
+            time.monotonic()+90)
         report.setdefault('resume_timer_reads',[]).append(value)
         return value
     def click(x,y):
@@ -289,7 +320,7 @@ def main():
             stop.clear();worker=threading.Thread(target=operate,daemon=True);worker.start();time.sleep(12)
         assert report.get('inventory_verified'), 'No genuine recipe completed within finite public stock route'
         assert report['purchases'],'No naturally affordable equipment found within120 public market requests'
-        drain_choices();before=timer_seconds();time.sleep(2);drain_choices();after=timer_seconds()
+        before=timer_seconds();time.sleep(2);after=timer_seconds()
         report['resume_countdown_before']=before;report['resume_countdown_after']=after
         assert after<before,'Actual battlefield countdown did not resume'
         print('stage: acquired equipment, inspected inventory/recipes, actual countdown resumed',flush=True)

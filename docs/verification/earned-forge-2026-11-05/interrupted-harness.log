@@ -1,0 +1,54 @@
+stage: battle started; resetting actual toolbar to1x
+stage: earn kills and wait for real3min unlock
+stage: real unlock countdown 1474
+stage: real unlock countdown 1471
+stage: real unlock countdown 1468
+stage: real unlock countdown 1464
+stage: real unlock countdown 1459
+stage: real unlock countdown 1455
+stage: real unlock countdown 1450
+stage: real unlock countdown 1445
+stage: real unlock countdown 1441
+stage: real unlock countdown 1436
+stage: real unlock countdown 1433
+stage: real unlock countdown 1428
+stage: real unlock countdown 1424
+stage: real unlock countdown 1408
+stage: real unlock countdown 1403
+stage: real unlock countdown 1399
+stage: real unlock countdown 1394
+stage: real unlock countdown 1391
+stage: real unlock countdown 1387
+stage: real unlock countdown 1382
+stage: real unlock countdown 1378
+stage: real unlock countdown 1374
+stage: real unlock countdown 1369
+stage: real unlock countdown 1365
+stage: real unlock countdown 1360
+stage: real unlock countdown 1356
+stage: real unlock countdown 1351
+stage: real unlock countdown 1348
+stage: real unlock countdown 1343
+stage: real unlock countdown 1339
+stage: real unlock countdown 1334
+stage: real unlock countdown 1330
+stage: real unlock countdown 1325
+stage: real unlock countdown 1321
+stage: real unlock countdown 1316
+Traceback (most recent call last):
+  File "/harness/forge_runtime.py", line 311, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/harness/forge_runtime.py", line 292, in main
+    drain_choices();before=timer_seconds();time.sleep(2);drain_choices();after=timer_seconds()
+                           ^^^^^^^^^^^^^^^
+  File "/harness/forge_runtime.py", line 98, in timer_seconds
+    value=screenshot_battle_seconds(shot('resume-timer-source.png'),env)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/campaign_equipment_runtime.py", line 38, in screenshot_battle_seconds
+    return battle_seconds(crop_text(path, '100x28+1170+20', env))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/campaign_equipment_runtime.py", line 33, in battle_seconds
+    assert match and int(match[2]) < 60, f'Unreadable battle countdown: {text!r}'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Unreadable battle countdown: ''

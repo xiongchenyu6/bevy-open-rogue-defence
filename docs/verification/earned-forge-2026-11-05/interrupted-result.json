@@ -1,0 +1,1252 @@
+{
+  "package_version": {
+    "binary_sha256": "6b62507ef03cb963b753c55c0a06fa1dbb945658a07cc990c577f42783536bff",
+    "git_commit": "37fe665d4db0f171edbf5236ecbb733872398633",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "initial_progress": {
+    "unlocked": 5,
+    "currency": 575,
+    "cleared": "111100",
+    "upgrades": [
+      5,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "scope": "Packaged public X11 UI, earned kills, random market stock",
+  "purchases": [
+    {
+      "name": "Arc Lens",
+      "price": 180,
+      "wallet_before": 333,
+      "wallet_after": 153,
+      "offer_ocr": {
+        "name": "Arc Lens",
+        "price": 180,
+        "category": "Equipment",
+        "index": 1,
+        "tile_ocr": "Arc Lens",
+        "price_ocr": "180",
+        "preview_ocr": "ArcLens + Equipment",
+        "observed_name": "ArcLens"
+      }
+    },
+    {
+      "name": "Echo Core",
+      "price": 300,
+      "wallet_before": 910,
+      "wallet_after": 610,
+      "offer_ocr": {
+        "name": "Echo Core",
+        "price": 300,
+        "category": "Equipment",
+        "index": 0,
+        "tile_ocr": "Echo Core",
+        "price_ocr": "300",
+        "preview_ocr": "Echo Core + Equipment",
+        "observed_name": "Echo Core"
+      }
+    }
+  ],
+  "crafting": "Astral Prism crafted from two same-run naturally purchased materials",
+  "acquired_materials": [
+    "Arc Lens",
+    "Echo Core"
+  ],
+  "speed_ocr_values": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "actual_speed": 1,
+  "unlock_timer_reads": [
+    1474,
+    1471,
+    1468,
+    1464,
+    1459,
+    1455,
+    1450,
+    1445,
+    1441,
+    1436,
+    1433,
+    1428,
+    1424,
+    1408,
+    1403,
+    1399,
+    1394,
+    1391,
+    1387,
+    1382,
+    1378,
+    1374,
+    1369,
+    1365,
+    1360,
+    1356,
+    1351,
+    1348,
+    1343,
+    1339,
+    1334,
+    1330,
+    1325,
+    1321,
+    1316
+  ],
+  "clock_progress": [
+    {
+      "stage": "unlock",
+      "remaining": 1474,
+      "stall_seconds": 0.0,
+      "wall": 189592.742902189
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1471,
+      "stall_seconds": 0.0,
+      "wall": 189597.291311944
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1468,
+      "stall_seconds": 0.0,
+      "wall": 189601.805035617
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1464,
+      "stall_seconds": 0.0,
+      "wall": 189606.40731805
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1459,
+      "stall_seconds": 0.0,
+      "wall": 189610.987130663
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1455,
+      "stall_seconds": 0.0,
+      "wall": 189615.535909116
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1450,
+      "stall_seconds": 0.0,
+      "wall": 189620.155239292
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1445,
+      "stall_seconds": 0.0,
+      "wall": 189624.779627102
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1441,
+      "stall_seconds": 0.0,
+      "wall": 189629.344714025
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1436,
+      "stall_seconds": 0.0,
+      "wall": 189634.007227299
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1433,
+      "stall_seconds": 0.0,
+      "wall": 189638.551289249
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1428,
+      "stall_seconds": 0.0,
+      "wall": 189643.095889551
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1424,
+      "stall_seconds": 0.0,
+      "wall": 189647.631395627
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1408,
+      "stall_seconds": 0.0,
+      "wall": 189663.520695541
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1403,
+      "stall_seconds": 0.0,
+      "wall": 189668.036220213
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1399,
+      "stall_seconds": 0.0,
+      "wall": 189672.67896393
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1394,
+      "stall_seconds": 0.0,
+      "wall": 189677.158715475
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1391,
+      "stall_seconds": 0.0,
+      "wall": 189681.645297551
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1387,
+      "stall_seconds": 0.0,
+      "wall": 189686.152950095
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1382,
+      "stall_seconds": 0.0,
+      "wall": 189690.66286248
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1378,
+      "stall_seconds": 0.0,
+      "wall": 189695.172741993
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1374,
+      "stall_seconds": 0.0,
+      "wall": 189699.698533562
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1369,
+      "stall_seconds": 0.0,
+      "wall": 189704.21531997
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1365,
+      "stall_seconds": 0.0,
+      "wall": 189708.75766638
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1360,
+      "stall_seconds": 0.0,
+      "wall": 189713.290519083
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1356,
+      "stall_seconds": 0.0,
+      "wall": 189717.80235508
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1351,
+      "stall_seconds": 0.0,
+      "wall": 189722.429720175
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1348,
+      "stall_seconds": 0.0,
+      "wall": 189727.070979859
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1343,
+      "stall_seconds": 0.0,
+      "wall": 189731.587282498
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1339,
+      "stall_seconds": 0.0,
+      "wall": 189736.385022691
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1334,
+      "stall_seconds": 0.0,
+      "wall": 189740.883560514
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1330,
+      "stall_seconds": 0.0,
+      "wall": 189745.401763793
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1325,
+      "stall_seconds": 0.0,
+      "wall": 189749.959473813
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1321,
+      "stall_seconds": 0.0,
+      "wall": 189754.4748005
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1316,
+      "stall_seconds": 0.0,
+      "wall": 189758.949377397
+    }
+  ],
+  "unreadable_unlock_clock": [
+    "Unreadable battle countdown: 'oe'"
+  ],
+  "wallet_ocr": [
+    "LV1 KILLS 0090",
+    "LV1 KILLS 0122",
+    "LV1 KILLS 0149",
+    "LV1 KILLS 0170",
+    "LV2 KILLS 0333",
+    "LV2 KILLS 0333",
+    "LV2 KILLS 0153",
+    "LV2 KILLS 0226",
+    "LV2 KILLS 0258",
+    "LV2 KILLS 0305",
+    "LV2 KILLS 0365",
+    "LV2 KILLS 0445",
+    "LV2 KILLS 0487",
+    "LV2 KILLS 0537",
+    "LV2 KILLS 0601",
+    "LV3 KILLS 0828",
+    "LV3 KILLS 0910",
+    "LV3 KILLS 0910",
+    "LV3 KILLS 0610"
+  ],
+  "market_inspections": [
+    {
+      "attempt": 0,
+      "wallet": 90,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 1,
+      "wallet": 122,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 2,
+      "wallet": 149,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 3,
+      "wallet": 170,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 4,
+      "wallet": 333,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 5,
+      "wallet": 226,
+      "offers": [
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        },
+        {
+          "name": "Storm Coil",
+          "price": 280,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Storm Coil",
+          "price_ocr": "280",
+          "preview_ocr": "Storm Coil + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Slow Hourglass",
+          "price": 200,
+          "category": "Consumable",
+          "index": 4,
+          "tile_ocr": "Slow Hourglass",
+          "price_ocr": "200",
+          "preview_ocr": "Slow Hourglass + Consumable"
+        }
+      ]
+    },
+    {
+      "attempt": 6,
+      "wallet": 258,
+      "offers": [
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        },
+        {
+          "name": "Storm Coil",
+          "price": 280,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Storm Coil",
+          "price_ocr": "280",
+          "preview_ocr": "Storm Coil + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Slow Hourglass",
+          "price": 200,
+          "category": "Consumable",
+          "index": 4,
+          "tile_ocr": "Slow Hourglass",
+          "price_ocr": "200",
+          "preview_ocr": "Slow Hourglass + Consumable"
+        }
+      ]
+    },
+    {
+      "attempt": 7,
+      "wallet": 305,
+      "offers": [
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        },
+        {
+          "name": "Storm Coil",
+          "price": 280,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Storm Coil",
+          "price_ocr": "280",
+          "preview_ocr": "Storm Coil + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Slow Hourglass",
+          "price": 200,
+          "category": "Consumable",
+          "index": 4,
+          "tile_ocr": "Slow Hourglass",
+          "price_ocr": "200",
+          "preview_ocr": "Slow Hourglass + Consumable"
+        }
+      ]
+    },
+    {
+      "attempt": 8,
+      "wallet": 365,
+      "offers": [
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        },
+        {
+          "name": "Storm Coil",
+          "price": 280,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Storm Coil",
+          "price_ocr": "280",
+          "preview_ocr": "Storm Coil + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Slow Hourglass",
+          "price": 200,
+          "category": "Consumable",
+          "index": 4,
+          "tile_ocr": "Slow Hourglass",
+          "price_ocr": "200",
+          "preview_ocr": "Slow Hourglass + Consumable"
+        }
+      ]
+    },
+    {
+      "attempt": 9,
+      "wallet": 445,
+      "offers": [
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        },
+        {
+          "name": "Storm Coil",
+          "price": 280,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Storm Coil",
+          "price_ocr": "280",
+          "preview_ocr": "Storm Coil + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Slow Hourglass",
+          "price": 200,
+          "category": "Consumable",
+          "index": 4,
+          "tile_ocr": "Slow Hourglass",
+          "price_ocr": "200",
+          "preview_ocr": "Slow Hourglass + Consumable"
+        }
+      ]
+    },
+    {
+      "attempt": 10,
+      "wallet": 487,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "World Anchor",
+          "price": 500,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "World Anchor",
+          "price_ocr": "500",
+          "preview_ocr": "World Anchor + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Spirit Drum",
+          "price": 200,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Spirit Drum",
+          "price_ocr": "200",
+          "preview_ocr": "Spirit Drum * Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 11,
+      "wallet": 537,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "World Anchor",
+          "price": 500,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "World Anchor",
+          "price_ocr": "500",
+          "preview_ocr": "World Anchor + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Spirit Drum",
+          "price": 200,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Spirit Drum",
+          "price_ocr": "200",
+          "preview_ocr": "Spirit Drum * Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 12,
+      "wallet": 601,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "World Anchor",
+          "price": 500,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "World Anchor",
+          "price_ocr": "500",
+          "preview_ocr": "World Anchor + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Spirit Drum",
+          "price": 200,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Spirit Drum",
+          "price_ocr": "200",
+          "preview_ocr": "Spirit Drum * Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 13,
+      "wallet": 828,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "World Anchor",
+          "price": 500,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "World Anchor",
+          "price_ocr": "500",
+          "preview_ocr": "World Anchor + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Spirit Drum",
+          "price": 200,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Spirit Drum",
+          "price_ocr": "200",
+          "preview_ocr": "Spirit Drum * Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 14,
+      "wallet": 910,
+      "offers": [
+        {
+          "name": "Echo Core",
+          "price": 300,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Echo Core",
+          "price_ocr": "300",
+          "preview_ocr": "Echo Core + Equipment"
+        },
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Blood Contract",
+          "price": 320,
+          "category": "Equipment",
+          "index": 3,
+          "tile_ocr": "Blood Contract",
+          "price_ocr": "320",
+          "preview_ocr": "Blood Contract + Equipment"
+        },
+        {
+          "name": "Frost Mirror",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Frost Mirror",
+          "price_ocr": "280",
+          "preview_ocr": "Frost Mirror + Equipment"
+        }
+      ]
+    }
+  ],
+  "selected_material_ocr": {
+    "name": "Echo Core",
+    "price": 300,
+    "category": "Equipment",
+    "index": 0,
+    "tile_ocr": "Echo Core",
+    "price_ocr": "300",
+    "preview_ocr": "Echo Core + Equipment"
+  },
+  "hud_wallet_ocr": [
+    {
+      "value": 333,
+      "bounds": [
+        169,
+        188
+      ],
+      "raw": "333"
+    },
+    {
+      "value": 153,
+      "bounds": [
+        169,
+        188
+      ],
+      "raw": "153"
+    },
+    {
+      "value": 910,
+      "bounds": [
+        168,
+        188
+      ],
+      "raw": "910"
+    },
+    {
+      "value": 610,
+      "bounds": [
+        168,
+        188
+      ],
+      "raw": "610"
+    },
+    {
+      "value": 631,
+      "bounds": [
+        169,
+        186
+      ],
+      "raw": "631"
+    },
+    {
+      "value": 631,
+      "bounds": [
+        169,
+        186
+      ],
+      "raw": "631"
+    }
+  ],
+  "pending_purchase": {
+    "name": "Echo Core",
+    "price": 300,
+    "wallet_before": 910,
+    "offer_ocr": {
+      "name": "Echo Core",
+      "price": 300,
+      "category": "Equipment",
+      "index": 0,
+      "tile_ocr": "Echo Core",
+      "price_ocr": "300",
+      "preview_ocr": "Echo Core + Equipment",
+      "observed_name": "Echo Core"
+    }
+  },
+  "inventory_inspections": [
+    {
+      "prefix": "material-1",
+      "count": 1,
+      "names": [
+        "arclens"
+      ]
+    },
+    {
+      "prefix": "material-2",
+      "count": 2,
+      "names": [
+        "arclens",
+        "echocore"
+      ]
+    },
+    {
+      "prefix": "crafted",
+      "count": 1,
+      "names": [
+        "astralprism"
+      ]
+    }
+  ],
+  "ready_material_ocr": {
+    "title": "[SSR] Astral Prism",
+    "materials": "/ Arc Lens + \u00a5 Echo Core",
+    "action": "Forge equipment"
+  },
+  "crafted_inventory_ocr": {
+    "count": 1,
+    "names": [
+      "astralprism"
+    ]
+  },
+  "inventory_verified": true
+}
