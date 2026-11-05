@@ -1,0 +1,2 @@
+d1f3c7dfc944376012ff5949b60cb1dea56117703ddb0bec36a02aa552b97d4f  /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/desktop-packages-nov5/rogue-commander-linux/rogue_commander
+d98b27d24e2eecdf64ad942a4cfafd0c3990683e15bd07659c309bf055aea22b  target/desktop-packages-nov5/rogue-commander-linux-0.1.0.tar.gz

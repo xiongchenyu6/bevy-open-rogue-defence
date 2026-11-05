@@ -1,0 +1,10 @@
+test_blocked_override_remains_missing_even_with_registry_notice (test_package_desktop.PackageDesktopTests.test_blocked_override_remains_missing_even_with_registry_notice) ... ok
+test_complete_assets_missing_evidence_and_manifest (test_package_desktop.PackageDesktopTests.test_complete_assets_missing_evidence_and_manifest) ... ok
+test_missing_licenses_fail_without_partial_output (test_package_desktop.PackageDesktopTests.test_missing_licenses_fail_without_partial_output) ... ok
+test_pinned_license_override_and_hash_verification (test_package_desktop.PackageDesktopTests.test_pinned_license_override_and_hash_verification) ... ok
+test_release_rejects_absolute_nix_linkage (test_package_desktop.PackageDesktopTests.test_release_rejects_absolute_nix_linkage) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.737s
+
+OK

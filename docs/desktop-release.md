@@ -1,8 +1,17 @@
 # Linux 桌面发行候选包
 
-当前候选包为 `target/desktop-packages-oct14-r3/rogue-commander-linux/`，压缩包为 `target/desktop-packages-oct14-r3/rogue-commander-linux-0.1.0.tar.gz`（约55MiB）。游戏源版本为 `78251d2`，包含新版引导、加载保护、保存重试、音频恢复与成长节奏改动。可直接运行包内 `rogue_commander`，保持 `assets` 和 `third-party` 同级。尚未发布到 Steam。
+当前独立运行验收通过的候选包来自游戏源码 `8f4084b22b55be0040a8cb0f7f5a50bd470eb126`：
 
-构建使用固定摘要的 Steam Runtime 3 sniper SDK、Rust 1.98.0。最终 ELF 使用普通 Linux 解释器，没有 Nix 库依赖或库搜索路径。SDK 与所选 Steam 运行时应匹配，见 [Valve Linux 开发说明](https://partner.steamgames.com/doc/store/application/platforms/linux)。
+- 目录：`target/desktop-packages-nov5/rogue-commander-linux/`
+- 压缩包：`target/desktop-packages-nov5/rogue-commander-linux-0.1.0.tar.gz`，60,264,483 字节，约 57.5 MiB。
+- 二进制 SHA256：`d1f3c7dfc944376012ff5949b60cb1dea56117703ddb0bec36a02aa552b97d4f`
+- 压缩包 SHA256：`d98b27d24e2eecdf64ad942a4cfafd0c3990683e15bd07659c309bf055aea22b`
+
+直接运行包内 `rogue_commander`，保持 `assets` 和 `third-party` 同级。本包包括黑市装备插画、剑类接触校准、密集伤害受击恢复及镜头反馈修正。它是开发候选包，未发布到 Steam，完整发售门槛见[验收清单](release-readiness.md)。
+
+## 构建和内容核验
+
+使用仓库固定摘要的 Steam Runtime 3 sniper SDK 和 Rust 1.98.0，实际 release 构建用时 15 分 20 秒。最终 ELF 使用 `/lib64/ld-linux-x86-64.so.2`，没有 Nix 依赖或库搜索路径。878 项包内文件在打包后、宿主复核及隔离容器中逐一验证哈希；新装备插画 atlas 与仓库来源哈希一致。383 项 Rust 依赖的许可证无缺失，完整素材来源、字体 OFL、本地 `bevy_audio` 补丁及其原始许可随包保留。许可收集不是法律审核。
 
 ```sh
 tools/build_desktop_linux.sh target/my-linux-package
@@ -11,17 +20,21 @@ tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner \
   > target/my-linux-package/rogue-commander-linux-0.1.0.tar.gz
 ```
 
-工具拒绝覆盖已有包，复制完整素材与来源文件，并收集目标平台正常／构建依赖许可证。本次875项文件逐一验证哈希，383项依赖没有缺失许可文本。`bevy_audio` 清单明确指向本地 `vendor/bevy_audio`，其原始 MIT 与 Apache 文本随包保留，确认包含音频恢复补丁。16项许可补充仍见 `licenses/rust-overrides.json`；清单区分原始声明和标准全文，未补造作者。项目音效、模型来源与字体 OFL 也随包保留。这不是法律审核。
+工具拒绝覆盖已有输出，并保留 SDK 的独立编译与依赖缓存。5 项打包集成测试通过。[来源、镜像与产物哈希](verification/desktop-release-2026-11-05/artifact.json) · [构建日志](verification/desktop-release-2026-11-05/build.log)。
 
 ## 独立运行验收
 
-Ubuntu 24.04、Mesa 25.2.8 软件 Vulkan、X11：从 `/tmp` 启动只读包，不挂载源码、Nix 或 Rust/Cargo，网络关闭。真实界面识别等待指南出现，跳过后核对偏好文件为 `1`，再实际选英雄并确认战斗倒计时推进。中文设置、F11全屏1600×900及恢复1280×720、退出与第二进程重启均验证；重启恢复中文和跳过状态，再次征募与战斗正常，两次退出返回0。11张最终截图已实际检查，没有缺字、缺素材或 ICU 错误。
+Ubuntu 24.04、X11、Mesa 软件 Vulkan：从 `/tmp` 启动只读安装包，关闭网络，不挂载游戏源码、Nix 或 Rust/Cargo。实际 UI 自动化验证：
 
-容器没有可听音频设备。设备不可用／自动重试提示完整可读，游戏继续运行；这不能证明真实听感或物理设备恢复。
+- 首次章节选择、资源就绪后的指南、跳过指南和基础英雄征募。
+- 实际战斗倒计时推进。
+- 切换中文并保存，F11 全屏 1600×900、恢复 1280×720。
+- 退出后用第二个游戏进程重启，恢复中文与跳过指南偏好，再次征募和战斗。
+- 两次正常退出均返回 0；两个游戏日志没有缺路径、ICU、panic 或渲染错误。
+
+Root 实际查看了本轮启动页、首次战斗、中文设置和重启中文战斗四张原生截图；其他路线状态另有截图和自动断言。容器没有可听音频设备，界面正确显示设备暂不可用与自动重连，不能证明真实设备听感。[运行断言](verification/desktop-release-2026-11-05/result.json) · [启动](verification/desktop-release-2026-11-05/startup.png) · [战斗](verification/desktop-release-2026-11-05/battle.png) · [中文设置](verification/desktop-release-2026-11-05/settings-chinese.png) · [重启战斗](verification/desktop-release-2026-11-05/restart-battle-chinese.png)。
 
 ```sh
-docker build -f tools/desktop/Dockerfile.smoke-modern \
-  -t rogue-commander-linux-smoke:ubuntu24-oct8 tools/desktop
 mkdir -p target/package-smoke-new
 docker run --rm --network none \
   --mount "type=bind,src=$PWD/target/my-linux-package/rogue-commander-linux,dst=/game,readonly" \
@@ -30,19 +43,8 @@ docker run --rm --network none \
   --workdir /tmp rogue-commander-linux-smoke:ubuntu24-oct8 python3 /smoke.py
 ```
 
-OCR 同时读取原图与反相灰度图、稀疏与块级排版，保留像素坐标；短小中文设置入口按工具栏位置打开后，仍要求真实设置标题出现。两个早期验收尝试因 OCR 漏识别按钮／中文标题而失败，没有算作通过。最终完整重跑通过，记录见 [验收证据](verification/desktop-release-2026-10-14-r3/result.json)。[引导](verification/desktop-release-2026-10-14-r3/guide.png) · [战斗](verification/desktop-release-2026-10-14-r3/battle.png) · [中文重启](verification/desktop-release-2026-10-14-r3/restart-chinese.png) · [重启战斗](verification/desktop-release-2026-10-14-r3/restart-battle-chinese.png)。
+## 仍未覆盖
 
-5项打包集成测试、2项 OCR 目标回归与 Python 编译检查通过。历史组合检查640项库测试通过（一项忽略），本次发行包独立构建及运行验收通过；模型加载、召唤计时及倒计时布局分别见 [远征加载](expedition-loading.md)、[有限召唤物计时](rare-summon-cadence.md)及[倒计时布局](gate-countdown-layout.md)。实际 Steam 客户端、Steam Deck、硬件帧率、完整打包战役、Windows／macOS仍未验证，整体发售品质见 [验收清单](release-readiness.md)。旧 Mesa 20.3.5 软件环境不能满足渲染要求，未保留降级兼容代码；玩家需要满足游戏渲染能力的驱动。
+上述短流程不证明完整 25 分钟战役、后续征募／支线／死亡／奖励／强化全流程、自然赚取后的新版黑市购买与合成，或第六章胜利。当前第六章装备路线已使用真实赚取的前五章通关存档另行启动，结果未定。
 
-
-本次候选包已包含立绘完整适配、伤害数字避让、紧凑营地图标／说明、黄色精英符文光环，以及失败场景标签重试修复、骨卫／猎犬与四类有限召唤物倍速攻击修正、紧凑重建倒计时布局修正、区域／旗帜过期结算，以及漩涡细流和淡色地面投影。Source `78251d2` 的 SDK release 构建与只读独立运行均已重新执行；Root实际查看本轮11张截图。875项文件哈希在容器与宿主独立核对一致。此验收只覆盖短首次流程与偏好重启，不能代替打包后的完整25波战役、后续征募／支线／死亡／奖励／强化全流程、Steam客户端或硬件性能验收。
-
-此轮候选包还包含薄冰冻结外壳、死亡期间能量账本修正、冻结／眩晕攻击及动画暂停，以及控制在帧内结束时的可行动时间预算。包来源仍为d2527eb；此轮已经包含合成奖励优先展示、装备面板层级、继承远程武器独立射程和首次黑市库存初始化；正常赚取后购买与同局材料合成已在此包独立实测，见[完整合成路线](earned-forge-probe.md)；本轮新版仍需复验。
-
-## 2026-10-14 手柄改动后的候选包
-
-`78251d2`已重新以Steam Runtime SDK构建（1分36秒），875项文件在宿主和隔离容器中哈希一致。独立只读包断网首次指南、战斗、中文设置、全屏／恢复、偏好重启和两次正常退出通过；Root查看11张最终截图。包包含手柄导航与保留选牌营地修正，但此安装包烟雾验收使用键鼠，不证明物理手柄；原生模拟手柄路线见[手柄证据](controller-input.md)。
-
-## 滚动与倒计时修正后的候选包
-
-78251d2候选包包括074a8a4手柄详情滚动和13b7a8a城门同帧数字修正。SDK构建1分36秒，875项文件宿主／容器哈希一致，完整短烟雾路线和两次正常退出通过；Root查看本轮11张截图。[来源与压缩包哈希](verification/desktop-release-2026-10-14-r3/artifact.json)。第六章装备路线正在独立运行，未计入此短流程通过结果。
+真实 Steam 客户端、Steam Deck、物理手柄与音频、Windows／macOS、更多驱动与分辨率、完整长局硬件性能仍需验收。历史 `78251d2` 候选包的独立证据保留在[旧版运行记录](verification/desktop-release-2026-10-14-r3/result.json)，不再作为当前包的通过依据。

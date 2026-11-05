@@ -1,0 +1,39 @@
+{
+  "version": {
+    "binary_sha256": "d1f3c7dfc944376012ff5949b60cb1dea56117703ddb0bec36a02aa552b97d4f",
+    "git_commit": "8f4084b22b55be0040a8cb0f7f5a50bd470eb126",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "binary_sha256": "d1f3c7dfc944376012ff5949b60cb1dea56117703ddb0bec36a02aa552b97d4f",
+  "tar_sha256": "d98b27d24e2eecdf64ad942a4cfafd0c3990683e15bd07659c309bf055aea22b",
+  "tar_bytes": 60264483,
+  "files": 878,
+  "rust_dependency_packages": 383,
+  "missing_license_files": [],
+  "atlas_sha256": "ea9c22a92ce0d3c251e928e04464d76b3a422fa8a677d02dcd80f933774e2160",
+  "sdk_image_id": "sha256:5e47fb3110569ab39fac6568db05c900d372e95110a5fc795f8ca6c7ed11d2cb",
+  "smoke_image_id": "sha256:0d4cccee982b31492e0f7b01a50afc1a0ec710d3166dab22e02322ce64832715",
+  "scope": "Short independent Ubuntu24/X11/software Vulkan offline package route; no Steam client/physical audio/hardware performance/full chapter6 claim"
+}
