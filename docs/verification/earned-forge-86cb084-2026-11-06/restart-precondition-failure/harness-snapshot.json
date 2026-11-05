@@ -1,0 +1,12 @@
+{
+  "harness_commit": "367f86cfa58589f105746414d19f46066152af24",
+  "package_commit": "86cb08498e446a27b31554f8cb6dd3eb641e214b",
+  "files": {
+    "forge_restart_runtime.py": "7410c953166083c58b0606f62d4cc8d56ec97cb2dca5c87ff7b6756add067c78",
+    "forge_runtime.py": "28456a792a83df11ceef4049bb4c11811b984d22911fc6be392f62f4a0033e0b",
+    "campaign_equipment_runtime.py": "00d691f4d0f1d6577d6deb21999d904f3c91a28e2fd4381c996be9c549bf5b8d",
+    "campaign_runtime.py": "76ce1daa5939dbbbdcbc0b68162f62b59ce178c14228e1cecb1c8f50684c0591",
+    "smoke_runtime.py": "b836e98f55fe7997112145d72250b19bf2ff67f13fe441cab5d4d1320af4f4f6"
+  },
+  "scope": "Actual public OS input with visible-card ACK followed by strict identity; no injections; immutable 86 package only"
+}

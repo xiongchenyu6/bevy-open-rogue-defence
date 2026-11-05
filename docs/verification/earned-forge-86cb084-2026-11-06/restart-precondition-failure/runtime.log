@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/harness/forge_restart_runtime.py", line 147, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/harness/forge_restart_runtime.py", line 42, in main
+    assert (STATE/'audio').is_file() and (STATE/'config').is_dir()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
