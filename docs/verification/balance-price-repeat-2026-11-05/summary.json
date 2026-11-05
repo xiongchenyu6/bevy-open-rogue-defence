@@ -1,0 +1,30 @@
+[
+  {
+    "run": "a",
+    "seconds": 155.74,
+    "outcome": "loss",
+    "terminal": {
+      "frame": 38519,
+      "elapsed": 629.958,
+      "level": 15,
+      "kills": 376,
+      "deaths": 3,
+      "victory": false,
+      "actual_hero_id": 9
+    }
+  },
+  {
+    "run": "b",
+    "seconds": 211.44,
+    "outcome": "loss",
+    "terminal": {
+      "frame": 62397,
+      "elapsed": 1019.327,
+      "level": 27,
+      "kills": 988,
+      "deaths": 3,
+      "victory": false,
+      "actual_hero_id": 0
+    }
+  }
+]

@@ -35,4 +35,4 @@
 
 脚本已保留全部失败证据，并修正[彩色卡名](verification/market-red-label-2026-11-05/README.md)、[小额补零余额](verification/market-wallet-0089-2026-11-05/README.md)、后到征募时钟和[有界装备界面开启](verification/inventory-open-2026-11-05/README.md)；66项Python测试通过（包含[实际LEVEL5识别失败回归](verification/battle-level-ocr-2026-11-05/README.md)），[实际倒计时像素识别](verification/battle-timer-ocr-2026-11-05/README.md)、[面板单次开关与同截图读取](verification/panel-toggle-2026-11-05/README.md)、同截图HUD／双面板等待已统一，1×整局脚本预算按25分钟战斗＋5分钟余量＋12次有界访问推导为3240秒；[商品预览等待](verification/market-preview-ocr-2026-11-05/README.md)已统一并减少整屏识别开销；新的完整原生路线仍待完成。所有后续章节、永久成长边界、更多种子／构筑、真实Steam客户端、手柄／音频设备、SteamDeck、其他平台与长局性能门槛保持未完成。
 
-当前模拟器已[移除过期抽卡价格预测](verification/simulator-prices-2026-11-05/README.md)：修复前两项策略回归失败，修复后4项bin测试与严格全目标Clippy通过。重建已通过，同种子完整重复已开始但仍待确认，不据此调整游戏数值。
+当前模拟器已[移除过期抽卡价格预测](verification/simulator-prices-2026-11-05/README.md)：修复前两项策略回归失败，修复后4项bin测试与严格全目标Clippy通过。重建已通过，[同种子完整重复已完成且出现构筑／轨迹分歧](verification/balance-price-repeat-2026-11-05/README.md)，因此未启动批量矩阵，不据此调整游戏数值。
