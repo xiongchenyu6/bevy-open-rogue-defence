@@ -1,5 +1,6 @@
 {
   "src/bin/balance_sim.rs": "539d8ae3c227483279c2f7df0b9550c6fea31c140a277703b70ba944310c59b4",
   "src/game/mod.rs": "da538bc4788c32cc0a202a389f9589a9363af0f61a4c7a7c3a5c4cbb61256683",
-  "src/game/progression.rs": "c30ed00a7edbdc60ac45aa0fa44cd75d97698875804016a39590f3495b153b85"
+  "src/game/progression.rs": "c30ed00a7edbdc60ac45aa0fa44cd75d97698875804016a39590f3495b153b85",
+  "target/release/balance_sim": "719ae38bbf6bd753fabb371dd5ee274f22648205259ca7678c61c513b099c5b8"
 }

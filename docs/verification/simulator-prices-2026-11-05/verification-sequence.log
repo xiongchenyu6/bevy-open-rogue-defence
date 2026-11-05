@@ -1,0 +1,6 @@
+START after-tests.log
+PASS after-tests.log
+START clippy.log
+PASS clippy.log
+START build.log
+PASS build.log
