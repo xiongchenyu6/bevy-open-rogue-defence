@@ -1,0 +1,92 @@
+[
+  {
+    "visit": 2,
+    "source": "original PNG filesystem capture timestamps; includes renderer/OCR/input overhead",
+    "captures": [
+      {
+        "file": "equipment-02-unlock-clock.png",
+        "relative_seconds": 0.0
+      },
+      {
+        "file": "equipment-02-inventory-open-04.png",
+        "relative_seconds": 52.894
+      },
+      {
+        "file": "equipment-02-inventory-open-05.png",
+        "relative_seconds": 59.968
+      },
+      {
+        "file": "equipment-02-inventory-icon-0.png",
+        "relative_seconds": 64.685
+      },
+      {
+        "file": "equipment-02-inventory.png",
+        "relative_seconds": 69.103
+      },
+      {
+        "file": "equipment-02-resume-before.png",
+        "relative_seconds": 77.434
+      },
+      {
+        "file": "equipment-02-resume-after.png",
+        "relative_seconds": 86.513
+      }
+    ]
+  },
+  {
+    "visit": 3,
+    "source": "original PNG filesystem capture timestamps; includes renderer/OCR/input overhead",
+    "captures": [
+      {
+        "file": "equipment-03-unlock-clock.png",
+        "relative_seconds": 0.0
+      },
+      {
+        "file": "equipment-03-inventory-open-08.png",
+        "relative_seconds": 51.204
+      },
+      {
+        "file": "equipment-03-inventory-open-09.png",
+        "relative_seconds": 58.603
+      },
+      {
+        "file": "equipment-03-inventory-icon-0.png",
+        "relative_seconds": 63.276
+      },
+      {
+        "file": "equipment-03-inventory.png",
+        "relative_seconds": 67.798
+      },
+      {
+        "file": "equipment-03-resume-before.png",
+        "relative_seconds": 77.762
+      },
+      {
+        "file": "equipment-03-resume-after.png",
+        "relative_seconds": 91.612
+      }
+    ]
+  },
+  {
+    "visit": 5,
+    "source": "original PNG filesystem capture timestamps; includes renderer/OCR/input overhead",
+    "captures": [
+      {
+        "file": "equipment-05-unlock-clock.png",
+        "relative_seconds": 0.0
+      },
+      {
+        "file": "equipment-05-inventory-open-16.png",
+        "relative_seconds": 92.913
+      },
+      {
+        "file": "equipment-05-inventory-open-17.png",
+        "relative_seconds": 104.732
+      },
+      {
+        "file": "equipment-05-inventory-open-18.png",
+        "relative_seconds": 114.991
+      }
+    ]
+  }
+]

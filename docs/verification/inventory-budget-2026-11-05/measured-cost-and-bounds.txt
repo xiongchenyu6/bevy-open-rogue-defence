@@ -1,0 +1,6 @@
+detail '[R] Spirit Drum' identity spiritdrum ocr_seconds 0.207
+per_owned_allowance 20
+visit3owned 180
+visit12owned 360
+pause_budget 3000
+1x_total_harness_seconds 4800

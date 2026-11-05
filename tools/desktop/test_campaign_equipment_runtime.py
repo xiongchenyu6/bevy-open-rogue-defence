@@ -5,7 +5,7 @@ import unittest
 from contextlib import nullcontext
 from unittest.mock import patch, Mock
 from smoke_runtime import ocr_screenshot
-from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop, tile_name_text, public_panel_state, wait_panel_open, battle_level_pixels, market_header_text, poll_market_offer
+from campaign_equipment_runtime import EquipmentPolicy, tile_name_crop, tile_name_text, public_panel_state, wait_panel_open, battle_level_pixels, verify_owned_inventory, market_header_text, poll_market_offer
 from campaign_equipment_runtime import battle_seconds
 from pathlib import Path
 from campaign_equipment_runtime import (affordable_gear, market_wallet, inventory_count,
@@ -299,6 +299,37 @@ class EquipmentPolicyParsing(unittest.TestCase):
         self.assertEqual(screenshot_battle_seconds(path,None),9*60+50)
         self.assertEqual(read_toolbar_speed(path,None),1)
 
+    def test_owned_route_budget_scales_finitely_and_total_covers_all_visits(self):
+        budgets=[EquipmentPolicy.visit_budget_for_owned(count) for count in range(1,EquipmentPolicy.visit_limit+1)]
+        self.assertTrue(all(a < b for a,b in zip(budgets,budgets[1:])))
+        self.assertEqual(sum(budgets),EquipmentPolicy.pause_budget_seconds)
+        self.assertGreater(budgets[0],EquipmentPolicy.visit_base_budget_seconds)
+        for count in (-1,EquipmentPolicy.visit_limit+1):
+            with self.assertRaises(AssertionError):EquipmentPolicy.visit_budget_for_owned(count)
+
+    def test_owned_proof_requires_every_prior_item_not_only_new_purchase(self):
+        purchases=[dict(name='Wind Boots'),dict(name='Spirit Drum'),dict(name='Serrated Disc')]
+        verify_owned_inventory(3,['serrateddisc','spiritdrum','windboots'],purchases)
+        for count,names in [(1,['serrateddisc']), (3,['serrateddisc','spiritdrum','spiritdrum']),
+                            (3,['serrateddisc','spiritdrum','arclens']),
+                            (3,['serrateddisc','spiritdrum'])]:
+            with self.assertRaises(AssertionError):verify_owned_inventory(count,names,purchases)
+
+    def test_visit_reserves_deadline_for_all_known_owned_items_plus_next_purchase(self):
+        policy=EquipmentPolicy.__new__(EquipmentPolicy)
+        policy.next_visit=0;policy.visits=4;policy.key=Mock()
+        policy.purchases=[dict(name='Wind Boots'),dict(name='Spirit Drum')]
+        policy.visible_countdown=Mock(return_value=21*60)
+        policy.ui=dict(input_lock=nullcontext(),report={},shot=Mock(),env=None)
+        with patch('campaign_equipment_runtime.time.monotonic',return_value=1000), \
+                patch('campaign_equipment_runtime.wait_panel_open',side_effect=RuntimeError('reserved deadline')) as opener, \
+                self.assertRaisesRegex(RuntimeError,'reserved deadline'):
+            policy.observe([],1000)
+        self.assertEqual(opener.call_args.args[3],1000+EquipmentPolicy.visit_budget_for_owned(3))
+        self.assertEqual(policy.ui['report']['equipment_visit_budgets'],
+            [dict(visit=5,owned_item_bound=3,seconds=EquipmentPolicy.visit_budget_for_owned(3))])
+        policy.key.assert_not_called()
+
     def test_inventory_opener_never_toggles_an_open_panel(self):
         rows=[('EQUIPMENT · 2',213,108,400,130)]
         policy,ocr,clock=self.inventory_opener([rows])
@@ -361,7 +392,7 @@ class EquipmentPolicyParsing(unittest.TestCase):
     def test_campaign_market_visit_skips_until_public_simulation_unlock(self):
         for clock in (22*60+1,22*60):
             policy=EquipmentPolicy.__new__(EquipmentPolicy)
-            policy.next_visit=185;policy.visits=0;policy.key=Mock()
+            policy.next_visit=185;policy.visits=0;policy.key=Mock();policy.purchases=[]
             policy.visible_countdown=Mock(return_value=clock)
             policy.ui=dict(input_lock=nullcontext(),report={},shot=Mock(return_value=Path('unavailable.png')))
             with patch('campaign_equipment_runtime.wait_panel_open') as opener:
@@ -372,7 +403,7 @@ class EquipmentPolicyParsing(unittest.TestCase):
                              [dict(visit=1,countdown=clock,unlocked=False)])
             policy.ui['shot'].assert_called_once_with('equipment-01-unavailable.png')
         policy=EquipmentPolicy.__new__(EquipmentPolicy)
-        policy.next_visit=185;policy.visits=0;policy.key=Mock()
+        policy.next_visit=185;policy.visits=0;policy.key=Mock();policy.purchases=[]
         policy.visible_countdown=Mock(return_value=22*60-1)
         policy.ui=dict(input_lock=nullcontext(),report={},shot=Mock(),env=None)
         with patch('campaign_equipment_runtime.wait_panel_open',side_effect=RuntimeError('unlocked route reached')) as opener, \

@@ -235,6 +235,12 @@ def inventory_count(rows):
     return counts.pop()
 
 
+def verify_owned_inventory(count, names, purchases):
+    expected = [normalized(item['name']) for item in purchases]
+    assert count == len(names) == len(expected) and len(set(names)) == count \
+        and set(names) == set(expected), ('Owned equipment identities differ', count, names, expected)
+
+
 def inventory_icons(count):
     # Public 1280x720 visible grid, catalog order rather than purchase order.
     assert 1 <= count <= 20, f'Inventory count {count} exceeds verified visible grid bound 1..20'
@@ -350,8 +356,15 @@ def wait_panel_open(shot, env, send, deadline, records, prefix, target_panel, vi
 
 class EquipmentPolicy:
     visit_limit = 12
-    visit_budget_seconds = 120
-    pause_budget_seconds = visit_limit * visit_budget_seconds
+    visit_base_budget_seconds = 120
+    per_owned_item_budget_seconds = 20
+    pause_budget_seconds = (visit_limit * visit_base_budget_seconds
+                            + per_owned_item_budget_seconds * sum(range(1, visit_limit + 1)))
+
+    @classmethod
+    def visit_budget_for_owned(cls, owned_count):
+        assert 0 <= owned_count <= cls.visit_limit, 'Owned count exceeds bounded public purchase route'
+        return cls.visit_base_budget_seconds + cls.per_owned_item_budget_seconds * owned_count
 
     def __init__(self, ui):
         assert os.environ.get('CAMPAIGN_STAGE') == '5'
@@ -366,7 +379,10 @@ class EquipmentPolicy:
         ui['report'].update(scope='Packaged public UI; stationary first-card policy plus earned equipment',
             strategy='Stationary keys 1/g/f; cheapest affordable natural gear; no refresh or movement',
             package_version=version, equipment_purchases=self.purchases,
-            equipment_visit_limit=self.visit_limit, equipment_visit_timeout_seconds=self.visit_budget_seconds,
+            equipment_visit_limit=self.visit_limit,
+            equipment_visit_base_budget_seconds=self.visit_base_budget_seconds,
+            equipment_per_owned_item_budget_seconds=self.per_owned_item_budget_seconds,
+            equipment_visit_max_timeout_seconds=self.visit_budget_for_owned(self.visit_limit),
             equipment_pause_budget_seconds=self.pause_budget_seconds,
             equipment_cooldown_after_completion_seconds=60)
 
@@ -424,7 +440,11 @@ class EquipmentPolicy:
         self.visits += 1
         self.next_visit = elapsed + 60
         visit_started = time.monotonic()
-        deadline = visit_started + self.visit_budget_seconds
+        owned_bound = len(self.purchases) + 1
+        visit_budget = self.visit_budget_for_owned(owned_bound)
+        deadline = visit_started + visit_budget
+        self.ui['report'].setdefault('equipment_visit_budgets', []).append(
+            dict(visit=self.visits, owned_item_bound=owned_bound, seconds=visit_budget))
         prefix = f'equipment-{self.visits:02}'
         with self.ui['input_lock']:
             clock = self.visible_countdown(prefix + '-unlock-clock', deadline)
@@ -488,7 +508,11 @@ class EquipmentPolicy:
                 _, inventory = opened
                 count = inventory_count(inventory)
                 details = []
+                names = []
                 found = None
+                purchase['inventory_count'] = count
+                purchase['inventory_inspections'] = details
+                purchase['owned_names'] = names
                 for index, (x, y) in enumerate(inventory_icons(count)):
                     assert time.monotonic() < deadline, 'Inventory inspection exceeded visit budget'
                     self.click(('', x, y, x, y))
@@ -496,13 +520,12 @@ class EquipmentPolicy:
                     text = crop_text(image, '840x25+220+445', self.ui['env'])
                     name = selected_inventory_name(text)
                     details.append(dict(icon=[x, y], detail_ocr=text))
+                    names.append(name)
                     if name == normalized(offer['name']):
                         found = [x, y]
-                        break
+                verify_owned_inventory(count, names, self.purchases)
                 assert found is not None, 'Purchased item not found in visible selected inventory details'
-                purchase['inventory_count'] = count
                 purchase['selected_icon'] = found
-                purchase['inventory_inspections'] = details
                 inventory = self.ui['lines']()
                 self.ui['shot'](prefix + '-inventory.png')
                 close = find_text(inventory, 'Close')
@@ -534,14 +557,14 @@ class EquipmentPolicy:
                     break
             else:
                 raise AssertionError('Battle countdown did not resume after market/equipment closure')
-            assert time.monotonic() < deadline, f'Market visit exceeded {self.visit_budget_seconds} seconds'
+            assert time.monotonic() < deadline, f'Market visit exceeded {visit_budget} seconds'
             self.ui['report']['equipment_visit_timings'].append(
                 dict(visit=self.visits, phase='resume verified', elapsed=time.monotonic()-visit_started))
             # Leave a full minute of battle after a slow software-render visit.
             self.next_visit = elapsed + (time.monotonic()-visit_started) + 60
             print(json.dumps(dict(stage='earned equipment visit', visit=self.visits,
                                   purchases=len(self.purchases), wallet=wallet,
-                                  visit_budget_seconds=self.visit_budget_seconds)), flush=True)
+                                  visit_budget_seconds=visit_budget)), flush=True)
 
     def verify(self):
         assert self.purchases, 'No earned equipment purchased; active equipment route unproven'
