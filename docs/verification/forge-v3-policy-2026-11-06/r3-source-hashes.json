@@ -1,0 +1,6 @@
+{
+  "tools/desktop/forge_runtime.py": "6d6d336287e4ce33741c723940d3eff689e7211e2ce3ef7383122b114fc61e93",
+  "tools/desktop/forge_refresh.py": "c40e9e61179f9ae55d767bd6c9f1333e7b6bced398cd292a190870e701423063",
+  "tools/desktop/test_forge_refresh.py": "740ca271730f862905fcd04e2dfd077338eedcaef33ab1be8b2ecf293b390ce5",
+  "tools/desktop/campaign_equipment_runtime.py": "674909c39cf601765e45980bc028d4efa09ffe723a732c57a219812cd135f872"
+}

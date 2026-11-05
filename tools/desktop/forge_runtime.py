@@ -9,6 +9,8 @@ from campaign_equipment_runtime import (TILE_LEFTS, INVENTORY_TITLE_CROP, close_
     inventory_icons, inventory_open, selected_inventory_name, market_closed,
     has_gear_rows, screenshot_battle_seconds, wait_panel_open, public_panel_state, poll_market_offer, offer_identity, purchase_market_offer)
 
+from forge_refresh import refresh_control, refresh_allowed, refresh_observation, observe_one_refresh
+
 FORGE_RECIPE_PRISM_CENTER = (443, 207)
 FORGE_MATERIALS_CROP = '310x46+744+253'
 FORGE_ACTION_CROP = '180x24+720+546'
@@ -34,14 +36,24 @@ def visible_hud_value(shot, read_value, read_rows, choose, deadline, now=time.mo
     raise AssertionError('Recognized choices did not expose a HUD within90seconds')
 
 
+def player_cycle(send, stopped):
+    for button in ('1', 'g', 'f'):
+        if stopped(): break
+        send(button)
+
+
 def material_name(name):
     return next((canonical for canonical in MATERIALS if normalized(name) == normalized(canonical)), None)
 
 
 
 
-def natural_material(offers, wallet, acquired):
-    assert len(offers) == 5 and {offer['index'] for offer in offers} == set(range(5))
+def natural_material(offers, wallet, acquired, complete_stock=True):
+    if complete_stock:
+        assert len(offers) == 5 and {offer['index'] for offer in offers} == set(range(5))
+    else:
+        assert len({offer['index'] for offer in offers}) == len(offers)
+        assert all(offer['index'] in range(5) for offer in offers)
     acquired_keys = {normalized(name) for name in acquired}
     candidates = [dict(offer, name=material_name(offer['name']), observed_name=offer['name'])
                   for offer in offers if normalized(offer['category']) == 'equipment'
@@ -49,6 +61,32 @@ def natural_material(offers, wallet, acquired):
                   and normalized(offer['name']) not in acquired_keys
                   and 0 < offer['price'] <= wallet]
     return min(candidates, key=lambda offer: (offer['price'], offer['index']), default=None)
+
+
+
+def post_refresh_phase_deadline(overall_deadline, now=time.monotonic):
+    started = now()
+    assert started < overall_deadline, 'Overall forge deadline expired after refresh'
+    return started, min(overall_deadline, started + 120)
+
+
+def inspect_refreshed_materials(names, acquired, inspect, deadline, observations, now=time.monotonic):
+    assert len(names) == 5 and all(names), 'Five observed refreshed names required'
+    acquired = {normalized(name) for name in acquired}
+    offers = []
+    for index, name in enumerate(names):
+        canonical = material_name(name)
+        record = dict(index=index, observed_name=name, inspection='names_only_not_hovered')
+        observations.append(record)
+        if canonical is None or normalized(canonical) in acquired:
+            continue
+        assert now() < deadline, 'Post-refresh material inspection deadline exhausted'
+        offer = inspect(index, deadline)
+        assert now() < deadline, 'Post-refresh material preview exceeded deadline'
+        assert material_name(offer['name']) == canonical, 'Refreshed tile/preview material mismatch'
+        record.update(inspection='full_tile_price_category_preview', offer=offer)
+        offers.append(offer)
+    return offers
 
 
 def verify_recipe_selection(title, materials, action):
@@ -117,7 +155,10 @@ def main():
     def click(x,y):
         call(['xdotool','mousemove','--window',win,str(x),str(y)]);call(['xdotool','mousedown','1']);time.sleep(.2);call(['xdotool','mouseup','1']);time.sleep(.5)
     def key(k):
-        call(['xdotool','keydown',k]);time.sleep(.3);call(['xdotool','keyup',k]);time.sleep(1)
+        call(['xdotool','keydown',k])
+        counts=report.setdefault('input_counts',{})
+        counts[k]=counts.get(k,0)+1
+        time.sleep(.3);call(['xdotool','keyup',k]);time.sleep(1)
     def clicktext(text):
         _,x,y,r,b=wait(text);click((x+r)//2,(y+b)//2)
     def wallet():
@@ -191,7 +232,8 @@ def main():
             raise RuntimeError('Terminal reached before equipment proof: '+title)
     def operate():
         while not stop.is_set() and app.poll() is None:
-            key('1');key('g');stop.wait(.2)
+            player_cycle(key,lambda:stop.is_set() or app.poll() is not None)
+            stop.wait(.2)
     try:
         start(['Xvfb',':94','-screen','0','1600x900x24','-nolisten','tcp','-ac'],'xvfb.log');time.sleep(1);start(['openbox'],'wm.log');time.sleep(1)
         app=start([str(GAME/'rogue_commander')],'game.log')
@@ -244,6 +286,7 @@ def main():
         else:raise RuntimeError('Real3minute unlock not observed')
         shot('unlocked.png')
         forge_deadline=time.monotonic()+3600
+        refresh_visits=set();refresh_count=0;refresh_spent=0
         for attempt in range(120):
             assert time.monotonic()<forge_deadline, "Finite earned forge wall budget exhausted"
             stop.set();worker.join(5);assert not worker.is_alive()
@@ -268,6 +311,37 @@ def main():
                 offers.append(inspect_offer(index,f'market-{attempt:02}',visit_end))
             report.setdefault('market_inspections',[]).append(dict(attempt=attempt,wallet=before,offers=offers))
             offer=natural_material(offers,before,report['acquired_materials'])
+            if offer is None:
+                refresh_record=dict(visit=attempt,wallet=before,reserve=300,count=refresh_count,spent=refresh_spent)
+                report.setdefault('refresh_policy',[]).append(refresh_record)
+                try:
+                    control=refresh_control(shot(f'market-{attempt:02}-refresh-control.png'),env)
+                except AssertionError as error:
+                    refresh_record['skipped']=str(error)
+                else:
+                    refresh_record['control']=control
+                    if refresh_allowed(before,control['fee'],refresh_visits,attempt,refresh_count,refresh_spent):
+                        assert hud_wallet()==before==wallet(), 'Pre-refresh HUD/header wallet disagreement'
+                        old_names=tuple(normalized(item['name']) for item in offers)
+                        _,remaining=observe_one_refresh(
+                            lambda:click(*control['center']),shot,
+                            lambda image:refresh_observation(image,env,before,control['fee'],old_names),
+                            before,control['fee'],forge_deadline,
+                            report.setdefault('refresh_observations',[]),f'market-{attempt:02}')
+                        refresh_visits.add(attempt);refresh_count+=1;refresh_spent+=control['fee']
+                        refresh_record.update(completed=True,wallet_after=remaining,count_after=refresh_count,spent_after=refresh_spent)
+                        before=remaining
+                        started,visit_end=post_refresh_phase_deadline(forge_deadline)
+                        phase=dict(phase='post_refresh_material_inspection',visit=attempt,started=started,deadline=visit_end,overall_deadline=forge_deadline,inspections=[])
+                        report.setdefault('inspection_phases',[]).append(phase)
+                        names=report['refresh_observations'][-1]['stock_names']
+                        offers=inspect_refreshed_materials(names,report['acquired_materials'],
+                            lambda index,deadline:inspect_offer(index,f'market-{attempt:02}-refreshed',deadline),
+                            visit_end,phase['inspections'])
+                        report.setdefault('refreshed_market_inspections',[]).append(dict(attempt=attempt,wallet=before,observed_names=names,offers=offers,scope='Only missing recipe materials hovered; other stock names-only'))
+                        offer=natural_material(offers,before,report['acquired_materials'],complete_stock=False)
+                    else:
+                        refresh_record['skipped']='Finite refresh/reserve budget does not permit input'
             if offer is not None:
                 name,price=offer['name'],offer['price'];left=TILE_LEFTS[offer['index']]
                 checked=inspect_offer(offer['index'],'before-purchase',visit_end,offer)

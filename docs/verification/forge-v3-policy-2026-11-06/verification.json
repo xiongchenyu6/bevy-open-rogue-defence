@@ -1,0 +1,15 @@
+{
+  "scope": "Helper-only V3 final121tests pass; no game launch; strict wallet equality retained",
+  "files_sha256": {
+    "README.md": "5766053fbe01dfa2af4ae9d1baa09b2029877fcd1a609571c06ba0e8485c6e74",
+    "r1-test-process.json": "00cba2fffe2de740f0a0181dfa734662b653095a55e7cb3ea0f34a941f6be503",
+    "r1-tests.log": "08c628fc94f5a2a6f0f722aed85b8419bdd0188d224e9b45f656dcba33a37644",
+    "r2-source-hashes.json": "aa30f7cf6422f2c9c6fdd8c02b05d50a8157ecf47a05686458cbc6cbdac7c1a4",
+    "r2-test-process.json": "b562dad6e359ed1e6f9724bea489d907b011a5e88f1a66bc9435395a37c4aeec",
+    "r2-tests.log": "85b43bac619532780398c4f33c273a143f4c716a57bba301db1b6f1bd1914601",
+    "r3-source-hashes.json": "4bffe38bcd5beaa3613c98669d0e9fc2aef85d26cff3071845d86e24d7390cd2",
+    "r3-test-process.json": "93fa6bb36f1c8b65f7a4ab01c0fce0d3553421a69b595b1d8cd62cd1c1f962b0",
+    "r3-tests.log": "e09529ed768703566a728639f7974d1df7fc1f060761cea6533844a7c4c1ba0f",
+    "verify.py": "a9bb8802edb8f889ba1c384cf03818d251b82eaf9ec9473258d9c03b14c939f8"
+  }
+}
