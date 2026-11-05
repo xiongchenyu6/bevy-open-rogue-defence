@@ -1,0 +1,91 @@
+{"sample": 1, "wall_seconds": 6.6, "terminal": null}
+{"sample": 2, "wall_seconds": 16.9, "terminal": null}
+{"sample": 3, "wall_seconds": 26.9, "terminal": null}
+{"sample": 4, "wall_seconds": 36.9, "terminal": null}
+{"sample": 5, "wall_seconds": 47.0, "terminal": null}
+{"sample": 6, "wall_seconds": 57.1, "terminal": null}
+{"sample": 7, "wall_seconds": 67.0, "terminal": null}
+{"sample": 8, "wall_seconds": 76.8, "terminal": null}
+{"sample": 9, "wall_seconds": 86.8, "terminal": null}
+{"sample": 10, "wall_seconds": 97.1, "terminal": null}
+{"sample": 11, "wall_seconds": 107.1, "terminal": null}
+{"sample": 12, "wall_seconds": 117.1, "terminal": null}
+{"sample": 13, "wall_seconds": 126.9, "terminal": null}
+{"sample": 14, "wall_seconds": 137.3, "terminal": null}
+{"sample": 15, "wall_seconds": 147.1, "terminal": null}
+{"sample": 16, "wall_seconds": 157.1, "terminal": null}
+{"sample": 17, "wall_seconds": 167.0, "terminal": null}
+{"sample": 18, "wall_seconds": 176.9, "terminal": null}
+{"sample": 19, "wall_seconds": 187.4, "terminal": null}
+{"sample": 20, "wall_seconds": 221.7, "terminal": null}
+{"sample": 21, "wall_seconds": 232.1, "terminal": null}
+{"sample": 22, "wall_seconds": 242.9, "terminal": null}
+{"sample": 23, "wall_seconds": 253.1, "terminal": null}
+{"sample": 24, "wall_seconds": 288.3, "terminal": null}
+{"sample": 25, "wall_seconds": 299.3, "terminal": null}
+{"sample": 26, "wall_seconds": 309.9, "terminal": null}
+{"sample": 27, "wall_seconds": 320.6, "terminal": null}
+{"stage": "earned equipment visit", "visit": 3, "purchases": 0, "wallet": 156}
+{"sample": 28, "wall_seconds": 389.1, "terminal": null}
+{"sample": 29, "wall_seconds": 398.7, "terminal": null}
+{"sample": 30, "wall_seconds": 408.6, "terminal": null}
+{"sample": 31, "wall_seconds": 418.3, "terminal": null}
+{"sample": 32, "wall_seconds": 428.1, "terminal": null}
+{"sample": 33, "wall_seconds": 438.1, "terminal": null}
+{"sample": 34, "wall_seconds": 448.1, "terminal": null}
+{"stage": "earned equipment visit", "visit": 4, "purchases": 1, "wallet": 406}
+{"sample": 35, "wall_seconds": 541.6, "terminal": null}
+{"sample": 36, "wall_seconds": 551.5, "terminal": null}
+{"sample": 37, "wall_seconds": 561.5, "terminal": null}
+{"sample": 38, "wall_seconds": 571.3, "terminal": null}
+{"sample": 39, "wall_seconds": 581.5, "terminal": null}
+{"sample": 40, "wall_seconds": 591.7, "terminal": null}
+{"stage": "earned equipment visit", "visit": 5, "purchases": 2, "wallet": 328}
+{"sample": 41, "wall_seconds": 679.9, "terminal": null}
+{"sample": 42, "wall_seconds": 689.8, "terminal": null}
+{"sample": 43, "wall_seconds": 699.7, "terminal": null}
+{"sample": 44, "wall_seconds": 709.3, "terminal": null}
+{"sample": 45, "wall_seconds": 719.0, "terminal": null}
+{"sample": 46, "wall_seconds": 729.3, "terminal": null}
+{"sample": 47, "wall_seconds": 739.3, "terminal": null}
+{"stage": "earned equipment visit", "visit": 6, "purchases": 3, "wallet": 319}
+{"sample": 48, "wall_seconds": 832.6, "terminal": null}
+{"sample": 49, "wall_seconds": 842.9, "terminal": null}
+{"sample": 50, "wall_seconds": 853.2, "terminal": null}
+{"sample": 51, "wall_seconds": 863.8, "terminal": null}
+{"sample": 52, "wall_seconds": 875.2, "terminal": null}
+{"sample": 53, "wall_seconds": 886.3, "terminal": null}
+{"sample": 54, "wall_seconds": 921.9, "terminal": null}
+{"sample": 55, "wall_seconds": 931.9, "terminal": null}
+{"sample": 56, "wall_seconds": 942.0, "terminal": null}
+{"sample": 57, "wall_seconds": 951.8, "terminal": null}
+{"sample": 58, "wall_seconds": 984.7, "terminal": null}
+{"sample": 59, "wall_seconds": 995.0, "terminal": null}
+{"sample": 60, "wall_seconds": 1005.5, "terminal": null}
+{"sample": 61, "wall_seconds": 1016.4, "terminal": null}
+{"stage": "earned equipment visit", "visit": 9, "purchases": 4, "wallet": 626}
+{"sample": 62, "wall_seconds": 1115.9, "terminal": null}
+{"sample": 63, "wall_seconds": 1125.4, "terminal": null}
+{"sample": 64, "wall_seconds": 1135.2, "terminal": null}
+{"sample": 65, "wall_seconds": 1145.2, "terminal": null}
+{"sample": 66, "wall_seconds": 1154.9, "terminal": null}
+{"sample": 67, "wall_seconds": 1164.8, "terminal": null}
+{"sample": 68, "wall_seconds": 1174.5, "terminal": null}
+{"stage": "earned equipment visit", "visit": 10, "purchases": 5, "wallet": 689}
+{"sample": 69, "wall_seconds": 1273.5, "terminal": null}
+{"sample": 70, "wall_seconds": 1283.9, "terminal": null}
+{"sample": 71, "wall_seconds": 1294.2, "terminal": null}
+{"sample": 72, "wall_seconds": 1304.6, "terminal": null}
+{"sample": 73, "wall_seconds": 1315.1, "terminal": null}
+{"sample": 74, "wall_seconds": 1325.4, "terminal": null}
+Traceback (most recent call last):
+  File "/harness/campaign_equipment_runtime.py", line 360, in <module>
+    main(EquipmentPolicy)
+  File "/harness/campaign_runtime.py", line 268, in main
+    policy.observe(text_lines, time.monotonic() - started)
+  File "/harness/campaign_equipment_runtime.py", line 261, in observe
+    inspected.append(self.inspect_offer(index, prefix, deadline))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/campaign_equipment_runtime.py", line 210, in inspect_offer
+    raise AssertionError(f'Offer {index} did not show a matching preview within budget: {attempts}')
+AssertionError: Offer 1 did not show a matching preview within budget: [{'tile': '| Chaosie', 'price': '450', 'preview': 'Echo Core + Equipment', 'error': "Tile/preview mismatch: '| Chaosie', 'Echo Core + Equipment'"}, {'tile': '| Chaosie', 'price': '450', 'preview': 'Chaos Die + Equipment', 'error': "Tile/preview mismatch: '| Chaosie', 'Chaos Die + Equipment'"}, {'tile': '| Chaosie', 'price': '450', 'preview': 'Chaos Die + Equipment', 'error': "Tile/preview mismatch: '| Chaosie', 'Chaos Die + Equipment'"}]

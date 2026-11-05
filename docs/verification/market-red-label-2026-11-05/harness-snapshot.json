@@ -1,0 +1,9 @@
+{
+  "source_commit": "37fe665d4db0f171edbf5236ecbb733872398633",
+  "files": {
+    "campaign_equipment_runtime.py": "b4017969e2ee0a40e9b1bbd1ae5d51373886e002783b8a826c7e1a4091162848",
+    "campaign_runtime.py": "21eb764b2b6e4bef907351464b0b56457ea95657009eae93dc30344d952139f8",
+    "smoke_runtime.py": "4adad46813fefb10e034968b1fe705cb4b9ab20cf7b8cdd5c452f7bae33cc1e5"
+  },
+  "scope": "Frozen public UI only; no game state injection"
+}
