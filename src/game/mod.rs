@@ -113,7 +113,9 @@ pub use localization::{GameLanguage, LocalizationPlugin};
 pub use market::{prepare_attribute_growth_market, prepare_crafting_market};
 pub use mobile_layout::ControlScheme;
 pub use pooling::{CombatPoolSnapshot, CombatPools, DamageNumberPoolMetrics, PoolMetrics};
-pub use progression::{SkillEconomy, available_bond_cards, available_bond_cards_at};
+pub use progression::{
+    SkillEconomy, available_bond_cards, available_bond_cards_at, bond_cost, skill_cost,
+};
 pub use resources::*;
 pub use settings::{SettingsDepartureInputSet, SettingsInputSet};
 pub use skills::SkillCastTelemetry;

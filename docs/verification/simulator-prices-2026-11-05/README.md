@@ -1,0 +1,9 @@
+# Simulator draw-price policy — 2026-11-05
+
+An audit found that the simulator still predicted skill affordability with80+15×paid_draws capped at260, and bond affordability with a fixed40wood. Production skill prices now include quadratic late-draw growth with no such cap; bond prices increase per paid draw and respect encounter modifiers. That stale policy could prioritize an unaffordable skill button and starve an affordable bond choice, biasing balance conclusions.
+
+Three new tests call the actual policy(World) decision with real button components and isolated resource fixtures. Before the fix, the paid8/gold260/wood40 case pressed Skill instead of Bond, and the paid10bond/wood40 case pressed an unaffordable Bond. Those two tests failed; the free-skill-point priority test passed. After replacing duplicate math with the existing production skill_cost/bond_cost functions (read-only reexports), all4 balance-bin tests passed, including the existing health-metrics test. Strict optimized all-target Clippy passed. Logs and source hashes are archived.
+
+Game economy, damage and enemy numbers are unchanged. The fixture tests policy decisions, not a complete UI purchase. Default starting wood and the production opening gate preserve the initial free-bond path for this strategy; the policy is not an optimal player or exhaustive economy test.
+
+The earlier current-source repeat attempt was deliberately stopped and censored on discovering the stale policy. It is not a replay-equality, win/loss or valid balance baseline. The rebuilt simulator and complete same-binary repeats must be verified before new numerical conclusions or a full matrix; fixed step/one thread alone do not prove determinism.

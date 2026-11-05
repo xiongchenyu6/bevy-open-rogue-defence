@@ -1,0 +1,4 @@
+{
+  "reason": "Audit found obsolete capped skill draw and fixed bond prices in simulator policy; current game uses quadratic increasing skill prices and increasing encounter-adjusted bond prices. Stopped deliberately before treating this as a current balance baseline.",
+  "scope": "No game rules changed; partial run is censored, no replay equality or campaign outcome asserted."
+}

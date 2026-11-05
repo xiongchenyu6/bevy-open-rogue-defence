@@ -10,9 +10,9 @@ use bevy::{
 };
 use rogue_commander::game::{
     BasicAttackCounter, BondCardId, BondDrawButton, CombatPools, DraftButton, DraftState,
-    EnemyPressureSettings, GamePlugin, GameSession, Hero, HeroVitals, PlayerBuild,
+    EncounterState, EnemyPressureSettings, GamePlugin, GameSession, Hero, HeroVitals, PlayerBuild,
     RecruitmentProgress, RunRng, RunSeed, SelectedHero, SkillCastTelemetry, SkillDrawButton,
-    SkillEconomy,
+    SkillEconomy, bond_cost, skill_cost,
 };
 use std::{env, time::Duration};
 
@@ -173,9 +173,8 @@ fn policy(world: &mut World) {
         p.next_market_at = next;
         return;
     }
-    let price = 80 + 15 * world.resource::<SkillEconomy>().paid_draws;
-    let skill = s.skill_points > 0 || s.gold >= price.min(260);
-    let bond = s.wood >= 40;
+    let skill = s.skill_points > 0 || s.gold >= skill_cost(world.resource::<SkillEconomy>());
+    let bond = s.wood >= bond_cost(s, world.resource::<EncounterState>());
     let e = if skill {
         world
             .query_filtered::<Entity, With<SkillDrawButton>>()
@@ -450,6 +449,74 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn policy_fixture(
+        gold: u32,
+        wood: u32,
+        bond_draws: u32,
+        skill_points: u32,
+    ) -> (World, Entity, Entity) {
+        let mut world = World::new();
+        world.insert_resource(Policy {
+            chapter: 5,
+            training: 0,
+            active: true,
+            starter: 2,
+            forward: false,
+            frame: 15,
+            settled: 1,
+            market_step: None,
+            next_market_at: 180.,
+        });
+        world.init_resource::<ButtonInput<KeyCode>>();
+        world.init_resource::<rogue_commander::game::CampaignMenu>();
+        world
+            .resource_mut::<rogue_commander::game::CampaignMenu>()
+            .0 = false;
+        world.init_resource::<SelectedHero>();
+        world.resource_mut::<SelectedHero>().locked = true;
+        world.init_resource::<GameSession>();
+        {
+            let mut session = world.resource_mut::<GameSession>();
+            session.elapsed = 1.;
+            session.gold = gold;
+            session.wood = wood;
+            session.bond_draws = bond_draws;
+            session.skill_points = skill_points;
+            session.paused = false;
+        }
+        world.init_resource::<DraftState>();
+        world.init_resource::<SkillEconomy>();
+        world.resource_mut::<SkillEconomy>().paid_draws = 8;
+        world.init_resource::<rogue_commander::game::EncounterState>();
+        let skill = world.spawn((SkillDrawButton, Interaction::None)).id();
+        let bond = world.spawn((BondDrawButton, Interaction::None)).id();
+        (world, skill, bond)
+    }
+
+    #[test]
+    fn policy_chooses_affordable_bond_when_late_skill_draw_is_unaffordable() {
+        let (mut world, skill, bond) = policy_fixture(260, 40, 0, 0);
+        policy(&mut world);
+        assert_eq!(world.get::<Interaction>(skill), Some(&Interaction::None));
+        assert_eq!(world.get::<Interaction>(bond), Some(&Interaction::Pressed));
+    }
+
+    #[test]
+    fn policy_does_not_request_bond_when_current_wood_price_exceeds_balance() {
+        let (mut world, skill, bond) = policy_fixture(0, 40, 10, 0);
+        policy(&mut world);
+        assert_eq!(world.get::<Interaction>(skill), Some(&Interaction::None));
+        assert_eq!(world.get::<Interaction>(bond), Some(&Interaction::None));
+    }
+
+    #[test]
+    fn policy_prioritizes_free_skill_points_without_gold_or_wood() {
+        let (mut world, skill, bond) = policy_fixture(0, 0, 10, 1);
+        policy(&mut world);
+        assert_eq!(world.get::<Interaction>(skill), Some(&Interaction::Pressed));
+        assert_eq!(world.get::<Interaction>(bond), Some(&Interaction::None));
+    }
 
     #[test]
     fn health_pressure_tracks_fraction_after_growth_and_excludes_dead_time() {

@@ -1,0 +1,53 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `release` profile [optimized] target(s) in 4m 34s
+     Running unittests src/bin/balance_sim.rs (target/release/deps/balance_sim-77ed61d0b2c1945a)
+
+running 3 tests
+
+thread 'tests::policy_chooses_affordable_bond_when_late_skill_draw_is_unaffordable' (1716204) panicked at src/bin/balance_sim.rs:502:9:
+assertion `left == right` failed
+  left: Some(Pressed)
+ right: Some(None)
+stack backtrace:
+test tests::policy_prioritizes_free_skill_points_without_gold_or_wood ... ok
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<core::option::Option<&bevy_ui::focus::Interaction>, core::option::Option<&bevy_ui::focus::Interaction>>
+   4: balance_sim::tests::policy_chooses_affordable_bond_when_late_skill_draw_is_unaffordable
+   5: <balance_sim::tests::policy_chooses_affordable_bond_when_late_skill_draw_is_unaffordable::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+test tests::policy_chooses_affordable_bond_when_late_skill_draw_is_unaffordable ... FAILED
+
+thread 'tests::policy_does_not_request_bond_when_current_wood_price_exceeds_balance' (1716205) panicked at src/bin/balance_sim.rs:511:9:
+assertion `left == right` failed
+  left: Some(Pressed)
+ right: Some(None)
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<core::option::Option<&bevy_ui::focus::Interaction>, core::option::Option<&bevy_ui::focus::Interaction>>
+   4: balance_sim::tests::policy_does_not_request_bond_when_current_wood_price_exceeds_balance
+   5: <balance_sim::tests::policy_does_not_request_bond_when_current_wood_price_exceeds_balance::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+test tests::policy_does_not_request_bond_when_current_wood_price_exceeds_balance ... FAILED
+
+failures:
+
+failures:
+    tests::policy_chooses_affordable_bond_when_late_skill_draw_is_unaffordable
+    tests::policy_does_not_request_bond_when_current_wood_price_exceeds_balance
+
+test result: FAILED. 1 passed; 2 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.03s
+
+error: test failed, to rerun pass `--bin balance_sim`
