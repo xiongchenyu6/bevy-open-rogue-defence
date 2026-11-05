@@ -1,5 +1,7 @@
 import shutil
 import unittest
+from unittest.mock import patch
+from campaign_equipment_runtime import EquipmentPolicy
 from campaign_equipment_runtime import battle_seconds
 from pathlib import Path
 from campaign_equipment_runtime import (affordable_gear, market_wallet, inventory_count,
@@ -13,6 +15,32 @@ class EquipmentPolicyParsing(unittest.TestCase):
         for text in ('24:99', '24:5', 'ROUND 0/5', '', '24:59 0/5'):
             with self.assertRaises(AssertionError):
                 battle_seconds(text)
+
+    def test_countdown_drains_recognized_recruitment_before_reading_hud(self):
+        policy = EquipmentPolicy.__new__(EquipmentPolicy)
+        keys = []
+        policy.key = keys.append
+        policy.visits = 4
+        policy.ui = dict(shot=lambda name: Path(name), env=None, report={},
+                         lines=lambda: [('Level 10 · Recruit a hero', 40, 80, 450, 110)])
+        with patch('campaign_equipment_runtime.screenshot_battle_seconds',
+                   side_effect=[AssertionError('blank'), 1155]), \
+             patch('campaign_equipment_runtime.time.monotonic', return_value=0):
+            self.assertEqual(policy.visible_countdown('resume', 10), 1155)
+        self.assertEqual(keys, ['1'])
+        self.assertEqual(len(policy.ui['report']['equipment_clock_choices']), 1)
+
+    def test_unreadable_clock_without_choice_still_fails_without_keys(self):
+        policy = EquipmentPolicy.__new__(EquipmentPolicy)
+        keys = []
+        policy.key = keys.append
+        policy.ui = dict(shot=lambda name: Path(name), env=None, report={}, lines=lambda: [])
+        with patch('campaign_equipment_runtime.screenshot_battle_seconds',
+                   side_effect=AssertionError('blank')), \
+             patch('campaign_equipment_runtime.time.monotonic', return_value=0), \
+             self.assertRaises(AssertionError):
+            policy.visible_countdown('resume', 10)
+        self.assertEqual(keys, [])
 
     def test_current_header_and_ambiguous_wallet(self):
         self.assertEqual(market_wallet([('LV1 KILLS 99880',1120,205,1209,214)]),99880)

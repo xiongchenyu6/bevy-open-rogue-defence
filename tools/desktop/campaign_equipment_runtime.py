@@ -4,7 +4,7 @@
 Run only in isolated packaged Ubuntu/X11 container. Requires CAMPAIGN_STAGE=5,
 CAMPAIGN_CONTINUE=1, CAMPAIGN_SPEED=1 and PACKAGE_COMMIT. No movement claim,
 stock refresh, save mutation, or resource injection. At most 12 market visits,
-60 seconds apart, each bounded to 90 seconds; total battle bound 2400 seconds.
+a 60-second cooldown after completed visits, each bounded to 90 seconds; total battle bound 2400 seconds.
 """
 import json
 import os
@@ -160,7 +160,8 @@ class EquipmentPolicy:
         ui['report'].update(scope='Packaged public UI; stationary first-card policy plus earned equipment',
             strategy='Stationary keys 1/g/f; cheapest affordable natural gear; no refresh or movement',
             package_version=version, equipment_purchases=self.purchases,
-            equipment_visit_limit=12, equipment_visit_timeout_seconds=90)
+            equipment_visit_limit=12, equipment_visit_timeout_seconds=90,
+            equipment_cooldown_after_completion_seconds=60)
 
     def key(self, key):
         self.ui['call'](['xdotool', 'keydown', key])
@@ -202,6 +203,23 @@ class EquipmentPolicy:
             dict(visit=self.visits, index=index, attempts=attempts,
                  pointer=self.ui['call'](['xdotool', 'getmouselocation', '--shell'])))
         raise AssertionError(f'Offer {index} did not show a matching preview within budget: {attempts}')
+
+    def visible_countdown(self, prefix, deadline):
+        while time.monotonic() < deadline:
+            image = self.ui['shot'](prefix + '.png')
+            try:
+                return screenshot_battle_seconds(image, self.ui['env'])
+            except AssertionError:
+                # A level-up can open recruitment after the market closes.
+                # Only a positively identified public choice permits a key;
+                # unreadable ordinary HUDs still fail rather than being skipped.
+                rows = self.ui['lines']()
+                if not choice_pending(rows):
+                    raise
+                self.ui['report'].setdefault('equipment_clock_choices', []).append(
+                    dict(visit=self.visits, rows=rows))
+                self.key('1')
+        raise AssertionError('Choice queue did not expose a battle countdown within visit budget')
 
     def observe(self, rows, elapsed):
         if elapsed < self.next_visit or self.visits >= 12:
@@ -298,8 +316,7 @@ class EquipmentPolicy:
             assert time.monotonic() < deadline, 'Visit budget exhausted before battle-resume verification'
             self.ui['report'].setdefault('equipment_visit_timings', []).append(
                 dict(visit=self.visits, phase='panels closed', elapsed=time.monotonic()-visit_started))
-            resumed = self.ui['shot'](prefix + '-resume-before.png')
-            before_seconds = screenshot_battle_seconds(resumed, self.ui['env'])
+            before_seconds = self.visible_countdown(prefix + '-resume-before', deadline)
             resume_deadline = min(deadline, time.monotonic() + 10)
             while time.monotonic() < resume_deadline:
                 time.sleep(.5)
@@ -307,8 +324,7 @@ class EquipmentPolicy:
                 if choice_pending(rows):
                     self.key('1')
                     continue
-                resumed = self.ui['shot'](prefix + '-resume-after.png')
-                after_seconds = screenshot_battle_seconds(resumed, self.ui['env'])
+                after_seconds = self.visible_countdown(prefix + '-resume-after', resume_deadline)
                 if after_seconds < before_seconds:
                     self.ui['report'].setdefault('equipment_resume_proofs', []).append(
                         dict(visit=self.visits, before=before_seconds, after=after_seconds))
@@ -318,6 +334,8 @@ class EquipmentPolicy:
             assert time.monotonic() < deadline, 'Market visit exceeded 90 seconds'
             self.ui['report']['equipment_visit_timings'].append(
                 dict(visit=self.visits, phase='resume verified', elapsed=time.monotonic()-visit_started))
+            # Leave a full minute of battle after a slow software-render visit.
+            self.next_visit = elapsed + (time.monotonic()-visit_started) + 60
             print(json.dumps(dict(stage='earned equipment visit', visit=self.visits,
                                   purchases=len(self.purchases), wallet=wallet)), flush=True)
 

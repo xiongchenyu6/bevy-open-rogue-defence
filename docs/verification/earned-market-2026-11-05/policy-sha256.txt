@@ -1,0 +1,1 @@
+580c79778fbb876bc04ffe9e1a1f67f57b95082e76e66b799255a65816e01c7a  tools/desktop/campaign_equipment_runtime.py

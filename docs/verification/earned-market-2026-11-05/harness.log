@@ -1,0 +1,39 @@
+{"sample": 1, "wall_seconds": 7.5, "terminal": null}
+{"sample": 2, "wall_seconds": 17.8, "terminal": null}
+{"sample": 3, "wall_seconds": 28.2, "terminal": null}
+{"sample": 4, "wall_seconds": 38.7, "terminal": null}
+{"sample": 5, "wall_seconds": 49.2, "terminal": null}
+{"sample": 6, "wall_seconds": 59.5, "terminal": null}
+{"sample": 7, "wall_seconds": 70.4, "terminal": null}
+{"sample": 8, "wall_seconds": 81.1, "terminal": null}
+{"sample": 9, "wall_seconds": 91.4, "terminal": null}
+{"sample": 10, "wall_seconds": 102.1, "terminal": null}
+{"sample": 11, "wall_seconds": 112.9, "terminal": null}
+{"sample": 12, "wall_seconds": 123.5, "terminal": null}
+{"sample": 13, "wall_seconds": 133.8, "terminal": null}
+{"sample": 14, "wall_seconds": 144.4, "terminal": null}
+{"sample": 15, "wall_seconds": 154.8, "terminal": null}
+{"sample": 16, "wall_seconds": 165.3, "terminal": null}
+{"sample": 17, "wall_seconds": 176.1, "terminal": null}
+{"sample": 18, "wall_seconds": 186.9, "terminal": null}
+{"stage": "earned equipment visit", "visit": 1, "purchases": 0, "wallet": 121}
+{"sample": 19, "wall_seconds": 255.2, "terminal": null}
+{"stage": "earned equipment visit", "visit": 2, "purchases": 0, "wallet": 157}
+{"sample": 20, "wall_seconds": 323.5, "terminal": null}
+{"stage": "earned equipment visit", "visit": 3, "purchases": 1, "wallet": 307}
+{"sample": 21, "wall_seconds": 415.1, "terminal": null}
+Traceback (most recent call last):
+  File "/harness/campaign_equipment_runtime.py", line 330, in <module>
+    main(EquipmentPolicy)
+  File "/harness/campaign_runtime.py", line 268, in main
+    policy.observe(text_lines, time.monotonic() - started)
+  File "/harness/campaign_equipment_runtime.py", line 302, in observe
+    before_seconds = screenshot_battle_seconds(resumed, self.ui['env'])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/campaign_equipment_runtime.py", line 33, in screenshot_battle_seconds
+    return battle_seconds(crop_text(path, '100x28+1170+20', env))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/campaign_equipment_runtime.py", line 28, in battle_seconds
+    assert match and int(match[2]) < 60, f'Unreadable battle countdown: {text!r}'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Unreadable battle countdown: ''
