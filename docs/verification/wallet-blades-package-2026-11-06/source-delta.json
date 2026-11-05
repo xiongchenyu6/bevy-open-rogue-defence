@@ -1,0 +1,25 @@
+{
+  "old_commit": "f5ef6ff8f37ecab467b5ba0baadb6decd8d49aaf",
+  "new_commit": "d4540c44df479041fe4ff4fdb818f8fb2f280f99",
+  "files": {
+    "src/bin/balance_sim.rs": "a65dc1c77216495232ffeb935e46b39613000091afd26407639a9186ee623880",
+    "src/bin/capture/market_wallet.rs": "5e6f30aa2fd36ecb4315d787da63c957e777dc82943602bff70e394a90fc4490",
+    "src/game/basic_attacks.rs": "2ff7ca66419220a9fc7a033e5915875fc655405e492f72a66e316694021623b2",
+    "src/game/combat.rs": "884638a9e2426e04e665726a45f4186647bbda2de9c825503e211d38379d6e69",
+    "src/game/combat/collision_order_tests.rs": "b52288f978410276eac85b3e6a67f0b2829b2cdce6f973d67e77e2a0c72f447a",
+    "src/game/combat/gate_state_tests.rs": "cd40b8408f45e43475493a375357713de6ef58e0c880c57fe23626f39420eb9b",
+    "src/game/combat/native_aim_tests.rs": "2241bd60937635f4df888d6fdaf9d600af470d3be3cc56729306d4533c4832ab",
+    "src/game/market.rs": "6ccb3df2d827e5380cbcfdcb15d0daee84bfa43009cb7e3ebaaa944f59843f4f",
+    "src/game/skills.rs": "d661c256b2f944827959289c71a389adb5bd336eba7b21280efcba1c90ff5418",
+    "src/game/skills/reference_skills.rs": "735186761a832eafce6d5fe6787843e65b26927a15a6f28c76bbe829d2862e18",
+    "src/game/ui.rs": "2c4be911fefbf3449c403c097e885b39879c026e08ad63d3db37c146c952e8ad",
+    "src/game/ui_art.rs": "7e1a94a28a73e44267ca56df9796a9d12e80274167581264e34b9ff9a6aa6faa",
+    "tools/desktop/campaign_equipment_runtime.py": "674909c39cf601765e45980bc028d4efa09ffe723a732c57a219812cd135f872",
+    "tools/desktop/forge_refresh.py": "c40e9e61179f9ae55d767bd6c9f1333e7b6bced398cd292a190870e701423063",
+    "tools/desktop/forge_runtime.py": "6d6d336287e4ce33741c723940d3eff689e7211e2ce3ef7383122b114fc61e93",
+    "tools/desktop/test_battle_caption_candidate.py": "891d3068a6ec36fdcd7e979ca6c28611498aaa2a66726dd4828d0e2d83950e55",
+    "tools/desktop/test_campaign_equipment_runtime.py": "5cf2e94b1721764f8a2094ab160e6b310ef3d00d1f1b6ae6f214ba5c095bcdab",
+    "tools/desktop/test_forge_refresh.py": "740ca271730f862905fcd04e2dfd077338eedcaef33ab1be8b2ecf293b390ce5",
+    "tools/desktop/test_forge_runtime.py": "5e6b0b43288ffa48c3af508b630394664a5732ffedad9c52e66fb42399ff57de"
+  }
+}

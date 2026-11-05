@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "files_verified": 886,
+  "source": "d4540c44df479041fe4ff4fdb818f8fb2f280f99",
+  "binary_sha256": "7dce2d9be5a8a8d8fa9027b1adc5fc7b0f3705b6ffadf6cb8652326e0b7aec24",
+  "tracked_inputs_unchanged": 516,
+  "scope": "Root independently rehashed package files, manifest, tar and pre/post input receipts; viewed EN battle and persisted ZH restart battle. Short flow only, not complete natural Forge/C6."
+}

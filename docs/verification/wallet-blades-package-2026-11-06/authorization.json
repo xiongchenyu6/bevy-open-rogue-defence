@@ -1,0 +1,6 @@
+{
+  "build_and_smoke_authorized": true,
+  "expected_source_commit": "d4540c44df479041fe4ff4fdb818f8fb2f280f99",
+  "public_routes_authorized": false,
+  "reason": "Await root final source including ec3 wallet synchronization and completed blade fixes"
+}
