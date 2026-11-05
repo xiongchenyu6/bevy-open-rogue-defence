@@ -1,0 +1,27 @@
+stage: battle started; resetting actual toolbar to1x
+stage: earn kills and wait for real3min unlock
+stage: real unlock countdown 1466
+stage: real unlock countdown 1459
+stage: real unlock countdown 1449
+stage: real unlock countdown 1438
+stage: real unlock countdown 1428
+stage: real unlock countdown 1417
+stage: real unlock countdown 1406
+stage: real unlock countdown 1395
+stage: real unlock countdown 1385
+stage: real unlock countdown 1374
+stage: real unlock countdown 1365
+stage: real unlock countdown 1354
+stage: real unlock countdown 1345
+stage: real unlock countdown 1334
+stage: real unlock countdown 1324
+stage: real unlock countdown 1314
+Traceback (most recent call last):
+  File "/harness/forge_runtime.py", line 343, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/harness/forge_runtime.py", line 258, in main
+    terminal(lines())
+  File "/harness/forge_runtime.py", line 191, in terminal
+    raise RuntimeError('Terminal reached before equipment proof: '+title)
+RuntimeError: Terminal reached before equipment proof: NO LIVES REMAIN

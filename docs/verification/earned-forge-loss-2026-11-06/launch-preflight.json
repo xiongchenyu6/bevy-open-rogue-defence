@@ -1,0 +1,14 @@
+{
+  "first_attempt": {
+    "executable": "/run/current-system/sw/bin/python3",
+    "exit": 1,
+    "stderr": "Failed to find executable /run/current-system/sw/bin/python3: No such file or directory",
+    "game_started": false
+  },
+  "before_retry_authoritative_unit_state": {
+    "LoadState": "not-found",
+    "ActiveState": "inactive"
+  },
+  "corrected_launcher": "/run/current-system/sw/bin/bash -c exec python3 ...",
+  "scope": "Host command-path preflight only; no child game/profile modification from first attempt"
+}

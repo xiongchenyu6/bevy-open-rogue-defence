@@ -1,0 +1,33 @@
+{
+  "scope": "Actual public game defeat; actual ArcLens purchase/inventory; EchoCore/forge/restart incomplete; no balance causality or rerun",
+  "files_sha256": {
+    "README.md": "60bcfd3e13c45a0b7665a8147bf31a93e927f3b388a5d954000d7912a599388f",
+    "archive-verification.log": "f07054e1a04e4db7a82ad2d0c96f142594f1542a0ae042b357676b441308d3d9",
+    "complete-original-run.tar.gz.part00": "597eade088be11cf0d1c9ca1481f3ee9c4c029f6784d4419bc2a308e5e52583d",
+    "complete-original-run.tar.gz.part01": "6d26cf8c86977cd2ccd45b99dc4ea85c9fc6c1e79dd3c43ba8e98638333f2ca8",
+    "complete-original-run.tar.gz.part02": "8a5791c547fe9fd826761c5ef81a726af92439fa0a43aaa43ab5af0008a58738",
+    "forge/command.json": "e6f93fa51c6ee2cd80a4f776869fd9b8339d05561e80885270a909fcfe68fb6b",
+    "forge/harness-snapshot.json": "5dc7724408a55457da63c56569de0b758a142440e1db58968435ffedfe4105b7",
+    "forge/harness-source/campaign_equipment_runtime.py": "806ec83bdf9ed96202afad5f7c5ace80c8de8a32eddf34a0690e73aa1c0c802b",
+    "forge/harness-source/campaign_runtime.py": "76ce1daa5939dbbbdcbc0b68162f62b59ce178c14228e1cecb1c8f50684c0591",
+    "forge/harness-source/forge_runtime.py": "4185842ce51580d68c1749ec66fdc7c5ed8c62fe1f3bfcfe781935fc2495e48b",
+    "forge/harness-source/smoke_runtime.py": "b836e98f55fe7997112145d72250b19bf2ff67f13fe441cab5d4d1320af4f4f6",
+    "forge/initial-save-provenance.json": "2b48c8c875570d599ff1649c9db94c9c5fcab1460e3683ff68f31a591b821466",
+    "forge/inventory-material-1.png": "d34f0c84830f7a07c99cdcafad9410b228d3e529d915e713ad87a2904cfe14e3",
+    "forge/market-18.png": "abdc1daafc9d239a737c52a3c769386484e5a30ed2527839a7a7ac57628117e8",
+    "forge/material-03-purchase-00.png": "5c0e853ec24ee9a28c492214050f19df814337c70af0741cb80a6b72e97b9f3e",
+    "forge/process.json": "67bf1317feb1dec9487a89f8595d9bd28447fa4617d6e1c557d09c7a513cf47d",
+    "forge/result.json": "e1cb4c47cc696386409454905b43d20dee5c1cfeee8906bf0f1c9c39e894c2fc",
+    "forge/runtime.log": "81ca61fa65be710cc6f03adbd732fbb95dbb245ddf33749c3c99feb8a545a8ef",
+    "forge/state/campaign.save": "6b7821afd78d1ee1babc2b02d5dffdba64f53de00ddbea53d0efd089e814abb0",
+    "forge/terminal.png": "c1d2496d3235ccf6e5aadbfcec1d188f499254353a273490b5666fbfedbf70a3",
+    "launch-preflight.json": "46abd36382a9ed5aeeed91d78eeff5d0f6e015dd3aa12a6d989a514eb175c9ca",
+    "manager.log": "131ae53a84c7c87a6ec14d5d94ccf11f3b6ccedc69f1bd7a28b6a6dea8698691",
+    "manager.py": "339f00aeef02d253f7cc7d0ef2e410cf5f55b476565066639a3bf653d3a6b5bb",
+    "package-check.json": "fbb56e826d43c5cd2aba897253d0d63a75d01e2eccafafceb9c36b5af896a70b",
+    "raw-receipt.json": "3fb31f65b12936fd11ba29dd4895ab02a6bc970f3ceb70b7250bca4245b5dc78",
+    "raw-source-files.json": "c652be48282f4c345ba9cdd811503ed84a680966209ad8da3017fc80abbdb60f",
+    "reviewed-package-pins.json": "fbb56e826d43c5cd2aba897253d0d63a75d01e2eccafafceb9c36b5af896a70b",
+    "verify.py": "9dfb57a8e0d2da3464752127eca73c50a7155fbcaea2d2ee27a051a35aa35dde"
+  }
+}
