@@ -1,0 +1,9 @@
+{
+  "source_commit": "32cf5941c92faf465202d8c4895707d83394dffb",
+  "binary_sha256": "f2af1f1a768935d17da4c7305a92938e7da90e94bf167e5da5947db7ad268e35",
+  "tar_sha256": "ae6f62ea409b3d2f96522776eab0aed9be888611c544f3740dcd4ab20caba1ec",
+  "tar_bytes": 60302370,
+  "package_path": "target/desktop-packages-sword-nov5/rogue-commander-linux",
+  "tar_path": "target/desktop-packages-sword-nov5/rogue-commander-linux-0.1.0.tar.gz",
+  "scope": "offline readonly Ubuntu24/X11/software Vulkan independent short flow; no Steam client/performance/full campaign claim"
+}

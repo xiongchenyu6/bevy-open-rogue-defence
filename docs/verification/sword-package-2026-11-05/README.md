@@ -1,0 +1,5 @@
+# Starter-sword Linux candidate
+
+SDK source `32cf594` includes same-frame passive accounting and `797613a` starter-sword fading trails. Fixed sniper SDK/Rust1.98 build completed in2m38s, with878manifest files verified and no missing collected dependency licenses. The immutable offline package passed first guide/recruitment/battle, Chinese settings, fullscreen/restore, saved restart/recruitment/battle and two normal exits in Ubuntu24/X11/software Vulkan without source, Rust or Nix mounts. Root inspected first battle and restarted Chinese battle frames.
+
+The default short route does not specifically exercise every sword tier; the actual starter-sword behavior has separate four-scenario native before/after evidence at `../sword-trail-2026-11-05/`. Neither this evidence nor that fixture establishes complete campaign, real Steam-client, physical audio/hardware performance, or subjective art acceptance. The previous37fe665 package's five earned equipment purchases and current live independent forge route are scoped to that earlier binary, not this package.
