@@ -1,0 +1,24 @@
+{
+  "source": "docs/verification/earned-equipment-2026-10-09/initial-campaign.save",
+  "sha256": "da5bf0a9ca3f4032a265425f9989bda292d8c0c2622848157df6d2c0223ba825",
+  "copied_bytes_unchanged": true,
+  "initial_progress": {
+    "unlocked": 5,
+    "currency": 575,
+    "cleared": "111100",
+    "upgrades": [
+      5,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "files": {
+    "campaign.save": "da5bf0a9ca3f4032a265425f9989bda292d8c0c2622848157df6d2c0223ba825"
+  },
+  "audio_or_preferences_copied": false,
+  "restart_profile": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/wallet-blades-earned-forge-v3-2026-11-06/forge/state",
+  "restart_same_rw_profile": true
+}

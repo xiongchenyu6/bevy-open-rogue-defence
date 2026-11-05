@@ -1,0 +1,3425 @@
+{
+  "package_version": {
+    "binary_sha256": "7dce2d9be5a8a8d8fa9027b1adc5fc7b0f3705b6ffadf6cb8652326e0b7aec24",
+    "git_commit": "d4540c44df479041fe4ff4fdb818f8fb2f280f99",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "initial_progress": {
+    "unlocked": 5,
+    "currency": 575,
+    "cleared": "111100",
+    "upgrades": [
+      5,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "scope": "Packaged public X11 UI, earned kills, random market stock",
+  "purchases": [
+    {
+      "name": "Arc Lens",
+      "price": 180,
+      "wallet_before": 332,
+      "wallet_after": 152,
+      "offer_ocr": {
+        "name": "Arc Lens",
+        "price": 180,
+        "category": "Equipment",
+        "index": 1,
+        "tile_ocr": "Arc Lens",
+        "price_ocr": "180",
+        "preview_ocr": "ArcLens + Equipment",
+        "observed_name": "ArcLens"
+      }
+    },
+    {
+      "name": "Echo Core",
+      "price": 300,
+      "wallet_before": 310,
+      "wallet_after": 10,
+      "offer_ocr": {
+        "name": "Echo Core",
+        "price": 300,
+        "category": "Equipment",
+        "index": 0,
+        "tile_ocr": "Echo Core",
+        "price_ocr": "300",
+        "preview_ocr": "Echo Core + Equipment",
+        "observed_name": "Echo Core"
+      }
+    }
+  ],
+  "crafting": "Astral Prism crafted from two same-run naturally purchased materials",
+  "acquired_materials": [
+    "Arc Lens",
+    "Echo Core"
+  ],
+  "startup_observations": [
+    {
+      "screenshot": "startup-observation-00.png",
+      "guide": null,
+      "skip": null,
+      "commander": null
+    },
+    {
+      "screenshot": "startup-observation-01.png",
+      "guide": [
+        "1/4 + MOVE & DODGE",
+        520,
+        330,
+        762,
+        353
+      ],
+      "skip": [
+        "Skip",
+        476,
+        446,
+        507,
+        463
+      ],
+      "commander": null,
+      "input": "Escape"
+    },
+    {
+      "screenshot": "startup-observation-02.png",
+      "guide": null,
+      "skip": null,
+      "commander": [
+        "Click a basic commander to begin",
+        42,
+        79,
+        599,
+        117
+      ]
+    }
+  ],
+  "input_counts": {
+    "Escape": 1,
+    "1": 74,
+    "g": 66,
+    "f": 66,
+    "b": 12,
+    "i": 3
+  },
+  "speed_ocr_values": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "actual_speed": 1,
+  "unlock_timer_reads": [
+    1474,
+    1469,
+    1465,
+    1457,
+    1446,
+    1435,
+    1427,
+    1416,
+    1406,
+    1395,
+    1384,
+    1371,
+    1360,
+    1349,
+    1338,
+    1327,
+    1315
+  ],
+  "clock_progress": [
+    {
+      "stage": "unlock",
+      "remaining": 1474,
+      "stall_seconds": 0.0,
+      "wall": 237852.897745525
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1469,
+      "stall_seconds": 0.0,
+      "wall": 237864.349239391
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1465,
+      "stall_seconds": 0.0,
+      "wall": 237893.143712456
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1457,
+      "stall_seconds": 0.0,
+      "wall": 237903.89033952
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1446,
+      "stall_seconds": 0.0,
+      "wall": 237914.737800754
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1435,
+      "stall_seconds": 0.0,
+      "wall": 237926.515139328
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1427,
+      "stall_seconds": 0.0,
+      "wall": 237937.322465227
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1416,
+      "stall_seconds": 0.0,
+      "wall": 237947.936329554
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1406,
+      "stall_seconds": 0.0,
+      "wall": 237958.73824221
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1395,
+      "stall_seconds": 0.0,
+      "wall": 237969.396424936
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1384,
+      "stall_seconds": 0.0,
+      "wall": 237980.038149889
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1371,
+      "stall_seconds": 0.0,
+      "wall": 237998.145853312
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1360,
+      "stall_seconds": 0.0,
+      "wall": 238008.92368468
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1349,
+      "stall_seconds": 0.0,
+      "wall": 238020.742594654
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1338,
+      "stall_seconds": 0.0,
+      "wall": 238032.425725535
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1327,
+      "stall_seconds": 0.0,
+      "wall": 238044.6543985
+    },
+    {
+      "stage": "unlock",
+      "remaining": 1315,
+      "stall_seconds": 0.0,
+      "wall": 238057.141406296
+    }
+  ],
+  "hud_choices": [
+    {
+      "screenshot": "unlock-choice-0.png",
+      "rows": [
+        [
+          "Settings",
+          615,
+          25,
+          664,
+          39
+        ],
+        [
+          "Detailed - switch to simple",
+          837,
+          74,
+          990,
+          103
+        ],
+        [
+          "Oo xX | \u4e4b",
+          1021,
+          71,
+          1162,
+          113
+        ],
+        [
+          "Forge a new bond",
+          113,
+          76,
+          372,
+          110
+        ],
+        [
+          "sr",
+          122,
+          161,
+          140,
+          169
+        ],
+        [
+          "R",
+          841,
+          161,
+          846,
+          169
+        ],
+        [
+          "@\u00ae",
+          203,
+          182,
+          361,
+          295
+        ],
+        [
+          "Divine Wisdom",
+          562,
+          376,
+          718,
+          396
+        ],
+        [
+          "Intelligence Growth",
+          179,
+          376,
+          384,
+          401
+        ],
+        [
+          "Intelligence Training",
+          893,
+          376,
+          1107,
+          401
+        ],
+        [
+          "om",
+          273,
+          416,
+          291,
+          423
+        ],
+        [
+          "oosoo",
+          615,
+          416,
+          666,
+          423
+        ],
+        [
+          "ao",
+          991,
+          416,
+          1009,
+          423
+        ],
+        [
+          "Intelligence Growth",
+          132,
+          481,
+          328,
+          505
+        ],
+        [
+          "+10% intelligence amplification",
+          130,
+          509,
+          319,
+          523
+        ],
+        [
+          "Intelligence",
+          131,
+          526,
+          200,
+          539
+        ],
+        [
+          "0/2",
+          219,
+          526,
+          238,
+          538
+        ],
+        [
+          "an Training \u00ab",
+          130,
+          540,
+          279,
+          567
+        ],
+        [
+          "O Intelligence Growth",
+          288,
+          540,
+          420,
+          554
+        ],
+        [
+          ").1 Intelligence per kill and 0.2 per second; unlock Arcanum with double draw weight.",
+          182,
+          556,
+          687,
+          570
+        ],
+        [
+          "Geet unlocks: Arcanum",
+          130,
+          557,
+          311,
+          585
+        ],
+        [
+          "Forge a new bond \u8f90 \u56fd\u533b",
+          113,
+          38,
+          1159,
+          134
+        ],
+        [
+          "a] fe 2] [a 3",
+          436,
+          161,
+          1158,
+          169
+        ],
+        [
+          "Intelligence Growth Divine Wisdom Intelligence Training",
+          179,
+          376,
+          1107,
+          401
+        ],
+        [
+          "+10% Intelligence amplification.",
+          130,
+          509,
+          323,
+          523
+        ],
+        [
+          "Intelligence + 0/2",
+          131,
+          526,
+          238,
+          539
+        ],
+        [
+          "O \u3007 Intelligence Training + \u00a9 Intelligence Growth",
+          126,
+          533,
+          420,
+          559
+        ],
+        [
+          "2: Gain 0.1 Intelligence per kill and 0.2 per second; unlock Arcanum with double draw weight.",
+          130,
+          549,
+          687,
+          574
+        ],
+        [
+          "Completion unlocks: Arcanum",
+          131,
+          571,
+          311,
+          585
+        ],
+        [
+          "Detailed - switch to simple",
+          837,
+          74,
+          990,
+          102
+        ],
+        [
+          "OX",
+          1021,
+          75,
+          1159,
+          101
+        ],
+        [
+          "SSR",
+          123,
+          161,
+          140,
+          169
+        ],
+        [
+          "@\u00ae",
+          203,
+          183,
+          360,
+          295
+        ],
+        [
+          "como",
+          615,
+          416,
+          666,
+          423
+        ],
+        [
+          "+10% intelligence amplification,",
+          130,
+          509,
+          323,
+          523
+        ],
+        [
+          "0/2",
+          220,
+          526,
+          238,
+          538
+        ],
+        [
+          "z",
+          130,
+          557,
+          140,
+          567
+        ],
+        [
+          "OlIntelligence Training \u00ab \u00a9 intelligence Growth",
+          130,
+          532,
+          420,
+          561
+        ],
+        [
+          ").1 Intelligence per kill and 0.2 per second; unlock Arcanum with double draw weight.",
+          182,
+          557,
+          687,
+          570
+        ],
+        [
+          "Completion unlocks: Arcanum",
+          131,
+          572,
+          311,
+          585
+        ],
+        [
+          "Forge anew bond \u8f90 \u56fd\u533b",
+          113,
+          75,
+          1159,
+          110
+        ],
+        [
+          "ssa a] fe 2] [a 3",
+          119,
+          145,
+          1158,
+          180
+        ],
+        [
+          "O Intelligence Training + \u00a9 Intelligence Growth",
+          130,
+          533,
+          420,
+          559
+        ]
+      ]
+    },
+    {
+      "screenshot": "unlock-choice-1.png",
+      "rows": [
+        [
+          "Settings",
+          615,
+          25,
+          664,
+          39
+        ],
+        [
+          "Detailed + switch to simple",
+          837,
+          75,
+          991,
+          103
+        ],
+        [
+          "Oo xX | \u4e4b",
+          1021,
+          71,
+          1162,
+          113
+        ],
+        [
+          "Forge a new bond",
+          113,
+          76,
+          372,
+          110
+        ],
+        [
+          "sk",
+          122,
+          161,
+          134,
+          170
+        ],
+        [
+          "R",
+          841,
+          161,
+          846,
+          169
+        ],
+        [
+          "s",
+          611,
+          317,
+          629,
+          330
+        ],
+        [
+          "2",
+          648,
+          319,
+          664,
+          334
+        ],
+        [
+          "Judge\u2019 s Brush",
+          198,
+          375,
+          363,
+          401
+        ],
+        [
+          "Divine Body",
+          578,
+          376,
+          704,
+          401
+        ],
+        [
+          "Agility Training",
+          919,
+          376,
+          1079,
+          401
+        ],
+        [
+          "ao",
+          273,
+          416,
+          291,
+          423
+        ],
+        [
+          "oooom",
+          615,
+          416,
+          666,
+          423
+        ],
+        [
+          "ao",
+          991,
+          416,
+          1009,
+          423
+        ],
+        [
+          "Judge\u2019 s Brush",
+          131,
+          480,
+          289,
+          505
+        ],
+        [
+          "+109 health. Survive lethal damage for 2 seconds; 120-second cooldown.",
+          130,
+          509,
+          571,
+          524
+        ],
+        [
+          "Underworld Judge",
+          131,
+          525,
+          243,
+          540
+        ],
+        [
+          "0/2",
+          262,
+          525,
+          281,
+          539
+        ],
+        [
+          "O Judge\u2019 sBrush \u00ab O Book of Life",
+          130,
+          532,
+          349,
+          561
+        ],
+        [
+          "2: Gain one additional revival.",
+          130,
+          556,
+          308,
+          567
+        ],
+        [
+          "\u2018Completion unlocks: Requiem",
+          130,
+          571,
+          311,
+          585
+        ],
+        [
+          "Forge anew bond",
+          113,
+          76,
+          372,
+          110
+        ],
+        [
+          "3 \u53ef \u4e0b 2| Je 3",
+          122,
+          161,
+          1158,
+          170
+        ],
+        [
+          "Judge\u2019 s Brush Divine Body Agility Training",
+          198,
+          375,
+          1079,
+          401
+        ],
+        [
+          "+10% health. Survive lethal damage for 2 seconds; 120-second cooldown.",
+          130,
+          505,
+          571,
+          528
+        ],
+        [
+          "Underworld Judge + 0/2",
+          131,
+          517,
+          281,
+          544
+        ],
+        [
+          "OJudge\u2019 s Brush \u00ab \u00a9 Book of Life",
+          130,
+          533,
+          349,
+          560
+        ],
+        [
+          "Completion unlocks: Requiem",
+          130,
+          571,
+          311,
+          585
+        ],
+        [
+          "Detailed - switch to simple",
+          837,
+          74,
+          990,
+          102
+        ],
+        [
+          "OX",
+          1021,
+          75,
+          1159,
+          101
+        ],
+        [
+          "sR",
+          123,
+          162,
+          134,
+          169
+        ],
+        [
+          "@",
+          257,
+          233,
+          283,
+          257
+        ],
+        [
+          "> @",
+          267,
+          257,
+          319,
+          287
+        ],
+        [
+          "y",
+          561,
+          225,
+          611,
+          306
+        ],
+        [
+          "\u5728",
+          611,
+          318,
+          622,
+          330
+        ],
+        [
+          "+10% health. Survive lethal damage for 2 seconds; 120-second cooldown.",
+          130,
+          501,
+          567,
+          530
+        ],
+        [
+          "Underworld Judge",
+          131,
+          526,
+          243,
+          539
+        ],
+        [
+          "0/2",
+          262,
+          526,
+          281,
+          538
+        ],
+        [
+          "2: Gain one additional revival.",
+          130,
+          557,
+          308,
+          567
+        ],
+        [
+          "Oudge\u2019 s Brush + \u00a9 Bookof Life",
+          130,
+          533,
+          346,
+          561
+        ],
+        [
+          "Completion unlocks: Requiem",
+          131,
+          572,
+          311,
+          585
+        ],
+        [
+          "Forge anew bond TENG",
+          113,
+          75,
+          1159,
+          110
+        ],
+        [
+          "\u5415 \u53f8 |e 2] |e 3",
+          123,
+          161,
+          1158,
+          169
+        ],
+        [
+          "@ , wy",
+          257,
+          197,
+          1053,
+          297
+        ],
+        [
+          "\u00a9 A - P \u4ece Gal",
+          267,
+          230,
+          1086,
+          336
+        ],
+        [
+          "+e",
+          611,
+          318,
+          659,
+          333
+        ],
+        [
+          "+10% health. Survive lethal damage for 2 seconds; 120-second cooldown.",
+          130,
+          501,
+          567,
+          527
+        ],
+        [
+          "Underworld Judge + 0/2",
+          131,
+          526,
+          281,
+          539
+        ],
+        [
+          "O Judge\u2019 s Brush + O Book of Life",
+          130,
+          536,
+          346,
+          558
+        ]
+      ]
+    },
+    {
+      "screenshot": "unlock-choice-2.png",
+      "rows": [
+        [
+          "Settings",
+          615,
+          25,
+          664,
+          39
+        ],
+        [
+          "Forge a new bond",
+          113,
+          76,
+          372,
+          110
+        ],
+        [
+          "R",
+          841,
+          161,
+          846,
+          169
+        ],
+        [
+          "Arcane Focus",
+          210,
+          378,
+          351,
+          396
+        ],
+        [
+          "Agility Training",
+          560,
+          376,
+          720,
+          401
+        ],
+        [
+          "Divine Might",
+          935,
+          376,
+          1066,
+          401
+        ],
+        [
+          "aon",
+          267,
+          416,
+          296,
+          423
+        ],
+        [
+          "oh",
+          632,
+          416,
+          650,
+          423
+        ],
+        [
+          "sooo",
+          974,
+          416,
+          1025,
+          423
+        ],
+        [
+          "Arcane Focus",
+          130,
+          482,
+          265,
+          500
+        ],
+        [
+          "Arcanum",
+          130,
+          526,
+          183,
+          536
+        ],
+        [
+          "+15% skill damage.",
+          130,
+          509,
+          246,
+          523
+        ],
+        [
+          "4/3",
+          204,
+          526,
+          222,
+          538
+        ],
+        [
+          "\u00a5 Spell Echo \u00bb O Arcane Chain - \u00a9 Arcane Focus",
+          130,
+          540,
+          434,
+          554
+        ],
+        [
+          "3: Gain another 10% skill damage and 1 Job Fruit.",
+          130,
+          556,
+          427,
+          570
+        ],
+        [
+          "\u2018Completion unlocks: Element Master",
+          130,
+          571,
+          352,
+          585
+        ],
+        [
+          "Forge a new bond LAs",
+          113,
+          64,
+          1170,
+          116
+        ],
+        [
+          "a a] fe 2] [a 3",
+          123,
+          161,
+          1158,
+          169
+        ],
+        [
+          "Arcane Focus Agility Training Divine Might",
+          210,
+          376,
+          1066,
+          401
+        ],
+        [
+          "+159 skill damage.",
+          130,
+          509,
+          246,
+          523
+        ],
+        [
+          "Arcanum + 1/3",
+          130,
+          526,
+          222,
+          538
+        ],
+        [
+          "v Spell Echo + O Arcane Chain \u00ab \u00a9 Arcane Focus",
+          126,
+          536,
+          434,
+          559
+        ],
+        [
+          "or",
+          632,
+          416,
+          650,
+          423
+        ],
+        [
+          "+15% skill damage.",
+          130,
+          510,
+          242,
+          523
+        ],
+        [
+          "3",
+          204,
+          526,
+          222,
+          538
+        ],
+        [
+          "\u00a5 Spell Echo",
+          126,
+          532,
+          204,
+          561
+        ],
+        [
+          "OArcane Chain",
+          225,
+          540,
+          318,
+          552
+        ],
+        [
+          "Oarcane Focus",
+          339,
+          540,
+          434,
+          552
+        ],
+        [
+          "3: Gain another 10% skill damage and 1 Job Fruit.",
+          130,
+          557,
+          427,
+          570
+        ],
+        [
+          "Completion unlocks: Element Master",
+          131,
+          572,
+          352,
+          585
+        ],
+        [
+          "Forge a new bond [] oO",
+          113,
+          60,
+          1047,
+          116
+        ],
+        [
+          "n a] fe 2] [a 3",
+          123,
+          161,
+          1158,
+          169
+        ],
+        [
+          "+159 skill damage.",
+          130,
+          503,
+          242,
+          527
+        ]
+      ]
+    },
+    {
+      "screenshot": "unlock-choice-3.png",
+      "rows": [
+        [
+          "Settings",
+          615,
+          25,
+          664,
+          39
+        ],
+        [
+          "Detailed + switch to simple",
+          837,
+          75,
+          991,
+          103
+        ],
+        [
+          "Oo xX | \u4e4b",
+          1021,
+          71,
+          1162,
+          113
+        ],
+        [
+          "Shape your arsenal",
+          111,
+          76,
+          395,
+          110
+        ],
+        [
+          "sk",
+          122,
+          161,
+          134,
+          170
+        ],
+        [
+          "1",
+          436,
+          162,
+          440,
+          169
+        ],
+        [
+          "R",
+          482,
+          161,
+          487,
+          169
+        ],
+        [
+          "2",
+          794,
+          161,
+          799,
+          169
+        ],
+        [
+          "R",
+          841,
+          161,
+          846,
+          169
+        ],
+        [
+          "FLAME RAY",
+          225,
+          378,
+          340,
+          395
+        ],
+        [
+          "FROST ARROW",
+          564,
+          377,
+          718,
+          396
+        ],
+        [
+          "STATIC SEAL",
+          934,
+          377,
+          1065,
+          396
+        ],
+        [
+          "sooo",
+          256,
+          416,
+          307,
+          423
+        ],
+        [
+          "sooo",
+          615,
+          416,
+          666,
+          423
+        ],
+        [
+          "aeooo",
+          974,
+          416,
+          1025,
+          423
+        ],
+        [
+          "FLAME RAY",
+          132,
+          482,
+          242,
+          499
+        ],
+        [
+          "Rank 0-1/5",
+          131,
+          510,
+          209,
+          523
+        ],
+        [
+          "\u2018Cooldown 11.3s + 5 basic attacks required \u4e00 Cooldown 11.3s",
+          130,
+          525,
+          502,
+          539
+        ],
+        [
+          "5 basic attacks required",
+          522,
+          525,
+          663,
+          539
+        ],
+        [
+          "Damage (magical): unlearned; rank 1 82.2 82.2",
+          131,
+          540,
+          424,
+          554
+        ],
+        [
+          "Reach 12.0 12.0m + beam width 0.60\u2014 0.60 m",
+          131,
+          548,
+          431,
+          576
+        ],
+        [
+          "Formula: (16 +8 X (rank - 1) + 0.18 X spell power) x 1.18",
+          131,
+          561,
+          477,
+          592
+        ],
+        [
+          "Attack 168.6 - Spell power 298.2 + Summon power 288.3",
+          130,
+          579,
+          480,
+          608
+        ],
+        [
+          "Spell power scales with INT; summon power inherits 70% spell power + 50% hero attack.",
+          131,
+          603,
+          661,
+          617
+        ],
+        [
+          "Values include active power bonuses; before enemy armor/resistance.",
+          130,
+          618,
+          550,
+          632
+        ],
+        [
+          "Rank0\u2014 1/5 + A12m/flame beam lasts 2 seconds and damages enemies every 0.25 seconds.",
+          131,
+          634,
+          694,
+          649
+        ],
+        [
+          "se 1] je 2| |e 3",
+          122,
+          161,
+          1158,
+          170
+        ],
+        [
+          "FLAME RAY FROST ARROW STATIC SEAL",
+          225,
+          377,
+          1065,
+          396
+        ],
+        [
+          "sooo sooo anooo",
+          256,
+          416,
+          1025,
+          423
+        ],
+        [
+          "Rank0 \u4e00 45",
+          131,
+          510,
+          209,
+          523
+        ],
+        [
+          "Cooldown 11.3s + 5 basic attacks required \u4e00 Cooldown 11.3s\uff0c5 basic attacks required",
+          130,
+          525,
+          663,
+          539
+        ],
+        [
+          "Damage (magical): unlearned; rank 1 82.2 > 82.2",
+          131,
+          540,
+          424,
+          554
+        ],
+        [
+          "Reach 12.0 12.0m + beam width 0.60 > 0.60 m",
+          131,
+          552,
+          431,
+          575
+        ],
+        [
+          "Formula: (16 + 8 x (rank - 1) + 0.18 x spell power) x 1.18",
+          131,
+          562,
+          477,
+          592
+        ],
+        [
+          "Attack 168.6 \u00ab Spell power 298.2 + Summon power 288.3",
+          130,
+          587,
+          480,
+          601
+        ],
+        [
+          "Rank0\u2014 1/5 + A12m flame beam lasts 2 seconds and damages enemies every 0.25 seconds.",
+          131,
+          634,
+          694,
+          649
+        ],
+        [
+          "Detailed - switch to simple",
+          837,
+          74,
+          990,
+          102
+        ],
+        [
+          "OX",
+          1021,
+          75,
+          1159,
+          101
+        ],
+        [
+          "sR",
+          123,
+          161,
+          134,
+          169
+        ],
+        [
+          "2",
+          794,
+          162,
+          799,
+          169
+        ],
+        [
+          "asco",
+          974,
+          416,
+          1025,
+          423
+        ],
+        [
+          "Rank0 \u4e00 115",
+          131,
+          501,
+          213,
+          529
+        ],
+        [
+          "Cooldown 11.3s",
+          131,
+          526,
+          226,
+          536
+        ],
+        [
+          "5 basic attacks required > Cooldown 11.3s",
+          245,
+          525,
+          502,
+          539
+        ],
+        [
+          "5 basic attacks required",
+          522,
+          526,
+          663,
+          539
+        ],
+        [
+          "Damage (magical): unlearned; rank 1 82.2 82.2",
+          131,
+          541,
+          423,
+          554
+        ],
+        [
+          "Reach 12.0 12.0m",
+          131,
+          557,
+          253,
+          567
+        ],
+        [
+          "beam width 0.60 \u2014 0.60 m",
+          274,
+          557,
+          431,
+          567
+        ],
+        [
+          "Formula: (16 + 8 X (rank ~ 1) + 0.18 X spell power) x 1.18",
+          131,
+          563,
+          477,
+          592
+        ],
+        [
+          "Attack 168.6 + Spell power 298.2 + Summon power 288.3,",
+          130,
+          579,
+          480,
+          608
+        ],
+        [
+          "Spell power scales with INT; summon power inherits 70% spell power + 50% hero attack.",
+          131,
+          604,
+          661,
+          617
+        ],
+        [
+          "Rank 0 1/5 + A12m flame beam lasts 2 seconds and damages enemies every 0.25 seconds.",
+          131,
+          634,
+          694,
+          648
+        ],
+        [
+          "Shape your arsenal SI \u533a | \u4ee4",
+          111,
+          55,
+          1159,
+          126
+        ],
+        [
+          "\u56db a] je 2] |e 3",
+          123,
+          161,
+          1158,
+          169
+        ],
+        [
+          "sooo sooo amooo",
+          256,
+          416,
+          1025,
+          423
+        ],
+        [
+          "Rank 0-1/5",
+          131,
+          510,
+          209,
+          522
+        ],
+        [
+          "Cooldown 11.3s + 5 basic attacks required \u2014> Cooldown 11.3s 5 basicattacks required",
+          131,
+          517,
+          663,
+          546
+        ],
+        [
+          "Reach 12.0 \u4e00 12.0 m + beam width 0.60 0.60 m",
+          131,
+          548,
+          431,
+          577
+        ],
+        [
+          "Attack 168.6 + Spell power 298.2 + Summon power 288.3,",
+          130,
+          579,
+          484,
+          608
+        ],
+        [
+          "Spell power scales with INT; summon power inherits 70% spell power + 50% hero attack.",
+          131,
+          595,
+          661,
+          624
+        ],
+        [
+          "Rank 0 1/5 + A12m flame beam lasts 2 seconds and damages enemies every 0.25 seconds.",
+          131,
+          626,
+          694,
+          655
+        ]
+      ]
+    }
+  ],
+  "panel_open_attempts": [
+    {
+      "visit": null,
+      "screenshot": "market-00-open-00.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1289,
+      "input": "b"
+    },
+    {
+      "visit": null,
+      "screenshot": "market-00-open-01.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": null,
+      "screenshot": "market-01-open-02.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1249,
+      "input": "b"
+    },
+    {
+      "visit": null,
+      "screenshot": "market-01-open-03.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": null,
+      "screenshot": "market-02-open-04.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1205,
+      "input": "b"
+    },
+    {
+      "visit": null,
+      "screenshot": "market-02-open-05.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": null,
+      "screenshot": "market-03-open-06.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1166,
+      "input": "b"
+    },
+    {
+      "visit": null,
+      "screenshot": "market-03-open-07.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": null,
+      "screenshot": "market-04-open-08.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1094,
+      "input": "b"
+    },
+    {
+      "visit": null,
+      "screenshot": "market-04-open-09.png",
+      "state": "market",
+      "requests": 1
+    },
+    {
+      "visit": null,
+      "screenshot": "market-05-open-10.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1049,
+      "input": "b"
+    },
+    {
+      "visit": null,
+      "screenshot": "market-05-open-11.png",
+      "state": "market",
+      "requests": 1
+    }
+  ],
+  "wallet_ocr": [
+    "200%: LV1 KILLS 0108 | 300%: LV1 KILLS 0108 | 600%: LV1 KILLS 0108",
+    "200%: LV1 KILLS 0140 | 300%: LV1 KILLS 0140 | 600%: LV1 KILLS 0140",
+    "200%: LV1 KILLS 0175 | 300%: LV1 KILLS 0175 | 600%: LV1 KILLS 0175",
+    "200%: LV2 KILLS 0332 | 300%: LV2 KILLS 0332 | 600%: LV2 KILLS 0332",
+    "200%: LV2 KILLS 0332 | 300%: LV2 KILLS 0332 | 600%: LV2 KILLS 0332",
+    "200%: LV2 KILLS 0261 | 300%: LV2 KILLS 0261 | 600%: LV2 KILLS 0261",
+    "200%: LV2 KILLS 0310 | 300%: LV2 KILLS 0310 | 600%: LV2 KILLS 0310",
+    "200%: LV2 KILLS 0310 | 300%: LV2 KILLS 0310 | 600%: LV2 KILLS 0310"
+  ],
+  "offer_preview_observations": [
+    {
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "market-00-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Wind Boots + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "market-00-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Wind Boots + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Wind Boots + Equipment'"
+        },
+        {
+          "screenshot": "market-00-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "ArcLens + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "observations": [
+        {
+          "screenshot": "market-00-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'ArcLens + Equipment'"
+        },
+        {
+          "screenshot": "market-00-inspect-2-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Gate Patch \u00bb Consumable"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "observations": [
+        {
+          "screenshot": "market-00-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Gate Patch \u00bb Consumable'"
+        },
+        {
+          "screenshot": "market-00-inspect-3-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Skill Tuner \u00bb Consumable"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "observations": [
+        {
+          "screenshot": "market-00-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Skill Tuner \u00bb Consumable'"
+        },
+        {
+          "screenshot": "market-00-inspect-4-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "market-01-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Wind Boots', 'Ember Heart + Equipment'"
+        },
+        {
+          "screenshot": "market-01-inspect-0-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Wind Boots + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "market-01-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Wind Boots + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Wind Boots + Equipment'"
+        },
+        {
+          "screenshot": "market-01-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "ArcLens + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "observations": [
+        {
+          "screenshot": "market-01-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'ArcLens + Equipment'"
+        },
+        {
+          "screenshot": "market-01-inspect-2-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Gate Patch \u00bb Consumable"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "observations": [
+        {
+          "screenshot": "market-01-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Gate Patch \u00bb Consumable'"
+        },
+        {
+          "screenshot": "market-01-inspect-3-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Skill Tuner \u00bb Consumable"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "observations": [
+        {
+          "screenshot": "market-01-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Skill Tuner \u00bb Consumable'"
+        },
+        {
+          "screenshot": "market-01-inspect-4-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "market-02-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Wind Boots', 'Ember Heart + Equipment'"
+        },
+        {
+          "screenshot": "market-02-inspect-0-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Wind Boots + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "market-02-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Wind Boots + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Wind Boots + Equipment'"
+        },
+        {
+          "screenshot": "market-02-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "ArcLens + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "observations": [
+        {
+          "screenshot": "market-02-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'ArcLens + Equipment'"
+        },
+        {
+          "screenshot": "market-02-inspect-2-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Gate Patch \u00bb Consumable"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "observations": [
+        {
+          "screenshot": "market-02-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Gate Patch \u00bb Consumable'"
+        },
+        {
+          "screenshot": "market-02-inspect-3-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Skill Tuner \u00bb Consumable"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "observations": [
+        {
+          "screenshot": "market-02-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Skill Tuner \u00bb Consumable'"
+        },
+        {
+          "screenshot": "market-02-inspect-4-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "market-03-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Wind Boots', 'Ember Heart + Equipment'"
+        },
+        {
+          "screenshot": "market-03-inspect-0-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Wind Boots",
+          "price": "160",
+          "preview": "Wind Boots + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "market-03-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Wind Boots + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Wind Boots + Equipment'"
+        },
+        {
+          "screenshot": "market-03-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "ArcLens + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "observations": [
+        {
+          "screenshot": "market-03-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'ArcLens + Equipment'"
+        },
+        {
+          "screenshot": "market-03-inspect-2-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Gate Patch \u00bb Consumable"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "observations": [
+        {
+          "screenshot": "market-03-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Skill Tuner', 'Gate Patch \u00bb Consumable'"
+        },
+        {
+          "screenshot": "market-03-inspect-3-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Skill Tuner",
+          "price": "140",
+          "preview": "Skill Tuner \u00bb Consumable"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "observations": [
+        {
+          "screenshot": "market-03-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Ember Heart', 'Skill Tuner \u00bb Consumable'"
+        },
+        {
+          "screenshot": "market-03-inspect-4-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Ember Heart",
+          "price": "280",
+          "preview": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "before-purchase-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "Ember Heart + Equipment",
+          "error": "Tile/preview mismatch: 'Arc Lens', 'Ember Heart + Equipment'"
+        },
+        {
+          "screenshot": "before-purchase-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Arc Lens",
+          "price": "180",
+          "preview": "ArcLens + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "market-04-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Echo Core",
+          "price": "300",
+          "preview": "Hardened Plate + Equipment",
+          "error": "Tile/preview mismatch: 'Echo Core', 'Hardened Plate + Equipment'"
+        },
+        {
+          "screenshot": "market-04-inspect-0-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Echo Core",
+          "price": "300",
+          "preview": "Echo Core + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "market-04-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Hardened Plate",
+          "price": "180",
+          "preview": "Echo Core + Equipment",
+          "error": "Tile/preview mismatch: 'Hardened Plate', 'Echo Core + Equipment'"
+        },
+        {
+          "screenshot": "market-04-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Hardened Plate",
+          "price": "180",
+          "preview": "Hardened Plate + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "observations": [
+        {
+          "screenshot": "market-04-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Hardened Plate + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'Hardened Plate + Equipment'"
+        },
+        {
+          "screenshot": "market-04-inspect-2-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Gate Patch \u00bb Consumable"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "observations": [
+        {
+          "screenshot": "market-04-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Spirit Drum",
+          "price": "200",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Spirit Drum', 'Gate Patch \u00bb Consumable'"
+        },
+        {
+          "screenshot": "market-04-inspect-3-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Spirit Drum",
+          "price": "200",
+          "preview": "Spirit Drum * Equipment"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "observations": [
+        {
+          "screenshot": "market-04-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Storm Coil",
+          "price": "280",
+          "preview": "Spirit Drum * Equipment",
+          "error": "Tile/preview mismatch: 'Storm Coil', 'Spirit Drum * Equipment'"
+        },
+        {
+          "screenshot": "market-04-inspect-4-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Storm Coil",
+          "price": "280",
+          "preview": "Storm Coil + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "market-05-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Echo Core",
+          "price": "300",
+          "preview": "Storm Coil + Equipment",
+          "error": "Tile/preview mismatch: 'Echo Core', 'Storm Coil + Equipment'"
+        },
+        {
+          "screenshot": "market-05-inspect-0-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Echo Core",
+          "price": "300",
+          "preview": "Echo Core + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "observations": [
+        {
+          "screenshot": "market-05-inspect-1-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Hardened Plate",
+          "price": "180",
+          "preview": "Echo Core + Equipment",
+          "error": "Tile/preview mismatch: 'Hardened Plate', 'Echo Core + Equipment'"
+        },
+        {
+          "screenshot": "market-05-inspect-1-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Hardened Plate",
+          "price": "180",
+          "preview": "Hardened Plate + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "observations": [
+        {
+          "screenshot": "market-05-inspect-2-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Hardened Plate + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'Hardened Plate + Equipment'"
+        },
+        {
+          "screenshot": "market-05-inspect-2-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "Gate Patch \u00bb Consumable"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "observations": [
+        {
+          "screenshot": "market-05-inspect-3-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Spirit Drum",
+          "price": "200",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'Spirit Drum', 'Gate Patch \u00bb Consumable'"
+        },
+        {
+          "screenshot": "market-05-inspect-3-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Spirit Drum",
+          "price": "200",
+          "preview": "Spirit Drum * Equipment"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "observations": [
+        {
+          "screenshot": "market-05-inspect-4-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Storm Coil",
+          "price": "280",
+          "preview": "Spirit Drum * Equipment",
+          "error": "Tile/preview mismatch: 'Storm Coil', 'Spirit Drum * Equipment'"
+        },
+        {
+          "screenshot": "market-05-inspect-4-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Storm Coil",
+          "price": "280",
+          "preview": "Storm Coil + Equipment"
+        }
+      ]
+    },
+    {
+      "index": 0,
+      "observations": [
+        {
+          "screenshot": "before-purchase-inspect-0-0.png",
+          "header": "BLACK MARKET",
+          "tile": "Echo Core",
+          "price": "300",
+          "preview": "Storm Coil + Equipment",
+          "error": "Tile/preview mismatch: 'Echo Core', 'Storm Coil + Equipment'"
+        },
+        {
+          "screenshot": "before-purchase-inspect-0-1.png",
+          "header": "BLACK MARKET",
+          "tile": "Echo Core",
+          "price": "300",
+          "preview": "Echo Core + Equipment"
+        }
+      ]
+    }
+  ],
+  "market_inspections": [
+    {
+      "attempt": 0,
+      "wallet": 108,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 1,
+      "wallet": 140,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 2,
+      "wallet": 175,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 3,
+      "wallet": 332,
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Arc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "Skill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Ember Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 4,
+      "wallet": 261,
+      "offers": [
+        {
+          "name": "Echo Core",
+          "price": 300,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Echo Core",
+          "price_ocr": "300",
+          "preview_ocr": "Echo Core + Equipment"
+        },
+        {
+          "name": "Hardened Plate",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Hardened Plate",
+          "price_ocr": "180",
+          "preview_ocr": "Hardened Plate + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Spirit Drum",
+          "price": 200,
+          "category": "Equipment",
+          "index": 3,
+          "tile_ocr": "Spirit Drum",
+          "price_ocr": "200",
+          "preview_ocr": "Spirit Drum * Equipment"
+        },
+        {
+          "name": "Storm Coil",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Storm Coil",
+          "price_ocr": "280",
+          "preview_ocr": "Storm Coil + Equipment"
+        }
+      ]
+    },
+    {
+      "attempt": 5,
+      "wallet": 310,
+      "offers": [
+        {
+          "name": "Echo Core",
+          "price": 300,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Echo Core",
+          "price_ocr": "300",
+          "preview_ocr": "Echo Core + Equipment"
+        },
+        {
+          "name": "Hardened Plate",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "Hardened Plate",
+          "price_ocr": "180",
+          "preview_ocr": "Hardened Plate + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Spirit Drum",
+          "price": 200,
+          "category": "Equipment",
+          "index": 3,
+          "tile_ocr": "Spirit Drum",
+          "price_ocr": "200",
+          "preview_ocr": "Spirit Drum * Equipment"
+        },
+        {
+          "name": "Storm Coil",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "Storm Coil",
+          "price_ocr": "280",
+          "preview_ocr": "Storm Coil + Equipment"
+        }
+      ]
+    }
+  ],
+  "refresh_policy": [
+    {
+      "visit": 0,
+      "wallet": 108,
+      "reserve": 300,
+      "count": 0,
+      "spent": 0,
+      "control": {
+        "fee": 60,
+        "center": [
+          910,
+          615
+        ],
+        "fee_ocr": "60",
+        "marker_differences": 0
+      },
+      "skipped": "Finite refresh/reserve budget does not permit input"
+    },
+    {
+      "visit": 1,
+      "wallet": 140,
+      "reserve": 300,
+      "count": 0,
+      "spent": 0,
+      "control": {
+        "fee": 60,
+        "center": [
+          910,
+          615
+        ],
+        "fee_ocr": "60",
+        "marker_differences": 0
+      },
+      "skipped": "Finite refresh/reserve budget does not permit input"
+    },
+    {
+      "visit": 2,
+      "wallet": 175,
+      "reserve": 300,
+      "count": 0,
+      "spent": 0,
+      "control": {
+        "fee": 60,
+        "center": [
+          910,
+          615
+        ],
+        "fee_ocr": "60",
+        "marker_differences": 0
+      },
+      "skipped": "Finite refresh/reserve budget does not permit input"
+    },
+    {
+      "visit": 4,
+      "wallet": 261,
+      "reserve": 300,
+      "count": 0,
+      "spent": 0,
+      "control": {
+        "fee": 60,
+        "center": [
+          910,
+          615
+        ],
+        "fee_ocr": "60",
+        "marker_differences": 0
+      },
+      "skipped": "Finite refresh/reserve budget does not permit input"
+    }
+  ],
+  "selected_material_ocr": {
+    "name": "Echo Core",
+    "price": 300,
+    "category": "Equipment",
+    "index": 0,
+    "tile_ocr": "Echo Core",
+    "price_ocr": "300",
+    "preview_ocr": "Echo Core + Equipment"
+  },
+  "hud_wallet_ocr": [
+    {
+      "value": 332,
+      "bounds": [
+        162,
+        181
+      ],
+      "raw": "332"
+    },
+    {
+      "value": 310,
+      "bounds": [
+        169,
+        188
+      ],
+      "raw": "310"
+    },
+    {
+      "value": 46,
+      "bounds": [
+        168,
+        181
+      ],
+      "raw": "46"
+    },
+    {
+      "value": 46,
+      "bounds": [
+        168,
+        181
+      ],
+      "raw": "46"
+    }
+  ],
+  "pending_purchase": {
+    "name": "Echo Core",
+    "price": 300,
+    "wallet_before": 310,
+    "offer_ocr": {
+      "name": "Echo Core",
+      "price": 300,
+      "category": "Equipment",
+      "index": 0,
+      "tile_ocr": "Echo Core",
+      "price_ocr": "300",
+      "preview_ocr": "Echo Core + Equipment",
+      "observed_name": "Echo Core"
+    }
+  },
+  "purchase_observations": [
+    {
+      "input": "buy_click",
+      "wall": 238358.464803742
+    },
+    {
+      "screenshot": "material-03-purchase-00.png",
+      "wall": 238361.337446274,
+      "header": "BLACK MARKET",
+      "wallet": 152,
+      "wallet_ocr": "200%: LV2 KILLS 0152 | 300%: LV2 KILLS 0152 | 600%: LV2 KILLS 0152",
+      "hud": 152,
+      "hud_ocr": "152",
+      "exact_debit": true
+    },
+    {
+      "input": "buy_click",
+      "wall": 238603.880700329
+    },
+    {
+      "screenshot": "material-05-purchase-00.png",
+      "wall": 238606.880422255,
+      "header": "BLACK MARKET",
+      "wallet": 10,
+      "wallet_ocr": "200%: LV2 KILLS 0010 | 300%: LV2 KILLS 0010 | 600%: LV2 KILLS 0010",
+      "hud": 10,
+      "hud_ocr": "10",
+      "exact_debit": true
+    }
+  ],
+  "inventory_open_attempts": [
+    {
+      "visit": null,
+      "screenshot": "material-1-open-00.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1143,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "material-1-open-01.png",
+      "state": "choice",
+      "requests": 1,
+      "input": "1"
+    },
+    {
+      "visit": null,
+      "screenshot": "material-1-open-02.png",
+      "state": "battle",
+      "requests": 1,
+      "clock": 1135,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "material-1-open-03.png",
+      "state": "inventory",
+      "requests": 2
+    },
+    {
+      "visit": null,
+      "screenshot": "material-2-open-04.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1025,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "material-2-open-05.png",
+      "state": "inventory",
+      "requests": 1
+    }
+  ],
+  "inventory_selection_observations": [
+    {
+      "input": "mouseDown",
+      "index": 0,
+      "center": [
+        261,
+        193
+      ],
+      "wall": 238415.013554467
+    },
+    {
+      "screenshot": "material-1-item-0-ack-001.png",
+      "index": 0,
+      "selected": true
+    },
+    {
+      "input": "mouseUp",
+      "index": 0,
+      "wall": 238415.248204782
+    },
+    {
+      "input": "mouseDown",
+      "index": 0,
+      "center": [
+        261,
+        193
+      ],
+      "wall": 238649.527392281
+    },
+    {
+      "screenshot": "material-2-item-0-ack-004.png",
+      "index": 0,
+      "selected": true
+    },
+    {
+      "input": "mouseUp",
+      "index": 0,
+      "wall": 238649.848772149
+    },
+    {
+      "input": "mouseDown",
+      "index": 1,
+      "center": [
+        365,
+        193
+      ],
+      "wall": 238652.91104572
+    },
+    {
+      "screenshot": "material-2-item-1-ack-007.png",
+      "index": 1,
+      "selected": false
+    },
+    {
+      "screenshot": "material-2-item-1-ack-008.png",
+      "index": 1,
+      "selected": false
+    },
+    {
+      "screenshot": "material-2-item-1-ack-009.png",
+      "index": 1,
+      "selected": true
+    },
+    {
+      "input": "mouseUp",
+      "index": 1,
+      "wall": 238654.026270378
+    },
+    {
+      "input": "mouseDown",
+      "index": 0,
+      "center": [
+        261,
+        193
+      ],
+      "wall": 238708.451861157
+    },
+    {
+      "screenshot": "crafted-item-0-ack-012.png",
+      "index": 0,
+      "selected": true
+    },
+    {
+      "input": "mouseUp",
+      "index": 0,
+      "wall": 238708.789526791
+    }
+  ],
+  "inventory_inspections": [
+    {
+      "prefix": "material-1",
+      "count": 1,
+      "names": [
+        "arclens"
+      ]
+    },
+    {
+      "prefix": "material-2",
+      "count": 2,
+      "names": [
+        "arclens",
+        "echocore"
+      ]
+    },
+    {
+      "prefix": "crafted",
+      "count": 1,
+      "names": [
+        "astralprism"
+      ]
+    }
+  ],
+  "inventory_close_observations": [
+    {
+      "phase": "operation_start",
+      "wall": 238415.978160612,
+      "operation_deadline": 238435.978156281,
+      "hold_budget_seconds": 10
+    },
+    {
+      "screenshot": "inventory-close-001.png",
+      "rows": [
+        [
+          "Gear",
+          904,
+          110,
+          933,
+          121
+        ],
+        [
+          "Forge",
+          960,
+          110,
+          993,
+          124
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1055,
+          122
+        ],
+        [
+          "EQUIPMENT - 1",
+          215,
+          108,
+          366,
+          127
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1054,
+          122
+        ],
+        [
+          "EQUIPMENT + 1",
+          215,
+          108,
+          366,
+          127
+        ],
+        [
+          "EQUIPMENT = 1",
+          210,
+          100,
+          410,
+          132
+        ],
+        [
+          "EQUIPMENT +1",
+          210,
+          100,
+          410,
+          132
+        ]
+      ]
+    },
+    {
+      "phase": "header_observed",
+      "wall": 238418.099585414,
+      "elapsed": 2.121424801996909
+    },
+    {
+      "input": "mouseDown",
+      "target": [
+        "Close",
+        1019,
+        110,
+        1055,
+        122
+      ],
+      "wall": 238418.099659587,
+      "dispatch_finished": 238418.1081357,
+      "hold_deadline": 238428.099659587,
+      "operation_deadline": 238435.978156281
+    },
+    {
+      "screenshot": "inventory-close-004.png",
+      "rows": [
+        [
+          "Gear",
+          904,
+          110,
+          933,
+          121
+        ],
+        [
+          "Forge",
+          960,
+          110,
+          993,
+          124
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1055,
+          122
+        ],
+        [
+          "EQUIPMENT - 1",
+          215,
+          108,
+          366,
+          127
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1054,
+          122
+        ],
+        [
+          "EQUIPMENT + 1",
+          215,
+          108,
+          366,
+          127
+        ],
+        [
+          "EQUIPMENT = 1",
+          210,
+          100,
+          410,
+          132
+        ],
+        [
+          "EQUIPMENT +1",
+          210,
+          100,
+          410,
+          132
+        ]
+      ]
+    },
+    {
+      "phase": "held_observation",
+      "wall": 238420.19250987,
+      "held_seconds": 2.0928502829920035,
+      "inventory_open": true,
+      "close": [
+        "Close",
+        1019,
+        110,
+        1055,
+        122
+      ]
+    },
+    {
+      "screenshot": "inventory-close-006.png",
+      "rows": [
+        [
+          "ee",
+          200,
+          80,
+          696,
+          145
+        ],
+        [
+          "=~",
+          200,
+          88,
+          343,
+          145
+        ],
+        [
+          "@. Ne",
+          516,
+          80,
+          697,
+          145
+        ],
+        [
+          "ee",
+          210,
+          100,
+          410,
+          132
+        ],
+        [
+          "ae",
+          210,
+          100,
+          410,
+          132
+        ]
+      ]
+    },
+    {
+      "phase": "held_observation",
+      "wall": 238423.769687058,
+      "held_seconds": 5.6700274710019585,
+      "inventory_open": false,
+      "close": null
+    },
+    {
+      "input": "mouseUp",
+      "wall": 238423.774101746,
+      "held_seconds": 5.67444215901196
+    },
+    {
+      "phase": "operation_end",
+      "wall": 238423.774107543,
+      "elapsed": 7.795946931000799
+    },
+    {
+      "phase": "operation_start",
+      "wall": 238709.714524727,
+      "operation_deadline": 238729.714520467,
+      "hold_budget_seconds": 10
+    },
+    {
+      "screenshot": "inventory-close-011.png",
+      "rows": [
+        [
+          "Gear",
+          904,
+          110,
+          933,
+          121
+        ],
+        [
+          "Forge",
+          960,
+          110,
+          993,
+          124
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1055,
+          122
+        ],
+        [
+          "EQUIPMENT - 1",
+          215,
+          108,
+          366,
+          127
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1054,
+          122
+        ],
+        [
+          "EQUIPMENT + 1",
+          215,
+          108,
+          366,
+          127
+        ],
+        [
+          "EQUIPMENT = 1",
+          210,
+          100,
+          410,
+          132
+        ],
+        [
+          "EQUIPMENT +1",
+          210,
+          100,
+          410,
+          132
+        ]
+      ]
+    },
+    {
+      "phase": "header_observed",
+      "wall": 238712.06744815,
+      "elapsed": 2.3529234229936264
+    },
+    {
+      "input": "mouseDown",
+      "target": [
+        "Close",
+        1019,
+        110,
+        1055,
+        122
+      ],
+      "wall": 238712.067536082,
+      "dispatch_finished": 238712.075445891,
+      "hold_deadline": 238722.067536082,
+      "operation_deadline": 238729.714520467
+    },
+    {
+      "screenshot": "inventory-close-014.png",
+      "rows": [
+        [
+          "Gear",
+          904,
+          110,
+          933,
+          121
+        ],
+        [
+          "Forge",
+          960,
+          110,
+          993,
+          124
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1055,
+          122
+        ],
+        [
+          "EQUIPMENT - 1",
+          215,
+          108,
+          366,
+          127
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1054,
+          122
+        ],
+        [
+          "EQUIPMENT + 1",
+          215,
+          108,
+          366,
+          127
+        ],
+        [
+          "EQUIPMENT = 1",
+          210,
+          100,
+          410,
+          132
+        ],
+        [
+          "EQUIPMENT +1",
+          210,
+          100,
+          410,
+          132
+        ]
+      ]
+    },
+    {
+      "phase": "held_observation",
+      "wall": 238714.348500412,
+      "held_seconds": 2.280964329984272,
+      "inventory_open": true,
+      "close": [
+        "Close",
+        1019,
+        110,
+        1055,
+        122
+      ]
+    },
+    {
+      "screenshot": "inventory-close-016.png",
+      "rows": [
+        [
+          "a et Cl",
+          200,
+          80,
+          477,
+          145
+        ],
+        [
+          "en a",
+          200,
+          80,
+          986,
+          145
+        ],
+        [
+          "=~",
+          200,
+          88,
+          343,
+          145
+        ],
+        [
+          "\u00a9. We.",
+          516,
+          80,
+          702,
+          145
+        ],
+        [
+          "\u2014\u2014 en va",
+          200,
+          80,
+          986,
+          145
+        ],
+        [
+          "ee",
+          210,
+          100,
+          410,
+          132
+        ],
+        [
+          "ae",
+          210,
+          100,
+          410,
+          132
+        ]
+      ]
+    },
+    {
+      "phase": "held_observation",
+      "wall": 238718.262317205,
+      "held_seconds": 6.194781122991117,
+      "inventory_open": false,
+      "close": null
+    },
+    {
+      "input": "mouseUp",
+      "wall": 238718.26657781,
+      "held_seconds": 6.199041727988515
+    },
+    {
+      "phase": "operation_end",
+      "wall": 238718.266585912,
+      "elapsed": 8.552061185007915
+    }
+  ],
+  "ready_material_ocr": {
+    "title": "[SSR] Astral Prism",
+    "materials": "/ Arc Lens + \u00a5 Echo Core",
+    "action": "Forge equipment"
+  },
+  "crafted_inventory_ocr": {
+    "count": 1,
+    "names": [
+      "astralprism"
+    ]
+  },
+  "inventory_verified": true,
+  "resume_timer_reads": [
+    1003,
+    992
+  ],
+  "resume_countdown_before": 1003,
+  "resume_countdown_after": 992,
+  "quit_exit": 0,
+  "final_progress": {
+    "unlocked": 5,
+    "currency": 575,
+    "cleared": "111100",
+    "upgrades": [
+      5,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "initial_save_sha256": "da5bf0a9ca3f4032a265425f9989bda292d8c0c2622848157df6d2c0223ba825",
+  "final_save_sha256": "da5bf0a9ca3f4032a265425f9989bda292d8c0c2622848157df6d2c0223ba825",
+  "completed": true
+}

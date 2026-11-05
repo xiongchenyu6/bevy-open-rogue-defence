@@ -1,0 +1,1134 @@
+{
+  "scope": "Same earned profile restart; no purchase, training, save copy or resource grant",
+  "package_version": {
+    "binary_sha256": "7dce2d9be5a8a8d8fa9027b1adc5fc7b0f3705b6ffadf6cb8652326e0b7aec24",
+    "git_commit": "d4540c44df479041fe4ff4fdb818f8fb2f280f99",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "source_profile": "/earned-state",
+  "previous_proof": "/previous-proof/result.json",
+  "progress_before": {
+    "unlocked": 5,
+    "currency": 575,
+    "cleared": "111100",
+    "upgrades": [
+      5,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "save_before_sha256": "da5bf0a9ca3f4032a265425f9989bda292d8c0c2622848157df6d2c0223ba825",
+  "operation_budget_seconds": 180,
+  "completed": true,
+  "result": "PASS",
+  "menu_shards_ocr": [
+    "575 LEGACY SHARDS",
+    120,
+    91,
+    256,
+    103
+  ],
+  "selected_caption_ocr": [
+    "STORM SAVANT",
+    173,
+    483,
+    295,
+    497
+  ],
+  "attributes": {
+    "hero": "StormSavant",
+    "level": 1,
+    "speed": 1,
+    "strength": 30.0,
+    "strength_ocr": [
+      [
+        "Strength",
+        203,
+        235,
+        259,
+        250
+      ],
+      [
+        "30.0",
+        457,
+        235,
+        484,
+        247
+      ],
+      [
+        "Strength",
+        204,
+        235,
+        259,
+        250
+      ],
+      [
+        "Strength 30.0 Base attack 48.0 Armor 0.0",
+        204,
+        231,
+        1076,
+        254
+      ]
+    ]
+  },
+  "panel_open_attempts": [
+    {
+      "visit": null,
+      "screenshot": "restart-inventory-open-00.png",
+      "state": "battle",
+      "requests": 0,
+      "clock": 1473,
+      "input": "i"
+    },
+    {
+      "visit": null,
+      "screenshot": "restart-inventory-open-01.png",
+      "state": "battle",
+      "requests": 1,
+      "clock": 1463
+    },
+    {
+      "visit": null,
+      "screenshot": "restart-inventory-open-02.png",
+      "state": "inventory",
+      "requests": 1
+    }
+  ],
+  "equipment_count": 0,
+  "empty_inventory_ocr": [
+    [
+      "Settings",
+      615,
+      25,
+      664,
+      39
+    ],
+    [
+      "a",
+      962,
+      23,
+      978,
+      28
+    ],
+    [
+      "& ome",
+      24,
+      34,
+      79,
+      54
+    ],
+    [
+      "1000",
+      119,
+      40,
+      141,
+      48
+    ],
+    [
+      "as",
+      331,
+      36,
+      347,
+      46
+    ],
+    [
+      "\u4e00",
+      940,
+      46,
+      947,
+      48
+    ],
+    [
+      "I",
+      1100,
+      40,
+      1108,
+      53
+    ],
+    [
+      "24:23",
+      1209,
+      27,
+      1257,
+      42
+    ],
+    [
+      "ap",
+      180,
+      42,
+      193,
+      59
+    ],
+    [
+      "i",
+      285,
+      31,
+      326,
+      60
+    ],
+    [
+      "oY)",
+      336,
+      59,
+      360,
+      71
+    ],
+    [
+      "N",
+      921,
+      64,
+      926,
+      69
+    ],
+    [
+      "\u516b",
+      962,
+      64,
+      978,
+      69
+    ],
+    [
+      "|",
+      1019,
+      29,
+      1020,
+      63
+    ],
+    [
+      "LNES3",
+      23,
+      87,
+      62,
+      96
+    ],
+    [
+      "Sycuniences |",
+      1133,
+      71,
+      1258,
+      105
+    ],
+    [
+      "@ 240/940",
+      24,
+      106,
+      102,
+      126
+    ],
+    [
+      "EQUIPMENT \"0",
+      215,
+      108,
+      367,
+      127
+    ],
+    [
+      "oo",
+      891,
+      69,
+      1055,
+      137
+    ],
+    [
+      "ge 504/504",
+      24,
+      134,
+      102,
+      152
+    ],
+    [
+      "Bio Sa",
+      24,
+      164,
+      115,
+      183
+    ],
+    [
+      "No equipment yet.",
+      226,
+      160,
+      363,
+      177
+    ],
+    [
+      "Visit the Black Market (B) to buy",
+      225,
+      179,
+      460,
+      196
+    ],
+    [
+      "\u7531 \u7531 \u4e0b",
+      625,
+      191,
+      705,
+      208
+    ],
+    [
+      "\u5305 | \u4ee4 \u3002",
+      31,
+      198,
+      125,
+      240
+    ],
+    [
+      "equipment with kill tokens.",
+      225,
+      198,
+      427,
+      215
+    ],
+    [
+      "No equipment",
+      792,
+      222,
+      924,
+      243
+    ],
+    [
+      "\u548c \u5916\"",
+      49,
+      246,
+      96,
+      280
+    ],
+    [
+      "rT",
+      605,
+      274,
+      621,
+      285
+    ],
+    [
+      "ha",
+      1224,
+      308,
+      1241,
+      315
+    ],
+    [
+      "The Black Market opens after 3 minutes.",
+      556,
+      311,
+      815,
+      345
+    ],
+    [
+      "Sees",
+      1079,
+      320,
+      1151,
+      343
+    ],
+    [
+      "a.",
+      1115,
+      347,
+      1141,
+      356
+    ],
+    [
+      "a",
+      155,
+      366,
+      194,
+      380
+    ],
+    [
+      ">.",
+      1201,
+      350,
+      1232,
+      369
+    ],
+    [
+      "ts de",
+      1079,
+      355,
+      1191,
+      387
+    ],
+    [
+      "All owned equipment stays active. Inspect an icon; scroll details to read more.",
+      209,
+      592,
+      643,
+      620
+    ],
+    [
+      "No slot limit. Forge consumes materials and inherits all their effects.",
+      214,
+      606,
+      589,
+      634
+    ],
+    [
+      "a",
+      769,
+      658,
+      843,
+      659
+    ],
+    [
+      "LEVEL1 36/60 xP",
+      490,
+      658,
+      594,
+      686
+    ],
+    [
+      "Shift",
+      808,
+      673,
+      834,
+      683
+    ],
+    [
+      "\u4e00",
+      428,
+      671,
+      455,
+      699
+    ],
+    [
+      "lent",
+      658,
+      639,
+      768,
+      696
+    ],
+    [
+      "\u201cas",
+      769,
+      697,
+      843,
+      698
+    ],
+    [
+      "mime (| Le [se Sere",
+      63,
+      0,
+      1235,
+      70
+    ],
+    [
+      "& cre somjs000 | SN na [- [+ (ae][u | 24:23",
+      24,
+      21,
+      1257,
+      68
+    ],
+    [
+      "cS \u00a2 don. L \u548c \u4eba \u4e0a -ROUND0/5",
+      344,
+      46,
+      1261,
+      80
+    ],
+    [
+      "Livess | dpcwmuences |",
+      19,
+      70,
+      1258,
+      106
+    ],
+    [
+      "504/504 \\",
+      24,
+      128,
+      170,
+      152
+    ],
+    [
+      "Bin Caspoe No equipment yet.",
+      24,
+      156,
+      367,
+      186
+    ],
+    [
+      "\u3001 Visit the Black Market (B) to buy",
+      145,
+      179,
+      460,
+      196
+    ],
+    [
+      "@| [>| equipment with kill tokens. youd",
+      22,
+      188,
+      705,
+      241
+    ],
+    [
+      "- No equipment",
+      180,
+      222,
+      924,
+      246
+    ],
+    [
+      "@> |",
+      53,
+      250,
+      1082,
+      276
+    ],
+    [
+      "\\ TI |",
+      153,
+      267,
+      1083,
+      294
+    ],
+    [
+      "\\ > \u4e00 \u4e00 \u4e00 \u4e00 \u4e00 \u4e00 \u4e00 YY",
+      68,
+      300,
+      1276,
+      327
+    ],
+    [
+      "\\ The Black Market opens after 3 minutes. Soe",
+      130,
+      317,
+      1242,
+      345
+    ],
+    [
+      "| yg a",
+      193,
+      338,
+      1183,
+      362
+    ],
+    [
+      "= eS \u672c y",
+      155,
+      361,
+      1245,
+      400
+    ],
+    [
+      "Allowned equipment stays active. Inspect an icon; scroll details to read more. \\",
+      209,
+      593,
+      1115,
+      618
+    ],
+    [
+      "No slot limit. Forge consumes materials and inherits all their effects.",
+      214,
+      610,
+      594,
+      632
+    ],
+    [
+      "ese",
+      490,
+      655,
+      850,
+      692
+    ],
+    [
+      "TE",
+      67,
+      40,
+      79,
+      48
+    ],
+    [
+      "+ lax] ou",
+      993,
+      29,
+      1107,
+      63
+    ],
+    [
+      "ROUND 0/5,",
+      1155,
+      50,
+      1257,
+      66
+    ],
+    [
+      "Apovnsiences",
+      1133,
+      77,
+      1231,
+      99
+    ],
+    [
+      "\u591a",
+      23,
+      88,
+      43,
+      124
+    ],
+    [
+      "940/940",
+      53,
+      108,
+      101,
+      117
+    ],
+    [
+      "Gear",
+      904,
+      110,
+      933,
+      121
+    ],
+    [
+      "Forge",
+      960,
+      110,
+      993,
+      124
+    ],
+    [
+      "Close",
+      1019,
+      109,
+      1055,
+      122
+    ],
+    [
+      "EQUIPMENT - 0",
+      215,
+      108,
+      366,
+      127
+    ],
+    [
+      "504/504",
+      26,
+      134,
+      101,
+      151
+    ],
+    [
+      "B10 2",
+      24,
+      164,
+      168,
+      183
+    ],
+    [
+      "No equipment yet.",
+      226,
+      160,
+      362,
+      177
+    ],
+    [
+      "\u4e00",
+      169,
+      204,
+      182,
+      209
+    ],
+    [
+      "in",
+      594,
+      198,
+      601,
+      207
+    ],
+    [
+      "Seta |",
+      616,
+      162,
+      735,
+      204
+    ],
+    [
+      "& || \u4ee4 \u3002",
+      31,
+      198,
+      122,
+      237
+    ],
+    [
+      "Oo",
+      172,
+      210,
+      192,
+      225
+    ],
+    [
+      "i\u00bb.",
+      700,
+      183,
+      734,
+      211
+    ],
+    [
+      "if",
+      720,
+      223,
+      725,
+      236
+    ],
+    [
+      "\\",
+      747,
+      256,
+      749,
+      258
+    ],
+    [
+      "\u7684 \u3002",
+      60,
+      250,
+      92,
+      263
+    ],
+    [
+      "0",
+      91,
+      266,
+      95,
+      268
+    ],
+    [
+      "|",
+      728,
+      222,
+      734,
+      271
+    ],
+    [
+      "\u540d",
+      747,
+      261,
+      760,
+      286
+    ],
+    [
+      "2 SO ee ao",
+      572,
+      266,
+      697,
+      301
+    ],
+    [
+      "The Black Market opens after 3 minutes.",
+      556,
+      312,
+      815,
+      345
+    ],
+    [
+      "All owned equipment stays active. Inspect an icon; scroll",
+      209,
+      592,
+      525,
+      620
+    ],
+    [
+      "ls to read more.",
+      554,
+      592,
+      643,
+      620
+    ],
+    [
+      "No slot limit. Forge consumes materials and inherits all their",
+      214,
+      614,
+      547,
+      627
+    ],
+    [
+      "ies",
+      490,
+      668,
+      515,
+      677
+    ],
+    [
+      "36)",
+      542,
+      668,
+      553,
+      677
+    ],
+    [
+      "Xp",
+      566,
+      668,
+      588,
+      677
+    ],
+    [
+      "Shift",
+      782,
+      670,
+      833,
+      685
+    ],
+    [
+      "eu",
+      680,
+      666,
+      730,
+      688
+    ],
+    [
+      "st 1000/1000 | 7 (| 24:23",
+      67,
+      18,
+      1257,
+      51
+    ],
+    [
+      "& cxre 1000/1000 | \u4e0a LJ \u4e0a ROUNDO/S",
+      24,
+      22,
+      1257,
+      70
+    ],
+    [
+      "a Ay cunences",
+      23,
+      63,
+      1231,
+      105
+    ],
+    [
+      "504/508",
+      26,
+      134,
+      101,
+      151
+    ],
+    [
+      "= No equipment yet. ge",
+      35,
+      147,
+      743,
+      184
+    ],
+    [
+      "6100 6) Be | icit the Black Market (B) to buy i =i",
+      24,
+      160,
+      734,
+      211
+    ],
+    [
+      "co\u00bb | equipment with kill tokens. | ee}",
+      166,
+      190,
+      743,
+      222
+    ],
+    [
+      "y 0 \u3001 .",
+      51,
+      211,
+      861,
+      225
+    ],
+    [
+      "\u00ab| \u4ee4 \u00a9 | ii No equipment",
+      31,
+      202,
+      924,
+      250
+    ],
+    [
+      "0 | J",
+      60,
+      233,
+      754,
+      279
+    ],
+    [
+      "ap \"Eee 3",
+      572,
+      268,
+      760,
+      297
+    ],
+    [
+      "The Black Market opens after3minutes,",
+      552,
+      307,
+      825,
+      346
+    ],
+    [
+      "i tive. \u2018icon; II details to read a",
+      293,
+      596,
+      643,
+      617
+    ],
+    [
+      "No sit limit Forgecansimes motfeleand inerisalltvcrefieets",
+      209,
+      596,
+      589,
+      635
+    ],
+    [
+      "LEVEL1 36/60 xP ea So shift & 02:24",
+      490,
+      664,
+      1248,
+      689
+    ]
+  ],
+  "inventory_close_observations": [
+    {
+      "phase": "operation_start",
+      "wall": 238857.069551176,
+      "operation_deadline": 238877.069546427,
+      "hold_budget_seconds": 10
+    },
+    {
+      "screenshot": "restart-close-001.png",
+      "rows": [
+        [
+          "Gear",
+          904,
+          110,
+          933,
+          121
+        ],
+        [
+          "Forge",
+          960,
+          110,
+          993,
+          124
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1055,
+          122
+        ],
+        [
+          "EQUIPMENT - 0",
+          215,
+          108,
+          366,
+          127
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1054,
+          122
+        ],
+        [
+          "EQUIPMENT = 0",
+          210,
+          100,
+          410,
+          132
+        ],
+        [
+          "EQUIPMENT +0",
+          210,
+          100,
+          410,
+          132
+        ]
+      ]
+    },
+    {
+      "phase": "header_observed",
+      "wall": 238859.460454185,
+      "elapsed": 2.390903008985333
+    },
+    {
+      "input": "mouseDown",
+      "target": [
+        "Close",
+        1019,
+        110,
+        1055,
+        122
+      ],
+      "wall": 238859.460535971,
+      "dispatch_finished": 238859.482170523,
+      "hold_deadline": 238869.460535971,
+      "operation_deadline": 238877.069546427
+    },
+    {
+      "screenshot": "restart-close-004.png",
+      "rows": [
+        [
+          "Gear",
+          904,
+          110,
+          933,
+          121
+        ],
+        [
+          "Forge",
+          960,
+          110,
+          993,
+          124
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1055,
+          122
+        ],
+        [
+          "EQUIPMENT - 0",
+          215,
+          108,
+          366,
+          127
+        ],
+        [
+          "Close",
+          1019,
+          110,
+          1054,
+          122
+        ],
+        [
+          "EQUIPMENT = 0",
+          210,
+          100,
+          410,
+          132
+        ],
+        [
+          "EQUIPMENT +0",
+          210,
+          100,
+          410,
+          132
+        ]
+      ]
+    },
+    {
+      "phase": "held_observation",
+      "wall": 238862.133889981,
+      "held_seconds": 2.673354009981267,
+      "inventory_open": true,
+      "close": [
+        "Close",
+        1019,
+        110,
+        1055,
+        122
+      ]
+    },
+    {
+      "screenshot": "restart-close-006.png",
+      "rows": [
+        [
+          "\u2014\u2014 en \u53f8",
+          200,
+          80,
+          708,
+          145
+        ],
+        [
+          "\u2014\u2014 en \u53f8 \u672c",
+          200,
+          80,
+          987,
+          145
+        ],
+        [
+          "=~",
+          200,
+          88,
+          343,
+          145
+        ],
+        [
+          "oo",
+          512,
+          80,
+          561,
+          145
+        ],
+        [
+          "\u2014\u2014 en \u53f8 a",
+          200,
+          80,
+          987,
+          145
+        ],
+        [
+          "ee",
+          210,
+          100,
+          410,
+          132
+        ],
+        [
+          "ae",
+          210,
+          100,
+          410,
+          132
+        ]
+      ]
+    },
+    {
+      "phase": "held_observation",
+      "wall": 238866.509853196,
+      "held_seconds": 7.049317224998958,
+      "inventory_open": false,
+      "close": null
+    },
+    {
+      "input": "mouseUp",
+      "wall": 238866.517321105,
+      "held_seconds": 7.056785133987432
+    },
+    {
+      "phase": "operation_end",
+      "wall": 238866.517327949,
+      "elapsed": 9.44777677298407
+    }
+  ],
+  "resume_countdown": {
+    "before": 1449,
+    "after": 1439
+  },
+  "quit_exit": 0,
+  "save_after_sha256": "da5bf0a9ca3f4032a265425f9989bda292d8c0c2622848157df6d2c0223ba825"
+}

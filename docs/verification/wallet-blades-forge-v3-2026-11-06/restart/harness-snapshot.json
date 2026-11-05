@@ -1,0 +1,14 @@
+{
+  "harness_commit": "d4540c44df479041fe4ff4fdb818f8fb2f280f99",
+  "package_commit": "d4540c44df479041fe4ff4fdb818f8fb2f280f99",
+  "files": {
+    "smoke_runtime.py": "b836e98f55fe7997112145d72250b19bf2ff67f13fe441cab5d4d1320af4f4f6",
+    "campaign_runtime.py": "76ce1daa5939dbbbdcbc0b68162f62b59ce178c14228e1cecb1c8f50684c0591",
+    "campaign_equipment_runtime.py": "674909c39cf601765e45980bc028d4efa09ffe723a732c57a219812cd135f872",
+    "forge_runtime.py": "6d6d336287e4ce33741c723940d3eff689e7211e2ce3ef7383122b114fc61e93",
+    "forge_refresh.py": "c40e9e61179f9ae55d767bd6c9f1333e7b6bced398cd292a190870e701423063",
+    "forge_restart_runtime.py": "659c983316e5c8f4f7c9e4cb3949a626277d7eb4282141743b7525a28f28d737"
+  },
+  "scope": "Six committed runtime modules including ForgeV3 refresh dependency; no profile preparation except original earned save",
+  "snapshot_method": "git show d4540c44df479041fe4ff4fdb818f8fb2f280f99:tools/desktop/<module>; independent of live worktree"
+}
