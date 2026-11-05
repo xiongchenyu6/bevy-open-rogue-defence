@@ -1,0 +1,11 @@
+# Censored technical probes: no numeric divergence reproduced
+
+These are **two 10000-frame technical probes**, not completed battles, win/loss samples, a balance matrix or a passed full-run determinism gate. They reuse the exact previously frozen resolver-diagnostic executable (`3af6a3d59492b116a5071032161ed42da6de64358f8581688f1a02b41f52b6cb`, diagnostic source commit `4fa93e8`), with no new build or gameplay changes.
+
+Both use seed A11CE, chapter index 5, training zero, active starter policy 2 and behind-gate position; `ROGUE_SIM_TRACE_RANGE=1:10000` and `RUST_LOG=rogue_commander::projectile_hit=trace` capture from the first update. The normal runner explicitly records each valid result as **censored / frame_cap**, unfinished at frame 10000. Both reached 164.358 battle seconds, level 3 and 61 kills; wall times were 11.67 and 11.61 seconds.
+
+Each probe contains all 10000 actor-trace rows and 180 actual resolver contacts. Strict entity identities first differ at frame 24: enemy IDs 8589931994 versus 8589931896, with equal health/max health/position/speed. Comparing every recorded nonidentity scalar and sorted actor numeric multisets finds **no numeric difference within this bounded window**. All 180 contact sequences also match in their recorded numeric fields, progress, profile, damage, health and RNG, excluding only entity identity and iteration ordinals.
+
+This pair therefore did not reproduce the earlier full-pair contact health difference around 73.9 seconds. It cannot establish equality of unrecorded statuses/pools, guarantee another process pair will match, or supersede the failed complete duplicate gates. No first numeric frame or associated target contact exists to map for these two probes. No extra probes, numerical tuning, gameplay fix or 24-case matrix followed.
+
+[Actor comparison](actor-comparison.json), [contact comparison](contact-prefix-analysis.json), [scope](scope.json), raw runner receipts and full lossless compressed stdout/stderr retain the result. Gzip files use an empty filename and mtime zero; [raw-receipts.json](raw-receipts.json) records compressed and decompressed hashes. The complete previous full-run logs remain separately preserved in target; these small probes do not replace them or duplicate their large derived contact files.

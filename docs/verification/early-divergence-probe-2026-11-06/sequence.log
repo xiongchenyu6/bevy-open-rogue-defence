@@ -1,0 +1,5 @@
+START probe a
+PASS CENSORED probe a
+START probe b
+PASS CENSORED probe b
+TERMINAL CENSORED TECHNICAL PROBE {"first_strict": 24, "first_numeric": null, "counts": [180, 180]}

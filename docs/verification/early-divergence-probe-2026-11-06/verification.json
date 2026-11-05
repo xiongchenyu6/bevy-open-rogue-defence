@@ -1,0 +1,26 @@
+{
+  "scope": "CENSORED technical probes only; no completed game or full-run determinism claim",
+  "files_sha256": {
+    "README.md": "df53b6687a3724747a0e195e22f5fc9b573eb57166e10c026607b88e146f1f9d",
+    "actor-comparison.json": "14bdc0549341f739482e8432701f4c15032dcb536e595fd9ab149dc31ce19178",
+    "analyze-contacts.py": "9bdb9c1b93c4977ada3d9f1808cea54093cf005a05f848f20d5faeba654ea8bc",
+    "binary.json": "99c08dc83c8151e82c4b1fe37db53731f4389372636b4d1a480748e7edba3b5c",
+    "contact-counts.json": "a238d03dd1e2df33a6829f37f7df9ef1fb759664f8639d7d38b0753c67829d50",
+    "contact-prefix-analysis.json": "6e59c6cfd68a55d741b5b2eca371195a36317a4ebd63e819504f667bf57b53cc",
+    "first-difference-contacts-a.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "first-difference-contacts-b.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "first-difference-context.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "probe-a/active-h2-behind-sa11ce-c5-t0.jsonl.gz": "5261d00ee6da29c8cd2f4bc92045a8ebee135bad883d26a33e2a2159b2bdb896",
+    "probe-a/active-h2-behind-sa11ce-c5-t0.stderr.gz": "50d64ea7de44e7b21382c8a7d4c603f0eacecdd27090b7f3bc13c92bae13ac8e",
+    "probe-a/summary.json": "9243d2209e1fe938390598422c825a61e927f1352bbe8fff95a8a5f0791852b2",
+    "probe-a.log": "9fe1564e20a97994a2cdf9d16937a1cba95041c41b0055b6b34e6310151c3019",
+    "probe-b/active-h2-behind-sa11ce-c5-t0.jsonl.gz": "1840758a529a7310791fbf10d22ec801e6c5c4e14a10f234d66e9db41608bd6e",
+    "probe-b/active-h2-behind-sa11ce-c5-t0.stderr.gz": "fd467d3d6bb909c7d395c24ceb891b820557099a462b71be5a8cddb66d5f0436",
+    "probe-b/summary.json": "439f13f069bc791807afb046720afeeda27581dae92cb01ea442335dde6213ce",
+    "probe-b.log": "d081981eef86ef8802dd605d27f6811389821e86dda7484798ba4499a57c68eb",
+    "raw-receipts.json": "bce9f13e59602b751516b6e34803434ecfc2dcf8416b87ece42c8e1bc54d73a6",
+    "run.py": "212fb8f0c01469cb9cf47e0a61d767363d7b84de6501ccc5c1d646e32455f71a",
+    "scope.json": "3511cc2e0781a259cd83441b9fa59b6d71a0c49df0058f2caef426f7cd10699f",
+    "sequence.log": "46f55bcfce3ff7f1734a40c586586996f9ac6aa673c23a01daca313994732ad9"
+  }
+}
