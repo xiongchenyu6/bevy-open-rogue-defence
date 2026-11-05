@@ -1,0 +1,5 @@
+{
+  "compared_worktree_head": "49562e6fa1f1cf781eb9f0b8a4155e7a15ec22cb",
+  "captured_source_differences": [],
+  "scope": "Cargo.toml/Cargo.lock,src Rust,vendored audio Rust files in build receipt; not a complete external asset snapshot"
+}

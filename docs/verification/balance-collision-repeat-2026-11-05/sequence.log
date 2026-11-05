@@ -1,0 +1,10 @@
+WAIT prior Cargo owner rogue-inventory-split-r2-build-nov5.service
+PRIOR TERMINAL PASS; acquiring single Cargo lane
+START build.log
+PASS build.log
+START replay-a.log
+PASS replay-a.log
+START replay-b.log
+PASS replay-b.log
+{"complete": true, "all_checkpoint_fields_equal": false, "left_count": 33, "right_count": 56, "strict_comparator_exit": 1, "matrix_started": false, "scope": "recorded checkpoints only; not proof of all internal state determinism", "first_difference": {"checkpoint": 18, "frame_left": 32400, "frame_right": 32400, "fields": {"attacks": [1145, 1170], "elapsed": [530.073, 530.01], "enemy_peak": [17, 18], "gold": [694, 766], "injured_secs": [317.46, 317.397], "kills": [314, 315], "owned_bond_ids": [[0, 1, 2, 3, 9, 11, 14, 15, 16, 18, 19, 27, 28, 29, 50], [0, 1, 2, 3, 9, 11, 13, 14, 15, 16, 18, 19, 27, 28, 29]], "rng_state": [8058488476366043607, 16691252434969496931], "wood": [7, 39]}}}
+TERMINAL: duplicate gate only; 24-case matrix remains withheld pending root review
