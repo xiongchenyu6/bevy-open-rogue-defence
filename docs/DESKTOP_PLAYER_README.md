@@ -10,7 +10,7 @@ The gate has limited health and rebuilds after falling. Your hero has three live
 losing the last life ends the expedition. Cleared chapters and permanent training
 carry over to later expeditions.
 
-Move: W / A / S / D or arrow keys. Dodge: Shift.
+Move: arrow keys. Dodge: Shift.
 Use the skill, equipment, bond and challenge buttons to inspect and grow your build.
 Settings offers English or Simplified Chinese, detailed or simple card descriptions,
 music and effect volume, and fullscreen. F11 switches fullscreen; Escape closes
