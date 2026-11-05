@@ -1,0 +1,38 @@
+{
+  "scope": "Intentional equal-front nearest/visible-coordinate design refinement; old ID tie legitimate; full duplicate pending; no matrix/tuning",
+  "before": {
+    "passed": 8,
+    "failed": 2,
+    "exit": 101,
+    "wrapper_validation_issue": "nocapture interleaving independently validated"
+  },
+  "after": {
+    "passed": 681,
+    "failed": 0,
+    "ignored": 1,
+    "strict_clippy": "passed",
+    "balance_build": "passed"
+  },
+  "source_sha256": {
+    "src/game/combat.rs": "3df0cfcb056c13d84113fc652fbfd10f50df35c5a5b43273eb9f49f548f7e6fa",
+    "src/game/combat/native_aim_tests.rs": "264c4b44b54bdd3e194117e9e61f161deb89ef7d654a4d02b1a27f9851be6f93"
+  },
+  "files_sha256": {
+    "README.md": "ca3c44518489b03e4ba9728de30581477a054ee8827a236c62b81f52f1acb2c6",
+    "after-build.log": "3245df6ae59c5b76a1f53122c1a1571d9a683b1910d5cdd607d69ea428e9f5c4",
+    "after-clippy.log": "eb14a9743690c80c9c3d418ae5843d6dd3a136c55a93ded922dd260da5628294",
+    "after-full-tests.log": "50984f0aeb524e90131495bda58f0919f60fb419f7b26c3247353b78d5869822",
+    "after-sequence.log": "86a314ebb15a03fffce15d3f3ee55930917fc72d2ff74ff084f1f4f599fe477f",
+    "after-source-after.json": "d15793e1cb4a6a97f3c3100699c928d62eff349ad8c9a79e9d74d000637dc48c",
+    "after-source-before.json": "0367b19a5649460968bd7684477ed6a8c85afa35e276cdf52e184baebf4d9858",
+    "after.py": "459dcd7af0e4ea5c122a2ff7d156412f6a8c9be7e8b3f77656d41629222030eb",
+    "before-exit.txt": "39b8dc3fc8b44765c8e6f1adee04c5b465e555ab791cc42d0d9e810d5b64297c",
+    "before-sequence.log": "970407aac53e3ed6ad67ff00a555a4ac3b17c3731078089dfeb8e05153f353f0",
+    "before-source-hashes.json": "12587fc1700456f90b84478dd00c712cb544338e7ca0e53602cb4a0f5448e6c2",
+    "before-tests.log": "3959d7ecfc826dcc8ff6aa7bdacb65d916616c9ae632457c32bbe7daed7aedb5",
+    "before-validation.json": "baae8192daf778e6c7ce765b0c8d1c2b208d599c7425285892d3e139e5ae9def",
+    "before.py": "d07b376be55cfceb54a8eec7f72cdc6103faa6866c691591c614f0470f811eba",
+    "binary.json": "16621a266395c88c4a5fc83c49fc46b7a087b209de95bee166389893f31bff54",
+    "minimal-design.patch": "fadf029c25288cacbca7acaf339f564ce2514d2edce362d246545e62dd581c1d"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "actual_test_exit": 101,
+  "actual_passed": 8,
+  "actual_failed": 2,
+  "failed_tests": [
+    "equal_front_native_attacks_prefer_closest_visible_target",
+    "equal_front_symmetric_native_aim_uses_visible_coordinate_tie"
+  ],
+  "front_priority_control": "passed",
+  "wrapper_status": "failed only because concurrent nocapture output interleaved expected literal failure line; actual negative test results independently validated, no rerun or log rewrite"
+}

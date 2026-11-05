@@ -1,0 +1,26 @@
+--- before/src/game/combat.rs
++++ after/src/game/combat.rs
+@@ -1948,12 +1948,22 @@
+             enemy_transform.translation.x
+         };
+         let candidate = (tier, within_tier_score, entity, enemy_transform.translation);
++        // Preserve tier/front priority, but resolve equal fronts by visible
++        // proximity/coordinates before unrelated render-entity allocation.
+         if target.is_none_or(|current| {
+             candidate.0 < current.0
+                 || (candidate.0 == current.0
+                     && (candidate.1 < current.1
+                         || (candidate.1 == current.1
+-                            && candidate.2.to_bits() < current.2.to_bits())))
++                            && hero
++                                .translation
++                                .distance_squared(candidate.3)
++                                .total_cmp(&hero.translation.distance_squared(current.3))
++                                .then_with(|| candidate.3.z.total_cmp(&current.3.z))
++                                .then_with(|| candidate.3.x.total_cmp(&current.3.x))
++                                .then_with(|| candidate.3.y.total_cmp(&current.3.y))
++                                .then_with(|| candidate.2.to_bits().cmp(&current.2.to_bits()))
++                                .is_lt())))
+         }) {
+             target = Some(candidate);
+         }

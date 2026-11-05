@@ -1,0 +1,6 @@
+BEFORE terminal exit 101
+Traceback (most recent call last):
+  File "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/native-aim-2026-11-06/before.py", line 6, in <module>
+    text=(out/'before-tests.log').read_text();assert 'equal_front_native_attacks_prefer_closest_visible_target ... FAILED' in text and 'equal_front_symmetric_native_aim_uses_visible_coordinate_tie ... FAILED' in text
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

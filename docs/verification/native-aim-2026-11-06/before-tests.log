@@ -1,0 +1,66 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `release` profile [optimized] target(s) in 4m 06s
+     Running unittests src/lib.rs (target/release/deps/rogue_commander-37d39db57aeef6a3)
+
+running 10 tests
+test game::settings::display_controls::preferences::tests::native_display_save_roundtrips_and_rejects_corruption ... ok
+NATIVE_AIM reverse_allocation=false actors=[(33v0, Vec3(-3.3961327, 0.0, 0.39402592)), (34v0, Vec3(-3.3961327, 0.0, 1.0440259)), (35v0, Vec3(-3.3961327, 0.0, 1.6940259))] aim=Vec3(-3.3961327, 0.0, 1.6940259) projectile_xz=Vec2(0.94308007, 0.33256578)
+NATIVE_AIM reverse_allocation=false actors=[(33v0, Vec3(-4.0, 0.0, 3.0)), (34v0, Vec3(-3.8, 0.0, 0.0))] aim=Vec3(-4.0, 0.0, 3.0) projectile_xz=Vec2(0.81373346, 0.5812382)
+NATIVE_AIM reverse_allocation=false actors=[(33v0, Vec3(-3.3961327, 0.0, -1.0)), (34v0, Vec3(-3.3961327, 0.0, 1.0))] aim=Vec3(-3.3961327, 0.0, 1.0) projectile_xz=Vec2(0.9790132, 0.2037969)
+test game::combat::tests::broken_gate_redirects_zero_native_damage_rushers_using_their_breach_damage ... ok
+test game::combat::tests::archer_native_volley_aims_distinct_targets_and_attaches_real_bounces ... ok
+NATIVE_AIM reverse_allocation=true actors=[(33v0, Vec3(-3.8, 0.0, 0.0)), (34v0, Vec3(-4.0, 0.0, 3.0))] aim=Vec3(-4.0, 0.0, 3.0) projectile_xz=Vec2(0.81373346, 0.5812382)
+NATIVE_AIM reverse_allocation=true actors=[(33v0, Vec3(-3.3961327, 0.0, 1.6940259)), (34v0, Vec3(-3.3961327, 0.0, 1.0440259)), (35v0, Vec3(-3.3961327, 0.0, 0.39402592))] aim=Vec3(-3.3961327, 0.0, 0.39402592) projectile_xz=Vec2(0.9966531, 0.08174811)
+
+thread 'game::combat::tests::equal_front_native_attacks_prefer_closest_visible_target' (2539418) panicked at src/game/combat/native_aim_tests.rs:52:5:
+assertion `left == right` failed: actual BasicAttackAim must follow visible target policy
+  left: Vec3(-3.3961327, 0.0, 1.6940259)
+ right: Vec3(-3.3961327, 0.0, 0.39402592)
+stack backtrace:
+test game::combat::tests::native_front_priority_still_beats_a_closer_enemy_behind_it ... ok
+test game::combat::tests::inherited_backlog_waits_for_native_budget_and_drains_exactly_once ... ok
+NATIVE_AIM reverse_allocation=true actors=[(33v0, Vec3(-3.3961327, 0.0, 1.0)), (34v0, Vec3(-3.3961327, 0.0, -1.0))] aim=Vec3(-3.3961327, 0.0, -1.0) projectile_xz=Vec2(0.9790132, -0.2037969)
+test game::combat::tests::inherited_fallback_defers_large_step_without_native_backlog_or_double_slots ... ok
+test game::combat::tests::native_reach_keeps_single_legacy_per_four_hits_without_extra_fallback ... ok
+test game::combat::tests::inherited_ranged_weapon_reaches_beyond_melee_host_without_native_hits ... ok
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<glam::f32::vec3::Vec3, glam::f32::vec3::Vec3>
+   4: rogue_commander::game::combat::tests::equal_front_native_attacks_prefer_closest_visible_target
+   5: <rogue_commander::game::combat::tests::equal_front_native_attacks_prefer_closest_visible_target::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+thread 'game::combat::tests::equal_front_symmetric_native_aim_uses_visible_coordinate_tie' (2539419) panicked at src/game/combat/native_aim_tests.rs:52:5:
+assertion `left == right` failed: actual BasicAttackAim must follow visible target policy
+  left: Vec3(-3.3961327, 0.0, 1.0)
+ right: Vec3(-3.3961327, 0.0, -1.0)
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<glam::f32::vec3test game::combat::tests::equal_front_native_attacks_prefer_closest_visible_target ... ::Vec3FAILED, 
+glam::f32::vec3::Vec3>
+   4: rogue_commander::game::combat::tests::equal_front_symmetric_native_aim_uses_visible_coordinate_tie
+   5: <rogue_commander::game::combat::tests::equal_front_symmetric_native_aim_uses_visible_coordinate_tie::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+test game::combat::tests::equal_front_symmetric_native_aim_uses_visible_coordinate_tie ... FAILED
+
+failures:
+
+failures:
+    game::combat::tests::equal_front_native_attacks_prefer_closest_visible_target
+    game::combat::tests::equal_front_symmetric_native_aim_uses_visible_coordinate_tie
+
+test result: FAILED. 8 passed; 2 failed; 0 ignored; 0 measured; 672 filtered out; finished in 0.03s
+
+error: test failed, to rerun pass `--lib`
