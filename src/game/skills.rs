@@ -864,6 +864,26 @@ pub(crate) fn test_vortex_order_pulse(world: &mut World) -> (usize, f32) {
     (strikes, pulse_remaining)
 }
 
+#[cfg(test)]
+pub(crate) fn test_resolve_typed_strike(world: &mut World, target: Entity, area: bool) {
+    use bevy::ecs::system::RunSystemOnce;
+    world
+        .run_system_once(move |mut commands: Commands| {
+            schedule_typed_strike(
+                &mut commands,
+                target,
+                100.0,
+                0.0,
+                0.05,
+                area,
+                0.5,
+                DamageProfile::for_skill(0),
+            );
+        })
+        .unwrap();
+    world.run_system_once(resolve_skill_strikes).unwrap();
+}
+
 #[allow(clippy::too_many_arguments)]
 fn update_spell_zones(
     mut commands: Commands,
@@ -1252,6 +1272,13 @@ fn resolve_skill_strikes(
             continue;
         };
         commands.entity(projectile_entity).insert(strike.profile);
+        if !strike.area {
+            super::combat::restrict_projectile_to_target(
+                &mut commands,
+                projectile_entity,
+                strike.target,
+            );
+        }
         for reward in &strike.transmute_rewards {
             commands.spawn(TransmuteKillWatch {
                 target: reward.target,

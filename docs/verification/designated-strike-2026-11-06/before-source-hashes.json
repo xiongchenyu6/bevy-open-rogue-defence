@@ -1,0 +1,6 @@
+{
+  "src/game/combat.rs": "5c0b003b5dfed05938af2152927c6d2b461d943cb408560ea24ff16704810afc",
+  "src/game/skills.rs": "44a721aa797ddcb401bd905d66de7cdcc13dbdd9ba08938f445f0b9987f1596c",
+  "src/game/pooling.rs": "61b2cceca3e36138c69f1234d3f9a9dd17b7250741c153dcb6a1a915f73e6c2f",
+  "src/game/combat/collision_order_tests.rs": "a13ca47c3e8ba306939f6b040cfe2e3ab484834e3423c759a7f8dacd0da81c65"
+}

@@ -192,6 +192,10 @@ pub(crate) struct ProjectileHitMemory {
     enemies: HashSet<Entity>,
 }
 
+/// A designated contact must never fall through to another overlapping actor.
+#[derive(Component, Debug, Clone, Copy)]
+pub(crate) struct ProjectileTarget(pub(crate) Entity);
+
 /// Per-frame work budget. Excess completions are retained by
 /// [`AttackVolleyRuntime`] and resolved on later active frames.
 pub(crate) const MAX_ATTACK_CATCH_UP_VOLLEYS: u32 = 8;
@@ -2043,12 +2047,7 @@ fn auto_attack(
                         DamageProfile::new(DamageElement::Storm, DamageClass::Attack)
                             .as_market_proc(),
                     ) {
-                        restrict_projectile_to_target(
-                            &mut commands,
-                            projectile_entity,
-                            entity,
-                            &target_positions,
-                        );
+                        restrict_projectile_to_target(&mut commands, projectile_entity, entity);
                     }
                 }
             }
@@ -2299,7 +2298,6 @@ pub(crate) fn queue_melee_contact(
     target: Entity,
     position: Vec3,
     damage: f32,
-    candidates: &[(Entity, Vec3)],
 ) -> Option<Entity> {
     if let Some(entity) = pools.rent_projectile(
         commands,
@@ -2321,24 +2319,18 @@ pub(crate) fn queue_melee_contact(
                 Visibility::Hidden,
                 DamageProfile::PHYSICAL_ATTACK.as_melee(),
             ));
-        restrict_projectile_to_target(commands, entity, target, candidates);
+        restrict_projectile_to_target(commands, entity, target);
         return Some(entity);
     }
     None
 }
 
-fn restrict_projectile_to_target(
+pub(crate) fn restrict_projectile_to_target(
     commands: &mut Commands,
     projectile: Entity,
     target: Entity,
-    candidates: &[(Entity, Vec3)],
 ) {
-    commands.entity(projectile).insert(ProjectileHitMemory {
-        enemies: candidates
-            .iter()
-            .filter_map(|(entity, _)| (*entity != target).then_some(*entity))
-            .collect(),
-    });
+    commands.entity(projectile).insert(ProjectileTarget(target));
 }
 
 const fn target_priority(archive: bool, boss: bool, trial: bool, archetype: Option<u8>) -> u8 {
@@ -2651,6 +2643,7 @@ fn projectile_hits(
             &mut Transform,
             Option<&DamageProfile>,
             Option<&mut ProjectileHitMemory>,
+            Option<&ProjectileTarget>,
             Option<&ProjectileFirstFrameTravel>,
             Option<&WeaponFlight>,
             Option<&super::hero_fusion::FusionAttack>,
@@ -2710,6 +2703,7 @@ fn projectile_hits(
             mut projectile_transform,
             profile,
             mut hit_memory,
+            target_lock,
             first_frame,
             flight,
             fusion,
@@ -2732,6 +2726,9 @@ fn projectile_hits(
         let mut collision_order: Vec<(f32, Entity)> = collision_targets
             .iter()
             .filter_map(|(entity, position, elite)| {
+                if target_lock.is_some_and(|target| target.0 != *entity) {
+                    return None;
+                }
                 let already_hit = hit_memory
                     .as_deref()
                     .is_some_and(|memory| memory.enemies.contains(entity));
@@ -2932,7 +2929,6 @@ fn projectile_hits(
                                 &mut commands,
                                 projectile_entity,
                                 splash_target,
-                                &target_positions,
                             );
                         }
                     }
@@ -2963,12 +2959,7 @@ fn projectile_hits(
                             0,
                             profile.as_card_proc(),
                         ) {
-                            restrict_projectile_to_target(
-                                &mut commands,
-                                entity,
-                                target,
-                                &target_positions,
-                            );
+                            restrict_projectile_to_target(&mut commands, entity, target);
                         }
                     }
                 }
@@ -3422,6 +3413,7 @@ mod tests {
     use super::*;
 
     include!("combat/collision_order_tests.rs");
+    include!("combat/designated_strike_tests.rs");
 
     fn test_game_assets() -> GameAssets {
         GameAssets {

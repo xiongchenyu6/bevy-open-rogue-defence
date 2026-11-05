@@ -8,7 +8,7 @@ use super::boss_vfx::BossPhaseBurstOwner;
 use super::bosses::BossSummon;
 use super::combat::{
     CommanderAuraState, EliteAffix, EnemyArmor, EnemyBreachDamage, ProjectileFirstFrameTravel,
-    ProjectileHitMemory,
+    ProjectileHitMemory, ProjectileTarget,
 };
 use super::hero_abilities::{
     AbilityGenerated, PassiveSpirit, SpiritOrbit, TimedSpeedEffect, VoidPull, WetMark,
@@ -1187,6 +1187,7 @@ impl CombatPools {
         entity_commands
             .remove::<(
                 ProjectileHitMemory,
+                ProjectileTarget,
                 super::basic_attacks::Ricochet,
                 ProjectileFirstFrameTravel,
                 super::attack_vfx::WeaponFlight,
@@ -1292,6 +1293,7 @@ impl CombatPools {
                 Projectile,
                 ActivePooledProjectile,
                 ProjectileHitMemory,
+                ProjectileTarget,
                 super::basic_attacks::Ricochet,
                 ProjectileFirstFrameTravel,
                 super::attack_vfx::WeaponFlight,
@@ -1379,7 +1381,13 @@ fn clear_summon_gameplay_components(entity: &mut EntityCommands<'_>) {
             SpiritOrbit,
             PassiveSpirit,
         )>()
-        .remove::<(Name, AbilityGenerated, DamageProfile, ProjectileHitMemory)>();
+        .remove::<(
+            Name,
+            AbilityGenerated,
+            DamageProfile,
+            ProjectileHitMemory,
+            ProjectileTarget,
+        )>();
 }
 
 fn clear_enemy_gameplay_components(entity: &mut EntityCommands<'_>) {
@@ -2099,6 +2107,7 @@ mod tests {
         let overflow = rent_one_projectile(app.world_mut(), 900.0);
         app.world_mut().entity_mut(overflow).insert((
             ProjectileHitMemory::default(),
+            ProjectileTarget(leases[0]),
             AbilityGenerated,
             DamageProfile::new(
                 DamageElement::Storm,
@@ -2112,6 +2121,7 @@ mod tests {
             .expect("overflow participates in projectile gameplay queries");
         assert_eq!(logical.damage, 910.0);
         assert!(app.world().get::<ProjectileHitMemory>(overflow).is_some());
+        assert!(app.world().get::<ProjectileTarget>(overflow).is_some());
         assert_eq!(
             app.world()
                 .get::<DamageProfile>(overflow)
@@ -2123,6 +2133,7 @@ mod tests {
         retire_one_projectile(app.world_mut(), overflow);
         assert!(app.world().get::<Projectile>(overflow).is_none());
         assert!(app.world().get::<ProjectileHitMemory>(overflow).is_none());
+        assert!(app.world().get::<ProjectileTarget>(overflow).is_none());
         assert!(app.world().get::<DamageProfile>(overflow).is_none());
         assert!(app.world().get::<Mesh3d>(overflow).is_none());
         finalize(app.world_mut());
@@ -2136,6 +2147,7 @@ mod tests {
             Some(911.0)
         );
         assert!(app.world().get::<ProjectileHitMemory>(reused).is_none());
+        assert!(app.world().get::<ProjectileTarget>(reused).is_none());
         assert!(app.world().get::<DamageProfile>(reused).is_none());
         assert!(app.world().get::<Mesh3d>(reused).is_none());
         let pools = app.world().resource::<CombatPools>();
@@ -2637,6 +2649,7 @@ mod tests {
         let entity = rent_one_projectile(app.world_mut(), 4.0);
         app.world_mut().entity_mut(entity).insert((
             ProjectileHitMemory::default(),
+            ProjectileTarget(entity),
             ProjectileFirstFrameTravel(0.25),
             AbilityGenerated,
             DamageProfile::PHYSICAL_ATTACK,
@@ -2648,6 +2661,7 @@ mod tests {
         assert!(world.get::<Projectile>(entity).is_none());
         assert!(world.get::<ActivePooledProjectile>(entity).is_none());
         assert!(world.get::<ProjectileHitMemory>(entity).is_none());
+        assert!(world.get::<ProjectileTarget>(entity).is_none());
         assert!(world.get::<ProjectileFirstFrameTravel>(entity).is_none());
         assert!(world.get::<AbilityGenerated>(entity).is_none());
         assert!(world.get::<DamageProfile>(entity).is_none());

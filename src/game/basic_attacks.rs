@@ -756,7 +756,6 @@ pub(crate) fn resolve_swings(
                     target,
                     position,
                     swing.damage * if index == 0 { 1.0 } else { stats.cleave_ratio },
-                    &candidates,
                 );
                 if let (Some(contact), Some(fusion)) = (contact, fusion) {
                     commands.entity(contact).insert((

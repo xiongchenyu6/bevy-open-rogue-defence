@@ -1,0 +1,39 @@
+{
+  "scope": "Isolated actual designated-target interception defect fixed; complete duplicate gate pending; no matrix/tuning",
+  "before": {
+    "passed": 0,
+    "failed": 1,
+    "exit": 101
+  },
+  "after": {
+    "passed": 678,
+    "failed": 0,
+    "ignored": 1,
+    "strict_clippy": "passed",
+    "balance_build": "passed"
+  },
+  "source_sha256": {
+    "src/game/combat.rs": "a0214fa501afb9b0edad755f3a9b95a04a525fe1ddf44094b414b1a10a5e87a8",
+    "src/game/skills.rs": "b5ce90f3fc0525c6f3c02dc416f121e3ae30d9b6fa9cc98904cafa13985c14b3",
+    "src/game/pooling.rs": "ec037e456c146450b56284bf4bf23019142a448b68e6a4d9623764d48b1dbdaa",
+    "src/game/basic_attacks.rs": "bbadbfdef7452a7911c456765b967f85d021f1a997cbf0febbba6ad05c744761",
+    "src/game/combat/designated_strike_tests.rs": "33d0d2ab665425d2d9129b1e4332a08aec26c2078701a20ea85f0e361682007b",
+    "src/game/combat/collision_order_tests.rs": "ad9908f8f2eee5df9c2871a3b53191feb96027b3448b4c50361c997e29dc48e3"
+  },
+  "files_sha256": {
+    "README.md": "b8d20aca658b345a4b0a36c235c41b18c29ab6ecab708c6b9263e311cce21909",
+    "after-build.log": "870302e2db0d35097ef9133677b8fa77ab9db268be12f5cb7317032a5cdbe1ab",
+    "after-clippy.log": "90484bf3bf620928aff0bc5880f738ca72a84e176a8f22115f1f07ddd5b1032c",
+    "after-full-tests.log": "2a8676249e19eb386bb94ae76173aa7c6e37fbe8c94f5be519b50ec7c4e79ced",
+    "after-sequence.log": "c9fe8cddcaa45b757f3ef5c3f4b09c219e968252955db95d79586a1a864c338d",
+    "after-source-after.json": "933ea65b6104dd7457d90968a0858054b64ecba35413e073f2437a16cd4a0ecb",
+    "after-source-before.json": "71dfab30dcc11ef02833c3180e633fbcfafb82908b3bb5cdec099f82fc05ccee",
+    "after.py": "34918b59ce01b7b7e24a8759cea007ab88798594d2e913e18cd9ab31b648172e",
+    "before-exit.txt": "39b8dc3fc8b44765c8e6f1adee04c5b465e555ab791cc42d0d9e810d5b64297c",
+    "before-sequence.log": "8803897d99c95c5e8ca44f3ace4cac1086d5dfab2007301350a2be3209a33c07",
+    "before-source-hashes.json": "281379cbac852258d02d64af6dbf9d8c762a770d5793bf4fb15388de68c52fb7",
+    "before-tests.log": "fa1f0530274eee7e014c31f73b89e733f8d58079a1b6de6e8cb1eb743f2e8d5a",
+    "before.py": "87756d9131a67d804facb023462f5db357efe0464a87c11511e9353a93e7cfc5",
+    "binary.json": "6608730ef57f0149e62bc0a2411ef4dc1cd9b86d3bc48353174ecc4e15400ab4"
+  }
+}
