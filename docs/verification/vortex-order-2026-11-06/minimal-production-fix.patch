@@ -1,0 +1,13 @@
+--- before/src/game/skills.rs
++++ after/src/game/skills.rs
+@@ -921,6 +921,10 @@
+             }
+             affected.push(target);
+         }
++
++        // Cosmetic component migrations can reorder the enemy query. Keep
++        // target-to-strike assignment stable before shared critical RNG is used.
++        affected.sort_unstable_by_key(|target| target.entity.to_bits());
+ 
+         for _ in 0..pulses {
+             for target in &affected {

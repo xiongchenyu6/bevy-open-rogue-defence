@@ -1,0 +1,36 @@
+{
+  "scope": "Isolated real zone-to-collision cosmetic-order regression and minimal scheduling sort; complete duplicate gate pending; upstream cause unproven",
+  "before": {
+    "passed": 0,
+    "failed": 1,
+    "exit": 101
+  },
+  "after": {
+    "library_passed": 674,
+    "library_failed": 0,
+    "library_ignored": 1,
+    "strict_clippy": "passed",
+    "balance_build": "passed"
+  },
+  "source_sha256": {
+    "src/game/skills.rs": "40181a9b7f4eb9bfe4a9cb10f4f2315dce4fa6dca6a151808a0703986b304eb1",
+    "src/game/combat/collision_order_tests.rs": "ad9908f8f2eee5df9c2871a3b53191feb96027b3448b4c50361c997e29dc48e3"
+  },
+  "files_sha256": {
+    "README.md": "8ed97672e3ca105ffc47d1ecaee6df25ccd2417839291269fd3d29c2a0daa01d",
+    "after-build.log": "13bf43279f9494e717e85a494d4ee071b8f93dc976ae1a9815a521d9f74d62d1",
+    "after-clippy.log": "90484bf3bf620928aff0bc5880f738ca72a84e176a8f22115f1f07ddd5b1032c",
+    "after-full-tests.log": "42ff506c357e09e3bd69b8a546aecda6620d8b565e5f5868153f6520b2680bb0",
+    "after-sequence.log": "20eef3120b54858dafae77482bbf3da21b86392510bba9780a99acd13bffd447",
+    "after-source-after.json": "b60ed72e17a758abbde8c0b873ddebaf66a5a9310bcc5bdd38a1b1505e44e9c3",
+    "after-source-before.json": "753b3bcf0e558576bfda835fb5fb6661e475b31a250c1674538409244abd1d28",
+    "after.py": "b25e3402f82f9cc514dcd24a4a201753adc455794e5ec1e3064169616ef42dbf",
+    "before-exit.txt": "39b8dc3fc8b44765c8e6f1adee04c5b465e555ab791cc42d0d9e810d5b64297c",
+    "before-sequence.log": "8803897d99c95c5e8ca44f3ace4cac1086d5dfab2007301350a2be3209a33c07",
+    "before-source-hashes.json": "c63ef331c2118b406b2ca18e80ca356e7dfea27108c3843ba70f0f8de4dac6d2",
+    "before-tests.log": "507b9ef8ce71c9f47c5e884dac85ab09b43cc8d83d4b9fa96fde2a9e370a7f74",
+    "before.py": "b6809f4e95e1e4f82f554c77916235aded40c315f2333b53efff340389faab0c",
+    "binary.json": "a2d9aee1b30c3d59964f019e0295c96bee324900ca87a257564c54d7122e5af2",
+    "minimal-production-fix.patch": "497f6b07c913e15af8baa5a26990d0bc521236e8ed3db2279d9d73934f70b8c2"
+  }
+}

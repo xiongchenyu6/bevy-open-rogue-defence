@@ -838,6 +838,32 @@ fn cleanup_skill_summons(
     }
 }
 
+/// Test-only bridge for exercising the real zone -> strike -> pooled projectile
+/// path from combat's authoritative damage fixture, without exposing runtime APIs.
+#[cfg(test)]
+pub(crate) fn test_vortex_order_pulse(world: &mut World) -> (usize, f32) {
+    use bevy::ecs::system::RunSystemOnce;
+    let zone = world
+        .spawn((
+            SkillZone {
+                kind: ZoneKind::VortexColumn,
+                remaining: 4.0,
+                pulse_remaining: 0.0,
+                damage_per_pulse: 100.0,
+                radius: 4.0,
+                glacier_hits: HashMap::new(),
+                profile: DamageProfile::for_skill(15),
+            },
+            Transform::default(),
+        ))
+        .id();
+    world.run_system_once(update_spell_zones).unwrap();
+    let strikes = world.query::<&SkillStrike>().iter(world).count();
+    let pulse_remaining = world.get::<SkillZone>(zone).unwrap().pulse_remaining;
+    world.run_system_once(resolve_skill_strikes).unwrap();
+    (strikes, pulse_remaining)
+}
+
 #[allow(clippy::too_many_arguments)]
 fn update_spell_zones(
     mut commands: Commands,
@@ -895,6 +921,10 @@ fn update_spell_zones(
             }
             affected.push(target);
         }
+
+        // Cosmetic component migrations can reorder the enemy query. Keep
+        // target-to-strike assignment stable before shared critical RNG is used.
+        affected.sort_unstable_by_key(|target| target.entity.to_bits());
 
         for _ in 0..pulses {
             for target in &affected {

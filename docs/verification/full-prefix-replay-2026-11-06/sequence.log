@@ -1,0 +1,5 @@
+START full replay a
+PASS normal replay a loss
+START full replay b
+PASS normal replay b win
+TERMINAL NORMAL FULL-PREFIX REPLAYS {"first_strict": 24, "first_numeric": 39557, "counts": [8577, 109429]}

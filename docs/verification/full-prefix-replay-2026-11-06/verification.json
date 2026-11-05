@@ -1,0 +1,35 @@
+{
+  "scope": "Complete full-prefix duplicate diagnostics; local target-order/critical-assignment mechanism recorded; upstream cause unproven; no tuning or matrix",
+  "actor_trace_counts": [
+    46271,
+    98484
+  ],
+  "contact_counts": [
+    8577,
+    109429
+  ],
+  "raw_sequence_counts_field": "preserved mislabeled analysis counter; contact counts not actor counts",
+  "files_sha256": {
+    "README.md": "9b1dcc1cba6c292548865afd5194adbe537ea8d71423b63d6dbe353d6c679be9",
+    "actor-comparison.json": "880105dee3b2aed019264399a93b6aeef28a3fe99618db5bc9573be324e315b5",
+    "binary.json": "99c08dc83c8151e82c4b1fe37db53731f4389372636b4d1a480748e7edba3b5c",
+    "checkpoint-comparison.json": "b8cc0d751ef228697bb79ed1c5bb5de66a3772e5790656e5d5e83d520b7bc369",
+    "contact-counts.json": "1b510ce1222d837d62efd1e02bd70876ec637e52cad829100e7babfe4c8c7e96",
+    "diagnostic-commit.json": "1dd85e31e5f55092abf8e412ff636b3009ddc0daa38a05905bd9a2f596860bbe",
+    "first-difference-contacts-a.json": "90d1a8c8a7b2d4fe5943fd0a554a46e0c5e174eb6e64121d5481c4ba70211d19",
+    "first-difference-contacts-b.json": "f869f5a515766e530a02ae5b7cd69bd9a19cb8b316b84306f46b2fab98de87bf",
+    "first-difference-context.json": "d2853d3182be06dd8992049b9f0f5679bc0f960d98e074644cb2b779b04aba1f",
+    "probe-a.log": "dd3630f9a6a46d971145d107a937d4446c0368f00835e922dec3ebfac95988d2",
+    "probe-b.log": "88cf9759d32ad8899f7300d31d64dd36bd581981ce2090cca64fe60ed95f1733",
+    "raw-receipts.json": "1a0766398972039e42d317ea8ead74eef493ae4377e92c54def5ea08c7c92a59",
+    "replay-a/active-h2-behind-sa11ce-c5-t0.jsonl.gz": "d8168544e27888ecd68944979c6acffa243a61d5e1f33419b5752f38d40bc466",
+    "replay-a/active-h2-behind-sa11ce-c5-t0.stderr.gz": "1bb49fc05418d33285bed673d05238ff2616ba1d49f386a2f72ee0fbfba90e82",
+    "replay-a/summary.json": "ca68cfeb4f36d99fa643d938a9a9d4ca96c64416bcbc7b7ab879776392ad6b4d",
+    "replay-b/active-h2-behind-sa11ce-c5-t0.jsonl.gz": "a2e52e1a0cd781c09c6f807caec75a25abf6355e7d766899d16d5ff4f467bf26",
+    "replay-b/active-h2-behind-sa11ce-c5-t0.stderr.gz": "dfa4476c6c706124634f3915395f0bfc9a4e0f73776be426b0f3c9ea5840a2ce",
+    "replay-b/summary.json": "e120dae479f6394fe165f47118124ead2ff9c8e03df0d6568edd72d9adf55de9",
+    "run.py": "9d219c4c7c2652c45b08203bcf2870b6891da9b78418f8813b74633c03468af3",
+    "scope.json": "cdbf22632a79e557fd081322b1175b47478bdc679e2d49c13cba046d2c091fe9",
+    "sequence.log": "1f17e22b37d6c325f45409235b3249973a6b4b34b3c771a8636aafc86b366aac"
+  }
+}
