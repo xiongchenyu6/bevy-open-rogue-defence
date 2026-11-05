@@ -45,7 +45,7 @@ docker run --rm --network none \
 
 ## 仍未覆盖
 
-上述短流程不代表完整25分钟战役、后续征募／支线／死亡／奖励／永久强化的整局回归。前一候选86cb084已完成自然材料购买、实际合成、背包逐项核对、恢复战斗、正常退出及同档重启，见下节；这些不替代当前f5ef6ff的对应流程。当前包[第六章路线](verification/overlap-chapter6-2026-11-06/README.md)因购买后余额不变而中断，未形成游戏终局；独立观察已记录一次点击后延迟显示的精确扣款，原失败不计为通关。新包[自然合成](verification/overlap-earned-forge-failure-2026-11-06/README.md)在400.590秒因战斗HUD识别失败而中断，尚未确认合成，同档重启未启动。分类触发和单次购买后的被动观察已通过[助手回归](verification/passive-market-purchase-2026-11-06/README.md)；使用同一不可变包的[第六章R2](verification/overlap-chapter6-r2-2026-11-06/README.md)已因访问时间预算耗尽中断，实际购买／单件身份通过但尚未发Close按下事件；自然合成R2仍在运行。更多配方仍待复验。旧版中断证据保留，但不替代当前包结论。
+上述短流程不代表完整25分钟战役、后续征募／支线／死亡／奖励／永久强化的整局回归。前一候选86cb084已完成自然材料购买、实际合成、背包逐项核对、恢复战斗、正常退出及同档重启，见下节；这些不替代当前f5ef6ff的对应流程。当前包[第六章路线](verification/overlap-chapter6-2026-11-06/README.md)因购买后余额不变而中断，未形成游戏终局；独立观察已记录一次点击后延迟显示的精确扣款，原失败不计为通关。新包[自然合成](verification/overlap-earned-forge-failure-2026-11-06/README.md)在400.590秒因战斗HUD识别失败而中断，尚未确认合成，同档重启未启动。分类触发和单次购买后的被动观察已通过[助手回归](verification/passive-market-purchase-2026-11-06/README.md)；使用同一不可变包的[第六章R2](verification/overlap-chapter6-r2-2026-11-06/README.md)已因访问时间预算耗尽中断，实际购买／单件身份通过但尚未发Close按下事件；自然合成R2已发生[真实败北](verification/earned-forge-loss-2026-11-06/README.md)：奥术透镜购买与背包核对通过，但19次黑市访问未观察到另一材料，生命耗尽后获得56战果；未合成，同档重启未启动。更多配方仍待复验。旧版中断证据保留，但不替代当前包结论。
 
 真实Steam客户端、SteamDeck、物理手柄与音频、Windows／macOS、更多驱动／分辨率和长局硬件性能仍需验收。历史证据继续保留，但不作为当前包的通过依据。
 
