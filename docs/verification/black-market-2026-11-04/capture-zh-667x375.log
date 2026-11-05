@@ -1,0 +1,33 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {35, 50, 70, 96, 125, 145}; all 160 simulation/render updates retained
+[2m2026-11-05T03:05:15.009400Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-05T03:05:15.099808Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-05T03:05:15.862862Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-05T03:05:15.863069Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-05T03:05:16.693503Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[2m2026-11-05T03:05:20.223506Z[0m [32m INFO[0m [2mbevy_input::gamepad[0m[2m:[0m Gamepad 2396v0 connected.
+[capture] PASS all five item tiles and controls fit
+[2m2026-11-05T03:05:21.573836Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/zh-667x375/frame00035.png
+[capture] saved 1/1 target/verification/market-art-2026-11-04/zh-667x375/frame00035.png (128610 bytes)
+[2m2026-11-05T03:05:22.180100Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/zh-667x375/frame00050.png
+[capture] saved 2/2 target/verification/market-art-2026-11-04/zh-667x375/frame00050.png (130982 bytes)
+[capture] PASS auto-buy marked without accidental unaffordable purchase
+[2m2026-11-05T03:05:22.937715Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/zh-667x375/frame00070.png
+[capture] saved 3/3 target/verification/market-art-2026-11-04/zh-667x375/frame00070.png (128924 bytes)
+[capture] PASS touch tile activation previews without spending
+[capture] PASS explicit purchase charges the displayed item price
+[2m2026-11-05T03:05:23.957271Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/zh-667x375/frame00096.png
+[capture] saved 4/4 target/verification/market-art-2026-11-04/zh-667x375/frame00096.png (120295 bytes)
+[capture] PASS unaffordable selection remains inspectable and cannot spend
+[2m2026-11-05T03:05:25.105799Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/zh-667x375/frame00125.png
+[capture] saved 5/5 target/verification/market-art-2026-11-04/zh-667x375/frame00125.png (124082 bytes)
+[capture] PASS controller inspection remains in the shop scope
+[2m2026-11-05T03:05:25.911321Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/zh-667x375/frame00145.png
+[capture] saved 6/6 target/verification/market-art-2026-11-04/zh-667x375/frame00145.png (130829 bytes)
+[capture] PASS shop Close resumes the battle
+[capture] all 6 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 160 simulation frames to target/verification/market-art-2026-11-04/zh-667x375

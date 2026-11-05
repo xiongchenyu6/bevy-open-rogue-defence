@@ -82,10 +82,15 @@ const ROUTE: &[Action] = &[
     Action::Market,
     Action::Shot("09-market"),
     Action::Target("Market offer 0"),
+    Action::Target("Market buy selected"),
     Action::Target("Market offer 1"),
+    Action::Target("Market buy selected"),
     Action::Target("Market offer 2"),
+    Action::Target("Market buy selected"),
     Action::Target("Market offer 3"),
+    Action::Target("Market buy selected"),
     Action::Target("Market offer 4"),
+    Action::Target("Market buy selected"),
     Action::Button(GamepadButton::East),
     Action::Target("Equipment open"),
     Action::Target("Equipment crafting tab"),
@@ -369,7 +374,9 @@ fn drive(world: &mut World) {
         return;
     }
     assert!(
-        driver.frame < 1600,
+        // The art-first market adds five explicit preview purchases and their
+        // navigation. Keep a finite timeout with room for the longer route.
+        driver.frame < 2200,
         "controller route stalled at step {}: focus {:?}",
         driver.step,
         world.resource::<ControllerFocus>()

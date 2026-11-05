@@ -31,8 +31,12 @@ struct Probe {
     controller: Option<Entity>,
 }
 /// Register before AssetPlugin; no production asset files or readiness flags are changed.
-pub fn prepare(app: &mut App, font_scenario: bool) {
-    let target = if font_scenario { UI_FONT } else { BACKDROP };
+pub fn prepare(app: &mut App, scenario: &str) {
+    let target = match scenario {
+        "asset-readiness-font" => UI_FONT,
+        "market-atlas-readiness" => "ui/market/equipment-atlas.png",
+        _ => BACKDROP,
+    };
     let (root, gate) = asset_io_capture::prepare(app, &[target], false);
     app.insert_resource(Probe {
         target,

@@ -46,10 +46,10 @@ pub(super) fn panel(
                     if crafting_tab {
                         for recipe in RecipeId::ALL {
                             grid.spawn((Button, Recipe(recipe), Name::new(format!("Crafting recipe {}", recipe.index())),
-                                Node { width: px(icon + 8.0), height: px(icon + 8.0), padding: UiRect::all(px(3)), border: UiRect::all(px(1)), ..default() },
+                                Node { width: px(icon + 8.0), height: px(icon + 8.0), align_items: AlignItems::Center, justify_content: JustifyContent::Center, padding: UiRect::all(px(3)), border: UiRect::all(px(1)), ..default() },
                                 BackgroundColor(PANEL), BorderColor::all(crate::game::rarity::rarity_color(recipe.rarity()))))
                             .with_children(|card| {
-                                card.spawn((ImageNode::new(assets.load(recipe.icon())), Node { width: percent(100), height: percent(100), ..default() }, Pickable::IGNORE));
+                                card.spawn((recipe.image_node(assets), Node { width: px(recipe.art_size(icon).x), height: px(recipe.art_size(icon).y), ..default() }, Pickable::IGNORE));
                                 card.spawn((Text::new(recipe.rarity().label()), Node { position_type: PositionType::Absolute, left: px(2), top: px(2), ..default() },
                                     TextFont { font_size: FontSize::Px(10.0), ..default() }, TextColor(GOLD), Pickable::IGNORE));
                             });
@@ -63,12 +63,12 @@ pub(super) fn panel(
                     for (index, item) in owned.iter().copied().enumerate() {
                         grid.spawn((Button, Item(item), Name::new(format!("Equipment item {index}")),
                             Node { width: px(icon + 8.0), height: px(icon + 8.0),
-                                padding: UiRect::all(px(3)), border: UiRect::all(px(1)), ..default() },
+                                align_items: AlignItems::Center, justify_content: JustifyContent::Center, padding: UiRect::all(px(3)), border: UiRect::all(px(1)), ..default() },
                             BackgroundColor(Color::srgb(0.07, 0.09, 0.105)),
                             BorderColor::all(crate::game::rarity::rarity_color(item.build_rarity()))))
                         .with_children(|card| {
-                            card.spawn((ImageNode::new(assets.load(item.icon_path())), Node {
-                                width: percent(100), height: percent(100), ..default()
+                            card.spawn((item.image_node(assets), Node {
+                                width: px(item.art_size(icon).x), height: px(item.art_size(icon).y), ..default()
                             }, Pickable::IGNORE));
                             card.spawn((Text::new(item.build_rarity().label()), Node { position_type: PositionType::Absolute,
                                 left: px(3), top: px(2), ..default() }, TextFont { font_size: FontSize::Px(10.0), ..default() },
@@ -77,9 +77,9 @@ pub(super) fn panel(
                     }
                     for (index, recipe) in crafted.iter().copied().enumerate() {
                         grid.spawn((Button, Crafted(recipe), Name::new(format!("Equipment crafted item {index}")),
-                            Node { width: px(icon + 8.0), height: px(icon + 8.0), padding: UiRect::all(px(3)), border: UiRect::all(px(2)), ..default() },
+                            Node { width: px(icon + 8.0), height: px(icon + 8.0), align_items: AlignItems::Center, justify_content: JustifyContent::Center, padding: UiRect::all(px(3)), border: UiRect::all(px(2)), ..default() },
                             BackgroundColor(PANEL), BorderColor::all(crate::game::rarity::rarity_color(recipe.rarity()))))
-                        .with_child((ImageNode::new(assets.load(recipe.icon())), Node { width: percent(100), height: percent(100), ..default() }, Pickable::IGNORE));
+                        .with_child((recipe.image_node(assets), Node { width: px(recipe.art_size(icon).x), height: px(recipe.art_size(icon).y), ..default() }, Pickable::IGNORE));
                     }
                     }
                 });

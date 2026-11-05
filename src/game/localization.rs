@@ -248,6 +248,7 @@ mod tests {
         include_str!("hero_draft.rs"),
         include_str!("localization.rs"),
         include_str!("market.rs"),
+        include_str!("market/presentation.rs"),
         include_str!("progression.rs"),
         include_str!("progression_ui.rs"),
         include_str!("ui.rs"),

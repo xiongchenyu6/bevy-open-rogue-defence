@@ -35,15 +35,21 @@ impl RecipeId {
         };
         language.pick(en, zh)
     }
-    pub(crate) fn icon(self) -> &'static str {
+    fn art_item(self) -> MarketItem {
         match self {
-            Self::Bloodreaver => MarketItem::SerratedDisc.icon_path(),
-            Self::AstralPrism => MarketItem::ArcLens.icon_path(),
-            Self::StormBastion => MarketItem::HardenedPlate.icon_path(),
-            Self::Suncoil => MarketItem::StormCoil.icon_path(),
-            Self::NightCrown => MarketItem::AscendantCrown.icon_path(),
-            Self::WorldEngine => MarketItem::PrismaticEngine.icon_path(),
+            Self::Bloodreaver => MarketItem::SerratedDisc,
+            Self::AstralPrism => MarketItem::ArcLens,
+            Self::StormBastion => MarketItem::HardenedPlate,
+            Self::Suncoil => MarketItem::StormCoil,
+            Self::NightCrown => MarketItem::AscendantCrown,
+            Self::WorldEngine => MarketItem::PrismaticEngine,
         }
+    }
+    pub(crate) fn image_node(self, assets: &AssetServer) -> ImageNode {
+        self.art_item().image_node(assets)
+    }
+    pub(crate) fn art_size(self, max: f32) -> Vec2 {
+        self.art_item().art_size(max)
     }
     pub(crate) fn rarity(self) -> super::content::Rarity {
         if self.index() >= 4 {

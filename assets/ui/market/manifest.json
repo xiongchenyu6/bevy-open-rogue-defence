@@ -1,0 +1,398 @@
+{
+  "image": "equipment-atlas.png",
+  "sha256": "ea9c22a92ce0d3c251e928e04464d76b3a422fa8a677d02dcd80f933774e2160",
+  "size": [
+    1536,
+    1024
+  ],
+  "columns": 6,
+  "rows": 4,
+  "items": [
+    {
+      "item": "CorePatch",
+      "index": 0,
+      "rect": [
+        11,
+        11,
+        277,
+        250
+      ],
+      "subject_bounds": [
+        12,
+        12,
+        276,
+        249
+      ]
+    },
+    {
+      "item": "SkillTuner",
+      "index": 1,
+      "rect": [
+        330,
+        8,
+        490,
+        251
+      ],
+      "subject_bounds": [
+        331,
+        9,
+        489,
+        250
+      ]
+    },
+    {
+      "item": "BondCompass",
+      "index": 2,
+      "rect": [
+        533,
+        7,
+        757,
+        251
+      ],
+      "subject_bounds": [
+        534,
+        8,
+        756,
+        250
+      ]
+    },
+    {
+      "item": "SlowHourglass",
+      "index": 3,
+      "rect": [
+        815,
+        5,
+        987,
+        250
+      ],
+      "subject_bounds": [
+        816,
+        6,
+        986,
+        249
+      ]
+    },
+    {
+      "item": "RevivalSeed",
+      "index": 4,
+      "rect": [
+        1036,
+        10,
+        1244,
+        247
+      ],
+      "subject_bounds": [
+        1037,
+        11,
+        1243,
+        246
+      ]
+    },
+    {
+      "item": "SerratedDisc",
+      "index": 5,
+      "rect": [
+        1279,
+        18,
+        1521,
+        238
+      ],
+      "subject_bounds": [
+        1280,
+        19,
+        1520,
+        237
+      ]
+    },
+    {
+      "item": "ArcLens",
+      "index": 6,
+      "rect": [
+        20,
+        263,
+        241,
+        508
+      ],
+      "subject_bounds": [
+        21,
+        264,
+        240,
+        507
+      ]
+    },
+    {
+      "item": "HardenedPlate",
+      "index": 7,
+      "rect": [
+        268,
+        263,
+        518,
+        504
+      ],
+      "subject_bounds": [
+        269,
+        264,
+        517,
+        503
+      ]
+    },
+    {
+      "item": "SpiritDrum",
+      "index": 8,
+      "rect": [
+        523,
+        264,
+        763,
+        501
+      ],
+      "subject_bounds": [
+        524,
+        265,
+        762,
+        500
+      ]
+    },
+    {
+      "item": "WindBoots",
+      "index": 9,
+      "rect": [
+        775,
+        260,
+        1019,
+        505
+      ],
+      "subject_bounds": [
+        776,
+        261,
+        1018,
+        504
+      ]
+    },
+    {
+      "item": "EchoCore",
+      "index": 10,
+      "rect": [
+        1062,
+        260,
+        1239,
+        507
+      ],
+      "subject_bounds": [
+        1063,
+        261,
+        1238,
+        506
+      ]
+    },
+    {
+      "item": "EmberHeart",
+      "index": 11,
+      "rect": [
+        1302,
+        259,
+        1508,
+        509
+      ],
+      "subject_bounds": [
+        1303,
+        260,
+        1507,
+        508
+      ]
+    },
+    {
+      "item": "StormCoil",
+      "index": 12,
+      "rect": [
+        24,
+        520,
+        244,
+        763
+      ],
+      "subject_bounds": [
+        25,
+        521,
+        243,
+        762
+      ]
+    },
+    {
+      "item": "FrostMirror",
+      "index": 13,
+      "rect": [
+        276,
+        512,
+        490,
+        768
+      ],
+      "subject_bounds": [
+        277,
+        513,
+        489,
+        767
+      ]
+    },
+    {
+      "item": "ThreefoldRelic",
+      "index": 14,
+      "rect": [
+        515,
+        525,
+        760,
+        754
+      ],
+      "subject_bounds": [
+        516,
+        526,
+        759,
+        753
+      ]
+    },
+    {
+      "item": "BloodContract",
+      "index": 15,
+      "rect": [
+        781,
+        513,
+        1015,
+        766
+      ],
+      "subject_bounds": [
+        782,
+        514,
+        1014,
+        765
+      ]
+    },
+    {
+      "item": "MarketBadge",
+      "index": 16,
+      "rect": [
+        1037,
+        512,
+        1266,
+        766
+      ],
+      "subject_bounds": [
+        1038,
+        513,
+        1265,
+        765
+      ]
+    },
+    {
+      "item": "GuardianSeed",
+      "index": 17,
+      "rect": [
+        1294,
+        511,
+        1513,
+        766
+      ],
+      "subject_bounds": [
+        1295,
+        512,
+        1512,
+        765
+      ]
+    },
+    {
+      "item": "AscendantCrown",
+      "index": 18,
+      "rect": [
+        10,
+        783,
+        257,
+        1003
+      ],
+      "subject_bounds": [
+        11,
+        784,
+        256,
+        1002
+      ]
+    },
+    {
+      "item": "ChaosDie",
+      "index": 19,
+      "rect": [
+        286,
+        788,
+        488,
+        1007
+      ],
+      "subject_bounds": [
+        287,
+        789,
+        487,
+        1006
+      ]
+    },
+    {
+      "item": "WorldAnchor",
+      "index": 20,
+      "rect": [
+        514,
+        770,
+        749,
+        1021
+      ],
+      "subject_bounds": [
+        515,
+        771,
+        748,
+        1020
+      ]
+    },
+    {
+      "item": "LegionStandard",
+      "index": 21,
+      "rect": [
+        774,
+        769,
+        1019,
+        1020
+      ],
+      "subject_bounds": [
+        775,
+        770,
+        1018,
+        1019
+      ]
+    },
+    {
+      "item": "PrismaticEngine",
+      "index": 22,
+      "rect": [
+        1034,
+        776,
+        1269,
+        1013
+      ],
+      "subject_bounds": [
+        1035,
+        777,
+        1268,
+        1012
+      ]
+    },
+    {
+      "item": "LastOath",
+      "index": 23,
+      "rect": [
+        1346,
+        769,
+        1526,
+        1011
+      ],
+      "subject_bounds": [
+        1347,
+        770,
+        1525,
+        1010
+      ]
+    }
+  ],
+  "layout": "Explicit subject rectangles; nominal six-column layout is not a slicing grid",
+  "alpha_threshold": 64
+}

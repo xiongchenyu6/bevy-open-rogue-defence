@@ -48,3 +48,7 @@ blender -b -t 4 --python tools/render_game_icons.py -- arc_chain
 ```
 
 The script checks that every current skill and bond has a defined icon before rendering and writes `icons/manifest.json`. Requirements are Blender and ImageMagick on `PATH`, matching the portrait workflow above.
+
+## Black Market equipment illustrations
+
+`market/equipment-atlas.png` is a separately authored original AI-generated painted set, rather than a Blender icon render. Its 24 item identities, transparent atlas geometry, generation brief and file hash are recorded in [market source notes](market/SOURCE.md) and [manifest](market/manifest.json). Equipment illustrations are shared between the shop and owned inventory.

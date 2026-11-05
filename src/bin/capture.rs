@@ -155,6 +155,11 @@ mod crafting_capture;
 #[path = "capture/equipment.rs"]
 mod equipment_capture;
 
+#[cfg(any(debug_assertions, feature = "dev-tools"))]
+#[path = "capture/hit_feedback.rs"]
+mod hit_feedback_capture;
+#[path = "capture/market_art.rs"]
+mod market_art_capture;
 #[path = "capture/market_wallet.rs"]
 mod market_wallet_capture;
 
@@ -433,9 +438,12 @@ fn main() {
     }
     if matches!(
         scenario,
-        "asset-readiness" | "asset-readiness-font" | "controller-readiness"
+        "asset-readiness"
+            | "asset-readiness-font"
+            | "controller-readiness"
+            | "market-atlas-readiness"
     ) {
-        asset_readiness_capture::prepare(&mut app, scenario == "asset-readiness-font");
+        asset_readiness_capture::prepare(&mut app, scenario);
     }
     app.insert_resource(ClearColor(Color::srgb(0.015, 0.025, 0.045)))
         .insert_resource(TimeUpdateStrategy::ManualDuration(Duration::from_secs_f64(
@@ -474,7 +482,10 @@ fn main() {
     }
     if matches!(
         scenario,
-        "asset-readiness" | "asset-readiness-font" | "controller-readiness"
+        "asset-readiness"
+            | "asset-readiness-font"
+            | "controller-readiness"
+            | "market-atlas-readiness"
     ) {
         asset_readiness_capture::plugin(&mut app);
     }
@@ -524,7 +535,10 @@ fn main() {
         println!("[capture] later recruitment readiness retains cold-start missing catalog assets");
     } else if matches!(
         scenario,
-        "asset-readiness" | "asset-readiness-font" | "controller-readiness"
+        "asset-readiness"
+            | "asset-readiness-font"
+            | "controller-readiness"
+            | "market-atlas-readiness"
     ) {
         asset_readiness_capture::install(&mut apps.main);
         println!(
@@ -627,6 +641,13 @@ fn main() {
     }
     if scenario == "equipment" {
         equipment_capture::install(&mut apps.main);
+    }
+    #[cfg(any(debug_assertions, feature = "dev-tools"))]
+    if matches!(scenario, "hit-feedback" | "hit-feedback-8x") {
+        hit_feedback_capture::install(&mut apps.main, scenario);
+    }
+    if scenario == "market-art" {
+        market_art_capture::install(&mut apps.main);
     }
     if scenario == "market-wallet" {
         market_wallet_capture::install(&mut apps.main);
@@ -973,7 +994,10 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     }
     if matches!(
         scenario,
-        "asset-readiness" | "asset-readiness-font" | "controller-readiness"
+        "asset-readiness"
+            | "asset-readiness-font"
+            | "controller-readiness"
+            | "market-atlas-readiness"
     ) {
         asset_readiness_capture::configure(world);
         return;
@@ -1087,6 +1111,15 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     }
     if scenario == "equipment" {
         equipment_capture::configure(world);
+        return;
+    }
+    #[cfg(any(debug_assertions, feature = "dev-tools"))]
+    if matches!(scenario, "hit-feedback" | "hit-feedback-8x") {
+        hit_feedback_capture::configure(world);
+        return;
+    }
+    if scenario == "market-art" {
+        market_art_capture::configure(world);
         return;
     }
     if scenario == "market-wallet" {

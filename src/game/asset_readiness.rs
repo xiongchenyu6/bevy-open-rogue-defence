@@ -138,6 +138,7 @@ fn inspect(
     server: Res<AssetServer>,
     assets: Option<Res<GameAssets>>,
     art: Option<Res<super::hero::draft::DraftArt>>,
+    market_art: Option<Res<super::market::MarketArt>>,
     font: Option<Res<super::localization::UiFont>>,
     seed: Res<RunSeed>,
     selected: Res<SelectedHero>,
@@ -164,6 +165,12 @@ fn inspect(
         ids.insert(art.portraits[kind.index()].id().untyped());
     }
     ids.insert(art.backdrop.id().untyped());
+    if let Some(market_art) = market_art {
+        ids.insert(market_art.0.id().untyped());
+    } else {
+        gate.ready = false;
+        return;
+    }
     ids.insert(font.0.id().untyped());
     for (root, visibility) in &environment {
         if visibility != Some(&Visibility::Hidden) {

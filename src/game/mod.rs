@@ -58,6 +58,8 @@ mod hero_abilities;
 mod hero_fusion;
 pub mod hero_stats;
 mod hit_feedback;
+#[cfg(any(debug_assertions, feature = "dev-tools"))]
+pub use hit_feedback::capture as hit_feedback_capture;
 mod localization;
 mod market;
 mod material_finish;

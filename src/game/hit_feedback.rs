@@ -5,7 +5,13 @@
 //! [`HitEvent`] per landed hit. Every consumer reads the same frame of events
 //! and the queue is cleared in `Last`.
 
+use std::collections::HashMap;
+
 use bevy::prelude::*;
+
+#[cfg(any(debug_assertions, feature = "dev-tools"))]
+#[path = "hit_feedback/capture.rs"]
+pub mod capture;
 
 use super::bonds::DamageElement;
 use super::combat::{CombatSet, SurvivalSet};
@@ -280,18 +286,25 @@ fn react_to_hits(
     if session.finished {
         return;
     }
-    for event in feedback.events() {
-        if !event.killed
-            && let Ok((transform, punch)) = enemies.get_mut(event.target)
-        {
-            let strength = punch_strength(*event);
+    // Commands are deferred: collect once per target so a later ordinary hit
+    // cannot overwrite a same-frame critical punch before it is inserted.
+    let mut punches = HashMap::<Entity, f32>::new();
+    for event in feedback.events().iter().filter(|event| !event.killed) {
+        punches
+            .entry(event.target)
+            .and_modify(|strength| *strength = strength.max(punch_strength(*event)))
+            .or_insert_with(|| punch_strength(*event));
+    }
+    for (target, strength) in punches {
+        if let Ok((transform, punch)) = enemies.get_mut(target) {
             match punch {
                 Some(mut punch) => {
-                    punch.elapsed = 0.0;
+                    // Complete impact -> overshoot -> recovery even under a
+                    // continuous barrage. Restarting at zero erases the impact.
                     punch.strength = punch.strength.max(strength);
                 }
                 None => {
-                    commands.entity(event.target).insert(HitPunch {
+                    commands.entity(target).insert(HitPunch {
                         elapsed: 0.0,
                         base_scale: transform.scale,
                         strength,
@@ -299,6 +312,8 @@ fn react_to_hits(
                 }
             }
         }
+    }
+    for event in feedback.events() {
         if let Some(art) = art.as_deref()
             && pools.impact_fx_metrics().active() < BURST_POOL_HEADROOM
         {
@@ -740,6 +755,78 @@ mod tests {
         let shake = app.world().resource::<ScreenShake>().trauma;
         assert_eq!(shake, 1.0);
         assert!(app.world().resource::<HitStop>().requested > 0.1);
+    }
+
+    fn punch_app() -> (App, Entity) {
+        let mut app = App::new();
+        app.init_resource::<GameSession>()
+            .init_resource::<CombatPools>()
+            .init_resource::<ScreenShake>()
+            .init_resource::<HitStop>()
+            .init_resource::<HitFeedback>()
+            .init_resource::<Time<Real>>();
+        let target = app
+            .world_mut()
+            .spawn(Transform::from_scale(Vec3::splat(1.25)))
+            .id();
+        (app, target)
+    }
+
+    fn record_punch(app: &mut App, target: Entity, critical: bool) {
+        let mut feedback = app.world_mut().resource_mut::<HitFeedback>();
+        feedback.events.clear();
+        feedback.push(HitEvent {
+            target,
+            ..event(HitWeight::Normal, critical, false)
+        });
+    }
+
+    #[test]
+    fn dense_hits_complete_recovery_and_next_normal_does_not_keep_critical_strength() {
+        let (mut app, target) = punch_app();
+        let base = app.world().get::<Transform>(target).unwrap().scale;
+        record_punch(&mut app, target, true);
+        app.world_mut().run_system_cached(react_to_hits).unwrap();
+        // Twelve 10ms hits arrive during one 120ms reaction. None may rewind it.
+        for _ in 0..13 {
+            record_punch(&mut app, target, false);
+            app.world_mut().run_system_cached(react_to_hits).unwrap();
+            app.world_mut()
+                .resource_mut::<Time<Real>>()
+                .advance_by(std::time::Duration::from_millis(10));
+            app.world_mut()
+                .run_system_cached(animate_hit_punch)
+                .unwrap();
+            if app.world().get::<HitPunch>(target).is_none() {
+                break;
+            }
+        }
+        assert!(
+            app.world().get::<HitPunch>(target).is_none(),
+            "dense hits must not pin the reaction"
+        );
+        assert_eq!(app.world().get::<Transform>(target).unwrap().scale, base);
+        record_punch(&mut app, target, false);
+        app.world_mut().run_system_cached(react_to_hits).unwrap();
+        let next = app.world().get::<HitPunch>(target).unwrap();
+        assert_eq!(next.strength, 1.0);
+        assert_eq!(next.base_scale, base);
+    }
+
+    #[test]
+    fn simultaneous_punches_use_strongest_hit_in_either_order() {
+        for critical_first in [false, true] {
+            let (mut app, target) = punch_app();
+            record_punch(&mut app, target, critical_first);
+            app.world_mut()
+                .resource_mut::<HitFeedback>()
+                .push(HitEvent {
+                    target,
+                    ..event(HitWeight::Normal, !critical_first, false)
+                });
+            app.world_mut().run_system_cached(react_to_hits).unwrap();
+            assert_eq!(app.world().get::<HitPunch>(target).unwrap().strength, 1.6);
+        }
     }
 
     #[test]

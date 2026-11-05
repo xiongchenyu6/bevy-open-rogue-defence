@@ -1,0 +1,193 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {2399}; all 2400 simulation/render updates retained
+[2m2026-11-05T03:05:38.669320Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-05T03:05:38.825207Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-05T03:05:39.943269Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-05T03:05:39.943504Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-05T03:05:40.755689Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[2m2026-11-05T03:05:44.389127Z[0m [32m INFO[0m [2mbevy_input::gamepad[0m[2m:[0m Gamepad 2438v0 connected.
+[2m2026-11-05T03:05:45.142142Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/01-chapters.png
+[capture] saved 1/1 target/verification/market-art-2026-11-04/controller-route/01-chapters.png (120224 bytes)
+CONTROLLER_ROUTE_INPUT step=1 frame=27 target=Campaign training key=DPadRight
+CONTROLLER_ROUTE_INPUT step=1 frame=31 target=Campaign training key=South
+[2m2026-11-05T03:05:46.527968Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/01b-training.png
+[capture] saved 2/2 target/verification/market-art-2026-11-04/controller-route/01b-training.png (91353 bytes)
+CONTROLLER_ROUTE_INPUT step=4 frame=75 target=Campaign chapter 0 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=4 frame=79 target=Campaign chapter 0 key=South
+[2m2026-11-05T03:05:48.652278Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/02-recruitment.png
+[capture] saved 3/3 target/verification/market-art-2026-11-04/controller-route/02-recruitment.png (360291 bytes)
+CONTROLLER_ROUTE_INPUT step=6 frame=111 target=Commander card 0 key=South
+CONTROLLER_FIXTURE injected wallet/time, not earned progression
+CONTROLLER_ROUTE_CHECK movement PASS frame=163
+[2m2026-11-05T03:05:51.701925Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/03-combat.png
+[capture] saved 4/4 target/verification/market-art-2026-11-04/controller-route/03-combat.png (1012724 bytes)
+[2m2026-11-05T03:05:53.356012Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/04-pause.png
+[capture] saved 5/5 target/verification/market-art-2026-11-04/controller-route/04-pause.png (459333 bytes)
+CONTROLLER_ROUTE_INPUT step=14 frame=223 target=Settings open key=DPadUp
+CONTROLLER_ROUTE_INPUT step=14 frame=227 target=Settings open key=South
+CONTROLLER_ROUTE_INPUT step=15 frame=247 target=Settings mute key=DPadRight
+CONTROLLER_ROUTE_INPUT step=15 frame=251 target=Settings mute key=DPadRight
+CONTROLLER_ROUTE_INPUT step=15 frame=255 target=Settings mute key=DPadRight
+CONTROLLER_ROUTE_INPUT step=15 frame=259 target=Settings mute key=South
+CONTROLLER_ROUTE_INPUT step=16 frame=279 target=Settings music down key=DPadUp
+CONTROLLER_ROUTE_INPUT step=16 frame=283 target=Settings music down key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=16 frame=287 target=Settings music down key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=16 frame=291 target=Settings music down key=South
+CONTROLLER_ROUTE_INPUT step=17 frame=311 target=Settings display toggle key=DPadRight
+CONTROLLER_ROUTE_INPUT step=17 frame=315 target=Settings display toggle key=DPadRight
+CONTROLLER_ROUTE_INPUT step=17 frame=319 target=Settings display toggle key=DPadRight
+CONTROLLER_ROUTE_INPUT step=17 frame=323 target=Settings display toggle key=DPadDown
+CONTROLLER_ROUTE_INPUT step=17 frame=327 target=Settings display toggle key=South
+CONTROLLER_ROUTE_INPUT step=18 frame=347 target=Settings display toggle key=South
+CONTROLLER_ROUTE_INPUT step=19 frame=367 target=Settings chapters key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=19 frame=371 target=Settings chapters key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=19 frame=375 target=Settings chapters key=South
+[2m2026-11-05T03:06:00.017177Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/05-confirmation.png
+[capture] saved 6/6 target/verification/market-art-2026-11-04/controller-route/05-confirmation.png (77705 bytes)
+CONTROLLER_ROUTE_CHECK cancel PASS frame=419
+[2m2026-11-05T03:06:01.418827Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/06-settings.png
+[capture] saved 7/7 target/verification/market-art-2026-11-04/controller-route/06-settings.png (67015 bytes)
+CONTROLLER_ROUTE_INPUT step=24 frame=443 target=Settings close key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=24 frame=447 target=Settings close key=DPadDown
+CONTROLLER_ROUTE_INPUT step=24 frame=451 target=Settings close key=South
+CONTROLLER_ROUTE_CHECK resume PASS frame=483
+CONTROLLER_ROUTE_INPUT step=28 frame=507 target=Skill draw control key=DPadUp
+CONTROLLER_ROUTE_INPUT step=28 frame=511 target=Skill draw control key=DPadDown
+CONTROLLER_ROUTE_INPUT step=28 frame=515 target=Skill draw control key=DPadDown
+CONTROLLER_ROUTE_INPUT step=28 frame=519 target=Skill draw control key=South
+[2m2026-11-05T03:06:05.605643Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/03b-controller-tooltip.png
+[capture] saved 8/8 target/verification/market-art-2026-11-04/controller-route/03b-controller-tooltip.png (1010558 bytes)
+CONTROLLER_ROUTE_INPUT step=30 frame=551 target=Skill draw control key=South
+[2m2026-11-05T03:06:07.359510Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/07-cards.png
+[capture] saved 9/9 target/verification/market-art-2026-11-04/controller-route/07-cards.png (327127 bytes)
+CONTROLLER_ROUTE_INPUT step=32 frame=583 target=Build card 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=32 frame=587 target=Build card 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=32 frame=591 target=Build card 0 key=South
+CONTROLLER_ROUTE_CHECK draft PASS frame=611
+CONTROLLER_ROUTE_INPUT step=34 frame=623 target=Build card 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=34 frame=627 target=Build card 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=34 frame=631 target=Build card 0 key=South
+CONTROLLER_ROUTE_CHECK draft-second PASS frame=651
+CONTROLLER_ROUTE_INPUT step=36 frame=663 target=Build later key=DPadRight
+CONTROLLER_ROUTE_INPUT step=36 frame=667 target=Build later key=DPadRight
+CONTROLLER_ROUTE_INPUT step=36 frame=671 target=Build later key=DPadRight
+CONTROLLER_ROUTE_INPUT step=36 frame=675 target=Build later key=South
+CONTROLLER_ROUTE_CHECK banked PASS frame=695
+CONTROLLER_ROUTE_INPUT step=38 frame=707 target=Adventure camp entry 0 key=DPadUp
+CONTROLLER_ROUTE_INPUT step=38 frame=711 target=Adventure camp entry 0 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=38 frame=715 target=Adventure camp entry 0 key=South
+[2m2026-11-05T03:06:14.401684Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/07b-camp-choice.png
+[capture] saved 10/10 target/verification/market-art-2026-11-04/controller-route/07b-camp-choice.png (590295 bytes)
+CONTROLLER_ROUTE_CHECK camp-back PASS frame=759
+CONTROLLER_ROUTE_INPUT step=42 frame=771 target=Encounter boss safe reward key=DPadRight
+CONTROLLER_ROUTE_INPUT step=42 frame=775 target=Encounter boss safe reward key=South
+CONTROLLER_ROUTE_CHECK camp-reward PASS frame=795
+CONTROLLER_ROUTE_INPUT step=44 frame=807 target=Skill draw control key=DPadUp
+CONTROLLER_ROUTE_INPUT step=44 frame=811 target=Skill draw control key=DPadDown
+CONTROLLER_ROUTE_INPUT step=44 frame=815 target=Skill draw control key=South
+CONTROLLER_ROUTE_CHECK banked-reopen PASS frame=835
+[2m2026-11-05T03:06:19.365026Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/07c-banked-reopen.png
+[capture] saved 11/11 target/verification/market-art-2026-11-04/controller-route/07c-banked-reopen.png (313400 bytes)
+CONTROLLER_ROUTE_INPUT step=47 frame=859 target=Build later key=DPadRight
+CONTROLLER_ROUTE_INPUT step=47 frame=863 target=Build later key=DPadRight
+CONTROLLER_ROUTE_INPUT step=47 frame=867 target=Build later key=DPadRight
+CONTROLLER_ROUTE_INPUT step=47 frame=871 target=Build later key=South
+CONTROLLER_ROUTE_INPUT step=48 frame=891 target=Equipment open key=DPadUp
+CONTROLLER_ROUTE_INPUT step=48 frame=895 target=Equipment open key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=48 frame=899 target=Equipment open key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=48 frame=903 target=Equipment open key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=48 frame=907 target=Equipment open key=South
+CONTROLLER_ROUTE_INPUT step=49 frame=927 target=Equipment crafting tab key=DPadRight
+CONTROLLER_ROUTE_INPUT step=49 frame=931 target=Equipment crafting tab key=South
+CONTROLLER_ROUTE_INPUT step=50 frame=951 target=Crafting recipe 0 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=50 frame=955 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=50 frame=959 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=50 frame=963 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=50 frame=967 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=50 frame=971 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=50 frame=975 target=Crafting recipe 0 key=South
+[2m2026-11-05T03:06:25.185153Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/08-forge-missing.png
+[capture] saved 12/12 target/verification/market-art-2026-11-04/controller-route/08-forge-missing.png (491360 bytes)
+CONTROLLER_FIXTURE injected deterministic stock; purchases use public controller navigation/button handlers
+[2m2026-11-05T03:06:26.877671Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/09-market.png
+[capture] saved 13/13 target/verification/market-art-2026-11-04/controller-route/09-market.png (778842 bytes)
+CONTROLLER_ROUTE_INPUT step=55 frame=1043 target=Market offer 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=55 frame=1047 target=Market offer 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=55 frame=1051 target=Market offer 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=55 frame=1055 target=Market offer 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=55 frame=1059 target=Market offer 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=55 frame=1063 target=Market offer 0 key=South
+CONTROLLER_ROUTE_INPUT step=56 frame=1083 target=Market buy selected key=DPadDown
+CONTROLLER_ROUTE_INPUT step=56 frame=1087 target=Market buy selected key=DPadDown
+CONTROLLER_ROUTE_INPUT step=56 frame=1091 target=Market buy selected key=DPadRight
+CONTROLLER_ROUTE_INPUT step=56 frame=1095 target=Market buy selected key=South
+CONTROLLER_ROUTE_INPUT step=57 frame=1115 target=Market offer 1 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=57 frame=1119 target=Market offer 1 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=57 frame=1123 target=Market offer 1 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=57 frame=1127 target=Market offer 1 key=DPadUp
+CONTROLLER_ROUTE_INPUT step=57 frame=1131 target=Market offer 1 key=South
+CONTROLLER_ROUTE_INPUT step=58 frame=1151 target=Market buy selected key=DPadDown
+CONTROLLER_ROUTE_INPUT step=58 frame=1155 target=Market buy selected key=DPadDown
+CONTROLLER_ROUTE_INPUT step=58 frame=1159 target=Market buy selected key=DPadRight
+CONTROLLER_ROUTE_INPUT step=58 frame=1163 target=Market buy selected key=South
+CONTROLLER_ROUTE_INPUT step=59 frame=1183 target=Market offer 2 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=59 frame=1187 target=Market offer 2 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=59 frame=1191 target=Market offer 2 key=DPadUp
+CONTROLLER_ROUTE_INPUT step=59 frame=1195 target=Market offer 2 key=South
+CONTROLLER_ROUTE_INPUT step=60 frame=1215 target=Market buy selected key=DPadRight
+CONTROLLER_ROUTE_INPUT step=60 frame=1219 target=Market buy selected key=DPadDown
+CONTROLLER_ROUTE_INPUT step=60 frame=1223 target=Market buy selected key=DPadDown
+CONTROLLER_ROUTE_INPUT step=60 frame=1227 target=Market buy selected key=South
+CONTROLLER_ROUTE_INPUT step=61 frame=1247 target=Market offer 3 key=DPadRight
+CONTROLLER_ROUTE_INPUT step=61 frame=1251 target=Market offer 3 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=61 frame=1255 target=Market offer 3 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=61 frame=1259 target=Market offer 3 key=South
+CONTROLLER_ROUTE_INPUT step=62 frame=1279 target=Market buy selected key=DPadDown
+CONTROLLER_ROUTE_INPUT step=62 frame=1283 target=Market buy selected key=DPadDown
+CONTROLLER_ROUTE_INPUT step=62 frame=1287 target=Market buy selected key=South
+CONTROLLER_ROUTE_INPUT step=63 frame=1307 target=Market offer 4 key=DPadRight
+CONTROLLER_ROUTE_INPUT step=63 frame=1311 target=Market offer 4 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=63 frame=1315 target=Market offer 4 key=South
+CONTROLLER_ROUTE_INPUT step=64 frame=1335 target=Market buy selected key=DPadDown
+CONTROLLER_ROUTE_INPUT step=64 frame=1339 target=Market buy selected key=DPadRight
+CONTROLLER_ROUTE_INPUT step=64 frame=1343 target=Market buy selected key=South
+CONTROLLER_ROUTE_INPUT step=66 frame=1375 target=Equipment open key=DPadUp
+CONTROLLER_ROUTE_INPUT step=66 frame=1379 target=Equipment open key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=66 frame=1383 target=Equipment open key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=66 frame=1387 target=Equipment open key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=66 frame=1391 target=Equipment open key=South
+CONTROLLER_ROUTE_INPUT step=67 frame=1411 target=Equipment crafting tab key=DPadRight
+CONTROLLER_ROUTE_INPUT step=67 frame=1415 target=Equipment crafting tab key=South
+CONTROLLER_ROUTE_INPUT step=68 frame=1435 target=Crafting recipe 0 key=DPadDown
+CONTROLLER_ROUTE_INPUT step=68 frame=1439 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=68 frame=1443 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=68 frame=1447 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=68 frame=1451 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=68 frame=1455 target=Crafting recipe 0 key=DPadLeft
+CONTROLLER_ROUTE_INPUT step=68 frame=1459 target=Crafting recipe 0 key=South
+[2m2026-11-05T03:06:43.199239Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/10-forge-ready.png
+[capture] saved 14/14 target/verification/market-art-2026-11-04/controller-route/10-forge-ready.png (490188 bytes)
+CONTROLLER_ROUTE_INPUT step=70 frame=1491 target=Crafting confirm key=DPadDown
+CONTROLLER_ROUTE_INPUT step=70 frame=1495 target=Crafting confirm key=South
+CONTROLLER_ROUTE_CHECK forged PASS frame=1515
+[2m2026-11-05T03:06:45.360702Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/11-forged.png
+[capture] saved 15/15 target/verification/market-art-2026-11-04/controller-route/11-forged.png (490417 bytes)
+CONTROLLER_ROUTE_INPUT step=75 frame=1563 target=Settings open key=DPadUp
+CONTROLLER_ROUTE_INPUT step=75 frame=1567 target=Settings open key=South
+CONTROLLER_ROUTE_INPUT step=76 frame=1587 target=Settings chapters key=DPadDown
+CONTROLLER_ROUTE_INPUT step=76 frame=1591 target=Settings chapters key=DPadDown
+CONTROLLER_ROUTE_INPUT step=76 frame=1595 target=Settings chapters key=South
+CONTROLLER_ROUTE_INPUT step=77 frame=1615 target=Settings departure confirm key=DPadRight
+CONTROLLER_ROUTE_INPUT step=77 frame=1619 target=Settings departure confirm key=South
+CONTROLLER_ROUTE_CHECK chapters PASS frame=1639
+[2m2026-11-05T03:06:49.944852Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/12-returned-chapters.png
+[capture] saved 16/16 target/verification/market-art-2026-11-04/controller-route/12-returned-chapters.png (120224 bytes)
+CONTROLLER_ROUTE_PASS all 80 steps; synthetic native only
+[2m2026-11-05T03:07:16.511555Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to target/verification/market-art-2026-11-04/controller-route/frame02399.png
+[capture] saved 17/17 target/verification/market-art-2026-11-04/controller-route/frame02399.png (120224 bytes)
+[capture] all 17 screenshot(s) saved after 2 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 2400 simulation frames to target/verification/market-art-2026-11-04/controller-route

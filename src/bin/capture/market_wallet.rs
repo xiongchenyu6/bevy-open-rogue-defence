@@ -20,7 +20,7 @@ pub fn configure(world: &mut World) {
     world.resource_mut::<SpawnDirector>().enabled = false;
     world.resource_mut::<GameSession>().auto_bond_draws = false;
 }
-pub fn install(app: &mut bevy::app::SubApp) {
+pub fn install_fixture(app: &mut bevy::app::SubApp) {
     let world = app.world_mut();
     world.remove_resource::<Autoplay>();
     world.resource_mut::<SpawnDirector>().enabled = false;
@@ -28,6 +28,9 @@ pub fn install(app: &mut bevy::app::SubApp) {
     world.resource_mut::<AttackClock>().0.pause();
     world.resource_mut::<GameSession>().elapsed = 181.0;
     world.resource_mut::<GameSession>().kills = 100_000;
+}
+pub fn install(app: &mut bevy::app::SubApp) {
+    install_fixture(app);
     app.init_resource::<WalletCapture>().add_systems(
         PreUpdate,
         exercise
@@ -36,15 +39,16 @@ pub fn install(app: &mut bevy::app::SubApp) {
     );
 }
 fn wallet(world: &mut World) -> String {
-    world
+    let texts: Vec<_> = world
         .query::<(&Name, &Text)>()
         .iter(world)
-        .find(|(name, _)| name.as_str() == "Market wallet")
-        .expect("real market wallet text")
-        .1
-        .0
-        .clone()
+        .filter(|(name, _)| matches!(name.as_str(), "Market wallet" | "Market feedback"))
+        .map(|(_, text)| text.0.clone())
+        .collect();
+    assert_eq!(texts.len(), 2, "real wallet and feedback text");
+    texts.join("\n")
 }
+
 fn press(world: &mut World, wanted: &str) {
     let mut found = false;
     for (name, mut interaction) in world.query::<(&Name, &mut Interaction)>().iter_mut(world) {
@@ -75,7 +79,7 @@ fn layer_and_owner(world: &World, mut entity: Entity, panel: Entity) -> (i32, bo
 fn overlap(a: (Vec2, Vec2), b: (Vec2, Vec2)) -> bool {
     a.0.x < b.1.x && a.1.x > b.0.x && a.0.y < b.1.y && a.1.y > b.0.y
 }
-fn visible_controls(world: &mut World) {
+pub(super) fn visible_controls(world: &mut World) {
     let window = world.query::<&Window>().single(world).unwrap();
     let viewport = Vec2::new(
         window.physical_width() as f32,
@@ -87,7 +91,7 @@ fn visible_controls(world: &mut World) {
     let mut wallet_bottom = 0.0_f32;
     let mut first_offer_top = f32::INFINITY;
     let mut content = Vec::new();
-    let mut toggle = None;
+    let mut close = None;
     let mut panel = None;
     for (entity, name, node, transform) in world
         .query::<(Entity, &Name, &ComputedNode, &UiGlobalTransform)>()
@@ -100,8 +104,8 @@ fn visible_controls(world: &mut World) {
         if name.as_str() == "Market panel" {
             panel = Some((entity, rect));
         }
-        if name.as_str() == "Market toggle" {
-            toggle = Some(rect);
+        if name.as_str() == "Market close" {
+            close = Some(rect);
         }
         let is_offer = name.as_str().starts_with("Market offer ");
         let is_auto = name.as_str().starts_with("Market auto ");
@@ -138,8 +142,11 @@ fn visible_controls(world: &mut World) {
     let (panel, panel_rect) = panel.expect("actual panel rectangle");
     let panel_z = world.get::<GlobalZIndex>(panel).unwrap().0;
     assert!(
-        !overlap(panel_rect, toggle.expect("actual close toggle")),
-        "close toggle must remain accessible outside the panel"
+        {
+            let close = close.expect("actual close button");
+            close.0.cmpge(panel_rect.0).all() && close.1.cmple(panel_rect.1).all()
+        },
+        "close button must remain accessible inside the panel"
     );
     for (entity, node, computed, transform, background, text, image, name) in world
         .query::<(
@@ -223,21 +230,13 @@ fn exercise(world: &mut World) {
             assert!(world.resource::<GameSession>().paused);
             let before = world.resource::<GameSession>().kills;
             let elapsed = world.resource::<GameSession>().elapsed;
-            let offer = world
-                .query::<(&Name, &Children)>()
+            let price: u32 = world
+                .query::<(&Name, &Text)>()
                 .iter(world)
-                .find(|(name, _)| name.as_str() == "Market offer 0")
+                .find(|(n, _)| n.as_str() == "Market price 0")
                 .unwrap()
-                .1[0];
-            let label = &world.get::<Text>(offer).unwrap().0;
-            let price: u32 = label
-                .lines()
-                .next()
-                .unwrap()
-                .split_whitespace()
-                .rev()
-                .nth(1)
-                .unwrap()
+                .1
+                .0
                 .parse()
                 .unwrap();
             let mut state = world.resource_mut::<WalletCapture>();

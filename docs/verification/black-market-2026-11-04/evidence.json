@@ -1,0 +1,26 @@
+{
+  "matrix": [
+    "en-1280x720",
+    "en-667x375",
+    "zh-1280x720",
+    "zh-667x375"
+  ],
+  "controller_steps": 80,
+  "library_tests": {
+    "passed": 658,
+    "failed": 0,
+    "ignored": 1
+  },
+  "profile": "dev opt-level=0; dependency opt-level=0; debug=0; j1; visual/input only",
+  "binary_sha256": "82f09459ba017c580d34974f2efc81eab7d512634d4ee8936d21ed97e8830f14",
+  "sources": {
+    "src/game/market.rs": "3e48a9ac6bc8cc2e1dd7bf4dfd79a2fa1f058c7d7944d5dc7940c85f921b6a48",
+    "src/game/market/presentation.rs": "8e8cc97787da5143320169fa77ceaa6413e9482d364f7bd79b72858b9defe07f",
+    "src/game/hit_feedback.rs": "f18d29f8733a9ef2f64180046e5fca2de342cb64cafd46816786a952eb9aa906",
+    "src/game/hit_feedback/capture.rs": "ca2b55fedb621a96119581b9decc0c992dca10292abe8d5183ac1f21072a5cc1",
+    "src/bin/capture/market_art.rs": "a329e2ad20a1a535e1e0ad7b978d91ca1bc0c8f934c3f45ac1d8e5584fec05c4",
+    "src/bin/capture/controller_input.rs": "d0c43caefdf09077dd34022919f3b800adbc9659f2a51b289d6388f1f98089c5",
+    "assets/ui/market/equipment-atlas.png": "ea9c22a92ce0d3c251e928e04464d76b3a422fa8a677d02dcd80f933774e2160",
+    "assets/fonts/rogue_commander_ui.ttf": "b069c53af20e3937118139f7c39ef7bfd30977bfcc2872b68ee4e28ff6f3c2f1"
+  }
+}

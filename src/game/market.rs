@@ -6,6 +6,12 @@ use super::mobile_layout::hud_metrics;
 use super::rarity::rarity_color;
 use super::{Autoplay, GameLanguage, GameSession, HeroVitals, PlayerBuild, RunRng};
 
+#[path = "market/presentation.rs"]
+mod presentation;
+
+#[derive(Resource, Default)]
+pub(crate) struct MarketArt(pub Handle<Image>);
+
 pub struct MarketPlugin;
 
 impl Plugin for MarketPlugin {
@@ -13,16 +19,20 @@ impl Plugin for MarketPlugin {
         app.init_resource::<GameLanguage>()
             .init_resource::<MarketState>()
             .init_resource::<MarketEffects>()
+            .init_resource::<MarketArt>()
+            .init_resource::<presentation::ShopPreview>()
             .add_systems(Startup, setup_market)
             .add_systems(
                 Update,
                 (
                     maintain_market_stock,
+                    presentation::select_preview,
                     handle_market_actions,
                     tick_market_effects,
                     tick_market_notice,
                     apply_market_layout,
                     update_market_ui,
+                    presentation::update_visuals,
                     update_market_tooltip,
                     refresh_market_language,
                 )
@@ -49,16 +59,8 @@ const LAST_OATH_EMPOWERMENT_SECONDS: f32 = 8.0;
 const LAST_OATH_DAMAGE_MULTIPLIER: f32 = 1.50;
 const WORLD_ANCHOR_CONTROL_GUARD_SECONDS: f32 = 1.0;
 const GUARDIAN_INTERCEPT_COOLDOWN_SECONDS: f32 = 30.0;
-const MARKET_PANEL_GAP: f32 = 6.0;
-const MARKET_COMPACT_PANEL_PADDING: f32 = 8.0;
-const MARKET_COMPACT_HEADER_HEIGHT: f32 = 28.0;
-const MARKET_COMPACT_ROW_HEIGHT: f32 = 54.0;
-const MARKET_COMPACT_ROW_WIDTH_PERCENT: f32 = 49.0;
-const MARKET_COMPACT_MARK_WIDTH: f32 = 64.0;
 const MARKET_COMPACT_TOGGLE_WIDTH: f32 = 96.0;
 const MARKET_COMPACT_TOGGLE_HEIGHT: f32 = 52.0;
-const MARKET_REFRESH_HEIGHT: f32 = 48.0;
-const _: () = assert!(MARKET_REFRESH_HEIGHT >= 48.0);
 
 // Public footage exposes these exact odds for market levels 1 through 5.
 // Columns are White, Blue, Purple, Orange and Red.
@@ -192,29 +194,78 @@ pub(crate) enum MarketItem {
 }
 
 impl MarketItem {
-    pub(crate) fn icon_path(self) -> &'static str {
-        match self {
-            Self::SerratedDisc => "ui/icons/orbit_blade.png",
-            Self::ArcLens => "ui/icons/arcane_loop.png",
-            Self::HardenedPlate => "ui/icons/shield.png",
-            Self::SpiritDrum => "ui/icons/spirit_pact.png",
-            Self::WindBoots => "ui/icons/windrunner.png",
-            Self::EchoCore => "ui/icons/prism_echo.png",
-            Self::EmberHeart => "ui/icons/cinder_aura.png",
-            Self::StormCoil => "ui/icons/storm_conduit.png",
-            Self::FrostMirror => "ui/icons/glacier_core.png",
-            Self::ThreefoldRelic => "ui/icons/triune_engine.png",
-            Self::BloodContract => "ui/icons/blood_array.png",
-            Self::MarketBadge => "ui/icons/raider_fortune.png",
-            Self::GuardianSeed => "ui/icons/guardian_oath.png",
-            Self::AscendantCrown => "ui/icons/qi_ascension.png",
-            Self::ChaosDie => "ui/icons/fate_cube.png",
-            Self::WorldAnchor => "ui/icons/mountain.png",
-            Self::LegionStandard => "ui/icons/oath_banner.png",
-            Self::PrismaticEngine => "ui/icons/element_master.png",
-            Self::LastOath => "ui/icons/ember_oath.png",
-            _ => "ui/icons/market.png",
+    pub(crate) fn image_node(self, assets: &AssetServer) -> ImageNode {
+        // Reuse the retained request even after failure. Calling load every UI
+        // update would silently retry and race the explicit loading Retry flow.
+        let path = "ui/market/equipment-atlas.png";
+        let image = assets.get_handle(path).unwrap_or_else(|| assets.load(path));
+        ImageNode {
+            rect: Some(self.art_rect()),
+            ..ImageNode::new(image)
         }
+    }
+
+    fn art_rect(self) -> Rect {
+        let index = match self {
+            Self::CorePatch => 0,
+            Self::SkillTuner => 1,
+            Self::BondCompass => 2,
+            Self::SlowHourglass => 3,
+            Self::RevivalSeed => 4,
+            Self::SerratedDisc => 5,
+            Self::ArcLens => 6,
+            Self::HardenedPlate => 7,
+            Self::SpiritDrum => 8,
+            Self::WindBoots => 9,
+            Self::EchoCore => 10,
+            Self::EmberHeart => 11,
+            Self::StormCoil => 12,
+            Self::FrostMirror => 13,
+            Self::ThreefoldRelic => 14,
+            Self::BloodContract => 15,
+            Self::MarketBadge => 16,
+            Self::GuardianSeed => 17,
+            Self::AscendantCrown => 18,
+            Self::ChaosDie => 19,
+            Self::WorldAnchor => 20,
+            Self::LegionStandard => 21,
+            Self::PrismaticEngine => 22,
+            Self::LastOath => 23,
+        };
+        const RECTS: [[f32; 4]; 24] = [
+            [11., 11., 277., 250.],
+            [330., 8., 490., 251.],
+            [533., 7., 757., 251.],
+            [815., 5., 987., 250.],
+            [1036., 10., 1244., 247.],
+            [1279., 18., 1521., 238.],
+            [20., 263., 241., 508.],
+            [268., 263., 518., 504.],
+            [523., 264., 763., 501.],
+            [775., 260., 1019., 505.],
+            [1062., 260., 1239., 507.],
+            [1302., 259., 1508., 509.],
+            [24., 520., 244., 763.],
+            [276., 512., 490., 768.],
+            [515., 525., 760., 754.],
+            [781., 513., 1015., 766.],
+            [1037., 512., 1266., 766.],
+            [1294., 511., 1513., 766.],
+            [10., 783., 257., 1003.],
+            [286., 788., 488., 1007.],
+            [514., 770., 749., 1021.],
+            [774., 769., 1019., 1020.],
+            [1034., 776., 1269., 1013.],
+            [1346., 769., 1526., 1011.],
+        ];
+        let [left, top, right, bottom] = RECTS[index];
+        Rect::from_corners(Vec2::new(left, top), Vec2::new(right, bottom))
+    }
+
+    pub(crate) fn art_size(self, max: f32) -> Vec2 {
+        // The atlas illustrations have different proportions and nonuniform bounds.
+        let size = self.art_rect().size();
+        size * (max / size.max_element())
     }
 
     pub(crate) fn name(self, language: GameLanguage) -> &'static str {
@@ -992,25 +1043,9 @@ struct MarketLayout {
     compact: bool,
     safe_x: f32,
     safe_y: f32,
-    panel_top: f32,
-    row_width_percent: f32,
-    row_height: f32,
-    mark_width: f32,
     toggle_right: f32,
     toggle_width: f32,
     toggle_height: f32,
-}
-
-impl MarketLayout {
-    fn minimum_compact_panel_height(self) -> f32 {
-        let grid_rows = OFFER_COUNT.div_ceil(2) as f32;
-        MARKET_COMPACT_PANEL_PADDING * 2.0
-            + MARKET_COMPACT_HEADER_HEIGHT
-            + grid_rows * self.row_height
-            + (grid_rows - 1.0) * MARKET_PANEL_GAP
-            + MARKET_REFRESH_HEIGHT
-            + MARKET_PANEL_GAP * 2.0
-    }
 }
 
 fn market_layout(width: f32, height: f32) -> MarketLayout {
@@ -1020,10 +1055,6 @@ fn market_layout(width: f32, height: f32) -> MarketLayout {
             compact: true,
             safe_x: metrics.safe_x,
             safe_y: metrics.safe_y,
-            panel_top: metrics.safe_y + MARKET_COMPACT_TOGGLE_HEIGHT + MARKET_PANEL_GAP,
-            row_width_percent: MARKET_COMPACT_ROW_WIDTH_PERCENT,
-            row_height: MARKET_COMPACT_ROW_HEIGHT,
-            mark_width: MARKET_COMPACT_MARK_WIDTH,
             toggle_right: metrics.safe_x + 164.0,
             toggle_width: MARKET_COMPACT_TOGGLE_WIDTH,
             toggle_height: MARKET_COMPACT_TOGGLE_HEIGHT,
@@ -1033,10 +1064,6 @@ fn market_layout(width: f32, height: f32) -> MarketLayout {
             compact: false,
             safe_x: 18.0,
             safe_y: 18.0,
-            panel_top: 0.0,
-            row_width_percent: 100.0,
-            row_height: 52.0,
-            mark_width: 72.0,
             toggle_right: 18.0,
             toggle_width: 96.0,
             toggle_height: 48.0,
@@ -1053,6 +1080,9 @@ fn setup_market(
 
     mut rng: ResMut<RunRng>,
 ) {
+    if let Some(server) = assets.as_deref() {
+        commands.insert_resource(MarketArt(server.load("ui/market/equipment-atlas.png")));
+    }
     let level = state.level;
     reroll_all(&mut state, &effects, &mut rng, level);
 
@@ -1135,168 +1165,7 @@ fn setup_market(
             ));
         });
 
-    commands
-        .spawn((
-            MarketPanel,
-            Name::new("Market panel"),
-            Node {
-                position_type: PositionType::Absolute,
-                right: px(18),
-                bottom: px(70),
-                width: px(360),
-                display: Display::None,
-                padding: UiRect::all(px(10)),
-                flex_direction: FlexDirection::Column,
-                row_gap: px(6),
-                border: UiRect::all(px(1)),
-                border_radius: BorderRadius::all(px(10)),
-                ..default()
-            },
-            BackgroundColor(Color::srgba(0.025, 0.02, 0.035, 1.0)),
-            BorderColor::all(Color::srgba(0.7, 0.45, 0.18, 0.65)),
-            // Open shopping belongs above HUD and camp entries, below settings.
-            GlobalZIndex(280),
-            crate::game::controller_input::ControllerScope(280),
-        ))
-        .with_children(|panel| {
-            panel
-                .spawn((
-                    MarketHeader,
-                    Node {
-                        width: percent(100),
-                        justify_content: JustifyContent::SpaceBetween,
-                        align_items: AlignItems::Center,
-                        ..default()
-                    },
-                ))
-                .with_children(|header| {
-                    header.spawn((
-                        MarketTitle,
-                        Text::new(language.pick("BLACK MARKET", "黑市")),
-                        TextFont {
-                            font_size: FontSize::Px(15.0),
-                            ..default()
-                        },
-                        TextColor(Color::srgb(1.0, 0.72, 0.3)),
-                    ));
-                    header.spawn((
-                        MarketWalletLabel,
-                        Name::new("Market wallet"),
-                        Text::new(language.pick("KILLS 0000", "击杀 0000")),
-                        TextFont {
-                            font_size: FontSize::Px(11.0),
-                            ..default()
-                        },
-                        TextColor(Color::srgb(0.88, 0.9, 0.94)),
-                        TextLayout::justify(Justify::Right),
-                    ));
-                });
-
-            panel
-                .spawn((
-                    MarketOfferGrid,
-                    Node {
-                        width: percent(100),
-                        flex_direction: FlexDirection::Column,
-                        row_gap: px(MARKET_PANEL_GAP),
-                        ..default()
-                    },
-                ))
-                .with_children(|grid| {
-                    for index in 0..OFFER_COUNT {
-                        grid.spawn((
-                            MarketOfferRow,
-                            Node {
-                                width: percent(100),
-                                min_height: px(52),
-                                column_gap: px(MARKET_PANEL_GAP),
-                                align_items: AlignItems::Center,
-                                ..default()
-                            },
-                        ))
-                        .with_children(|row| {
-                            row.spawn((
-                                Button,
-                                Name::new(format!("Market offer {index}")),
-                                MarketOfferButton(index),
-                                Node {
-                                    flex_grow: 1.0,
-                                    min_height: px(52),
-                                    padding: UiRect::axes(px(8), px(5)),
-                                    align_items: AlignItems::Center,
-                                    border_radius: BorderRadius::all(px(6)),
-                                    ..default()
-                                },
-                                BackgroundColor(Color::srgb(0.09, 0.075, 0.11)),
-                            ))
-                            .with_children(|button| {
-                                button.spawn((
-                                    MarketOfferLabel(index),
-                                    Text::new(""),
-                                    TextFont {
-                                        font_size: FontSize::Px(11.0),
-                                        ..default()
-                                    },
-                                    TextColor(Color::WHITE),
-                                    TextLayout::linebreak(LineBreak::WordOrCharacter),
-                                ));
-                            });
-                            row.spawn((
-                                Button,
-                                MarketMarkButton(index),
-                                Name::new(format!("Market auto {index}")),
-                                Node {
-                                    width: px(72),
-                                    min_height: px(52),
-                                    align_items: AlignItems::Center,
-                                    justify_content: JustifyContent::Center,
-                                    border_radius: BorderRadius::all(px(6)),
-                                    ..default()
-                                },
-                                BackgroundColor(Color::srgb(0.10, 0.16, 0.20)),
-                            ))
-                            .with_children(|button| {
-                                button.spawn((
-                                    MarketMarkLabel(index),
-                                    Text::new(language.pick("AUTO", "自动")),
-                                    TextFont {
-                                        font_size: FontSize::Px(11.0),
-                                        ..default()
-                                    },
-                                    TextColor(Color::srgb(0.68, 0.84, 0.92)),
-                                ));
-                            });
-                        });
-                    }
-                });
-
-            panel
-                .spawn((
-                    Button,
-                    MarketRefreshButton,
-                    Name::new("Market refresh"),
-                    Node {
-                        width: percent(100),
-                        height: px(MARKET_REFRESH_HEIGHT),
-                        align_items: AlignItems::Center,
-                        justify_content: JustifyContent::Center,
-                        border_radius: BorderRadius::all(px(6)),
-                        ..default()
-                    },
-                    BackgroundColor(Color::srgb(0.24, 0.14, 0.055)),
-                ))
-                .with_children(|button| {
-                    button.spawn((
-                        MarketRefreshLabel,
-                        Text::new(language.pick("REFRESH", "刷新")),
-                        TextFont {
-                            font_size: FontSize::Px(12.0),
-                            ..default()
-                        },
-                        TextColor(Color::WHITE),
-                    ));
-                });
-        });
+    presentation::spawn_shop(&mut commands, assets.as_deref(), *language);
 }
 
 fn maintain_market_stock(
@@ -1336,6 +1205,9 @@ fn handle_market_actions(
 
     mut rng: ResMut<RunRng>,
     offer_interactions: Query<(&Interaction, &MarketOfferButton), Changed<Interaction>>,
+    preview: Res<presentation::ShopPreview>,
+    scheme: Option<Res<super::ControlScheme>>,
+    buy_interactions: Query<&Interaction, (With<presentation::PreviewBuy>, Changed<Interaction>)>,
     mark_interactions: Query<(&Interaction, &MarketMarkButton), Changed<Interaction>>,
     refresh_interactions: Query<&Interaction, (With<MarketRefreshButton>, Changed<Interaction>)>,
     toggle_interactions: Query<&Interaction, (With<MarketToggleButton>, Changed<Interaction>)>,
@@ -1410,12 +1282,19 @@ fn handle_market_actions(
             }
         }
 
-        for (interaction, button) in &offer_interactions {
-            if *interaction != Interaction::Pressed {
-                continue;
-            }
+        let direct = !scheme.as_ref().is_some_and(|s| s.touch() || s.controller());
+        let selected = offer_interactions
+            .iter()
+            .find_map(|(i, b)| (*i == Interaction::Pressed && direct).then_some(b.0))
+            .or_else(|| {
+                buy_interactions
+                    .iter()
+                    .any(|i| *i == Interaction::Pressed)
+                    .then_some(preview.index)
+            });
+        if let Some(index) = selected {
             let outcome = purchase_offer(
-                button.0,
+                index,
                 &mut state,
                 &mut effects,
                 &mut session,
@@ -1763,8 +1642,9 @@ fn tick_market_notice(time: Res<Time<Real>>, mut state: ResMut<MarketState>) {
 
 #[allow(clippy::type_complexity)]
 fn apply_market_layout(
+    state: Res<MarketState>,
     windows: Query<&Window, With<PrimaryWindow>>,
-    mut nodes: Query<
+    nodes: Query<
         (
             &mut Node,
             Option<&MarketPanel>,
@@ -1775,6 +1655,7 @@ fn apply_market_layout(
             Option<&MarketMarkButton>,
             Option<&MarketRefreshButton>,
             Option<&MarketToggleButton>,
+            Option<&presentation::Preview>,
         ),
         Or<(
             With<MarketPanel>,
@@ -1785,205 +1666,11 @@ fn apply_market_layout(
             With<MarketMarkButton>,
             With<MarketRefreshButton>,
             With<MarketToggleButton>,
+            With<presentation::Preview>,
         )>,
     >,
 ) {
-    let layout = windows
-        .single()
-        .map(|window| market_layout(window.width(), window.height()))
-        .unwrap_or_else(|_| market_layout(1280.0, 720.0));
-
-    for (mut node, panel, header, grid, row, offer, mark, refresh, toggle) in &mut nodes {
-        if panel.is_some() {
-            node.reborrow()
-                .map_unchanged(|value| &mut value.padding)
-                .set_if_neq(UiRect::all(px(if layout.compact {
-                    MARKET_COMPACT_PANEL_PADDING
-                } else {
-                    10.0
-                })));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.row_gap)
-                .set_if_neq(px(MARKET_PANEL_GAP));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.height)
-                .set_if_neq(Val::Auto);
-            node.reborrow()
-                .map_unchanged(|value| &mut value.min_height)
-                .set_if_neq(px(if layout.compact {
-                    layout.minimum_compact_panel_height()
-                } else {
-                    0.0
-                }));
-            if layout.compact {
-                node.reborrow()
-                    .map_unchanged(|value| &mut value.left)
-                    .set_if_neq(px(layout.safe_x));
-                node.reborrow()
-                    .map_unchanged(|value| &mut value.right)
-                    .set_if_neq(px(layout.safe_x));
-                node.reborrow()
-                    .map_unchanged(|value| &mut value.top)
-                    .set_if_neq(px(layout.panel_top));
-                node.reborrow()
-                    .map_unchanged(|value| &mut value.bottom)
-                    .set_if_neq(px(layout.safe_y));
-                node.reborrow()
-                    .map_unchanged(|value| &mut value.width)
-                    .set_if_neq(Val::Auto);
-            } else {
-                node.reborrow()
-                    .map_unchanged(|value| &mut value.left)
-                    .set_if_neq(Val::Auto);
-                node.reborrow()
-                    .map_unchanged(|value| &mut value.right)
-                    .set_if_neq(px(18));
-                node.reborrow()
-                    .map_unchanged(|value| &mut value.top)
-                    .set_if_neq(Val::Auto);
-                node.reborrow()
-                    .map_unchanged(|value| &mut value.bottom)
-                    .set_if_neq(px(70));
-                node.reborrow()
-                    .map_unchanged(|value| &mut value.width)
-                    .set_if_neq(px(360));
-            }
-        } else if header.is_some() {
-            node.reborrow()
-                .map_unchanged(|value| &mut value.width)
-                .set_if_neq(percent(100));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.min_height)
-                .set_if_neq(px(if layout.compact {
-                    MARKET_COMPACT_HEADER_HEIGHT
-                } else {
-                    0.0
-                }));
-        } else if grid.is_some() {
-            node.reborrow()
-                .map_unchanged(|value| &mut value.width)
-                .set_if_neq(percent(100));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.height)
-                .set_if_neq(Val::Auto);
-            node.reborrow()
-                .map_unchanged(|value| &mut value.flex_direction)
-                .set_if_neq(if layout.compact {
-                    FlexDirection::Row
-                } else {
-                    FlexDirection::Column
-                });
-            node.reborrow()
-                .map_unchanged(|value| &mut value.flex_wrap)
-                .set_if_neq(if layout.compact {
-                    FlexWrap::Wrap
-                } else {
-                    FlexWrap::NoWrap
-                });
-            node.reborrow()
-                .map_unchanged(|value| &mut value.justify_content)
-                .set_if_neq(JustifyContent::FlexStart);
-            node.reborrow()
-                .map_unchanged(|value| &mut value.align_items)
-                .set_if_neq(AlignItems::Stretch);
-            node.reborrow()
-                .map_unchanged(|value| &mut value.column_gap)
-                .set_if_neq(px(if layout.compact {
-                    MARKET_PANEL_GAP
-                } else {
-                    0.0
-                }));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.row_gap)
-                .set_if_neq(px(MARKET_PANEL_GAP));
-        } else if row.is_some() {
-            node.reborrow()
-                .map_unchanged(|value| &mut value.width)
-                .set_if_neq(percent(layout.row_width_percent));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.height)
-                .set_if_neq(if layout.compact {
-                    px(layout.row_height)
-                } else {
-                    Val::Auto
-                });
-            node.reborrow()
-                .map_unchanged(|value| &mut value.min_height)
-                .set_if_neq(px(layout.row_height));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.flex_grow)
-                .set_if_neq(0.0);
-            node.reborrow()
-                .map_unchanged(|value| &mut value.flex_shrink)
-                .set_if_neq(0.0);
-        } else if offer.is_some() {
-            node.reborrow()
-                .map_unchanged(|value| &mut value.height)
-                .set_if_neq(if layout.compact {
-                    px(layout.row_height)
-                } else {
-                    Val::Auto
-                });
-            node.reborrow()
-                .map_unchanged(|value| &mut value.min_height)
-                .set_if_neq(px(layout.row_height));
-        } else if mark.is_some() {
-            node.reborrow()
-                .map_unchanged(|value| &mut value.width)
-                .set_if_neq(px(layout.mark_width));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.height)
-                .set_if_neq(if layout.compact {
-                    px(layout.row_height)
-                } else {
-                    Val::Auto
-                });
-            node.reborrow()
-                .map_unchanged(|value| &mut value.min_height)
-                .set_if_neq(px(layout.row_height));
-        } else if refresh.is_some() {
-            node.reborrow()
-                .map_unchanged(|value| &mut value.width)
-                .set_if_neq(percent(100));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.height)
-                .set_if_neq(px(MARKET_REFRESH_HEIGHT));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.min_height)
-                .set_if_neq(px(MARKET_REFRESH_HEIGHT));
-        } else if toggle.is_some() {
-            node.reborrow()
-                .map_unchanged(|value| &mut value.left)
-                .set_if_neq(Val::Auto);
-            node.reborrow()
-                .map_unchanged(|value| &mut value.right)
-                .set_if_neq(px(layout.toggle_right));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.width)
-                .set_if_neq(px(layout.toggle_width));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.height)
-                .set_if_neq(px(layout.toggle_height));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.min_height)
-                .set_if_neq(px(layout.toggle_height));
-            if layout.compact {
-                node.reborrow()
-                    .map_unchanged(|value| &mut value.top)
-                    .set_if_neq(px(layout.safe_y));
-                node.reborrow()
-                    .map_unchanged(|value| &mut value.bottom)
-                    .set_if_neq(Val::Auto);
-            } else {
-                node.reborrow()
-                    .map_unchanged(|value| &mut value.top)
-                    .set_if_neq(Val::Auto);
-                node.reborrow()
-                    .map_unchanged(|value| &mut value.bottom)
-                    .set_if_neq(px(layout.safe_y));
-            }
-        }
-    }
+    presentation::layout(state, windows, nodes);
 }
 
 #[allow(clippy::type_complexity, clippy::too_many_arguments)]
@@ -2071,11 +1758,14 @@ fn update_market_ui(
         .unwrap_or_else(|_| market_layout(1280.0, 720.0));
 
     if let Ok(mut panel) = panels.single_mut() {
-        panel.display = if state.open {
-            Display::Flex
-        } else {
-            Display::None
-        };
+        panel
+            .reborrow()
+            .map_unchanged(|node| &mut node.display)
+            .set_if_neq(if state.open {
+                Display::Flex
+            } else {
+                Display::None
+            });
     }
     if let Ok((mut label, mut font)) = toggle_labels.single_mut() {
         label
@@ -2100,51 +1790,9 @@ fn update_market_ui(
             .set_if_neq(FontSize::Px(if layout.compact { 12.0 } else { 11.0 }));
         if let Some(label) = offer_label {
             let item = state.offers[label.0].item;
-            let price = discounted_cost(item.price(), &effects);
-            let kind = if item.is_consumable() {
-                language.pick("USE", "使用")
-            } else {
-                language.pick("GEAR", "装备")
-            };
             text.reborrow()
                 .map_unchanged(|value| &mut value.0)
-                .set_if_neq(if language.is_chinese() && layout.compact {
-                    format!(
-                        "{}   {} 击杀\n[{} / {}] {}",
-                        item.name(language),
-                        price,
-                        item.tag(),
-                        kind,
-                        item.effect_text(language)
-                    )
-                } else if language.is_chinese() {
-                    format!(
-                        "[{} / {}] {}   {} 击杀\n{}",
-                        item.tag(),
-                        kind,
-                        item.name(language),
-                        price,
-                        item.effect_text(language)
-                    )
-                } else if layout.compact {
-                    format!(
-                        "{}   {} K\n[{} / {}] {}",
-                        item.name(language),
-                        price,
-                        item.tag(),
-                        kind,
-                        item.effect_text(language)
-                    )
-                } else {
-                    format!(
-                        "[{} / {}] {}   {} KILLS\n{}",
-                        item.tag(),
-                        kind,
-                        item.name(language),
-                        price,
-                        item.effect_text(language)
-                    )
-                });
+                .set_if_neq(item.name(language).to_owned());
             color
                 .reborrow()
                 .map_unchanged(|value| &mut value.0)
@@ -2155,9 +1803,9 @@ fn update_market_ui(
             text.reborrow()
                 .map_unchanged(|value| &mut value.0)
                 .set_if_neq(if marked {
-                    language.pick("AUTO\nON", "自动\n开启").to_string()
+                    "✓".to_string()
                 } else {
-                    language.pick("AUTO", "自动").to_string()
+                    String::new()
                 });
             color
                 .reborrow()
@@ -2175,7 +1823,7 @@ fn update_market_ui(
         font.reborrow()
             .map_unchanged(|value| &mut value.font_size)
             .set_if_neq(FontSize::Px(if layout.compact { 12.0 } else { 11.0 }));
-        let mut label = if language.is_chinese() && layout.compact {
+        let label = if language.is_chinese() && layout.compact {
             format!(
                 "等级{}｜击杀 {}｜补货 {:02}:{:02}",
                 state.level,
@@ -2208,10 +1856,6 @@ fn update_market_ui(
                 next_stock % 60
             )
         };
-        if state.notice_timer > 0.0 {
-            label.push('\n');
-            label.push_str(&state.notice[usize::from(language.is_chinese())]);
-        }
         text.reborrow()
             .map_unchanged(|value| &mut value.0)
             .set_if_neq(label);
@@ -2224,26 +1868,10 @@ fn update_market_ui(
         let price = state.refresh_price(&effects);
         text.reborrow()
             .map_unchanged(|value| &mut value.0)
-            .set_if_neq(if language.is_chinese() && price == 0 {
-                if layout.compact {
-                    "刷新｜免费".to_string()
-                } else {
-                    "刷新货品   免费".to_string()
-                }
-            } else if language.is_chinese() {
-                if layout.compact {
-                    format!("刷新｜{price} 击杀")
-                } else {
-                    format!("刷新货品   {price} 击杀")
-                }
-            } else if layout.compact && price == 0 {
-                "REFRESH | FREE".to_string()
-            } else if layout.compact {
-                format!("REFRESH | {price} K")
-            } else if price == 0 {
-                "REFRESH STOCK   FREE".to_string()
+            .set_if_neq(if price == 0 {
+                language.pick("Free", "免费").to_string()
             } else {
-                format!("REFRESH STOCK   {price} KILLS")
+                price.to_string()
             });
     }
 
@@ -2251,7 +1879,7 @@ fn update_market_ui(
         if let Some(button) = offer_button {
             let item = state.offers[button.0].item;
             let affordable = session.kills >= discounted_cost(item.price(), &effects);
-            let enabled = !effects.owns(item) && affordable;
+            let enabled = !effects.owns(item);
             if !enabled && !disabled {
                 commands
                     .entity(entity)
@@ -2787,6 +2415,84 @@ mod tests {
     }
 
     #[test]
+    fn touch_inspection_does_not_spend_and_explicit_buy_charges_the_previewed_item() {
+        let mut app = test_app(MARKET_UNLOCK_AT + 1.0);
+        app.insert_resource(super::super::ControlScheme::Touch);
+        // Fix stock to equipment: consumables are applied immediately and never owned.
+        let item = MarketItem::ArcLens;
+        app.world_mut().resource_mut::<MarketState>().offers[2].item = item;
+        app.world_mut().resource_mut::<GameSession>().kills = item.price() + 11;
+        tap_b(&mut app);
+        for (button, mut interaction) in app
+            .world_mut()
+            .query::<(&MarketOfferButton, &mut Interaction)>()
+            .iter_mut(app.world_mut())
+        {
+            *interaction = if button.0 == 2 {
+                Interaction::Pressed
+            } else {
+                Interaction::None
+            };
+        }
+        app.update();
+        assert_eq!(app.world().resource::<presentation::ShopPreview>().index, 2);
+        assert_eq!(
+            app.world().resource::<GameSession>().kills,
+            item.price() + 11
+        );
+        assert!(!app.world().resource::<MarketEffects>().owns(item));
+        for mut interaction in app
+            .world_mut()
+            .query_filtered::<&mut Interaction, With<presentation::PreviewBuy>>()
+            .iter_mut(app.world_mut())
+        {
+            *interaction = Interaction::Pressed;
+        }
+        app.update();
+        assert_eq!(app.world().resource::<GameSession>().kills, 11);
+        assert!(app.world().resource::<MarketEffects>().owns(item));
+    }
+
+    #[test]
+    fn controller_can_inspect_an_unaffordable_offer_without_spending() {
+        let mut app = test_app(MARKET_UNLOCK_AT + 1.0);
+        app.insert_resource(super::super::ControlScheme::Controller);
+        tap_b(&mut app);
+        let entity = app
+            .world_mut()
+            .query::<(Entity, &MarketOfferButton)>()
+            .iter(app.world())
+            .find(|(_, b)| b.0 == 3)
+            .unwrap()
+            .0;
+        app.world_mut()
+            .entity_mut(entity)
+            .insert(super::super::controller_input::ControllerFocused);
+        app.update();
+        assert_eq!(app.world().resource::<presentation::ShopPreview>().index, 3);
+        assert!(
+            !app.world()
+                .entity(entity)
+                .contains::<super::super::controller_input::ControllerDisabled>()
+        );
+        let before = app.world().resource::<GameSession>().kills;
+        for mut interaction in app
+            .world_mut()
+            .query_filtered::<&mut Interaction, With<presentation::PreviewBuy>>()
+            .iter_mut(app.world_mut())
+        {
+            *interaction = Interaction::Pressed;
+        }
+        app.update();
+        assert_eq!(app.world().resource::<GameSession>().kills, before);
+        assert!(
+            !app.world()
+                .resource::<MarketEffects>()
+                .owns(app.world().resource::<MarketState>().offers[3].item)
+        );
+    }
+
+    #[test]
     fn paused_market_purchase_keeps_balance_and_restock_visible_with_feedback() {
         let (mut app, name) = paused_purchase_app();
         let wallet = app
@@ -2804,7 +2510,7 @@ mod tests {
             wallet.contains("RESTOCK 02:59"),
             "restock vanished: {wallet}"
         );
-        assert!(wallet.contains(&format!("Bought {name}")));
+        assert!(market_feedback(&mut app).contains(&format!("Bought {name}")));
         assert!(app.world().resource::<GameSession>().paused);
     }
 
@@ -2853,7 +2559,7 @@ mod tests {
             .0
             .clone();
         assert!(wallet.contains("KILLS 0037") && wallet.contains("RESTOCK 02:59"));
-        assert!(!wallet.contains("Bought"));
+        assert!(!market_feedback(&mut app).contains("Bought"));
     }
 
     #[test]
@@ -2897,10 +2603,18 @@ mod tests {
             app.world_mut()
                 .query_filtered::<&Text, With<MarketWalletLabel>>()
                 .iter(app.world())
-                .any(|text| text.0.contains("货品已刷新")
-                    && text.0.contains("击杀 0000")
-                    && text.0.contains("补货 03:00"))
+                .any(|text| text.0.contains("击杀 0000") && text.0.contains("补货 03:00"))
         );
+        assert!(market_feedback(&mut app).contains("货品已刷新"));
+    }
+
+    fn market_feedback(app: &mut App) -> String {
+        app.world_mut()
+            .query_filtered::<&Text, With<presentation::HelpText>>()
+            .single(app.world())
+            .unwrap()
+            .0
+            .clone()
     }
 
     #[test]
@@ -2972,56 +2686,6 @@ mod tests {
             assert!(matches!(item.tag(), "R" | "SR" | "SSR" | "UR"));
             assert_eq!(item.color(), rarity_color(item.build_rarity()));
         }
-    }
-
-    #[test]
-    fn compact_market_grid_fits_supported_landscape_viewports() {
-        for (width, height) in [
-            (667.0, 375.0),
-            (740.0, 360.0),
-            (844.0, 390.0),
-            (915.0, 412.0),
-        ] {
-            let layout = market_layout(width, height);
-            let available_height = height - layout.panel_top - layout.safe_y;
-            let panel_width = width - layout.safe_x * 2.0;
-            let inner_width = panel_width - MARKET_COMPACT_PANEL_PADDING * 2.0;
-            let row_width = inner_width * layout.row_width_percent / 100.0;
-            let purchase_width = row_width - MARKET_PANEL_GAP - layout.mark_width;
-
-            assert!(layout.compact, "{width}x{height} should use compact layout");
-            assert_eq!(OFFER_COUNT.div_ceil(2), 3);
-            assert!(layout.minimum_compact_panel_height() <= available_height + f32::EPSILON);
-            assert!(row_width * 2.0 + MARKET_PANEL_GAP <= inner_width + f32::EPSILON);
-            assert!(layout.row_height >= 48.0);
-            assert!(purchase_width >= 48.0);
-            assert!(layout.mark_width >= 48.0);
-            assert!(layout.toggle_height >= 48.0);
-            // The pause button occupies right=safe_x+104 with a 52px target.
-            assert!(layout.toggle_right >= layout.safe_x + 104.0 + 52.0 + 8.0);
-        }
-    }
-
-    #[test]
-    fn desktop_market_stays_single_column_and_mobile_labels_drop_keyboard_hints() {
-        let desktop = market_layout(1280.0, 720.0);
-        assert!(!desktop.compact);
-        assert_eq!(desktop.row_width_percent, 100.0);
-        assert_eq!(desktop.row_height, 52.0);
-        assert_eq!(desktop.toggle_height, 48.0);
-
-        let mobile_locked = market_toggle_label(GameLanguage::English, true, 0.0, false, 1);
-        let mobile_open =
-            market_toggle_label(GameLanguage::English, true, MARKET_UNLOCK_AT, true, 1);
-        assert!(!mobile_locked.starts_with("B  "));
-        assert!(!mobile_open.starts_with("B  "));
-        assert!(
-            market_toggle_label(GameLanguage::English, false, 0.0, false, 1).starts_with("B  ")
-        );
-        assert_eq!(
-            market_toggle_label(GameLanguage::SimplifiedChinese, true, 0.0, false, 1),
-            "黑市锁定 03:00"
-        );
     }
 
     #[test]
