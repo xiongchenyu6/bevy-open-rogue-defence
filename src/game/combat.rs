@@ -2745,13 +2745,13 @@ fn projectile_hits(
                 .map(|progress| (progress, *entity))
             })
             .collect();
-        if sweep_start.distance_squared(projectile_transform.translation) > f32::EPSILON {
-            collision_order.sort_by(|left, right| {
-                left.0
-                    .total_cmp(&right.0)
-                    .then_with(|| left.1.to_bits().cmp(&right.1.to_bits()))
-            });
-        }
+        // Stationary overlaps also need stable ties: cosmetic components may
+        // migrate enemy archetypes and change query order without moving actors.
+        collision_order.sort_by(|left, right| {
+            left.0
+                .total_cmp(&right.0)
+                .then_with(|| left.1.to_bits().cmp(&right.1.to_bits()))
+        });
         let mut consumed = false;
         let mut first_frame_hits = HashSet::new();
         for (_, ordered_enemy) in collision_order {
@@ -3378,6 +3378,8 @@ mod tests {
     use bevy::ecs::system::RunSystemOnce;
 
     use super::*;
+
+    include!("combat/collision_order_tests.rs");
 
     fn test_game_assets() -> GameAssets {
         GameAssets {

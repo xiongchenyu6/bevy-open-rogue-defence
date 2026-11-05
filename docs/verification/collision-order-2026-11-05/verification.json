@@ -1,0 +1,36 @@
+{
+  "scope": "Stationary single-hit projectile target order under cosmetic enemy archetype migration. Does not establish cause of full balance replay divergence.",
+  "base_commit": "09389407feaf88ed04220525ccd92d3782cf417c",
+  "before": {
+    "focused_passed": 1,
+    "focused_failed": 1,
+    "stationary_hp_forward": [
+      75,
+      100
+    ],
+    "stationary_hp_reverse": [
+      100,
+      75
+    ],
+    "moving_hp_both": [
+      100,
+      75
+    ],
+    "rng_both": 11083784628768264341
+  },
+  "after": {
+    "library_passed": 672,
+    "library_failed": 0,
+    "library_ignored": 1,
+    "strict_all_targets_release_clippy": "passed"
+  },
+  "source_sha256": {
+    "src/game/combat.rs": "7c4ba24343478d8f8029e8f9625b98020f72ba2f6a3c38f1f663bcf8d915c33b",
+    "src/game/combat/collision_order_tests.rs": "3e63ceaec7f693c4e0bc82291cdf94e4311acf0d5d972cab0f01d88ca1cad9e1"
+  },
+  "log_sha256": {
+    "after-clippy.log": "34e10241ac550b7657bde8fcb7cd4a89f633afd1bc57d83b631c143aefe5955f",
+    "after-full-tests.log": "b79239f0a49e6b66a1e112e12bae7cbdf129886b7be5e93022e162fc32e102bf",
+    "before-tests.log": "511811f2ec6e3a97e8f4ffa1b74cec8f6fc1915fb5596373dc798c33e0fee0ca"
+  }
+}
