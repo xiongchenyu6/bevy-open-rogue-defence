@@ -4,7 +4,7 @@
 Run only in isolated packaged Ubuntu/X11 container. Requires CAMPAIGN_STAGE=5,
 CAMPAIGN_CONTINUE=1, CAMPAIGN_SPEED=1 and PACKAGE_COMMIT. No movement claim,
 stock refresh, save mutation, or resource injection. At most 12 market visits,
-60 seconds apart, each bounded to 45 seconds; total battle bound 2400 seconds.
+60 seconds apart, each bounded to 90 seconds; total battle bound 2400 seconds.
 """
 import json
 import os
@@ -160,7 +160,7 @@ class EquipmentPolicy:
         ui['report'].update(scope='Packaged public UI; stationary first-card policy plus earned equipment',
             strategy='Stationary keys 1/g/f; cheapest affordable natural gear; no refresh or movement',
             package_version=version, equipment_purchases=self.purchases,
-            equipment_visit_limit=12, equipment_visit_timeout_seconds=45)
+            equipment_visit_limit=12, equipment_visit_timeout_seconds=90)
 
     def key(self, key):
         self.ui['call'](['xdotool', 'keydown', key])
@@ -208,7 +208,8 @@ class EquipmentPolicy:
             return
         self.visits += 1
         self.next_visit = elapsed + 60
-        deadline = time.monotonic() + 45
+        visit_started = time.monotonic()
+        deadline = visit_started + 90
         prefix = f'equipment-{self.visits:02}'
         with self.ui['input_lock']:
             # Drain only already queued choices; never draw or refresh here.
@@ -294,6 +295,9 @@ class EquipmentPolicy:
                 purchase['inventory_verified'] = True
             # Header absence alone can be OCR failure. Prove actual simulation
             # resumes through the public countdown after both panels are closed.
+            assert time.monotonic() < deadline, 'Visit budget exhausted before battle-resume verification'
+            self.ui['report'].setdefault('equipment_visit_timings', []).append(
+                dict(visit=self.visits, phase='panels closed', elapsed=time.monotonic()-visit_started))
             resumed = self.ui['shot'](prefix + '-resume-before.png')
             before_seconds = screenshot_battle_seconds(resumed, self.ui['env'])
             resume_deadline = min(deadline, time.monotonic() + 10)
@@ -311,7 +315,9 @@ class EquipmentPolicy:
                     break
             else:
                 raise AssertionError('Battle countdown did not resume after market/equipment closure')
-            assert time.monotonic() < deadline, 'Market visit exceeded 45 seconds'
+            assert time.monotonic() < deadline, 'Market visit exceeded 90 seconds'
+            self.ui['report']['equipment_visit_timings'].append(
+                dict(visit=self.visits, phase='resume verified', elapsed=time.monotonic()-visit_started))
             print(json.dumps(dict(stage='earned equipment visit', visit=self.visits,
                                   purchases=len(self.purchases), wallet=wallet)), flush=True)
 

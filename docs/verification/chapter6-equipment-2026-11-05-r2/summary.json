@@ -1,0 +1,14 @@
+{
+  "game_source": "8f4084b22b55be0040a8cb0f7f5a50bd470eb126",
+  "completed_run": false,
+  "victory": false,
+  "purchases": 0,
+  "all_five_offers_inspected": true,
+  "stale_pointer_samples": 4,
+  "actual_market_countdown_seconds": 1257,
+  "actual_closed_countdown_seconds": 1251,
+  "countdown_evidence": "Root OCR rerun on archived native market/resumed-battle images",
+  "persistent_progress_unchanged": true,
+  "harness_error": "45s total visit deadline expired before new countdown verification could sample; no resume-after image generated",
+  "followup": "90s software-render visit budget; separate per-phase elapsed timing and explicit budget exhaustion check; strict purchase/inventory/countdown contracts retained"
+}

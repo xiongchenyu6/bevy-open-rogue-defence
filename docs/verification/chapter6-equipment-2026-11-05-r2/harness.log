@@ -1,0 +1,28 @@
+{"sample": 1, "wall_seconds": 6.6, "terminal": null}
+{"sample": 2, "wall_seconds": 16.0, "terminal": null}
+{"sample": 3, "wall_seconds": 25.9, "terminal": null}
+{"sample": 4, "wall_seconds": 35.7, "terminal": null}
+{"sample": 5, "wall_seconds": 45.4, "terminal": null}
+{"sample": 6, "wall_seconds": 55.3, "terminal": null}
+{"sample": 7, "wall_seconds": 65.0, "terminal": null}
+{"sample": 8, "wall_seconds": 75.1, "terminal": null}
+{"sample": 9, "wall_seconds": 84.6, "terminal": null}
+{"sample": 10, "wall_seconds": 94.2, "terminal": null}
+{"sample": 11, "wall_seconds": 104.2, "terminal": null}
+{"sample": 12, "wall_seconds": 114.2, "terminal": null}
+{"sample": 13, "wall_seconds": 121.9, "terminal": null}
+{"sample": 14, "wall_seconds": 131.7, "terminal": null}
+{"sample": 15, "wall_seconds": 141.9, "terminal": null}
+{"sample": 16, "wall_seconds": 152.0, "terminal": null}
+{"sample": 17, "wall_seconds": 162.0, "terminal": null}
+{"sample": 18, "wall_seconds": 171.9, "terminal": null}
+{"sample": 19, "wall_seconds": 182.5, "terminal": null}
+{"sample": 20, "wall_seconds": 192.6, "terminal": null}
+Traceback (most recent call last):
+  File "/harness/campaign_equipment_runtime.py", line 324, in <module>
+    main(EquipmentPolicy)
+  File "/harness/campaign_runtime.py", line 268, in main
+    policy.observe(text_lines, time.monotonic() - started)
+  File "/harness/campaign_equipment_runtime.py", line 313, in observe
+    raise AssertionError('Battle countdown did not resume after market/equipment closure')
+AssertionError: Battle countdown did not resume after market/equipment closure

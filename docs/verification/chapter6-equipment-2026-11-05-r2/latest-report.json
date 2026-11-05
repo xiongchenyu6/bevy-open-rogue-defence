@@ -1,0 +1,1189 @@
+{
+  "scope": "Packaged public UI; stationary first-card policy plus earned equipment",
+  "stage": 5,
+  "continued": true,
+  "initial_progress": {
+    "unlocked": 6,
+    "currency": 645,
+    "cleared": "111110",
+    "upgrades": [
+      6,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "requested_seed": "0xA11CE",
+  "requested_speed": 1,
+  "strategy": "Stationary keys 1/g/f; cheapest affordable natural gear; no refresh or movement",
+  "completed_run": false,
+  "victory": false,
+  "package_version": {
+    "binary_sha256": "d1f3c7dfc944376012ff5949b60cb1dea56117703ddb0bec36a02aa552b97d4f",
+    "git_commit": "8f4084b22b55be0040a8cb0f7f5a50bd470eb126",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "equipment_purchases": [],
+  "equipment_visit_limit": 12,
+  "equipment_visit_timeout_seconds": 45,
+  "base_attributes": {
+    "hero": "StormSavant",
+    "level": 1,
+    "speed": 1,
+    "strength": 32.0,
+    "expected": 32.0,
+    "screenshot": "base-strength.png",
+    "strength_ocr": [
+      [
+        "Strength",
+        203,
+        235,
+        259,
+        250
+      ],
+      [
+        "32.0",
+        457,
+        235,
+        484,
+        247
+      ],
+      [
+        "Strength",
+        204,
+        235,
+        259,
+        250
+      ],
+      [
+        "Strength 32.0 Base attack 480 Armor 0.0",
+        204,
+        224,
+        1076,
+        256
+      ]
+    ]
+  },
+  "actual_speed": 1,
+  "battle_timeout_seconds": 2400.0,
+  "equipment_visit_rows": [
+    {
+      "visit": 1,
+      "rows": [
+        [
+          "Settings",
+          615,
+          25,
+          664,
+          39
+        ],
+        [
+          "20:57",
+          1208,
+          27,
+          1258,
+          43
+        ],
+        [
+          "-",
+          920,
+          22,
+          953,
+          70
+        ],
+        [
+          "LVES3",
+          23,
+          87,
+          62,
+          97
+        ],
+        [
+          "\u4ece 2105/3238",
+          24,
+          106,
+          115,
+          126
+        ],
+        [
+          "109311093",
+          53,
+          134,
+          115,
+          146
+        ],
+        [
+          "\u2014",
+          286,
+          92,
+          438,
+          162
+        ],
+        [
+          "Embermaw",
+          629,
+          153,
+          687,
+          162
+        ],
+        [
+          "Cus \u5415",
+          24,
+          160,
+          107,
+          190
+        ],
+        [
+          "@in",
+          597,
+          159,
+          657,
+          183
+        ],
+        [
+          "My",
+          717,
+          172,
+          732,
+          179
+        ],
+        [
+          "Explore",
+          629,
+          179,
+          666,
+          190
+        ],
+        [
+          "ces",
+          718,
+          178,
+          740,
+          189
+        ],
+        [
+          "Wi KILLS 0123",
+          1132,
+          205,
+          1209,
+          214
+        ],
+        [
+          "\u56fe",
+          24,
+          193,
+          52,
+          231
+        ],
+        [
+          "BLACK MARKET",
+          617,
+          214,
+          759,
+          230
+        ],
+        [
+          "RESTOCK0158 \u516d",
+          1132,
+          215,
+          1240,
+          228
+        ],
+        [
+          "Sm",
+          420,
+          236,
+          471,
+          257
+        ],
+        [
+          "\u201cWy",
+          516,
+          241,
+          529,
+          255
+        ],
+        [
+          "SR",
+          1001,
+          255,
+          1013,
+          264
+        ],
+        [
+          "\u5305 | \u4ee4 \u3002",
+          31,
+          240,
+          127,
+          283
+        ],
+        [
+          "\u2014",
+          372,
+          285,
+          409,
+          302
+        ],
+        [
+          "f\\)",
+          532,
+          258,
+          558,
+          289
+        ],
+        [
+          "i",
+          1149,
+          347,
+          1151,
+          352
+        ],
+        [
+          "\u91cc -",
+          469,
+          340,
+          516,
+          368
+        ],
+        [
+          "Wind Boots",
+          646,
+          359,
+          704,
+          369
+        ],
+        [
+          "Arc Lens",
+          781,
+          360,
+          824,
+          369
+        ],
+        [
+          "Gate Patch",
+          901,
+          359,
+          955,
+          369
+        ],
+        [
+          "Skill Tuner",
+          1029,
+          359,
+          1083,
+          369
+        ],
+        [
+          "Emberteart",
+          1151,
+          348,
+          1215,
+          369
+        ],
+        [
+          "\u2014",
+          222,
+          385,
+          266,
+          395
+        ],
+        [
+          "vy",
+          486,
+          364,
+          504,
+          384
+        ],
+        [
+          "\u00ae 160",
+          656,
+          388,
+          696,
+          401
+        ],
+        [
+          "\u00a9 180",
+          783,
+          388,
+          823,
+          401
+        ],
+        [
+          "\u00a9 120",
+          909,
+          388,
+          949,
+          401
+        ],
+        [
+          "\u00a9 140",
+          1036,
+          388,
+          1076,
+          401
+        ],
+        [
+          "\u00ae 280",
+          1163,
+          388,
+          1203,
+          401
+        ],
+        [
+          "i",
+          1264,
+          372,
+          1280,
+          410
+        ],
+        [
+          "a",
+          461,
+          420,
+          473,
+          428
+        ],
+        [
+          "be",
+          1261,
+          416,
+          1271,
+          426
+        ],
+        [
+          "\u00a9",
+          665,
+          422,
+          681,
+          436
+        ],
+        [
+          "\u00a9",
+          792,
+          422,
+          808,
+          436
+        ],
+        [
+          "\u00a9",
+          1045,
+          422,
+          1061,
+          436
+        ],
+        [
+          "\u00a9",
+          1172,
+          422,
+          1188,
+          436
+        ],
+        [
+          "e",
+          237,
+          433,
+          272,
+          473
+        ],
+        [
+          "Piaaa Wind Boots \uff0c Equipment",
+          622,
+          471,
+          854,
+          514
+        ],
+        [
+          "=",
+          636,
+          497,
+          653,
+          516
+        ],
+        [
+          "z",
+          655,
+          493,
+          671,
+          512
+        ],
+        [
+          ",",
+          672,
+          499,
+          682,
+          527
+        ],
+        [
+          "+15% move speed, -15% dodge cooldown, +8% evasion",
+          699,
+          499,
+          1032,
+          530
+        ],
+        [
+          "Need 37",
+          1159,
+          500,
+          1211,
+          513
+        ],
+        [
+          "=",
+          648,
+          510,
+          676,
+          536
+        ],
+        [
+          "Inspect an item effects remain active after hero absorption",
+          616,
+          570,
+          926,
+          582
+        ],
+        [
+          "O % 6",
+          901,
+          608,
+          963,
+          622
+        ],
+        [
+          "LEVELS. 87/132XP",
+          487,
+          667,
+          592,
+          680
+        ],
+        [
+          "co",
+          658,
+          649,
+          755,
+          698
+        ],
+        [
+          "ES 20:57",
+          599,
+          9,
+          1258,
+          51
+        ],
+        [
+          "\u201cee \u56fd\u4eba E eo oF:",
+          24,
+          14,
+          1236,
+          76
+        ],
+        [
+          "@ 3105/3238 sd @. a *",
+          24,
+          83,
+          704,
+          145
+        ],
+        [
+          "3093/1093 a, i \u529b Pr ar se",
+          23,
+          118,
+          683,
+          166
+        ],
+        [
+          "= = Ember",
+          447,
+          152,
+          662,
+          163
+        ],
+        [
+          "t= 24 = ga\u201d \u2014",
+          24,
+          146,
+          1008,
+          196
+        ],
+        [
+          "e a? as",
+          26,
+          194,
+          573,
+          211
+        ],
+        [
+          "Ee 40 Gi BLACK MARKET esrockoiss |X",
+          440,
+          205,
+          1240,
+          240
+        ],
+        [
+          "eat 7 \n5\t1\t1\t1\t9\t4\t570\t233\t4\t4\t0.000000\t5\n4\t1\t1\t1\t10\t0\t22\t235\t1118\t59\t-1\t\n5\t1\t1\t1\t10\t1\t22\t235\t44\t44\t15.741508\t\u52a0\n5\t1\t1\t1\t10\t2\t74\t236\t167\t42\t18.910538\tKE\n5\t1\t1\t1\t10\t3\t516\t244\t42\t23\t23.723129\tVe\n5\t1\t1\t1\t10\t4\t622\t255\t91\t39\t36.703758\t2\n5\t1\t1\t1\t10\t5\t875\t255\t138\t9\t0.000000\teee\n4\t1\t1\t1\t11\t0\t367\t256\t905\t84\t-1\t\n5\t1\t1\t1\t11\t1\t367\t274\t134\t33\t58.138119\twe\n5\t1\t1\t1\t11\t2\t515\t256\t37\t68\t53.533615\tji\n5\t1\t1\t1\t11\t3\t630\t275\t90\t54\t18.521591\tpee\n5\t1\t1\t1\t11\t4\t931\t299\t42\t41\t53.849854\tip\n5\t1\t1\t1\t11\t5\t1149\t305\t10\t20\t19.324234\t\u2018\n5\t1\t1\t1\t11\t6\t1203\t278\t17\t50\t62.972416\t>\n4\t1\t1\t1\t12\t0\t23\t305\t1139\t40\t-1\t\n5\t1\t1\t1\t12\t1\t23\t323\t3\t3\t19.703133\tq\n5\t1\t1\t1\t12\t2\t306\t310\t57\t18\t53.553524\tyet\n5\t1\t1\t1\t12\t3\t440\t321\t27\t9\t17.621223\tpay\n5\t1\t1\t1\t12\t4\t628\t307\t42\t38\t48.544266\t&\n5\t1\t1\t1\t12\t5\t703\t325\t2\t3\t23.120369\t\\\n5\t1\t1\t1\t12\t6\t788\t323\t2\t3\t3.812271\t,\n5\t1\t1\t1\t12\t7\t948\t305\t27\t34\t30.997353\t=a\n5\t1\t1\t1\t12\t8\t1143\t310\t19\t21\t67.762970\t&\n4\t1\t1\t1\t13\t0\t461\t325\t734\t17\t-1\t\n5\t1\t1\t1\t13\t1\t461\t330\t14\t10\t64.964432\tit\n5\t1\t1\t1\t13\t2\t657\t331\t46\t10\t59.278011\tyy\n5\t1\t1\t1\t13\t3\t936\t333\t6\t8\t45.334023\tA\n5\t1\t1\t1\t13\t4\t1147\t325\t48\t17\t43.369236\tNhe\n4\t1\t1\t1\t14\t0\t222\t372\t1058\t56\t-1\t\n5\t1\t1\t1\t14\t1\t222\t385\t66\t16\t6.368057\t\u4e0b\n5\t1\t1\t1\t14\t2\t420\t376\t33\t52\t34.794861\thy\n5\t1\t1\t1\t14\t3\t479\t385\t15\t18\t22.510750\tJ\n5\t1\t1\t1\t14\t4\t656\t388\t11\t13\t72.987518\t\u00a9\n5\t1\t1\t1\t14\t5\t674\t389\t22\t12\t84.560272\t160\n5\t1\t1\t1\t14\t6\t783\t388\t11\t13\t73.943176\t\u00a9\n5\t1\t1\t1\t14\t7\t801\t389\t22\t12\t79.482269\t180\n5\t1\t1\t1\t14\t8\t909\t388\t11\t13\t20.275131\t\u00a9\n5\t1\t1\t1\t14\t9\t927\t389\t22\t12\t20.275131\t120\n5\t1\t1\t1\t14\t10\t1036\t388\t11\t13\t30.305954\t\u00a9\n5\t1\t1\t1\t14\t11\t1054\t390\t22\t11\t30.305954\t140\n5\t1\t1\t1\t14\t12\t1163\t388\t11\t13\t82.320786\t\u00a9\n5\t1\t1\t1\t14\t13\t1180\t389\t23\t12\t92.565689\t280\n5\t1\t1\t1\t14\t14\t1264\t372\t16\t38\t21.851257\tk\n4\t1\t1\t1\t15\t0\t316\t407\t107\t10\t-1\t\n5\t1\t1\t1\t15\t1\t316\t407\t28\t10\t46.751724\tse\n5\t1\t1\t1\t15\t2\t420\t410\t3\t3\t53.207657\t1\n4\t1\t1\t1\t16\t0\t233\t412\t1045\t51\t-1\t\n5\t1\t1\t1\t16\t1\t233\t412\t39\t51\t12.300346\tPs\n5\t1\t1\t1\t16\t2\t350\t416\t17\t7\t85.575127\t=\n5\t1\t1\t1\t16\t3\t426\t420\t47\t25\t24.150223\taka\n5\t1\t1\t1\t16\t4\t665\t422\t16\t14\t39.908714\t\u00b0\n5\t1\t1\t1\t16\t5\t792\t422\t16\t14\t39.908714\t\u00b0\n5\t1\t1\t1\t16\t6\t918\t422\t16\t14\t39.908714\t\u00b0\n5\t1\t1\t1\t16\t7\t1045\t422\t16\t14\t39.908714\t\u00b0\n5\t1\t1\t1\t16\t8\t1172\t422\t16\t14\t39.908714\t\u00b0\n5\t1\t1\t1\t16\t9\t1275\t422\t3\t2\t0.000000\t:\n4\t1\t1\t1\t17\t0\t240\t444\t360\t40\t-1\t\n5\t1\t1\t1\t17\t1\t240\t444\t30\t40\t28.569969\toe\n5\t1\t1\t1\t17\t2\t472\t450\t128\t26\t0.000000\tae\n3\t1\t1\t2\t0\t0\t626\t477\t187\t33\t-1\t\n4\t1\t1\t2\t1\t0\t626\t478\t187\t32\t-1\t\n5\t1\t1\t2\t1\t1\t626\t478\t14\t32\t18.999443\t\u770b\n5\t1\t1\t2\t1\t2\t670\t491\t16\t11\t0.000000\t\u2018=\n5\t1\t1\t2\t1\t3\t699\t493\t14\t10\t81.714447\tWind\n5\t1\t1\t2\t1\t4\t722\t492\t46\t12\t94.530640\tBoots\n5\t1\t1\t2\t1\t5\t776\t496\t3\t4\t83.739395\t+\n5\t1\t1\t2\t1\t6\t788\t493\t25\t10\t95.692459\tEqui\n3\t1\t1\t3\t0\t0\t626\t493\t585\t43\t-1\t\n4\t1\t1\t3\t1\t0\t626\t493\t585\t43\t-1\t\n5\t1\t1\t3\t1\t1\t626\t493\t59\t43\t65.288773\tBEN\n5\t1\t1\t3\t1\t2\t699\t494\t333\t29\t29.668251\tEC\n5\t1\t1\t3\t1\t3\t1159\t496\t52\t31\t91.596931\tNeed37\n3\t1\t1\t4\t0\t0\t616\t570\t310\t12\t-1\t\n4\t1\t1\t4\t1\t0\t616\t570\t310\t12\t-1\t\n5\t1\t1\t4\t1\t1\t616\t571\t51\t11\t81.696991\tInspec\n5\t1\t1\t4\t1\t2\t671\t570\t22\t9\t77.233543\tanitem\n5\t1\t1\t4\t1\t3\t700\t573\t3\t3\t54.318398\t+\n5\t1\t1\t4\t1\t4\t711\t553\t33\t36\t76.967468\teffects\n5\t1\t1\t4\t1\t5\t750\t553\t30\t36\t83.304245\temain\n5\t1\t1\t4\t1\t6\t786\t553\t27\t36\t30.154358\tactive\n5\t1\t1\t4\t1\t7\t819\t553\t21\t36\t29.169441\tater\n5\t1\t1\t4\t1\t8\t846\t570\t18\t9\t29.169441\ther\n5\t1\t1\t4\t1\t9\t870\t570\t56\t12\t78.374756\tabsorption\n3\t1\t1\t5\t0\t0\t684\t650\t94\t8\t-1\t\n4\t1\t1\t5\t1\t0\t684\t650\t94\t8\t-1\t\n5\t1\t1\t5\t1\t1\t684\t650\t94\t8\t0.000000\t\u2014-\n",
+          411,
+          236,
+          529,
+          257
+        ],
+        [
+          "@ are 218/000 4",
+          24,
+          26,
+          193,
+          63
+        ],
+        [
+          "ey",
+          264,
+          14,
+          356,
+          67
+        ],
+        [
+          "\u56db \u52a0",
+          920,
+          22,
+          1072,
+          70
+        ],
+        [
+          "ae",
+          336,
+          54,
+          366,
+          74
+        ],
+        [
+          "y",
+          618,
+          52,
+          636,
+          75
+        ],
+        [
+          "\u4ece 310513238",
+          24,
+          106,
+          115,
+          126
+        ],
+        [
+          "=",
+          286,
+          92,
+          438,
+          162
+        ],
+        [
+          "ia",
+          552,
+          145,
+          573,
+          161
+        ],
+        [
+          "~",
+          447,
+          154,
+          497,
+          171
+        ],
+        [
+          "4",
+          717,
+          171,
+          732,
+          179
+        ],
+        [
+          "\u56db \u56db",
+          597,
+          159,
+          657,
+          183
+        ],
+        [
+          ">",
+          717,
+          177,
+          740,
+          189
+        ],
+        [
+          "ab:",
+          30,
+          196,
+          116,
+          228
+        ],
+        [
+          "RESTOCK0158 XX",
+          1132,
+          215,
+          1240,
+          228
+        ],
+        [
+          "ma A",
+          386,
+          232,
+          476,
+          264
+        ],
+        [
+          "SR",
+          1128,
+          255,
+          1140,
+          264
+        ],
+        [
+          "ea",
+          697,
+          276,
+          713,
+          282
+        ],
+        [
+          "fel",
+          639,
+          259,
+          674,
+          291
+        ],
+        [
+          "ou)",
+          929,
+          281,
+          965,
+          300
+        ],
+        [
+          "Aas",
+          1146,
+          276,
+          1208,
+          301
+        ],
+        [
+          "Ia",
+          519,
+          291,
+          541,
+          320
+        ],
+        [
+          "hs",
+          646,
+          287,
+          665,
+          308
+        ],
+        [
+          "\u201cel",
+          749,
+          255,
+          880,
+          319
+        ],
+        [
+          "a",
+          946,
+          304,
+          973,
+          317
+        ],
+        [
+          "FA)",
+          671,
+          293,
+          714,
+          328
+        ],
+        [
+          "Dy",
+          883,
+          306,
+          929,
+          341
+        ],
+        [
+          "2",
+          941,
+          314,
+          975,
+          336
+        ],
+        [
+          "yi",
+          469,
+          345,
+          506,
+          360
+        ],
+        [
+          "\u00e9",
+          760,
+          316,
+          795,
+          347
+        ],
+        [
+          "Skil Tuner",
+          1029,
+          351,
+          1083,
+          368
+        ],
+        [
+          "Ember Heart",
+          1151,
+          349,
+          1215,
+          377
+        ],
+        [
+          "\u7684",
+          434,
+          375,
+          453,
+          394
+        ],
+        [
+          "\u2014\u2014",
+          223,
+          385,
+          288,
+          401
+        ],
+        [
+          "180",
+          801,
+          390,
+          823,
+          401
+        ],
+        [
+          "280",
+          1180,
+          389,
+          1203,
+          401
+        ],
+        [
+          "\u653b",
+          1269,
+          391,
+          1280,
+          410
+        ],
+        [
+          "e",
+          245,
+          451,
+          270,
+          465
+        ],
+        [
+          "4h",
+          628,
+          491,
+          640,
+          501
+        ],
+        [
+          "hie",
+          670,
+          493,
+          682,
+          502
+        ],
+        [
+          "Wy)",
+          627,
+          498,
+          682,
+          519
+        ],
+        [
+          "Wind Boots + Equipment",
+          699,
+          492,
+          854,
+          506
+        ],
+        [
+          "+15% move speed, -15% dodge cooldown, +8% evasion",
+          699,
+          508,
+          1032,
+          523
+        ],
+        [
+          "Inspect an item + effects remain active after hero absorption",
+          616,
+          560,
+          926,
+          588
+        ],
+        [
+          "CO @ 0",
+          901,
+          603,
+          967,
+          631
+        ],
+        [
+          "LEVELS 87/132XP",
+          487,
+          667,
+          592,
+          679
+        ],
+        [
+          "Cie",
+          658,
+          649,
+          850,
+          698
+        ],
+        [
+          "eee Le | sme |",
+          24,
+          5,
+          681,
+          67
+        ],
+        [
+          ": Jouning",
+          622,
+          22,
+          1258,
+          70
+        ],
+        [
+          "= \u2018 = P ba}. ROUND 0",
+          23,
+          53,
+          1236,
+          97
+        ],
+        [
+          "\u4e8c pe el |g",
+          24,
+          38,
+          681,
+          144
+        ],
+        [
+          "1083/1093 i ea v",
+          23,
+          115,
+          705,
+          166
+        ],
+        [
+          "aM ~~ \u4e00",
+          552,
+          134,
+          710,
+          158
+        ],
+        [
+          "\u4e0b 2 ekg embermaw:",
+          118,
+          148,
+          687,
+          173
+        ],
+        [
+          "= \u2014 ta ~2",
+          24,
+          146,
+          994,
+          196
+        ],
+        [
+          "ira: BD ef cuscenann _",
+          22,
+          173,
+          1010,
+          246
+        ],
+        [
+          "op) 45) Ae",
+          25,
+          212,
+          583,
+          231
+        ],
+        [
+          "=e ans BLACK MARKET westockouss |X",
+          166,
+          204,
+          1240,
+          268
+        ],
+        [
+          "Vi R",
+          505,
+          246,
+          627,
+          271
+        ],
+        [
+          "Org Es ee | @] \u201cty | &",
+          22,
+          231,
+          1191,
+          319
+        ],
+        [
+          "Dati Via At we, iy Bix",
+          406,
+          255,
+          1209,
+          311
+        ],
+        [
+          "yo. Pe yy Wz Ze eZ Sez, ( Habs",
+          75,
+          276,
+          1210,
+          328
+        ],
+        [
+          "\u201c \u4f4d/ KAO 4a |< | ae| PF |e we) 0G",
+          204,
+          300,
+          1280,
+          355
+        ],
+        [
+          "\u00a5 a \u6c9f \uff0c = | \u00a9 car : me | fl",
+          159,
+          324,
+          1270,
+          379
+        ],
+        [
+          "aS \u00a2 \u548c \u963f Peele Gate Patch Skil Tuner Emoerheat | |",
+          223,
+          342,
+          1272,
+          401
+        ],
+        [
+          "< a if \u00ae 160 \u00ae 180 \u00a9 120 \u00a9 140 \u00a9 280 {",
+          315,
+          372,
+          1277,
+          424
+        ],
+        [
+          "; a :",
+          423,
+          403,
+          1280,
+          428
+        ],
+        [
+          "B '~@ ; \u00b0 \u00b0 \u00b0 \u00b0 \u00b0 r",
+          237,
+          417,
+          1267,
+          465
+        ],
+        [
+          "4 \u2014 \u4e3b",
+          251,
+          457,
+          592,
+          473
+        ],
+        [
+          "a",
+          660,
+          476,
+          681,
+          490
+        ],
+        [
+          "Bae Wind Boots + Equipment",
+          627,
+          476,
+          854,
+          518
+        ],
+        [
+          "FZ \u201c5 move spee,-15% dodge cooldown, +8% evasion Need 37",
+          626,
+          496,
+          1211,
+          538
+        ],
+        [
+          "Inspec anitem + effects emain active after her absorption",
+          616,
+          553,
+          926,
+          589
+        ],
+        [
+          "Oo",
+          901,
+          608,
+          963,
+          622
+        ],
+        [
+          "=\"",
+          432,
+          667,
+          592,
+          690
+        ],
+        [
+          "Ye Shift",
+          780,
+          673,
+          834,
+          686
+        ]
+      ]
+    }
+  ],
+  "equipment_hover_checks": [
+    {
+      "visit": 1,
+      "index": 0,
+      "stale_attempts": []
+    },
+    {
+      "visit": 1,
+      "index": 1,
+      "stale_attempts": [
+        {
+          "tile": "a.F\nArc Lens",
+          "price": "180",
+          "preview": "Wind Boots + Equipment",
+          "error": "Tile/preview mismatch: 'a.F\\nArc Lens', 'Wind Boots + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 1,
+      "index": 2,
+      "stale_attempts": [
+        {
+          "tile": "Gate Patch",
+          "price": "120",
+          "preview": "ArcLens + Equipment",
+          "error": "Tile/preview mismatch: 'Gate Patch', 'ArcLens + Equipment'"
+        }
+      ]
+    },
+    {
+      "visit": 1,
+      "index": 3,
+      "stale_attempts": [
+        {
+          "tile": "wy\nSkill Tuner",
+          "price": "140",
+          "preview": "Gate Patch \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'wy\\nSkill Tuner', 'Gate Patch \u00bb Consumable'"
+        }
+      ]
+    },
+    {
+      "visit": 1,
+      "index": 4,
+      "stale_attempts": [
+        {
+          "tile": "yi! a\nEmber Heart",
+          "price": "280",
+          "preview": "Skill Tuner \u00bb Consumable",
+          "error": "Tile/preview mismatch: 'yi! a\\nEmber Heart', 'Skill Tuner \u00bb Consumable'"
+        }
+      ]
+    }
+  ],
+  "equipment_inspections": [
+    {
+      "visit": 1,
+      "wallet": 123,
+      "wallet_ocr": "LV1 KILLS 0123",
+      "offers": [
+        {
+          "name": "Wind Boots",
+          "price": 160,
+          "category": "Equipment",
+          "index": 0,
+          "tile_ocr": "Wind Boots",
+          "price_ocr": "160",
+          "preview_ocr": "Wind Boots + Equipment"
+        },
+        {
+          "name": "ArcLens",
+          "price": 180,
+          "category": "Equipment",
+          "index": 1,
+          "tile_ocr": "yr\nArc Lens",
+          "price_ocr": "180",
+          "preview_ocr": "ArcLens + Equipment"
+        },
+        {
+          "name": "Gate Patch",
+          "price": 120,
+          "category": "Consumable",
+          "index": 2,
+          "tile_ocr": "Gate Patch",
+          "price_ocr": "120",
+          "preview_ocr": "Gate Patch \u00bb Consumable"
+        },
+        {
+          "name": "Skill Tuner",
+          "price": 140,
+          "category": "Consumable",
+          "index": 3,
+          "tile_ocr": "7\nSkill Tuner",
+          "price_ocr": "140",
+          "preview_ocr": "Skill Tuner \u00bb Consumable"
+        },
+        {
+          "name": "Ember Heart",
+          "price": 280,
+          "category": "Equipment",
+          "index": 4,
+          "tile_ocr": "\\! a\nEmber Heart",
+          "price_ocr": "280",
+          "preview_ocr": "Ember Heart + Equipment"
+        }
+      ]
+    }
+  ]
+}
