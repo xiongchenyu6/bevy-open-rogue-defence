@@ -1,0 +1,12 @@
+{
+  "old_commit": "f205e965ac61bc7494457e5f3de0f56ce3cf164e",
+  "new_commit": "bdd6660f16514a1ba1bd506c3a58f42916183e10",
+  "files": {
+    "src/game/combat.rs": "0416c11a140b547684f80384b64639b7a11b402e3815c1c296adc243187d53b9",
+    "src/game/combat/cinder_order_tests.rs": "716f7d8446c86145e4f4c677b6e69426f5b6da27883cdbff7f75e1e5ec962d5b",
+    "src/game/combat/gate_state_tests.rs": "7eb217fa023ad3eae88b9358371b0e1e0b21abd61ab9a63b0026a4521cdf34dc",
+    "src/game/combat/glacier_order_tests.rs": "3f78d63cd50562a9221d06438de7e6c4dd5bbfc6cd766546918ee4403c1d45ea",
+    "src/game/skills.rs": "727c000513c6eb1644c03a1d395edeea4c0cded80988ef4223cb196b7268fa0b",
+    "src/game/skills/glacier_order_test_support.rs": "7d756556d65171e8662cf42a9e9c08fda089cf1fddc3ed0b3f95069ee580b4a7"
+  }
+}

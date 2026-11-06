@@ -1,0 +1,26 @@
+{
+  "exit": 0,
+  "elapsed": 117.16109521198086,
+  "args": [
+    "docker",
+    "run",
+    "--rm",
+    "--name",
+    "rogue-glacier-smoke-nov6",
+    "--network",
+    "none",
+    "--mount",
+    "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/desktop-packages-glacier-nov6/rogue-commander-linux,dst=/game,readonly",
+    "--mount",
+    "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/glacier-package-2026-11-06/smoke,dst=/verify",
+    "--mount",
+    "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/glacier-package-2026-11-06/smoke/harness-source,dst=/harness,readonly",
+    "--env",
+    "PACKAGE_COMMIT=bdd6660f16514a1ba1bd506c3a58f42916183e10",
+    "--workdir",
+    "/tmp",
+    "sha256:0d4cccee982b31492e0f7b01a50afc1a0ec710d3166dab22e02322ce64832715",
+    "python3",
+    "/harness/smoke_runtime.py"
+  ]
+}

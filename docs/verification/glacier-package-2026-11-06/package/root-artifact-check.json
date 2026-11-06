@@ -1,0 +1,18 @@
+{
+  "source_commit": "bdd6660f16514a1ba1bd506c3a58f42916183e10",
+  "manifest_files": 892,
+  "tar_regular_files": 893,
+  "all_tar_metadata_zero": true,
+  "binary_sha256": "f10dd77c63e69916e5cf3471ff94dc1f2cbe1b591f4105977df648b5d18252a8",
+  "tar_sha256": "5bacb0ff3301c69bd90525252a4740c4ff7d690ef038c1e51990971f3e7d409e",
+  "input_count": 537,
+  "input_bytes_unchanged": true,
+  "root_viewed": [
+    "battle.png",
+    "settings-chinese.png",
+    "restart-battle-progress-02.png"
+  ],
+  "scope": "public short flow and artifact integrity, not full campaign/hardware/audio listening/replay equality",
+  "game_source_matches_740_test_input_map": true,
+  "test_input_manifest_sha256": "63e03f25d1f784b82f2f2c839116aa6515bfdbb8d9988e87764055d8e32d9f42"
+}

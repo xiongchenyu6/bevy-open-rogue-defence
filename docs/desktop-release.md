@@ -1,21 +1,21 @@
 # Linux 桌面发行候选包
 
-当前通过独立短流程验收的包来自游戏源码 `f205e965ac61bc7494457e5f3de0f56ce3cf164e`：
+当前通过独立短流程验收的包来自源码 `bdd6660f16514a1ba1bd506c3a58f42916183e10`，包含 `3d42d0b` 冰霜修正及此前城墙／火焰结算修正：
 
-- 目录：`target/desktop-packages-gate-cutaway-nov6/rogue-commander-linux/`
-- 压缩包：`target/desktop-packages-gate-cutaway-nov6/rogue-commander-linux-0.1.0.tar.gz`，62,300,408字节。
-- 二进制SHA256：`eef177e05409f07564b449cf339486fce91ecc98bacbed6334278cbc5810bec4`
-- 压缩包SHA256：`cfca4c5d928c63c658e93508c0bf5dc814443849019a4c0f20bb303ff98069e7`
+- 目录：`target/desktop-packages-glacier-nov6/rogue-commander-linux/`
+- 压缩包：`target/desktop-packages-glacier-nov6/rogue-commander-linux-0.1.0.tar.gz`，62,295,464字节。
+- 二进制SHA256：`f10dd77c63e69916e5cf3471ff94dc1f2cbe1b591f4105977df648b5d18252a8`
+- 压缩包SHA256：`5bacb0ff3301c69bd90525252a4740c4ff7d690ef038c1e51990971f3e7d409e`
 
-运行包内 `rogue_commander`，保持 `assets` 和 `third-party` 同级；移动使用方向键。该包是开发候选，未发布到Steam。
+运行包内 `rogue_commander`，保持 `assets` 和 `third-party` 同级；方向键移动。这是未发布到Steam的开发候选。
 
-本包增加主英雄被城门遮挡时的自动淡出和原材质／阴影恢复，并包含已接入生产场景的纹理洞窟、固定角度的响应式取景、跟随镜头方向的移动与闪避、窄竖屏工具栏和圆形触屏摇杆。存活目标暴击增加25ms短停顿，沿用同帧最大请求、0.5秒冷却及4倍以上跳过规则。此前的装备插画、合成、普通木箭、近战接触校准、挥击音效和局部目标排程修正继续包含在包中。
+本轮让城墙逐怪结算、火焰同距目标和冰霜区域脉冲采用稳定位置顺序，避免部分无关实体变化交换伤害或暴击。冰霜伤害、范围、0.8秒脉冲和第三次冻结规则不变。对应[局部真实红绿回归](verification/glacier-order-2026-11-06/README.md)与完整库测试740通过、0失败、1既有忽略、严格Clippy和模拟器构建均有记录。包内游戏源码／资产／vendor字节与该验证输入一致，SDK未另跑740项测试。
 
-对应产品源码全库734通过、0失败、1忽略，严格release all-target Clippy通过。此前同轮[18个受控原生场景](verification/combat-framing-feedback-2026-11-06/README.md)完成5320更新；25ms请求在30Hz呈现探针中量化为一帧约33ms。新增[真实双相机尺寸回归](verification/primary-camera-resize-2026-11-06/README.md)修复全屏恢复时的渲染目标不同步。新增[三尺寸城门遮挡原生对照](verification/gate-cutaway-2026-11-06/README.md)完成6组3480更新，原始不透明材质控制与淡出使用相同位置／镜头，并检查退出遮挡后的原材质和阴影恢复。原生呈现探针不是实际伤害解析、主观手感或硬件验收。
+相对此前f205候选，交付清单只有游戏程序和 `version.json` 改变，全部资产保持原哈希。正式洞窟、响应式取景、镜头方向输入、窄屏HUD、城门遮挡淡出、普通木箭、近战接触反馈、挥击音效、装备插画与合成继续包含在包中；其专项受控证据仍按各自源码版本保留。
 
-## 构建和文件核验
+## 构建与文件核验
 
-固定Steam Runtime3 sniper SDK及Rust1.98.0，实际release构建107.117秒。534项构建输入前后与源版本逐字节一致；892项清单文件和包含清单自身的893个压缩包文件均逐项复核。ELF没有Nix依赖或库搜索路径。
+固定Steam Runtime3 sniper SDK、Rust1.98.0，实际构建108.669秒。537项构建／运行输入前后与固定提交逐字节一致；Root独立核对892项清单文件和893个压缩包常规文件，全部压缩包条目的所有者与时间为0。ELF检查无Nix依赖或搜索路径。
 
 ```sh
 tools/build_desktop_linux.sh target/my-linux-package
@@ -24,14 +24,16 @@ tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner \
   > target/my-linux-package/rogue-commander-linux-0.1.0.tar.gz
 ```
 
-工具拒绝覆盖已有输出。实际源输入、镜像、产物、失败记录和复核见[候选包证据](verification/gate-cutaway-package-2026-11-06/README.md)。产品和六个验收helper均由f205e96冻结；后续证据提交不改变安装包产品版本。
+工具拒绝覆盖既有输出。实际源码、镜像、输入清单、完整短流程和截图见[新候选包证据](verification/glacier-package-2026-11-06/README.md)。六个验收helper也固定为产品提交的原始字节。
 
 ## 实际独立运行
 
-Ubuntu24／X11／软件Vulkan，断网、只读安装包、工作目录 `/tmp`，不挂载游戏源码、Rust或Nix。实际116.623秒完成首次指南、征募、严格递减计时、中英文切换、全屏恢复、偏好重启及两次正常退出；Root实际查看英文战斗、中文设置和中文重启战斗。新验证器要求两尺度精确倒计时一致及两次递减，不使用24分固定前缀或猜读字符。
+Ubuntu24／X11／软件Vulkan，断网、只读安装包、工作目录 `/tmp`，不挂载游戏源码、Rust或Nix。实际117.161秒完成首次指南、征募、战斗计时推进、中文设置、全屏恢复、偏好重启、再次征募／战斗及两次正常退出。两次启动的精确倒计时端点分别1498→1492与1487→1481，双尺度读取一致；一次不一致的中间OCR观察被拒绝并保留，未猜读替换。
 
-此前932包另有Root直接看画面操作的375×667→1600×1000全屏→375×667恢复，以及1280×720全屏往返和实际退出。该手动会话的管理单元到达600秒watchdog，游戏仍在容器内继续并在后续实际Quit确认后返回0；保留两种状态，不称管理单元通过。完整自动短流程是另一个独立成功运行。
+Root实际查看英文战斗、中文设置和中文重启战斗，未见设置裁切，英雄在城门安全侧可辨。设置页显示测试环境无可用音频设备及自动重连提示，本次没有物理声音或主观听感验收。通用短流程也没有实际按键穿越城门；此前[三尺寸遮挡对照](verification/gate-cutaway-2026-11-06/README.md)仍为独立受控证据。
 
 ## 验收边界
 
-f205未重跑完整第六章、自然合成、收费刷新或旧赚取存档兼容。此前[0c真实旧档](verification/polish-next-earned-restart-2026-11-06/README.md)、[d454自然合成](verification/wallet-blades-forge-v3-2026-11-06/README.md)及[d454完整第六章](verification/wallet-blades-chapter6-2026-11-06/README.md)仍按各自版本保留，不能改算新包通过。精确重复、总体平衡、长局硬件性能、主观听感、实体手柄／音频设备、Steam客户端和其他平台仍待验收；见[发售清单](release-readiness.md)。
+[同游戏逻辑的Nix模拟器完整重复](verification/post-glacier-repeat-2026-11-06/README.md)仍在后期出现冰霜普攻黑市触发效果的目标／状态差异，精确比较失败；未在SDK包重跑完整重复，不能宣称全局确定性或总体平衡。
+
+本包未重跑完整第六章、自然合成、收费刷新或旧赚取存档兼容。此前[0c真实旧档](verification/polish-next-earned-restart-2026-11-06/README.md)、[d454自然合成](verification/wallet-blades-forge-v3-2026-11-06/README.md)、[d454完整第六章](verification/wallet-blades-chapter6-2026-11-06/README.md)及[f205候选短流程](verification/gate-cutaway-package-2026-11-06/README.md)按各自版本保留，不改算本包通过。长局硬件性能、实体手柄／音频设备、Steam客户端和其他平台仍待验收；见[发售清单](release-readiness.md)。

@@ -1,0 +1,5 @@
+{
+  "build_and_smoke_authorized": true,
+  "expected_source_commit": "bdd6660f16514a1ba1bd506c3a58f42916183e10",
+  "basis": "root-reviewed local 740-pass/strict-Clippy/build proof; completed full pair exact-state negative retained and inspected; development candidate short-flow only, no global determinism or release-quality claim"
+}
