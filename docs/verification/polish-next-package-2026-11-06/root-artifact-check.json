@@ -1,0 +1,11 @@
+{
+  "scope": "Root independent package/tar byte audit; runtime smoke not yet accepted",
+  "commit": "0c12230d3bf25c2b1a070c80950e5388a3b7b2ec",
+  "manifest_files": 889,
+  "actual_files_including_manifest": 890,
+  "tar_files": 890,
+  "binary_sha256": "b19b938f0f058c90bca35edec95cb87f39fe47f77e9e0d14720bdda012f45d91",
+  "tar_sha256": "019aff09b4d6ee63df2503628acb2b179216995ecfdcb32ea61c932d6c34bb23",
+  "frozen_input_count": 525,
+  "all_file_bytes_and_tar_metadata_pass": true
+}

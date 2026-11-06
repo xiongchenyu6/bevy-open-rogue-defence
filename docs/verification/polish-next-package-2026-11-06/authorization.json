@@ -1,0 +1,9 @@
+{
+  "build_and_smoke_authorized": true,
+  "expected_source_commit": "0c12230d3bf25c2b1a070c80950e5388a3b7b2ec",
+  "public_routes_authorized": false,
+  "reason": "Root GO after independent wave-order proof review; SDK build + offline smoke only; earned restart awaits artifact review",
+  "earned_restart_authorized": true,
+  "long_routes_authorized": false,
+  "earned_restart_r2_authorized": true
+}

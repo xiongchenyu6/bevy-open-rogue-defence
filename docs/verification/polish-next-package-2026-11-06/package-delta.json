@@ -1,0 +1,24 @@
+{
+  "old_files": 886,
+  "new_files": 889,
+  "added": {
+    "assets/audio/swing_daggers.wav": "ac9c63d8d170cf32ec4c4e70b7ec9d9b96addbb704769bb1454072cdfe39d615",
+    "assets/audio/swing_sword.wav": "79501b7ab0fb6cad7ece61a4572239ba36793e6e9103005d1f42f6d6da205c25",
+    "assets/audio/swing_axe.wav": "c81a4657056917f0c092e364069c4ebd176f75456f5ad9a5e928b533a9212c1f"
+  },
+  "removed": {},
+  "changed": {
+    "version.json": {
+      "old": "aaab48c691463c05c31b8fca1279d9d0e1d6a6e139701d6b46eccf5a25823152",
+      "new": "718c839e71d2f9f32fca915d864bd59c5c216f220173653e1ac792fe087828ee"
+    },
+    "rogue_commander": {
+      "old": "7dce2d9be5a8a8d8fa9027b1adc5fc7b0f3705b6ffadf6cb8652326e0b7aec24",
+      "new": "b19b938f0f058c90bca35edec95cb87f39fe47f77e9e0d14720bdda012f45d91"
+    },
+    "assets/audio/SOURCES.md": {
+      "old": "5129753d14647318bc3a993ecb455db0342acfecbdecf30571ac85e6b6e8622d",
+      "new": "97a820b51c901c8e8a165f124205a926636a8462a5912e5c1fd023ba0e5f2d91"
+    }
+  }
+}

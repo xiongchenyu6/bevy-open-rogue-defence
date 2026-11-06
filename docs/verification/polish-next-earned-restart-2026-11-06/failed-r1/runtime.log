@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/harness/ffab_restart_runtime.py", line 170, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/harness/ffab_restart_runtime.py", line 117, in main
+    clock('restart-battle');assert read_toolbar_speed(shot('restart-speed.png'),env)==1
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/ffab_restart_runtime.py", line 86, in clock
+    value=visible_hud_value(lambda:shot(prefix+'.png'),
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/forge_runtime.py", line 32, in visible_hud_value
+    assert state == 'battle', 'Unknown or covered public HUD'
+           ^^^^^^^^^^^^^^^^^
+AssertionError: Unknown or covered public HUD

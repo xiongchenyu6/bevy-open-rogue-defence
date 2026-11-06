@@ -1,0 +1,28 @@
+{
+  "old_commit": "d4540c44df479041fe4ff4fdb818f8fb2f280f99",
+  "new_commit": "0c12230d3bf25c2b1a070c80950e5388a3b7b2ec",
+  "files": {
+    "assets/audio/SOURCES.md": "97a820b51c901c8e8a165f124205a926636a8462a5912e5c1fd023ba0e5f2d91",
+    "assets/audio/swing_axe.wav": "c81a4657056917f0c092e364069c4ebd176f75456f5ad9a5e928b533a9212c1f",
+    "assets/audio/swing_daggers.wav": "ac9c63d8d170cf32ec4c4e70b7ec9d9b96addbb704769bb1454072cdfe39d615",
+    "assets/audio/swing_sword.wav": "79501b7ab0fb6cad7ece61a4572239ba36793e6e9103005d1f42f6d6da205c25",
+    "src/bin/capture.rs": "8ca776b3d0414493a3c188b8219a27e7c99dacacc34dcdf78765eb55beac2790",
+    "src/bin/capture/attacks.rs": "b68b82e672fd34de1d984573c5dc80c78e17cbbc8e20f38bda55886a63771a7b",
+    "src/bin/capture/demon_cave.rs": "fc5dda4a06102f4ff89c7d0993a5a910b95030eb13b0b996b1eaee2deae664cf",
+    "src/bin/capture/hit_material.rs": "d3b017ee0f3d2305299903b1ae18c4cf562e792140be68131006ac4a22f3bf94",
+    "src/game/audio.rs": "22330fb9b2b2ef8823aac8e0be2efca7db132a35c96f30f0e077661f35f8bc6e",
+    "src/game/audio_melee.rs": "1c301161ec2010c276e80e773d4dce6b8f45a3f124f1905f27318564afd61ff1",
+    "src/game/basic_attacks.rs": "c496c37fe1d7a80ae8c64e01aee0d6bd32e6a8d844f82991ab0fbf6768cc0d82",
+    "src/game/combat.rs": "416a7d4e1f450a927ca3b55d9f0df1a71a79c44ce3cd8c6c7b90e5edbfffa280",
+    "src/game/combat/melee_audio_tests.rs": "34e2b9b5634e5133c95a7d6a2e222448ed49f684aa3d46a3689c23d876a5d6c4",
+    "src/game/combat/orbit_order_tests.rs": "6043d7e4cc7ae94735e9502143116d09ef55e9b4fe4a287bbeb6d73f58b0b095",
+    "src/game/combat/storm_order_tests.rs": "7a541fe81eea6884b4485172b3c72307b9e5902b17f5a614959fe3fa15a1d181",
+    "src/game/combat/wave_order_tests.rs": "f9279e1566072c3eac238e0915257a78eac47dd29f19a1a860f900b1338355a4",
+    "src/game/hero_fusion.rs": "1197defdf96d4a58fbc02e80ac6d64de63ac913c23bc9e479aa9fc618ac48f11",
+    "src/game/hit_feedback.rs": "b40d10bac74049fea6e3379851e58ef17f44391f1018f1b4b7d0ba581f88aa4f",
+    "src/game/hit_feedback/enemy_flash.rs": "fff909625930b3f59d92be8cf514322260f7d9da1ab901794e32f7393ab237c6",
+    "src/game/mod.rs": "095cc655e8599be8d738281e87ed0258baa1b4def7a5f37c9fb43d6633dafbf6",
+    "src/game/skills.rs": "0a347874567406b36d6f737cb61b99fc8edf2a6deee46aa49a339bda796d4763",
+    "src/game/skills/tidal_wave.rs": "476486db6388eea3516bb768c5c8c934a228a317999e9287124d25faf129cbd7"
+  }
+}

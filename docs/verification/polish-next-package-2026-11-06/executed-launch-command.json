@@ -1,0 +1,10 @@
+[
+  "systemd-run",
+  "--user",
+  "--unit=rogue-polish-next-package-nov6",
+  "--property=RuntimeMaxSec=3200",
+  "--working-directory=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence",
+  "/bin/sh",
+  "-c",
+  "exec python3 -u target/verification/polish-next-package-2026-11-06/build-and-smoke.py 0c12230d3bf25c2b1a070c80950e5388a3b7b2ec > target/verification/polish-next-package-2026-11-06/manager.log 2>&1"
+]

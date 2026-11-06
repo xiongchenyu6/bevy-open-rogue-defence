@@ -1,0 +1,6 @@
+{'exit': 1, 'elapsed': 69.47602018999169}
+Traceback (most recent call last):
+  File "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/polish-next-earned-restart-2026-11-06/execute.py", line 16, in <module>
+    assert result.get('exit')==0,'Actual short earned restart incomplete; preserve failure'
+           ^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Actual short earned restart incomplete; preserve failure

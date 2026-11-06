@@ -1,0 +1,13 @@
+{
+  "git_status_readonly": " M src/game/combat.rs\n M src/game/skills.rs\n M src/game/skills/tidal_wave.rs\n?? src/game/combat/wave_order_tests.rs\n?? tools/build_demon_cavern.py\n?? tools/verify_demon_cavern.py\n",
+  "prepared_files": {
+    "build-and-smoke.py": "6a2336d45aa2fcfd4a0029b3df524e83ba8784010ee342ca43ae3e65ae5c9804",
+    "plan.json": "fae0b3d82f32150eab9e2edfba9aa6bcd0791d1db9418774f547c48d2b02570f",
+    "REVIEW.md": "58b9b01f735512e9a02600de4db6af5d5033e908e6d8c2d893373b4b5b53fde9",
+    "authorization.json": "6610e155bdf53a73d5d353a03f9d28b9be24db2a92e1a7600c35297dfae0b9e4"
+  },
+  "executed_build": false,
+  "executed_container": false,
+  "initialized_profile": false,
+  "source_or_git_mutation": false
+}

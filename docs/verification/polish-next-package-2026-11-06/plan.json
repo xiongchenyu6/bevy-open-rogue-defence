@@ -1,0 +1,115 @@
+{
+  "prepared_only": false,
+  "candidate_head_informational": "8da1befd475dc2abf2457a06e3acbd239fb11b02",
+  "final_source_commit": "0c12230d3bf25c2b1a070c80950e5388a3b7b2ec",
+  "source_mutated": false,
+  "package_or_profile_created": false,
+  "sdk_image": {
+    "tag": "rogue-commander-linux-sdk:rust-1.98.0-sniper",
+    "id": "sha256:5e47fb3110569ab39fac6568db05c900d372e95110a5fc795f8ca6c7ed11d2cb",
+    "rust_from_Dockerfile": "1.98.0",
+    "actual_new_container_version_not_executed": true
+  },
+  "smoke_image": "sha256:0d4cccee982b31492e0f7b01a50afc1a0ec710d3166dab22e02322ce64832715",
+  "package_destination": "target/desktop-packages-polish-next-nov6",
+  "helpers": {
+    "smoke_runtime.py": "b836e98f55fe7997112145d72250b19bf2ff67f13fe441cab5d4d1320af4f4f6",
+    "campaign_runtime.py": "76ce1daa5939dbbbdcbc0b68162f62b59ce178c14228e1cecb1c8f50684c0591",
+    "campaign_equipment_runtime.py": "674909c39cf601765e45980bc028d4efa09ffe723a732c57a219812cd135f872",
+    "forge_runtime.py": "6d6d336287e4ce33741c723940d3eff689e7211e2ce3ef7383122b114fc61e93",
+    "forge_refresh.py": "c40e9e61179f9ae55d767bd6c9f1333e7b6bced398cd292a190870e701423063",
+    "forge_restart_runtime.py": "659c983316e5c8f4f7c9e4cb3949a626277d7eb4282141743b7525a28f28d737"
+  },
+  "build_command": [
+    "python3",
+    "-u",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/polish-next-package-2026-11-06/build-and-smoke.py",
+    "0c12230d3bf25c2b1a070c80950e5388a3b7b2ec"
+  ],
+  "sdk_command": [
+    "tools/build_desktop_linux.sh",
+    "target/desktop-packages-polish-next-nov6"
+  ],
+  "limits": {
+    "build": 1800,
+    "smoke": 600,
+    "tar": 180,
+    "systemd": 3200
+  },
+  "previous_package": {
+    "commit": "d4540c44df479041fe4ff4fdb818f8fb2f280f99",
+    "binary_sha256": "7dce2d9be5a8a8d8fa9027b1adc5fc7b0f3705b6ffadf6cb8652326e0b7aec24",
+    "manifest_sha256": "6f64b92b3189b0ea49fe8502369569da186ad736a9588ff4210a9743462d9e79",
+    "files": 886
+  },
+  "minimal_new_acceptance": [
+    "Exact SDK build source/input audit and manifest/linkage checks",
+    "Offline read-only Ubuntu24 short flow with fresh profile, readiness/guide/recruit/battle/settings/language/restart/normal quits",
+    "Separate short genuine earned-final-C6 checkpoint restart: menu630/sixcleared/Strength34/inventory0/clockadvance/normalquit; read-only original save provenance, writable fresh profile only exact saved bytes; new narrow target driver requires review before launch"
+  ],
+  "earned_checkpoints": {
+    "docs/verification/packaged-chapter6-2026-10-09/initial-campaign.save": {
+      "sha256": "4c9a0973fa90b3f75838ccb1999267be31ff8ff9b896a8c9b165ae5ac3e129f9",
+      "raw_lines": [
+        "RCAMPAIGN1",
+        "6",
+        "645",
+        "111110",
+        "6,0,0,0,0,0",
+        "45fbb0dedb4919ce"
+      ]
+    },
+    "docs/verification/wallet-blades-chapter6-2026-11-06/campaign-final.save": {
+      "sha256": "ffab0a0d890e9ddd012de5516a7ef6de6a444a7b48108a1ae0fcecd43433cfbb",
+      "raw_lines": [
+        "RCAMPAIGN1",
+        "6",
+        "630",
+        "111111",
+        "7,0,0,0,0,0",
+        "9e13d9f4b9aa101e"
+      ]
+    }
+  },
+  "long_routes_not_automatic": {
+    "reason": "Old d454 actual C6 A11CF victory and Forge/restart remain source-specific evidence; not new-source terminal acceptance. No 40-minute route unless root explicitly requests new-source chapter/economy claim or new gameplay regression warrants it",
+    "optional_c6_limits": {
+      "internal": 5280,
+      "outer": 6000,
+      "unit": 6200
+    },
+    "old_forge": "Passed d454 ArcLens+EchoCore->AstralPrism and same RW profile reset; zero paid refresh executed; not silently rerun or relabeled"
+  },
+  "earned_restart_target_driver": {
+    "path": "target/verification/polish-next-package-2026-11-06/ffab_restart_runtime.py",
+    "sha256": "478b11d93fb1c2906fffeb808d7337beca2e438a65876ae0b61bfc1e6153d20e",
+    "static_parse_only": true,
+    "runtime_verified": false,
+    "operation_budget_seconds": 180,
+    "outer_seconds": 300,
+    "source_profile_initialization": "Only exact actual ffab campaign-final.save into fresh isolated profile; no initial prefs/config/audio",
+    "previous_proof_mount": "docs/verification/wallet-blades-chapter6-2026-11-06 read-only",
+    "expected": {
+      "unlocked": 6,
+      "currency": 630,
+      "cleared": "111111",
+      "upgrades": [
+        7,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "strength": 34,
+      "equipment": 0
+    },
+    "prepared_command": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/polish-next-package-2026-11-06/earned-restart-command.json",
+    "directories_not_yet_created": [
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/polish-next-earned-restart-2026-11-06",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/polish-next-earned-profile-2026-11-06"
+    ]
+  },
+  "execution_started": true,
+  "execution_scope": "Root-authorized SDK build and offline smoke only; earned route still false"
+}

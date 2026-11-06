@@ -1,0 +1,22 @@
+{
+  "source": "docs/verification/wallet-blades-chapter6-2026-11-06/campaign-final.save",
+  "source_sha256": "ffab0a0d890e9ddd012de5516a7ef6de6a444a7b48108a1ae0fcecd43433cfbb",
+  "initial_files": {
+    "campaign.save": "ffab0a0d890e9ddd012de5516a7ef6de6a444a7b48108a1ae0fcecd43433cfbb"
+  },
+  "copied_only_campaign_save": true,
+  "no_initial_preferences": true,
+  "expected_progress": {
+    "unlocked": 6,
+    "currency": 630,
+    "cleared": "111111",
+    "upgrades": [
+      7,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

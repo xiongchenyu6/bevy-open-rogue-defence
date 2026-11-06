@@ -1,0 +1,2 @@
+PASS root independent package/tar byte audit: 889 manifest files, 890 actual files, 525 frozen inputs; runtime acceptance separate
+POLISH_NEXT_PACKAGE_ARCHIVE_VERIFIED source=0c12230d3bf25c2b1a070c80950e5388a3b7b2ec build0 smoke0 files889 inputs525; no new-source chapter-clear claim

@@ -1,0 +1,492 @@
+{
+  "scope": "New-package compatibility with exact genuinely earned final C6 bytes; no purchase/training/resource grants",
+  "package_version": {
+    "binary_sha256": "b19b938f0f058c90bca35edec95cb87f39fe47f77e9e0d14720bdda012f45d91",
+    "git_commit": "0c12230d3bf25c2b1a070c80950e5388a3b7b2ec",
+    "linux_linkage": {
+      "checked": true,
+      "interpreter": [
+        "/lib64/ld-linux-x86-64.so.2"
+      ],
+      "needed": [
+        "libwayland-client.so.0",
+        "libdl.so.2",
+        "libudev.so.1",
+        "libasound.so.2",
+        "libgcc_s.so.1",
+        "libpthread.so.0",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "nix_dependencies": [],
+      "search_paths": []
+    },
+    "profile": "release",
+    "release_package": true,
+    "target": "x86_64-unknown-linux-gnu",
+    "version": "0.1.0"
+  },
+  "source_profile": "/earned-state",
+  "previous_proof": "/previous-proof/chapter6/result.json",
+  "progress_before": {
+    "unlocked": 6,
+    "currency": 630,
+    "cleared": "111111",
+    "upgrades": [
+      7,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "save_before_sha256": "ffab0a0d890e9ddd012de5516a7ef6de6a444a7b48108a1ae0fcecd43433cfbb",
+  "previous_package_commit": "d4540c44df479041fe4ff4fdb818f8fb2f280f99",
+  "requested_seed": "0xA11CE",
+  "operation_budget_seconds": 180,
+  "completed": false,
+  "result": "INCOMPLETE",
+  "menu_shards_ocr": [
+    "630 LEGACY SHARDS",
+    120,
+    91,
+    256,
+    102
+  ],
+  "six_cleared_public_ocr": [
+    {
+      "chapter": 1,
+      "screenshot": "restart-cleared-01.png",
+      "rows": [
+        [
+          "\u2014",
+          33,
+          0,
+          109,
+          8
+        ],
+        [
+          "we ao",
+          173,
+          0,
+          304,
+          15
+        ],
+        [
+          "\u2014",
+          322,
+          0,
+          337,
+          7
+        ],
+        [
+          "CLEARED",
+          141,
+          34,
+          282,
+          62
+        ],
+        [
+          "or",
+          33,
+          0,
+          388,
+          15
+        ],
+        [
+          "\u2014\u2014\u2014,",
+          74,
+          0,
+          126,
+          6
+        ],
+        [
+          "\u4e00 \u4e00 -\u4e00 \u4e00",
+          173,
+          0,
+          268,
+          18
+        ],
+        [
+          "\u2014\u2014",
+          323,
+          0,
+          363,
+          7
+        ],
+        [
+          "Te",
+          33,
+          0,
+          388,
+          14
+        ]
+      ]
+    },
+    {
+      "chapter": 2,
+      "screenshot": "restart-cleared-02.png",
+      "rows": [
+        [
+          "\u2014",
+          30,
+          0,
+          106,
+          8
+        ],
+        [
+          "we ao",
+          170,
+          0,
+          301,
+          15
+        ],
+        [
+          "\u2014",
+          319,
+          0,
+          334,
+          7
+        ],
+        [
+          "CLEARED",
+          138,
+          34,
+          279,
+          62
+        ],
+        [
+          "re",
+          30,
+          0,
+          385,
+          15
+        ],
+        [
+          "\u2014\u2014\u2014,",
+          71,
+          0,
+          123,
+          6
+        ],
+        [
+          "\u4e00 \u4e00 -\u4e00 \u4e00",
+          170,
+          0,
+          265,
+          18
+        ],
+        [
+          "\u2014",
+          320,
+          0,
+          360,
+          7
+        ],
+        [
+          "To",
+          30,
+          0,
+          385,
+          14
+        ]
+      ]
+    },
+    {
+      "chapter": 3,
+      "screenshot": "restart-cleared-03.png",
+      "rows": [
+        [
+          "\u2014",
+          30,
+          0,
+          106,
+          8
+        ],
+        [
+          "we ao",
+          170,
+          0,
+          301,
+          15
+        ],
+        [
+          "\u2014_\u2014",
+          318,
+          0,
+          334,
+          8
+        ],
+        [
+          "CLEARED",
+          138,
+          34,
+          279,
+          62
+        ],
+        [
+          "er Hl ctl",
+          30,
+          0,
+          385,
+          15
+        ],
+        [
+          "\u2014\u2014\u2014,",
+          71,
+          0,
+          123,
+          6
+        ],
+        [
+          "\u4e00 \u4e00 -\u4e00 \u4e00",
+          170,
+          0,
+          265,
+          18
+        ],
+        [
+          "Sa",
+          30,
+          0,
+          385,
+          14
+        ]
+      ]
+    },
+    {
+      "chapter": 4,
+      "screenshot": "restart-cleared-04.png",
+      "rows": [
+        [
+          "\u2014",
+          33,
+          0,
+          109,
+          8
+        ],
+        [
+          "we ao",
+          173,
+          0,
+          304,
+          15
+        ],
+        [
+          "CLEARED",
+          141,
+          34,
+          282,
+          62
+        ],
+        [
+          "or",
+          33,
+          0,
+          388,
+          15
+        ],
+        [
+          "\u2014\u2014\u2014,",
+          74,
+          0,
+          126,
+          6
+        ],
+        [
+          "\u4e00 \u4e00 -\u4e00 \u4e00",
+          173,
+          0,
+          268,
+          18
+        ],
+        [
+          "me",
+          33,
+          0,
+          388,
+          14
+        ]
+      ]
+    },
+    {
+      "chapter": 5,
+      "screenshot": "restart-cleared-05.png",
+      "rows": [
+        [
+          "\u2014",
+          30,
+          0,
+          106,
+          8
+        ],
+        [
+          "See J",
+          170,
+          0,
+          265,
+          19
+        ],
+        [
+          "\u4eba",
+          318,
+          0,
+          385,
+          8
+        ],
+        [
+          "CLEARED",
+          138,
+          34,
+          279,
+          62
+        ],
+        [
+          "er termed lines",
+          30,
+          0,
+          385,
+          20
+        ],
+        [
+          "\u2014\u2014\u2014,",
+          71,
+          0,
+          123,
+          6
+        ],
+        [
+          "\u4e00 \u4e00 -\u4e00 \u4e00",
+          170,
+          0,
+          265,
+          18
+        ],
+        [
+          "cc",
+          30,
+          0,
+          385,
+          14
+        ]
+      ]
+    },
+    {
+      "chapter": 6,
+      "screenshot": "restart-cleared-06.png",
+      "rows": [
+        [
+          "\u2014",
+          30,
+          0,
+          106,
+          8
+        ],
+        [
+          "See J",
+          170,
+          0,
+          265,
+          19
+        ],
+        [
+          "_\u2014_\u2014_- ~",
+          317,
+          0,
+          389,
+          16
+        ],
+        [
+          "CLEARED",
+          138,
+          34,
+          279,
+          62
+        ],
+        [
+          "er ieee clio",
+          30,
+          0,
+          385,
+          20
+        ],
+        [
+          "\u2014\u2014\u2014,",
+          71,
+          0,
+          123,
+          6
+        ],
+        [
+          "\u4e00 \u4e00 -\u4e00 \u4e00",
+          170,
+          0,
+          265,
+          18
+        ],
+        [
+          "\u2014_\u2014_",
+          318,
+          0,
+          360,
+          7
+        ],
+        [
+          "Te",
+          30,
+          0,
+          385,
+          14
+        ]
+      ]
+    }
+  ],
+  "startup_observations": [
+    {
+      "screenshot": "startup-observation-00.png",
+      "guide": null,
+      "skip": null,
+      "commander": null
+    },
+    {
+      "screenshot": "startup-observation-01.png",
+      "guide": [
+        "1/4 + MOVE & DODGE",
+        520,
+        330,
+        762,
+        353
+      ],
+      "skip": [
+        "Skip",
+        476,
+        446,
+        507,
+        463
+      ],
+      "commander": null,
+      "input": "Escape"
+    },
+    {
+      "screenshot": "startup-observation-02.png",
+      "guide": null,
+      "skip": null,
+      "commander": [
+        "Click a basic commander to begin",
+        42,
+        79,
+        599,
+        117
+      ]
+    }
+  ],
+  "selected_caption_ocr": [
+    "STORM SAVANT",
+    173,
+    483,
+    295,
+    497
+  ]
+}

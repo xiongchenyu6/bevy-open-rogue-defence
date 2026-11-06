@@ -1,0 +1,14 @@
+{
+  "package_commit": "0c12230d3bf25c2b1a070c80950e5388a3b7b2ec",
+  "target_driver_source": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/polish-next-package-2026-11-06/ffab_restart_runtime-r2.py",
+  "scope": "Root-authorized R2 one observed footer request held150ms plus no-input settlement; product unchanged",
+  "files": {
+    "smoke_runtime.py": "b836e98f55fe7997112145d72250b19bf2ff67f13fe441cab5d4d1320af4f4f6",
+    "campaign_runtime.py": "76ce1daa5939dbbbdcbc0b68162f62b59ce178c14228e1cecb1c8f50684c0591",
+    "campaign_equipment_runtime.py": "674909c39cf601765e45980bc028d4efa09ffe723a732c57a219812cd135f872",
+    "forge_runtime.py": "6d6d336287e4ce33741c723940d3eff689e7211e2ce3ef7383122b114fc61e93",
+    "forge_refresh.py": "c40e9e61179f9ae55d767bd6c9f1333e7b6bced398cd292a190870e701423063",
+    "forge_restart_runtime.py": "659c983316e5c8f4f7c9e4cb3949a626277d7eb4282141743b7525a28f28d737",
+    "ffab_restart_runtime.py": "82dced7e080140ee63a63799beddd7828fc1050dce82fb7b2242c26145e0c089"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "bounds": [
+    565,
+    155,
+    765,
+    283
+  ],
+  "r2_first": {
+    "unique_rgba": 1,
+    "dominant_rgba": [
+      11,
+      18,
+      22,
+      255
+    ],
+    "dominant_pixels": 25600
+  },
+  "r3_first": {
+    "unique_rgba": 6653,
+    "dominant_pixels": 13439
+  },
+  "r3_later": {
+    "unique_rgba": 6653,
+    "dominant_pixels": 13439
+  },
+  "changed_r2_first_to_r3_later": 12161,
+  "changed_r3_first_to_r3_later": 0,
+  "actual_view_by_executing_agent": true,
+  "scope": "Pixel evidence of nonbackground content plus actual root/agent visual identification; not exact async latency"
+}
