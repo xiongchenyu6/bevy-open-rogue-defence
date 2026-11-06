@@ -1,0 +1,12 @@
+{
+  "source_commit": "d4540c44df479041fe4ff4fdb818f8fb2f280f99",
+  "binary_sha256": "7dce2d9be5a8a8d8fa9027b1adc5fc7b0f3705b6ffadf6cb8652326e0b7aec24",
+  "manifest_sha256": "6f64b92b3189b0ea49fe8502369569da186ad736a9588ff4210a9743462d9e79",
+  "files_verified": 886,
+  "tar_sha256": "5b380058e2278fee3fcbe5f3ab9226f74c3d6e293a09999bc30ea5251bbf7808",
+  "short_flow_pass": true,
+  "public_routes_authorized": false,
+  "head_unchanged": true,
+  "input_audit_before_after_identical": true,
+  "tracked_input_files": 516
+}

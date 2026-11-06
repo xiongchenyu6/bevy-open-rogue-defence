@@ -1,0 +1,2 @@
+{"stage": "launch", "harness_commit": "d4540c44df479041fe4ff4fdb818f8fb2f280f99", "package_commit": "d4540c44df479041fe4ff4fdb818f8fb2f280f99", "container": "rogue-wallet-blades-c6-nov6", "outer_budget": 6000}
+{"stage": "terminal", "exit": 0, "elapsed": 2527.891415119171}

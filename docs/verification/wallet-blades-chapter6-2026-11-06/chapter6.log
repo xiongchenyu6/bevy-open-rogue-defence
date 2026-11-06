@@ -1,0 +1,117 @@
+{"sample": 1, "wall_seconds": 4.3, "terminal": null}
+{"sample": 2, "wall_seconds": 14.2, "terminal": null}
+{"sample": 3, "wall_seconds": 24.2, "terminal": null}
+{"sample": 4, "wall_seconds": 34.2, "terminal": null}
+{"sample": 5, "wall_seconds": 44.1, "terminal": null}
+{"sample": 6, "wall_seconds": 54.1, "terminal": null}
+{"sample": 7, "wall_seconds": 64.3, "terminal": null}
+{"sample": 8, "wall_seconds": 74.3, "terminal": null}
+{"sample": 9, "wall_seconds": 84.2, "terminal": null}
+{"sample": 10, "wall_seconds": 94.4, "terminal": null}
+{"sample": 11, "wall_seconds": 104.4, "terminal": null}
+{"sample": 12, "wall_seconds": 114.3, "terminal": null}
+{"sample": 13, "wall_seconds": 124.3, "terminal": null}
+{"sample": 14, "wall_seconds": 134.6, "terminal": null}
+{"sample": 15, "wall_seconds": 144.5, "terminal": null}
+{"sample": 16, "wall_seconds": 155.4, "terminal": null}
+{"sample": 17, "wall_seconds": 165.1, "terminal": null}
+{"sample": 18, "wall_seconds": 175.0, "terminal": null}
+{"sample": 19, "wall_seconds": 184.9, "terminal": null}
+{"sample": 20, "wall_seconds": 194.7, "terminal": null}
+{"stage": "earned equipment visit", "visit": 1, "purchases": 0, "wallet": 116, "visit_budget_seconds": 180}
+{"sample": 21, "wall_seconds": 257.1, "terminal": null}
+{"sample": 22, "wall_seconds": 266.4, "terminal": null}
+{"sample": 23, "wall_seconds": 276.1, "terminal": null}
+{"sample": 24, "wall_seconds": 285.9, "terminal": null}
+{"sample": 25, "wall_seconds": 295.9, "terminal": null}
+{"sample": 26, "wall_seconds": 305.6, "terminal": null}
+{"sample": 27, "wall_seconds": 315.3, "terminal": null}
+{"stage": "earned equipment visit", "visit": 2, "purchases": 1, "wallet": 186, "visit_budget_seconds": 180}
+{"sample": 28, "wall_seconds": 417.7, "terminal": null}
+{"sample": 29, "wall_seconds": 427.2, "terminal": null}
+{"sample": 30, "wall_seconds": 437.0, "terminal": null}
+{"sample": 31, "wall_seconds": 447.2, "terminal": null}
+{"sample": 32, "wall_seconds": 456.9, "terminal": null}
+{"sample": 33, "wall_seconds": 466.9, "terminal": null}
+{"sample": 34, "wall_seconds": 476.6, "terminal": null}
+{"stage": "earned equipment visit", "visit": 3, "purchases": 2, "wallet": 260, "visit_budget_seconds": 200}
+{"sample": 35, "wall_seconds": 582.8, "terminal": null}
+{"sample": 36, "wall_seconds": 592.4, "terminal": null}
+{"sample": 37, "wall_seconds": 601.8, "terminal": null}
+{"sample": 38, "wall_seconds": 611.5, "terminal": null}
+{"sample": 39, "wall_seconds": 621.5, "terminal": null}
+{"sample": 40, "wall_seconds": 632.5, "terminal": null}
+{"sample": 41, "wall_seconds": 643.1, "terminal": null}
+{"stage": "earned equipment visit", "visit": 4, "purchases": 3, "wallet": 234, "visit_budget_seconds": 220}
+{"sample": 42, "wall_seconds": 749.9, "terminal": null}
+{"sample": 43, "wall_seconds": 759.8, "terminal": null}
+{"sample": 44, "wall_seconds": 769.6, "terminal": null}
+{"sample": 45, "wall_seconds": 779.3, "terminal": null}
+{"sample": 46, "wall_seconds": 789.0, "terminal": null}
+{"sample": 47, "wall_seconds": 799.3, "terminal": null}
+{"sample": 48, "wall_seconds": 809.5, "terminal": null}
+{"stage": "earned equipment visit", "visit": 5, "purchases": 4, "wallet": 433, "visit_budget_seconds": 240}
+{"sample": 49, "wall_seconds": 921.8, "terminal": null}
+{"sample": 50, "wall_seconds": 931.6, "terminal": null}
+{"sample": 51, "wall_seconds": 940.9, "terminal": null}
+{"sample": 52, "wall_seconds": 950.6, "terminal": null}
+{"sample": 53, "wall_seconds": 960.6, "terminal": null}
+{"sample": 54, "wall_seconds": 970.8, "terminal": null}
+{"sample": 55, "wall_seconds": 980.9, "terminal": null}
+{"stage": "earned equipment visit", "visit": 6, "purchases": 5, "wallet": 368, "visit_budget_seconds": 260}
+{"sample": 56, "wall_seconds": 1096.1, "terminal": null}
+{"sample": 57, "wall_seconds": 1107.2, "terminal": null}
+{"sample": 58, "wall_seconds": 1118.8, "terminal": null}
+{"sample": 59, "wall_seconds": 1130.5, "terminal": null}
+{"sample": 60, "wall_seconds": 1141.6, "terminal": null}
+{"sample": 61, "wall_seconds": 1153.3, "terminal": null}
+{"stage": "earned equipment visit", "visit": 7, "purchases": 6, "wallet": 503, "visit_budget_seconds": 280}
+{"sample": 62, "wall_seconds": 1285.3, "terminal": null}
+{"sample": 63, "wall_seconds": 1296.8, "terminal": null}
+{"sample": 64, "wall_seconds": 1308.3, "terminal": null}
+{"sample": 65, "wall_seconds": 1319.1, "terminal": null}
+{"sample": 66, "wall_seconds": 1330.1, "terminal": null}
+{"sample": 67, "wall_seconds": 1340.2, "terminal": null}
+{"stage": "earned equipment visit", "visit": 8, "purchases": 7, "wallet": 759, "visit_budget_seconds": 300}
+{"sample": 68, "wall_seconds": 1459.1, "terminal": null}
+{"sample": 69, "wall_seconds": 1468.8, "terminal": null}
+{"sample": 70, "wall_seconds": 1478.2, "terminal": null}
+{"sample": 71, "wall_seconds": 1488.1, "terminal": null}
+{"sample": 72, "wall_seconds": 1497.9, "terminal": null}
+{"sample": 73, "wall_seconds": 1507.6, "terminal": null}
+{"sample": 74, "wall_seconds": 1518.1, "terminal": null}
+{"stage": "earned equipment visit", "visit": 9, "purchases": 8, "wallet": 970, "visit_budget_seconds": 320}
+{"sample": 75, "wall_seconds": 1645.7, "terminal": null}
+{"sample": 76, "wall_seconds": 1655.6, "terminal": null}
+{"sample": 77, "wall_seconds": 1665.4, "terminal": null}
+{"sample": 78, "wall_seconds": 1675.8, "terminal": null}
+{"sample": 79, "wall_seconds": 1686.0, "terminal": null}
+{"sample": 80, "wall_seconds": 1696.3, "terminal": null}
+{"stage": "earned equipment visit", "visit": 10, "purchases": 9, "wallet": 1471, "visit_budget_seconds": 340}
+{"sample": 81, "wall_seconds": 1850.3, "terminal": null}
+{"sample": 82, "wall_seconds": 1861.1, "terminal": null}
+{"sample": 83, "wall_seconds": 1871.2, "terminal": null}
+{"sample": 84, "wall_seconds": 1881.0, "terminal": null}
+{"sample": 85, "wall_seconds": 1891.0, "terminal": null}
+{"sample": 86, "wall_seconds": 1900.8, "terminal": null}
+{"stage": "earned equipment visit", "visit": 11, "purchases": 10, "wallet": 1642, "visit_budget_seconds": 360}
+{"sample": 87, "wall_seconds": 2040.3, "terminal": null}
+{"sample": 88, "wall_seconds": 2050.1, "terminal": null}
+{"sample": 89, "wall_seconds": 2060.0, "terminal": null}
+{"sample": 90, "wall_seconds": 2070.7, "terminal": null}
+{"sample": 91, "wall_seconds": 2080.6, "terminal": null}
+{"sample": 92, "wall_seconds": 2090.3, "terminal": null}
+{"stage": "earned equipment visit", "visit": 12, "purchases": 11, "wallet": 2147, "visit_budget_seconds": 380}
+{"sample": 93, "wall_seconds": 2231.4, "terminal": null}
+{"sample": 94, "wall_seconds": 2241.5, "terminal": null}
+{"sample": 95, "wall_seconds": 2252.2, "terminal": null}
+{"sample": 96, "wall_seconds": 2263.0, "terminal": null}
+{"sample": 97, "wall_seconds": 2273.3, "terminal": null}
+{"sample": 98, "wall_seconds": 2283.2, "terminal": null}
+{"sample": 99, "wall_seconds": 2293.6, "terminal": null}
+{"sample": 100, "wall_seconds": 2304.4, "terminal": null}
+{"sample": 101, "wall_seconds": 2314.4, "terminal": null}
+{"sample": 102, "wall_seconds": 2324.5, "terminal": null}
+{"sample": 103, "wall_seconds": 2334.6, "terminal": null}
+{"sample": 104, "wall_seconds": 2344.9, "terminal": null}
+{"sample": 105, "wall_seconds": 2350.4, "terminal": "CHAPTER CLEARED"}
