@@ -1285,6 +1285,7 @@ fn update_orbit_blades(
             hero.translation + Vec3::new(angle.cos() * radius, 0.48, angle.sin() * radius);
         transform.rotation = Quat::from_rotation_y(session.elapsed * 11.0 + blade.slot as f32);
         transform.scale = Vec3::splat(orbit_art::scale(rank));
+        let mut contacts = Vec::new();
         for (enemy_entity, enemy_transform, enemy) in &enemies {
             if enemy.hp <= 0.0
                 || transform
@@ -1298,6 +1299,21 @@ fn update_orbit_blades(
             {
                 continue;
             }
+            contacts.push((enemy_entity, enemy_transform.translation));
+        }
+        // Bind this blade's shared critical rolls to actual contact geometry,
+        // independent of cosmetic query migration or unrelated entity allocation.
+        contacts.sort_unstable_by(|a, b| {
+            transform
+                .translation
+                .distance_squared(a.1)
+                .total_cmp(&transform.translation.distance_squared(b.1))
+                .then_with(|| a.1.z.total_cmp(&b.1.z))
+                .then_with(|| a.1.x.total_cmp(&b.1.x))
+                .then_with(|| a.1.y.total_cmp(&b.1.y))
+                .then_with(|| a.0.to_bits().cmp(&b.0.to_bits()))
+        });
+        for (enemy_entity, _) in contacts {
             runtime.orbit_hit_cooldowns.insert(enemy_entity, 1.0);
             schedule_typed_strike(
                 &mut commands,
@@ -3586,6 +3602,91 @@ pub(crate) fn test_ray_order_damage(world: &mut World) -> (usize, f32, f32) {
     let pulse = reference_skills::test_ray_order_pulse(world);
     world.run_system_once(resolve_skill_strikes).unwrap();
     pulse
+}
+
+// Test-only bridge through actual orbit art, synchronization and contacts.
+// No runtime entry point and no cast/charge bypass: Orbit6 is persistent,
+// not gated by cast_ready. Real art setup + sync determine its blade population.
+#[cfg(test)]
+pub(crate) fn test_prepare_orbit_order(app: &mut App) -> Vec<Vec3> {
+    use bevy::ecs::system::RunSystemOnce;
+    app.init_resource::<Assets<Mesh>>()
+        .init_resource::<Assets<StandardMaterial>>();
+    orbit_art::install(app);
+    app.world_mut().run_schedule(Startup);
+    let world = app.world_mut();
+    assert_eq!(world.resource::<PlayerBuild>().skills[6], 1);
+    assert!(world.resource::<HeroVitals>().can_act());
+    assert!(!world.resource::<GameSession>().paused);
+    assert!(!world.resource::<GameSession>().finished);
+    assert_eq!(world.query::<&Enemy>().iter(world).count(), 0);
+    assert!(
+        world
+            .resource::<SkillRuntime>()
+            .orbit_hit_cooldowns
+            .is_empty()
+    );
+    world.run_system_once(sync_orbit_blades).unwrap();
+    world.run_system_once(update_orbit_blades).unwrap();
+    let mut blades: Vec<_> = world
+        .query::<(&OrbitBlade, &Transform)>()
+        .iter(world)
+        .map(|(blade, t)| (blade.slot, t.translation))
+        .collect();
+    blades.sort_by_key(|(slot, _)| *slot);
+    assert_eq!(blades.len(), usize::from(orbit_blade_count(1)));
+    assert!(
+        world
+            .resource::<SkillRuntime>()
+            .orbit_hit_cooldowns
+            .is_empty()
+    );
+    blades.into_iter().map(|(_, p)| p).collect()
+}
+
+#[cfg(test)]
+pub(crate) fn test_orbit_order_contacts(world: &mut World) -> (usize, f32, Vec<(Entity, f32)>) {
+    use bevy::ecs::system::RunSystemOnce;
+    assert!(
+        world
+            .resource::<SkillRuntime>()
+            .orbit_hit_cooldowns
+            .is_empty()
+    );
+    world.run_system_once(update_orbit_blades).unwrap();
+    let strikes: Vec<_> = world.query::<&SkillStrike>().iter(world).collect();
+    assert_eq!(strikes.len(), 2);
+    assert!(
+        strikes
+            .iter()
+            .all(|s| !s.area && s.profile == DamageProfile::for_skill(6))
+    );
+    let damage = strikes[0].damage;
+    assert!(damage > 0. && strikes.iter().all(|s| s.damage == damage));
+    let mut cooldowns: Vec<_> = world
+        .resource::<SkillRuntime>()
+        .orbit_hit_cooldowns
+        .iter()
+        .map(|(e, s)| (*e, *s))
+        .collect();
+    cooldowns.sort_by_key(|(entity, _)| entity.to_bits());
+    assert_eq!(cooldowns.len(), 2);
+    assert!(cooldowns.iter().all(|(_, seconds)| *seconds == 1.));
+    let count = strikes.len();
+    drop(strikes);
+    // Real cooldown guard: another same-state production update cannot queue
+    // duplicate damage or reset the existing one-second per-target cooldown.
+    world.run_system_once(update_orbit_blades).unwrap();
+    assert_eq!(world.query::<&SkillStrike>().iter(world).count(), count);
+    assert!(
+        world
+            .resource::<SkillRuntime>()
+            .orbit_hit_cooldowns
+            .values()
+            .all(|s| *s == 1.)
+    );
+    world.run_system_once(resolve_skill_strikes).unwrap();
+    (count, damage, cooldowns)
 }
 
 #[cfg(test)]

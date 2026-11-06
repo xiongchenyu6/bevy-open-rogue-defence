@@ -1,0 +1,18 @@
+{
+  "src/game/skills.rs": {
+    "tested_sha256": "3628102c2169aaaa704312ec785d9b8cfad6cc8a44c1bb7ebfc0bf307d34b3ab",
+    "final_sha256": "e3420868b2d044bfd5fa6d99710bd82e3bc89c97794c898d67cca2fdba5cab6b",
+    "exact_comment_replacement": {
+      "old": "// DRAFT ONLY: place before skills.rs #[cfg(test)] mod tests after lane handoff.",
+      "new": "// Test-only bridge through actual orbit art, synchronization and contacts."
+    }
+  },
+  "src/game/combat/orbit_order_tests.rs": {
+    "tested_sha256": "8829af2de5b4ded79ad259a8f84a3f9e65ab44919604f1daf4621dda82867474",
+    "final_sha256": "6043d7e4cc7ae94735e9502143116d09ef55e9b4fe4a287bbeb6d73f58b0b095",
+    "exact_comment_replacement": {
+      "old": "// DRAFT ONLY: include in combat.rs existing test module after handoff.",
+      "new": "// Actual orbit contact ordering through typed strikes and pooled damage."
+    }
+  }
+}

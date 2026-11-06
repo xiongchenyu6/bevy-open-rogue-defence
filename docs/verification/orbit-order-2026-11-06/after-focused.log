@@ -1,0 +1,23 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `release` profile [optimized] target(s) in 3m 25s
+     Running unittests src/lib.rs (target/release/deps/rogue_commander-37d39db57aeef6a3)
+
+running 2 tests
+ORBIT_BLADE_ORDER reverse=false reallocate=true ids=[36v0, 37v0] rows=[36v0, 37v0] hp=[9955.2, 14921.6] damage=44.8 rng=16263334312487546840 strikes=2 cooldowns=[(37v0, 1.0), (36v0, 1.0)] blades=[Vec3(2.05, 0.48, 0.0), Vec3(-2.05, 0.48, -1.7921668e-7)]
+ORBIT_BLADE_ORDER reverse=false reallocate=false ids=[36v0, 37v0] rows=[36v0, 37v0] hp=[9955.2, 14921.6] damage=44.8 rng=16263334312487546840 strikes=2 cooldowns=[(37v0, 1.0), (36v0, 1.0)] blades=[Vec3(2.05, 0.48, 0.0), Vec3(-2.05, 0.48, -1.7921668e-7)]
+ORBIT_BLADE_ORDER reverse=true reallocate=true ids=[37v0, 36v0] rows=[36v0, 37v0] hp=[9955.2, 14921.6] damage=44.8 rng=16263334312487546840 strikes=2 cooldowns=[(37v0, 1.0), (36v0, 1.0)] blades=[Vec3(2.05, 0.48, 0.0), Vec3(-2.05, 0.48, -1.7921668e-7)]
+ORBIT_BLADE_ORDER reverse=true reallocate=false ids=[36v0, 37v0] rows=[37v0, 36v0] hp=[9955.2, 14921.6] damage=44.8 rng=16263334312487546840 strikes=2 cooldowns=[(37v0, 1.0), (36v0, 1.0)] blades=[Vec3(2.05, 0.48, 0.0), Vec3(-2.05, 0.48, -1.7921668e-7)]
+test game::combat::tests::orbit_blade_critical_assignment_follows_geometry_across_allocations ... ok
+test game::combat::tests::orbit_blade_same_ids_ignore_cosmetic_row_order ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 701 filtered out; finished in 0.01s
+

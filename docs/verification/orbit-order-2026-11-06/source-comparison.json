@@ -1,0 +1,17 @@
+{
+  "sync_orbit_blades": {
+    "identical_to_237e650": true,
+    "current_sha256": "0d9d721f5a672dcff9fcd82cd282660bdae88ec2bea486863607c9fe355eb7b5",
+    "frozen_sha256": "0d9d721f5a672dcff9fcd82cd282660bdae88ec2bea486863607c9fe355eb7b5"
+  },
+  "update_orbit_blades": {
+    "identical_to_237e650": true,
+    "current_sha256": "d8005c0055e3b12610e08bf006d58f2d2cfc61501d9fbf638782fb137270e775",
+    "frozen_sha256": "d8005c0055e3b12610e08bf006d58f2d2cfc61501d9fbf638782fb137270e775"
+  },
+  "resolve_skill_strikes": {
+    "identical_to_237e650": true,
+    "current_sha256": "f69cfb1c2d0852bfc2c63bc135dbac45c0ee7149d83184c10eb47c35f906c09d",
+    "frozen_sha256": "f69cfb1c2d0852bfc2c63bc135dbac45c0ee7149d83184c10eb47c35f906c09d"
+  }
+}

@@ -1,0 +1,56 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `release` profile [optimized] target(s) in 3m 05s
+     Running unittests src/lib.rs (target/release/deps/rogue_commander-37d39db57aeef6a3)
+
+running 2 tests
+ORBIT_BLADE_ORDER reverse=false reallocate=true ids=[36v0, 37v0] rows=[36v0, 37v0] hp=[9955.2, 14921.6] damage=44.8 rng=16263334312487546840 strikes=2 cooldowns=[(37v0, 1.0), (36v0, 1.0)] blades=[Vec3(2.05, 0.48, 0.0), Vec3(-2.05, 0.48, -1.7921668e-7)]
+ORBIT_BLADE_ORDER reverse=false reallocate=false ids=[36v0, 37v0] rows=[36v0, 37v0] hp=[9955.2, 14921.6] damage=44.8 rng=16263334312487546840 strikes=2 cooldowns=[(37v0, 1.0), (36v0, 1.0)] blades=[Vec3(2.05, 0.48, 0.0), Vec3(-2.05, 0.48, -1.7921668e-7)]
+ORBIT_BLADE_ORDER reverse=true reallocate=true ids=[37v0, 36v0] rows=[36v0, 37v0] hp=[9921.6, 14955.2] damage=44.8 rng=16263334312487546840 strikes=2 cooldowns=[(37v0, 1.0), (36v0, 1.0)] blades=[Vec3(2.05, 0.48, 0.0), Vec3(-2.05, 0.48, -1.7921668e-7)]
+ORBIT_BLADE_ORDER reverse=true reallocate=false ids=[36v0, 37v0] rows=[37v0, 36v0] hp=[9921.6, 14955.2] damage=44.8 rng=16263334312487546840 strikes=2 cooldowns=[(37v0, 1.0), (36v0, 1.0)] blades=[Vec3(2.05, 0.48, 0.0), Vec3(-2.05, 0.48, -1.7921668e-7)]
+
+thread 'game::combat::tests::orbit_blade_critical_assignment_follows_geometry_across_allocations' (3849079) panicked at src/game/combat/orbit_order_tests.rs:114:5:
+assertion `left == right` failed: unrelated Entity allocation must not decide which visible target receives the critical hit
+  left: ([9955.2, 14921.6], 16263334312487546840)
+ right: ([9921.6, 14955.2], 16263334312487546840)
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<([f32; 2], u64), ([f32; 2], u64)>
+   4: rogue_commander::game::combat::tests::orbit_blade_critical_assignment_follows_geometry_across_allocations
+   5: <rogue_commander::game::combat::tests::orbit_blade_critical_assignment_follows_geometry_across_allocations::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+thread 'game::combat::tests::orbit_blade_same_ids_ignore_cosmetic_row_order' (3849080) panicked at src/game/combat/orbit_order_tests.rs:108:5:
+assertion `left == right` failed
+  left: ([9955.2, 14921.6], 16263334312487546840)
+ right: ([9921.6, 14955.2], 16263334312487546840)
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<([f32; 2], u64), ([f32; 2], test game::combat::tests::orbit_blade_critical_assignment_follows_geometry_across_allocations ... u64FAILED)
+>
+   4: rogue_commander::game::combat::tests::orbit_blade_same_ids_ignore_cosmetic_row_order
+   5: <rogue_commander::game::combat::tests::orbit_blade_same_ids_ignore_cosmetic_row_order::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+test game::combat::tests::orbit_blade_same_ids_ignore_cosmetic_row_order ... FAILED
+
+failures:
+
+failures:
+    game::combat::tests::orbit_blade_critical_assignment_follows_geometry_across_allocations
+    game::combat::tests::orbit_blade_same_ids_ignore_cosmetic_row_order
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 701 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--lib`
