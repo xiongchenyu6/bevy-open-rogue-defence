@@ -1,7 +1,7 @@
 {
   "raw-manifest.json": "55e51142c39572a9ea27a15fb5eea980d464b619bc1dc3fab16fe7bc727e4712",
   "cases.csv": "f5fa8ae73fd25eac20b05b2974cb3ac3c24d92bfe2d6623fbc2d51d80c656a78",
-  ".gitattributes": "363fa0f50951adf714608432693c860a74657e73ceabdccfcce69db1db10266a",
+  ".gitattributes": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
   "README.md": "64aa0e2d55f8bcff28d91d71ccffe773ee0109a9cf1ad0f203d8c0bd58efd3fe",
   "verify.py": "fae9b4cdf6ded9c1c0b0b712afee3892ecff141385561ac201101165757cfdaa",
   "results.json": "489b6794730f38bc61a2725cb43b31f5b823965813173e6d379b55282193c10e",
