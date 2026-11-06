@@ -1,0 +1,7 @@
+STAGE clippy begin
+STAGE clippy terminal 0
+STAGE full-tests begin
+STAGE full-tests terminal 0
+STAGE capture-build begin
+STAGE capture-build terminal 0
+COMBINED_SOURCE_CHECKS_PASS; native production/input/layout acceptance still required

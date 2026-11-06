@@ -1,0 +1,93 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {0, 8, 9, 10, 11, 12, 14, 18, 60, 89, 90, 119, 120, 121, 122, 149, 150, 152, 165, 179}; all 180 simulation/render updates retained
+CAPTURE_ASSET_ROOT /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/isolated-assets
+[2m2026-11-06T07:10:26.059995Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-06T07:10:26.128776Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-06T07:10:26.872141Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-06T07:10:26.872317Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-06T07:10:27.569962Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[2m2026-11-06T07:10:31.365748Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00000.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00000.png (943188 bytes)
+[capture] volley-shake frame=10 trauma=0.000000000 offset=Vec3(0.00064444816, 0.00023880621, -0.00023880621)
+[capture] PASS 100 critical contacts use one camera impulse
+[capture] synthetic-hit-time frame=10 requested_speed=8 actual_speed=8.000000000 real_delta=0.033333331 remaining=0.000000000 cooldown=0.000000000
+[capture] impact frame=10 scale=Vec3(1.7733831, 1.1582712, 1.7733831) punch=Some(HitPunch { elapsed: 0.024, presented: true, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.6 })
+[2m2026-11-06T07:10:32.054432Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00008.png
+[capture] saved 2/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00008.png (941144 bytes)
+[capture] synthetic-hit-time frame=11 requested_speed=8 actual_speed=8.000000000 real_delta=0.033333331 remaining=0.000000000 cooldown=0.000000000
+[2m2026-11-06T07:10:32.509539Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00009.png
+[capture] saved 3/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00009.png (937569 bytes)
+[capture] volley-shake frame=12 trauma=0.000000000 offset=Vec3(-0.0, -0.0, 0.0)
+[capture] synthetic-hit-time frame=12 requested_speed=8 actual_speed=8.000000000 real_delta=0.033333331 remaining=0.000000000 cooldown=0.000000000
+[capture] impact frame=12 scale=Vec3(1.458003, 1.5524962, 1.458003) punch=Some(HitPunch { elapsed: 0.09066667, presented: true, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.6 })
+[2m2026-11-06T07:10:32.956150Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00010.png
+[capture] saved 4/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00010.png (937009 bytes)
+[2m2026-11-06T07:10:33.407821Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00011.png
+[capture] saved 5/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00011.png (937328 bytes)
+[capture] synthetic-hit-time frame=14 requested_speed=8 actual_speed=8.000000000 real_delta=0.033333331 remaining=0.000000000 cooldown=0.000000000
+[capture] impact frame=14 scale=Vec3(1.6708643, 1.2864194, 1.6708643) punch=Some(HitPunch { elapsed: 0.024, presented: true, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.0 })
+[2m2026-11-06T07:10:33.853220Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00012.png
+[capture] saved 6/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00012.png (941372 bytes)
+[2m2026-11-06T07:10:34.320609Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00014.png
+[capture] saved 7/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00014.png (937486 bytes)
+[capture] synthetic-hit-time frame=18 requested_speed=8 actual_speed=8.000000000 real_delta=0.033333331 remaining=0.000000000 cooldown=0.000000000
+[capture] impact frame=18 scale=Vec3(1.6708643, 1.2864194, 1.6708643) punch=Some(HitPunch { elapsed: 0.024, presented: true, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.0 })
+[2m2026-11-06T07:10:34.849112Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00018.png
+[capture] saved 8/8 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00018.png (937583 bytes)
+[capture] synthetic-hit-time frame=46 requested_speed=8 actual_speed=8.000000000 real_delta=0.033333331 remaining=0.000000000 cooldown=0.000000000
+[capture] impact frame=46 scale=Vec3(1.5, 1.5, 1.5) punch=None
+[capture] synthetic-hit-time frame=60 requested_speed=8 actual_speed=8.000000000 real_delta=0.033333331 remaining=0.000000000 cooldown=0.000000000
+[capture] impact frame=60 scale=Vec3(1.5, 1.5, 1.5) punch=None
+[capture] PASS dense-hit impact peak and exact production recovery
+[2m2026-11-06T07:10:36.587482Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00060.png
+[capture] saved 9/9 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00060.png (940835 bytes)
+[capture] synthetic-hit-time frame=90 requested_speed=8 actual_speed=8.000000000 real_delta=0.033333331 remaining=0.000000000 cooldown=0.000000000
+[capture] impact frame=90 scale=Vec3(1.6708643, 1.2864194, 1.6708643) punch=Some(HitPunch { elapsed: 0.024, presented: true, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.0 })
+[capture] PASS ordinary contact does not inherit critical strength
+[2m2026-11-06T07:10:37.874419Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00089.png
+[capture] saved 10/11 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00089.png (937286 bytes)
+[capture] synthetic-hit-time frame=92 requested_speed=8 actual_speed=8.000000000 real_delta=0.033333331 remaining=0.000000000 cooldown=0.000000000
+[capture] impact frame=92 scale=Vec3(1.4737519, 1.53281, 1.4737519) punch=Some(HitPunch { elapsed: 0.09066667, presented: true, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.0 })
+[2m2026-11-06T07:10:38.327891Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00090.png
+[capture] saved 11/11 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00090.png (937708 bytes)
+[capture] volley-shake frame=120 trauma=0.000000000 offset=Vec3(-0.0005928771, 0.00037046341, -0.0003704634)
+[capture] PASS 100 critical contacts use one camera impulse
+[capture] synthetic-hit-time frame=120 requested_speed=8 actual_speed=8.000000000 real_delta=0.033333331 remaining=0.000000000 cooldown=0.000000000
+[capture] impact frame=120 scale=Vec3(1.7733831, 1.1582712, 1.7733831) punch=Some(HitPunch { elapsed: 0.024, presented: true, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.6 })
+[capture] synthetic-hit-time frame=121 requested_speed=8 actual_speed=8.000000000 real_delta=0.033333331 remaining=0.000000000 cooldown=0.000000000
+[2m2026-11-06T07:10:39.668765Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00119.png
+[capture] saved 12/14 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00119.png (937366 bytes)
+[capture] synthetic-hit-time frame=122 requested_speed=8 actual_speed=8.000000000 real_delta=0.033333331 remaining=0.000000000 cooldown=0.000000000
+[capture] impact frame=122 scale=Vec3(1.458003, 1.5524962, 1.458003) punch=Some(HitPunch { elapsed: 0.09066667, presented: true, base_scale: Vec3(1.5, 1.5, 1.5), strength: 1.6 })
+[2m2026-11-06T07:10:40.115606Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00120.png
+[capture] saved 13/15 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00120.png (937291 bytes)
+[2m2026-11-06T07:10:40.562046Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00121.png
+[capture] saved 14/15 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00121.png (937272 bytes)
+[2m2026-11-06T07:10:41.005566Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00122.png
+[capture] saved 15/15 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00122.png (940744 bytes)
+[capture] volley-shake frame=150 trauma=0.370000005 offset=Vec3(0.021967553, -0.0059966953, 0.005996695)
+[capture] synthetic-hit-time frame=150 requested_speed=8 actual_speed=8.000000000 real_delta=0.033333331 remaining=0.000000000 cooldown=0.000000000
+[capture] impact frame=150 scale=Vec3(1.5, 1.5, 1.5) punch=None
+[2m2026-11-06T07:10:42.301822Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00149.png
+[capture] saved 16/17 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00149.png (942348 bytes)
+[capture] volley-shake frame=152 trauma=0.210000023 offset=Vec3(0.01607752, 0.009756128, -0.009756127)
+[capture] synthetic-hit-time frame=152 requested_speed=8 actual_speed=8.000000000 real_delta=0.033333331 remaining=0.000000000 cooldown=0.000000000
+[capture] impact frame=152 scale=Vec3(1.5, 1.5, 1.5) punch=None
+[2m2026-11-06T07:10:42.754602Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00150.png
+[capture] saved 17/18 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00150.png (941131 bytes)
+[2m2026-11-06T07:10:43.263266Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00152.png
+[capture] saved 18/18 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00152.png (941443 bytes)
+[capture] volley-shake frame=165 trauma=0.000000000 offset=Vec3(0.0, -0.0, 0.0)
+[capture] synthetic-hit-time frame=165 requested_speed=8 actual_speed=8.000000000 real_delta=0.033333331 remaining=0.000000000 cooldown=0.000000000
+[capture] impact frame=165 scale=Vec3(1.5, 1.5, 1.5) punch=None
+[capture] PASS heavy-kill sequence leaves requested 8x battle speed
+[2m2026-11-06T07:10:44.085234Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00165.png
+[capture] saved 19/19 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00165.png (940916 bytes)
+[2m2026-11-06T07:10:44.948001Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00179.png
+[capture] saved 20/20 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames/frame00179.png (940546 bytes)
+[capture] all 20 screenshot(s) saved after 2 wait frame(s)
+[capture] PASS material finish: 69 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 180 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames

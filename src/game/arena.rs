@@ -5,6 +5,9 @@ use bevy::{
     prelude::*,
 };
 
+mod camera;
+pub use camera::BattleCamera;
+
 use super::environment::spawn_gate_art;
 use super::gate_feedback::GateArt;
 use super::{ArenaEntity, CaptureTarget, Core, GameAssets, Hero, HeroVisual};
@@ -13,7 +16,12 @@ pub struct ArenaPlugin;
 
 impl Plugin for ArenaPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup_arena);
+        app.add_systems(Startup, setup_arena).add_systems(
+            Update,
+            camera::update_battle_camera
+                .after(super::combat::CombatSet)
+                .before(super::hit_feedback::HitFeedbackSet),
+        );
     }
 }
 
@@ -381,15 +389,15 @@ fn setup_arena(
 
     let camera_projection = Projection::from(OrthographicProjection {
         scaling_mode: ScalingMode::FixedVertical {
-            viewport_height: 22.0,
+            viewport_height: 28.0,
         },
         ..OrthographicProjection::default_3d()
     });
-    let camera_transform =
-        Transform::from_xyz(8.0, 24.0, 21.0).looking_at(Vec3::new(0.0, 0.0, 0.0), Vec3::Y);
+    let camera_transform = camera::initial_transform();
     if let Some(target) = capture_target {
         commands.spawn((
             Camera3d::default(),
+            BattleCamera::default(),
             combat_bloom(),
             Tonemapping::TonyMcMapface,
             bevy::camera::RenderTarget::Image(target.0.clone().into()),
@@ -400,6 +408,7 @@ fn setup_arena(
     } else {
         commands.spawn((
             Camera3d::default(),
+            BattleCamera::default(),
             combat_bloom(),
             Tonemapping::TonyMcMapface,
             camera_projection,

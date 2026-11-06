@@ -1,0 +1,30 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {0, 29, 60, 90, 180, 295, 319}; all 320 simulation/render updates retained
+CAPTURE_ASSET_ROOT /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/isolated-assets
+[2m2026-11-06T07:07:59.333510Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-06T07:07:59.402164Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-06T07:08:00.132999Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-06T07:08:00.133230Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-06T07:08:00.861151Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[2m2026-11-06T07:08:04.154251Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames/frame00000.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames/frame00000.png (388294 bytes)
+[capture] PASS demon cave quiet: actual authored WorldAsset imported, meshes=1, original root pose retained, legacy procedural nodes absent
+[2m2026-11-06T07:08:05.109811Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames/frame00029.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames/frame00029.png (387995 bytes)
+[2m2026-11-06T07:08:06.357258Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames/frame00060.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames/frame00060.png (388436 bytes)
+[2m2026-11-06T07:08:07.369237Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames/frame00090.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames/frame00090.png (388461 bytes)
+[2m2026-11-06T07:08:10.306492Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames/frame00180.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames/frame00180.png (388949 bytes)
+[capture] PASS demon-cave: authored production cavern, real wave enemies and actual emergence pulse, legacy geometry absent
+[2m2026-11-06T07:08:14.011237Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames/frame00295.png
+[capture] saved 6/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames/frame00295.png (389484 bytes)
+[2m2026-11-06T07:08:14.941625Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames/frame00319.png
+[capture] saved 7/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames/frame00319.png (389533 bytes)
+[capture] all 7 screenshot(s) saved after 2 wait frame(s)
+[capture] PASS material finish: 69 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 320 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames

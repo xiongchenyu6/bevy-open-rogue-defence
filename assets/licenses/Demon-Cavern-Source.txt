@@ -1,0 +1,7 @@
+LowPoly Cave Entrance
+Original mesh: OrbitStudios / Fernando Ferreira; submitted by zisongbr.
+Original asset page: https://opengameart.org/content/lowpoly-cave-entrance
+Source mesh license: Creative Commons Zero 1.0 (CC0-1.0), as declared by the source asset page.
+License reference: https://creativecommons.org/publicdomain/zero/1.0/
+
+This runtime mesh retains the original474 triangles with project-specific global transforms, dark rear backing and a new embedded UV material. The slate texture is original project-generated material, not an imported third-party texture and not claimed to be CC0. Its generation provenance and the original source archive/license evidence are retained in the repository verification record. Exact input/output hashes and transformations are listed in demon-cavern-source.json.

@@ -1,0 +1,42 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {0, 29, 58, 89, 118, 149, 178, 209, 238, 259}; all 260 simulation/render updates retained
+CAPTURE_ASSET_ROOT /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/isolated-assets
+[2m2026-11-06T07:07:45.098430Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-06T07:07:45.183769Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-06T07:07:45.935840Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-06T07:07:45.936116Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-06T07:07:46.687544Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] CAMERA_TOUCH frame=0 phase=Started
+[capture] CAMERA_TOUCH frame=1 phase=Ended
+[2m2026-11-06T07:07:49.947819Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00000.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00000.png (277342 bytes)
+[2m2026-11-06T07:07:51.008240Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00029.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00029.png (272140 bytes)
+[capture] CAMERA_INPUT_MODE actual=Touch
+[capture] CAMERA_CORNER frame=59 world=Vec3(-10.0, 1.2, -12.0) actual_pixel=Vec2(286.68997, 219.0) viewport=Vec2(667.0, 375.0)
+[2m2026-11-06T07:07:51.953532Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00058.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00058.png (272328 bytes)
+[2m2026-11-06T07:07:52.997702Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00089.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00089.png (293359 bytes)
+[capture] CAMERA_CORNER frame=119 world=Vec3(10.0, 1.2, -12.0) actual_pixel=Vec2(286.69003, 124.99999) viewport=Vec2(667.0, 375.0)
+[2m2026-11-06T07:07:53.959686Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00118.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00118.png (293391 bytes)
+[2m2026-11-06T07:07:54.964862Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00149.png
+[capture] saved 6/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00149.png (298870 bytes)
+[capture] CAMERA_CORNER frame=179 world=Vec3(10.0, 1.2, 12.0) actual_pixel=Vec2(512.7583, 203.11465) viewport=Vec2(667.0, 375.0)
+[2m2026-11-06T07:07:56.002085Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00178.png
+[capture] saved 7/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00178.png (299033 bytes)
+[2m2026-11-06T07:07:57.029732Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00209.png
+[capture] saved 8/8 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00209.png (264343 bytes)
+[capture] CAMERA_CORNER frame=239 world=Vec3(-10.0, 1.2, 12.0) actual_pixel=Vec2(409.73627, 219.00005) viewport=Vec2(667.0, 375.0)
+[capture] PASS camera-framing: four legal corners remain onscreen; inspect pixels for HUD/model occlusion; controlled poses only
+[2m2026-11-06T07:07:57.969419Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00238.png
+[capture] saved 9/9 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00238.png (264518 bytes)
+[2m2026-11-06T07:07:58.741118Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00259.png
+[capture] saved 10/10 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames/frame00259.png (264248 bytes)
+[capture] all 10 screenshot(s) saved after 2 wait frame(s)
+[capture] PASS material finish: 69 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 260 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames

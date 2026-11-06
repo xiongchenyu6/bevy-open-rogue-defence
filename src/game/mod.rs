@@ -92,6 +92,7 @@ mod waves;
 mod tests;
 
 pub use archive::{ArchiveOutcome, ArchiveState};
+pub use arena::BattleCamera;
 pub use audio_mix::{AudioChannel, AudioPreferences, AudioSaveStatus, AudioVoice};
 pub use bosses::{BossDangerShape, BossPhaseCue, BossTelegraph};
 pub use campaign::{CHAPTER_COUNT, CampaignRun, RunRequest, chapter};

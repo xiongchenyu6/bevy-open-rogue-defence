@@ -94,6 +94,36 @@ pub fn hud_metrics(width: f32, height: f32) -> HudMetrics {
     }
 }
 
+/// Narrow battle toolbar: two touch-sized columns beside the primary status rail.
+#[derive(Clone, Copy, Debug)]
+pub(crate) struct PortraitToolbar {
+    pub left_right: f32,
+    pub right_right: f32,
+}
+impl PortraitToolbar {
+    #[cfg(test)]
+    pub fn rect(self, width: f32, left_column: bool, top: f32, height: f32) -> Rect {
+        let right = if left_column {
+            self.left_right
+        } else {
+            self.right_right
+        };
+        Rect::from_corners(
+            Vec2::new(width - right - 44.0, top),
+            Vec2::new(width - right, top + height),
+        )
+    }
+}
+pub(crate) fn portrait_toolbar(width: f32, height: f32) -> Option<PortraitToolbar> {
+    (width < 560.0 && height > width).then(|| {
+        let right = hud_metrics(width, height).safe_x;
+        PortraitToolbar {
+            left_right: right + 52.0,
+            right_right: right,
+        }
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

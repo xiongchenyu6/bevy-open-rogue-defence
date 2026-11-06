@@ -1,0 +1,380 @@
+[
+  {
+    "case": "en-desktop-demon-cave",
+    "size": "1280x720",
+    "language": "en",
+    "scenario": "demon-cave",
+    "frames": 320,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-demon-cave/frames",
+      "320",
+      "demon-cave",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "seconds": 19.104896390985232
+  },
+  {
+    "case": "en-desktop-den-preview",
+    "size": "1280x720",
+    "language": "en",
+    "scenario": "den-preview",
+    "frames": 400,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-den-preview/frames",
+      "400",
+      "den-preview",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "seconds": 20.908595226996113
+  },
+  {
+    "case": "en-desktop-camera-framing",
+    "size": "1280x720",
+    "language": "en",
+    "scenario": "camera-framing",
+    "frames": 260,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-camera-framing/frames",
+      "260",
+      "camera-framing",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "seconds": 17.102423036005348
+  },
+  {
+    "case": "en-desktop-camera-framing-touch",
+    "size": "1280x720",
+    "language": "en",
+    "scenario": "camera-framing-touch",
+    "frames": 260,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-camera-framing-touch/frames",
+      "260",
+      "camera-framing-touch",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "seconds": 17.2510789539665
+  },
+  {
+    "case": "zh-compact-demon-cave",
+    "size": "667x375",
+    "language": "zh-CN",
+    "scenario": "demon-cave",
+    "frames": 320,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-demon-cave/frames",
+      "320",
+      "demon-cave",
+      "0xA11CE",
+      "667x375"
+    ],
+    "exit": 0,
+    "seconds": 15.79727807897143
+  },
+  {
+    "case": "zh-compact-den-preview",
+    "size": "667x375",
+    "language": "zh-CN",
+    "scenario": "den-preview",
+    "frames": 400,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-den-preview/frames",
+      "400",
+      "den-preview",
+      "0xA11CE",
+      "667x375"
+    ],
+    "exit": 0,
+    "seconds": 18.103135533980094
+  },
+  {
+    "case": "zh-compact-camera-framing",
+    "size": "667x375",
+    "language": "zh-CN",
+    "scenario": "camera-framing",
+    "frames": 260,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing/frames",
+      "260",
+      "camera-framing",
+      "0xA11CE",
+      "667x375"
+    ],
+    "exit": 0,
+    "seconds": 13.794094046985265
+  },
+  {
+    "case": "zh-compact-camera-framing-touch",
+    "size": "667x375",
+    "language": "zh-CN",
+    "scenario": "camera-framing-touch",
+    "frames": 260,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-compact-camera-framing-touch/frames",
+      "260",
+      "camera-framing-touch",
+      "0xA11CE",
+      "667x375"
+    ],
+    "exit": 0,
+    "seconds": 14.145659217028879
+  },
+  {
+    "case": "en-portrait-demon-cave",
+    "size": "390x844",
+    "language": "en",
+    "scenario": "demon-cave",
+    "frames": 320,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-demon-cave/frames",
+      "320",
+      "demon-cave",
+      "0xA11CE",
+      "390x844"
+    ],
+    "exit": 0,
+    "seconds": 16.15018975903513
+  },
+  {
+    "case": "en-portrait-den-preview",
+    "size": "390x844",
+    "language": "en",
+    "scenario": "den-preview",
+    "frames": 400,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-den-preview/frames",
+      "400",
+      "den-preview",
+      "0xA11CE",
+      "390x844"
+    ],
+    "exit": 0,
+    "seconds": 19.30653349601198
+  },
+  {
+    "case": "en-portrait-camera-framing",
+    "size": "390x844",
+    "language": "en",
+    "scenario": "camera-framing",
+    "frames": 260,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-camera-framing/frames",
+      "260",
+      "camera-framing",
+      "0xA11CE",
+      "390x844"
+    ],
+    "exit": 0,
+    "seconds": 14.495022332994267
+  },
+  {
+    "case": "en-portrait-camera-framing-touch",
+    "size": "390x844",
+    "language": "en",
+    "scenario": "camera-framing-touch",
+    "frames": 260,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-portrait-camera-framing-touch/frames",
+      "260",
+      "camera-framing-touch",
+      "0xA11CE",
+      "390x844"
+    ],
+    "exit": 0,
+    "seconds": 14.546364101988729
+  },
+  {
+    "case": "zh-phone-demon-cave",
+    "size": "375x667",
+    "language": "zh-CN",
+    "scenario": "demon-cave",
+    "frames": 320,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-phone-demon-cave/frames",
+      "320",
+      "demon-cave",
+      "0xA11CE",
+      "375x667"
+    ],
+    "exit": 0,
+    "seconds": 15.698044442979153
+  },
+  {
+    "case": "zh-phone-den-preview",
+    "size": "375x667",
+    "language": "zh-CN",
+    "scenario": "den-preview",
+    "frames": 400,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-phone-den-preview/frames",
+      "400",
+      "den-preview",
+      "0xA11CE",
+      "375x667"
+    ],
+    "exit": 0,
+    "seconds": 18.304754648997914
+  },
+  {
+    "case": "zh-phone-camera-framing",
+    "size": "375x667",
+    "language": "zh-CN",
+    "scenario": "camera-framing",
+    "frames": 260,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-phone-camera-framing/frames",
+      "260",
+      "camera-framing",
+      "0xA11CE",
+      "375x667"
+    ],
+    "exit": 0,
+    "seconds": 14.195675985945854
+  },
+  {
+    "case": "zh-phone-camera-framing-touch",
+    "size": "375x667",
+    "language": "zh-CN",
+    "scenario": "camera-framing-touch",
+    "frames": 260,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/zh-phone-camera-framing-touch/frames",
+      "260",
+      "camera-framing-touch",
+      "0xA11CE",
+      "375x667"
+    ],
+    "exit": 0,
+    "seconds": 14.14400322700385
+  },
+  {
+    "case": "en-desktop-hit-feedback",
+    "size": "1280x720",
+    "language": "en",
+    "scenario": "hit-feedback",
+    "frames": 180,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback/frames",
+      "180",
+      "hit-feedback",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "seconds": 19.15532360097859
+  },
+  {
+    "case": "en-desktop-hit-feedback-8x",
+    "size": "1280x720",
+    "language": "en",
+    "scenario": "hit-feedback-8x",
+    "frames": 180,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cave-adoption-r6-native-2026-11-06/en-desktop-hit-feedback-8x/frames",
+      "180",
+      "hit-feedback-8x",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "seconds": 19.459614047023933
+  }
+]

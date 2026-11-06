@@ -1,0 +1,27 @@
+{
+  "technical_result": "16 cases, 4960 updates, all process/assertion checks passed",
+  "visual_result": "rejected pending touch footer and camera correction",
+  "reviewed": [
+    {
+      "image": "zh-phone-demon-cave/frames/frame00295.png",
+      "finding": "portrait toolbar no longer overlaps primary HP and avatar"
+    },
+    {
+      "image": "zh-phone-camera-framing-touch/frames/frame00118.png",
+      "finding": "joystick squashed by flex layout; knob positioned outside"
+    },
+    {
+      "image": "zh-phone-camera-framing-touch/frames/frame00238.png",
+      "finding": "hero feet partly behind dodge control"
+    },
+    {
+      "image": "zh-compact-camera-framing-touch/frames/frame00238.png",
+      "finding": "hero covered by XP and skill controls"
+    },
+    {
+      "image": "en-desktop-camera-framing-touch/frames/frame00238.png",
+      "finding": "wide touch hero clear; avoid global footer exclusion"
+    }
+  ],
+  "scope": "controlled native fixtures, not physical input or standalone package acceptance"
+}

@@ -1042,6 +1042,7 @@ struct MarketTooltipText;
 #[derive(Clone, Copy, Debug, PartialEq)]
 struct MarketLayout {
     compact: bool,
+    portrait: bool,
     safe_x: f32,
     safe_y: f32,
     toggle_right: f32,
@@ -1051,9 +1052,20 @@ struct MarketLayout {
 
 fn market_layout(width: f32, height: f32) -> MarketLayout {
     let metrics = hud_metrics(width, height);
-    if metrics.compact {
+    if let Some(toolbar) = super::mobile_layout::portrait_toolbar(width, height) {
         MarketLayout {
             compact: true,
+            portrait: true,
+            safe_x: metrics.safe_x,
+            safe_y: metrics.safe_y,
+            toggle_right: toolbar.right_right,
+            toggle_width: 44.0,
+            toggle_height: 44.0,
+        }
+    } else if metrics.compact {
+        MarketLayout {
+            compact: true,
+            portrait: false,
             safe_x: metrics.safe_x,
             safe_y: metrics.safe_y,
             toggle_right: metrics.safe_x + 164.0,
@@ -1063,12 +1075,40 @@ fn market_layout(width: f32, height: f32) -> MarketLayout {
     } else {
         MarketLayout {
             compact: false,
+            portrait: false,
             safe_x: 18.0,
             safe_y: 18.0,
             toggle_right: 18.0,
             toggle_width: 96.0,
             toggle_height: 48.0,
         }
+    }
+}
+
+#[test]
+fn portrait_market_entry_fits_second_toolbar_column() {
+    for (width, height) in [(390., 844.), (375., 667.)] {
+        let layout = market_layout(width, height);
+        let toolbar = super::mobile_layout::portrait_toolbar(width, height).unwrap();
+        assert!(layout.portrait);
+        assert_eq!(
+            (
+                layout.toggle_right,
+                layout.toggle_width,
+                layout.toggle_height
+            ),
+            (toolbar.right_right, 44., 44.)
+        );
+        let rect = toolbar.rect(width, false, 176., 44.);
+        let primary_right = hud_metrics(width, height).safe_x + 220.;
+        assert!(rect.min.x > primary_right);
+        assert!(
+            rect.intersect(toolbar.rect(width, true, 124., 140.))
+                .is_empty()
+        );
+    }
+    for (width, height) in [(667., 375.), (1280., 720.)] {
+        assert!(!market_layout(width, height).portrait);
     }
 }
 
@@ -1775,7 +1815,9 @@ fn update_market_ui(
         label
             .reborrow()
             .map_unchanged(|value| &mut value.0)
-            .set_if_neq(if session.elapsed < MARKET_UNLOCK_AT {
+            .set_if_neq(if layout.portrait {
+                String::new()
+            } else if session.elapsed < MARKET_UNLOCK_AT {
                 let remaining = (MARKET_UNLOCK_AT - session.elapsed).ceil() as u32;
                 format!("{:02}:{:02}", remaining / 60, remaining % 60)
             } else if state.open {

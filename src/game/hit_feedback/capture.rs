@@ -59,6 +59,17 @@ pub fn install(app: &mut bevy::app::SubApp, speed: f32) {
     {
         transform.translation = Vec3::new(-3.0, 0.0, 0.0);
     }
+    // This diagnostic deliberately owns a fixed 9m close-up. Responsive
+    // production framing must not overwrite it on the next Update.
+    let production_cameras: Vec<_> = world
+        .query_filtered::<Entity, With<crate::game::BattleCamera>>()
+        .iter(world)
+        .collect();
+    for camera in production_cameras {
+        world
+            .entity_mut(camera)
+            .remove::<crate::game::BattleCamera>();
+    }
     let center = Vec3::new(0.0, 0.7, 0.0);
     for (mut transform, mut projection) in world
         .query_filtered::<(&mut Transform, &mut Projection), With<Camera3d>>()
@@ -219,6 +230,37 @@ fn observe(world: &mut World) {
                 "critical impulse must reach the rendered camera"
             );
             println!("[capture] PASS 100 critical contacts use one camera impulse");
+        }
+    }
+    if matches!(
+        frame,
+        10 | 11 | 12 | 14 | 18 | 46 | 60 | 90 | 92 | 120 | 121 | 122 | 150 | 152 | 165
+    ) {
+        let expected = p.speed;
+        let speed = world.resource::<Time<Virtual>>().relative_speed();
+        let stop = world.resource::<HitStop>();
+        println!(
+            "[capture] synthetic-hit-time frame={frame} requested_speed={expected} actual_speed={speed:.9} real_delta={:.9} remaining={:.9} cooldown={:.9}",
+            world.resource::<Time<Real>>().delta_secs(),
+            stop.remaining,
+            stop.cooldown
+        );
+        if matches!(frame, 10 | 120) {
+            if expected == 1. {
+                assert_eq!(
+                    speed, HIT_STOP_TIME_SCALE,
+                    "surviving critical requests one short stop"
+                );
+                assert!(stop.remaining > 0. && stop.remaining < 0.04);
+            } else {
+                assert_eq!(speed, 8., "fast-forward critical must not slow the battle");
+            }
+        }
+        if matches!(frame, 12 | 14 | 60 | 90 | 92 | 122 | 165) {
+            assert_eq!(
+                speed, expected,
+                "short critical stop recovers; ordinary90 never stops"
+            );
         }
     }
     let scale = world.get::<Transform>(target).unwrap().scale;

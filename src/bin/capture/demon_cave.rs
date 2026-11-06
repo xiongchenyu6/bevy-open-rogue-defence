@@ -1,14 +1,15 @@
 //! Production-camera proof of the demon entrance, quiet and during real waves.
 use bevy::prelude::*;
 use rogue_commander::game::{
-    ActiveSkill, AttackClock, Autoplay, CampaignMenu, Enemy, EnemyArchetype, GameAssets,
-    GameSession, PlayerBuild, SelectedHero, SpawnDirector,
+    ActiveSkill, AttackClock, Autoplay, BattleCamera, CampaignMenu, Enemy, EnemyArchetype,
+    GameAssets, GameSession, PlayerBuild, SelectedHero, SpawnDirector,
 };
 #[derive(Resource, Default)]
 struct CaveCapture {
     frame: u32,
     saw_enemy: bool,
     saw_pulse: bool,
+    saw_authored: bool,
 }
 pub fn configure(world: &mut World) {
     world.remove_resource::<Autoplay>();
@@ -29,42 +30,83 @@ pub fn install(app: &mut bevy::app::SubApp) {
     app.init_resource::<CaveCapture>()
         .add_systems(PreUpdate, exercise);
 }
-fn exercise(
-    mut state: ResMut<CaveCapture>,
-    mut director: ResMut<SpawnDirector>,
-    enemies: Query<(&Enemy, &Transform)>,
-    names: Query<&Name>,
-) {
+fn exercise(world: &mut World) {
+    let mut state = world.remove_resource::<CaveCapture>().unwrap();
     state.frame += 1;
     let frame = state.frame;
-    state.saw_enemy |= enemies
-        .iter()
+    let enemy_count = world.query::<(&Enemy, &Transform)>().iter(world).count();
+    state.saw_enemy |= world
+        .query::<(&Enemy, &Transform)>()
+        .iter(world)
         .any(|(enemy, transform)| enemy.hp > 0. && transform.translation.x > 10.);
-    state.saw_pulse |= names
+    let labels: Vec<_> = world
+        .query::<&Name>()
+        .iter(world)
+        .map(|name| name.as_str().to_owned())
+        .collect();
+    state.saw_pulse |= labels
         .iter()
-        .any(|name| name.as_str() == "Demon den emergence pulse");
-    if frame == 30 {
-        assert!(
-            enemies.is_empty(),
-            "quiet entrance scene has no hand-spawned or real enemies"
-        );
-        let count = |label: &str| names.iter().filter(|name| name.as_str() == label).count();
+        .any(|name| name == "Demon den emergence pulse");
+    let den: Vec<_> = world
+        .query::<(Entity, &Name, &WorldAssetRoot, &Transform)>()
+        .iter(world)
+        .filter(|(_, name, _, _)| name.as_str() == "Demon den")
+        .map(|(entity, _, scene, pose)| (entity, scene.0.clone(), *pose))
+        .collect();
+    assert_eq!(den.len(), 1, "one actual authored production den root");
+    let (root, scene, pose) = &den[0];
+    let path = world
+        .resource::<AssetServer>()
+        .get_path(scene.id())
+        .unwrap();
+    assert_eq!(
+        path.to_string(),
+        "models/environment_demon_cavern.glb#Scene0"
+    );
+    assert_eq!(
+        *pose,
+        Transform::from_xyz(15.65, 0., 0.).with_rotation(Quat::from_rotation_y(-0.55))
+    );
+    let loaded = world
+        .resource::<AssetServer>()
+        .is_loaded_with_dependencies(scene.id());
+    let imported_meshes = descendants(world, *root)
+        .into_iter()
+        .filter(|entity| world.get::<Mesh3d>(*entity).is_some())
+        .count();
+    if frame >= 30 && !state.saw_authored {
         assert_eq!(
-            count("Demon den mouth"),
-            1,
-            "one giant dark mouth, rather than scattered portal circles"
+            enemy_count, 0,
+            "quiet entrance has no injected or real enemies"
         );
-        assert!(count("Demon den rock arch") >= 10);
-        assert!(count("Demon den fang") >= 6);
-        assert!(count("Demon den breathing mist") >= 6);
-        println!(
-            "[capture] PASS demon cave quiet: one giant mouth, stone arch, solid fangs and breathing mist, production camera"
-        );
+        for old in [
+            "Demon den mouth",
+            "Demon den rock arch",
+            "Demon den fang",
+            "Demon den violet fissure",
+            "Demon den breathing mist",
+            "Demon den interior purple light",
+        ] {
+            assert!(
+                !labels.iter().any(|name| name == old),
+                "legacy procedural den node remains: {old}"
+            );
+        }
+        if loaded && imported_meshes > 0 {
+            state.saw_authored = true;
+            println!(
+                "[capture] PASS demon cave quiet: actual authored WorldAsset imported, meshes={imported_meshes}, original root pose retained, legacy procedural nodes absent"
+            );
+        }
     }
-    if frame == 60 {
-        director.enabled = true;
+    if frame >= 60 && state.saw_authored {
+        world.resource_mut::<SpawnDirector>().enabled = true;
     }
     if frame == 295 {
+        assert!(
+            state.saw_authored && loaded && imported_meshes > 0,
+            "production authored cavern must really import"
+        );
         assert!(
             state.saw_enemy,
             "actual SpawnDirector wave must emerge at the den"
@@ -74,9 +116,10 @@ fn exercise(
             "actual enemy addition must trigger emergence pulse"
         );
         println!(
-            "[capture] PASS demon-cave: quiet cave, real wave enemies and actual emergence pulse; production camera unchanged"
+            "[capture] PASS demon-cave: authored production cavern, real wave enemies and actual emergence pulse, legacy geometry absent"
         );
     }
+    world.insert_resource(state);
 }
 
 // Candidate preview only: clone assets and never alter the shipped entrance.
@@ -160,6 +203,13 @@ pub fn install_preview(app: &mut bevy::app::SubApp, scenario: &str) {
         _ => ("production", None),
     };
     if let Some((eye, focus, height)) = camera_proposal {
+        let production_cameras: Vec<_> = world
+            .query_filtered::<Entity, With<BattleCamera>>()
+            .iter(world)
+            .collect();
+        for entity in production_cameras {
+            world.entity_mut(entity).remove::<BattleCamera>();
+        }
         for (mut transform, mut projection) in world
             .query_filtered::<(&mut Transform, &mut Projection), With<Camera3d>>()
             .iter_mut(world)

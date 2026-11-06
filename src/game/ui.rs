@@ -2,7 +2,7 @@ use bevy::{prelude::*, time::Virtual, window::PrimaryWindow};
 
 use super::archive::ArchiveEcho;
 use super::encounters::EncounterState;
-use super::mobile_layout::{ControlScheme, hud_metrics};
+use super::mobile_layout::{ControlScheme, hud_metrics, portrait_toolbar};
 use super::progression::{SkillEconomy, bond_cost, skill_cost};
 use super::trial::{
     GOLD_LEVEL_COUNT, GOLD_TARGET_COUNT, GOLD_UNLOCK_AT, TOWER_FLOOR_COUNT, TOWER_UNLOCK_AT,
@@ -956,9 +956,33 @@ fn apply_hud_layout(
             Without<HudBottom>,
             Without<DodgeArt>,
             Without<ArchiveHudText>,
+            Without<TimerText>,
+            Without<SpeedButton>,
         ),
     >,
     mut bottom_rows: Query<&mut Node, (With<HudBottom>, Without<SpeedControl>)>,
+    mut timers: Query<
+        (&mut Node, &mut TextFont),
+        (
+            With<TimerText>,
+            Without<SpeedControl>,
+            Without<DodgeArt>,
+            Without<HudBottom>,
+            Without<ArchiveHudText>,
+            Without<SpeedButton>,
+        ),
+    >,
+    mut speed_buttons: Query<
+        &mut Node,
+        (
+            With<SpeedButton>,
+            Without<SpeedControl>,
+            Without<DodgeArt>,
+            Without<HudBottom>,
+            Without<ArchiveHudText>,
+            Without<TimerText>,
+        ),
+    >,
     mut speed_controls: Query<&mut Node, (With<SpeedControl>, Without<DodgeArt>)>,
     mut dodge_art: Query<&mut Node, (With<DodgeArt>, Without<HudBottom>, Without<SpeedControl>)>,
 ) {
@@ -967,6 +991,12 @@ fn apply_hud_layout(
     };
     let layout = hud_metrics(window.width(), window.height());
     let compact = layout.compact;
+    let portrait = portrait_toolbar(window.width(), window.height());
+    // The portrait row cannot fit three flex children at their touch sizes.
+    // Anchor them independently so visual and input joystick centers stay equal.
+    let portrait_touch = portrait.is_some() && scheme.touch();
+    let portrait_middle_width =
+        (window.width() - layout.safe_x * 2.0 - layout.joystick_size - 64.0 - 16.0).max(44.0);
     let xp_width = compact_xp_width(window.width());
     let compact_dodge_size = compact_dodge_size(layout.joystick_size);
     let action_width = compact_action_width(layout.joystick_size);
@@ -1019,6 +1049,23 @@ fn apply_hud_layout(
                 .set_if_neq(UiRect::all(px(if compact { 2 } else { 3 })));
         } else if movement_pad.is_some() {
             node.reborrow()
+                .map_unchanged(|n| &mut n.position_type)
+                .set_if_neq(if portrait_touch {
+                    PositionType::Absolute
+                } else {
+                    PositionType::Relative
+                });
+            node.reborrow()
+                .map_unchanged(|n| &mut n.left)
+                .set_if_neq(if portrait_touch { px(0) } else { Val::Auto });
+            node.reborrow()
+                .map_unchanged(|n| &mut n.bottom)
+                .set_if_neq(if portrait_touch { px(0) } else { Val::Auto });
+            node.reborrow()
+                .map_unchanged(|n| &mut n.flex_shrink)
+                .set_if_neq(0.0);
+
+            node.reborrow()
                 .map_unchanged(|value| &mut value.display)
                 .set_if_neq(if scheme.touch() {
                     Display::Flex
@@ -1033,11 +1080,37 @@ fn apply_hud_layout(
                 .set_if_neq(px(layout.joystick_size));
         } else if xp_panel.is_some() {
             node.reborrow()
+                .map_unchanged(|n| &mut n.position_type)
+                .set_if_neq(if portrait_touch {
+                    PositionType::Absolute
+                } else {
+                    PositionType::Relative
+                });
+            node.reborrow()
+                .map_unchanged(|n| &mut n.left)
+                .set_if_neq(if portrait_touch {
+                    px(layout.joystick_size + 8.0)
+                } else {
+                    Val::Auto
+                });
+            node.reborrow()
+                .map_unchanged(|n| &mut n.bottom)
+                .set_if_neq(if portrait_touch { px(0) } else { Val::Auto });
+
+            node.reborrow()
                 .map_unchanged(|value| &mut value.height)
-                .set_if_neq(if scheme.touch() { Val::Auto } else { px(40) });
+                .set_if_neq(if portrait_touch {
+                    px(48)
+                } else if scheme.touch() {
+                    Val::Auto
+                } else {
+                    px(40)
+                });
             node.reborrow()
                 .map_unchanged(|value| &mut value.width)
-                .set_if_neq(px(if !scheme.touch() {
+                .set_if_neq(px(if portrait_touch {
+                    portrait_middle_width
+                } else if !scheme.touch() {
                     desktop_xp_width
                 } else if compact {
                     xp_width
@@ -1059,6 +1132,28 @@ fn apply_hud_layout(
                 .set_if_neq(px(if compact { 5 } else { 7 }));
         } else if xp_readout.is_some() {
             node.reborrow()
+                .map_unchanged(|n| &mut n.position_type)
+                .set_if_neq(if portrait_touch {
+                    PositionType::Absolute
+                } else {
+                    PositionType::Relative
+                });
+            node.reborrow()
+                .map_unchanged(|n| &mut n.left)
+                .set_if_neq(if portrait_touch {
+                    px(-layout.joystick_size - 8.0)
+                } else {
+                    Val::Auto
+                });
+            node.reborrow()
+                .map_unchanged(|n| &mut n.bottom)
+                .set_if_neq(if portrait_touch {
+                    px(layout.joystick_size + 8.0)
+                } else {
+                    Val::Auto
+                });
+
+            node.reborrow()
                 .map_unchanged(|value| &mut value.height)
                 .set_if_neq(if scheme.touch() { Val::Auto } else { px(28) });
             node.reborrow()
@@ -1070,7 +1165,9 @@ fn apply_hud_layout(
                 });
             node.reborrow()
                 .map_unchanged(|value| &mut value.width)
-                .set_if_neq(if scheme.touch() {
+                .set_if_neq(if portrait_touch {
+                    px(220)
+                } else if scheme.touch() {
                     percent(100)
                 } else {
                     px(desktop_readout_width)
@@ -1081,7 +1178,9 @@ fn apply_hud_layout(
         } else if xp_track.is_some() {
             node.reborrow()
                 .map_unchanged(|value| &mut value.width)
-                .set_if_neq(px(if !scheme.touch() {
+                .set_if_neq(px(if portrait_touch {
+                    204.0
+                } else if !scheme.touch() {
                     desktop_readout_width
                 } else if compact {
                     xp_width - 16.0
@@ -1094,14 +1193,36 @@ fn apply_hud_layout(
         } else if skill_button.is_some() {
             node.reborrow()
                 .map_unchanged(|value| &mut value.width)
-                .set_if_neq(px(if scheme.touch() { 112 } else { 92 }));
+                .set_if_neq(px(if portrait_touch {
+                    portrait_middle_width.min(112.0)
+                } else if scheme.touch() {
+                    112.0
+                } else {
+                    92.0
+                }));
             node.reborrow()
                 .map_unchanged(|value| &mut value.height)
                 .set_if_neq(px(if scheme.touch() { 48 } else { 40 }));
         } else if action_panel.is_some() {
             node.reborrow()
+                .map_unchanged(|n| &mut n.position_type)
+                .set_if_neq(if portrait_touch {
+                    PositionType::Absolute
+                } else {
+                    PositionType::Relative
+                });
+            node.reborrow()
+                .map_unchanged(|n| &mut n.right)
+                .set_if_neq(if portrait_touch { px(0) } else { Val::Auto });
+            node.reborrow()
+                .map_unchanged(|n| &mut n.bottom)
+                .set_if_neq(if portrait_touch { px(0) } else { Val::Auto });
+
+            node.reborrow()
                 .map_unchanged(|value| &mut value.width)
-                .set_if_neq(px(if !scheme.touch() {
+                .set_if_neq(px(if portrait_touch {
+                    64.0
+                } else if !scheme.touch() {
                     88.0
                 } else if compact {
                     action_width
@@ -1110,7 +1231,9 @@ fn apply_hud_layout(
                 }));
             node.reborrow()
                 .map_unchanged(|value| &mut value.height)
-                .set_if_neq(px(if !scheme.touch() {
+                .set_if_neq(px(if portrait_touch {
+                    64.0
+                } else if !scheme.touch() {
                     40.0
                 } else if compact {
                     layout.joystick_size
@@ -1125,7 +1248,13 @@ fn apply_hud_layout(
                     0.0
                 })));
         } else if dodge_button.is_some() {
-            let size = if compact { compact_dodge_size } else { 76.0 };
+            let size = if portrait_touch {
+                64.0
+            } else if compact {
+                compact_dodge_size
+            } else {
+                76.0
+            };
             node.reborrow()
                 .map_unchanged(|value| &mut value.width)
                 .set_if_neq(px(if scheme.touch() { size } else { 88.0 }));
@@ -1192,24 +1321,48 @@ fn apply_hud_layout(
                 .set_if_neq(px(layout.safe_x));
             node.reborrow()
                 .map_unchanged(|value| &mut value.top)
-                .set_if_neq(px(64));
+                .set_if_neq(px(if portrait.is_some() { 124.0 } else { 64.0 }));
+            node.reborrow()
+                .map_unchanged(|n| &mut n.width)
+                .set_if_neq(px(if portrait.is_some() { 44.0 } else { 154.0 }));
+            node.reborrow()
+                .map_unchanged(|n| &mut n.height)
+                .set_if_neq(px(if portrait.is_some() { 44.0 } else { 48.0 }));
         } else if pause_button.is_some() {
             node.reborrow()
                 .map_unchanged(|value| &mut value.right)
-                .set_if_neq(px(if compact {
+                .set_if_neq(px(if let Some(toolbar) = portrait {
+                    toolbar.right_right
+                } else if compact {
                     layout.safe_x + 104.0
                 } else {
                     150.0
                 }));
             node.reborrow()
                 .map_unchanged(|value| &mut value.top)
-                .set_if_neq(px(layout.safe_y));
+                .set_if_neq(px(if portrait.is_some() {
+                    72.0
+                } else {
+                    layout.safe_y
+                }));
+            node.reborrow()
+                .map_unchanged(|n| &mut n.width)
+                .set_if_neq(px(if portrait.is_some() { 44.0 } else { 52.0 }));
+            node.reborrow()
+                .map_unchanged(|n| &mut n.height)
+                .set_if_neq(px(if portrait.is_some() { 44.0 } else { 48.0 }));
         }
     }
     for mut node in &mut bottom_rows {
         node.reborrow()
             .map_unchanged(|value| &mut value.height)
-            .set_if_neq(if scheme.touch() { Val::Auto } else { px(40) });
+            .set_if_neq(if portrait_touch {
+                px(layout.joystick_size)
+            } else if scheme.touch() {
+                Val::Auto
+            } else {
+                px(40)
+            });
         node.reborrow()
             .map_unchanged(|value| &mut value.left)
             .set_if_neq(if scheme.touch() {
@@ -1279,13 +1432,62 @@ fn apply_hud_layout(
             .map_unchanged(|value| &mut value.top)
             .set_if_neq(px(if compact { 118.0 } else { 80.0 }));
     }
+    for (mut node, mut font) in &mut timers {
+        node.reborrow()
+            .map_unchanged(|n| &mut n.width)
+            .set_if_neq(if portrait.is_some() {
+                px(96)
+            } else {
+                Val::Auto
+            });
+        node.reborrow()
+            .map_unchanged(|n| &mut n.flex_shrink)
+            .set_if_neq(0.0);
+        font.reborrow()
+            .map_unchanged(|f| &mut f.font_size)
+            .set_if_neq(FontSize::Px(if portrait.is_some() { 16.0 } else { 20.0 }));
+    }
+    for mut node in &mut speed_buttons {
+        node.reborrow()
+            .map_unchanged(|n| &mut n.width)
+            .set_if_neq(px(if portrait.is_some() { 44.0 } else { 48.0 }));
+        node.reborrow()
+            .map_unchanged(|n| &mut n.height)
+            .set_if_neq(px(if portrait.is_some() { 44.0 } else { 48.0 }));
+        node.reborrow()
+            .map_unchanged(|n| &mut n.flex_shrink)
+            .set_if_neq(0.0);
+    }
     for mut node in &mut speed_controls {
         node.reborrow()
             .map_unchanged(|value| &mut value.right)
-            .set_if_neq(px(speed_control_right(layout.safe_x, compact)));
+            .set_if_neq(px(portrait.map_or_else(
+                || speed_control_right(layout.safe_x, compact),
+                |t| t.left_right,
+            )));
         node.reborrow()
             .map_unchanged(|value| &mut value.top)
-            .set_if_neq(px(speed_control_top(layout.safe_y, compact)));
+            .set_if_neq(px(if portrait.is_some() {
+                124.0
+            } else {
+                speed_control_top(layout.safe_y, compact)
+            }));
+        node.reborrow()
+            .map_unchanged(|n| &mut n.width)
+            .set_if_neq(px(if portrait.is_some() { 44.0 } else { 152.0 }));
+        node.reborrow()
+            .map_unchanged(|n| &mut n.height)
+            .set_if_neq(px(if portrait.is_some() { 140.0 } else { 48.0 }));
+        node.reborrow()
+            .map_unchanged(|n| &mut n.flex_direction)
+            .set_if_neq(if portrait.is_some() {
+                FlexDirection::Column
+            } else {
+                FlexDirection::Row
+            });
+        node.reborrow()
+            .map_unchanged(|n| &mut n.row_gap)
+            .set_if_neq(px(4));
     }
 }
 
@@ -1314,6 +1516,7 @@ fn speed_control_top(safe_y: f32, compact: bool) -> f32 {
 }
 
 fn handle_trial_drawer(
+    windows: Query<&Window, With<PrimaryWindow>>,
     interactions: Query<&Interaction, (With<TrialToggleButton>, Changed<Interaction>)>,
     mut labels: Query<&mut Text, With<TrialToggleLabel>>,
     mut drawer: ResMut<TrialDrawerState>,
@@ -1329,11 +1532,18 @@ fn handle_trial_drawer(
         label
             .reborrow()
             .map_unchanged(|value| &mut value.0)
-            .set_if_neq(if drawer.open {
-                language.pick("CLOSE", "关闭").to_string()
-            } else {
-                language.pick("CHALLENGES", "挑战").to_string()
-            });
+            .set_if_neq(
+                if windows
+                    .single()
+                    .is_ok_and(|w| portrait_toolbar(w.width(), w.height()).is_some())
+                {
+                    String::new()
+                } else if drawer.open {
+                    language.pick("CLOSE", "关闭").to_string()
+                } else {
+                    language.pick("CHALLENGES", "挑战").to_string()
+                },
+            );
     }
 }
 
@@ -1990,6 +2200,223 @@ pub(crate) fn reset_run(world: &mut World) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn portrait_status_and_actual_toolbar_nodes_are_disjoint() {
+        let mut app = App::new();
+        app.insert_resource(ControlScheme::Touch)
+            .init_resource::<TrialDrawerState>()
+            .init_resource::<GameSession>()
+            .add_systems(Update, apply_hud_layout);
+        let window = app
+            .world_mut()
+            .spawn((
+                Window {
+                    resolution: (390, 844).into(),
+                    ..default()
+                },
+                PrimaryWindow,
+            ))
+            .id();
+        let primary = app.world_mut().spawn((HudLeft, Node::default())).id();
+        let timer = app
+            .world_mut()
+            .spawn((TimerText, Node::default(), TextFont::default()))
+            .id();
+        let pause = app.world_mut().spawn((PauseButton, Node::default())).id();
+        let challenge = app
+            .world_mut()
+            .spawn((TrialToggleButton, Node::default()))
+            .id();
+        let speed = app.world_mut().spawn((SpeedControl, Node::default())).id();
+        let buttons: Vec<_> = [
+            SpeedAction::Decrease,
+            SpeedAction::Increase,
+            SpeedAction::Reset,
+        ]
+        .into_iter()
+        .map(|a| {
+            app.world_mut()
+                .spawn((SpeedButton(a), Node::default()))
+                .id()
+        })
+        .collect();
+        for (width, height) in [(390., 844.), (375., 667.)] {
+            app.world_mut()
+                .get_mut::<Window>(window)
+                .unwrap()
+                .resolution
+                .set(width, height);
+            app.update();
+            let toolbar = portrait_toolbar(width, height).unwrap();
+            let safe = hud_metrics(width, height).safe_x;
+            let status = Rect::from_corners(Vec2::new(safe, 12.), Vec2::new(safe + 220., 264.));
+            assert_eq!(app.world().get::<Node>(primary).unwrap().width, px(220));
+            assert_eq!(app.world().get::<Node>(timer).unwrap().width, px(96));
+            assert!(width - safe - 96. >= status.max.x);
+            for (entity, left, top, tall) in [
+                (pause, false, 72., 44.),
+                (challenge, false, 124., 44.),
+                (speed, true, 124., 140.),
+            ] {
+                let node = app.world().get::<Node>(entity).unwrap();
+                assert_eq!(
+                    node.right,
+                    px(if left {
+                        toolbar.left_right
+                    } else {
+                        toolbar.right_right
+                    })
+                );
+                assert_eq!(
+                    (node.top, node.width, node.height),
+                    (px(top), px(44), px(tall))
+                );
+                assert!(
+                    toolbar
+                        .rect(width, left, top, tall)
+                        .intersect(status)
+                        .is_empty()
+                );
+            }
+            assert_eq!(
+                app.world().get::<Node>(speed).unwrap().flex_direction,
+                FlexDirection::Column
+            );
+            for entity in &buttons {
+                let node = app.world().get::<Node>(*entity).unwrap();
+                assert_eq!(
+                    (node.width, node.height, node.flex_shrink),
+                    (px(44), px(44), 0.)
+                );
+            }
+        }
+        app.world_mut()
+            .get_mut::<Window>(window)
+            .unwrap()
+            .resolution
+            .set(667., 375.);
+        app.update();
+        let node = app.world().get::<Node>(speed).unwrap();
+        assert_eq!(
+            (node.width, node.height, node.flex_direction),
+            (px(152), px(48), FlexDirection::Row)
+        );
+        assert_eq!(app.world().get::<Node>(timer).unwrap().width, Val::Auto);
+    }
+
+    #[test]
+    fn portrait_touch_footer_keeps_joystick_round_and_restores_resize_fields() {
+        let mut app = App::new();
+        app.insert_resource(ControlScheme::Touch)
+            .init_resource::<TrialDrawerState>()
+            .init_resource::<GameSession>()
+            .add_systems(Update, apply_hud_layout);
+        let window = app
+            .world_mut()
+            .spawn((
+                Window {
+                    resolution: (375, 667).into(),
+                    ..default()
+                },
+                PrimaryWindow,
+            ))
+            .id();
+        let pad = app.world_mut().spawn((MovementPad, Node::default())).id();
+        let xp = app.world_mut().spawn((XpPanel, Node::default())).id();
+        let readout = app.world_mut().spawn((XpReadout, Node::default())).id();
+        let skill = app
+            .world_mut()
+            .spawn((SkillDrawButton, Node::default()))
+            .id();
+        let action = app.world_mut().spawn((ActionPanel, Node::default())).id();
+        let dodge = app.world_mut().spawn((DodgeButton, Node::default())).id();
+        let bottom = app.world_mut().spawn((HudBottom, Node::default())).id();
+        for (width, height) in [(375., 667.), (390., 844.)] {
+            app.world_mut()
+                .get_mut::<Window>(window)
+                .unwrap()
+                .resolution
+                .set(width, height);
+            app.update();
+            let metrics = hud_metrics(width, height);
+            let pad = app.world().get::<Node>(pad).unwrap();
+            assert_eq!(
+                (pad.position_type, pad.width, pad.height, pad.flex_shrink),
+                (PositionType::Absolute, px(128), px(128), 0.)
+            );
+            assert_eq!((pad.left, pad.bottom), (px(0), px(0)));
+            // The same metrics drive real touch input and knob placement.
+            assert_eq!(
+                metrics.joystick_center,
+                Vec2::new(metrics.safe_x + 64., height - metrics.safe_y - 64.)
+            );
+            let xp = app.world().get::<Node>(xp).unwrap();
+            let Val::Px(x) = xp.left else {
+                panic!("portrait XP must be anchored")
+            };
+            let Val::Px(w) = xp.width else {
+                panic!("portrait XP must fit the gap")
+            };
+            let available = width - 2. * metrics.safe_x;
+            assert_eq!(x, 136.);
+            assert!(x >= 128. + 8. && x + w + 8. <= available - 64.);
+            let readout = app.world().get::<Node>(readout).unwrap();
+            assert_eq!(
+                (
+                    readout.position_type,
+                    readout.left,
+                    readout.bottom,
+                    readout.width
+                ),
+                (PositionType::Absolute, px(-136), px(136), px(220))
+            );
+            let skill = app.world().get::<Node>(skill).unwrap();
+            let Val::Px(skill_width) = skill.width else {
+                panic!("skill width")
+            };
+            assert!(skill_width <= w && skill_width >= 44.);
+            let action = app.world().get::<Node>(action).unwrap();
+            assert_eq!(
+                (
+                    action.position_type,
+                    action.right,
+                    action.bottom,
+                    action.width,
+                    action.height
+                ),
+                (PositionType::Absolute, px(0), px(0), px(64), px(64))
+            );
+            let dodge = app.world().get::<Node>(dodge).unwrap();
+            assert_eq!((dodge.width, dodge.height), (px(64), px(64)));
+            assert_eq!(app.world().get::<Node>(bottom).unwrap().height, px(128));
+        }
+        for (width, height, scheme) in [
+            (667., 375., ControlScheme::Touch),
+            (375., 667., ControlScheme::Keyboard),
+        ] {
+            app.world_mut()
+                .get_mut::<Window>(window)
+                .unwrap()
+                .resolution
+                .set(width, height);
+            *app.world_mut().resource_mut::<ControlScheme>() = scheme;
+            app.update();
+            for entity in [pad, xp, readout, action] {
+                let node = app.world().get::<Node>(entity).unwrap();
+                assert_eq!(node.position_type, PositionType::Relative);
+                assert_eq!(node.bottom, Val::Auto);
+            }
+            assert_eq!(app.world().get::<Node>(pad).unwrap().left, Val::Auto);
+            assert_eq!(app.world().get::<Node>(xp).unwrap().left, Val::Auto);
+            assert_eq!(app.world().get::<Node>(readout).unwrap().left, Val::Auto);
+            assert_eq!(app.world().get::<Node>(action).unwrap().right, Val::Auto);
+            assert_eq!(
+                app.world().get::<Node>(bottom).unwrap().height,
+                if scheme.touch() { Val::Auto } else { px(40) }
+            );
+        }
+    }
 
     #[test]
     fn narrow_desktop_hides_touch_controls_until_real_touch_mode() {

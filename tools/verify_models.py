@@ -78,6 +78,118 @@ def validate(path, animated):
     }
 
 
+def _delimiter_end(code, start, opening, closing):
+    depth = 1
+    index = start + 1
+    while index < len(code):
+        depth += (code[index] == opening) - (code[index] == closing)
+        index += 1
+        if depth == 0:
+            return index
+    raise ValueError(f"Unclosed Rust {opening} at character {start}")
+
+
+def production_rust_source(source):
+    """Keep production literals; exclude comments and inline cfg(test) modules.
+
+    A same-length lexical mask locates attributes and balanced braces without
+    interpreting braces in comments, characters, escaped or raw string literals.
+    """
+    code = list(source)
+    strings = []
+    index = 0
+    raw_start = re.compile(r'(?:br|cr|r)(#*)"')
+    char_literal = re.compile(r"'(?:\\(?:u\{[0-9a-fA-F_]+\}|x[0-9a-fA-F]{2}|.)|[^'\\\n])'")
+
+    def blank(start, end):
+        code[start:end] = ["\n" if c == "\n" else " " for c in source[start:end]]
+
+    while index < len(source):
+        start = index
+        if source.startswith("//", index):
+            newline = source.find("\n", index + 2)
+            index = len(source) if newline < 0 else newline
+        elif source.startswith("/*", index):
+            depth = 1
+            index += 2
+            while index < len(source) and depth:
+                if source.startswith("/*", index):
+                    depth += 1
+                    index += 2
+                elif source.startswith("*/", index):
+                    depth -= 1
+                    index += 2
+                else:
+                    index += 1
+            if depth:
+                raise ValueError("Unclosed Rust block comment")
+        elif (raw := raw_start.match(source, index)) and (
+            index == 0 or not (source[index - 1].isalnum() or source[index - 1] == "_")
+        ):
+            terminator = '"' + raw.group(1)
+            end = source.find(terminator, raw.end())
+            if end < 0:
+                raise ValueError("Unclosed Rust raw string")
+            index = end + len(terminator)
+            strings.append((start, index))
+        elif source[index] == '"':
+            index += 1
+            while index < len(source):
+                if source[index] == "\\":
+                    index += 2
+                elif source[index] == '"':
+                    index += 1
+                    break
+                else:
+                    index += 1
+            else:
+                raise ValueError("Unclosed Rust string")
+            strings.append((start, index))
+        elif char := char_literal.match(source, index):
+            index = char.end()
+        else:
+            index += 1
+            continue
+        blank(start, index)
+
+    masked = "".join(code)
+    test_modules = []
+    for attribute in re.finditer(r"#\s*\[\s*cfg\s*\(\s*test\s*\)\s*\]", masked):
+        cursor = attribute.end()
+        while True:
+            cursor += len(masked[cursor:]) - len(masked[cursor:].lstrip())
+            extra = re.match(r"#\s*\[", masked[cursor:])
+            if not extra:
+                break
+            cursor = _delimiter_end(masked, cursor + extra.end() - 1, "[", "]")
+        module = re.match(
+            r"(?:pub\b(?:\s*\([^)]*\))?\s*)?mod\s+\w+\s*\{",
+            masked[cursor:],
+        )
+        if module:
+            brace = cursor + module.end() - 1
+            test_modules.append((attribute.start(), _delimiter_end(masked, brace, "{", "}")))
+    for start, end in strings:
+        if not any(left <= start < right for left, right in test_modules):
+            code[start:end] = source[start:end]
+    for start, end in test_modules:
+        blank(start, end)
+    return "".join(code)
+
+
+def runtime_model_names(source):
+    return set(re.findall(r'"models/([^"#{}]+\.glb)', production_rust_source(source)))
+
+
+def check_runtime_model_files(sources, models, extra=()):
+    names = set(extra)
+    for source in sources:
+        names.update(runtime_model_names(source.read_text()))
+    for filename in sorted(names):
+        assert (models / filename).is_file(), f"Missing runtime model: {filename}"
+    return names
+
+
 def main():
     manifest = json.loads((MODELS / "cast-manifest.json").read_text())
     cast = {m["file"] for m in manifest}
@@ -85,7 +197,7 @@ def main():
         m["file"]
         for m in json.loads((MODELS / "adventure-manifest.json").read_text())["assets"]
     }
-    arena = (ROOT / "src/game/arena.rs").read_text()
+    arena = production_rust_source((ROOT / "src/game/arena.rs").read_text())
     for asset in json.loads((MODELS / "adventure-manifest.json").read_text())["assets"]:
         assert hashlib.sha256((MODELS / asset["file"]).read_bytes()).hexdigest() == asset["sha256"]
     runtime_cast = set(
@@ -100,23 +212,19 @@ def main():
     runtime_sources = [
         p for p in (ROOT / "src").rglob("*.rs") if ROOT / "src/bin" not in p.parents
     ]
-    runtime_models = set(re.findall(
-        r'"models/([^"#{}]+\.glb)',
-        "\n".join(p.read_text() for p in runtime_sources),
-    ))
-    environment = (ROOT / "src/game/environment.rs").read_text()
+    environment = production_rust_source((ROOT / "src/game/environment.rs").read_text())
     gate_models = re.search(
         r'for \(name, model, z, width, height\) in \[(.*?)\]',
         environment,
         re.S,
     )
     assert gate_models, "Missing gate model table"
-    runtime_models.update(
-        f"environment_{model}.glb"
-        for model in re.findall(r'\("[^"]+", "([^"]+)"', gate_models.group(1))
+    check_runtime_model_files(
+        runtime_sources,
+        MODELS,
+        (f"environment_{model}.glb"
+         for model in re.findall(r'\("[^"]+", "([^"]+)"', gate_models.group(1))),
     )
-    for filename in runtime_models:
-        assert (MODELS / filename).is_file(), f"Missing runtime model: {filename}"
     reports = [
         validate(path, path.name in cast | adventures) for path in sorted(MODELS.glob("*.glb"))
     ]

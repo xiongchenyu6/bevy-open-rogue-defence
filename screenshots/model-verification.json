@@ -1,8 +1,8 @@
 {
-  "models": 52,
+  "models": 53,
   "animated_cast": 35,
   "animated_adventures": 3,
-  "bytes": 14240308,
+  "bytes": 15527960,
   "results": [
     {
       "file": "adventure_embermaw.glb",
@@ -295,6 +295,14 @@
       "skin_count": 0,
       "animations": [],
       "sha256": "7926b81aa3f8e14e81a957a06bdc6546f168dab45bec693fe0c8a0838331c969"
+    },
+    {
+      "file": "environment_demon_cavern.glb",
+      "bytes": 1287652,
+      "mesh_count": 1,
+      "skin_count": 0,
+      "animations": [],
+      "sha256": "7cc6fe0dfbda094226f5f051492f8aee8c4a449fc90844c574cedf36995b7176"
     },
     {
       "file": "environment_floor.glb",

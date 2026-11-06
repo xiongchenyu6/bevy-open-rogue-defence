@@ -1,0 +1,45 @@
+{
+  "file": "assets/models/environment_demon_cavern.glb",
+  "sha256": "7cc6fe0dfbda094226f5f051492f8aee8c4a449fc90844c574cedf36995b7176",
+  "bytes": 1287652,
+  "mesh_source": {
+    "title": "LowPoly Cave Entrance",
+    "url": "https://opengameart.org/content/lowpoly-cave-entrance",
+    "author": "OrbitStudios / Fernando Ferreira",
+    "submitted_by": "zisongbr",
+    "license": "CC0-1.0",
+    "source_zip_sha256": "335aadd05fe302545e96b199c0247bdc6ab3b1f29efa3e8bb057ab67dad72892",
+    "source_blend_sha256": "2763728bea49930eac83fac1afc3076b618fbe712466090bf2380b7ccba830d6"
+  },
+  "adaptation": {
+    "source_triangles_retained": 474,
+    "source_vertices": 279,
+    "global_lateral_vertical_depth_scale": [
+      9.5,
+      2.8,
+      10.0
+    ],
+    "world_mouth_front_x": 14.0,
+    "parent_translation": [
+      15.65,
+      0.0,
+      0.0
+    ],
+    "parent_yaw": -0.55,
+    "original_six_rear_backing_faces": "retained dark",
+    "embedded_texture_dimensions": [
+      1024,
+      1024
+    ],
+    "material": "standard opaque PBR, metallic0, roughness0.97, real UV bake"
+  },
+  "texture": {
+    "origin": "Original project-generated seamless weathered slate, image_gen.imagegen",
+    "original_sha256": "1f6ee11f080fb1ac9b7edf6e46f02c5350b770f77af102e1c33f3e8e1690e448",
+    "third_party_texture": false,
+    "license_note": "Project-generated material subject to applicable generation-tool terms; not represented as third-party CC0."
+  },
+  "source_and_negative_positive_evidence": "docs/verification/intact-cave-C-asset-2026-11-06",
+  "controlled_native_evidence": "docs/verification/intact-cave-C-native-2026-11-06",
+  "clearance_scope": "96 height bands against the existing finite25phase animation envelope; not all-interpolation proof"
+}

@@ -143,6 +143,8 @@ mod bond_capture;
 #[path = "capture/bond_completion.rs"]
 mod bond_completion_capture;
 
+#[path = "capture/camera_framing.rs"]
+mod camera_framing_capture;
 #[path = "capture/demon_cave.rs"]
 mod demon_cave_capture;
 
@@ -724,6 +726,9 @@ fn main() {
     if scenario.starts_with("den-preview") {
         demon_cave_capture::install_preview(&mut apps.main, scenario);
     }
+    if matches!(scenario, "camera-framing" | "camera-framing-touch") {
+        camera_framing_capture::install(&mut apps.main, scenario == "camera-framing-touch");
+    }
 
     if scenario == "hud-hint" {
         apps.main
@@ -1135,7 +1140,10 @@ fn configure_scenario(world: &mut World, scenario: &str) {
         hero_attributes_capture::configure(world);
         return;
     }
-    if scenario == "demon-cave" || scenario.starts_with("den-preview") {
+    if scenario == "demon-cave"
+        || scenario.starts_with("den-preview")
+        || matches!(scenario, "camera-framing" | "camera-framing-touch")
+    {
         demon_cave_capture::configure(world);
         return;
     }

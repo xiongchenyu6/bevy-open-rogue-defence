@@ -369,6 +369,7 @@ fn hit_stop_seconds(event: HitEvent) -> f32 {
     match (event.killed, event.weight) {
         (true, HitWeight::Boss) => 0.16,
         (true, HitWeight::Elite) => 0.055,
+        (false, _) if event.critical => 0.025,
         _ => 0.0,
     }
 }
@@ -688,6 +689,142 @@ mod tests {
         assert!(shake_trauma(elite) < shake_trauma(boss));
         assert_eq!(hit_stop_seconds(normal), 0.0);
         assert!(hit_stop_seconds(elite) < hit_stop_seconds(boss));
+    }
+
+    fn critical_feedback_app(speed: f32) -> (App, Entity) {
+        let (mut app, target) = punch_app();
+        app.init_resource::<Time<Virtual>>()
+            .add_systems(Update, (react_to_hits, apply_hit_stop).chain());
+        app.world_mut()
+            .resource_mut::<Time<Virtual>>()
+            .set_relative_speed(speed);
+        (app, target)
+    }
+
+    // Synthetic feedback inputs, real production request/max/cooldown/apply chain.
+    // No claim that these unit events came from a gameplay damage resolver.
+    fn critical_feedback_frame(app: &mut App, hit: HitEvent, count: usize, millis: u64) {
+        let mut feedback = app.world_mut().resource_mut::<HitFeedback>();
+        feedback.events.clear();
+        for _ in 0..count {
+            feedback.push(hit);
+        }
+        app.world_mut()
+            .resource_mut::<Time<Real>>()
+            .advance_by(std::time::Duration::from_millis(millis));
+        app.update();
+    }
+
+    #[test]
+    fn surviving_critical_volley_has_one_short_stop_and_real_time_recovery() {
+        let mut holds = Vec::new();
+        for count in [1, 100] {
+            let (mut app, target) = critical_feedback_app(1.);
+            let hit = HitEvent {
+                target,
+                ..event(HitWeight::Normal, true, false)
+            };
+            critical_feedback_frame(&mut app, hit, count, 16);
+            assert_eq!(
+                app.world().resource::<Time<Virtual>>().relative_speed(),
+                HIT_STOP_TIME_SCALE
+            );
+            let hold = app.world().resource::<HitStop>().remaining;
+            assert!(
+                hold > 0. && hold < 0.04,
+                "critical contact gets a short bounded stop"
+            );
+            holds.push(hold);
+            critical_feedback_frame(&mut app, hit, 0, 16);
+            assert!(app.world().resource::<Time<Virtual>>().relative_speed() < 1.);
+            critical_feedback_frame(&mut app, hit, 0, 16);
+            assert_eq!(app.world().resource::<Time<Virtual>>().relative_speed(), 1.);
+            assert!(app.world().resource::<HitStop>().cooldown > 0.);
+        }
+        assert_eq!(
+            holds[0], holds[1],
+            "100 same-frame contacts cannot stack stop duration"
+        );
+    }
+
+    #[test]
+    fn continuous_criticals_leave_recovery_time_between_stops() {
+        let (mut app, target) = critical_feedback_app(1.);
+        let hit = HitEvent {
+            target,
+            ..event(HitWeight::Normal, true, false)
+        };
+        let mut previous = 1.;
+        let mut stops = 0;
+        let mut normal_frames = 0;
+        for _ in 0..72 {
+            critical_feedback_frame(&mut app, hit, 100, 16);
+            let speed = app.world().resource::<Time<Virtual>>().relative_speed();
+            stops += usize::from(previous == 1. && speed < 1.);
+            normal_frames += usize::from(speed == 1.);
+            previous = speed;
+        }
+        assert!(
+            (2..=3).contains(&stops),
+            "continued contacts may retrigger only after cooldown"
+        );
+        assert!(
+            normal_frames > 60,
+            "continuous critical barrages cannot pin slow motion"
+        );
+        critical_feedback_frame(&mut app, hit, 0, 100);
+        assert_eq!(app.world().resource::<Time<Virtual>>().relative_speed(), 1.);
+    }
+
+    #[test]
+    fn critical_feedback_respects_pause_finish_fast_forward_and_player_speed_change() {
+        for (paused, finished, speed) in [(true, false, 1.), (false, true, 1.), (false, false, 8.)]
+        {
+            let (mut app, target) = critical_feedback_app(speed);
+            {
+                let mut session = app.world_mut().resource_mut::<GameSession>();
+                session.paused = paused;
+                session.finished = finished;
+            }
+            let hit = HitEvent {
+                target,
+                ..event(HitWeight::Normal, true, false)
+            };
+            critical_feedback_frame(&mut app, hit, 100, 16);
+            assert_eq!(
+                app.world().resource::<Time<Virtual>>().relative_speed(),
+                speed
+            );
+            assert_eq!(app.world().resource::<HitStop>().remaining, 0.);
+        }
+        let (mut app, target) = critical_feedback_app(1.);
+        let hit = HitEvent {
+            target,
+            ..event(HitWeight::Normal, true, false)
+        };
+        critical_feedback_frame(&mut app, hit, 1, 16);
+        assert!(app.world().resource::<Time<Virtual>>().relative_speed() < 1.);
+        app.world_mut()
+            .resource_mut::<Time<Virtual>>()
+            .set_relative_speed(4.);
+        critical_feedback_frame(&mut app, hit, 0, 32);
+        assert_eq!(app.world().resource::<Time<Virtual>>().relative_speed(), 4.);
+        critical_feedback_frame(&mut app, hit, 100, 600);
+        assert_eq!(app.world().resource::<Time<Virtual>>().relative_speed(), 4.);
+    }
+
+    #[test]
+    fn ordinary_contacts_and_normal_kills_do_not_gain_hitstop() {
+        for (critical, killed) in [(false, false), (false, true), (true, true)] {
+            let (mut app, target) = critical_feedback_app(1.);
+            let hit = HitEvent {
+                target,
+                ..event(HitWeight::Normal, critical, killed)
+            };
+            critical_feedback_frame(&mut app, hit, 100, 16);
+            assert_eq!(app.world().resource::<Time<Virtual>>().relative_speed(), 1.);
+            assert_eq!(app.world().resource::<HitStop>().remaining, 0.);
+        }
     }
 
     fn hit_stop_app(battle_speed: f32) -> App {

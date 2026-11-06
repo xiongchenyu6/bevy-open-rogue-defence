@@ -16,18 +16,10 @@ struct DenArt {
     glow: Handle<StandardMaterial>,
 }
 #[derive(Component)]
-struct Mist {
-    origin: Vec3,
-    phase: f32,
-    scale: Vec3,
-}
-#[derive(Component)]
 struct Emergence {
     remaining: f32,
     initial: f32,
 }
-#[derive(Resource, Default)]
-struct DenClock(f32);
 const MAX_EMERGENCE: usize = 32;
 
 fn setup(
@@ -36,25 +28,7 @@ fn setup(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    let rock = server.load("models/environment_rubble_large.glb#Scene0");
-    let boulder = meshes.add(Sphere::new(1.0).mesh().ico(1).unwrap());
-    let mist_mesh = meshes.add(Sphere::new(1.0).mesh().ico(2).unwrap());
-    let tooth = meshes.add(ConicalFrustum {
-        radius_top: 0.025,
-        radius_bottom: 0.28,
-        height: 1.0,
-    });
-    let black = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.004, 0.002, 0.008),
-        unlit: true,
-        ..default()
-    });
-    let ivory = materials.add(StandardMaterial {
-        base_color: Color::srgb(0.69, 0.58, 0.78),
-        perceptual_roughness: 0.7,
-        emissive: LinearRgba::new(0.06, 0.035, 0.1, 1.0),
-        ..default()
-    });
+    let puff = meshes.add(Sphere::new(1.0).mesh().ico(2).unwrap());
     let glow = materials.add(StandardMaterial {
         base_color: Color::srgba(0.50, 0.06, 0.82, 0.30),
         emissive: LinearRgba::new(1.15, 0.025, 2.6, 1.0),
@@ -62,114 +36,14 @@ fn setup(
         unlit: true,
         ..default()
     });
-    let fog = materials.add(StandardMaterial {
-        base_color: Color::srgba(0.26, 0.045, 0.42, 0.10),
-        emissive: LinearRgba::new(0.12, 0.01, 0.22, 1.0),
-        alpha_mode: AlphaMode::Blend,
-        unlit: true,
-        ..default()
-    });
-    commands.insert_resource(DenArt {
-        puff: mist_mesh.clone(),
-        glow: glow.clone(),
-    });
-    commands.init_resource::<DenClock>();
-    commands
-        .spawn((
-            Name::new("Demon den"),
-            Transform::from_xyz(15.65, 0.0, 0.0).with_rotation(Quat::from_rotation_y(-0.55)),
-            Visibility::default(),
-            ArenaEntity,
-        ))
-        .with_children(|den| {
-            // A solid black tunnel volume recedes behind the open rock arch. Spawned
-            // enemies become visible as they leave this cavity towards decreasing X.
-            den.spawn((
-                Name::new("Demon den mouth"),
-                Mesh3d(meshes.add(Cylinder::new(1.0, 1.0))),
-                MeshMaterial3d(black),
-                Transform::from_xyz(-0.50, 2.55, 0.0)
-                    .with_rotation(Quat::from_rotation_z(std::f32::consts::FRAC_PI_2))
-                    .with_scale(Vec3::new(2.65, 0.30, 5.30)),
-            ));
-            // The authored rock arch provides depth without opaque background
-            // spheres obscuring the mouth from the production camera.
-            for index in 0..15 {
-                let angle = index as f32 / 14.0 * std::f32::consts::PI;
-                let position = Vec3::new(0.0, 0.15 + angle.sin() * 5.35, angle.cos() * 5.65);
-                den.spawn((
-                    Name::new("Demon den rock arch"),
-                    WorldAssetRoot(rock.clone()),
-                    Transform::from_translation(position - Vec3::Y * 0.65)
-                        .with_rotation(Quat::from_euler(
-                            EulerRot::YXZ,
-                            index as f32 * 0.71,
-                            0.13,
-                            -angle * 0.10,
-                        ))
-                        .with_scale(Vec3::new(0.85, 1.35, 1.10)),
-                ));
-                if index % 2 == 1 {
-                    den.spawn((
-                        Name::new("Demon den violet fissure"),
-                        Mesh3d(boulder.clone()),
-                        MeshMaterial3d(glow.clone()),
-                        Transform::from_translation(position + Vec3::new(-0.8, -0.25, 0.0))
-                            .with_rotation(Quat::from_rotation_x(angle))
-                            .with_scale(Vec3::new(0.12, 0.65, 0.14)),
-                    ));
-                }
-            }
-            for (z, y, length, angle) in [
-                (-3.9, 2.8, 1.10, -0.35),
-                (-2.9, 4.0, 1.35, -0.18),
-                (-1.2, 4.8, 1.45, -0.1),
-                (1.2, 4.8, 1.45, 0.1),
-                (2.9, 4.0, 1.35, 0.18),
-                (3.9, 2.8, 1.10, 0.35),
-            ] {
-                den.spawn((
-                    Name::new("Demon den fang"),
-                    Mesh3d(tooth.clone()),
-                    MeshMaterial3d(ivory.clone()),
-                    Transform::from_xyz(0.60, y, z)
-                        .with_rotation(Quat::from_euler(
-                            EulerRot::XYZ,
-                            angle,
-                            0.0,
-                            std::f32::consts::PI,
-                        ))
-                        .with_scale(Vec3::new(1.0, length, 1.0)),
-                ));
-            }
-            for index in 0..12 {
-                let z = -4.9 + index as f32 * 0.89;
-                let origin = Vec3::new(0.50, 0.34, z);
-                let scale = Vec3::new(0.8, 0.38, 0.7);
-                den.spawn((
-                    Name::new("Demon den breathing mist"),
-                    Mesh3d(mist_mesh.clone()),
-                    MeshMaterial3d(fog.clone()),
-                    Transform::from_translation(origin).with_scale(scale),
-                    Mist {
-                        origin,
-                        phase: index as f32 * 0.67,
-                        scale,
-                    },
-                ));
-            }
-            den.spawn((
-                Name::new("Demon den interior purple light"),
-                PointLight {
-                    color: Color::srgb(0.55, 0.14, 1.0),
-                    intensity: 60_000.0,
-                    range: 14.0,
-                    shadow_maps_enabled: false,
-                    ..default()
-                },
-                Transform::from_xyz(2.5, 3.6, 0.0),
-            ));
-        });
+    commands.insert_resource(DenArt { puff, glow });
+    commands.spawn((
+        Name::new("Demon den"),
+        WorldAssetRoot(server.load("models/environment_demon_cavern.glb#Scene0")),
+        Transform::from_xyz(15.65, 0.0, 0.0).with_rotation(Quat::from_rotation_y(-0.55)),
+        Visibility::default(),
+        ArenaEntity,
+    ));
 }
 
 fn emergence(
@@ -195,12 +69,8 @@ fn emergence(
             Name::new("Demon den emergence pulse"),
             Mesh3d(art.puff.clone()),
             MeshMaterial3d(art.glow.clone()),
-            Transform::from_xyz(
-                16.2 - enemy.translation.z.clamp(-5.1, 5.1) * 0.55_f32.tan(),
-                0.5,
-                enemy.translation.z.clamp(-5.1, 5.1),
-            )
-            .with_scale(Vec3::new(0.5, 0.18, 0.5)),
+            Transform::from_translation(enemy.translation.with_y(0.5))
+                .with_scale(Vec3::new(0.5, 0.18, 0.5)),
             Emergence {
                 remaining: 0.75,
                 initial: 0.75,
@@ -212,22 +82,16 @@ fn animate(
     mut commands: Commands,
     time: Res<Time>,
     session: Res<GameSession>,
-    mut clock: Option<ResMut<DenClock>>,
-    mut mist: Query<(&Mist, &mut Transform), Without<Emergence>>,
-    mut pulses: Query<(Entity, &mut Emergence, &mut Transform), Without<Mist>>,
+    mut pulses: Query<(Entity, &mut Emergence, &mut Transform)>,
 ) {
-    if session.paused || session.finished {
+    if session.finished {
+        for (entity, _, _) in &mut pulses {
+            commands.entity(entity).despawn();
+        }
         return;
     }
-    let Some(ref mut clock) = clock else {
+    if session.paused {
         return;
-    };
-    clock.0 += time.delta_secs();
-    for (mist, mut transform) in &mut mist {
-        let phase = clock.0 * 1.4 + mist.phase;
-        transform.translation =
-            mist.origin + Vec3::new(-phase.sin() * 0.35, phase.cos() * 0.12, phase.sin() * 0.1);
-        transform.scale = mist.scale * (1.0 + 0.16 * phase.sin());
     }
     for (entity, mut pulse, mut transform) in &mut pulses {
         pulse.remaining -= time.delta_secs();
@@ -264,7 +128,6 @@ mod tests {
         let mut app = App::new();
         app.init_resource::<GameSession>()
             .init_resource::<Time>()
-            .init_resource::<DenClock>()
             .insert_resource(DenArt {
                 puff: Handle::default(),
                 glow: Handle::default(),
@@ -332,34 +195,40 @@ mod tests {
         assert_eq!(app.world().get::<Enemy>(actor).unwrap().hp, 100.0);
     }
     #[test]
-    fn pause_freezes_mist_and_emergence_then_resumes_cleanup() {
+    fn pause_freezes_spawn_pulse_at_actual_birth_then_resumes_cleanup() {
         let mut app = app();
-        let mist = app
-            .world_mut()
-            .spawn((
-                Mist {
-                    origin: Vec3::new(14.0, 0.3, 0.0),
-                    phase: 0.5,
-                    scale: Vec3::ONE,
-                },
-                Transform::default(),
-            ))
-            .id();
+        let birth = Vec3::new(16.0, 0.0, 4.0);
         app.world_mut()
-            .spawn((enemy(), Transform::from_xyz(16.0, 0.0, 0.0)));
+            .spawn((enemy(), Transform::from_translation(birth)));
         app.update();
-        let before = *app.world().get::<Transform>(mist).unwrap();
-        let phase = app.world().resource::<DenClock>().0;
+        let (pulse, before, remaining) = app
+            .world_mut()
+            .query::<(Entity, &Transform, &Emergence)>()
+            .single(app.world())
+            .map(|(e, t, p)| (e, *t, p.remaining))
+            .unwrap();
+        assert_eq!(before.translation, birth.with_y(0.5));
         app.world_mut().resource_mut::<GameSession>().paused = true;
         app.world_mut()
             .resource_mut::<Time>()
             .advance_by(std::time::Duration::from_secs(10));
         app.update();
-        assert_eq!(app.world().resource::<DenClock>().0, phase);
+        assert_eq!(*app.world().get::<Transform>(pulse).unwrap(), before);
         assert_eq!(
-            app.world().get::<Transform>(mist).unwrap().translation,
-            before.translation
+            app.world().get::<Emergence>(pulse).unwrap().remaining,
+            remaining
         );
+        app.world_mut().resource_mut::<GameSession>().paused = false;
+        app.update();
+        assert!(app.world().get_entity(pulse).is_err());
+    }
+
+    #[test]
+    fn finished_battle_retires_emergence_without_creating_more() {
+        let mut app = app();
+        app.world_mut()
+            .spawn((enemy(), Transform::from_xyz(16.0, 0.0, -3.0)));
+        app.update();
         assert_eq!(
             app.world_mut()
                 .query::<&Emergence>()
@@ -367,7 +236,9 @@ mod tests {
                 .count(),
             1
         );
-        app.world_mut().resource_mut::<GameSession>().paused = false;
+        app.world_mut().resource_mut::<GameSession>().finished = true;
+        app.world_mut()
+            .spawn((enemy(), Transform::from_xyz(16.0, 0.0, 2.0)));
         app.update();
         assert_eq!(
             app.world_mut()

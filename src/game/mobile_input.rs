@@ -232,6 +232,30 @@ fn autoplay_movement(elapsed: f32) -> Vec2 {
     Vec2::new(phase.cos(), phase.sin() * 0.72).clamp_length_max(1.0)
 }
 
+// Intent stays in screen coordinates for the joystick knob. Only the movement
+// consumer converts it; Autoplay and camera-less simulations keep world axes.
+fn ground_movement(input: Vec2, camera_rotation: Option<Quat>) -> Vec2 {
+    let input = input.clamp_length_max(1.0);
+    let Some(rotation) = camera_rotation else {
+        return input;
+    };
+    let camera_right = rotation * Vec3::X;
+    let camera_up = rotation * Vec3::Y;
+    let right = camera_up.cross(Vec3::Y).normalize_or_zero();
+    let up = Vec3::Y.cross(camera_right).normalize_or_zero();
+    if right == Vec3::ZERO || up == Vec3::ZERO {
+        return input;
+    }
+    let right = if right.dot(camera_right) < 0.0 {
+        -right
+    } else {
+        right
+    };
+    let up = if up.dot(camera_up) < 0.0 { -up } else { up };
+    let world = (right * input.x - up * input.y).normalize_or_zero() * input.length();
+    Vec2::new(world.x, world.z)
+}
+
 #[allow(clippy::too_many_arguments)]
 fn move_and_dodge_hero(
     time: Res<Time>,
@@ -242,6 +266,8 @@ fn move_and_dodge_hero(
     mut vitals: ResMut<HeroVitals>,
     mut dodge: ResMut<DodgeState>,
     mut hero_query: Query<&mut Transform, With<Hero>>,
+    cameras: Query<(&Camera, &GlobalTransform), With<Camera3d>>,
+    autoplay: Option<Res<Autoplay>>,
 ) {
     if session.paused || session.finished {
         dodge.requested = false;
@@ -257,12 +283,26 @@ fn move_and_dodge_hero(
         return;
     };
 
-    let movement = intent.0.clamp_length_max(1.0);
-    if movement.length_squared() > 0.01 {
-        dodge.last_direction = movement.normalize();
+    let input = intent.0.clamp_length_max(1.0);
+    let camera_rotation = if autoplay.is_some() {
+        None
+    } else {
+        cameras
+            .iter()
+            .filter(|(camera, _)| camera.is_active)
+            .max_by_key(|(camera, _)| camera.order)
+            .map(|(_, transform)| transform.rotation())
+    };
+    if input.length_squared() > 0.01 {
+        // Same input space as MoveIntent, including the initial rightward dodge.
+        dodge.last_direction = input.normalize();
     }
+    let movement = ground_movement(input, camera_rotation);
     if dodge.requested && dodge.ready() {
-        transform.translation = dodge_destination(transform.translation, dodge.last_direction);
+        transform.translation = dodge_destination(
+            transform.translation,
+            ground_movement(dodge.last_direction, camera_rotation),
+        );
         dodge.cooldown_remaining =
             dodge_cooldown_duration(market_effects.dodge_cooldown_multiplier());
         vitals.invulnerable_remaining = vitals.invulnerable_remaining.max(DODGE_INVULNERABILITY);
@@ -302,6 +342,205 @@ pub(crate) fn reset_run(world: &mut World) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn camera_c() -> Transform {
+        Transform::from_xyz(-20.0, 25.2, 10.0).looking_at(Vec3::new(4.0, 1.2, 0.0), Vec3::Y)
+    }
+
+    #[test]
+    fn ground_axes_project_right_up_and_keep_analog_diagonals_bounded() {
+        for rotation in [
+            camera_c().rotation,
+            Transform::from_xyz(8.0, 24.0, 21.0)
+                .looking_at(Vec3::ZERO, Vec3::Y)
+                .rotation,
+            camera_c().rotation * Quat::from_rotation_z(0.35),
+        ] {
+            let right = ground_movement(Vec2::X, Some(rotation));
+            let up = ground_movement(Vec2::NEG_Y, Some(rotation));
+            let project = |v: Vec2| rotation.inverse() * Vec3::new(v.x, 0.0, v.y);
+            assert!(project(right).x > 0.0 && project(right).y.abs() < 1e-5);
+            assert!(project(up).y > 0.0 && project(up).x.abs() < 1e-5);
+            assert!(
+                (ground_movement(Vec2::new(1.0, -1.0), Some(rotation)).length() - 1.0).abs() < 1e-5
+            );
+            assert!(
+                (ground_movement(Vec2::new(0.3, 0.4), Some(rotation)).length() - 0.5).abs() < 1e-5
+            );
+        }
+        assert_eq!(
+            ground_movement(Vec2::ZERO, Some(camera_c().rotation)),
+            Vec2::ZERO
+        );
+        assert_eq!(
+            ground_movement(Vec2::new(0.3, -0.4), None),
+            Vec2::new(0.3, -0.4)
+        );
+    }
+
+    fn manual_app(camera: bool) -> (App, Entity, Entity) {
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<ButtonInput<KeyCode>>()
+            .init_resource::<Touches>()
+            .init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
+            .init_resource::<MoveIntent>()
+            .init_resource::<TouchJoystickState>()
+            .init_resource::<DodgeState>()
+            .init_resource::<MarketEffects>()
+            .init_resource::<PlayerBuild>()
+            .add_message::<WindowFocused>()
+            .add_message::<bevy::input::touch::TouchInput>()
+            .add_systems(
+                Update,
+                (
+                    bevy::input::touch::touch_screen_input_system,
+                    read_move_input,
+                    move_and_dodge_hero,
+                )
+                    .chain(),
+            );
+        let window = app
+            .world_mut()
+            .spawn((
+                PrimaryWindow,
+                Window {
+                    resolution: (844, 390).into(),
+                    ..default()
+                },
+            ))
+            .id();
+        let hero = app.world_mut().spawn((Hero, Transform::default())).id();
+        if camera {
+            let pose = camera_c();
+            app.world_mut().spawn((
+                Camera3d::default(),
+                Camera::default(),
+                pose,
+                GlobalTransform::from(pose),
+            ));
+            app.world_mut().spawn((
+                Camera3d::default(),
+                Camera {
+                    is_active: false,
+                    order: 50,
+                    ..default()
+                },
+                GlobalTransform::from(Transform::from_rotation(Quat::from_rotation_y(1.0))),
+            ));
+        }
+        (app, hero, window)
+    }
+
+    #[test]
+    fn arrows_controller_and_actual_touch_share_camera_relative_movement() {
+        use bevy::input::touch::{TouchInput, TouchPhase};
+        let mut positions = Vec::new();
+        for source in 0..3 {
+            let (mut app, hero, window) = manual_app(true);
+            match source {
+                0 => app
+                    .world_mut()
+                    .resource_mut::<ButtonInput<KeyCode>>()
+                    .press(KeyCode::ArrowRight),
+                1 => {
+                    let mut pad = super::super::ControllerInput::default();
+                    pad.movement = Vec2::X;
+                    app.insert_resource(pad);
+                }
+                _ => {
+                    let metrics = hud_metrics(844.0, 390.0);
+                    app.world_mut().write_message(TouchInput {
+                        phase: TouchPhase::Started,
+                        position: metrics.joystick_center,
+                        window,
+                        force: None,
+                        id: 7,
+                    });
+                    app.world_mut().run_schedule(Update);
+                    app.world_mut().write_message(TouchInput {
+                        phase: TouchPhase::Moved,
+                        position: metrics.joystick_center + Vec2::X * metrics.drag_radius * 2.0,
+                        window,
+                        force: None,
+                        id: 7,
+                    });
+                }
+            }
+            app.world_mut()
+                .resource_mut::<Time>()
+                .advance_by(std::time::Duration::from_millis(100));
+            app.world_mut().run_schedule(Update);
+            assert_eq!(
+                app.world().resource::<MoveIntent>().0,
+                Vec2::X,
+                "joystick display remains in screen space"
+            );
+            let position = app.world().get::<Transform>(hero).unwrap().translation;
+            let projected = camera_c().rotation.inverse() * position;
+            assert!(projected.x > 0.0 && projected.y.abs() < 1e-5);
+            positions.push(position);
+        }
+        assert!(
+            positions
+                .windows(2)
+                .all(|pair| pair[0].distance(pair[1]) < 1e-5)
+        );
+    }
+
+    #[test]
+    fn camera_less_manual_and_camera_present_autoplay_keep_world_routes() {
+        let (mut app, hero, _) = manual_app(false);
+        app.world_mut()
+            .resource_mut::<ButtonInput<KeyCode>>()
+            .press(KeyCode::ArrowUp);
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(100));
+        app.world_mut().run_schedule(Update);
+        let position = app.world().get::<Transform>(hero).unwrap().translation;
+        assert_eq!(position.x, 0.0);
+        assert!(position.z < 0.0);
+        let (mut app, hero, _) = manual_app(true);
+        app.insert_resource(Autoplay);
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(100));
+        app.world_mut().run_schedule(Update);
+        let route = autoplay_movement(0.1);
+        let speed = app.world().resource::<PlayerBuild>().move_speed;
+        assert!(
+            app.world()
+                .get::<Transform>(hero)
+                .unwrap()
+                .translation
+                .distance(Vec3::new(route.x, 0.0, route.y) * speed * 0.1)
+                < 1e-5
+        );
+    }
+
+    #[test]
+    fn idle_and_upward_dodge_use_the_same_screen_ground_basis() {
+        for upward in [false, true] {
+            let (mut app, hero, _) = manual_app(true);
+            if upward {
+                app.world_mut()
+                    .resource_mut::<ButtonInput<KeyCode>>()
+                    .press(KeyCode::ArrowUp);
+            }
+            app.world_mut().resource_mut::<DodgeState>().request();
+            app.world_mut().run_schedule(Update);
+            let position = app.world().get::<Transform>(hero).unwrap().translation;
+            assert!((position.length() - DODGE_DISTANCE).abs() < 1e-5);
+            let projected = camera_c().rotation.inverse() * position;
+            if upward {
+                assert!(projected.y > 0.0 && projected.x.abs() < 1e-5);
+            } else {
+                assert!(projected.x > 0.0 && projected.y.abs() < 1e-5);
+            }
+        }
+    }
 
     #[test]
     fn phone_joystick_only_starts_inside_the_visible_lower_left_pad() {

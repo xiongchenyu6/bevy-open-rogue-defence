@@ -1,0 +1,30 @@
+{
+  "verdict": "scoped source/native adoption accepted",
+  "root_viewed_r6": [
+    "en-desktop-demon-cave/frames/frame00295.png",
+    "zh-compact-demon-cave/frames/frame00295.png",
+    "en-portrait-den-preview/frames/frame00350.png",
+    "en-desktop-camera-framing-touch/frames/frame00238.png",
+    "zh-compact-camera-framing-touch/frames/frame00178.png",
+    "zh-compact-camera-framing-touch/frames/frame00238.png",
+    "en-portrait-camera-framing-touch/frames/frame00238.png",
+    "zh-phone-camera-framing-touch/frames/frame00118.png",
+    "zh-phone-camera-framing-touch/frames/frame00238.png",
+    "en-desktop-hit-feedback/frames/frame00010.png"
+  ],
+  "changes": "authored cave, adaptive C camera, camera-relative movement/dodge, portrait toolbar and touch footer, critical hitstop",
+  "scope": "Controlled capture fixtures and synthetic HitEvents; not physical touch/controller or standalone package acceptance. Body-centre corner assertions do not prove all poses/bounds. Only listed pixels reviewed.",
+  "units": {
+    "checks": "da4915cb64f147e894ee3dfd8f522917",
+    "native": "977f3469ae26492b80de142cf104cded"
+  },
+  "native_cases": 18,
+  "native_updates": 5320,
+  "native_saved_pngs": 184,
+  "full_tests": {
+    "passed": 726,
+    "failed": 0,
+    "ignored": 1
+  },
+  "critical_timing": "Requested 25ms; actual 30Hz capture holds for one 33.333ms update. Frame10/120 speed .06, next frame restores1;8x always8. No claim of exact25ms presentation at30Hz."
+}

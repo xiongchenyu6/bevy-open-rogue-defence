@@ -72,6 +72,8 @@ impl SettingsState {
 #[derive(Component)]
 struct SettingsOpen;
 #[derive(Component)]
+struct SettingsLauncherLabel;
+#[derive(Component)]
 struct SettingsClose;
 #[derive(Component)]
 struct SettingsTutorial;
@@ -135,7 +137,7 @@ fn setup_entry(mut commands: Commands) {
             BorderColor::all(GOLD),
         ))
         .with_children(|button| {
-            button.spawn((SettingsCopy(CopyKind::Title), label("", 13.0, IVORY)));
+            button.spawn((SettingsLauncherLabel, label("", 13.0, IVORY)));
         });
 }
 

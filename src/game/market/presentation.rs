@@ -567,7 +567,9 @@ pub(super) fn layout(
             next.width = px(layout.toggle_width);
             next.height = px(layout.toggle_height);
             next.min_height = next.height;
-            next.top = if compact {
+            next.top = if layout.portrait {
+                px(176)
+            } else if compact {
                 px(layout.safe_y)
             } else {
                 Val::Auto

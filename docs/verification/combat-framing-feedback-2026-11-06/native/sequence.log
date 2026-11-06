@@ -1,0 +1,37 @@
+STAGE en-desktop-demon-cave begin
+STAGE en-desktop-demon-cave technical PASS; visual/input acceptance separate
+STAGE en-desktop-den-preview begin
+STAGE en-desktop-den-preview technical PASS; visual/input acceptance separate
+STAGE en-desktop-camera-framing begin
+STAGE en-desktop-camera-framing technical PASS; visual/input acceptance separate
+STAGE en-desktop-camera-framing-touch begin
+STAGE en-desktop-camera-framing-touch technical PASS; visual/input acceptance separate
+STAGE zh-compact-demon-cave begin
+STAGE zh-compact-demon-cave technical PASS; visual/input acceptance separate
+STAGE zh-compact-den-preview begin
+STAGE zh-compact-den-preview technical PASS; visual/input acceptance separate
+STAGE zh-compact-camera-framing begin
+STAGE zh-compact-camera-framing technical PASS; visual/input acceptance separate
+STAGE zh-compact-camera-framing-touch begin
+STAGE zh-compact-camera-framing-touch technical PASS; visual/input acceptance separate
+STAGE en-portrait-demon-cave begin
+STAGE en-portrait-demon-cave technical PASS; visual/input acceptance separate
+STAGE en-portrait-den-preview begin
+STAGE en-portrait-den-preview technical PASS; visual/input acceptance separate
+STAGE en-portrait-camera-framing begin
+STAGE en-portrait-camera-framing technical PASS; visual/input acceptance separate
+STAGE en-portrait-camera-framing-touch begin
+STAGE en-portrait-camera-framing-touch technical PASS; visual/input acceptance separate
+STAGE zh-phone-demon-cave begin
+STAGE zh-phone-demon-cave technical PASS; visual/input acceptance separate
+STAGE zh-phone-den-preview begin
+STAGE zh-phone-den-preview technical PASS; visual/input acceptance separate
+STAGE zh-phone-camera-framing begin
+STAGE zh-phone-camera-framing technical PASS; visual/input acceptance separate
+STAGE zh-phone-camera-framing-touch begin
+STAGE zh-phone-camera-framing-touch technical PASS; visual/input acceptance separate
+STAGE en-desktop-hit-feedback begin
+STAGE en-desktop-hit-feedback technical PASS; visual/input acceptance separate
+STAGE en-desktop-hit-feedback-8x begin
+STAGE en-desktop-hit-feedback-8x technical PASS; visual/input acceptance separate
+NATIVE_TECHNICAL_PASS four sizes/four cave-camera scenarios plus two impact fixtures5320updates; inspect saved pixels and speed trace before acceptance
