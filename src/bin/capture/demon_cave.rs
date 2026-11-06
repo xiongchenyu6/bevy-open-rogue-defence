@@ -101,6 +101,7 @@ pub fn install_preview(app: &mut bevy::app::SubApp, scenario: &str) {
             | "den-preview-front"
             | "den-preview-wide"
             | "den-preview-front-board"
+            | "den-preview-frontal-c"
     ));
     let world = app.world_mut();
     assert!(
@@ -151,6 +152,10 @@ pub fn install_preview(app: &mut bevy::app::SubApp, scenario: &str) {
         "den-preview-front-board" => (
             "entrance-facing battlefield proposal",
             Some((Vec3::new(-9.0, 25.2, 21.0), Vec3::new(5.0, 1.2, 0.0), 28.0)),
+        ),
+        "den-preview-frontal-c" => (
+            "frontal cave and battlefield proposal C",
+            Some((Vec3::new(-20.0, 25.2, 10.0), Vec3::new(4.0, 1.2, 0.0), 28.0)),
         ),
         _ => ("production", None),
     };

@@ -1,0 +1,36 @@
+[
+  {
+    "case": "production-camera",
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/intact-cave-C-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/intact-cave-C-native-2026-11-06/production-camera/frames",
+      "400",
+      "den-preview",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "seconds": 22.51097613098682
+  },
+  {
+    "case": "frontal-C-proposal",
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/intact-cave-C-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/intact-cave-C-native-2026-11-06/frontal-C-proposal/frames",
+      "400",
+      "den-preview-frontal-c",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "seconds": 22.061433494993253
+  }
+]
