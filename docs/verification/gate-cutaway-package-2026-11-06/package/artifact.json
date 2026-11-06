@@ -1,0 +1,9 @@
+{
+  "source_commit": "f205e965ac61bc7494457e5f3de0f56ce3cf164e",
+  "package_directory": "target/desktop-packages-gate-cutaway-nov6/rogue-commander-linux",
+  "tar": "target/desktop-packages-gate-cutaway-nov6/rogue-commander-linux-0.1.0.tar.gz",
+  "tar_bytes": 62300408,
+  "tar_sha256": "cfca4c5d928c63c658e93508c0bf5dc814443849019a4c0f20bb303ff98069e7",
+  "binary_sha256": "eef177e05409f07564b449cf339486fce91ecc98bacbed6334278cbc5810bec4",
+  "scope": "Offline read-only Ubuntu24/X11 software Vulkan short flow only; no full chapter, natural forge, hardware or Steam claim"
+}

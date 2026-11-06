@@ -1,0 +1,16 @@
+{
+  "old_files": 892,
+  "new_files": 892,
+  "added": {},
+  "removed": {},
+  "changed": {
+    "version.json": {
+      "old": "0aeb5e38ee1a5256efba209d14d2b2fa458eef26a4979425df2185d7ccbc0b7d",
+      "new": "980579a2578956710e055cbe2c60b770dcf891054b0ed3b725c39687b486250a"
+    },
+    "rogue_commander": {
+      "old": "6e124cd0d123349b649da236931734ffc5657801e30e786bcc41233298d336a6",
+      "new": "eef177e05409f07564b449cf339486fce91ecc98bacbed6334278cbc5810bec4"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "source_commit": "f205e965ac61bc7494457e5f3de0f56ce3cf164e",
+  "manifest_files": 892,
+  "tar_files": 893,
+  "binary_sha256": "eef177e05409f07564b449cf339486fce91ecc98bacbed6334278cbc5810bec4",
+  "tar_sha256": "cfca4c5d928c63c658e93508c0bf5dc814443849019a4c0f20bb303ff98069e7",
+  "verdict": "ROOT_ALL_ARTIFACT_BYTES_PASS",
+  "scope": "Exact all file/tar bytes; native gate poses and public generic short flow are separate evidence"
+}

@@ -1,3 +1,4 @@
 # Verification manifests hash the original captured bytes, including raw logs.
 docs/verification/cave-feel-package-2026-11-06/** -text
 docs/verification/gate-cutaway-2026-11-06/** -text
+docs/verification/gate-cutaway-package-2026-11-06/** -text

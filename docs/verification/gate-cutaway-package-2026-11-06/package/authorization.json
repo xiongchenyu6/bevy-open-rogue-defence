@@ -1,0 +1,7 @@
+{
+  "build_and_smoke_authorized": true,
+  "expected_source_commit": "f205e965ac61bc7494457e5f3de0f56ce3cf164e",
+  "public_routes_authorized": false,
+  "reason": "Prepared target-only; await gate-cutaway native acceptance and exact final root source commit GO",
+  "basis": "Actual final .10-opacity native six-case comparison accepted and734 release tests/strictClippy; scoped source committed"
+}

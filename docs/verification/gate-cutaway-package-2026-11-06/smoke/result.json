@@ -1,0 +1,189 @@
+{
+  "package_hashes_verified": true,
+  "no_source": true,
+  "no_rust": true,
+  "no_nix": true,
+  "working_directory": "/tmp",
+  "chapter_recruit_battle": true,
+  "fullscreen_restored": true,
+  "language_saved_and_reloaded": true,
+  "normal_quit_twice": true,
+  "real_guide_after_readiness": true,
+  "tutorial_dismissal_saved": true,
+  "restart_skips_automatic_guide_and_runs_battle": true,
+  "battle_clock_proofs": {
+    "initial": {
+      "first": {
+        "screenshot": "initial-battle-progress-00.png",
+        "observed_monotonic": 276262.690887982,
+        "blockers": [],
+        "clock_seconds": 1498,
+        "clock_reads": [
+          [
+            300,
+            "24:58"
+          ],
+          [
+            400,
+            "24:58"
+          ]
+        ],
+        "completed_monotonic": 276267.383918248
+      },
+      "second": {
+        "screenshot": "initial-battle-progress-01.png",
+        "observed_monotonic": 276268.730668951,
+        "blockers": [],
+        "clock_seconds": 1492,
+        "clock_reads": [
+          [
+            300,
+            "24:52"
+          ],
+          [
+            400,
+            "24:52"
+          ]
+        ],
+        "completed_monotonic": 276273.088076345
+      }
+    },
+    "restart": {
+      "first": {
+        "screenshot": "restart-battle-progress-02.png",
+        "observed_monotonic": 276327.420335521,
+        "blockers": [],
+        "clock_seconds": 1487,
+        "clock_reads": [
+          [
+            300,
+            "24:47"
+          ],
+          [
+            400,
+            "24:47"
+          ]
+        ],
+        "completed_monotonic": 276331.915420833
+      },
+      "second": {
+        "screenshot": "restart-battle-progress-03.png",
+        "observed_monotonic": 276333.227344597,
+        "blockers": [],
+        "clock_seconds": 1481,
+        "clock_reads": [
+          [
+            300,
+            "24:41"
+          ],
+          [
+            400,
+            "24:41"
+          ]
+        ],
+        "completed_monotonic": 276337.732758562
+      }
+    }
+  },
+  "battle_clock_observations": {
+    "initial": [
+      {
+        "screenshot": "initial-battle-progress-00.png",
+        "observed_monotonic": 276262.690887982,
+        "blockers": [],
+        "clock_seconds": 1498,
+        "clock_reads": [
+          [
+            300,
+            "24:58"
+          ],
+          [
+            400,
+            "24:58"
+          ]
+        ],
+        "completed_monotonic": 276267.383918248
+      },
+      {
+        "screenshot": "initial-battle-progress-01.png",
+        "observed_monotonic": 276268.730668951,
+        "blockers": [],
+        "clock_seconds": 1492,
+        "clock_reads": [
+          [
+            300,
+            "24:52"
+          ],
+          [
+            400,
+            "24:52"
+          ]
+        ],
+        "completed_monotonic": 276273.088076345
+      }
+    ],
+    "restart": [
+      {
+        "screenshot": "restart-battle-progress-00.png",
+        "observed_monotonic": 276315.789545669,
+        "blockers": [],
+        "clock_seconds": 1498,
+        "clock_reads": [
+          [
+            300,
+            "24:58"
+          ],
+          [
+            400,
+            "24:58"
+          ]
+        ],
+        "completed_monotonic": 276320.041369625
+      },
+      {
+        "screenshot": "restart-battle-progress-01.png",
+        "observed_monotonic": 276321.301169049,
+        "blockers": [],
+        "clock_seconds": null,
+        "clock_reads": [],
+        "clock_error": "Unreadable battle countdown pixels: [(300, '2452'), (400, '24:52')]",
+        "completed_monotonic": 276326.079382113
+      },
+      {
+        "screenshot": "restart-battle-progress-02.png",
+        "observed_monotonic": 276327.420335521,
+        "blockers": [],
+        "clock_seconds": 1487,
+        "clock_reads": [
+          [
+            300,
+            "24:47"
+          ],
+          [
+            400,
+            "24:47"
+          ]
+        ],
+        "completed_monotonic": 276331.915420833
+      },
+      {
+        "screenshot": "restart-battle-progress-03.png",
+        "observed_monotonic": 276333.227344597,
+        "blockers": [],
+        "clock_seconds": 1481,
+        "clock_reads": [
+          [
+            300,
+            "24:41"
+          ],
+          [
+            400,
+            "24:41"
+          ]
+        ],
+        "completed_monotonic": 276337.732758562
+      }
+    ]
+  },
+  "scope": "Ubuntu 24.04 / X11 / software Vulkan; no Steam client or hardware performance claim"
+}
