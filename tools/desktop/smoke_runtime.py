@@ -324,7 +324,10 @@ def main():
         click(win, 230, 340)
         battle_running(win, app, 'initial')
         screenshot(win, 'battle.png')
-        click_text(win, app, 'Settings')
+        # The small launcher caption competes with the rendered battlefield in
+        # whole-frame OCR. Use its observed toolbar position, then require the
+        # actual large settings-page title below, as on the Chinese quit route.
+        click(win, int(geometry(win)['WIDTH']) // 2, 30)
         wait_text(win, app, 'INTERFACE LANGUAGE')
         click(win, 780, 300)
         assert (state / 'config/rogue-commander/language').read_text().strip() == 'zh-CN'
