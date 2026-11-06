@@ -59,7 +59,10 @@ library result are recorded in
 Sword contact has since been calibrated against its authored clip and paired
 native damage/playback sequences; see
 [the sword timing record](verification/attack-rhythm-2026-11-05/README.md).
-Other weapons still need their own release/contact evidence before timing changes.
+Later source adds [three-family windup audio](verification/melee-whoosh-2026-11-06/README.md)
+and preserves [first-contact squash on long frames](verification/first-punch-2026-11-06/README.md).
+Their records distinguish real contact/output checks from subjective listening and
+full-session feel. Neither change is included in the d454 standalone package.
 More particles, full-screen flashes,
 universal slow motion or continuous shake are not part of this change. Future
 camera/flash additions should honor reduced-motion and reduced-flash settings.
