@@ -1,0 +1,14 @@
+{
+  "unit": "rogue-attack-phase-followup-nov6",
+  "launch_invocation": "03f042a750ef418692defa27956a2105",
+  "terminal_observed_by_root": {
+    "ActiveState": "inactive",
+    "Result": "success",
+    "ExecMainStatus": 0
+  },
+  "invocation_scope": "launch tool receipt, not guaranteed terminal systemctl InvocationID",
+  "binary_sha256": "a74af33904926e2f75b4d4a5927d3c753bde9a94f1968998ef0b19e01bc75e27",
+  "binary_source": "target/verification/crown-detail-2026-11-06/after-capture",
+  "inputs_scope": "actual common Crown after-build input map copied by run.py, per-case post-run verified; includes default-off release probe",
+  "source_file_sha256": "7601f73aabf4087328f2f2b54958a7c38d6e98860ce715b059d533e8d875a1dd"
+}

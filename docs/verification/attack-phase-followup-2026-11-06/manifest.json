@@ -1,0 +1,23 @@
+{
+  ".gitattributes": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+  "README.md": "29c83932d61ea25710634ca347322dc4e57aea83d86a9cdd056b20abdcece462",
+  "analyze-current.py": "ce66147e780cafb21b99948c1ae68665b46e1799de28cf870dfc2756273e4cac",
+  "current-ember-result.json": "37b544848c0f141cf79e1493f96f92fc4dd4eb92c26eb655be4b6179953145d4",
+  "current-ember.log.gz": "eda6ecb29636aadab7c1ae880c16a8a31feae97818a684168feff8c468f2aed0",
+  "current-storm-result.json": "e57c45f0824af93ba2273752901948ea2f108f9b3722277e7a4d192e6db0daec",
+  "current-storm.log.gz": "073835a2952c11a586693b81a19b83cff80f80cab836a5ed6b62f54b4563007e",
+  "current-sword-result.json": "62c7251877ac0271b095d98853b42e031d10ecc6bc50ffd2993eb4f7d1ef1cf0",
+  "current-sword.log.gz": "4f08831007c9279eb007d552791b9e11b20a1bc25639f41226c817fb470b3e35",
+  "frozen/attacks.rs": "7601f73aabf4087328f2f2b54958a7c38d6e98860ce715b059d533e8d875a1dd",
+  "images/ember-009.png": "a1a36ef92f138dd3a56d89e68949624be75b1ff82ca6ba0692ca58eb837ed575",
+  "images/ember-010.png": "e8c22875cb0e31b9b79c8c9bdac4e0081078ea992d346e212628f65a30ed5ce3",
+  "images/ember-012.png": "0ff2f92a32dcb66ca621ca6b1c094f69297d4f6f583f4690ab66f21f219125a8",
+  "images/ember-015.png": "c15d12e0dae4d94bbcbe3a2750a2315d94eb9f27f105de3f4b940fb8af62ee7c",
+  "inputs.json": "ccf7d75702a817ec5483bed528744618bc1ff1f84876ba9944672b6191f41a7f",
+  "manager.log": "2e1eac2991d44f7a72c93676a0274c442b974e6b7da74507d2c1a35dd1f75f6e",
+  "measured-summary.json": "13ce80a2a2b8d1c8eef781b8578dd8644f7da91133aac23edba223cdda8adc94",
+  "provenance.json": "6870683da826d7c3e8934001b11b099e1e694f71aee1bac829d252a1a3a0dc7a",
+  "raw-manifest.json": "0056ce8683b085cfe24be1324ff7ea29d8170254524020413dcaec47cd35c5cb",
+  "run.py": "e8e98381dce4501655b4a5d2895828a99300238747582a7a63593dd6806a97d3",
+  "verify.py": "7fef3f1635853a11fd99c1122dd2758ed3e9af91d3daab31010247f46fee6231"
+}

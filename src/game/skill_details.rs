@@ -39,7 +39,7 @@ const EFFECTS_EN: [&str; SkillId::COUNT] = [
 ];
 
 pub(crate) fn simple(language: GameLanguage, skill: SkillId, current: u8) -> String {
-    let next = current.saturating_add(1).min(skill.definition().max_rank);
+    let next = current.max(current.saturating_add(1).min(skill.definition().max_rank));
     let effect = if language.is_chinese() {
         match skill.0 {
             21 => "旗帜持续10秒，提供减伤、攻速与城门修复。",
@@ -52,7 +52,7 @@ pub(crate) fn simple(language: GameLanguage, skill: SkillId, current: u8) -> Str
     format!(
         "{} {current} → {next}/{} · {effect}",
         language.pick("Rank", "等级"),
-        skill.definition().max_rank
+        current.max(skill.definition().max_rank)
     )
 }
 
@@ -176,14 +176,14 @@ pub(crate) fn detailed(
 ) -> String {
     let i = skill.0 as usize;
     let rank = current.max(1);
-    let next = current.saturating_add(1).min(skill.definition().max_rank);
+    let next = current.max(current.saturating_add(1).min(skill.definition().max_rank));
     let current_value = skills::skill_preview_damage(i, rank, build, vitals, runtime);
     let next_value = skills::skill_preview_damage(i, next, build, vitals, runtime);
     let mut lines = vec![
         format!(
             "{} {current} → {next}/{}",
             language.pick("Rank", "等级"),
-            skill.definition().max_rank
+            current.max(skill.definition().max_rank)
         ),
         format!(
             "{} → {}",
@@ -396,81 +396,5 @@ pub(crate) fn detailed(
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn detailed_preview_uses_live_damage_cooldown_and_next_radius() {
-        let build = PlayerBuild::default();
-        let vitals = HeroVitals::default();
-        let runtime = SkillRuntime::default();
-        let detail = detailed(
-            GameLanguage::English,
-            SkillId(13),
-            2,
-            &build,
-            &vitals,
-            &runtime,
-        );
-        let a = skills::skill_preview_damage(13, 2, &build, &vitals, &runtime).unwrap();
-        let b = skills::skill_preview_damage(13, 3, &build, &vitals, &runtime).unwrap();
-        assert!(detail.contains(&format!("{a:.1} → {b:.1}")));
-        assert!(detail.contains(&format!("Cooldown {:.1}s", skills::rank_cooldown(13, 2))));
-        assert!(detail.contains("Effect radius 4.00 → 4.80 m"));
-        assert!(detail.contains("spell power"));
-        assert!(!simple(GameLanguage::English, SkillId(13), 2).contains("Formula:"));
-    }
-    #[test]
-    fn passive_and_infection_previews_do_not_invent_catalog_damage() {
-        let build = PlayerBuild::default();
-        let vitals = HeroVitals::default();
-        let runtime = SkillRuntime::default();
-        let prism = detailed(
-            GameLanguage::English,
-            SkillId(20),
-            4,
-            &build,
-            &vitals,
-            &runtime,
-        );
-        assert!(prism.contains("Copied spell damage 94% → Copied spell damage 100%"));
-        assert!(!prism.contains("Damage ("));
-        let infection = detailed(
-            GameLanguage::SimplifiedChinese,
-            SkillId(18),
-            2,
-            &build,
-            &vitals,
-            &runtime,
-        );
-        assert!(infection.contains("物理疫蚀每跳"));
-        assert!(infection.contains("0.14 + 0.04"));
-        let volley = detailed(
-            GameLanguage::English,
-            SkillId(7),
-            2,
-            &build,
-            &vitals,
-            &runtime,
-        );
-        assert!(volley.contains(&format!(
-            "{:.1} → {:.1}",
-            build.attack_damage * 0.6,
-            build.attack_damage * 0.6
-        )));
-        assert!(volley.contains("Formula: 0.60 × attack damage"));
-    }
-    #[test]
-    fn all_skill_descriptions_are_localized_and_bounded_at_max_rank() {
-        let build = PlayerBuild::default();
-        let vitals = HeroVitals::default();
-        let runtime = SkillRuntime::default();
-        for index in 0..SkillId::COUNT {
-            for language in [GameLanguage::English, GameLanguage::SimplifiedChinese] {
-                let text = detailed(language, SkillId(index as u8), 5, &build, &vitals, &runtime);
-                assert!(text.contains("5 → 5/5"));
-                assert!(!text.contains("NaN") && !text.contains("infinity"));
-                assert!(!text.is_empty());
-            }
-        }
-    }
-}
+#[path = "skill_details/tests.rs"]
+mod tests;

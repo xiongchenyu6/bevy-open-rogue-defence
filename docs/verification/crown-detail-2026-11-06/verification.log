@@ -1,0 +1,99 @@
+{
+  "result": "PASS",
+  "frozen_files": 390,
+  "production_delta_expressions": 4,
+  "base_observations": 384,
+  "strings_per_observation": 2,
+  "before_regression_exit": 101,
+  "native_cases": 8,
+  "frames_per_case": 240,
+  "selected_pngs": 16,
+  "damage": {
+    "before-en": {
+      "100": [
+        "650.8",
+        "573.1"
+      ],
+      "180": [
+        "650.8",
+        "573.1"
+      ]
+    },
+    "before-portrait-en": {
+      "100": [
+        "650.8",
+        "573.1"
+      ],
+      "180": [
+        "650.8",
+        "573.1"
+      ]
+    },
+    "before-zh": {
+      "100": [
+        "650.8",
+        "573.1"
+      ],
+      "180": [
+        "650.8",
+        "573.1"
+      ]
+    },
+    "before-portrait-zh": {
+      "100": [
+        "650.8",
+        "573.1"
+      ],
+      "180": [
+        "650.8",
+        "573.1"
+      ]
+    },
+    "after-en": {
+      "100": [
+        "650.8",
+        "650.8"
+      ],
+      "180": [
+        "650.8",
+        "650.8"
+      ]
+    },
+    "after-portrait-en": {
+      "100": [
+        "650.8",
+        "650.8"
+      ],
+      "180": [
+        "650.8",
+        "650.8"
+      ]
+    },
+    "after-zh": {
+      "100": [
+        "650.8",
+        "650.8"
+      ],
+      "180": [
+        "650.8",
+        "650.8"
+      ]
+    },
+    "after-portrait-zh": {
+      "100": [
+        "650.8",
+        "650.8"
+      ],
+      "180": [
+        "650.8",
+        "650.8"
+      ]
+    }
+  },
+  "library": [
+    746,
+    0,
+    1
+  ],
+  "limit": "Rank/header downgrade only; final outgoing Crown30% buff inclusion remains unverified"
+}

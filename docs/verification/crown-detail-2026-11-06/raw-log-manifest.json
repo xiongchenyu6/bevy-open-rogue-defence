@@ -1,0 +1,116 @@
+[
+  {
+    "original": "target/verification/crown-detail-2026-11-06/library-tests.log",
+    "archive": "logs/library-tests.log.gz",
+    "raw_bytes": 73996,
+    "raw_sha256": "d34c4bb35193cb32c5731c61dda7a289998d151ffba5bc9da5f99293d88d336a"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/after-regression.log",
+    "archive": "logs/after-regression.log.gz",
+    "raw_bytes": 1443,
+    "raw_sha256": "74552e4cb5eb8aebaf001fd135a738ebfc79c559d8968f0336d37476d1d60212"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/before-manager.log",
+    "archive": "logs/before-manager.log.gz",
+    "raw_bytes": 218,
+    "raw_sha256": "e044f462c4bcb549cd9ba7e662724073faeea4592f68d1a38156e6654cbe7a7c"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/clippy.log",
+    "archive": "logs/clippy.log.gz",
+    "raw_bytes": 278,
+    "raw_sha256": "da4b6c6ee22760a5af56c692ba3db52fc86c146421278e1b8c6066356762363d"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/before-zh-native.log",
+    "archive": "logs/before-zh-native.log.gz",
+    "raw_bytes": 18287,
+    "raw_sha256": "97c635cce062acdd68584f11a4f9508f45dd1119fc70a14f7f462184e19fb575"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/after-build.log",
+    "archive": "logs/after-build.log.gz",
+    "raw_bytes": 276,
+    "raw_sha256": "9950ca73e5c29961bfaf8aab90caa37308f56a62c40719b8de7768584708cc80"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/after-en-native.log",
+    "archive": "logs/after-en-native.log.gz",
+    "raw_bytes": 18265,
+    "raw_sha256": "082a4d7b49f129c560f8b35676f318ae725b8cbbd5a49179111a880da6df674b"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/before-base.log",
+    "archive": "logs/before-base.log.gz",
+    "raw_bytes": 253118,
+    "raw_sha256": "34f19d95542a8458447e263553b27f9009d32b418b0b424784d897c672b93a54"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/before-en-native.log",
+    "archive": "logs/before-en-native.log.gz",
+    "raw_bytes": 18333,
+    "raw_sha256": "baeed30102851864b91ade665136b972030d71ecfdf2e3c707329534b0a2a369"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/before-build.log",
+    "archive": "logs/before-build.log.gz",
+    "raw_bytes": 276,
+    "raw_sha256": "6e931998cb13a01360445d694e604b5697eaaa094b693063019c70f0bbb4c3bd"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/after-base.log",
+    "archive": "logs/after-base.log.gz",
+    "raw_bytes": 253118,
+    "raw_sha256": "2625a76e6f78bb515b007b437247f0ff3ad1c203ca4089b96b781e1a17581607"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/before-regression.log",
+    "archive": "logs/before-regression.log.gz",
+    "raw_bytes": 2299,
+    "raw_sha256": "91086e47d33f4dfb30abf5f2e6a12c26e100086a342a756622cb22cb352f6884"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/after-zh-native.log",
+    "archive": "logs/after-zh-native.log.gz",
+    "raw_bytes": 18219,
+    "raw_sha256": "23392a6d58861e41d32fb3b23930a8462d95f77334d6b0e69531b3f105c8a19a"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/after-manager.log",
+    "archive": "logs/after-manager.log.gz",
+    "raw_bytes": 196,
+    "raw_sha256": "d2d8ae5d4550706c2c58ea30f0e9de312c036635b9e0c034440f5705fd711f7a"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/before-portrait-en-native.log",
+    "archive": "logs/before-portrait-en-native.log.gz",
+    "raw_bytes": 4778,
+    "raw_sha256": "0a6a952ac89dff6f4702ff932c07d8d9af0e814d5370b40c95e72dd326fff0e1"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/before-portrait-zh-native.log",
+    "archive": "logs/before-portrait-zh-native.log.gz",
+    "raw_bytes": 4732,
+    "raw_sha256": "fb3bc2981a17f98e256e0af6f1129bd770a12b39db7ca7fd530d506643fceccb"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/after-portrait-en-native.log",
+    "archive": "logs/after-portrait-en-native.log.gz",
+    "raw_bytes": 4770,
+    "raw_sha256": "19056ce75ce5e044b9a1927bbbc011997bab095dfa666eb8167bb42dacce7394"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/after-portrait-zh-native.log",
+    "archive": "logs/after-portrait-zh-native.log.gz",
+    "raw_bytes": 4724,
+    "raw_sha256": "d46c61ff4ae32589f88dc491cb39084263f07cd7101180ff9d1480c3657f6a2d"
+  },
+  {
+    "original": "target/verification/crown-detail-2026-11-06/portrait-manager.log",
+    "archive": "logs/portrait-manager.log.gz",
+    "raw_bytes": 227,
+    "raw_sha256": "1b980984e9ae4974413b95b15da7eae31d6aece4ca4051eff1ba0883cecc98b8"
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "src/game/skill_details.rs": "1c77eea05a10108f6150c183900e520ddd599847ad35b86fa7f4c67891b1f282",
+  "src/game/skills.rs": "727c000513c6eb1644c03a1d395edeea4c0cded80988ef4223cb196b7268fa0b",
+  "src/game/skills/summons.rs": "7aab0fdd6fb9c59714b650e2ee299eecbf790f66dc1b41bfbe1fd79f1fb317d7",
+  "src/game/skills/growth.rs": "0ba9362b42dde89ac9b42cef430b1a6b1ce2de97f3a7f39b7b473e7bc08d112a",
+  "src/game/skills/ur_evolutions.rs": "a59617dd0a862caee9fc93d5be777d44c84bcaa8379b637ccf7b8010ef2d84fc",
+  "src/game/bonds.rs": "e13de03027434ad2b86fc3959d0ec9410d67d1b8d716b9d27d34052b28ed7e55",
+  "src/game/combat.rs": "7b1d7282323487c51d33f97c23f1f9e2dfefc768b1f6e6d0db70732405ddc024",
+  "src/game/market.rs": "07fb296087bc950fe88013cdd572de09d13ef2a7856f953094460e1cf6ab24ca",
+  "src/game/encounters.rs": "d7a74ba383e776fe7df0901552bcab945144b11875e1c4e0bb98a5fd2f6f1589",
+  "src/game/content.rs": "3083d27a14774708b99063a34866b178575f103cda652123a24a11745b65e197",
+  "src/game/progression_ui.rs": "45a571781a13cef201b45044ae9e153c2216edd7e178a9fdfc8c3498c0fa22d2"
+}

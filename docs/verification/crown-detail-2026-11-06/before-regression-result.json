@@ -1,0 +1,1 @@
+{"command": ["nix", "develop", "--command", "cargo", "test", "--locked", "--release", "--lib", "crown_rank_six_evolution_preview_never_offers_a_downgrade", "-j2", "--", "--nocapture"], "returncode": 101}

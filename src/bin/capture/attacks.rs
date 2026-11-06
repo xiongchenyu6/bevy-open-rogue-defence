@@ -188,9 +188,75 @@ pub fn install(app: &mut bevy::app::SubApp, scenario: &str) {
     if std::env::var_os("ROGUE_CAPTURE_HIT_MATERIAL_TRACE").is_some() {
         super::hit_material::install(app);
     }
+    if std::env::var_os("ROGUE_CAPTURE_RELEASE_TRACE").is_some() {
+        app.init_resource::<ReleaseTrace>()
+            .add_systems(Last, trace_projectile_release);
+    }
     if std::env::var_os("ROGUE_CAPTURE_ATTACK_TRACE").is_some() {
         app.init_resource::<AttackTimingTrace>()
             .add_systems(Last, trace_attack_timing);
+    }
+}
+
+/// Opt-in observation at Last: public active projectile components only.
+/// A carrier born and retired earlier in the same update is not observable here.
+#[derive(Resource, Default)]
+struct ReleaseTrace {
+    frame: u32,
+    seen: std::collections::HashSet<(Entity, u32)>,
+}
+
+fn trace_projectile_release(world: &mut World) {
+    let frame = {
+        let mut trace = world.resource_mut::<ReleaseTrace>();
+        trace.frame += 1;
+        trace.frame
+    };
+    if frame > 210 {
+        return;
+    }
+    let animations: Vec<_> = world
+        .query::<(Entity, &AnimationPlayer)>()
+        .iter(world)
+        .filter(|(entity, _)| {
+            let mut ancestor = Some(*entity);
+            while let Some(entity) = ancestor {
+                if world.get::<Hero>(entity).is_some() {
+                    return true;
+                }
+                ancestor = world.get::<ChildOf>(entity).map(ChildOf::parent);
+            }
+            false
+        })
+        .flat_map(|(_, player)| {
+            player
+                .playing_animations()
+                .map(|(index, active)| (index.index(), active.seek_time(), active.speed()))
+        })
+        .collect();
+    let projectiles: Vec<_> = world
+        .query::<(Entity, &Projectile, &Transform)>()
+        .iter(world)
+        .map(|(entity, projectile, transform)| {
+            let epoch = world
+                .entity(entity)
+                .get_change_ticks::<Projectile>()
+                .expect("queried projectile has component ticks")
+                .added
+                .get();
+            (entity, epoch, transform.translation, projectile.velocity)
+        })
+        .collect();
+    let kind = world.resource::<HeroVitals>().kind;
+    let mut trace = world.resource_mut::<ReleaseTrace>();
+    println!("RELEASE_PHASE frame={frame} hero={kind:?} clips={animations:?}");
+    for (entity, epoch, position, velocity) in projectiles {
+        if trace.seen.insert((entity, epoch)) {
+            // DamageProfile is gameplay-private; no new API is exposed for this probe.
+            println!(
+                "PROJECTILE_RELEASE frame={frame} entity={entity:?} added_tick={epoch} hero={kind:?} position={position:?} velocity={velocity:?} clips={animations:?}"
+            );
+        }
     }
 }
 

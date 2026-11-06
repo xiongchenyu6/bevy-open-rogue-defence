@@ -1,0 +1,17 @@
+{
+  "current-ember.log": {
+    "raw_sha256": "e320af0bacc2a5495e3dd2dd544a41bc2cce000d09040f416dcffc0c08311b7c",
+    "gzip_sha256": "eda6ecb29636aadab7c1ae880c16a8a31feae97818a684168feff8c468f2aed0",
+    "raw_bytes": 58265
+  },
+  "current-storm.log": {
+    "raw_sha256": "c4f6f86ffd97b8eee2fe68971d576357744e8de659771ab77dfa05cbc77d9035",
+    "gzip_sha256": "073835a2952c11a586693b81a19b83cff80f80cab836a5ed6b62f54b4563007e",
+    "raw_bytes": 56047
+  },
+  "current-sword.log": {
+    "raw_sha256": "0fe53d9fb1202fa97227960eb8cf02f55cc7e1bd0f9a3e30a8792227f35ff96d",
+    "gzip_sha256": "4f08831007c9279eb007d552791b9e11b20a1bc25639f41226c817fb470b3e35",
+    "raw_bytes": 57636
+  }
+}

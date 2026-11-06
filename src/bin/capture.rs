@@ -159,6 +159,9 @@ mod boss_battle_capture;
 #[path = "capture/crafting.rs"]
 mod crafting_capture;
 
+#[path = "capture/crown_detail.rs"]
+mod crown_detail_capture;
+
 #[path = "capture/equipment.rs"]
 mod equipment_capture;
 #[path = "capture/equipment_empty.rs"]
@@ -662,6 +665,9 @@ fn main() {
     }
     if scenario.starts_with("crafting-") {
         crafting_capture::install(&mut apps.main);
+    }
+    if scenario == "crown-detail" {
+        crown_detail_capture::install(&mut apps.main);
     }
     if scenario.starts_with("equipment-empty") {
         equipment_empty_capture::install(&mut apps.main);
@@ -1169,6 +1175,10 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     }
     if scenario.starts_with("crafting-") {
         crafting_capture::configure(world, scenario);
+        return;
+    }
+    if scenario == "crown-detail" {
+        crown_detail_capture::configure(world);
         return;
     }
     if scenario.starts_with("equipment-empty") {

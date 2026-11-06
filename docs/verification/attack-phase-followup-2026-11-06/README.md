@@ -1,0 +1,13 @@
+# Ranged phase observations — bounded, not calibrated
+
+Three actual native capture scenarios completed210updates each with exit0: Ember, Storm and Sword. The opt-in `ROGUE_CAPTURE_RELEASE_TRACE` is capture-only observation; it changes no combat/timing/RNG. `run.py` is the original execution receipt, not a portable rerun command. Run `python3 verify.py` here for portable offline verification.
+
+Each log contains210 phase observations and80 synchronous `ATTACK_TIMING` observations. Ember has24 first-observed projectile epochs; Storm13; Sword0. First two Ember observations occur at frames11/21 with Attack seek .10453333/.107146665 and speed3.1360002/3.2144; Storm16/31 with seek .0691358 and speed2.074074. Their actual imported GLB Attack durations are1.0666666666666667s (`Rogue_Hooded/2H_Ranged_Shoot`) and.9333333333333333s (`Mage/Spellcast_Shoot`). Graph node3 is Attack. `measured-summary.json` retains corresponding phase rows, counts and raw log hashes.
+
+At first observation Ember is already at x−1.3853333, velocity+x18.44; Storm x−1.3586667, velocity+x19.24, from fixture hero x−2. Both have already traveled one30Hz step. These are **Last-observed positions and phases**, not exact spawn/hand release instants. Same Entity is reused with distinct Projectile added ticks, so epoch tracking detects pool reuse. Sword's strict contact carrier retires in the same update and is not observable at Last; zero does not indicate attack failure.
+
+Root viewed only the four archived Ember PNGs9/10/12/15. Production responsive BattleCamera overrides the intended fixed10m capture projection, leaving hero about40pixels high. These pictures cannot resolve exact hand release. No release defect, successful calibration, latency, performance or audio conclusion is claimed. This is controlled rendering/telemetry, not natural gameplay acceptance.
+
+Next bounded diagnostic, not implemented here: under release-probe flag only, remove BattleCamera from the controlled Camera3d, preserving attacks.rs's existing camera transform and FixedVertical10m view. Re-run the same scenarios and adjacent release/recovery frames before proposing any timing change. Accepted Sword.60 and Daggers.50 contact calibration remains untouched.
+
+Raw logs are losslessly compressed with deterministic gzip; raw-manifest records both raw and compressed hashes. All actual source/assets/build input hashes are in inputs.json; frozen attacks.rs matches that map. The binary SHA references the common Crown after-capture binary, without copying the executable. Provenance distinguishes root's observed terminal status from the launch invocation ID. No other PNGs are included or claimed visually reviewed.

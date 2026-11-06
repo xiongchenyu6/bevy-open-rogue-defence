@@ -1,0 +1,13 @@
+{
+  "before_source_copy": "before-skill_details.rs",
+  "after_source_copy": "after-skill_details.rs",
+  "before_input_manifest": "before-inputs.json",
+  "after_input_manifest": "after-inputs.json",
+  "shared_capture_and_test_sources": {
+    "src/game/skill_details/tests.rs": "251f246dadbb55f6ffce41955f12fd9638024f189b917036b4828eec6c9b7c2d",
+    "src/bin/capture/crown_detail.rs": "0c522d651768f98fdf0dcd815abf775ac783fc6e3005adce2e8b2e1936a150a5",
+    "src/bin/capture.rs": "99312f79b3787f9ec5fa73d3f6a7222b7832ae4f23d1d6ab6eb421eb4acdb65e",
+    "src/bin/capture/attacks.rs": "7601f73aabf4087328f2f2b54958a7c38d6e98860ce715b059d533e8d875a1dd"
+  },
+  "scope": "Both native builds include identical controlled Crown fixture, test module and release-phase diagnostics; only skill_details.rs differs"
+}
