@@ -1,0 +1,11 @@
+{
+  "base_head": "2304fd871031df9127e9a30a01ea858921422539",
+  "source_scope": "Base HEAD plus scoped audio/diagnostic changes, exact copied source and native receipts; no standalone release package or public campaign rerun",
+  "native_cases": {
+    "sword": "target/verification/melee-whoosh-implementation-2026-11-06/native-r4b/native-sword",
+    "axe": "target/verification/melee-whoosh-implementation-2026-11-06/native-r5b/native-axe",
+    "daggers": "target/verification/melee-whoosh-implementation-2026-11-06/native-r5b/native-daggers"
+  },
+  "library_test_scope": "700 pass/0 fail/1 ignored on final runtime; later only cfg readonly count/reexport and controlled capture diagnostics changed; exact audio/core hashes retained",
+  "listening_verified": false
+}

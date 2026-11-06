@@ -1,0 +1,19 @@
+{
+  "changed_inputs": [
+    "src/game/basic_attacks.rs",
+    "src/bin/capture/attacks.rs",
+    "src/game/mod.rs"
+  ],
+  "unchanged_production_audio_and_assets": {
+    "src/game/audio.rs": "22330fb9b2b2ef8823aac8e0be2efca7db132a35c96f30f0e077661f35f8bc6e",
+    "src/game/audio_melee.rs": "1c301161ec2010c276e80e773d4dce6b8f45a3f124f1905f27318564afd61ff1",
+    "src/game/combat.rs": "af31094de2ebd6254028b04c66f73e0103f2ff3b263647965de56d81ba66f292",
+    "src/game/hero_fusion.rs": "1197defdf96d4a58fbc02e80ac6d64de63ac913c23bc9e479aa9fc618ac48f11",
+    "src/game/combat/melee_audio_tests.rs": "34e2b9b5634e5133c95a7d6a2e222448ed49f684aa3d46a3689c23d876a5d6c4",
+    "assets/audio/swing_sword.wav": "79501b7ab0fb6cad7ece61a4572239ba36793e6e9103005d1f42f6d6da205c25",
+    "assets/audio/swing_axe.wav": "c81a4657056917f0c092e364069c4ebd176f75456f5ad9a5e928b533a9212c1f",
+    "assets/audio/swing_daggers.wav": "ac9c63d8d170cf32ec4c4e70b7ec9d9b96addbb704769bb1454072cdfe39d615"
+  },
+  "basic_attacks_difference_only_cfg_readonly_count": true,
+  "scope": "R4b sword vs R5b axe/daggers; source diagnostics/capture differ; no all-source identical claim"
+}

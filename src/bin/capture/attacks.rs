@@ -69,11 +69,29 @@ struct AttackCapture {
     route_fixture: bool,
     saw_damage: bool,
     saw_visual: bool,
+    audio_verified: bool,
+    audio_started: Option<f64>,
 }
 
 pub fn install(app: &mut bevy::app::SubApp, scenario: &str) {
     let world = app.world_mut();
     world.remove_resource::<Autoplay>();
+    if std::env::var_os("ROGUE_CAPTURE_MELEE_AUDIO").is_some() {
+        if !cfg!(any(debug_assertions, feature = "dev-tools")) {
+            panic!("melee audio capture requires debug or dev-tools pending-count diagnostic");
+        }
+        world.insert_resource(bevy::time::TimeUpdateStrategy::Automatic);
+        // Controlled recording fixture only: preserve a dodgeable windup even
+        // on the first slow render. This is not the default performance case.
+        world.resource_mut::<PlayerBuild>().attacks_per_second = 1.0;
+        world
+            .resource_mut::<Time<Virtual>>()
+            .set_max_delta(std::time::Duration::from_millis(50));
+        let mut preferences = world.resource_mut::<rogue_commander::game::AudioPreferences>();
+        preferences.music = 0;
+        preferences.effects = 100;
+        preferences.muted = false;
+    }
     world.resource_mut::<PlayerBuild>().skills.fill(0);
     world.resource_mut::<ActiveSkill>().remaining = 10_000.0;
     // Keep the pre-existing optional bond-route comparisons meaningful.
@@ -163,6 +181,8 @@ pub fn install(app: &mut bevy::app::SubApp, scenario: &str) {
         route_fixture: scenario == "attack-arcanum",
         saw_damage: false,
         saw_visual: false,
+        audio_verified: false,
+        audio_started: None,
     })
     .add_systems(Last, (verify, revive_fragile_targets));
     if std::env::var_os("ROGUE_CAPTURE_HIT_MATERIAL_TRACE").is_some() {
@@ -178,6 +198,9 @@ pub fn install(app: &mut bevy::app::SubApp, scenario: &str) {
 struct AttackTimingTrace {
     frame: u32,
     previous_health: Option<f32>,
+    miss_started: Option<f64>,
+    miss_restored: bool,
+    displaced: Vec<(Entity, Vec3)>,
 }
 
 /// Observe actual damage and authored playback together, without injecting hits.
@@ -194,6 +217,86 @@ fn trace_attack_timing(world: &mut World) {
         trace.previous_health = Some(health);
         (trace.frame, damage)
     };
+    if std::env::var_os("ROGUE_CAPTURE_MELEE_AUDIO").is_some() {
+        let now = world.resource::<Time<Real>>().elapsed_secs_f64();
+        let wall = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_secs_f64();
+        if damage > 0.0 {
+            println!(
+                "MELEE_DAMAGE_WALL frame={frame} wall={wall:.6} damage={damage:.3} health={health:.3}"
+            );
+        }
+        let committed = world
+            .resource::<rogue_commander::game::BasicAttackCounter>()
+            .count()
+            > 0;
+        let (started, restored) = {
+            let p = world.resource::<AttackTimingTrace>();
+            (p.miss_started, p.miss_restored)
+        };
+        if committed && started.is_none() && !restored {
+            assert_eq!(
+                damage, 0.0,
+                "first controlled miss must move targets before contact"
+            );
+            let displaced: Vec<_> = world
+                .query_filtered::<(Entity, &Transform), With<AttackTarget>>()
+                .iter(world)
+                .map(|(e, t)| (e, t.translation))
+                .collect();
+            for (e, _) in &displaced {
+                world.get_mut::<Transform>(*e).unwrap().translation.z += 100.0;
+            }
+            let mut p = world.resource_mut::<AttackTimingTrace>();
+            p.displaced = displaced;
+            p.miss_started = Some(now);
+            println!(
+                "MELEE_MISS_BEGIN frame={frame} real={now:.6} wall={wall:.6} health={health:.3}"
+            );
+        } else if let Some(started) = started
+            && !restored
+        {
+            assert_eq!(
+                damage, 0.0,
+                "controlled displaced targets must not take hits"
+            );
+            #[cfg(any(debug_assertions, feature = "dev-tools"))]
+            let pending = rogue_commander::game::pending_melee_count(world);
+            #[cfg(not(any(debug_assertions, feature = "dev-tools")))]
+            let pending = usize::MAX; // Optional probe rejected explicitly at installation.
+            if now - started >= 0.65 && pending == 0 {
+                let displaced =
+                    std::mem::take(&mut world.resource_mut::<AttackTimingTrace>().displaced);
+                for (e, position) in displaced {
+                    world.get_mut::<Transform>(e).unwrap().translation = position;
+                }
+                world.resource_mut::<AttackTimingTrace>().miss_restored = true;
+                println!(
+                    "MELEE_MISS_END frame={frame} real={now:.6} wall={wall:.6} health={health:.3} pending={pending}"
+                );
+            }
+        }
+        let real = world.resource::<Time<Real>>().elapsed_secs_f64();
+        let virtual_time = world.resource::<Time>().elapsed_secs_f64();
+        let voices: Vec<_> = world
+            .query::<(Entity, &Name, &AudioPlayer, Option<&bevy::audio::AudioSink>)>()
+            .iter(world)
+            .filter(|(_, name, _, _)| name.as_str() == "Melee swing whoosh")
+            .map(|(entity, _, player, sink)| (entity, player.0.clone(), sink.is_some()))
+            .collect();
+        let assets = world.resource::<AssetServer>();
+        for (entity, handle, sink) in voices {
+            println!(
+                "MELEE_AUDIO frame={frame} real={real:.6} virtual={virtual_time:.6} entity={entity:?} source={:?} sink={sink} health={health:.3} damage={damage:.3}",
+                assets.get_path(handle.id())
+            );
+        }
+        println!(
+            "MELEE_CONTACT frame={frame} real={real:.6} virtual={virtual_time:.6} health={health:.3} damage={damage:.3}"
+        );
+    }
     if frame > 80 {
         return;
     }
@@ -258,8 +361,11 @@ fn revive_fragile_targets(mut targets: Query<(&mut Enemy, &mut FragileRevive)>) 
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn verify(
     mut capture: ResMut<AttackCapture>,
+    real: Res<Time<Real>>,
+    audio_trace: Option<Res<AttackTimingTrace>>,
     names: Query<&Name>,
     enemies: Query<&Enemy, With<AttackTarget>>,
     build: Res<PlayerBuild>,
@@ -275,7 +381,22 @@ fn verify(
             "Weapon trail / impact" | "Weapon swing trail"
         )
     });
-    if capture.frame == 205 {
+    let audio_probe = std::env::var_os("ROGUE_CAPTURE_MELEE_AUDIO").is_some();
+    let audio_started = *capture.audio_started.get_or_insert(real.elapsed_secs_f64());
+    if audio_probe && !capture.audio_verified {
+        assert!(
+            real.elapsed_secs_f64() - audio_started < 30.0,
+            "controlled melee audio fixture exceeded 30 real seconds without restored-target damage"
+        );
+    }
+    let audio_ready = audio_probe
+        && !capture.audio_verified
+        && capture.saw_damage
+        && audio_trace
+            .as_ref()
+            .is_some_and(|trace| trace.miss_restored);
+    if (!audio_probe && capture.frame == 205) || audio_ready {
+        capture.audio_verified = true;
         assert!(capture.saw_damage, "real basic attacks must damage enemies");
         assert!(
             capture.saw_visual,

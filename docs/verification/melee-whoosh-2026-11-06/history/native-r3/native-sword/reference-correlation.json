@@ -1,0 +1,10 @@
+{
+  "normalized_cross_correlation": 0.9377702686651214,
+  "offset_samples": 11597,
+  "offset_seconds": 0.24160416666666668,
+  "least_squares_gain": 0.2041504161121041,
+  "reference": "assets/audio/swing_sword.wav",
+  "search": "independent PCM threshold onset neighborhood +/-300 samples; mono average; 48k no resampling",
+  "listening_verified": false,
+  "scope": "Only R3 partial controlled zero-hit sword window, later fixture verification failed"
+}

@@ -1,0 +1,22 @@
+{
+  "command": [
+    "nix",
+    "develop",
+    "--command",
+    "cargo",
+    "build",
+    "--locked",
+    "--bin",
+    "capture",
+    "-j2",
+    "--target-dir",
+    "target/market-visual",
+    "--config",
+    "profile.dev.opt-level=0",
+    "--config",
+    "profile.dev.package.\"*\".opt-level=0",
+    "--config",
+    "profile.dev.debug=0"
+  ],
+  "sha256": "93d3ed4171428ef6e327d261051340e33036bd047ff69c18dffcdbba8fe49aa7"
+}

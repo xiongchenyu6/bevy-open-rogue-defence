@@ -1,0 +1,4 @@
+load-module module-native-protocol-unix socket=/tmp/rogue-melee-whoosh-1000-nov6/native auth-anonymous=1
+load-module module-null-sink sink_name=rogue_melee rate=48000 channels=2
+set-default-sink rogue_melee
+set-default-source rogue_melee.monitor

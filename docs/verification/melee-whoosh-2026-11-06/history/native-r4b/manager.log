@@ -1,0 +1,12 @@
+STAGE native build beginning
+STAGE native build terminal exit0
+STAGE actual native sword beginning
+STAGE native sword game terminal 0
+sword {'child_exit': 0, 'wall_seconds': 77.77017497998895, 'voices': 64, 'saw_real_sink': True, 'first_voice_frame': 32, 'first_damage_frame': 64, 'recorded_seconds': 75.52810416666667, 'nonzero_samples': 1257354, 'peak': 30928, 'listening_verified': False, 'first_miss_zero_damage': True, 'first_miss_nonzero_samples': 17588, 'first_miss_peak': 4055, 'record_start_wall': 1793929907.806525, 'record_end_wall': 1793929985.2886088, 'inferred_pcm_start_wall': 1793929909.7605047, 'pcm_window_alignment': 'end-time minus actual PCM duration; approximate server/recorder latency, not sample-accurate event timestamp'}
+STAGE actual native axe beginning
+STAGE native axe game terminal 0
+Traceback (most recent call last):
+  File "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r4b/native.py", line 63, in <module>
+    assert len(isolated)>4800 and sum(v!=0 for v in isolated)>100, 'no recorded energy in controlled zero-hit/music-muted window'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: no recorded energy in controlled zero-hit/music-muted window

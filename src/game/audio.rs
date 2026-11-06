@@ -10,6 +10,10 @@ use super::{Autoplay, BossEnemy, DraftRoot, Projectile};
 #[path = "audio_output_health.rs"]
 mod output_health;
 
+#[path = "audio_melee.rs"]
+mod melee;
+pub(crate) use melee::play_melee_swings;
+
 pub struct GameAudioPlugin;
 
 impl Plugin for GameAudioPlugin {
@@ -21,7 +25,10 @@ impl Plugin for GameAudioPlugin {
             .add_systems(Startup, start_ambient)
             .add_systems(
                 Update,
-                (play_feedback, play_hit_feedback.after(HitFeedbackSet)),
+                (
+                    play_feedback.after(super::combat::CombatSet),
+                    play_hit_feedback.after(HitFeedbackSet),
+                ),
             );
     }
 }
@@ -41,6 +48,7 @@ struct GameAudio {
     kill_heavy: Handle<AudioSource>,
     hero_hurt: Handle<AudioSource>,
     gate_hit: Handle<AudioSource>,
+    melee_whoosh: [Handle<AudioSource>; 3],
 }
 
 impl FromWorld for GameAudio {
@@ -60,6 +68,11 @@ impl FromWorld for GameAudio {
             kill_heavy: assets.load("audio/kill_heavy.wav"),
             hero_hurt: assets.load("audio/hero_hurt.wav"),
             gate_hit: assets.load("audio/gate_hit.wav"),
+            melee_whoosh: [
+                assets.load("audio/swing_sword.wav"),
+                assets.load("audio/swing_axe.wav"),
+                assets.load("audio/swing_daggers.wav"),
+            ],
         }
     }
 }
@@ -71,6 +84,8 @@ struct AudioThrottle {
     boss: f32,
     previous_ultimate_serial: u64,
     previous_crafting_revision: u32,
+    melee: f32,
+    melee_pending: [bool; 3],
 }
 
 impl AudioThrottle {
@@ -148,6 +163,7 @@ fn play_feedback(
     audio: Res<GameAudio>,
     cues: Res<UltimateCues>,
     crafting: Option<Res<super::crafting::CraftingState>>,
+    session: Option<Res<super::GameSession>>,
     autoplay: Option<Res<Autoplay>>,
     bosses: Query<(), Added<BossEnemy>>,
     projectiles: Query<(), Added<Projectile>>,
@@ -155,6 +171,7 @@ fn play_feedback(
     mut throttle: ResMut<AudioThrottle>,
     output: Option<Res<bevy::audio::AudioOutputStatus>>,
 ) {
+    let melee = std::mem::take(&mut throttle.melee_pending);
     let crafting_revision = crafting.as_ref().map_or(0, |state| state.revision);
     if autoplay.is_some() || output.as_ref().is_some_and(|status| !status.is_available()) {
         // Consume cues while disconnected so recovery cannot replay old ultimates.
@@ -164,6 +181,17 @@ fn play_feedback(
     }
     let delta = time.delta_secs();
     throttle.tick(delta);
+    let melee_live = session.as_ref().is_none_or(|s| !s.paused && !s.finished);
+    for (slot, emit) in melee.into_iter().enumerate() {
+        if emit && melee_live {
+            commands.spawn((
+                Name::new("Melee swing whoosh"),
+                AudioPlayer::new(audio.melee_whoosh[slot].clone()),
+                AudioVoice::new(AudioChannel::Effects, 0.24),
+                PlaybackSettings::DESPAWN.with_volume(Volume::Linear(0.24)),
+            ));
+        }
+    }
 
     if !bosses.is_empty() && ready(&mut throttle.boss, 0.35) {
         play_once(&mut commands, &audio.boss_spawn, 0.72);
@@ -276,12 +304,12 @@ pub(crate) fn reset_run(world: &mut World) {
 }
 
 #[cfg(test)]
-mod tests {
+pub(crate) mod tests {
     use bevy::audio::Decodable;
 
     use super::*;
 
-    fn feedback_app() -> App {
+    pub(crate) fn install_feedback(app: &mut App) {
         let mut sources = Assets::<AudioSource>::default();
         let mut source = || {
             sources.add(AudioSource {
@@ -302,8 +330,8 @@ mod tests {
             kill_heavy: source(),
             hero_hurt: source(),
             gate_hit: source(),
+            melee_whoosh: [source(), source(), source()],
         };
-        let mut app = App::new();
         app.insert_resource(sources)
             .insert_resource(crate::game::AudioPreferences {
                 music: 100,
@@ -313,9 +341,20 @@ mod tests {
             .insert_resource(audio)
             .init_resource::<Time>()
             .init_resource::<Time<Real>>()
+            .init_resource::<Time<Virtual>>()
             .init_resource::<UltimateCues>()
             .init_resource::<AudioThrottle>()
-            .add_systems(Update, play_feedback);
+            .add_systems(Update, (melee::play_melee_swings, play_feedback).chain());
+    }
+
+    pub(crate) fn drain_feedback(app: &mut App) {
+        use bevy::ecs::system::RunSystemOnce;
+        app.world_mut().run_system_once(play_feedback).unwrap();
+    }
+
+    fn feedback_app() -> App {
+        let mut app = App::new();
+        install_feedback(&mut app);
         app
     }
 

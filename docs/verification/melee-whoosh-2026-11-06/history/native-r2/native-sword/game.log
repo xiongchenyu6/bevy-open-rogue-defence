@@ -1,0 +1,41 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {10, 12, 14, 16, 18, 20, 22, 24, 30, 40, 50, 60, 70}; all 2000 simulation/render updates retained
+CAPTURE_ASSET_ROOT /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/assets
+[2m2026-11-06T01:37:24.746283Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-06T01:37:24.834571Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-06T01:37:25.603290Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-06T01:37:25.603485Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[capture] scenario=attack-sword
+[capture] seed=0x00000000000A11CE
+[2m2026-11-06T01:37:26.310082Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] attack-sword: centered battlefield, real StoneWarden basic attacks; no Autoplay or ultimate
+MELEE_CONTACT frame=1 real=4.999063 virtual=0.650000 health=300000.000 damage=0.000
+ATTACK_TIMING frame=1 health=300000.000 damage=0.000 clips=[(1, 0.25, 1.0)]
+MELEE_CONTACT frame=2 real=5.027558 virtual=0.678494 health=300000.000 damage=0.000
+ATTACK_TIMING frame=2 health=300000.000 damage=0.000 clips=[(1, 0.27849448, 1.0)]
+
+thread 'main' (3735557) panicked at src/bin/capture/attacks.rs:226:13:
+assertion `left == right` failed: first controlled miss must move targets before contact
+  left: 114.40625
+ right: 0.0
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<f32, f32>
+   4: capture::attack_capture::trace_attack_timing
+   5: <capture::attack_capture::trace_attack_timing as core::ops::function::FnMut<(&mut bevy_ecs::world::World,)>>::call_mut
+   6: <&mut capture::attack_capture::trace_attack_timing as core::ops::function::FnMut<(&mut bevy_ecs::world::World,)>>::call_mut
+   7: <_ as bevy_ecs::system::exclusive_function_system::ExclusiveSystemParamFunction<fn() -> _>>::run::call_inner::<(), &mut capture::attack_capture::trace_attack_timing>
+   8: <capture::attack_capture::trace_attack_timing as bevy_ecs::system::exclusive_function_system::ExclusiveSystemParamFunction<fn()>>::run
+   9: <bevy_ecs::system::exclusive_function_system::ExclusiveFunctionSystem<fn(), (), capture::attack_capture::trace_attack_timing> as bevy_ecs::system::system::System>::run_unsafe::{closure#0}
+  10: <bevy_ecs::world::World>::last_change_tick_scope::<core::result::Result<(), bevy_ecs::system::system::RunSystemError>, <bevy_ecs::system::exclusive_function_system::ExclusiveFunctionSystem<fn(), (), capture::attack_capture::trace_attack_timing> as bevy_ecs::system::system::System>::run_unsafe::{closure#0}>
+  11: <bevy_ecs::system::exclusive_function_system::ExclusiveFunctionSystem<fn(), (), capture::attack_capture::trace_attack_timing> as bevy_ecs::system::system::System>::run_unsafe
+  12: <bevy_ecs::system::exclusive_function_system::ExclusiveFunctionSystem<fn(), (), capture::attack_capture::trace_attack_timing> as bevy_ecs::system::system::System>::run_without_applying_deferred
+  13: <bevy_ecs::system::exclusive_function_system::ExclusiveFunctionSystem<fn(), (), capture::attack_capture::trace_attack_timing> as bevy_ecs::system::system::System>::run
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+Encountered a panic in system `<Enable the debug feature to see the name>`!
+Encountered a panic in system `<Enable the debug feature to see the name>`!

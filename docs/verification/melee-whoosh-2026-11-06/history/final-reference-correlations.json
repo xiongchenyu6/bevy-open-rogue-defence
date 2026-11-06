@@ -1,0 +1,41 @@
+{
+  "sword": {
+    "normalized_cross_correlation": 0.9542217962260333,
+    "offset_samples": 11189,
+    "offset_seconds": 0.23310416666666667,
+    "least_squares_gain": 0.20773182377155025,
+    "reference": "assets/audio/swing_sword.wav",
+    "search": "independent PCM threshold onset neighborhood +/-300 samples; output threshold16/reference64; mono average; 48k no resampling",
+    "listening_verified": false,
+    "alignment": "Native window from record end minus duration is approximate; not sample-accurate event synchronization",
+    "scope": "Controlled Automatic 1APS/max_delta50ms first-miss zero-HP/music0 interval; no population/performance claim",
+    "window_file": "target/verification/melee-whoosh-implementation-2026-11-06/native-r4b/native-sword/first-miss-window.wav",
+    "window_may_include_followup_prehit_whoosh": false
+  },
+  "axe": {
+    "normalized_cross_correlation": 0.967499355320298,
+    "offset_samples": 8009,
+    "offset_seconds": 0.16685416666666666,
+    "least_squares_gain": 0.22095387951813755,
+    "reference": "assets/audio/swing_axe.wav",
+    "search": "independent PCM threshold onset neighborhood +/-300 samples; output threshold16/reference64; mono average; 48k no resampling",
+    "listening_verified": false,
+    "alignment": "Native window from record end minus duration is approximate; not sample-accurate event synchronization",
+    "scope": "Controlled Automatic 1APS/max_delta50ms first-miss zero-HP/music0 interval; no population/performance claim",
+    "window_file": "target/verification/melee-whoosh-implementation-2026-11-06/native-r5b/native-axe/zero-damage-window.wav",
+    "window_may_include_followup_prehit_whoosh": true
+  },
+  "daggers": {
+    "normalized_cross_correlation": 0.8286759008411825,
+    "offset_samples": 11202,
+    "offset_seconds": 0.233375,
+    "least_squares_gain": 0.1701090671893856,
+    "reference": "assets/audio/swing_daggers.wav",
+    "search": "independent PCM threshold onset neighborhood +/-300 samples; output threshold16/reference64; mono average; 48k no resampling",
+    "listening_verified": false,
+    "alignment": "Native window from record end minus duration is approximate; not sample-accurate event synchronization",
+    "scope": "Controlled Automatic 1APS/max_delta50ms first-miss zero-HP/music0 interval; no population/performance claim",
+    "window_file": "target/verification/melee-whoosh-implementation-2026-11-06/native-r5b/native-daggers/zero-damage-window.wav",
+    "window_may_include_followup_prehit_whoosh": true
+  }
+}

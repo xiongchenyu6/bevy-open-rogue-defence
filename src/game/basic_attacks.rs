@@ -563,6 +563,7 @@ const fn swing_style(kind: HeroKind) -> SwingStyle {
 
 #[derive(Component)]
 pub(crate) struct PendingSwing {
+    pub(crate) whoosh_consumed: bool,
     pub(crate) hero: Entity,
     pub(crate) target: Entity,
     pub(crate) kind: HeroKind,
@@ -570,6 +571,12 @@ pub(crate) struct PendingSwing {
     pub(crate) damage: f32,
     pub(crate) hit_limit: usize,
     pub(crate) remaining: f32,
+}
+
+/// Read-only capture diagnostic; never changes a pending attack.
+#[cfg(any(debug_assertions, feature = "dev-tools"))]
+pub fn pending_melee_count(world: &mut World) -> usize {
+    world.query::<&PendingSwing>().iter(world).count()
 }
 
 #[derive(Component)]
@@ -1090,6 +1097,7 @@ mod tests {
             .single(app.world())
             .unwrap();
         app.world_mut().spawn(PendingSwing {
+            whoosh_consumed: false,
             hero,
             target: hero,
             kind,
@@ -1370,6 +1378,7 @@ mod tests {
         let spawn = |world: &mut World| {
             world
                 .spawn(PendingSwing {
+                    whoosh_consumed: false,
                     hero,
                     target: hero,
                     kind: HeroKind::StoneWarden,

@@ -1,0 +1,11 @@
+{
+  "src/game/audio.rs": "dac0127e8a3d95d2802d773e42ed951a5b4ea151e0a65dddb158ffdebd841126",
+  "src/game/audio_melee.rs": "d3976d441608f53d78ae3e612320586c4cb301e825253af612e2d9f8c426f078",
+  "src/game/combat.rs": "10d8694d445b337dda55f7c5f0d2450d3c5e36f0f639df8be4d4a09cd43adc58",
+  "src/bin/capture/attacks.rs": "e4f360fa62321c0a839f7e3075e0fa35c8f2302f81ed58307fe70f0d24033614",
+  "tools/generate_melee_whoosh.py": "021a2f9f820645bee34adc9e635d9aa9c34b13f753cb3afde60d9a8947824b5e",
+  "assets/audio/SOURCES.md": "97a820b51c901c8e8a165f124205a926636a8462a5912e5c1fd023ba0e5f2d91",
+  "assets/audio/swing_sword.wav": "79501b7ab0fb6cad7ece61a4572239ba36793e6e9103005d1f42f6d6da205c25",
+  "assets/audio/swing_axe.wav": "c81a4657056917f0c092e364069c4ebd176f75456f5ad9a5e928b533a9212c1f",
+  "assets/audio/swing_daggers.wav": "ac9c63d8d170cf32ec4c4e70b7ec9d9b96addbb704769bb1454072cdfe39d615"
+}

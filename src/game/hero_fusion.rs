@@ -210,6 +210,7 @@ fn emit(
                     origin,
                 },
                 PendingSwing {
+                    whoosh_consumed: false,
                     hero: request.hero,
                     target: request.target,
                     kind: request.kind,

@@ -1,0 +1,28 @@
+{
+  "overall_native_pass": false,
+  "child_exit": 101,
+  "scope": "Actual sword zero-HP-change/source-sink observation; later followup-damage fixture timeout failed; no axe/dagger yet",
+  "miss_begin": {
+    "frame": 27,
+    "real": 9.484058,
+    "wall": 1793929494.163836,
+    "health": 300000.0
+  },
+  "miss_end": {
+    "frame": 34,
+    "real": 10.144525,
+    "wall": 1793929494.836363,
+    "health": 300000.0
+  },
+  "wall_window_seconds": 0.6725270748138428,
+  "source_sink_observed": true,
+  "raw_sha256": "0345736dee95ef6fc515440b92dbe6fa196c217846d7022cd20c95a7dfe8809e",
+  "recorded_seconds": 9.797041666666667,
+  "approximate_pcm_start_wall": 1793929485.5294828,
+  "alignment": "Raw final mtime minus PCM duration, approximate recorder/server buffering; not sample-accurate",
+  "window_frames": 32282,
+  "window_nonzero_samples": 17590,
+  "window_peak": 4417,
+  "window_rms": 435.2627666977197,
+  "listening_verified": false
+}

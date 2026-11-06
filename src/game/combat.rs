@@ -270,6 +270,7 @@ impl Plugin for CombatPlugin {
                     tick_elite_affixes,
                     move_enemies,
                     auto_attack,
+                    super::audio::play_melee_swings,
                     basic_attacks::resolve_swings,
                     move_projectiles,
                     projectile_hits,
@@ -2075,6 +2076,7 @@ fn auto_attack(
             let mut fired = false;
             if weapon.melee() {
                 commands.spawn(PendingSwing {
+                    whoosh_consumed: false,
                     hero: hero_entity,
                     target: target_entity,
                     kind: vitals.kind,
@@ -4832,6 +4834,10 @@ mod tests {
         );
     }
 
+    mod melee_audio_tests {
+        include!("combat/melee_audio_tests.rs");
+    }
+
     #[test]
     fn weapon_contact_uses_shared_damage_resolution_and_cannot_hit_behind() {
         let mut app = projectile_test_app();
@@ -4854,6 +4860,7 @@ mod tests {
         app.world_mut().entity_mut(primary).insert(EnemyArmor(20.0));
         app.world_mut().entity_mut(nearby).insert(EnemyArmor(20.0));
         app.world_mut().spawn(PendingSwing {
+            whoosh_consumed: false,
             hero,
             target: primary,
             kind: HeroKind::StoneWarden,
@@ -4939,6 +4946,7 @@ mod tests {
             .spawn((test_enemy(100.0), Transform::from_xyz(1.0, 0.0, 0.0)))
             .id();
         app.world_mut().spawn(PendingSwing {
+            whoosh_consumed: false,
             hero,
             target,
             kind: HeroKind::IronBerserker,
@@ -5051,6 +5059,7 @@ mod tests {
                 origin: Vec3::new(4.4, 0.0, 0.0),
             },
             PendingSwing {
+                whoosh_consumed: false,
                 hero,
                 target,
                 kind: HeroKind::StoneWarden,

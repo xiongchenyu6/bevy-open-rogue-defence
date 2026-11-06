@@ -1,0 +1,8 @@
+STAGE native build beginning
+STAGE native build terminal exit0
+STAGE actual native sword beginning
+Traceback (most recent call last):
+  File "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r2/native.py", line 44, in <module>
+    text=(folder/'game.log').read_text();assert code==0 and 'PASS: real basic attack damage' in text and 'panicked' not in text
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

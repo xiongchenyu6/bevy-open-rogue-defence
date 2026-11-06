@@ -1,0 +1,9 @@
+{
+  "rogue-whoosh-old-test-nov6": "ActiveState=failed\nInvocationID=101155af98854278a447714fddf5222c\nExecMainStatus=101\n",
+  "rogue-whoosh-suite2-nov6": "ActiveState=inactive\nInvocationID=\nExecMainStatus=0\n",
+  "rogue-whoosh-field-suite2-nov6": "ActiveState=failed\nInvocationID=4841c034292a4d76a1292a187e8ffbd2\nExecMainStatus=101\n",
+  "rogue-whoosh-queue-suite-nov6": "ActiveState=failed\nInvocationID=16de6d0ef0874d22838760c59fc151b9\nExecMainStatus=101\n",
+  "rogue-whoosh-final-suite-nov6": "ActiveState=inactive\nInvocationID=\nExecMainStatus=0\n",
+  "rogue-whoosh-final-native-nov6": "ActiveState=failed\nInvocationID=774811a5e18942d1957c199601cfaecf\nExecMainStatus=1\n",
+  "rogue-whoosh-native-r2-nov6": "ActiveState=failed\nInvocationID=782916f15f1d4c03a5f6f49224f0513d\nExecMainStatus=1\n"
+}

@@ -23,6 +23,8 @@ mod encounter_boss_ui;
 mod encounter_bosses;
 mod energy_art;
 mod spirit_art;
+#[cfg(any(debug_assertions, feature = "dev-tools"))]
+pub use basic_attacks::pending_melee_count;
 pub use basic_attacks::{ClassBasicStats, Ricochet, class_basic_stats};
 pub use basic_relics::{BasicRelics, RelicCast};
 pub use encounter_bosses::{

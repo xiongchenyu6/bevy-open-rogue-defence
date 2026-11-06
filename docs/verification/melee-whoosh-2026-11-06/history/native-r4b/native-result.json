@@ -1,0 +1,21 @@
+{
+  "sword": {
+    "child_exit": 0,
+    "wall_seconds": 77.77017497998895,
+    "voices": 64,
+    "saw_real_sink": true,
+    "first_voice_frame": 32,
+    "first_damage_frame": 64,
+    "recorded_seconds": 75.52810416666667,
+    "nonzero_samples": 1257354,
+    "peak": 30928,
+    "listening_verified": false,
+    "first_miss_zero_damage": true,
+    "first_miss_nonzero_samples": 17588,
+    "first_miss_peak": 4055,
+    "record_start_wall": 1793929907.806525,
+    "record_end_wall": 1793929985.2886088,
+    "inferred_pcm_start_wall": 1793929909.7605047,
+    "pcm_window_alignment": "end-time minus actual PCM duration; approximate server/recorder latency, not sample-accurate event timestamp"
+  }
+}

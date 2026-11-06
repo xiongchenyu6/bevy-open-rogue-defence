@@ -1,0 +1,11 @@
+{
+  "normalized_cross_correlation": 0.9542217962260333,
+  "offset_samples": 11189,
+  "offset_seconds": 0.23310416666666667,
+  "least_squares_gain": 0.20773182377155025,
+  "reference": "assets/audio/swing_sword.wav",
+  "search": "independent PCM threshold onset neighborhood +/-300 samples; output threshold16/reference64; mono average; 48k no resampling",
+  "listening_verified": false,
+  "alignment": "Native window from record end minus duration is approximate; not sample-accurate event synchronization",
+  "scope": "Controlled Automatic 1APS/max_delta50ms first-miss zero-HP/music0 interval; no population/performance claim"
+}

@@ -1,0 +1,122 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+[capture] selective PNG frames: {10, 12, 14, 16, 18, 20, 22, 24, 30, 40, 50, 60, 70}; all 2000 simulation/render updates retained
+CAPTURE_ASSET_ROOT /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/assets
+[2m2026-11-06T01:44:44.183370Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-06T01:44:44.451837Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-06T01:44:45.397824Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-06T01:44:45.398042Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[capture] scenario=attack-sword
+[capture] seed=0x00000000000A11CE
+[2m2026-11-06T01:44:46.149097Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] attack-sword: centered battlefield, real StoneWarden basic attacks; no Autoplay or ultimate
+MELEE_CONTACT frame=1 real=5.415850 virtual=0.450000 health=300000.000 damage=0.000
+ATTACK_TIMING frame=1 health=300000.000 damage=0.000 clips=[(1, 0.05, 1.0)]
+MELEE_CONTACT frame=2 real=5.444138 virtual=0.478287 health=300000.000 damage=0.000
+ATTACK_TIMING frame=2 health=300000.000 damage=0.000 clips=[(1, 0.07828731, 1.0)]
+MELEE_CONTACT frame=3 real=5.685044 virtual=0.528287 health=300000.000 damage=0.000
+ATTACK_TIMING frame=3 health=300000.000 damage=0.000 clips=[(1, 0.12828732, 1.0)]
+MELEE_CONTACT frame=4 real=5.723677 virtual=0.566920 health=300000.000 damage=0.000
+ATTACK_TIMING frame=4 health=300000.000 damage=0.000 clips=[(1, 0.16692038, 1.0)]
+MELEE_CONTACT frame=5 real=5.760428 virtual=0.603670 health=300000.000 damage=0.000
+ATTACK_TIMING frame=5 health=300000.000 damage=0.000 clips=[(1, 0.2036705, 1.0)]
+MELEE_CONTACT frame=6 real=5.794566 virtual=0.637809 health=300000.000 damage=0.000
+ATTACK_TIMING frame=6 health=300000.000 damage=0.000 clips=[(1, 0.23780861, 1.0)]
+MELEE_CONTACT frame=7 real=5.825837 virtual=0.669080 health=300000.000 damage=0.000
+ATTACK_TIMING frame=7 health=300000.000 damage=0.000 clips=[(1, 0.26907992, 1.0)]
+MELEE_CONTACT frame=8 real=5.857060 virtual=0.700303 health=300000.000 damage=0.000
+ATTACK_TIMING frame=8 health=300000.000 damage=0.000 clips=[(1, 0.3003033, 1.0)]
+MELEE_CONTACT frame=9 real=5.891765 virtual=0.735008 health=300000.000 damage=0.000
+ATTACK_TIMING frame=9 health=300000.000 damage=0.000 clips=[(1, 0.33500838, 1.0)]
+MELEE_CONTACT frame=10 real=5.924393 virtual=0.767636 health=300000.000 damage=0.000
+ATTACK_TIMING frame=10 health=300000.000 damage=0.000 clips=[(1, 0.36763573, 1.0)]
+MELEE_CONTACT frame=11 real=5.958788 virtual=0.802031 health=300000.000 damage=0.000
+ATTACK_TIMING frame=11 health=300000.000 damage=0.000 clips=[(1, 0.40203112, 1.0)]
+MELEE_CONTACT frame=12 real=5.993193 virtual=0.836436 health=300000.000 damage=0.000
+ATTACK_TIMING frame=12 health=300000.000 damage=0.000 clips=[(1, 0.43643644, 1.0)]
+[2m2026-11-06T01:44:50.692443Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00010.png
+[capture] saved 1/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00010.png (949467 bytes)
+MELEE_CONTACT frame=13 real=6.035999 virtual=0.879242 health=300000.000 damage=0.000
+ATTACK_TIMING frame=13 health=300000.000 damage=0.000 clips=[(1, 0.47924185, 1.0)]
+MELEE_CONTACT frame=14 real=6.068231 virtual=0.911474 health=300000.000 damage=0.000
+ATTACK_TIMING frame=14 health=300000.000 damage=0.000 clips=[(1, 0.51147395, 1.0)]
+[2m2026-11-06T01:44:51.185569Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00012.png
+[capture] saved 2/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00012.png (944948 bytes)
+MELEE_CONTACT frame=15 real=6.529185 virtual=0.961474 health=300000.000 damage=0.000
+ATTACK_TIMING frame=15 health=300000.000 damage=0.000 clips=[(1, 0.56147397, 1.0)]
+MELEE_CONTACT frame=16 real=6.558922 virtual=0.991211 health=300000.000 damage=0.000
+ATTACK_TIMING frame=16 health=300000.000 damage=0.000 clips=[(1, 0.59121126, 1.0)]
+[2m2026-11-06T01:44:51.673737Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00014.png
+[capture] saved 3/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00014.png (944350 bytes)
+MELEE_CONTACT frame=17 real=7.021066 virtual=1.041211 health=300000.000 damage=0.000
+ATTACK_TIMING frame=17 health=300000.000 damage=0.000 clips=[(1, 0.6412113, 1.0)]
+MELEE_CONTACT frame=18 real=7.050628 virtual=1.070773 health=300000.000 damage=0.000
+ATTACK_TIMING frame=18 health=300000.000 damage=0.000 clips=[(1, 0.67077285, 1.0)]
+[2m2026-11-06T01:44:52.159009Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00016.png
+[capture] saved 4/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00016.png (944529 bytes)
+MELEE_CONTACT frame=19 real=7.509149 virtual=1.120773 health=300000.000 damage=0.000
+ATTACK_TIMING frame=19 health=300000.000 damage=0.000 clips=[(1, 0.72077286, 1.0)]
+MELEE_CONTACT frame=20 real=7.536407 virtual=1.148031 health=300000.000 damage=0.000
+ATTACK_TIMING frame=20 health=300000.000 damage=0.000 clips=[(1, 0.74803126, 1.0)]
+[2m2026-11-06T01:44:52.650705Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00018.png
+[capture] saved 5/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00018.png (944432 bytes)
+MELEE_CONTACT frame=21 real=7.994062 virtual=1.198031 health=300000.000 damage=0.000
+ATTACK_TIMING frame=21 health=300000.000 damage=0.000 clips=[(1, 0.7980313, 1.0)]
+MELEE_CONTACT frame=22 real=8.022385 virtual=1.226354 health=300000.000 damage=0.000
+ATTACK_TIMING frame=22 health=300000.000 damage=0.000 clips=[(1, 0.82635415, 1.0)]
+[2m2026-11-06T01:44:53.146380Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00020.png
+[capture] saved 6/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00020.png (944487 bytes)
+MELEE_CONTACT frame=23 real=8.483418 virtual=1.276354 health=300000.000 damage=0.000
+ATTACK_TIMING frame=23 health=300000.000 damage=0.000 clips=[(1, 0.87635416, 1.0)]
+MELEE_CONTACT frame=24 real=8.512850 virtual=1.305786 health=300000.000 damage=0.000
+ATTACK_TIMING frame=24 health=300000.000 damage=0.000 clips=[(1, 0.9057859, 1.0)]
+[2m2026-11-06T01:44:53.650610Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00022.png
+[capture] saved 7/8 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00022.png (944374 bytes)
+MELEE_CONTACT frame=25 real=8.988494 virtual=1.355786 health=300000.000 damage=0.000
+ATTACK_TIMING frame=25 health=300000.000 damage=0.000 clips=[(1, 0.95578593, 1.0)]
+MELEE_CONTACT frame=26 real=9.017196 virtual=1.384489 health=300000.000 damage=0.000
+ATTACK_TIMING frame=26 health=300000.000 damage=0.000 clips=[(1, 0.98448867, 1.0)]
+[2m2026-11-06T01:44:54.141178Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00024.png
+[capture] saved 8/8 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00024.png (944566 bytes)
+MELEE_MISS_BEGIN frame=27 real=9.484058 wall=1793929494.163836 health=300000.000
+MELEE_CONTACT frame=27 real=9.484058 virtual=1.434489 health=300000.000 damage=0.000
+ATTACK_TIMING frame=27 health=300000.000 damage=0.000 clips=[(3, 0.11851853, 2.3703706)]
+MELEE_CONTACT frame=28 real=9.513409 virtual=1.463840 health=300000.000 damage=0.000
+ATTACK_TIMING frame=28 health=300000.000 damage=0.000 clips=[(3, 0.1880931, 2.3703706)]
+MELEE_CONTACT frame=29 real=9.980828 virtual=1.513840 health=300000.000 damage=0.000
+ATTACK_TIMING frame=29 health=300000.000 damage=0.000 clips=[(3, 0.30661163, 2.3703706)]
+MELEE_CONTACT frame=30 real=10.018511 virtual=1.551524 health=300000.000 damage=0.000
+ATTACK_TIMING frame=30 health=300000.000 damage=0.000 clips=[(3, 0.39593515, 2.3703706)]
+MELEE_CONTACT frame=31 real=10.050204 virtual=1.583217 health=300000.000 damage=0.000
+ATTACK_TIMING frame=31 health=300000.000 damage=0.000 clips=[(3, 0.47106063, 2.3703706)]
+MELEE_AUDIO frame=32 real=10.080637 virtual=1.613650 entity=2905v0 source=Some(audio/swing_sword.wav) sink=true health=300000.000 damage=0.000
+MELEE_CONTACT frame=32 real=10.080637 virtual=1.613650 health=300000.000 damage=0.000
+ATTACK_TIMING frame=32 health=300000.000 damage=0.000 clips=[(3, 0.5431981, 2.3703706)]
+[2m2026-11-06T01:44:54.780163Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00030.png
+[capture] saved 9/9 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/melee-whoosh-implementation-2026-11-06/native-r3/native-sword/frames/frame00030.png (939760 bytes)
+MELEE_CONTACT frame=33 real=10.112645 virtual=1.645658 health=300000.000 damage=0.000
+ATTACK_TIMING frame=33 health=300000.000 damage=0.000 clips=[(3, 0.61906844, 2.3703706)]
+MELEE_MISS_END frame=34 real=10.144525 wall=1793929494.836363 health=300000.000
+MELEE_CONTACT frame=34 real=10.144525 virtual=1.677537 health=300000.000 damage=0.000
+SWORD_TRAIL frame=34 entity=2904v0 alpha=0.680000 mode=Blend material_count=406
+ATTACK_TIMING frame=34 health=300000.000 damage=0.000 clips=[(3, 0.6946343, 2.3703706)]
+
+thread 'Compute Task Pool (6)' (3752250) panicked at src/bin/capture/attacks.rs:376:9:
+real basic attacks must damage enemies
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: capture::attack_capture::verify
+   3: <capture::attack_capture::verify as core::ops::function::FnMut<(bevy_ecs::change_detection::params::ResMut<capture::attack_capture::AttackCapture>, bevy_ecs::change_detection::params::Res<bevy_time::time::Time<bevy_time::real::Real>>, bevy_ecs::system::query::Query<&bevy_ecs::name::Name>, bevy_ecs::system::query::Query<&rogue_commander::game::components::Enemy, bevy_ecs::query::filter::With<capture::attack_capture::AttackTarget>>, bevy_ecs::change_detection::params::Res<rogue_commander::game::resources::PlayerBuild>, bevy_ecs::change_detection::params::Res<rogue_commander::game::resources::ActiveSkill>, core::option::Option<bevy_ecs::change_detection::params::Res<rogue_commander::game::resources::Autoplay>>)>>::call_mut
+   4: <&mut capture::attack_capture::verify as core::ops::function::FnMut<(bevy_ecs::change_detection::params::ResMut<capture::attack_capture::AttackCapture>, bevy_ecs::change_detection::params::Res<bevy_time::time::Time<bevy_time::real::Real>>, bevy_ecs::system::query::Query<&bevy_ecs::name::Name>, bevy_ecs::system::query::Query<&rogue_commander::game::components::Enemy, bevy_ecs::query::filter::With<capture::attack_capture::AttackTarget>>, bevy_ecs::change_detection::params::Res<rogue_commander::game::resources::PlayerBuild>, bevy_ecs::change_detection::params::Res<rogue_commander::game::resources::ActiveSkill>, core::option::Option<bevy_ecs::change_detection::params::Res<rogue_commander::game::resources::Autoplay>>)>>::call_mut
+   5: <_ as bevy_ecs::system::function_system::SystemParamFunction<fn(_, _, _, _, _, _, _) -> _>>::run::call_inner::<(), bevy_ecs::change_detection::params::ResMut<capture::attack_capture::AttackCapture>, bevy_ecs::change_detection::params::Res<bevy_time::time::Time<bevy_time::real::Real>>, bevy_ecs::system::query::Query<&bevy_ecs::name::Name>, bevy_ecs::system::query::Query<&rogue_commander::game::components::Enemy, bevy_ecs::query::filter::With<capture::attack_capture::AttackTarget>>, bevy_ecs::change_detection::params::Res<rogue_commander::game::resources::PlayerBuild>, bevy_ecs::change_detection::params::Res<rogue_commander::game::resources::ActiveSkill>, core::option::Option<bevy_ecs::change_detection::params::Res<rogue_commander::game::resources::Autoplay>>, &mut capture::attack_capture::verify>
+   6: <capture::attack_capture::verify as bevy_ecs::system::function_system::SystemParamFunction<fn(bevy_ecs::change_detection::params::ResMut<capture::attack_capture::AttackCapture>, bevy_ecs::change_detection::params::Res<bevy_time::time::Time<bevy_time::real::Real>>, bevy_ecs::system::query::Query<&bevy_ecs::name::Name>, bevy_ecs::system::query::Query<&rogue_commander::game::components::Enemy, bevy_ecs::query::filter::With<capture::attack_capture::AttackTarget>>, bevy_ecs::change_detection::params::Res<rogue_commander::game::resources::PlayerBuild>, bevy_ecs::change_detection::params::Res<rogue_commander::game::resources::ActiveSkill>, core::option::Option<bevy_ecs::change_detection::params::Res<rogue_commander::game::resources::Autoplay>>)>>::run
+   7: <bevy_ecs::system::function_system::FunctionSystem<fn(bevy_ecs::change_detection::params::ResMut<capture::attack_capture::AttackCapture>, bevy_ecs::change_detection::params::Res<bevy_time::time::Time<bevy_time::real::Real>>, bevy_ecs::system::query::Query<&bevy_ecs::name::Name>, bevy_ecs::system::query::Query<&rogue_commander::game::components::Enemy, bevy_ecs::query::filter::With<capture::attack_capture::AttackTarget>>, bevy_ecs::change_detection::params::Res<rogue_commander::game::resources::PlayerBuild>, bevy_ecs::change_detection::params::Res<rogue_commander::game::resources::ActiveSkill>, core::option::Option<bevy_ecs::change_detection::params::Res<rogue_commander::game::resources::Autoplay>>), (), (), capture::attack_capture::verify> as bevy_ecs::system::system::System>::run_unsafe
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+Encountered a panic in system `<Enable the debug feature to see the name>`!
+MELEE_CONTACT frame=35 real=10.620233 virtual=1.727537 health=300000.000 damage=0.000
+SWORD_TRAIL frame=35 entity=2904v0 alpha=0.500000 mode=Blend material_count=406
+ATTACK_TIMING frame=35 health=300000.000 damage=0.000 clips=[(3, 0.81315285, 2.3703706)]
+Encountered a panic in system `<Enable the debug feature to see the name>`!

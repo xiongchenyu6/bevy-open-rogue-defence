@@ -1,0 +1,34 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+error[E0425]: cannot find value `Autoplay` in this scope
+    --> src/game/combat.rs:5027:41
+     |
+5027 |                     app.insert_resource(Autoplay);
+     |                                         ^^^^^^^^ not found in this scope
+     |
+help: consider importing this unit struct through its public re-export
+     |
+3432 +     use crate::game::Autoplay;
+     |
+
+error[E0425]: cannot find type `Autoplay` in this scope
+    --> src/game/combat.rs:5048:47
+     |
+5048 |             app.world_mut().remove_resource::<Autoplay>();
+     |                                               ^^^^^^^^ not found in this scope
+     |
+help: consider importing this struct through its public re-export
+     |
+3432 +     use crate::game::Autoplay;
+     |
+
+For more information about this error, try `rustc --explain E0425`.
+error: could not compile `rogue_commander` (lib test) due to 2 previous errors
