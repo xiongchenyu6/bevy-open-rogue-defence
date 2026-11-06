@@ -20,7 +20,7 @@ tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner \
   > target/my-linux-package/rogue-commander-linux-0.1.0.tar.gz
 ```
 
-工具拒绝覆盖已有输出，并保留 SDK 的独立编译与依赖缓存。5 项打包集成测试通过。[来源、镜像与产物哈希](verification/wallet-blades-package-2026-11-06/artifact.json) · [构建日志](verification/wallet-blades-package-2026-11-06/build.log)。
+工具拒绝覆盖已有输出，并保留 SDK 的独立编译与依赖缓存。打包工具既有的5项集成测试通过；本次独立构建和短流程的具体结果见下列记录。[来源、镜像与产物哈希](verification/wallet-blades-package-2026-11-06/artifact.json) · [构建日志](verification/wallet-blades-package-2026-11-06/build.log)。
 
 ## 独立运行验收
 
@@ -45,7 +45,7 @@ docker run --rm --network none \
 
 ## 仍未覆盖
 
-上述短流程不代表完整25分钟战役、后续征募／支线／死亡／奖励／永久强化的整局回归。当前d454包的自然材料获取／合成路线正在实际运行，仅从原先真实赚取的存档开始，通过正常输入获取材料；只有精确扣款、材料消耗、唯一星界棱镜、恢复战斗与正常退出均通过后才进行同一用户目录重启。当前尚未确认本包合成或完整第六章通关。
+上述短流程不代表完整25分钟战役、后续征募／支线／死亡／奖励／永久强化的整局回归。当前d454包已通过[自然购买材料、合成与同档重启](verification/wallet-blades-forge-v3-2026-11-06/README.md)：奥术透镜332→152（180）、回响核心310→10（300），两材料消耗后背包仅有星界棱镜，计时1003→992，正常退出且长期存档字节不变。同一实际用户目录重启后局内装备清空、永久力量30保留，计时1449→1439、正常退出。Root实际查看合成装备、重启空背包及力量画面。本次没有执行付费刷新。独立第六章完整路线已启动，尚未形成终局，不能据合成流程称整章通关。
 
 较早的86cb084自然合成与同档重启见下节，不能替代当前包。f5候选的[第六章购买观察失败](verification/overlap-chapter6-2026-11-06/README.md)、[R2关闭前预算耗尽](verification/overlap-chapter6-r2-2026-11-06/README.md)、[R3实际钱包显示冲突](verification/overlap-chapter6-r3-2026-11-06/README.md)和[自然合成真实败北](verification/earned-forge-loss-2026-11-06/README.md)均保留为历史证据。钱包显示的生产修正已包含在d454包，但历史失败不能改算通过。更多配方与完整路线仍需验证。
 
