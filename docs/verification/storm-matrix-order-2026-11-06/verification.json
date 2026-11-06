@@ -1,0 +1,24 @@
+{
+  "files_sha256": {
+    "README.md": "c84411ac35e7a6f3fee9cf5f5c325dd61691dcafa2040e56471e64fae8b5792f",
+    "after-pass.txt": "9787770c0a6d34fb01b3acecb385edba445bf66e06c94b882a6c97c7b4aa0331",
+    "after-sequence.log": "0b96bbff394d791935866a15a38952e15c5bb76d9b5cb3a89297229dc195b720",
+    "after-skills.rs.gz": "44eb4fc93c14fb790b4dcbf55648a6ff20bbd2dff8300266ebe83858443af27b",
+    "after-source-hashes.json": "ad441b887e246cbbb81ce9a0d792702089b223b797d2b7c4f1c89175d5915dc6",
+    "after-tests-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "after-tests.log": "3a672767f7aafd1e97823a5035885b4e6ee10c02c9075fe18cdfbb39c477a15a",
+    "after.py": "08c598a6fbd6dd216bc0e7e3ab60341b8bfb7065761720d9835a0b5e285a964b",
+    "before-exit.txt": "39b8dc3fc8b44765c8e6f1adee04c5b465e555ab791cc42d0d9e810d5b64297c",
+    "before-sequence.log": "8a4146064b8de75255a52c33c9fe22305ddd668fff544be5f1d9d36dc70bf48c",
+    "before-skills.rs.gz": "cdd3c4bc4dd18c6dee7b1cf59c92642ef5fe6ca2ad606de45c1797bf0d135980",
+    "before-source-hashes.json": "086eeba0e7f8db5de7868f9b91bccd28528361a71006420b1ddd263149211426",
+    "before-tests.log": "5b2152d57cfe136163f141991443f4776a2118d8cc0e1d56a2428f90d423d991",
+    "before.py": "ef590d69d36239399549ca72b91b05f2a37344ed123652a7261824e818f80561",
+    "clippy-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "clippy.log": "90e31ff074e4cfe93f81a9fdf092fd1f9d9e542a38a65c6826a7cd3122613c18",
+    "prior-source-comparison.json": "bdc9b4be0e3f5d08658cba4c5680537469f717f58a249f4c2fa4c0d489c8eea9",
+    "r1-fixture-invalid.log": "8efd5e7f9665d49865b10237f0fa8ffd6b8e3aa4ac40a81a77e1e8f8294a7f0e",
+    "scoped.diff": "27d6c8d9b149bde5fad679946db2b2cd9cea238bbdae8f2f6fe9e80c4d41d90e",
+    "storm_order_tests.rs": "7a541fe81eea6884b4485172b3c72307b9e5902b17f5a614959fe3fa15a1d181"
+  }
+}

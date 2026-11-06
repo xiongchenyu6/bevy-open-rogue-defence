@@ -1,0 +1,5 @@
+{
+  "src/game/skills.rs": "a49836bf36fada9d9d1228b0f11c7891ee0d134124ce634640d11b0489aa0934",
+  "src/game/combat.rs": "d2b371039860c431bef0b5a9f2c405ff27d030578825a0646ade377c949248d2",
+  "src/game/combat/storm_order_tests.rs": "7a541fe81eea6884b4485172b3c72307b9e5902b17f5a614959fe3fa15a1d181"
+}

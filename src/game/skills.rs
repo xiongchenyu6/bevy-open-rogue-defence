@@ -864,6 +864,81 @@ pub(crate) fn test_vortex_order_pulse(world: &mut World) -> (usize, f32) {
     (strikes, pulse_remaining)
 }
 
+/// Test-only real cast -> zone pulse -> strict pooled contact bridge.
+#[cfg(test)]
+pub(crate) fn test_storm_matrix_order_pulse(
+    world: &mut World,
+    primary_entity: Entity,
+) -> (usize, f32, f32, u64, f32) {
+    use bevy::ecs::system::RunSystemOnce;
+    world
+        .run_system_once(
+            move |mut commands: Commands,
+                  assets: Res<GameAssets>,
+                  mut pools: ResMut<CombatPools>,
+                  build: Res<PlayerBuild>,
+                  vitals: Res<HeroVitals>,
+                  mut runtime: ResMut<SkillRuntime>,
+                  enemies: Query<(Entity, &Transform, &Enemy)>| {
+                let targets: Vec<_> = enemies
+                    .iter()
+                    .map(|(entity, transform, enemy)| {
+                        target_info(entity, transform, enemy, None, None, None)
+                    })
+                    .collect();
+                let primary = *targets
+                    .iter()
+                    .find(|target| target.entity == primary_entity)
+                    .unwrap();
+                // Controlled fixture: a learned skill with elapsed initial cooldown and
+                // real resolved-basic-attack charge, before calling the actual caster.
+                runtime.prepare_cadence(&build.skills);
+                runtime.cooldowns[12] = 0.0;
+                let charge = attack_charge_requirement(12, build.skills[12]);
+                apply_resolved_attack_volleys(&mut runtime, charge as u32, |_| {});
+                assert!(runtime.cast_ready(12));
+                let mut budget = SummonBudget::from_existing(0, 0);
+                cast_rare_skills(
+                    &mut commands,
+                    &assets,
+                    &mut pools,
+                    &build,
+                    &vitals,
+                    Vec3::ZERO,
+                    primary,
+                    &targets,
+                    &mut budget,
+                    &mut runtime,
+                );
+            },
+        )
+        .unwrap();
+    assert_eq!(world.query::<&SkillZone>().iter(world).count(), 1);
+    world
+        .resource_mut::<Time>()
+        .advance_by(std::time::Duration::from_secs_f32(0.6));
+    world.run_system_once(update_spell_zones).unwrap();
+    let strikes: Vec<_> = world.query::<&SkillStrike>().iter(world).collect();
+    assert!(
+        strikes
+            .iter()
+            .all(|s| s.profile == DamageProfile::for_skill(12) && !s.area)
+    );
+    let count = strikes.len();
+    let damage = strikes[0].damage;
+    assert!(strikes.iter().all(|s| s.damage == damage));
+    let zone = world.query::<&SkillZone>().single(world).unwrap();
+    let result = (
+        count,
+        zone.pulse_remaining,
+        zone.remaining,
+        world.resource::<SkillRuntime>().spell_cast_count,
+        damage,
+    );
+    world.run_system_once(resolve_skill_strikes).unwrap();
+    result
+}
+
 #[cfg(test)]
 pub(crate) fn test_resolve_typed_strike(world: &mut World, target: Entity, area: bool) {
     use bevy::ecs::system::RunSystemOnce;
@@ -942,9 +1017,21 @@ fn update_spell_zones(
             affected.push(target);
         }
 
-        // Cosmetic component migrations can reorder the enemy query. Keep
-        // target-to-strike assignment stable before shared critical RNG is used.
-        affected.sort_unstable_by_key(|target| target.entity.to_bits());
+        // Storm pulses bind shared critical rolls to visible geometry, not
+        // unrelated entity allocation or cosmetic query migrations.
+        if zone.kind == ZoneKind::StormMatrix {
+            affected.sort_unstable_by(|a, b| {
+                a.position
+                    .distance_squared(center)
+                    .total_cmp(&b.position.distance_squared(center))
+                    .then_with(|| a.position.z.total_cmp(&b.position.z))
+                    .then_with(|| a.position.x.total_cmp(&b.position.x))
+                    .then_with(|| a.position.y.total_cmp(&b.position.y))
+                    .then_with(|| a.entity.to_bits().cmp(&b.entity.to_bits()))
+            });
+        } else {
+            affected.sort_unstable_by_key(|target| target.entity.to_bits());
+        }
 
         for _ in 0..pulses {
             for target in &affected {

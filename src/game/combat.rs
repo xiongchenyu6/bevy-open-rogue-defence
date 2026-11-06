@@ -3433,6 +3433,7 @@ mod tests {
     use super::*;
 
     include!("combat/collision_order_tests.rs");
+    include!("combat/storm_order_tests.rs");
     include!("combat/gate_state_tests.rs");
     include!("combat/designated_strike_tests.rs");
     include!("combat/native_aim_tests.rs");

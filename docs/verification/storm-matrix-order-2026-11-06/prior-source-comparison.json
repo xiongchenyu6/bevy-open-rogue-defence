@@ -1,0 +1,26 @@
+{
+  "update_spell_zones": {
+    "identical": true,
+    "sha256": "1d39a09951a701db0ef684b3b0d9798cedd5959e86f4918c7cb5e02de10357e2"
+  },
+  "spawn_skill_zone": {
+    "identical": true,
+    "sha256": "f2f3a5a467c78cf7b822fb3e10c7ef6578d81e103bf8f37f243876be5633904d"
+  },
+  "resolve_skill_strikes": {
+    "identical": true,
+    "sha256": "f69cfb1c2d0852bfc2c63bc135dbac45c0ee7149d83184c10eb47c35f906c09d"
+  },
+  "cast_rare_skills": {
+    "identical": true,
+    "sha256": "6253b3a43559d5419e840889b4780e35546f756af053b59bcd07e0eb8228fe5c"
+  },
+  "zone_pulse_interval": {
+    "identical": true,
+    "sha256": "6689293b57b57088c7ed0c53cb3eb929dfe4b4428df386df32d08dc718bcbc21"
+  },
+  "projectile_hits": {
+    "identical": true,
+    "sha256": "caf9711e8ef08f260fce52136041304018d610e28e13d03a9480a2198c02c6a6"
+  }
+}
