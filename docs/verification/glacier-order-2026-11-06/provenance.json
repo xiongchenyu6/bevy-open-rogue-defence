@@ -1,0 +1,7 @@
+{
+  "base_commit": "113233824316e0f77af4f10447c8a205764e2b22",
+  "binary_sha256": "db3d1fc93dc987a5227f1b2b67ee2bb42dd05e8ea8446ff18e32a750cf1c6274",
+  "binary_bytes": 181953088,
+  "source_input_manifest_sha256": "63e03f25d1f784b82f2f2c839116aa6515bfdbb8d9988e87764055d8e32d9f42",
+  "claim": "controlled local Glacier pulse ordering regression, not full replay equality"
+}

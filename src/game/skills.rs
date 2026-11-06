@@ -19,8 +19,13 @@ use super::{
 
 #[path = "skills/evolution_mechanics.rs"]
 mod evolution_mechanics;
+#[cfg(test)]
+#[path = "skills/glacier_order_test_support.rs"]
+mod glacier_order_test_support;
 #[path = "skills/growth.rs"]
 mod growth;
+#[cfg(test)]
+pub(crate) use glacier_order_test_support::test_glacier_order_pulse;
 #[path = "skills/infection.rs"]
 pub(crate) mod infection;
 #[path = "skills/orbit_art.rs"]
@@ -1017,9 +1022,9 @@ fn update_spell_zones(
             affected.push(target);
         }
 
-        // Storm pulses bind shared critical rolls to visible geometry, not
-        // unrelated entity allocation or cosmetic query migrations.
-        if zone.kind == ZoneKind::StormMatrix {
+        // Storm and Glacier pulses bind shared critical rolls to visible
+        // geometry, not unrelated allocation or cosmetic query migrations.
+        if matches!(zone.kind, ZoneKind::StormMatrix | ZoneKind::GlacierCore) {
             affected.sort_unstable_by(|a, b| {
                 a.position
                     .distance_squared(center)

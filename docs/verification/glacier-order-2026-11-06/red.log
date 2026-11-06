@@ -1,0 +1,43 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `release` profile [optimized] target(s) in 3m 10s
+     Running unittests src/lib.rs (target/release/deps/rogue_commander-37d39db57aeef6a3)
+
+running 3 tests
+GLACIER_ORDER reverse=false reallocate=true ids=[28v0, 29v0] rows=[28v0, 29v0] hp=[9886.838, 14935.336] damage=64.664 rng=16263334312487546840 casts=1 strikes=2 pulse=0.8 remaining=4.2
+GLACIER_ORDER reverse=false reallocate=false ids=[28v0, 29v0] rows=[28v0, 29v0] hp=[9886.838, 14935.336] damage=64.664 rng=16263334312487546840 casts=1 strikes=2 pulse=0.8 remaining=4.2
+GLACIER_ORDER reverse=true reallocate=false ids=[28v0, 29v0] rows=[29v0, 28v0] hp=[9886.838, 14935.336] damage=64.664 rng=16263334312487546840 casts=1 strikes=2 pulse=0.8 remaining=4.2
+GLACIER_ORDER reverse=true reallocate=true ids=[29v0, 28v0] rows=[28v0, 29v0] hp=[9935.336, 14886.838] damage=64.664 rng=16263334312487546840 casts=1 strikes=2 pulse=0.8 remaining=4.2
+test game::combat::tests::glacier_same_ids_ignore_cosmetic_row_order ... ok
+
+thread 'game::combat::tests::glacier_critical_assignment_follows_geometry_across_allocations' (900906) panicked at src/game/combat/glacier_order_tests.rs:95:5:
+assertion `left == right` failed: unrelated allocation must not exchange Glacier critical assignments
+  left: ([9886.838, 14935.336], 16263334312487546840)
+ right: ([9935.336, 14886.838], 16263334312487546840)
+stack backtrace:
+test game::combat::tests::glacier_third_real_pulse_freezes_both_targets ... ok
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<([f32; 2], u64), ([f32; 2], u64)>
+   4: rogue_commander::game::combat::tests::glacier_critical_assignment_follows_geometry_across_allocations
+   5: <rogue_commander::game::combat::tests::glacier_critical_assignment_follows_geometry_across_allocations::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+test game::combat::tests::glacier_critical_assignment_follows_geometry_across_allocations ... FAILED
+
+failures:
+
+failures:
+    game::combat::tests::glacier_critical_assignment_follows_geometry_across_allocations
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 738 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--lib`
