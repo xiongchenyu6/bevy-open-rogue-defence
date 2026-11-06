@@ -1,0 +1,31 @@
+{
+  "args": [
+    "python3",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-gate-cinder-repeat-2026-11-06/frozen/tools/run_balance_matrix.py",
+    "--binary",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-gate-cinder-repeat-2026-11-06/frozen/balance-sim-snapshot",
+    "--batch",
+    "post-order-c1-sample-nov6",
+    "--frames",
+    "120000",
+    "--jobs",
+    "1",
+    "--case-timeout",
+    "900",
+    "--chapters",
+    "0",
+    "--training",
+    "0",
+    "--seeds",
+    "1,2,3,4",
+    "--policies",
+    "active,passive",
+    "--starters",
+    "2",
+    "--positions",
+    "behind",
+    "--require-telemetry"
+  ],
+  "exit": 0,
+  "seconds": 723.2157511109835
+}
