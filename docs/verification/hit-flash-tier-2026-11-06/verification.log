@@ -1,0 +1,20 @@
+{
+  "result": "PASS",
+  "frozen_input_files": 388,
+  "changed_source": [
+    "enemy_flash.rs"
+  ],
+  "library": [
+    744,
+    0,
+    1
+  ],
+  "desktop_contacts": 60,
+  "portrait_contacts": 60,
+  "timing_rows_per_run": 80,
+  "resolver_rows_per_run": 60,
+  "ordinary": 59,
+  "critical": 1,
+  "selected_pngs": 24,
+  "limits": "Selected PNG hashes/dimensions only; no portable claim checking every local frame, audio, full campaign, hardware or Steam"
+}

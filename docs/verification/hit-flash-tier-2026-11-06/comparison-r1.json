@@ -1,0 +1,2558 @@
+{
+  "status": "PASS",
+  "scope": "Real250 contact supplement only; synthetic180 evidence is separate.",
+  "claim_limits": [
+    "No screenshot pixels or actual sound are evaluated.",
+    "Contact printouts have3decimal precision; resolver fields additionally compare HP/critical/RNG bits.",
+    "Cross-run actor/projectile IDs and outer iteration order are not compared."
+  ],
+  "runs": {
+    "baseline": {
+      "log": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/hit-flash-tier-2026-11-06/baseline-real-native.log",
+      "sha256": "54c9c618babef7e7a0e41c684c8a27bbe0c8c7aaf1640318d784668c58f53bc0",
+      "contacts": 60,
+      "timing_rows": 80,
+      "resolver_rows": 60,
+      "ordinary": 59,
+      "critical": 1,
+      "receipt": {
+        "command": [
+          "nix",
+          "develop",
+          "--command",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/hit-flash-tier-2026-11-06/baseline-capture",
+          "frames",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/hit-flash-tier-2026-11-06/baseline-real",
+          "250",
+          "weapon-growth-sword-starter",
+          "0xA11CE",
+          "1280x720"
+        ],
+        "returncode": 0
+      }
+    },
+    "after": {
+      "log": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/hit-flash-tier-2026-11-06/after-real-native.log",
+      "sha256": "4c28263b724b7cd23a4f98404bdbb0b98e01acf290349ab565b054836c476c30",
+      "contacts": 60,
+      "timing_rows": 80,
+      "resolver_rows": 60,
+      "ordinary": 59,
+      "critical": 1,
+      "receipt": {
+        "command": [
+          "nix",
+          "develop",
+          "--command",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/hit-flash-tier-2026-11-06/after-capture",
+          "frames",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/hit-flash-tier-2026-11-06/after-real",
+          "250",
+          "weapon-growth-sword-starter",
+          "0xA11CE",
+          "1280x720"
+        ],
+        "returncode": 0
+      }
+    }
+  },
+  "contact_multiset_equal": true,
+  "attack_timing_numeric_rows_equal": true,
+  "resolver_numeric_rows_equal": true,
+  "contact_differences": {
+    "baseline_only": [],
+    "after_only": []
+  },
+  "timing_differences": {
+    "baseline_only": [],
+    "after_only": []
+  },
+  "resolver_differences": {
+    "baseline_only": [],
+    "after_only": []
+  },
+  "material_matching": {
+    "baseline": {
+      "matched_contact_groups": 60,
+      "unmatched_contact_groups": [],
+      "fresh_material_groups": {
+        "ordinary": 0,
+        "critical": 0
+      },
+      "checked_material_rows": [],
+      "unclassified_fresh_swaps": [
+        {
+          "frame": 20,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2425v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2426v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2420v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        }
+      ],
+      "screenshot_candidates": {
+        "ordinary": [],
+        "critical": []
+      },
+      "scope": "Same-run identities used only for matching. Unmatched rows do not establish a material tier. PNG candidates require actual visual review, not exact-frame claims."
+    },
+    "after": {
+      "matched_contact_groups": 60,
+      "unmatched_contact_groups": [],
+      "fresh_material_groups": {
+        "ordinary": 0,
+        "critical": 0
+      },
+      "checked_material_rows": [],
+      "unclassified_fresh_swaps": [
+        {
+          "frame": 20,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 20,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 32,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 44,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 56,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 67,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 79,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 91,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2452v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 103,
+          "actor": "2403v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 115,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 115,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 115,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 115,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 115,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 115,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 115,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 115,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 115,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        },
+        {
+          "frame": 115,
+          "actor": "2453v0",
+          "reason": "fresh swap lacks exact contact/source-color evidence"
+        }
+      ],
+      "screenshot_candidates": {
+        "ordinary": [],
+        "critical": []
+      },
+      "scope": "Same-run identities used only for matching. Unmatched rows do not establish a material tier. PNG candidates require actual visual review, not exact-frame claims."
+    }
+  }
+}

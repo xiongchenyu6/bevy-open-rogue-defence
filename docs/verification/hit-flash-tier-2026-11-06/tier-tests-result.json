@@ -1,0 +1,1 @@
+{"command": ["nix", "develop", "--command", "cargo", "test", "--locked", "--release", "--lib", "simultaneous_ordinary_and_critical_contacts", "-j2", "--", "--nocapture"], "returncode": 0}

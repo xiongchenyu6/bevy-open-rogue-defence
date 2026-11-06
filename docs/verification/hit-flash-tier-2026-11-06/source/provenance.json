@@ -1,0 +1,5 @@
+{
+  "before_commit": "ee9b5a69b2c9780bc813c9a3420e73eda0fd6118",
+  "before_path": "src/game/hit_feedback/enemy_flash.rs",
+  "after_scope": "uncommitted tested working bytes recorded in after-inputs.json; only one source hash differs"
+}

@@ -1,0 +1,6 @@
+{
+  "contact_multisets_equal": true,
+  "resolver_selected_bitfields_equal": true,
+  "contacts": 60,
+  "scope": "actual portrait250 pair, transientIDs excluded; fields critical_roll_bits,crit_multiplier,hp_before_bits,hp_after_bits,rng_before_crit,rng_after_crit,rng_after_resolution,elapsed_bits"
+}

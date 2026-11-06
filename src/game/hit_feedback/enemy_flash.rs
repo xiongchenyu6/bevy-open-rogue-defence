@@ -1,5 +1,5 @@
 //! Brief per-instance body feedback; imported source materials remain immutable.
-use super::{Enemy, GameSession, HitPunch};
+use super::{Enemy, GameSession, HitFeedback, HitPunch};
 use bevy::prelude::*;
 use std::collections::HashMap;
 
@@ -7,8 +7,8 @@ const FLASH_SECONDS: f32 = 0.070;
 
 #[derive(Resource, Default)]
 pub(super) struct EnemyFlash {
-    pending: Vec<(Entity, u32)>,
-    variants: HashMap<AssetId<StandardMaterial>, Handle<StandardMaterial>>,
+    pending: Vec<(Entity, u32, bool)>,
+    variants: HashMap<(AssetId<StandardMaterial>, bool), Handle<StandardMaterial>>,
 }
 
 #[derive(Component, Clone)]
@@ -24,17 +24,26 @@ struct FlashedLeaf {
 pub(super) fn collect(
     mut flash: ResMut<EnemyFlash>,
     session: Res<GameSession>,
+    feedback: Res<HitFeedback>,
     punched: Query<(Entity, Ref<Enemy>), Added<HitPunch>>,
 ) {
     if session.finished || session.paused {
         return;
     }
-    flash.pending.extend(
-        punched
-            .iter()
-            .filter(|(_, enemy)| enemy.hp > 0.)
-            .map(|(entity, enemy)| (entity, enemy.added().get())),
-    );
+    flash
+        .pending
+        .extend(
+            punched
+                .iter()
+                .filter(|(_, enemy)| enemy.hp > 0.)
+                .map(|(entity, enemy)| {
+                    let critical = feedback
+                        .events()
+                        .iter()
+                        .any(|event| event.target == entity && !event.killed && event.critical);
+                    (entity, enemy.added().get(), critical)
+                }),
+        );
 }
 
 fn owner_epoch(world: &World, owner: Entity) -> Option<u32> {
@@ -87,8 +96,8 @@ pub(super) fn animate(world: &mut World) {
     }
     state
         .variants
-        .retain(|id, _| world.resource::<Assets<StandardMaterial>>().contains(*id));
-    for (owner, epoch) in state.pending.drain(..) {
+        .retain(|(id, _), _| world.resource::<Assets<StandardMaterial>>().contains(*id));
+    for (owner, epoch, critical) in state.pending.drain(..) {
         if finished || paused || owner_epoch(world, owner) != Some(epoch) {
             continue;
         }
@@ -113,7 +122,7 @@ pub(super) fn animate(world: &mut World) {
             }
         }
         for (entity, original) in leaves {
-            let flash = if let Some(handle) = state.variants.get(&original.id()) {
+            let flash = if let Some(handle) = state.variants.get(&(original.id(), critical)) {
                 handle.clone()
             } else {
                 let Some(source) = world.resource::<Assets<StandardMaterial>>().get(&original)
@@ -121,12 +130,32 @@ pub(super) fn animate(world: &mut World) {
                     continue;
                 };
                 let mut variant = source.clone();
-                variant.base_color = Color::srgba(1., 1., 1., source.base_color.alpha());
-                variant.emissive = LinearRgba::rgb(1., 1., 1.);
+                // Ordinary contacts retain the creature's palette and surface shading.
+                // Critical contacts have a warmer, stronger accent, rather than
+                // replacing every body surface with the same white silhouette.
+                let base = source.base_color.to_srgba();
+                let (amount, tint) = if critical {
+                    (0.55, [1.0, 0.82, 0.38])
+                } else {
+                    (0.18, [1.0, 1.0, 1.0])
+                };
+                variant.base_color = Color::srgba(
+                    base.red + (tint[0] - base.red) * amount,
+                    base.green + (tint[1] - base.green) * amount,
+                    base.blue + (tint[2] - base.blue) * amount,
+                    base.alpha,
+                );
+                if critical {
+                    variant.emissive.red += 0.4;
+                    variant.emissive.green += 0.18;
+                    variant.emissive.blue += 0.03;
+                }
                 let handle = world
                     .resource_mut::<Assets<StandardMaterial>>()
                     .add(variant);
-                state.variants.insert(original.id(), handle.clone());
+                state
+                    .variants
+                    .insert((original.id(), critical), handle.clone());
                 handle
             };
             world.entity_mut(entity).insert((
@@ -169,6 +198,7 @@ mod tests {
             .init_asset::<StandardMaterial>()
             .init_resource::<GameSession>()
             .init_resource::<EnemyFlash>()
+            .init_resource::<HitFeedback>()
             .add_systems(Update, (collect, super::super::animate_hit_punch).chain())
             .add_systems(PostUpdate, animate);
         let world = app.world_mut();
@@ -242,8 +272,48 @@ mod tests {
         assert_eq!(variant.alpha_mode, AlphaMode::Mask(0.4));
         assert_eq!(variant.base_color.alpha(), 0.8);
         assert_eq!(variant.base_color_texture, Some(Handle::default()));
-        assert_eq!(variant.emissive, LinearRgba::WHITE);
+        assert_eq!(variant.emissive, assets.get(&source).unwrap().emissive);
+        let color = variant.base_color.to_srgba();
+        assert!(color.green > color.red && color.red > color.blue);
+        assert!(color.red < 0.4 && color.green < 0.6);
         assert_eq!(format!("{:?}", assets.get(&source).unwrap()), before);
+    }
+
+    #[test]
+    fn simultaneous_ordinary_and_critical_contacts_keep_the_critical_palette() {
+        for critical_first in [false, true] {
+            let (mut app, owner, leaf, control, source) = fixture();
+            for critical in [critical_first, !critical_first] {
+                app.world_mut()
+                    .resource_mut::<HitFeedback>()
+                    .push(super::super::HitEvent {
+                        target: owner,
+                        position: Vec3::ZERO,
+                        element: crate::game::bonds::DamageElement::Physical,
+                        weight: super::super::HitWeight::Normal,
+                        critical,
+                        killed: false,
+                    });
+            }
+            hit(&mut app, owner);
+            step(&mut app, 0.016);
+            let assets = app.world().resource::<Assets<StandardMaterial>>();
+            let material = assets.get(current(&app, leaf).id()).unwrap();
+            assert_eq!(material.emissive, LinearRgba::rgb(0.4, 0.18, 0.03));
+            assert_eq!(material.base_color.alpha(), 0.8);
+            assert_eq!(material.base_color_texture, Some(Handle::default()));
+            assert_eq!(current(&app, control), source);
+            step(&mut app, 0.08);
+            assert_eq!(current(&app, leaf), source);
+            app.world_mut().resource_mut::<HitFeedback>().events.clear();
+            app.world_mut().entity_mut(owner).remove::<HitPunch>();
+            hit(&mut app, owner);
+            step(&mut app, 0.016);
+            let assets = app.world().resource::<Assets<StandardMaterial>>();
+            let material = assets.get(current(&app, leaf).id()).unwrap();
+            assert_eq!(material.emissive, assets.get(&source).unwrap().emissive);
+            assert_eq!(app.world().resource::<EnemyFlash>().variants.len(), 2);
+        }
     }
 
     #[test]

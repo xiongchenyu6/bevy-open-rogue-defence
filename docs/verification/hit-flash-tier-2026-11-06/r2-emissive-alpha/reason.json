@@ -1,0 +1,1 @@
+{"actual_failure": "Critical tier emissive += added alpha too: actual2 expected1. Preserve source alpha and add RGB channels only. Existing7flash tests pass; newtier test fails. No nativeafter yet."}

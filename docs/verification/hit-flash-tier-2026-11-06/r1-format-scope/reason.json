@@ -1,0 +1,1 @@
+{"reason": "Intentionally stopped root-started build: cargo fmt --all reformatted three unrelated clean tracked files. Restore only these root-generated formatting changes, then fresh controlled build. No behavioral negative claimed."}
