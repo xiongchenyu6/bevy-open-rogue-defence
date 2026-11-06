@@ -1,0 +1,31 @@
+{
+  "old_files": 886,
+  "new_files": 892,
+  "added": {
+    "assets/licenses/demon-cavern-source.json": "3a11d2333a234c8a010c12907846b8b2b9113a2df5626ddab017d35596cabb02",
+    "assets/licenses/Demon-Cavern-Source.txt": "5c009be6e95937e0277f53426786904baa8267485461cb29db4a66a42ad165fd",
+    "assets/audio/swing_daggers.wav": "ac9c63d8d170cf32ec4c4e70b7ec9d9b96addbb704769bb1454072cdfe39d615",
+    "assets/audio/swing_axe.wav": "c81a4657056917f0c092e364069c4ebd176f75456f5ad9a5e928b533a9212c1f",
+    "assets/models/environment_demon_cavern.glb": "7cc6fe0dfbda094226f5f051492f8aee8c4a449fc90844c574cedf36995b7176",
+    "assets/audio/swing_sword.wav": "79501b7ab0fb6cad7ece61a4572239ba36793e6e9103005d1f42f6d6da205c25"
+  },
+  "removed": {},
+  "changed": {
+    "version.json": {
+      "old": "aaab48c691463c05c31b8fca1279d9d0e1d6a6e139701d6b46eccf5a25823152",
+      "new": "0aeb5e38ee1a5256efba209d14d2b2fa458eef26a4979425df2185d7ccbc0b7d"
+    },
+    "rogue_commander": {
+      "old": "7dce2d9be5a8a8d8fa9027b1adc5fc7b0f3705b6ffadf6cb8652326e0b7aec24",
+      "new": "6e124cd0d123349b649da236931734ffc5657801e30e786bcc41233298d336a6"
+    },
+    "assets/audio/SOURCES.md": {
+      "old": "5129753d14647318bc3a993ecb455db0342acfecbdecf30571ac85e6b6e8622d",
+      "new": "97a820b51c901c8e8a165f124205a926636a8462a5912e5c1fd023ba0e5f2d91"
+    },
+    "assets/models/SOURCES.md": {
+      "old": "ac6e96683bb9a66ad5e68fa8d2a69aeb243956ea25287f22f06cc3dc2a0fb7ea",
+      "new": "faad26167461f4b8d33767fb2ad85433669b59bac87d8cc3eec7893e6cf2c3d3"
+    }
+  }
+}

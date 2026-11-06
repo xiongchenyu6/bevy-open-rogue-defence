@@ -1,0 +1,10 @@
+{
+  "path": "target/verification/cave-feel-r3-smoke-r3-2026-11-06",
+  "package_commit": "932fba4d3f4a172e9c7421be1b191bb6b989127e",
+  "harness_commit": "c2a0740f833d4b36cf9e1529f2acabf86224584d",
+  "status": "ACTUAL_TERMINAL_EXIT0_FULL_FLOW",
+  "excluded_live_files_from_immutable_manifest": false,
+  "actual_exit": 0,
+  "actual_seconds": 113.71820460900199,
+  "archived": "positive"
+}

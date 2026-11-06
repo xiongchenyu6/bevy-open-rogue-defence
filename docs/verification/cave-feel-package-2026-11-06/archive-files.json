@@ -1,0 +1,368 @@
+[
+  {
+    "source": "target/verification/cave-feel-package-r2-2026-11-06/smoke-process.json",
+    "archive": "raw/r2-gpu/smoke-process.json",
+    "sha256": "59ce8c7016be3515ce463d30a70d27f0604a1ca3be7d9d3387a967063e15f2b5",
+    "bytes": 992
+  },
+  {
+    "source": "target/verification/cave-feel-package-r2-2026-11-06/smoke.log",
+    "archive": "raw/r2-gpu/smoke.log",
+    "sha256": "eea682a416127f6bb779f09260e24df2ad5fc88c969868282cce8999d2a02500",
+    "bytes": 717
+  },
+  {
+    "source": "target/verification/cave-feel-package-r2-2026-11-06/smoke/game.log",
+    "archive": "raw/r2-gpu/smoke-game.log",
+    "sha256": "b5322b0de2acea5c2ef5c5e088fbbb89edb2cafe334ed8c05c9963a991946964",
+    "bytes": 40756
+  },
+  {
+    "source": "target/verification/cave-feel-package-r3-2026-11-06/smoke-process.json",
+    "archive": "raw/r3-strict24/smoke-process.json",
+    "sha256": "1daacd0d6416f21c90947f2a4711d0b30d7649eeb0d07d6d44c6698df8fa5793",
+    "bytes": 992
+  },
+  {
+    "source": "target/verification/cave-feel-package-r3-2026-11-06/smoke.log",
+    "archive": "raw/r3-strict24/smoke.log",
+    "sha256": "6894ef0dc98a344202ce7340001518dca80bb26499daa6a6b377a742cd1b0da4",
+    "bytes": 502
+  },
+  {
+    "source": "target/verification/cave-feel-package-r3-2026-11-06/smoke/game.log",
+    "archive": "raw/r3-strict24/smoke-game.log",
+    "sha256": "66acc96fe9d48e390b9afd411fe207b6867703b05a1b22d6e8e4a61bf4a00169",
+    "bytes": 26798
+  },
+  {
+    "source": "target/verification/public-controls-cave-feel-r3-2026-11-06/process.json",
+    "archive": "raw/public-r3-unknown/process.json",
+    "sha256": "36cb63009fc6c6f94cbbbe610675860541862fa8d79a9b66a5d5bdc14268c978",
+    "bytes": 70
+  },
+  {
+    "source": "target/verification/public-controls-cave-feel-r3-2026-11-06/runtime.log",
+    "archive": "raw/public-r3-unknown/runtime.log",
+    "sha256": "ad8cf25a3b64137aae24f035bccfa8f67ed24934dba39893716ed433b130b144",
+    "bytes": 4247
+  },
+  {
+    "source": "target/verification/public-controls-cave-feel-r3-2026-11-06/output/result.json",
+    "archive": "raw/public-r3-unknown/output-result.json",
+    "sha256": "beef4c5055028bfbd2a589200c9e95d50aa8a0ddd3566f569bb8c2a9f4eefcd6",
+    "bytes": 45408
+  },
+  {
+    "source": "target/verification/public-controls-cave-feel-r3-2026-11-06/output/game.log",
+    "archive": "raw/public-r3-unknown/output-game.log",
+    "sha256": "1562ee2cf898bf090d0eb99ff87ee90dc6802a8ef0c1d5a74070579af6b6f190",
+    "bytes": 7856
+  },
+  {
+    "source": "target/verification/public-controls-cave-feel-r4-2026-11-06/process.json",
+    "archive": "raw/public-r4-camp/process.json",
+    "sha256": "adf3ad3574e89451f0d79f540721262b71337c93da03fec0c6039f1dd85dd67f",
+    "bytes": 69
+  },
+  {
+    "source": "target/verification/public-controls-cave-feel-r4-2026-11-06/runtime.log",
+    "archive": "raw/public-r4-camp/runtime.log",
+    "sha256": "83399c9d298f8588267af087be7e737d35c6a97d5a22b70149a1696496af2228",
+    "bytes": 719
+  },
+  {
+    "source": "target/verification/public-controls-cave-feel-r4-2026-11-06/output/result.json",
+    "archive": "raw/public-r4-camp/output-result.json",
+    "sha256": "8bb712e56a80a01333c6d3a32009e34dac72286b4f3fecca6eb60d59293f647c",
+    "bytes": 315789
+  },
+  {
+    "source": "target/verification/public-controls-cave-feel-r4-2026-11-06/output/game.log",
+    "archive": "raw/public-r4-camp/output-game.log",
+    "sha256": "5eaacc7d2b4c16acf99d26faa0fed258d8f683658cd416cae39cd9a34c042974",
+    "bytes": 32825
+  },
+  {
+    "source": "target/verification/public-fullscreen-cave-feel-r5-2026-11-06/process.json",
+    "archive": "raw/public-r5-menu/process.json",
+    "sha256": "68d0ed14ea9bcf05b37c416ef4e14e59488ef931e5949eb38416d247f55feea9",
+    "bytes": 70
+  },
+  {
+    "source": "target/verification/public-fullscreen-cave-feel-r5-2026-11-06/runtime.log",
+    "archive": "raw/public-r5-menu/runtime.log",
+    "sha256": "3ea88a17e63536294d3c52666ff451f28ee3b5ec60edda765ff33c7f42186a02",
+    "bytes": 666
+  },
+  {
+    "source": "target/verification/public-fullscreen-cave-feel-r5-2026-11-06/output/result.json",
+    "archive": "raw/public-r5-menu/output-result.json",
+    "sha256": "637953e3913fcc2c410eeacccfe97aeeb38b506b6206c5436dbe869efb9b0b47",
+    "bytes": 393829
+  },
+  {
+    "source": "target/verification/public-fullscreen-cave-feel-r5-2026-11-06/output/game.log",
+    "archive": "raw/public-r5-menu/output-game.log",
+    "sha256": "dab96d994fe8e06795311ca3cc7a81f6db0fa156b5bb3f89682ae967e91a96be",
+    "bytes": 32825
+  },
+  {
+    "source": "target/verification/cave-feel-manual-x11-2026-11-06/actions.jsonl",
+    "archive": "manual/actions.jsonl",
+    "sha256": "73bf6d88d281ea76c3723868a8778f3ce38bea7fdea5fb4ae48624683bc86538",
+    "bytes": 20141
+  },
+  {
+    "source": "target/verification/cave-feel-manual-x11-2026-11-06/exit.json",
+    "archive": "manual/exit.json",
+    "sha256": "f8f2f02d3d9a6a686ab2c4bb477d4eb1fbcfd48695cb288287475674e6ec4d13",
+    "bytes": 17
+  },
+  {
+    "source": "target/verification/cave-feel-manual-x11-2026-11-06/command.json",
+    "archive": "manual/command.json",
+    "sha256": "7cf7f570be2df4371ff8876cf7c82c5f852a568e7aae6d9393c57879290e796b",
+    "bytes": 606
+  },
+  {
+    "source": "target/verification/cave-feel-manual-x11-2026-11-06/session.py",
+    "archive": "manual/session.py",
+    "sha256": "99d446136f38e1b1104b1ae3d627876e1f27f915741571a2fe513cdd6cd902f8",
+    "bytes": 988
+  },
+  {
+    "source": "target/verification/cave-feel-manual-x11-2026-11-06/action.py",
+    "archive": "manual/action.py",
+    "sha256": "fe36dd3be43de49d4281d2e7fd06bde2778c10407082a3ad911271f4d7da5de5",
+    "bytes": 1197
+  },
+  {
+    "source": "target/verification/cave-feel-manual-x11-2026-11-06/game.log",
+    "archive": "manual/game.log",
+    "sha256": "12940f6fba0085c8cbc563087c17143beb703cec953f83bdec7716fbc44805f1",
+    "bytes": 115481
+  },
+  {
+    "source": "target/verification/cave-feel-manual-x11-2026-11-06/manager.log",
+    "archive": "manual/manager.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "source": "target/verification/cave-feel-manual-x11-2026-11-06/xvfb.log",
+    "archive": "manual/xvfb.log",
+    "sha256": "f172a1b0f5cf2a0d462c51dfc335af1a1dfc8e873cb66f61d018c8b1b35fe416",
+    "bytes": 1174
+  },
+  {
+    "source": "target/verification/cave-feel-manual-x11-2026-11-06/wm.log",
+    "archive": "manual/wm.log",
+    "sha256": "abb16ee7ad8150ef148cd3425ae2753458f96b4efa5060c8a1e746b62e5b886c",
+    "bytes": 228
+  },
+  {
+    "source": "target/verification/cave-feel-manual-x11-2026-11-06/portrait-settings.png",
+    "archive": "manual/portrait-settings.png",
+    "sha256": "b7667c202e1c168628dbf440db3eeae6c4e9f855e332e482d04118e1f2e1811d",
+    "bytes": 51132
+  },
+  {
+    "source": "target/verification/cave-feel-manual-x11-2026-11-06/fullscreen-settings.png",
+    "archive": "manual/fullscreen-settings.png",
+    "sha256": "843052777e9536a002a4836b8ac5008e8a4498a54b30121b094849c77dc22022",
+    "bytes": 59072
+  },
+  {
+    "source": "target/verification/cave-feel-manual-x11-2026-11-06/portrait-restored-settings.png",
+    "archive": "manual/portrait-restored-settings.png",
+    "sha256": "b7667c202e1c168628dbf440db3eeae6c4e9f855e332e482d04118e1f2e1811d",
+    "bytes": 51132
+  },
+  {
+    "source": "target/verification/cave-feel-manual-x11-2026-11-06/desktop-restored.png",
+    "archive": "manual/desktop-restored.png",
+    "sha256": "0ecc69a378267d608978cc4dea294d2f8fafeec0523f27a1d09180be9c616a7a",
+    "bytes": 746947
+  },
+  {
+    "source": "target/verification/cave-feel-manual-x11-2026-11-06/quit-confirmation.png",
+    "archive": "manual/quit-confirmation.png",
+    "sha256": "5534cb6a465860f9575946fecfedc37313eba92775d5aa5c07d924b9c7a1a6b7",
+    "bytes": 62579
+  },
+  {
+    "source": "actual systemd/journal read-only observation",
+    "archive": "manual/unit-show.txt",
+    "sha256": "a94d10d18b8fec57b7227cad008466aa01bf955a2b4a8bc366d5bb8e977309e6",
+    "bytes": 122
+  },
+  {
+    "source": "actual systemd/journal read-only observation",
+    "archive": "manual/unit-journal.log",
+    "sha256": "7f65738146c0b7e101ef44cea17e1ac77f8b11cd5848027ae9a13c80caa3b199",
+    "bytes": 869
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r2-2026-11-06/process.json",
+    "archive": "raw/strict-smoke-r2-settings/process.json",
+    "sha256": "41690862b3708c6ba2a1cb2d036af3c9598dc3176b68d31aa3e964f05e38ff79",
+    "bytes": 49
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r2-2026-11-06/runtime.log",
+    "archive": "raw/strict-smoke-r2-settings/runtime.log",
+    "sha256": "67636dcacb54605e9b8af1ac898fbbde6c915c2a1bb5f17ad49fbbf64662a919",
+    "bytes": 742
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r2-2026-11-06/harness-provenance.json",
+    "archive": "raw/strict-smoke-r2-settings/harness-provenance.json",
+    "sha256": "79e2339ddcc3a09bf65bdeaa3c9f30a1b3eabe28bcfb1f3e45f0a6aa227c58c1",
+    "bytes": 836
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r2-2026-11-06/output/game.log",
+    "archive": "raw/strict-smoke-r2-settings/output-game.log",
+    "sha256": "3dfb798270a4dc64514ffe64041e746dad67debb317aaa583c3a8c3a185d8151",
+    "bytes": 32825
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/process.json",
+    "archive": "positive/process.json",
+    "sha256": "13a6f4a02df2ae556d911f9747ce553a1978954d3efb32b1c7cc38d359ca9c0f",
+    "bytes": 49
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/runtime.log",
+    "archive": "positive/runtime.log",
+    "sha256": "14f54f19290e781f94b929bb65ba962350cbe4a8a81c6814baa5d51823fba69b",
+    "bytes": 2874
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/manager.log",
+    "archive": "positive/manager.log",
+    "sha256": "bb5481244b9fbfc45f2ae6399aa976d29054614f5df6a9c71e3285bff7d4b611",
+    "bytes": 22
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/executed-command.json",
+    "archive": "positive/executed-command.json",
+    "sha256": "f8c9440052a60aceaee0f994ed073023f5c71930c94b423bfd16b55f6bfe43c9",
+    "bytes": 880
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/harness-provenance.json",
+    "archive": "positive/harness-provenance.json",
+    "sha256": "bd2f3f9479498cf4f72d7ad040943411ddbb22511f84cf9e493563427681e065",
+    "bytes": 862
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/run.py",
+    "archive": "positive/run.py",
+    "sha256": "d5856dfadda76b6dccd35eba633f4430d21cb89e52e90cf5bf8ad30252ad1e3c",
+    "bytes": 1606
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/output/result.json",
+    "archive": "positive/output/result.json",
+    "sha256": "fc09bdac4cac7a3102a9b9643aaad1fb1eb746219334258ec15fbc5318ea0252",
+    "bytes": 4479
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/output/battle-progress.json",
+    "archive": "positive/output/battle-progress.json",
+    "sha256": "3341471f4793b376371839787e3e9dd5245614817a902094aee4a866a986f1e9",
+    "bytes": 3967
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/output/game.log",
+    "archive": "positive/output/game.log",
+    "sha256": "9fc645aa3f5824541e088db3130030865883821e835b9aad9302971f06a1f5e9",
+    "bytes": 11300
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/output/restart.log",
+    "archive": "positive/output/restart.log",
+    "sha256": "dd50bef91813b79809de24eb04dfa5f1195bf2deedc575ac9157d87ec5aa8998",
+    "bytes": 11300
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/output/xvfb.log",
+    "archive": "positive/output/xvfb.log",
+    "sha256": "b987a262609a3720f450ab6815ed90b2069dd47b7b012959ca19c325aebf5d55",
+    "bytes": 2348
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/output/wm.log",
+    "archive": "positive/output/wm.log",
+    "sha256": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c",
+    "bytes": 85
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/output/settings-chinese.png",
+    "archive": "positive/output/settings-chinese.png",
+    "sha256": "1f183e005c7c5c7e1534abb6e81d901586e636fa48e7017ab5cbf65997de9fdf",
+    "bytes": 40633
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/output/restart-chinese.png",
+    "archive": "positive/output/restart-chinese.png",
+    "sha256": "033ca6db6f6c96460080a971bd17d38edf5687b2758d451e38384618ee7ec37d",
+    "bytes": 88116
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/output/restart-battle-chinese.png",
+    "archive": "positive/output/restart-battle-chinese.png",
+    "sha256": "d071c62c55843178076a5a5ff6e2757393c1da6ab889dd0c75da3fb2cdef44b8",
+    "bytes": 742664
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/output/battle.png",
+    "archive": "positive/output/battle.png",
+    "sha256": "ef633a1e131ef10dd11d001e63500118a24f95350658127a8afb0aa2f75d1ce9",
+    "bytes": 740890
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/harness/forge_restart_runtime.py",
+    "archive": "positive/harness/forge_restart_runtime.py",
+    "sha256": "659c983316e5c8f4f7c9e4cb3949a626277d7eb4282141743b7525a28f28d737",
+    "bytes": 9632
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/harness/campaign_runtime.py",
+    "archive": "positive/harness/campaign_runtime.py",
+    "sha256": "76ce1daa5939dbbbdcbc0b68162f62b59ce178c14228e1cecb1c8f50684c0591",
+    "bytes": 18356
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/harness/forge_runtime.py",
+    "archive": "positive/harness/forge_runtime.py",
+    "sha256": "6d6d336287e4ce33741c723940d3eff689e7211e2ce3ef7383122b114fc61e93",
+    "bytes": 24703
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/harness/campaign_equipment_runtime.py",
+    "archive": "positive/harness/campaign_equipment_runtime.py",
+    "sha256": "674909c39cf601765e45980bc028d4efa09ffe723a732c57a219812cd135f872",
+    "bytes": 41606
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/harness/smoke_runtime.py",
+    "archive": "positive/harness/smoke_runtime.py",
+    "sha256": "61f7e3630f861d9d56b965fba7e155a9b9dee1b804af4d0bb539f0c4a6c9e300",
+    "bytes": 19456
+  },
+  {
+    "source": "target/verification/cave-feel-r3-smoke-r3-2026-11-06/harness/forge_refresh.py",
+    "archive": "positive/harness/forge_refresh.py",
+    "sha256": "c40e9e61179f9ae55d767bd6c9f1333e7b6bced398cd292a190870e701423063",
+    "bytes": 4319
+  },
+  {
+    "source": "actualsystemd readonly observation",
+    "archive": "positive/unit-show.txt",
+    "sha256": "e680afeebe3fc985bd889dab217d71ddcadcba687e6de232f732619f4458faa2",
+    "bytes": 76
+  }
+]

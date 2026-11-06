@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/harness/smoke_runtime.py", line 382, in <module>
+    main()
+  File "/harness/smoke_runtime.py", line 327, in main
+    click_text(win, app, 'Settings')
+  File "/harness/smoke_runtime.py", line 284, in click_text
+    _, left, top, right, bottom = wait_text(win, process, text)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/smoke_runtime.py", line 282, in wait_text
+    return wait(lambda: find_text(visible_lines(win), text), process)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/smoke_runtime.py", line 269, in wait
+    raise RuntimeError('Timed out waiting for runtime UI')
+RuntimeError: Timed out waiting for runtime UI

@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/harness/public_controls_runtime.py", line 196, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/harness/public_controls_runtime.py", line 159, in main
+    click_row(text('Menu'),'portrait-visible-Menu')
+              ^^^^^^^^^^^^
+  File "/harness/public_controls_runtime.py", line 102, in text
+    return wait(lambda:find_text(observe('current-ui')[1],label),label)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/public_controls_runtime.py", line 100, in wait
+    raise AssertionError('Timed out: '+label)
+AssertionError: Timed out: Menu

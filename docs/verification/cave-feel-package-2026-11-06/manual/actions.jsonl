@@ -1,0 +1,115 @@
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952133.5919003, "end_wall": 1793952133.7287488, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952133.728766, "end_wall": 1793952133.8277178, "exit": 0, "stdout": "WINDOW=4194306\nX=161\nY=167\nWIDTH=1280\nHEIGHT=720\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/startup.png"], "start_wall": 1793952133.8277297, "end_wall": 1793952134.0220013, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952164.3284488, "end_wall": 1793952164.4828932, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowactivate", "--sync", "4194306"], "start_wall": 1793952164.4829214, "end_wall": 1793952164.615508, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mousemove", "--window", "4194306", "290", "255"], "start_wall": 1793952164.6155205, "end_wall": 1793952164.7306635, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mousedown", "1"], "start_wall": 1793952164.7306788, "end_wall": 1793952164.8272572, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mouseup", "1"], "start_wall": 1793952164.9773746, "end_wall": 1793952165.101795, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952181.2470932, "end_wall": 1793952181.36706, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952181.3670819, "end_wall": 1793952181.4826183, "exit": 0, "stdout": "WINDOW=4194306\nX=161\nY=167\nWIDTH=1280\nHEIGHT=720\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/guide.png"], "start_wall": 1793952181.4826715, "end_wall": 1793952182.2897618, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952201.1526344, "end_wall": 1793952201.2996666, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowactivate", "--sync", "4194306"], "start_wall": 1793952201.2996893, "end_wall": 1793952201.4352064, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mousemove", "--window", "4194306", "491", "453"], "start_wall": 1793952201.4352155, "end_wall": 1793952201.51262, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mousedown", "1"], "start_wall": 1793952201.5126297, "end_wall": 1793952201.6711094, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mouseup", "1"], "start_wall": 1793952201.8217273, "end_wall": 1793952201.9054022, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952216.3696632, "end_wall": 1793952216.5107424, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952216.5107613, "end_wall": 1793952216.662612, "exit": 0, "stdout": "WINDOW=4194306\nX=161\nY=167\nWIDTH=1280\nHEIGHT=720\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/recruit.png"], "start_wall": 1793952216.6626291, "end_wall": 1793952217.1923938, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952235.2146266, "end_wall": 1793952235.3148987, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowactivate", "--sync", "4194306"], "start_wall": 1793952235.3149211, "end_wall": 1793952235.4577053, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mousemove", "--window", "4194306", "230", "490"], "start_wall": 1793952235.4577208, "end_wall": 1793952235.5680027, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mousedown", "1"], "start_wall": 1793952235.56802, "end_wall": 1793952235.6601374, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mouseup", "1"], "start_wall": 1793952235.8104463, "end_wall": 1793952235.9119565, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952254.2400656, "end_wall": 1793952254.324884, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952254.3249283, "end_wall": 1793952254.4309633, "exit": 0, "stdout": "WINDOW=4194306\nX=161\nY=167\nWIDTH=1280\nHEIGHT=720\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/battle.png"], "start_wall": 1793952254.431, "end_wall": 1793952255.6553278, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952280.1069937, "end_wall": 1793952280.217069, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowsize", "4194306", "375", "667"], "start_wall": 1793952280.2170951, "end_wall": 1793952280.3141496, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952297.5437639, "end_wall": 1793952297.6301954, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952297.630213, "end_wall": 1793952297.706832, "exit": 0, "stdout": "WINDOW=4194306\nX=161\nY=167\nWIDTH=375\nHEIGHT=667\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/portrait.png"], "start_wall": 1793952297.706842, "end_wall": 1793952298.0489094, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952316.7282164, "end_wall": 1793952316.8178914, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowactivate", "--sync", "4194306"], "start_wall": 1793952316.8179107, "end_wall": 1793952316.9240897, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mousemove", "--window", "4194306", "273", "94"], "start_wall": 1793952316.924101, "end_wall": 1793952316.995805, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mousedown", "1"], "start_wall": 1793952316.995813, "end_wall": 1793952317.0674484, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mouseup", "1"], "start_wall": 1793952317.217561, "end_wall": 1793952317.2864318, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952335.7751348, "end_wall": 1793952335.8635802, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952335.8635979, "end_wall": 1793952335.9434485, "exit": 0, "stdout": "WINDOW=4194306\nX=161\nY=167\nWIDTH=375\nHEIGHT=667\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/portrait-settings.png"], "start_wall": 1793952335.9434767, "end_wall": 1793952336.0664408, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952354.839816, "end_wall": 1793952354.9338465, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowactivate", "--sync", "4194306"], "start_wall": 1793952354.9338686, "end_wall": 1793952355.0394163, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "keydown", "F11"], "start_wall": 1793952355.0394242, "end_wall": 1793952355.127132, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "keyup", "F11"], "start_wall": 1793952355.4280128, "end_wall": 1793952355.515706, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952372.4446762, "end_wall": 1793952372.55791, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952372.5579317, "end_wall": 1793952372.6518173, "exit": 0, "stdout": "WINDOW=4194306\nX=0\nY=0\nWIDTH=1600\nHEIGHT=1000\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/fullscreen-settings.png"], "start_wall": 1793952372.6518323, "end_wall": 1793952372.9392917, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952388.5787048, "end_wall": 1793952388.7104576, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowactivate", "--sync", "4194306"], "start_wall": 1793952388.7105026, "end_wall": 1793952388.8875508, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "keydown", "F11"], "start_wall": 1793952388.8875718, "end_wall": 1793952389.020308, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "keyup", "F11"], "start_wall": 1793952389.3204064, "end_wall": 1793952389.419861, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952405.5695837, "end_wall": 1793952405.6547334, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952405.6547534, "end_wall": 1793952405.7384706, "exit": 0, "stdout": "WINDOW=4194306\nX=161\nY=167\nWIDTH=375\nHEIGHT=667\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/portrait-restored-settings.png"], "start_wall": 1793952405.7384822, "end_wall": 1793952405.9010613, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952430.5118394, "end_wall": 1793952430.6054223, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowactivate", "--sync", "4194306"], "start_wall": 1793952430.6054416, "end_wall": 1793952430.7151852, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "keydown", "Escape"], "start_wall": 1793952430.7151954, "end_wall": 1793952430.8102818, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "keyup", "Escape"], "start_wall": 1793952431.1103754, "end_wall": 1793952431.201481, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952450.6664777, "end_wall": 1793952450.7586634, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952450.7586844, "end_wall": 1793952450.8394344, "exit": 0, "stdout": "WINDOW=4194306\nX=161\nY=167\nWIDTH=375\nHEIGHT=667\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/portrait-resumed.png"], "start_wall": 1793952450.8394465, "end_wall": 1793952451.1936655, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952473.8779252, "end_wall": 1793952473.9711864, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowsize", "4194306", "1280", "720"], "start_wall": 1793952473.9712121, "end_wall": 1793952474.054758, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952492.53739, "end_wall": 1793952492.6452107, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952492.64525, "end_wall": 1793952492.716367, "exit": 0, "stdout": "WINDOW=4194306\nX=161\nY=167\nWIDTH=1280\nHEIGHT=720\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/desktop-restored.png"], "start_wall": 1793952492.7163808, "end_wall": 1793952493.9905357, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952514.8083217, "end_wall": 1793952514.9097517, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowactivate", "--sync", "4194306"], "start_wall": 1793952514.909771, "end_wall": 1793952515.082268, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "keydown", "Shift_L"], "start_wall": 1793952515.082277, "end_wall": 1793952515.2121587, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "keyup", "Shift_L"], "start_wall": 1793952515.512267, "end_wall": 1793952515.6209614, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952531.1799097, "end_wall": 1793952531.343048, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952531.3430681, "end_wall": 1793952531.4513488, "exit": 0, "stdout": "WINDOW=4194306\nX=161\nY=167\nWIDTH=1280\nHEIGHT=720\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/dodge-after.png"], "start_wall": 1793952531.4513605, "end_wall": 1793952532.7340078, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952559.0333552, "end_wall": 1793952559.1535232, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowactivate", "--sync", "4194306"], "start_wall": 1793952559.1535442, "end_wall": 1793952559.301065, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "keydown", "Up"], "start_wall": 1793952559.3010762, "end_wall": 1793952559.4166398, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "keyup", "Up"], "start_wall": 1793952559.717009, "end_wall": 1793952559.8144915, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952577.8447332, "end_wall": 1793952577.9567826, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952577.9568038, "end_wall": 1793952578.0374553, "exit": 0, "stdout": "WINDOW=4194306\nX=161\nY=167\nWIDTH=1280\nHEIGHT=720\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/up-after.png"], "start_wall": 1793952578.0374658, "end_wall": 1793952579.2761726, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952610.0091732, "end_wall": 1793952610.1122856, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowactivate", "--sync", "4194306"], "start_wall": 1793952610.1123095, "end_wall": 1793952610.25702, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mousemove", "--window", "4194306", "640", "30"], "start_wall": 1793952610.257029, "end_wall": 1793952610.3608413, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mousedown", "1"], "start_wall": 1793952610.360849, "end_wall": 1793952610.458366, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mouseup", "1"], "start_wall": 1793952610.6084661, "end_wall": 1793952610.7045703, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952639.509446, "end_wall": 1793952639.603493, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952639.603514, "end_wall": 1793952639.713643, "exit": 0, "stdout": "WINDOW=4194306\nX=161\nY=167\nWIDTH=1280\nHEIGHT=720\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/desktop-settings.png"], "start_wall": 1793952639.713659, "end_wall": 1793952639.9831922, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952654.6921551, "end_wall": 1793952654.8571024, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowactivate", "--sync", "4194306"], "start_wall": 1793952654.8571234, "end_wall": 1793952654.9862282, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "keydown", "F11"], "start_wall": 1793952654.986241, "end_wall": 1793952655.0893724, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "keyup", "F11"], "start_wall": 1793952655.3898485, "end_wall": 1793952655.5151048, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952670.7065103, "end_wall": 1793952670.8485692, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952670.8485868, "end_wall": 1793952670.9660563, "exit": 0, "stdout": "WINDOW=4194306\nX=0\nY=0\nWIDTH=1600\nHEIGHT=1000\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/desktop-fullscreen.png"], "start_wall": 1793952670.9660687, "end_wall": 1793952671.2108066, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952689.3098085, "end_wall": 1793952689.4256039, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowactivate", "--sync", "4194306"], "start_wall": 1793952689.425624, "end_wall": 1793952689.5958107, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "keydown", "F11"], "start_wall": 1793952689.5958226, "end_wall": 1793952689.7379339, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "keyup", "F11"], "start_wall": 1793952690.03804, "end_wall": 1793952690.139478, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952706.9230697, "end_wall": 1793952707.0263577, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952707.0263803, "end_wall": 1793952707.1555116, "exit": 0, "stdout": "WINDOW=4194306\nX=161\nY=167\nWIDTH=1280\nHEIGHT=720\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/desktop-roundtrip.png"], "start_wall": 1793952707.1555238, "end_wall": 1793952707.354913, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952723.4757621, "end_wall": 1793952723.592109, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowactivate", "--sync", "4194306"], "start_wall": 1793952723.5921354, "end_wall": 1793952723.7448282, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mousemove", "--window", "4194306", "724", "579"], "start_wall": 1793952723.7448401, "end_wall": 1793952723.8567815, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mousedown", "1"], "start_wall": 1793952723.856794, "end_wall": 1793952723.9604225, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mouseup", "1"], "start_wall": 1793952724.1105232, "end_wall": 1793952724.2107468, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952740.0424454, "end_wall": 1793952740.162477, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "getwindowgeometry", "--shell", "4194306"], "start_wall": 1793952740.1624954, "end_wall": 1793952740.2615788, "exit": 0, "stdout": "WINDOW=4194306\nX=161\nY=167\nWIDTH=1280\nHEIGHT=720\nSCREEN=0\n", "stderr": ""}
+{"args": ["import", "-window", "4194306", "/verify/quit-confirmation.png"], "start_wall": 1793952740.2615898, "end_wall": 1793952740.4347897, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "search", "--onlyvisible", "--pid", "13"], "start_wall": 1793952757.4321969, "end_wall": 1793952757.5485702, "exit": 0, "stdout": "4194306\n", "stderr": ""}
+{"args": ["xdotool", "windowactivate", "--sync", "4194306"], "start_wall": 1793952757.5485964, "end_wall": 1793952757.6894023, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mousemove", "--window", "4194306", "762", "408"], "start_wall": 1793952757.6894147, "end_wall": 1793952757.8013334, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mousedown", "1"], "start_wall": 1793952757.801342, "end_wall": 1793952757.908429, "exit": 0, "stdout": "", "stderr": ""}
+{"args": ["xdotool", "mouseup", "1"], "start_wall": 1793952758.0585449, "end_wall": 1793952758.1208942, "exit": 0, "stdout": "", "stderr": ""}

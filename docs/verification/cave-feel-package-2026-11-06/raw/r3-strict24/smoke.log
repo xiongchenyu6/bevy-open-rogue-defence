@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/harness/smoke_runtime.py", line 297, in <module>
+    main()
+  File "/harness/smoke_runtime.py", line 244, in main
+    battle_running(win, app)
+  File "/harness/smoke_runtime.py", line 213, in battle_running
+    wait(lambda: any(re.search(r'24\s*:\s*\d{2}', line[0]) for line in visible_lines(win))
+  File "/harness/smoke_runtime.py", line 193, in wait
+    raise RuntimeError('Timed out waiting for runtime UI')
+RuntimeError: Timed out waiting for runtime UI

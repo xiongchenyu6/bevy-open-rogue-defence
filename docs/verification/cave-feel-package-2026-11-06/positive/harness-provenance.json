@@ -1,0 +1,13 @@
+{
+  "harness_commit": "c2a0740f833d4b36cf9e1529f2acabf86224584d",
+  "package_commit": "932fba4d3f4a172e9c7421be1b191bb6b989127e",
+  "files": {
+    "smoke_runtime.py": "61f7e3630f861d9d56b965fba7e155a9b9dee1b804af4d0bb539f0c4a6c9e300",
+    "campaign_runtime.py": "76ce1daa5939dbbbdcbc0b68162f62b59ce178c14228e1cecb1c8f50684c0591",
+    "campaign_equipment_runtime.py": "674909c39cf601765e45980bc028d4efa09ffe723a732c57a219812cd135f872",
+    "forge_runtime.py": "6d6d336287e4ce33741c723940d3eff689e7211e2ce3ef7383122b114fc61e93",
+    "forge_refresh.py": "c40e9e61179f9ae55d767bd6c9f1333e7b6bced398cd292a190870e701423063",
+    "forge_restart_runtime.py": "659c983316e5c8f4f7c9e4cb3949a626277d7eb4282141743b7525a28f28d737"
+  },
+  "scope": "Strict two-read countdown and observed desktop toolbar anchor, then require actualSettingspage; initially empty preferences"
+}

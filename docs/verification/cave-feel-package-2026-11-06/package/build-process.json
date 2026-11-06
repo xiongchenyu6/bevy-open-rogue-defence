@@ -1,0 +1,8 @@
+{
+  "exit": 0,
+  "elapsed": 102.46083447203273,
+  "args": [
+    "tools/build_desktop_linux.sh",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/desktop-packages-cave-feel-r3-nov6"
+  ]
+}

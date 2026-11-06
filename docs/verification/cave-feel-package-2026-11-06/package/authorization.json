@@ -1,0 +1,5 @@
+{
+  "build_and_smoke_authorized": true,
+  "expected_source_commit": "932fba4d3f4a172e9c7421be1b191bb6b989127e",
+  "basis": "Actual728 tests and strictClippy0, source fix committed; rebuild for real fullscreen acceptance"
+}
