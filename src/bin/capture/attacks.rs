@@ -128,6 +128,23 @@ pub fn install(app: &mut bevy::app::SubApp, scenario: &str) {
     }
     let center = if melee { -1.0 } else { 0.5 };
     if !growth {
+        if std::env::var_os("ROGUE_CAPTURE_RELEASE_TRACE").is_some() {
+            // Own this diagnostic view: responsive production framing otherwise
+            // replaces the close-up before hands and release poses can be seen.
+            let cameras: Vec<_> = world
+                .query_filtered::<Entity, (With<Camera3d>, With<rogue_commander::game::BattleCamera>)>()
+                .iter(world)
+                .collect();
+            assert!(
+                !cameras.is_empty(),
+                "release diagnostic requires battle camera"
+            );
+            for camera in cameras {
+                world
+                    .entity_mut(camera)
+                    .remove::<rogue_commander::game::BattleCamera>();
+            }
+        }
         let mut cameras =
             world.query_filtered::<(&mut Transform, &mut Projection), With<Camera3d>>();
         for (mut transform, mut projection) in cameras.iter_mut(world) {

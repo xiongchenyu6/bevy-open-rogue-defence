@@ -1,0 +1,56 @@
+[
+  {
+    "original": "target/verification/attack-phase-closeup-2026-11-06/build.log",
+    "archive": "logs/build.log.gz",
+    "raw_bytes": 1140,
+    "raw_sha256": "441a3348df78cf12e965dc00a7493033f4dc0c21cb840b0a922a29e74601d8b5"
+  },
+  {
+    "original": "target/verification/attack-phase-closeup-2026-11-06/clippy.log",
+    "archive": "logs/clippy.log.gz",
+    "raw_bytes": 277,
+    "raw_sha256": "626d8104125560c7b8469b38fd30a330eb46eef46a4197f3379ce3ed2d479808"
+  },
+  {
+    "original": "target/verification/attack-phase-closeup-2026-11-06/sword.log",
+    "archive": "logs/sword.log.gz",
+    "raw_bytes": 56529,
+    "raw_sha256": "2c61c3e5ad13c0751785f8cbee38c0a823313ec2a5ed77cc0d309f1cbf4fcff3"
+  },
+  {
+    "original": "target/verification/attack-phase-closeup-2026-11-06/manager.log",
+    "archive": "logs/manager.log.gz",
+    "raw_bytes": 129,
+    "raw_sha256": "5e1dc08df04fe15b3d66729342457e961133b14d5e1ec7512facf97dedc22c51"
+  },
+  {
+    "original": "target/verification/attack-phase-closeup-2026-11-06/storm.log",
+    "archive": "logs/storm.log.gz",
+    "raw_bytes": 54940,
+    "raw_sha256": "0934263a5259d6b9042c15b73fa3314c3af657ea8f06edaceb7aa7f30fd806fb"
+  },
+  {
+    "original": "target/verification/attack-phase-closeup-2026-11-06/ember.log",
+    "archive": "logs/ember.log.gz",
+    "raw_bytes": 58022,
+    "raw_sha256": "29ab671dc4c1bbe8061e6a8677e02b5a0c1762383907690c7166ae324dc8678a"
+  },
+  {
+    "original": "target/verification/attack-phase-followup-2026-11-06/current-ember.log",
+    "archive": "logs/baseline/current-ember.log.gz",
+    "raw_bytes": 58265,
+    "raw_sha256": "e320af0bacc2a5495e3dd2dd544a41bc2cce000d09040f416dcffc0c08311b7c"
+  },
+  {
+    "original": "target/verification/attack-phase-followup-2026-11-06/current-storm.log",
+    "archive": "logs/baseline/current-storm.log.gz",
+    "raw_bytes": 56047,
+    "raw_sha256": "c4f6f86ffd97b8eee2fe68971d576357744e8de659771ab77dfa05cbc77d9035"
+  },
+  {
+    "original": "target/verification/attack-phase-followup-2026-11-06/current-sword.log",
+    "archive": "logs/baseline/current-sword.log.gz",
+    "raw_bytes": 57636,
+    "raw_sha256": "0fe53d9fb1202fa97227960eb8cf02f55cc7e1bd0f9a3e30a8792227f35ff96d"
+  }
+]

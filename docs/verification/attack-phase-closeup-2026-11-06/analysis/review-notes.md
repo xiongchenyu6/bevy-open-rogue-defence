@@ -1,0 +1,13 @@
+# Read-only GLB and close-up review
+
+`glb-hands.py/json` sample actual imported Attack channels and global handslot.r/l hierarchy at every30Hz authored key. SHA and clip names are retained. Method reused old read-only audit: vectors LINEAR, quaternions shortest-arc NLERP; no authored release event, no weapon-tip collision, no exact native SLERP claim. At these authored key times interpolation approximation is negligible; node transform/global positions do not independently establish weapon string release.
+
+Ember (`2H_Ranged_Shoot`): at source0 both hands Y≈.54. From.0667 to.2667 right-hand Y.581→.830 and left-hand Y.574→.805 while left slot moves Z−.108→−.465. This is a real initial raising/aiming movement, followed around.30–.333 by short recoil, then long settling. It is not correct to equate all later clip fractions with drawing a bow string: visible weapon is a crossbow and draw hand is hood-occluded.
+
+Storm (`Spellcast_Shoot`): right slot starts Y.545/Z−.091, reaches Y.743/Z−.339 at.1333, extends to Z−.532 by.2667, then returns through.40..93 to the original rest pose. Initial raise/thrust is present in actual channels; no explicit glTF release marker was found/assumed.
+
+Independently viewed actual close-up PNGs: Ember10/11/13/15 and20/21/23; Storm15/16/19 and30/31/34. Current fixed10m view exposes roughly100px hero. Ember first and second cycles show the arrow already clear while crossbow is still rising/settling; Storm first and second cycles show the large bolt already away while staff begins the lift, later extending toward enemy. This supports a repeatable early-emission candidate relative to the initial authored action, particularly Storm, rather than proving current release is artist-authored correct. However hood hides exact finger/string pose, camera is still top-oblique, and screenshots are asynchronous (e.g. PNG15 already contains Storm shot while synchronous Last first observation is frame16); don't equate PNG suffix with an exact synchronous bone phase.
+
+No precise replacement release fraction accepted. No gameplay changes justified solely by these sampled hand coordinates. Next small candidate comparison could shift only a selected weapon's emission to its actual raised/thrust pose after root chooses/reviews a candidate, keeping cadence/count/speed/damage and Sword calibration unchanged. Source.20–.267 for Storm and Ember.20–.30 are pose-review brackets, NOT universal timing constants or proven exact release instants. A side-on diagnostic or actual held-weapon tip/left-right local pose readout would narrow the event if needed; no extra build/run is initiated here.
+
+No full proof yet: actual unit completion and root image review remain authoritative. No source/build changes by this analysis.

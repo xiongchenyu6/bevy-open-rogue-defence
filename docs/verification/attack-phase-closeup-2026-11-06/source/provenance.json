@@ -1,0 +1,8 @@
+{
+  "before_source_commit": "8a79a44c3ba7adb95c14fd3923aaccb0abc57921",
+  "before_path": "src/bin/capture/attacks.rs",
+  "after_scope": "Only devcapture camera ownership release-trace flag, no production library delta",
+  "launch_invocation_reported_by_root": "a406e8b3ff424bbe9fc4f0b9a825098b",
+  "terminal_invocation_property_not_assumed": true,
+  "analysis_dependency_original": "target/verification/attack-rhythm-2026-11-05/clip-audit.py"
+}

@@ -1,0 +1,24 @@
+{
+  "result": "PASS",
+  "source_delta": "capture-only BattleCamera ownership guard",
+  "frozen_input_files": 390,
+  "counters": {
+    "ember": {
+      "ATTACK_TIMING": 80,
+      "RELEASE_PHASE": 210,
+      "PROJECTILE_RELEASE": 24
+    },
+    "storm": {
+      "ATTACK_TIMING": 80,
+      "RELEASE_PHASE": 210,
+      "PROJECTILE_RELEASE": 13
+    },
+    "sword": {
+      "ATTACK_TIMING": 80,
+      "RELEASE_PHASE": 210,
+      "PROJECTILE_RELEASE": 0
+    }
+  },
+  "selected_root_viewed_pngs": 6,
+  "limits": "No new timing fix, authored event, RNG equivalence, physical input/audio, fresh746 test rerun, campaign or hardware claim"
+}

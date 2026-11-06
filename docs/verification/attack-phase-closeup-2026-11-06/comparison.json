@@ -1,0 +1,53 @@
+{
+  "ember": {
+    "ATTACK_TIMING": {
+      "count_before": 80,
+      "count_after": 80,
+      "equal_excluding_projectile_identity_and_component_tick": true
+    },
+    "RELEASE_PHASE": {
+      "count_before": 210,
+      "count_after": 210,
+      "equal_excluding_projectile_identity_and_component_tick": true
+    },
+    "PROJECTILE_RELEASE": {
+      "count_before": 24,
+      "count_after": 24,
+      "equal_excluding_projectile_identity_and_component_tick": true
+    }
+  },
+  "storm": {
+    "ATTACK_TIMING": {
+      "count_before": 80,
+      "count_after": 80,
+      "equal_excluding_projectile_identity_and_component_tick": true
+    },
+    "RELEASE_PHASE": {
+      "count_before": 210,
+      "count_after": 210,
+      "equal_excluding_projectile_identity_and_component_tick": true
+    },
+    "PROJECTILE_RELEASE": {
+      "count_before": 13,
+      "count_after": 13,
+      "equal_excluding_projectile_identity_and_component_tick": true
+    }
+  },
+  "sword": {
+    "ATTACK_TIMING": {
+      "count_before": 80,
+      "count_after": 80,
+      "equal_excluding_projectile_identity_and_component_tick": true
+    },
+    "RELEASE_PHASE": {
+      "count_before": 210,
+      "count_after": 210,
+      "equal_excluding_projectile_identity_and_component_tick": true
+    },
+    "PROJECTILE_RELEASE": {
+      "count_before": 0,
+      "count_after": 0,
+      "equal_excluding_projectile_identity_and_component_tick": true
+    }
+  }
+}
