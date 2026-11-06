@@ -1,0 +1,1 @@
+PREPARED ONLY; no cases run. Requires actual successful complete post-splash recorded-repeat and terminal process. 24 cases, jobs2, same pinned binary/assets. No numeric tuning. Starting defaults/position and subsequent recruitment confound class ranking; descriptive sample only. Max frames120000, 900wallsec/case, outer22500. No headless trace/contact logs.

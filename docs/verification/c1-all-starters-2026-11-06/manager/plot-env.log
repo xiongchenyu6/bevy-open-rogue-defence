@@ -1,0 +1,61 @@
+Downloading kiwisolver (1.4MiB)
+Downloading fonttools (5.1MiB)
+Downloading pillow (6.8MiB)
+Downloading numpy (15.9MiB)
+Downloading matplotlib (9.4MiB)
+ Downloaded kiwisolver
+ Downloaded fonttools
+ Downloaded matplotlib
+ Downloaded numpy
+ Downloaded pillow
+Installed 11 packages in 18ms
+Traceback (most recent call last):
+  File "/home/freeman.xiong/.cache/uv/archive-v0/zF3DytOA5022qOZ-/lib/python3.14/site-packages/numpy/_core/__init__.py", line 24, in <module>
+    from . import multiarray
+  File "/home/freeman.xiong/.cache/uv/archive-v0/zF3DytOA5022qOZ-/lib/python3.14/site-packages/numpy/_core/multiarray.py", line 11, in <module>
+    from . import _multiarray_umath, overrides
+ImportError: libstdc++.so.6: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import matplotlib,numpy,sys,json;print(json.dumps({"python":sys.executable,"matplotlib":matplotlib.__version__,"numpy":numpy.__version__}))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/freeman.xiong/.cache/uv/archive-v0/zF3DytOA5022qOZ-/lib/python3.14/site-packages/matplotlib/__init__.py", line 161, in <module>
+    from . import _api, _version, cbook, _docstring, rcsetup
+  File "/home/freeman.xiong/.cache/uv/archive-v0/zF3DytOA5022qOZ-/lib/python3.14/site-packages/matplotlib/cbook.py", line 24, in <module>
+    import numpy as np
+  File "/home/freeman.xiong/.cache/uv/archive-v0/zF3DytOA5022qOZ-/lib/python3.14/site-packages/numpy/__init__.py", line 109, in <module>
+    from numpy.__config__ import show_config
+  File "/home/freeman.xiong/.cache/uv/archive-v0/zF3DytOA5022qOZ-/lib/python3.14/site-packages/numpy/__config__.py", line 4, in <module>
+    from numpy._core._multiarray_umath import (
+    ...<3 lines>...
+    )
+  File "/home/freeman.xiong/.cache/uv/archive-v0/zF3DytOA5022qOZ-/lib/python3.14/site-packages/numpy/_core/__init__.py", line 85, in <module>
+    raise ImportError(msg) from exc
+ImportError: 
+
+IMPORTANT: PLEASE READ THIS FOR ADVICE ON HOW TO SOLVE THIS ISSUE!
+
+Importing the numpy C-extensions failed. This error can happen for
+many reasons, often due to issues with your setup or how NumPy was
+installed.
+
+We have compiled some common reasons and troubleshooting tips at:
+
+    https://numpy.org/devdocs/user/troubleshooting-importerror.html
+
+Please note and check the following:
+
+  * The Python version is: Python 3.14 from "/home/freeman.xiong/.cache/uv/builds-v0/.tmpq9KT38/bin/python"
+  * The NumPy version is: "2.5.4"
+
+and make sure that they are the versions you expect.
+
+Please carefully study the information and documentation linked above.
+This is unlikely to be a NumPy issue but will be caused by a bad install
+or environment on your machine.
+
+Original error was: libstdc++.so.6: cannot open shared object file: No such file or directory
+

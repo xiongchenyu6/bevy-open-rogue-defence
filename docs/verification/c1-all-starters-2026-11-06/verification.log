@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "raw_files": 48,
+  "cases": 24,
+  "uncensored": 24,
+  "active_wins": 12,
+  "passive_losses": 12,
+  "starter_mapping": "all first-positive checkpoints verified",
+  "rank6_cases": [
+    "active-h1-behind-s3-c0-t0",
+    "active-h2-behind-s1-c0-t0",
+    "active-h2-behind-s4-c0-t0"
+  ],
+  "scope": "Descriptive fixed-behind stationary policies; not global win rate/class ranking/UR evolution proof"
+}
