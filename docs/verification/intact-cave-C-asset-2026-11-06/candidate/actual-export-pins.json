@@ -1,0 +1,33 @@
+{
+  "stage": "Actual exported standard PBR candidate; strong SAT and native pending",
+  "asset": "target/verification/intact-cave-C-lateral95-export-2026-11-06/intact_cave_global_C_lateral95_candidate.glb",
+  "sha256": "7cc6fe0dfbda094226f5f051492f8aee8c4a449fc90844c574cedf36995b7176",
+  "bytes": 1287652,
+  "source_world_blend_sha256": "bdf631b67a42c9fdbe59982208c92e5bf21113ed3b94b30bc64ca6e589bb165d",
+  "original_474_triangles_retained": true,
+  "global_lateral_vertical_depth": [
+    9.5,
+    2.8,
+    10.0
+  ],
+  "source_backing": "Original six rear backing triangles retained dark, baked with real neck geometry/AO; not light stone fill",
+  "bake": "1024x1024 genuine UV ImageTexture; original generated seamless + actual geometry AO; no scan-atlas tiling",
+  "image_sha256": "a64a6cc0bf9269e23df2370840be32f7769bf3d69a60ea86ecc44b0f0f1daaec",
+  "actual_reimport_meshes": 1,
+  "camera_C": {
+    "eye": [
+      -20,
+      25.2,
+      10
+    ],
+    "target": [
+      4,
+      1.2,
+      0
+    ],
+    "vertical": 28
+  },
+  "original_author": "OrbitStudios / Fernando Ferreira; submitted by zisongbr",
+  "original_license": "CC0 https://opengameart.org/content/lowpoly-cave-entrance",
+  "not_native_or_production_accepted": true
+}

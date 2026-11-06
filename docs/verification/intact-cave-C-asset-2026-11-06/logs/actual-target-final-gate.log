@@ -1,0 +1,64 @@
+{
+  "status": "FROZEN_TARGET_C_CANDIDATE_PASS_FOR_NATIVE_REVIEW_ONLY",
+  "asset": "target/verification/intact-cave-C-lateral95-export-2026-11-06/intact_cave_global_C_lateral95_candidate.glb",
+  "sha256": "7cc6fe0dfbda094226f5f051492f8aee8c4a449fc90844c574cedf36995b7176",
+  "bytes": 1287652,
+  "source_vertices": 279,
+  "exported_triangles": 474,
+  "only_authorized_change": "Whole-source lateral9 to9.5; vertical2.8/depth10 and all worldX/Y coordinates unchanged",
+  "global_scales": [
+    9.5,
+    2.8,
+    10.0
+  ],
+  "actual_checker_command": [
+    "python3",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/intact-cave-C-lateral95-export-2026-11-06/verify_export.py",
+    "--asset",
+    "target/verification/intact-cave-C-lateral95-export-2026-11-06/intact_cave_global_C_lateral95_candidate.glb",
+    "--path-envelope",
+    "target/verification/demon-cavern-production-path-2026-11-06/production-animated-envelope.json"
+  ],
+  "actual_checker_returncode": 0,
+  "actual_exported_strong_SAT": {
+    "envelope_sha256": "feb5795a8887f46fe27e1bb92a0f88fc1abf3f406728f8bfcc03034c14e89f23",
+    "finite_exit_world_x": 7.363721049474944,
+    "height_bands": 96,
+    "continuous_spawn_z": [
+      -4.25,
+      4.25
+    ],
+    "collisions": []
+  },
+  "original_models_unchanged": 52,
+  "canonical_body_SAT_prefix_and_collision_assert_AST_identical": true,
+  "standard_PBR": {
+    "roughness": 0.9700000286102295,
+    "metallic": 0,
+    "alpha": "OPAQUE"
+  },
+  "embedded_PNG_dimensions": [
+    1024,
+    1024
+  ],
+  "actual_UV_bake_and_glTF_reimport": true,
+  "dark_source_backing_six_faces_retained": true,
+  "source_author_credit": "OrbitStudios / Fernando Ferreira; submitted by zisongbr",
+  "source_mesh_license": "CC0 https://opengameart.org/content/lowpoly-cave-entrance",
+  "old_size_guard": "Failed real predecessor; replaced only with finite sane-bounds check, not actor-SAT relaxation",
+  "source_original_02e8_failure_preserved": true,
+  "limitations": [
+    "Not native verified or approved for production art/camera.",
+    "Static CPU board and HUD rectangles do not validate complete gameplay UI.",
+    "Original animated-envelope sampling remains finite25phases per clip, not all-interpolation proof.",
+    "Decorative mountain may be cropped; actual native core-mouth/HUD review is pending."
+  ],
+  "artifact_hashes": {
+    "intact_cave_global_C_lateral95_candidate.glb": "7cc6fe0dfbda094226f5f051492f8aee8c4a449fc90844c574cedf36995b7176",
+    "bake_export.py": "ae0510e980f9e88642267be6c5de71ec73b6a6e2628e9cbe24dcf567c1eb4541",
+    "verify_export.py": "3e717cc18ae922032e59308622886a38076f44302a2e038763a2e9103f291a01",
+    "whole-source-lateral-change.json": "f6d5c397ca38a022797034aa5d74f2367594eed3f4d529d230b63e6641c48f5e",
+    "actual-glTF-C-inside.png": "22612e3cacbcb48ec4f308f55cf821d6a4d0d5ba577419743ac9f3919d94791b",
+    "actual-glTF-C-after-exit.png": "db55f5c55b31f25f8285fa0ccf02db7b8191b9924e8b85a326bbe96bf338748c"
+  }
+}

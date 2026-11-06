@@ -1,0 +1,15 @@
+{
+  "asset_sha256": "7cc6fe0dfbda094226f5f051492f8aee8c4a449fc90844c574cedf36995b7176",
+  "path_audit": {
+    "envelope_sha256": "feb5795a8887f46fe27e1bb92a0f88fc1abf3f406728f8bfcc03034c14e89f23",
+    "finite_exit_world_x": 7.363721049474944,
+    "height_bands": 96,
+    "continuous_spawn_z": [
+      -4.25,
+      4.25
+    ],
+    "collisions": []
+  },
+  "reported_colliding_triangle_details": [],
+  "body_sweep_not_weakened": true
+}

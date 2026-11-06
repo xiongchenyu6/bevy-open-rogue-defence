@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/intact-cave-C-export-2026-11-06/verify_original_size.py", line 60, in <module>
+    assert 5.25 <= hi[1] <= 6.55 and lo[1] > -0.2, (lo, hi)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ([-22.286657333374023, -0.07999999821186066, -55.97537612915039], [42.69493103027344, 14.548720359802246, 31.381364822387695])

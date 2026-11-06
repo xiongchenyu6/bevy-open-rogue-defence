@@ -1,0 +1,265 @@
+{
+  "original_black_backing_face_count": 6,
+  "original_backing_polygon_bounds_XYZ": [
+    [
+      -0.6579768061637878,
+      0.5748646259307861
+    ],
+    [
+      2.6791250705718994,
+      2.6791419982910156
+    ],
+    [
+      -0.1836838573217392,
+      2.144322633743286
+    ]
+  ],
+  "source_back_polygon_width": 1.232841432094574,
+  "source_back_polygon_height": 2.3280064910650253,
+  "resulting_back_polygon_width": 11.095572888851166,
+  "resulting_back_polygon_height": 6.51841817498207,
+  "resulting_front_to_back_neck_depth": 10.218019982910157,
+  "actual_horizontal_ray_clearances": [
+    {
+      "section": "front_neck",
+      "source_y": 1.7,
+      "world_x": 14.426599999999999,
+      "world_actor_height": 0.05,
+      "source_height_z": -0.13727865091391972,
+      "source_nearest_walls_x": [
+        -1.075775146484375,
+        1.5177993774414062
+      ],
+      "world_clear_width_m": 23.34217071533203
+    },
+    {
+      "section": "front_neck",
+      "source_y": 1.7,
+      "world_x": 14.426599999999999,
+      "world_actor_height": 1.0,
+      "source_height_z": 0.20200706337179464,
+      "source_nearest_walls_x": [
+        -1.1301116943359375,
+        1.7135848999023438
+      ],
+      "world_clear_width_m": 25.59326934814453
+    },
+    {
+      "section": "front_neck",
+      "source_y": 1.7,
+      "world_x": 14.426599999999999,
+      "world_actor_height": 2.0,
+      "source_height_z": 0.5591499205146517,
+      "source_nearest_walls_x": [
+        -0.9612960815429688,
+        0.8455352783203125
+      ],
+      "world_clear_width_m": 16.26148223876953
+    },
+    {
+      "section": "front_neck",
+      "source_y": 1.7,
+      "world_x": 14.426599999999999,
+      "world_actor_height": 3.0,
+      "source_height_z": 0.9162927776575089,
+      "source_nearest_walls_x": [
+        -0.928466796875,
+        0.8104324340820312
+      ],
+      "world_clear_width_m": 15.650093078613281
+    },
+    {
+      "section": "front_neck",
+      "source_y": 1.7,
+      "world_x": 14.426599999999999,
+      "world_actor_height": 4.8,
+      "source_height_z": 1.5591499205146517,
+      "source_nearest_walls_x": [
+        -0.8716049194335938,
+        0.7544937133789062
+      ],
+      "world_clear_width_m": 14.6348876953125
+    },
+    {
+      "section": "actual_spawn_X16_4",
+      "source_y": 1.8973399999999998,
+      "world_x": 16.4,
+      "world_actor_height": 0.05,
+      "source_height_z": -0.13727865091391972,
+      "source_nearest_walls_x": [
+        -0.9292984008789062,
+        0.81353759765625
+      ],
+      "world_clear_width_m": 15.685523986816406
+    },
+    {
+      "section": "actual_spawn_X16_4",
+      "source_y": 1.8973399999999998,
+      "world_x": 16.4,
+      "world_actor_height": 1.0,
+      "source_height_z": 0.20200706337179464,
+      "source_nearest_walls_x": [
+        -0.9351959228515625,
+        0.793701171875
+      ],
+      "world_clear_width_m": 15.560073852539062
+    },
+    {
+      "section": "actual_spawn_X16_4",
+      "source_y": 1.8973399999999998,
+      "world_x": 16.4,
+      "world_actor_height": 2.0,
+      "source_height_z": 0.5591499205146517,
+      "source_nearest_walls_x": [
+        -0.9238510131835938,
+        0.7661361694335938
+      ],
+      "world_clear_width_m": 15.209884643554688
+    },
+    {
+      "section": "actual_spawn_X16_4",
+      "source_y": 1.8973399999999998,
+      "world_x": 16.4,
+      "world_actor_height": 3.0,
+      "source_height_z": 0.9162927776575089,
+      "source_nearest_walls_x": [
+        -0.9078903198242188,
+        0.7580718994140625
+      ],
+      "world_clear_width_m": 14.993659973144531
+    },
+    {
+      "section": "actual_spawn_X16_4",
+      "source_y": 1.8973399999999998,
+      "world_x": 16.4,
+      "world_actor_height": 4.8,
+      "source_height_z": 1.5591499205146517,
+      "source_nearest_walls_x": [
+        -0.8604583740234375,
+        0.7389144897460938
+      ],
+      "world_clear_width_m": 14.394355773925781
+    },
+    {
+      "section": "sampled_body_max_X19_432",
+      "source_y": 2.2005428079681395,
+      "world_x": 19.432028079681395,
+      "world_actor_height": 0.05,
+      "source_height_z": -0.13727865091391972,
+      "source_nearest_walls_x": [
+        -0.896484375,
+        0.769561767578125
+      ],
+      "world_clear_width_m": 14.994415283203125
+    },
+    {
+      "section": "sampled_body_max_X19_432",
+      "source_y": 2.2005428079681395,
+      "world_x": 19.432028079681395,
+      "world_actor_height": 1.0,
+      "source_height_z": 0.20200706337179464,
+      "source_nearest_walls_x": [
+        -0.882659912109375,
+        0.7621002197265625
+      ],
+      "world_clear_width_m": 14.802841186523438
+    },
+    {
+      "section": "sampled_body_max_X19_432",
+      "source_y": 2.2005428079681395,
+      "world_x": 19.432028079681395,
+      "world_actor_height": 2.0,
+      "source_height_z": 0.5591499205146517,
+      "source_nearest_walls_x": [
+        -0.8680877685546875,
+        0.7531585693359375
+      ],
+      "world_clear_width_m": 14.591217041015625
+    },
+    {
+      "section": "sampled_body_max_X19_432",
+      "source_y": 2.2005428079681395,
+      "world_x": 19.432028079681395,
+      "world_actor_height": 3.0,
+      "source_height_z": 0.9162927776575089,
+      "source_nearest_walls_x": [
+        -0.8557586669921875,
+        0.744232177734375
+      ],
+      "world_clear_width_m": 14.399917602539062
+    },
+    {
+      "section": "sampled_body_max_X19_432",
+      "source_y": 2.2005428079681395,
+      "world_x": 19.432028079681395,
+      "world_actor_height": 4.8,
+      "source_height_z": 1.5591499205146517,
+      "source_nearest_walls_x": [
+        -0.8353500366210938,
+        0.7268524169921875
+      ],
+      "world_clear_width_m": 14.059822082519531
+    },
+    {
+      "section": "near_back",
+      "source_y": 2.65,
+      "world_x": 23.9266,
+      "world_actor_height": 0.05,
+      "source_height_z": -0.13727865091391972,
+      "source_nearest_walls_x": [
+        -0.6549911499023438,
+        0.521697998046875
+      ],
+      "world_clear_width_m": 10.590202331542969
+    },
+    {
+      "section": "near_back",
+      "source_y": 2.65,
+      "world_x": 23.9266,
+      "world_actor_height": 1.0,
+      "source_height_z": 0.20200706337179464,
+      "source_nearest_walls_x": [
+        -0.6628875732421875,
+        0.544189453125
+      ],
+      "world_clear_width_m": 10.863693237304688
+    },
+    {
+      "section": "near_back",
+      "source_y": 2.65,
+      "world_x": 23.9266,
+      "world_actor_height": 2.0,
+      "source_height_z": 0.5591499205146517,
+      "source_nearest_walls_x": [
+        -0.6711959838867188,
+        0.5618820190429688
+      ],
+      "world_clear_width_m": 11.097702026367188
+    },
+    {
+      "section": "near_back",
+      "source_y": 2.65,
+      "world_x": 23.9266,
+      "world_actor_height": 3.0,
+      "source_height_z": 0.9162927776575089,
+      "source_nearest_walls_x": [
+        -0.67950439453125,
+        0.5795745849609375
+      ],
+      "world_clear_width_m": 11.331710815429688
+    },
+    {
+      "section": "near_back",
+      "source_y": 2.65,
+      "world_x": 23.9266,
+      "world_actor_height": 4.8,
+      "source_height_z": 1.5591499205146517,
+      "source_nearest_walls_x": [
+        -0.6423110961914062,
+        0.5880203247070312
+      ],
+      "world_clear_width_m": 11.072982788085938
+    }
+  ],
+  "note": "Back polygon width is not confused with outer white-rim extent; section widths use nearest actual mesh intersections around source aperture center"
+}

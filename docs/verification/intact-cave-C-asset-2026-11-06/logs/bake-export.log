@@ -1,0 +1,24 @@
+00:01.073  blend            | Read blend: "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/intact-cave-global-core-fit-2026-11-06/global-anisotropic-intact-cave-world.blend"
+/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/intact-cave-C-lateral95-export-2026-11-06/bake_export.py:53: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  assert material is not None and material.use_nodes
+/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/intact-cave-C-lateral95-export-2026-11-06/bake_export.py:78: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  material.use_nodes = True
+Info: Saved as "whole-source-lateral95-world.blend"
+Info: Baking map saved to internal image, save it externally or pack it
+INFO Draco is available, use library at /nix/store/g31dxnspbq3d8flxkw29m11ravszjbmf-blender-5.2.2/lib/blender/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.so
+INFO MeshOptimizer is available, use library at /nix/store/g31dxnspbq3d8flxkw29m11ravszjbmf-blender-5.2.2/lib/blender/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.so
+12:36:05 | INFO: Starting glTF 2.0 export
+12:36:05 | INFO: Extracting primitive: Plane
+12:36:05 | INFO: Primitives created: 1
+12:36:05 | INFO: Finished glTF 2.0 export in 0.017232418060302734 s
+
+12:36:06 | INFO: Data are loaded, start creating Blender stuff
+12:36:06 | INFO: Blender create Mesh node Plane
+12:36:06 | INFO: glTF import finished in 0.01s
+00:13.672  render           | Saved: '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/intact-cave-C-lateral95-export-2026-11-06/actual-glTF-C-inside.png'
+00:19.537  render           | Saved: '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/intact-cave-C-lateral95-export-2026-11-06/actual-glTF-C-after-exit.png'
+ACTUAL_C_GLTF_EXPORT_REIMPORT_READY
+Blender 5.2.2 LTS
+
+Blender quit
+EXPORT_REIMPORT_OUTPUT_GATE_PASS

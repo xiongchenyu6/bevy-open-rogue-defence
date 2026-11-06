@@ -1,0 +1,12 @@
+{
+  "tool": "image_gen.imagegen",
+  "model": "tool-managed, not returned",
+  "seed": null,
+  "source_image": null,
+  "original_saved_image": "/home/freeman.xiong/.codex/generated_images/01a1ab1d-bcb5-71c2-952f-ddf6846f9e9f/exec-4fd2c252-e5ce-47fd-badc-599b8c099dee.png",
+  "sha256": "1f6ee11f080fb1ac9b7edf6e46f02c5350b770f77af102e1c33f3e8e1690e448",
+  "prompt": "Generate an original seamless square tileable diffuse albedo texture of dry weathered warm grey slate for a stylized dark fantasy dungeon rock mountain 3D asset. Orthographic flat texture sheet fills entire square, no objects/background, no perspective, no lighting gradients or cast shadows. Broad irregular interlocking angular fractured stone grain, painterly worn edges and restrained umber/cool grey tonal differences, matte rough natural mineral surface. Subtle small rough pits, sparse dark irregular thin seams, no regular grid, no hexagons, no stripes or wood grain, no roof tiles/bricks, no glossy plastic, no crystals, no purple glow, no text. Low contrast enough to support real 3D lighting; midvalue warm grey, not dark black. Professional hand-painted game environment material. This is texture data, not a concept rendering.",
+  "processing": "Blender resize1024 and pack into GLB; no external runtime URI",
+  "third_party_asset": "none imported",
+  "license_note": "Original generated project material; no third-party model/texture reused. No claim of CC0 or transfer beyond applicable tool terms."
+}

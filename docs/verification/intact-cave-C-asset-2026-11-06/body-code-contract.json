@@ -1,0 +1,17 @@
+{
+  "geometry_statement_start": 7,
+  "geometry_prefix_statement_count": 11,
+  "geometry_statements_ast_sha256": "8d6c99b710d9c0984a370ce715b4d2e4764228962ab871c86b4327248458b662",
+  "historical_baseline": {
+    "models": 52,
+    "source_units": 11,
+    "source": "Actual historical positive exported-SAT log, not current HEAD"
+  },
+  "allowed_non_geometry_changes": [
+    "Resolve archive-relative files",
+    "Check source-unit hashes against fixed archived52model baseline, not mutable assets",
+    "Finite decorative bounds instead of old size limits",
+    "Print structured negative path diagnostic before the exact original collision assert"
+  ],
+  "actor_geometry_or_margins_changed": false
+}

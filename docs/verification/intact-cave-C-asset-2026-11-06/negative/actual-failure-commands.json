@@ -1,0 +1,24 @@
+[
+  {
+    "argv": [
+      "python3",
+      "target/verification/intact-cave-C-export-2026-11-06/verify_original_size.py",
+      "--asset",
+      "target/verification/intact-cave-C-export-2026-11-06/intact_cave_global_C_candidate.glb",
+      "--path-envelope",
+      "target/verification/demon-cavern-production-path-2026-11-06/production-animated-envelope.json"
+    ],
+    "returncode": 1
+  },
+  {
+    "argv": [
+      "python3",
+      "target/verification/intact-cave-C-export-2026-11-06/verify_export.py",
+      "--asset",
+      "target/verification/intact-cave-C-export-2026-11-06/intact_cave_global_C_candidate.glb",
+      "--path-envelope",
+      "target/verification/demon-cavern-production-path-2026-11-06/production-animated-envelope.json"
+    ],
+    "returncode": 1
+  }
+]

@@ -1,0 +1,72 @@
+{
+  "stage": "Initial intact source ONE global anisotropic-scale CPU inspection, no gate/native/art acceptance",
+  "source_author": "OrbitStudios / Fernando Ferreira, submitted by zisongbr",
+  "source_license": "CC0 https://opengameart.org/content/lowpoly-cave-entrance",
+  "source_blend_sha256": "2763728bea49930eac83fac1afc3076b618fbe712466090bf2380b7ccba830d6",
+  "source_world_matrix": [
+    [
+      -1.0,
+      -2.643879039310182e-11,
+      -7.303553047677269e-06,
+      0.0
+    ],
+    [
+      -7.303553047677269e-06,
+      3.6199901387590216e-06,
+      1.0,
+      3.545893669128418
+    ],
+    [
+      0.0,
+      1.0,
+      -3.6199901387590216e-06,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "global_anisotropic_scales": {
+    "lateral_originalX_to_worldZ": 9.0,
+    "vertical_originalZ_to_worldY": 2.8,
+    "depth_originalY_to_worldX": 10.0
+  },
+  "vertex_count": 279,
+  "triangles": 474,
+  "topology_faces_unchanged": true,
+  "original_black_backing_six_faces_dark_not_filled_light": true,
+  "source_ground_z": -0.18370722234249115,
+  "mouth_source_y": 1.65734,
+  "mouth_front_world_x": 14,
+  "actual_world_bounds": [
+    [
+      10.595748901367188,
+      56.464656829833984
+    ],
+    [
+      -0.07999999821186066,
+      14.548720359802246
+    ],
+    [
+      -49.92283248901367,
+      41.13876724243164
+    ]
+  ],
+  "actual_spawn_unchanged": {
+    "x": [
+      15.3,
+      16.4
+    ],
+    "z": [
+      -4.25,
+      4.25
+    ]
+  },
+  "exact_camera_B_unchanged": true,
+  "overview_is_not_runtime_camera_proposal": true,
+  "material": "Original seamless dry slate on original complete geometry; original six-face rear backing kept dark; no shiny white border material; no scan-atlas tiling",
+  "limits": "Decorative original mountain extent may crop in B. No max9m or allboundsvisible gate imposed. Actual swept actor clearance still untested."
+}

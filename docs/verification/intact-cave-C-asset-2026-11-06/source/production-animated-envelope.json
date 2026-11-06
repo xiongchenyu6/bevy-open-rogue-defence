@@ -1,0 +1,1795 @@
+{
+  "kind": "Conservative visible animated triangle AABB per 0.05m height band, continuous worldZ sweep",
+  "pose": "All four actually used production clips at25phases each; evaluated skin; only original GLB mesh nodes, no importer bone display objects",
+  "facing": "Idle initialspawn yaw0 plus yaw+pi/2; moving/Hit/Attack yaw+pi/2 per animate_cast look_to world-X",
+  "margin": 0.08,
+  "animation_limit": "Finite 25phase clip sampling with0.08m margin; not formal continuous skeletal maximum; native remains required",
+  "spawn_world_x": [
+    15.3,
+    16.4
+  ],
+  "spawn_world_z": [
+    -4.25,
+    4.25
+  ],
+  "den_translation": [
+    15.65,
+    0,
+    0
+  ],
+  "den_yaw": -0.55,
+  "source_units": [
+    {
+      "name": "rift_sapper",
+      "max_scale": 1.85,
+      "sha256": "c313125215eb1095322f7f6445dc16a1ebcc31e1120f1dee9386066f6aa02c15",
+      "clips": [
+        "Idle",
+        "Walk",
+        "Hit",
+        "Attack"
+      ],
+      "samples_per_clip": 25
+    },
+    {
+      "name": "gnawling",
+      "max_scale": 1.85,
+      "sha256": "7f332313dc041f5e5e774ea93a29e2c1d4a1e7a701ce1c97c3b4de476db3c8cb",
+      "clips": [
+        "Idle",
+        "Walk",
+        "Hit",
+        "Attack"
+      ],
+      "samples_per_clip": 25
+    },
+    {
+      "name": "shell_guard",
+      "max_scale": 1.85,
+      "sha256": "91a41d1932c63f98244c0f5b2207d85d6686d9ff876d34f51f44323d4500df2a",
+      "clips": [
+        "Idle",
+        "Walk",
+        "Hit",
+        "Attack"
+      ],
+      "samples_per_clip": 25
+    },
+    {
+      "name": "void_caster",
+      "max_scale": 1.85,
+      "sha256": "b76198b185285de8751e4fe329d0eb751bb3eecf0cc2d31a0f88af9a110d0d97",
+      "clips": [
+        "Idle",
+        "Walk",
+        "Hit",
+        "Attack"
+      ],
+      "samples_per_clip": 25
+    },
+    {
+      "name": "core_rusher",
+      "max_scale": 1.85,
+      "sha256": "97470fa8e184de9bed36b6d8c7bde9ecf78ff6aea7b889d58deb78a0c36c2651",
+      "clips": [
+        "Idle",
+        "Walk",
+        "Hit",
+        "Attack"
+      ],
+      "samples_per_clip": 25
+    },
+    {
+      "name": "chanting_acolyte",
+      "max_scale": 1.85,
+      "sha256": "535871ee942f0b32ec1d501085fa1c6681a85d1680b6321fc8b81e60505e9a57",
+      "clips": [
+        "Idle",
+        "Walk",
+        "Hit",
+        "Attack"
+      ],
+      "samples_per_clip": 25
+    },
+    {
+      "name": "iron_colossus",
+      "max_scale": 1.91808,
+      "sha256": "aa22df802df4c5856dfe07c21378609934783f7db7c984fedd2db73c03c629ab",
+      "clips": [
+        "Idle",
+        "Walk",
+        "Hit",
+        "Attack"
+      ],
+      "samples_per_clip": 25
+    },
+    {
+      "name": "field_mender",
+      "max_scale": 1.85,
+      "sha256": "f3be8c013e42a57069bce36226299d7766c877caa08f6b5e5ce6a3e2ef3dd13b",
+      "clips": [
+        "Idle",
+        "Walk",
+        "Hit",
+        "Attack"
+      ],
+      "samples_per_clip": 25
+    },
+    {
+      "name": "split_spore",
+      "max_scale": 1.85,
+      "sha256": "a936cdd48c3091d8561072a5d38fbb357a91325d170620d5c4f0c270ee8101b6",
+      "clips": [
+        "Idle",
+        "Walk",
+        "Hit",
+        "Attack"
+      ],
+      "samples_per_clip": 25
+    },
+    {
+      "name": "null_eye",
+      "max_scale": 1.85,
+      "sha256": "f445886b85a52f4051736dfd4605a63e8ec248ed8ce791dba66b213774d9e898",
+      "clips": [
+        "Idle",
+        "Walk",
+        "Hit",
+        "Attack"
+      ],
+      "samples_per_clip": 25
+    },
+    {
+      "name": "siege_lobber",
+      "max_scale": 1.8615212307692308,
+      "sha256": "09fbaac5fe445f8d49e50085cb1bd41cb9982a83fb4f8088ebdf7bfd84ddd3b6",
+      "clips": [
+        "Idle",
+        "Walk",
+        "Hit",
+        "Attack"
+      ],
+      "samples_per_clip": 25
+    }
+  ],
+  "excluded_spawn": "burrow_stalker: spawn_x[-9,-6.8]",
+  "bands": [
+    {
+      "y0": 0.0,
+      "y1": 0.05,
+      "min_x": -1.4092688101530075,
+      "max_x": 1.8141017041851926,
+      "min_z": -1.8202662703480355,
+      "max_z": 1.6316058471126558,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.05,
+      "y1": 0.1,
+      "min_x": -1.564076225304677,
+      "max_x": 1.8217738201681284,
+      "min_z": -1.8867762128414742,
+      "max_z": 1.6316058471126558,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.1,
+      "y1": 0.15000000000000002,
+      "min_x": -1.6792064525199304,
+      "max_x": 1.8217738201681284,
+      "min_z": -1.9260841292074644,
+      "max_z": 1.7429941064407644,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.15000000000000002,
+      "y1": 0.2,
+      "min_x": -1.6792064525199304,
+      "max_x": 1.8586264064414686,
+      "min_z": -1.9949446599793068,
+      "max_z": 1.8492067442992286,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.2,
+      "y1": 0.25,
+      "min_x": -1.7398620599020445,
+      "max_x": 1.8586264064414686,
+      "min_z": -2.0426412417312036,
+      "max_z": 1.849527304172516,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.25,
+      "y1": 0.30000000000000004,
+      "min_x": -1.7398620599020445,
+      "max_x": 1.8586264064414686,
+      "min_z": -2.0881923915760336,
+      "max_z": 1.9107903819084169,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.30000000000000004,
+      "y1": 0.35000000000000003,
+      "min_x": -1.8129610835808976,
+      "max_x": 1.8586264064414686,
+      "min_z": -2.129492399608319,
+      "max_z": 1.9220713194044554,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.35000000000000003,
+      "y1": 0.4,
+      "min_x": -1.8323515228986007,
+      "max_x": 1.8586264064414686,
+      "min_z": -2.165914590227567,
+      "max_z": 1.9705622302328258,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.4,
+      "y1": 0.45,
+      "min_x": -1.8333780814424663,
+      "max_x": 1.8586264064414686,
+      "min_z": -2.210614047099774,
+      "max_z": 2.0732422728773265,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.45,
+      "y1": 0.5,
+      "min_x": -1.8333780814424663,
+      "max_x": 1.8553592163330959,
+      "min_z": -2.231844680262052,
+      "max_z": 2.0732422728773265,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.5,
+      "y1": 0.55,
+      "min_x": -1.8333780814424663,
+      "max_x": 1.8319734981516325,
+      "min_z": -2.246537382637611,
+      "max_z": 2.0732422728773265,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.55,
+      "y1": 0.6000000000000001,
+      "min_x": -1.8333780814424663,
+      "max_x": 1.8241948650694628,
+      "min_z": -2.2536946659742503,
+      "max_z": 2.1840446881596494,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.6000000000000001,
+      "y1": 0.65,
+      "min_x": -1.8333780814424663,
+      "max_x": 1.8015244084596636,
+      "min_z": -2.2536946659742503,
+      "max_z": 2.199348088570815,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.65,
+      "y1": 0.7000000000000001,
+      "min_x": -1.8190296733991185,
+      "max_x": 1.9232845324277879,
+      "min_z": -2.2536946659742503,
+      "max_z": 2.199348088570815,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.7000000000000001,
+      "y1": 0.75,
+      "min_x": -1.930152611732483,
+      "max_x": 1.9807277429103853,
+      "min_z": -2.254536151058197,
+      "max_z": 2.2252263597869875,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.75,
+      "y1": 0.8,
+      "min_x": -2.3267146594238284,
+      "max_x": 2.3267340949249267,
+      "min_z": -2.3267340949249267,
+      "max_z": 2.3267146594238284,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.8,
+      "y1": 0.8500000000000001,
+      "min_x": -2.328345869598389,
+      "max_x": 2.3283655337524416,
+      "min_z": -2.447573294067383,
+      "max_z": 2.4475588889312747,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.8500000000000001,
+      "y1": 0.9,
+      "min_x": -2.508204511947632,
+      "max_x": 2.50821777381897,
+      "min_z": -2.5138607000732422,
+      "max_z": 2.5138927114868164,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.9,
+      "y1": 0.9500000000000001,
+      "min_x": -2.508204511947632,
+      "max_x": 2.50821777381897,
+      "min_z": -2.6050209744262696,
+      "max_z": 2.6051044327545165,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 0.9500000000000001,
+      "y1": 1.0,
+      "min_x": -2.508204511947632,
+      "max_x": 2.50821777381897,
+      "min_z": -2.703802251739502,
+      "max_z": 2.7039842594909667,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.0,
+      "y1": 1.05,
+      "min_x": -2.508204511947632,
+      "max_x": 2.50821777381897,
+      "min_z": -2.703802251739502,
+      "max_z": 2.7039842594909667,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.05,
+      "y1": 1.1,
+      "min_x": -2.7378841178131106,
+      "max_x": 2.737892120666504,
+      "min_z": -2.808064569015503,
+      "max_z": 2.8083890275573733,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.1,
+      "y1": 1.1500000000000001,
+      "min_x": -2.7378841178131106,
+      "max_x": 2.737892120666504,
+      "min_z": -2.808064569015503,
+      "max_z": 2.8083890275573733,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.1500000000000001,
+      "y1": 1.2000000000000002,
+      "min_x": -2.7378841178131106,
+      "max_x": 2.737892120666504,
+      "min_z": -2.9080444451141356,
+      "max_z": 2.908642143936157,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.2000000000000002,
+      "y1": 1.25,
+      "min_x": -2.7378841178131106,
+      "max_x": 2.737892120666504,
+      "min_z": -2.9080444451141356,
+      "max_z": 2.908642143936157,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.25,
+      "y1": 1.3,
+      "min_x": -2.7378841178131106,
+      "max_x": 2.737892120666504,
+      "min_z": -2.9080444451141356,
+      "max_z": 2.908642143936157,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.3,
+      "y1": 1.35,
+      "min_x": -2.7381905127716064,
+      "max_x": 2.7382136067199707,
+      "min_z": -2.9080444451141356,
+      "max_z": 2.908642143936157,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.35,
+      "y1": 1.4000000000000001,
+      "min_x": -2.9467354974365234,
+      "max_x": 2.946738927230835,
+      "min_z": -2.99122701789856,
+      "max_z": 2.99226395904541,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.4000000000000001,
+      "y1": 1.4500000000000002,
+      "min_x": -2.9467354974365234,
+      "max_x": 2.946738927230835,
+      "min_z": -2.99122701789856,
+      "max_z": 2.99226395904541,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.4500000000000002,
+      "y1": 1.5,
+      "min_x": -2.9480299018096923,
+      "max_x": 2.9480415631103516,
+      "min_z": -2.99122701789856,
+      "max_z": 2.99226395904541,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.5,
+      "y1": 1.55,
+      "min_x": -2.9480299018096923,
+      "max_x": 2.9480415631103516,
+      "min_z": -3.0215928161621095,
+      "max_z": 3.0231776097869876,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.55,
+      "y1": 1.6,
+      "min_x": -2.9480299018096923,
+      "max_x": 2.9480415631103516,
+      "min_z": -3.0215928161621095,
+      "max_z": 3.0231776097869876,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.6,
+      "y1": 1.6500000000000001,
+      "min_x": -2.9480299018096923,
+      "max_x": 2.9480415631103516,
+      "min_z": -3.0215928161621095,
+      "max_z": 3.0231776097869876,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.6500000000000001,
+      "y1": 1.7000000000000002,
+      "min_x": -2.9480299018096923,
+      "max_x": 2.9480415631103516,
+      "min_z": -3.0215928161621095,
+      "max_z": 3.0231776097869876,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.7000000000000002,
+      "y1": 1.75,
+      "min_x": -2.943208525619507,
+      "max_x": 2.943219729614258,
+      "min_z": -3.0215928161621095,
+      "max_z": 3.0231776097869876,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.75,
+      "y1": 1.8,
+      "min_x": -2.939032865371704,
+      "max_x": 2.9390445266723635,
+      "min_z": -3.0215928161621095,
+      "max_z": 3.0231776097869876,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.8,
+      "y1": 1.85,
+      "min_x": -2.901103684692383,
+      "max_x": 2.9011151173400878,
+      "min_z": -3.013385775680542,
+      "max_z": 3.0149982363128665,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.85,
+      "y1": 1.9000000000000001,
+      "min_x": -2.8516451361083983,
+      "max_x": 2.8516567974090576,
+      "min_z": -2.986436967163086,
+      "max_z": 2.9994352016448977,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.9000000000000001,
+      "y1": 1.9500000000000002,
+      "min_x": -2.8516451361083983,
+      "max_x": 2.8516567974090576,
+      "min_z": -2.986436967163086,
+      "max_z": 2.9912565141296388,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 1.9500000000000002,
+      "y1": 2.0,
+      "min_x": -3.0320280796813965,
+      "max_x": 3.0320280796813965,
+      "min_z": -3.0320280796813965,
+      "max_z": 3.0320280796813965,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.0,
+      "y1": 2.0500000000000003,
+      "min_x": -3.0320280796813965,
+      "max_x": 3.0320280796813965,
+      "min_z": -3.0320280796813965,
+      "max_z": 3.0320280796813965,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.0500000000000003,
+      "y1": 2.1,
+      "min_x": -3.0320280796813965,
+      "max_x": 3.0320280796813965,
+      "min_z": -3.0320280796813965,
+      "max_z": 3.0320280796813965,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.1,
+      "y1": 2.15,
+      "min_x": -3.0320280796813965,
+      "max_x": 3.0320280796813965,
+      "min_z": -3.0320280796813965,
+      "max_z": 3.0320280796813965,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.15,
+      "y1": 2.2,
+      "min_x": -3.0320280796813965,
+      "max_x": 3.0320280796813965,
+      "min_z": -3.0320280796813965,
+      "max_z": 3.0320280796813965,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.2,
+      "y1": 2.25,
+      "min_x": -3.022532579803467,
+      "max_x": 3.022532579803467,
+      "min_z": -3.022532579803467,
+      "max_z": 3.022532579803467,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.25,
+      "y1": 2.3000000000000003,
+      "min_x": -2.9993688922882082,
+      "max_x": 2.9993741513061525,
+      "min_z": -3.0071341752624514,
+      "max_z": 3.007144464645386,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.3000000000000003,
+      "y1": 2.35,
+      "min_x": -2.9993688922882082,
+      "max_x": 2.9993741513061525,
+      "min_z": -3.0071341752624514,
+      "max_z": 3.007144464645386,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.35,
+      "y1": 2.4000000000000004,
+      "min_x": -2.9993688922882082,
+      "max_x": 2.9993741513061525,
+      "min_z": -3.0006436325073245,
+      "max_z": 3.000739438095093,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.4000000000000004,
+      "y1": 2.45,
+      "min_x": -2.9527664477539064,
+      "max_x": 2.952771935424805,
+      "min_z": -2.9906139993286134,
+      "max_z": 2.9907093476104736,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.45,
+      "y1": 2.5,
+      "min_x": -2.9348130751037598,
+      "max_x": 2.934818334121704,
+      "min_z": -2.934818334121704,
+      "max_z": 2.9348130751037598,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.5,
+      "y1": 2.5500000000000003,
+      "min_x": -2.883314256210327,
+      "max_x": 2.883332091140747,
+      "min_z": -2.883332091140747,
+      "max_z": 2.883314256210327,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "void_caster",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.5500000000000003,
+      "y1": 2.6,
+      "min_x": -2.8768982543182373,
+      "max_x": 2.8768984829711917,
+      "min_z": -2.8768984829711917,
+      "max_z": 2.8768982543182373,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.6,
+      "y1": 2.6500000000000004,
+      "min_x": -2.8768982543182373,
+      "max_x": 2.8768984829711917,
+      "min_z": -2.887387022628784,
+      "max_z": 2.8768982543182373,
+      "units": [
+        "rift_sapper",
+        "gnawling",
+        "shell_guard",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.6500000000000004,
+      "y1": 2.7,
+      "min_x": -2.8768982543182373,
+      "max_x": 2.8768984829711917,
+      "min_z": -2.887387022628784,
+      "max_z": 2.8768982543182373,
+      "units": [
+        "shell_guard",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.7,
+      "y1": 2.75,
+      "min_x": -2.8768982543182373,
+      "max_x": 2.8768984829711917,
+      "min_z": -2.887387022628784,
+      "max_z": 2.8768982543182373,
+      "units": [
+        "shell_guard",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.75,
+      "y1": 2.8000000000000003,
+      "min_x": -2.8768982543182373,
+      "max_x": 2.8768984829711917,
+      "min_z": -2.887387022628784,
+      "max_z": 2.8768982543182373,
+      "units": [
+        "shell_guard",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.8000000000000003,
+      "y1": 2.85,
+      "min_x": -2.8467579078674317,
+      "max_x": 2.846758822479248,
+      "min_z": -2.887387022628784,
+      "max_z": 2.8467579078674317,
+      "units": [
+        "shell_guard",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.85,
+      "y1": 2.9000000000000004,
+      "min_x": -2.815959498214722,
+      "max_x": 2.8159615560913087,
+      "min_z": -2.887387022628784,
+      "max_z": 2.8238077822113037,
+      "units": [
+        "shell_guard",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.9000000000000004,
+      "y1": 2.95,
+      "min_x": -2.815959498214722,
+      "max_x": 2.8159615560913087,
+      "min_z": -2.861183622741699,
+      "max_z": 2.815959498214722,
+      "units": [
+        "shell_guard",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 2.95,
+      "y1": 3.0,
+      "min_x": -2.7642763850402834,
+      "max_x": 2.764284159240723,
+      "min_z": -2.7664376127624513,
+      "max_z": 2.764439871902466,
+      "units": [
+        "shell_guard",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 3.0,
+      "y1": 3.0500000000000003,
+      "min_x": -2.7549379697418215,
+      "max_x": 2.754945972595215,
+      "min_z": -2.754945972595215,
+      "max_z": 2.7549379697418215,
+      "units": [
+        "shell_guard",
+        "core_rusher",
+        "chanting_acolyte",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 3.0500000000000003,
+      "y1": 3.1,
+      "min_x": -2.711533465423584,
+      "max_x": 2.711535751953125,
+      "min_z": -2.711535751953125,
+      "max_z": 2.711533465423584,
+      "units": [
+        "core_rusher",
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 3.1,
+      "y1": 3.1500000000000004,
+      "min_x": -2.711533465423584,
+      "max_x": 2.711535751953125,
+      "min_z": -2.711535751953125,
+      "max_z": 2.711533465423584,
+      "units": [
+        "iron_colossus",
+        "field_mender",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 3.1500000000000004,
+      "y1": 3.2,
+      "min_x": -2.6748589035034183,
+      "max_x": 2.67485844619751,
+      "min_z": -2.67485844619751,
+      "max_z": 2.6748589035034183,
+      "units": [
+        "iron_colossus",
+        "split_spore",
+        "null_eye",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 3.2,
+      "y1": 3.25,
+      "min_x": -2.5746252226257327,
+      "max_x": 2.5746247653198244,
+      "min_z": -2.5746247653198244,
+      "max_z": 2.5746252226257327,
+      "units": [
+        "iron_colossus",
+        "split_spore",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 3.25,
+      "y1": 3.3000000000000003,
+      "min_x": -2.447838988800049,
+      "max_x": 2.447838760147095,
+      "min_z": -2.447838760147095,
+      "max_z": 2.447838988800049,
+      "units": [
+        "iron_colossus",
+        "split_spore",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 3.3000000000000003,
+      "y1": 3.35,
+      "min_x": -1.7497269933319093,
+      "max_x": 1.8279285901641846,
+      "min_z": -1.575861116256714,
+      "max_z": 1.5758392798995973,
+      "units": [
+        "iron_colossus",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 3.35,
+      "y1": 3.4000000000000004,
+      "min_x": -1.668317624206543,
+      "max_x": 1.8854837398529054,
+      "min_z": -1.3268985208129884,
+      "max_z": 1.2484885068130493,
+      "units": [
+        "iron_colossus",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 3.4000000000000004,
+      "y1": 3.45,
+      "min_x": -1.7999252342224121,
+      "max_x": 1.8959358093643188,
+      "min_z": -1.3268985208129884,
+      "max_z": 1.2876019954681397,
+      "units": [
+        "iron_colossus",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 3.45,
+      "y1": 3.5,
+      "min_x": -1.7999252342224121,
+      "max_x": 1.8959358093643188,
+      "min_z": -1.3268985208129884,
+      "max_z": 1.2876019954681397,
+      "units": [
+        "iron_colossus",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 3.5,
+      "y1": 3.5500000000000003,
+      "min_x": -1.8765222589492798,
+      "max_x": 1.8959358093643188,
+      "min_z": -1.3268985208129884,
+      "max_z": 1.2876019954681397,
+      "units": [
+        "iron_colossus",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 3.5500000000000003,
+      "y1": 3.6,
+      "min_x": -1.9501277027511597,
+      "max_x": 1.8959358093643188,
+      "min_z": -1.3268985208129884,
+      "max_z": 1.2876019954681397,
+      "units": [
+        "iron_colossus",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 3.6,
+      "y1": 3.6500000000000004,
+      "min_x": -1.9518892451095582,
+      "max_x": 1.8959358093643188,
+      "min_z": -1.3268985208129884,
+      "max_z": 1.2876019954681397,
+      "units": [
+        "iron_colossus",
+        "siege_lobber"
+      ]
+    },
+    {
+      "y0": 3.6500000000000004,
+      "y1": 3.7,
+      "min_x": -1.9518892451095582,
+      "max_x": 1.8959358093643188,
+      "min_z": -1.3268985208129884,
+      "max_z": 1.2876019954681397,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 3.7,
+      "y1": 3.75,
+      "min_x": -1.9518892451095582,
+      "max_x": 1.8959358093643188,
+      "min_z": -1.3268985208129884,
+      "max_z": 1.2876019954681397,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 3.75,
+      "y1": 3.8000000000000003,
+      "min_x": -1.9518892451095582,
+      "max_x": 1.88032315700531,
+      "min_z": -1.3268985208129884,
+      "max_z": 1.2876019954681397,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 3.8000000000000003,
+      "y1": 3.85,
+      "min_x": -1.9518892451095582,
+      "max_x": 1.8076840005874635,
+      "min_z": -1.3268985208129884,
+      "max_z": 1.2876019954681397,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 3.85,
+      "y1": 3.9000000000000004,
+      "min_x": -1.9518892451095582,
+      "max_x": 1.6144473311996461,
+      "min_z": -1.3268985208129884,
+      "max_z": 1.2876019954681397,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 3.9000000000000004,
+      "y1": 3.95,
+      "min_x": -1.7623356031799318,
+      "max_x": 1.6144473311996461,
+      "min_z": -1.3268985208129884,
+      "max_z": 1.2876019954681397,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 3.95,
+      "y1": 4.0,
+      "min_x": -1.7842607919692994,
+      "max_x": 1.6144473311996461,
+      "min_z": -1.3268985208129884,
+      "max_z": 1.2876019954681397,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.0,
+      "y1": 4.05,
+      "min_x": -1.7842607919692994,
+      "max_x": 1.6144473311996461,
+      "min_z": -1.3268985208129884,
+      "max_z": 1.2876019954681397,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.05,
+      "y1": 4.1000000000000005,
+      "min_x": -1.7842607919692994,
+      "max_x": 1.6144473311996461,
+      "min_z": -1.3247145421218873,
+      "max_z": 1.2876019954681397,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.1000000000000005,
+      "y1": 4.15,
+      "min_x": -1.7842607919692994,
+      "max_x": 1.6144473311996461,
+      "min_z": -1.2816920025634766,
+      "max_z": 1.2864727928543092,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.15,
+      "y1": 4.2,
+      "min_x": -1.7842607919692994,
+      "max_x": 1.6144473311996461,
+      "min_z": -1.2816920025634766,
+      "max_z": 1.2864727928543092,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.2,
+      "y1": 4.25,
+      "min_x": -1.7842607919692994,
+      "max_x": 1.6144473311996461,
+      "min_z": -1.2816920025634766,
+      "max_z": 1.2864727928543092,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.25,
+      "y1": 4.3,
+      "min_x": -1.7842607919692994,
+      "max_x": 1.6048485945129396,
+      "min_z": -1.2599080069732667,
+      "max_z": 1.2864727928543092,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.3,
+      "y1": 4.3500000000000005,
+      "min_x": -1.7842607919692994,
+      "max_x": 1.5183577564620971,
+      "min_z": -1.2599080069732667,
+      "max_z": 1.2795657587432863,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.3500000000000005,
+      "y1": 4.4,
+      "min_x": -1.7842607919692994,
+      "max_x": 1.4435810379028322,
+      "min_z": -1.2599080069732667,
+      "max_z": 1.2646756497192384,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.4,
+      "y1": 4.45,
+      "min_x": -1.7842607919692994,
+      "max_x": 1.4337643949508667,
+      "min_z": -1.1994212977600098,
+      "max_z": 1.2003258488464357,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.45,
+      "y1": 4.5,
+      "min_x": -1.7777342363739015,
+      "max_x": 1.1380617058944702,
+      "min_z": -1.1652921005249024,
+      "max_z": 1.2003258488464357,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.5,
+      "y1": 4.55,
+      "min_x": -1.5263047042083742,
+      "max_x": 1.1380617058944702,
+      "min_z": -1.1652921005249024,
+      "max_z": 1.1798187656784058,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.55,
+      "y1": 4.6000000000000005,
+      "min_x": -1.4858350748825073,
+      "max_x": 1.1380617058944702,
+      "min_z": -1.1652921005249024,
+      "max_z": 1.1543732360076906,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.6000000000000005,
+      "y1": 4.65,
+      "min_x": -1.1750173966217041,
+      "max_x": 1.019667149810791,
+      "min_z": -1.1541497277450563,
+      "max_z": 1.1380339245605469,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.65,
+      "y1": 4.7,
+      "min_x": -1.0196461137390136,
+      "max_x": 1.019667149810791,
+      "min_z": -1.0501984928131103,
+      "max_z": 1.0841799802398682,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.7,
+      "y1": 4.75,
+      "min_x": -0.6991765941429138,
+      "max_x": 0.20586772061824793,
+      "min_z": -1.016888673439026,
+      "max_z": 1.0168546041488649,
+      "units": [
+        "iron_colossus"
+      ]
+    },
+    {
+      "y0": 4.75,
+      "y1": 4.800000000000001,
+      "min_x": -0.6772680970191955,
+      "max_x": 0.0,
+      "min_z": 0.0,
+      "max_z": 0.962177795009613,
+      "units": [
+        "iron_colossus"
+      ]
+    }
+  ]
+}
