@@ -247,7 +247,6 @@ def main():
                VK_ICD_FILENAMES=str(next(Path('/usr/share/vulkan/icd.d').glob('lvp_icd*.json'))))
     for key in ['BEVY_ASSET_ROOT', 'CARGO_MANIFEST_DIR', 'WAYLAND_DISPLAY', 'ROGUE_COMMANDER_LANG', 'ROGUE_TUTORIAL_SAVE', 'ROGUE_CAMPAIGN_SAVE', 'ROGUE_COMMANDER_SEED']:
         env.pop(key, None)
-    (state / 'audio').write_text('1 0 0 1\n')
     processes, handles = [], []
     battle_observations, battle_proofs = {}, {}
     def start(args, log):
