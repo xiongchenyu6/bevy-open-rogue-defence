@@ -1,0 +1,22 @@
+[
+  {
+    "path": "target/verification/post-splash-repeat-2026-11-06/frozen/target/verification/post-splash-full-a-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+    "bytes": 912742025,
+    "sha256": "7f4bbd21b1a3fb16d98e36f077824655a335ba10694ac3e958cb05441077cae0"
+  },
+  {
+    "path": "target/verification/post-splash-repeat-2026-11-06/frozen/target/verification/post-splash-full-a-nov6/active-h2-behind-sbeef-c5-t0.stderr",
+    "bytes": 124518495,
+    "sha256": "b5ae39b64001dd913e97ebd7fcd5c66f9f2c103051e90bddfc0e4c847712ace3"
+  },
+  {
+    "path": "target/verification/post-splash-repeat-2026-11-06/frozen/target/verification/post-splash-full-b-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+    "bytes": 912179633,
+    "sha256": "16b71ce9b8fbd16e4693537c81d943dd16f916148996a4e76309b629996e3dd2"
+  },
+  {
+    "path": "target/verification/post-splash-repeat-2026-11-06/frozen/target/verification/post-splash-full-b-nov6/active-h2-behind-sbeef-c5-t0.stderr",
+    "bytes": 124503999,
+    "sha256": "4125739b9b99fa1240bce7909c8ea070c152b7c711cd3e41ead622914374dee7"
+  }
+]

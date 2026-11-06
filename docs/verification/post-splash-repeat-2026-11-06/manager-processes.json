@@ -1,0 +1,43 @@
+[
+  {
+    "stage": "freeze-ready",
+    "args": [
+      "/etc/profiles/per-user/freeman.xiong/bin/python3",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-splash-repeat-2026-11-06/freeze-ready.py"
+    ],
+    "exit": 0,
+    "seconds": 0.5083468049997464
+  },
+  {
+    "stage": "pair",
+    "args": [
+      "/etc/profiles/per-user/freeman.xiong/bin/python3",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-splash-repeat-2026-11-06/run-full.py"
+    ],
+    "exit": 0,
+    "seconds": 423.21795088995714
+  },
+  {
+    "stage": "checkpoint-comparison",
+    "args": [
+      "/etc/profiles/per-user/freeman.xiong/bin/python3",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-splash-repeat-2026-11-06/frozen/tools/compare_balance_replays.py",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-splash-repeat-2026-11-06/frozen/target/verification/post-splash-full-a-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-splash-repeat-2026-11-06/frozen/target/verification/post-splash-full-b-nov6/active-h2-behind-sbeef-c5-t0.jsonl"
+    ],
+    "exit": 0,
+    "seconds": 35.0803206890123
+  },
+  {
+    "stage": "recorded-comparison",
+    "args": [
+      "/etc/profiles/per-user/freeman.xiong/bin/python3",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-splash-repeat-2026-11-06/analysis/compare-recorded.py",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-splash-repeat-2026-11-06/frozen/target/verification/post-splash-full-a-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-splash-repeat-2026-11-06/frozen/target/verification/post-splash-full-b-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-splash-repeat-2026-11-06/full-recorded"
+    ],
+    "exit": 0,
+    "seconds": 31.48856370098656
+  }
+]

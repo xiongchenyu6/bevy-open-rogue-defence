@@ -1,0 +1,8 @@
+{
+  "sha256": "cc31f1b4ecf07ebb96dee3c28c9479dec2e9641f72611a9b1b1b876f474fde84",
+  "bytes": 181960880,
+  "source_commit": "acbdd2d75c814c6e05ac398f5b3e025dea1b4662",
+  "build_receipt": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/frost-splash-order-2026-11-06/validation-processes.json",
+  "build_input_manifest_sha256": "0f2369d58f229e8838d1da6181fb14baf1ce850f6c8d3fc7b9a275c2fa1cf747",
+  "reused_completed_validated_build": true
+}

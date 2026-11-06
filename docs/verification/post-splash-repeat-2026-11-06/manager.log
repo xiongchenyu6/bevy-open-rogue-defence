@@ -1,0 +1,9 @@
+STAGE freeze-ready begin
+STAGE freeze-ready terminal 0
+STAGE pair begin
+STAGE pair terminal 0
+STAGE checkpoint-comparison begin
+STAGE checkpoint-comparison terminal 0
+STAGE recorded-comparison begin
+STAGE recorded-comparison terminal 0
+PAIR_AND_ANALYSIS_FINISHED; inspect reports before equality claims

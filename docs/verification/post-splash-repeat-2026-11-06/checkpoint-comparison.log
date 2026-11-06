@@ -1,0 +1,13 @@
+{
+  "comparison_scope": "recorded checkpoints, not all internal simulation state",
+  "left": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-splash-repeat-2026-11-06/frozen/target/verification/post-splash-full-a-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+  "right": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-splash-repeat-2026-11-06/frozen/target/verification/post-splash-full-b-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+  "binary_sha256": "cc31f1b4ecf07ebb96dee3c28c9479dec2e9641f72611a9b1b1b876f474fde84",
+  "checkpoint_counts": [
+    57,
+    57
+  ],
+  "prefix_equal": true,
+  "complete_replay": true,
+  "status": "complete_equal_replay"
+}

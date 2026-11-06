@@ -34,6 +34,6 @@ Root实际查看英文战斗、中文设置和中文重启战斗，未见设置�
 
 ## 验收边界
 
-[同游戏逻辑的Nix模拟器完整重复](verification/post-glacier-repeat-2026-11-06/README.md)仍在后期出现冰霜普攻黑市触发效果的目标／状态差异，精确比较失败；未在SDK包重跑完整重复，不能宣称全局确定性或总体平衡。
+[同游戏逻辑的Nix模拟器完整重复](verification/post-glacier-repeat-2026-11-06/README.md)仍在后期出现冰霜普攻黑市触发效果的目标／状态差异，精确比较失败；未在SDK包重跑完整重复，不能宣称全局确定性或总体平衡。后续源码`acbdd2d`已有[一组完整记录投影匹配](verification/post-splash-repeat-2026-11-06/README.md)，但该溅射修正尚未进入本包，也不代表其他种子／职业已验证。
 
 本包未重跑完整第六章、自然合成、收费刷新或旧赚取存档兼容。此前[0c真实旧档](verification/polish-next-earned-restart-2026-11-06/README.md)、[d454自然合成](verification/wallet-blades-forge-v3-2026-11-06/README.md)、[d454完整第六章](verification/wallet-blades-chapter6-2026-11-06/README.md)及[f205候选短流程](verification/gate-cutaway-package-2026-11-06/README.md)按各自版本保留，不改算本包通过。长局硬件性能、实体手柄／音频设备、Steam客户端和其他平台仍待验收；见[发售清单](release-readiness.md)。
