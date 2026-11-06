@@ -1,0 +1,64 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+error[E0277]: `ScheduleConfigs<Box<dyn System<In = (), Out = ()>>>` is not a valid system with input `()` and output `_`
+   --> src/game/hit_feedback.rs:807:30
+    |
+807 |             .run_system_once((react_to_hits, animate_hit_punch).chain())
+    |              --------------- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ invalid system
+    |              |
+    |              required by a bound introduced by this call
+    |
+    = help: the trait `bevy::bevy_ecs::system::IntoSystem<(), _, _>` is not implemented for `ScheduleConfigs<Box<dyn System<In = (), Out = ()>>>`
+help: the following other types implement trait `bevy::bevy_ecs::system::IntoSystem<In, Out, Marker>`
+   --> /home/freeman.xiong/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_ecs-0.19.0/src/system/adapter_system.rs:84:1
+    |
+ 84 | / impl<Func, S, I, O, M> IntoSystem<Func::In, Func::Out, (IsAdapterSystemMarker, I, O, M)>
+ 85 | |     for IntoAdapterSystem<Func, S>
+ 86 | | where
+ 87 | |     Func: Adapt<S::System>,
+ 88 | |     I: SystemInput,
+ 89 | |     S: IntoSystem<I, O, M>,
+    | |___________________________^ `IntoAdapterSystem<Func, S>` implements `IntoSystem<<Func as Adapt<...>>::In, ..., ...>`
+    |
+   ::: /home/freeman.xiong/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_ecs-0.19.0/src/system/builder.rs:284:1
+    |
+284 | / impl<Marker, In, Out, Func, Builder> IntoSystem<In, Out, (IsBuilderSystem, Marker)>
+285 | |     for IntoBuilderSystem<Marker, In, Out, Func, Builder>
+286 | | where
+287 | |     Marker: 'static,
+...   |
+290 | |     Func: SystemParamFunction<Marker, In: FromInput<In>, Out: IntoResult<Out>>,
+291 | |     Builder: SystemParamBuilder<Func::Param> + Send + Sync + 'static,
+    | |_____________________________________________________________________^ `IntoBuilderSystem<Marker, In, Out, Func, Builder>` implements `IntoSystem<In, Out, (IsBuilderSystem, Marker)>`
+    |
+   ::: /home/freeman.xiong/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_ecs-0.19.0/src/system/combinator.rs:303:1
+    |
+303 | / impl<A, B, IA, OA, IB, OB, MA, MB> IntoSystem<IA, OB, (IsPipeSystemMarker, OA, IB, MA, MB)>
+304 | |     for IntoPipeSystem<A, B>
+305 | | where
+306 | |     IA: SystemInput,
+307 | |     A: IntoSystem<IA, OA, MA>,
+308 | |     B: IntoSystem<IB, OB, MB>,
+309 | |     for<'a> IB: SystemInput<Inner<'a> = OA>,
+    | |____________________________________________^ `IntoPipeSystem<A, B>` implements `IntoSystem<IA, OB, (IsPipeSystemMarker, OA, IB, MA, MB)>`
+note: required by a bound in `run_system_once`
+   --> /home/freeman.xiong/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_ecs-0.19.0/src/system/system.rs:357:12
+    |
+355 |     fn run_system_once<T, Out, Marker>(self, system: T) -> Result<Out, RunSystemError>
+    |        --------------- required by a bound in this associated function
+356 |     where
+357 |         T: IntoSystem<(), Out, Marker>,
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `RunSystemOnce::run_system_once`
+    = note: the full name for the type has been written to '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/release/deps/rogue_commander-37d39db57aeef6a3.long-type-2317390548582216270.txt'
+    = note: consider using `--verbose` to print the full type name to the console
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `rogue_commander` (lib test) due to 1 previous error

@@ -1,0 +1,196 @@
+diff --git a/src/bin/capture/hit_material.rs b/src/bin/capture/hit_material.rs
+index 5e82dfe..0fa1841 100644
+--- a/src/bin/capture/hit_material.rs
++++ b/src/bin/capture/hit_material.rs
+@@ -17,6 +17,9 @@ struct Probe {
+     swapped: bool,
+     restored: bool,
+     changed: Vec<Entity>,
++    low_fps: bool,
++    first_punch: Option<bool>,
++    base_scales: HashMap<Entity, Vec3>,
+ }
+ 
+ pub fn install(app: &mut bevy::app::SubApp) {
+@@ -38,6 +41,8 @@ pub fn install(app: &mut bevy::app::SubApp) {
+         Transform::from_xyz(-2.5, 0., 2.7).with_scale(Vec3::splat(0.8)),
+     ));
+     app.init_resource::<Probe>().add_systems(Last, observe);
++    app.world_mut().resource_mut::<Probe>().low_fps =
++        std::env::var("ROGUE_CAPTURE_HIT_PUNCH_LOW_FPS").is_ok_and(|v| v == "1");
+ }
+ 
+ fn owner(world: &World, mut entity: Entity) -> Option<(Entity, bool)> {
+@@ -110,6 +115,17 @@ fn observe(world: &mut World) {
+                 .any(|target| !target.2 && target.3 == control.3)),
+             "control must share original GLB materials"
+         );
++        for (actor, transform) in world
++            .query_filtered::<(Entity, &Transform), With<super::attack_capture::AttackTarget>>()
++            .iter(world)
++        {
++            probe.base_scales.insert(actor, transform.scale);
++        }
++        if probe.low_fps {
++            world.insert_resource(bevy::time::TimeUpdateStrategy::ManualDuration(
++                std::time::Duration::from_millis(160),
++            ));
++        }
+         probe.started = true;
+         println!(
+             "HIT_MATERIAL_BASELINE frame={} leaves={} sources={} shared_control=true",
+@@ -130,6 +146,20 @@ fn observe(world: &mut World) {
+                 && hp < previous
+             {
+                 probe.hits += 1;
++                if probe.low_fps && probe.first_punch.is_none() {
++                    let base = probe.base_scales[&actor];
++                    let scale = world.get::<Transform>(actor).unwrap().scale;
++                    let visible = scale.y < base.y && scale.x > base.x;
++                    probe.first_punch = Some(visible);
++                    let expected =
++                        std::env::var("EXPECT_HIT_PUNCH_FIRST_FRAME").is_ok_and(|v| v == "1");
++                    println!(
++                        "HIT_PUNCH_FIRST frame={} actor={actor:?} actual_hp={hp} base={base:?} scale={scale:?} visible={visible} real_delta={}",
++                        probe.frame,
++                        world.resource::<Time<Real>>().delta_secs()
++                    );
++                    assert_eq!(visible, expected, "real sword contact first-render squash");
++                }
+                 println!(
+                     "HIT_MATERIAL_CONTACT frame={} actor={actor:?} hp={hp:.3} damage={:.3}",
+                     probe.frame,
+@@ -196,6 +226,10 @@ fn observe(world: &mut World) {
+             !expected || probe.restored,
+             "flash must restore original handle"
+         );
++        assert!(
++            !probe.low_fps || probe.first_punch.is_some(),
++            "low-FPS requires actual sword contact"
++        );
+         println!(
+             "HIT_MATERIAL_PASS hits={} swapped={} restored={} source_and_control_unchanged=true",
+             probe.hits, probe.swapped, probe.restored
+diff --git a/src/game/hit_feedback.rs b/src/game/hit_feedback.rs
+index 263ee7f..af7c41a 100644
+--- a/src/game/hit_feedback.rs
++++ b/src/game/hit_feedback.rs
+@@ -142,6 +142,7 @@ struct HitStop {
+ #[derive(Component, Debug, Clone, Copy)]
+ pub(crate) struct HitPunch {
+     elapsed: f32,
++    presented: bool,
+     base_scale: Vec3,
+     strength: f32,
+ }
+@@ -311,6 +312,7 @@ fn react_to_hits(
+                 None => {
+                     commands.entity(target).insert(HitPunch {
+                         elapsed: 0.0,
++                        presented: false,
+                         base_scale: transform.scale,
+                         strength,
+                     });
+@@ -537,7 +539,14 @@ fn animate_hit_punch(
+         time.delta_secs()
+     };
+     for (entity, mut transform, mut punch) in &mut punched {
+-        punch.elapsed += delta;
++        if !session.paused && !punch.presented {
++            // A long contact frame must render impact before aging through the
++            // whole reaction. Later hits merge strength without rewinding it.
++            punch.elapsed = PUNCH_SECONDS * 0.2;
++            punch.presented = true;
++        } else {
++            punch.elapsed += delta;
++        }
+         if punch.elapsed >= PUNCH_SECONDS {
+             transform.scale = punch.base_scale;
+             commands.entity(entity).remove::<HitPunch>();
+@@ -792,6 +801,59 @@ mod tests {
+         });
+     }
+ 
++    #[test]
++    fn large_real_frame_keeps_new_hit_punch_visible() {
++        let (mut app, target) = punch_app();
++        let base = app.world().get::<Transform>(target).unwrap().scale;
++        // Synthetic event input, actual production reaction systems. The native
++        // companion uses a real sword contact and authoritative HP decrease.
++        record_punch(&mut app, target, false);
++        app.world_mut()
++            .resource_mut::<Time<Real>>()
++            .advance_by(std::time::Duration::from_millis(160));
++        app.add_systems(Update, (react_to_hits, animate_hit_punch).chain());
++        app.update();
++        let scale = app.world().get::<Transform>(target).unwrap().scale;
++        println!(
++            "PUNCH_LARGE_FRAME base={base:?} first_scale={scale:?} active={}",
++            app.world().get::<HitPunch>(target).is_some()
++        );
++        assert!(
++            scale.y < base.y && scale.x > base.x,
++            "first rendered contact must retain impact squash even when its real frame exceeds the reaction duration"
++        );
++        assert!(app.world().get::<HitPunch>(target).is_some());
++        app.world_mut().resource_mut::<HitFeedback>().events.clear();
++        app.world_mut()
++            .resource_mut::<Time<Real>>()
++            .advance_by(std::time::Duration::from_millis(160));
++        app.update();
++        assert_eq!(app.world().get::<Transform>(target).unwrap().scale, base);
++        assert!(app.world().get::<HitPunch>(target).is_none());
++    }
++
++    #[test]
++    fn new_hit_punch_waits_for_unpaused_first_presentation() {
++        let (mut app, target) = punch_app();
++        let base = app.world().get::<Transform>(target).unwrap().scale;
++        record_punch(&mut app, target, false);
++        app.world_mut().resource_mut::<GameSession>().paused = true;
++        app.world_mut()
++            .resource_mut::<Time<Real>>()
++            .advance_by(std::time::Duration::from_millis(160));
++        app.add_systems(Update, (react_to_hits, animate_hit_punch).chain());
++        app.update();
++        assert_eq!(app.world().get::<Transform>(target).unwrap().scale, base);
++        let punch = app.world().get::<HitPunch>(target).unwrap();
++        assert!(!punch.presented);
++        assert_eq!(punch.elapsed, 0.);
++        app.world_mut().resource_mut::<HitFeedback>().events.clear();
++        app.world_mut().resource_mut::<GameSession>().paused = false;
++        app.update();
++        assert!(app.world().get::<Transform>(target).unwrap().scale.y < base.y);
++        assert!(app.world().get::<HitPunch>(target).unwrap().presented);
++    }
++
+     #[test]
+     fn dense_hits_complete_recovery_and_next_normal_does_not_keep_critical_strength() {
+         let (mut app, target) = punch_app();
+diff --git a/src/game/hit_feedback/enemy_flash.rs b/src/game/hit_feedback/enemy_flash.rs
+index 8feb508..95c34b2 100644
+--- a/src/game/hit_feedback/enemy_flash.rs
++++ b/src/game/hit_feedback/enemy_flash.rs
+@@ -210,6 +210,7 @@ mod tests {
+     fn hit(app: &mut App, owner: Entity) {
+         app.world_mut().entity_mut(owner).insert(HitPunch {
+             elapsed: 0.,
++            presented: false,
+             base_scale: Vec3::ONE,
+             strength: 0.1,
+         });
+@@ -246,11 +247,12 @@ mod tests {
+     }
+ 
+     #[test]
+-    fn hit_flash_first_large_frame_survives_completed_punch_then_restores() {
++    fn hit_flash_and_punch_share_first_large_frame_then_restore() {
+         let (mut app, owner, leaf, _, source) = fixture();
+         hit(&mut app, owner);
+         step(&mut app, 0.2);
+-        assert!(app.world().get::<HitPunch>(owner).is_none());
++        assert!(app.world().get::<HitPunch>(owner).is_some());
++        assert!(app.world().get::<Transform>(owner).unwrap().scale.y < 1.);
+         assert_ne!(
+             current(&app, leaf),
+             source,

@@ -142,6 +142,7 @@ struct HitStop {
 #[derive(Component, Debug, Clone, Copy)]
 pub(crate) struct HitPunch {
     elapsed: f32,
+    presented: bool,
     base_scale: Vec3,
     strength: f32,
 }
@@ -311,6 +312,7 @@ fn react_to_hits(
                 None => {
                     commands.entity(target).insert(HitPunch {
                         elapsed: 0.0,
+                        presented: false,
                         base_scale: transform.scale,
                         strength,
                     });
@@ -537,7 +539,14 @@ fn animate_hit_punch(
         time.delta_secs()
     };
     for (entity, mut transform, mut punch) in &mut punched {
-        punch.elapsed += delta;
+        if !session.paused && !punch.presented {
+            // A long contact frame must render impact before aging through the
+            // whole reaction. Later hits merge strength without rewinding it.
+            punch.elapsed = PUNCH_SECONDS * 0.2;
+            punch.presented = true;
+        } else {
+            punch.elapsed += delta;
+        }
         if punch.elapsed >= PUNCH_SECONDS {
             transform.scale = punch.base_scale;
             commands.entity(entity).remove::<HitPunch>();
@@ -790,6 +799,59 @@ mod tests {
             target,
             ..event(HitWeight::Normal, critical, false)
         });
+    }
+
+    #[test]
+    fn large_real_frame_keeps_new_hit_punch_visible() {
+        let (mut app, target) = punch_app();
+        let base = app.world().get::<Transform>(target).unwrap().scale;
+        // Synthetic event input, actual production reaction systems. The native
+        // companion uses a real sword contact and authoritative HP decrease.
+        record_punch(&mut app, target, false);
+        app.world_mut()
+            .resource_mut::<Time<Real>>()
+            .advance_by(std::time::Duration::from_millis(160));
+        app.add_systems(Update, (react_to_hits, animate_hit_punch).chain());
+        app.update();
+        let scale = app.world().get::<Transform>(target).unwrap().scale;
+        println!(
+            "PUNCH_LARGE_FRAME base={base:?} first_scale={scale:?} active={}",
+            app.world().get::<HitPunch>(target).is_some()
+        );
+        assert!(
+            scale.y < base.y && scale.x > base.x,
+            "first rendered contact must retain impact squash even when its real frame exceeds the reaction duration"
+        );
+        assert!(app.world().get::<HitPunch>(target).is_some());
+        app.world_mut().resource_mut::<HitFeedback>().events.clear();
+        app.world_mut()
+            .resource_mut::<Time<Real>>()
+            .advance_by(std::time::Duration::from_millis(160));
+        app.update();
+        assert_eq!(app.world().get::<Transform>(target).unwrap().scale, base);
+        assert!(app.world().get::<HitPunch>(target).is_none());
+    }
+
+    #[test]
+    fn new_hit_punch_waits_for_unpaused_first_presentation() {
+        let (mut app, target) = punch_app();
+        let base = app.world().get::<Transform>(target).unwrap().scale;
+        record_punch(&mut app, target, false);
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        app.world_mut()
+            .resource_mut::<Time<Real>>()
+            .advance_by(std::time::Duration::from_millis(160));
+        app.add_systems(Update, (react_to_hits, animate_hit_punch).chain());
+        app.update();
+        assert_eq!(app.world().get::<Transform>(target).unwrap().scale, base);
+        let punch = app.world().get::<HitPunch>(target).unwrap();
+        assert!(!punch.presented);
+        assert_eq!(punch.elapsed, 0.);
+        app.world_mut().resource_mut::<HitFeedback>().events.clear();
+        app.world_mut().resource_mut::<GameSession>().paused = false;
+        app.update();
+        assert!(app.world().get::<Transform>(target).unwrap().scale.y < base.y);
+        assert!(app.world().get::<HitPunch>(target).unwrap().presented);
     }
 
     #[test]

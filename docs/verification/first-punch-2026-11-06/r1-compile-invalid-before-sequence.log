@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/first-punch-2026-11-06/before.py", line 9, in <module>
+    (p/'before-tests-exit.txt').write_text(str(r.returncode)+'\n');assert r.returncode==101 and '0 passed; 1 failed' in (p/'before-tests.log').read_text();assert inputs()==a
+                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

@@ -210,6 +210,7 @@ mod tests {
     fn hit(app: &mut App, owner: Entity) {
         app.world_mut().entity_mut(owner).insert(HitPunch {
             elapsed: 0.,
+            presented: false,
             base_scale: Vec3::ONE,
             strength: 0.1,
         });
@@ -246,11 +247,12 @@ mod tests {
     }
 
     #[test]
-    fn hit_flash_first_large_frame_survives_completed_punch_then_restores() {
+    fn hit_flash_and_punch_share_first_large_frame_then_restore() {
         let (mut app, owner, leaf, _, source) = fixture();
         hit(&mut app, owner);
         step(&mut app, 0.2);
-        assert!(app.world().get::<HitPunch>(owner).is_none());
+        assert!(app.world().get::<HitPunch>(owner).is_some());
+        assert!(app.world().get::<Transform>(owner).unwrap().scale.y < 1.);
         assert_ne!(
             current(&app, leaf),
             source,

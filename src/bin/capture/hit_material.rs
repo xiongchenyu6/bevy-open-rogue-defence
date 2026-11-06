@@ -17,6 +17,9 @@ struct Probe {
     swapped: bool,
     restored: bool,
     changed: Vec<Entity>,
+    low_fps: bool,
+    first_punch: Option<bool>,
+    base_scales: HashMap<Entity, Vec3>,
 }
 
 pub fn install(app: &mut bevy::app::SubApp) {
@@ -38,6 +41,8 @@ pub fn install(app: &mut bevy::app::SubApp) {
         Transform::from_xyz(-2.5, 0., 2.7).with_scale(Vec3::splat(0.8)),
     ));
     app.init_resource::<Probe>().add_systems(Last, observe);
+    app.world_mut().resource_mut::<Probe>().low_fps =
+        std::env::var("ROGUE_CAPTURE_HIT_PUNCH_LOW_FPS").is_ok_and(|v| v == "1");
 }
 
 fn owner(world: &World, mut entity: Entity) -> Option<(Entity, bool)> {
@@ -110,6 +115,17 @@ fn observe(world: &mut World) {
                 .any(|target| !target.2 && target.3 == control.3)),
             "control must share original GLB materials"
         );
+        for (actor, transform) in world
+            .query_filtered::<(Entity, &Transform), With<super::attack_capture::AttackTarget>>()
+            .iter(world)
+        {
+            probe.base_scales.insert(actor, transform.scale);
+        }
+        if probe.low_fps {
+            world.insert_resource(bevy::time::TimeUpdateStrategy::ManualDuration(
+                std::time::Duration::from_millis(160),
+            ));
+        }
         probe.started = true;
         println!(
             "HIT_MATERIAL_BASELINE frame={} leaves={} sources={} shared_control=true",
@@ -130,6 +146,20 @@ fn observe(world: &mut World) {
                 && hp < previous
             {
                 probe.hits += 1;
+                if probe.low_fps && probe.first_punch.is_none() {
+                    let base = probe.base_scales[&actor];
+                    let scale = world.get::<Transform>(actor).unwrap().scale;
+                    let visible = scale.y < base.y && scale.x > base.x;
+                    probe.first_punch = Some(visible);
+                    let expected =
+                        std::env::var("EXPECT_HIT_PUNCH_FIRST_FRAME").is_ok_and(|v| v == "1");
+                    println!(
+                        "HIT_PUNCH_FIRST frame={} actor={actor:?} actual_hp={hp} base={base:?} scale={scale:?} visible={visible} real_delta={}",
+                        probe.frame,
+                        world.resource::<Time<Real>>().delta_secs()
+                    );
+                    assert_eq!(visible, expected, "real sword contact first-render squash");
+                }
                 println!(
                     "HIT_MATERIAL_CONTACT frame={} actor={actor:?} hp={hp:.3} damage={:.3}",
                     probe.frame,
@@ -195,6 +225,10 @@ fn observe(world: &mut World) {
         assert!(
             !expected || probe.restored,
             "flash must restore original handle"
+        );
+        assert!(
+            !probe.low_fps || probe.first_punch.is_some(),
+            "low-FPS requires actual sword contact"
         );
         println!(
             "HIT_MATERIAL_PASS hits={} swapped={} restored={} source_and_control_unchanged=true",

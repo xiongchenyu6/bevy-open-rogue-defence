@@ -1,0 +1,4 @@
+AFTER native PASS: actual contact first squash visible
+after-tests terminal 0
+clippy terminal 0
+TERMINAL AFTER PASS

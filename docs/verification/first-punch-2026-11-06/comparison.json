@@ -1,0 +1,18 @@
+{
+  "contact_counts": [
+    255,
+    255
+  ],
+  "actual_contact_hp_damage_frame_multisets_equal": true,
+  "timing_rows": [
+    80,
+    80
+  ],
+  "all_logged_80_frame_health_clip_phase_speed_equal": true,
+  "contact_frame_count": [
+    85,
+    85
+  ],
+  "rng_telemetry": false,
+  "limitation": "No RNG state logged; no empirical RNG-equality claim. Entity allocation ignored for semantic contact comparison."
+}
