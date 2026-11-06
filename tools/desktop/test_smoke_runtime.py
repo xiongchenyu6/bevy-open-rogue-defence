@@ -3,7 +3,7 @@ import importlib.util
 from pathlib import Path
 import unittest
 import shutil
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
 spec = importlib.util.spec_from_file_location('smoke_runtime', Path(__file__).with_name('smoke_runtime.py'))
 smoke = importlib.util.module_from_spec(spec)
@@ -82,6 +82,96 @@ class VisibleActionTests(unittest.TestCase):
         self.assertIsNone(smoke.find_text(lines, '1 / 4 · MOVE & DODGE'))
         self.assertIsNone(smoke.find_text(lines, 'Click a basic commander to begin'))
         self.assertIsNone(smoke.find_text(lines, 'Skip'))
+
+
+class BattleProgressTests(unittest.TestCase):
+    def wait(self, rows, clocks, deadline=12):
+        records = []
+        ticks = iter(range(100))
+        with patch.object(smoke, 'ocr_screenshot', side_effect=rows), \
+             patch.object(smoke, 'read_smoke_battle_clock', side_effect=clocks):
+            proof = smoke.wait_battle_progress(
+                lambda name: Path(name), None, Mock(poll=Mock(return_value=None)),
+                deadline, records, now=lambda: next(ticks), pause=lambda _: None)
+        return proof, records
+
+    def test_readable_23_minute_countdown_proves_actual_progress_and_keeps_evidence(self):
+        first = (1380, [(300, '23:00'), (400, '23:00')])
+        second = (1379, [(300, '22:59'), (400, '22:59')])
+        proof, records = self.wait([[], []], [first, second])
+        self.assertEqual([row['clock_seconds'] for row in proof], [1380, 1379])
+        self.assertEqual(proof, tuple(records))
+        self.assertGreater(proof[1]['observed_monotonic'], proof[0]['observed_monotonic'])
+        self.assertEqual(proof[0]['clock_reads'], first[1])
+        self.assertTrue(all('completed_monotonic' in row for row in records))
+
+    def test_stagnant_or_increasing_clock_never_confirms_battle(self):
+        for values in [[1380] * 8, list(range(1380, 1388))]:
+            records = []
+            ticks = iter(range(100))
+            clocks = [(value, [(300, f'{value//60:02}:{value%60:02}'),
+                               (400, f'{value//60:02}:{value%60:02}')]) for value in values]
+            with self.subTest(values=values), \
+                 patch.object(smoke, 'ocr_screenshot', return_value=[]), \
+                 patch.object(smoke, 'read_smoke_battle_clock', side_effect=clocks), \
+                 self.assertRaisesRegex(AssertionError, 'Two readable decreasing'):
+                smoke.wait_battle_progress(
+                    lambda name: Path(name), None, Mock(poll=Mock(return_value=None)),
+                    12, records, now=lambda: next(ticks), pause=lambda _: None)
+            self.assertGreaterEqual(len(records), 2)
+
+    def test_visible_guide_or_commander_blocks_even_a_readable_timer(self):
+        for title in ['1 / 4 · MOVE & DODGE', '2 / 4 · 三次生命',
+                      'Click a basic Commander to begin', '点击基础指挥官开始远征']:
+            ticks = iter(range(100))
+            records = []
+            with self.subTest(title=title), \
+                 patch.object(smoke, 'ocr_screenshot', return_value=[(title, 10, 20, 200, 40)]), \
+                 patch.object(smoke, 'read_smoke_battle_clock') as clock, \
+                 self.assertRaisesRegex(AssertionError, 'Two readable decreasing'):
+                smoke.wait_battle_progress(
+                    lambda name: Path(name), None, Mock(poll=Mock(return_value=None)),
+                    9, records, now=lambda: next(ticks), pause=lambda _: None)
+            clock.assert_not_called()
+            self.assertTrue(all(row['blockers'] and row['clock_seconds'] is None for row in records))
+
+    def test_guide_resets_preceding_timer_so_both_proof_frames_are_clear(self):
+        clock = lambda value: (value, [(300, f'{value//60:02}:{value%60:02}'),
+                                      (400, f'{value//60:02}:{value%60:02}')])
+        proof, records = self.wait(
+            [[], [('1 / 4 · 移动与闪避', 0, 0, 200, 20)], [], []],
+            [clock(1380), clock(1379), clock(1378)], deadline=20)
+        self.assertIs(proof[0], records[2])
+        self.assertIs(proof[1], records[3])
+        self.assertTrue(records[1]['blockers'])
+
+    def test_invalid_ambiguous_or_missing_clock_is_not_a_progress_observation(self):
+        ticks = iter(range(100))
+        records = []
+        with patch.object(smoke, 'ocr_screenshot', return_value=[]), \
+             patch.object(smoke, 'read_smoke_battle_clock', side_effect=ValueError('unreadable pixels')), \
+             self.assertRaisesRegex(AssertionError, 'Two readable decreasing'):
+            smoke.wait_battle_progress(
+                lambda name: Path(name), None, Mock(poll=Mock(return_value=None)),
+                9, records, now=lambda: next(ticks), pause=lambda _: None)
+        self.assertTrue(records and all(row['clock_seconds'] is None and 'clock_error' in row for row in records))
+
+    def test_clock_crop_reader_requires_two_exact_formats_and_agreement(self):
+        with patch.object(smoke.subprocess, 'run') as convert, \
+             patch.object(smoke.subprocess, 'check_output', side_effect=['23:00\n', '23:00\n']):
+            self.assertEqual(smoke.read_smoke_battle_clock(Path('actual.png')),
+                             (1380, [(300, '23:00'), (400, '23:00')]))
+            self.assertEqual([call.args[0][3] for call in convert.call_args_list],
+                             ['74x24+1194+22', '74x24+1194+22'])
+        for reads in [[(300, '23:60'), (400, '23:60')],
+                      [(300, '23:00'), (400, '23:01')],
+                      [(300, '2:00'), (400, '2:00')],
+                      [(300, '23 : 00'), (400, '23 : 00')],
+                      [(300, '23:00'), (400, '')],
+                      [(300, 'O3:00'), (400, 'O3:00')]]:
+            with self.subTest(reads=reads), self.assertRaises(ValueError):
+                smoke.strict_battle_clock(reads)
+
 
 
 if __name__ == '__main__':

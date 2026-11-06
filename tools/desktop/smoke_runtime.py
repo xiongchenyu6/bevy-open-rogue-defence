@@ -130,6 +130,82 @@ def read_toolbar_speed(path, env=None):
         return toolbar_speed(raw)
 
 
+
+def strict_battle_clock(reads):
+    """Require both independently scaled timer crops to agree on exact MM:SS."""
+    seconds = []
+    for _, text in reads:
+        match = re.fullmatch(r'([0-9]{2}):([0-9]{2})', text.strip())
+        if not match or int(match[2]) >= 60:
+            raise ValueError(f'Unreadable battle countdown pixels: {reads!r}')
+        seconds.append(int(match[1]) * 60 + int(match[2]))
+    if len({scale for scale, _ in reads}) != 2 or len(seconds) != 2 or seconds[0] != seconds[1]:
+        raise ValueError(f'Conflicting battle countdown pixels: {reads!r}')
+    return seconds[0]
+
+
+def read_smoke_battle_clock(path, env=None):
+    # Measured on the actual failed 1280x720 smoke screenshot (23:00).
+    # These same narrow timer bounds also read the independent 24:52 battle.
+    reads = []
+    with tempfile.TemporaryDirectory(prefix='rogue-smoke-clock-') as directory:
+        for scale in (300, 400):
+            crop = Path(directory) / f'clock-{scale}.png'
+            subprocess.run(['convert', str(path), '-crop', '74x24+1194+22',
+                            '-resize', f'{scale}%', '-colorspace', 'Gray', '-negate',
+                            '-bordercolor', 'white', '-border', '20', str(crop)],
+                           env=env, check=True, capture_output=True)
+            raw = subprocess.check_output(
+                ['tesseract', str(crop), 'stdout', '-l', 'eng', '--psm', '7',
+                 '-c', 'tessedit_char_whitelist=0123456789:'],
+                env=env, text=True, stderr=subprocess.PIPE).strip()
+            reads.append((scale, raw))
+    return strict_battle_clock(reads), reads
+
+
+def wait_battle_progress(shot, env, process, deadline, records,
+                        now=time.monotonic, pause=time.sleep):
+    """Two decreasing public timer readings, with visible guide/chooser guards."""
+    previous = None
+    blockers = (
+        'MOVE & DODGE', 'THREE LIVES', 'KEEP GROWING', 'YOUR LEGACY',
+        '移动与闪避', '三次生命', '持续成长', '永久成长',
+        'Click a basic commander to begin', '点击基础指挥官开始远征',
+    )
+    while now() < deadline:
+        if process.poll() is not None:
+            raise RuntimeError('Game exited before the public battle clock advanced')
+        image = shot(f'battle-progress-{len(records):02}.png')
+        observed = now()
+        rows = ocr_screenshot(image, env)
+        blocked = [line for line in rows if any(
+            normalized(line[0]) == normalized(label)
+            or re.fullmatch(r'[1-4]4' + re.escape(normalized(label)), normalized(line[0]))
+            for label in blockers
+        )]
+        record = dict(screenshot=image.name, observed_monotonic=observed,
+                      blockers=blocked, clock_seconds=None, clock_reads=[])
+        records.append(record)
+        if blocked:
+            previous = None
+        else:
+            try:
+                seconds, reads = read_smoke_battle_clock(image, env)
+                record.update(clock_seconds=seconds, clock_reads=reads)
+            except (ValueError, subprocess.CalledProcessError) as error:
+                record['clock_error'] = str(error)
+                previous = None
+            else:
+                if previous is not None and observed > previous['observed_monotonic'] and seconds < previous['clock_seconds']:
+                    record['completed_monotonic'] = now()
+                    assert record['completed_monotonic'] < deadline, 'Battle observation exceeded deadline'
+                    return previous, record
+                previous = record
+        record['completed_monotonic'] = now()
+        pause(.2)
+    raise AssertionError('Two readable decreasing public battle countdowns were not observed')
+
+
 def find_text(lines, text):
     """Exact line match; choose the bottom action if title and button repeat."""
     matches = [line for line in lines if normalized(line[0]) == normalized(text)]
@@ -173,6 +249,7 @@ def main():
         env.pop(key, None)
     (state / 'audio').write_text('1 0 0 1\n')
     processes, handles = [], []
+    battle_observations, battle_proofs = {}, {}
     def start(args, log):
         file = (OUT / log).open('w'); handles.append(file)
         process = subprocess.Popen(args, env=env, cwd='/tmp', stdout=file, stderr=subprocess.STDOUT)
@@ -207,11 +284,16 @@ def main():
     def click_text(win, process, text):
         _, left, top, right, bottom = wait_text(win, process, text)
         click(win, (left + right) // 2, (top + bottom) // 2)
-    def battle_running(win, process):
-        # The production countdown must advance: a battlefield screenshot alone
-        # could still be the paused guide/recruitment background.
-        wait(lambda: any(re.search(r'24\s*:\s*\d{2}', line[0]) for line in visible_lines(win))
-             and find_text(visible_lines(win), '1 / 4 · MOVE & DODGE') is None, process)
+    def battle_running(win, process, phase):
+        records = []
+        battle_observations[phase] = records
+        def shot(name):
+            name = phase + '-' + name
+            screenshot(win, name)
+            return OUT / name
+        first, second = wait_battle_progress(
+            shot, env, process, time.monotonic() + 120, records)
+        battle_proofs[phase] = dict(first=first, second=second)
     def quit_game(win, process, name):
         # The battle's 12px launcher is not reliably OCR-readable in Chinese.
         # Use its actual centered toolbar position, then require the visible
@@ -241,7 +323,7 @@ def main():
         wait_text(win, app, 'Click a basic Commander to begin')
         screenshot(win, 'recruit.png')
         click(win, 230, 340)
-        battle_running(win, app)
+        battle_running(win, app, 'initial')
         screenshot(win, 'battle.png')
         click_text(win, app, 'Settings')
         wait_text(win, app, 'INTERFACE LANGUAGE')
@@ -270,7 +352,7 @@ def main():
         assert tutorial.read_text().strip() == '1'
         screenshot(win, 'restart-recruit-chinese.png')
         click(win, 230, 340)
-        battle_running(win, app)
+        battle_running(win, app, 'restart')
         screenshot(win, 'restart-battle-chinese.png')
         quit_game(win, app, 'restart-quit-chinese.png')
         for log in ['game.log', 'restart.log']:
@@ -282,10 +364,14 @@ def main():
                   'language_saved_and_reloaded': True, 'normal_quit_twice': True,
                   'real_guide_after_readiness': True, 'tutorial_dismissal_saved': True,
                   'restart_skips_automatic_guide_and_runs_battle': True,
+                  'battle_clock_proofs': battle_proofs,
+                  'battle_clock_observations': battle_observations,
                   'scope': 'Ubuntu 24.04 / X11 / software Vulkan; no Steam client or hardware performance claim'}
         (OUT / 'result.json').write_text(json.dumps(result, indent=2) + '\n')
         print('DESKTOP_RUNTIME_PASS ' + json.dumps(result), flush=True)
     finally:
+        (OUT / 'battle-progress.json').write_text(
+            json.dumps(dict(proofs=battle_proofs, observations=battle_observations), indent=2) + '\n')
         for process in reversed(processes):
             if process.poll() is None:
                 process.terminate()
