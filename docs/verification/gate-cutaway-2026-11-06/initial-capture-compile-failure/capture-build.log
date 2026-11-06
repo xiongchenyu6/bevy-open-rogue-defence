@@ -1,0 +1,10 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+error[E0432]: unresolved import `crate::game::CorePool`
+ --> src/game/gate_cutaway/capture.rs:4:55
+  |
+4 | use crate::game::{ActiveSkill, AttackClock, Autoplay, CorePool, PlayerBuild, SpawnDirector};
+  |                                                       ^^^^^^^^ no `CorePool` in `game`
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `rogue_commander` (lib) due to 1 previous error

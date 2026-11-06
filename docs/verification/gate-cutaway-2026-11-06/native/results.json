@@ -1,0 +1,128 @@
+[
+  {
+    "case": "en-desktop-gate-cutaway-opaque",
+    "size": "1280x720",
+    "language": "en",
+    "mode": "gate-cutaway-opaque",
+    "frames": 580,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-cutaway-r2-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-cutaway-r2-native-2026-11-06/en-desktop-gate-cutaway-opaque/frames",
+      "580",
+      "gate-cutaway-opaque",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "seconds": 28.727215274993796
+  },
+  {
+    "case": "en-desktop-gate-cutaway",
+    "size": "1280x720",
+    "language": "en",
+    "mode": "gate-cutaway",
+    "frames": 580,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-cutaway-r2-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-cutaway-r2-native-2026-11-06/en-desktop-gate-cutaway/frames",
+      "580",
+      "gate-cutaway",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "seconds": 27.373359963996336
+  },
+  {
+    "case": "zh-compact-gate-cutaway-opaque",
+    "size": "667x375",
+    "language": "zh-CN",
+    "mode": "gate-cutaway-opaque",
+    "frames": 580,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-cutaway-r2-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-cutaway-r2-native-2026-11-06/zh-compact-gate-cutaway-opaque/frames",
+      "580",
+      "gate-cutaway-opaque",
+      "0xA11CE",
+      "667x375"
+    ],
+    "exit": 0,
+    "seconds": 24.86740638501942
+  },
+  {
+    "case": "zh-compact-gate-cutaway",
+    "size": "667x375",
+    "language": "zh-CN",
+    "mode": "gate-cutaway",
+    "frames": 580,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-cutaway-r2-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-cutaway-r2-native-2026-11-06/zh-compact-gate-cutaway/frames",
+      "580",
+      "gate-cutaway",
+      "0xA11CE",
+      "667x375"
+    ],
+    "exit": 0,
+    "seconds": 23.964886759000365
+  },
+  {
+    "case": "en-phone-gate-cutaway-opaque",
+    "size": "375x667",
+    "language": "en",
+    "mode": "gate-cutaway-opaque",
+    "frames": 580,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-cutaway-r2-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-cutaway-r2-native-2026-11-06/en-phone-gate-cutaway-opaque/frames",
+      "580",
+      "gate-cutaway-opaque",
+      "0xA11CE",
+      "375x667"
+    ],
+    "exit": 0,
+    "seconds": 25.41839385300409
+  },
+  {
+    "case": "en-phone-gate-cutaway",
+    "size": "375x667",
+    "language": "en",
+    "mode": "gate-cutaway",
+    "frames": 580,
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-cutaway-r2-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/gate-cutaway-r2-native-2026-11-06/en-phone-gate-cutaway/frames",
+      "580",
+      "gate-cutaway",
+      "0xA11CE",
+      "375x667"
+    ],
+    "exit": 0,
+    "seconds": 24.06451739097247
+  }
+]

@@ -1,0 +1,13 @@
+STAGE en-desktop-gate-cutaway-opaque begin
+STAGE en-desktop-gate-cutaway-opaque technical PASS; actual pixels still require review
+STAGE en-desktop-gate-cutaway begin
+STAGE en-desktop-gate-cutaway technical PASS; actual pixels still require review
+STAGE zh-compact-gate-cutaway-opaque begin
+STAGE zh-compact-gate-cutaway-opaque technical PASS; actual pixels still require review
+STAGE zh-compact-gate-cutaway begin
+STAGE zh-compact-gate-cutaway technical PASS; actual pixels still require review
+STAGE en-phone-gate-cutaway-opaque begin
+STAGE en-phone-gate-cutaway-opaque technical PASS; actual pixels still require review
+STAGE en-phone-gate-cutaway begin
+STAGE en-phone-gate-cutaway technical PASS; actual pixels still require review
+GATE_CUTAWAY_NATIVE_TECHNICAL_PASS six cases3480updates; opaque control is not an old-binary run

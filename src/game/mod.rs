@@ -54,7 +54,10 @@ mod encounters;
 mod enemy_vfx;
 mod environment;
 mod equipment_ui;
+mod gate_cutaway;
 mod gate_feedback;
+#[cfg(any(debug_assertions, feature = "dev-tools"))]
+pub use gate_cutaway::capture as gate_cutaway_capture;
 mod hero;
 mod hero_abilities;
 mod hero_fusion;
@@ -171,6 +174,7 @@ impl Plugin for GamePlugin {
             .add_plugins(hero_fusion::HeroFusionPlugin)
             .add_plugins(hit_feedback::HitFeedbackPlugin)
             .add_plugins(gate_feedback::GateFeedbackPlugin)
+            .add_plugins(gate_cutaway::GateCutawayPlugin)
             .add_plugins((
                 arena::ArenaPlugin,
                 hero::HeroPlugin,

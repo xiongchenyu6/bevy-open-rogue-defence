@@ -1,0 +1,11 @@
+{
+  "technical": "sixcases3480updates passed",
+  "visual": "improved but phone hero remains too gray behind multiple blended gate layers; refine opacity before acceptance",
+  "root_viewed": [
+    "en-desktop-gate-cutaway-opaque/frames/frame00240.png",
+    "en-desktop-gate-cutaway/frames/frame00240.png",
+    "en-phone-gate-cutaway-opaque/frames/frame00180.png",
+    "en-phone-gate-cutaway/frames/frame00180.png"
+  ],
+  "next": "Keep exact original-material control; reduce per-layer opacity from.22 to.10, preserve all other geometry/material/shadow rules"
+}

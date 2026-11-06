@@ -1,0 +1,1 @@
+Production release all-target Clippy0 and734 tests passed. Debug-only capture fixture failed to compile because root used nonexistent CorePool; actual gate HP is GameSession.core_hp. Only that fixture import/read changed. Not a runtime gameplay failure.

@@ -1,0 +1,63 @@
+[
+  {
+    "stage": "clippy",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "cargo",
+      "clippy",
+      "--locked",
+      "--release",
+      "--all-targets",
+      "-j2",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit": 0,
+    "seconds": 39.05472207098501
+  },
+  {
+    "stage": "full-tests",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "cargo",
+      "test",
+      "--locked",
+      "--release",
+      "--lib",
+      "-j2",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "seconds": 193.56979932502145
+  },
+  {
+    "stage": "capture-build",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "cargo",
+      "build",
+      "--locked",
+      "--bin",
+      "capture",
+      "-j2",
+      "--target-dir",
+      "target/market-visual",
+      "--config",
+      "profile.dev.opt-level=0",
+      "--config",
+      "profile.dev.package.\"*\".opt-level=0",
+      "--config",
+      "profile.dev.debug=0"
+    ],
+    "exit": 101,
+    "seconds": 13.998218664026354
+  }
+]

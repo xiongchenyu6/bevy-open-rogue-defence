@@ -1,0 +1,29 @@
+{
+  "accepted": "Scoped main-hero/gate cutaway readability and exact material/shadow restoration",
+  "root_viewed_final": [
+    "en-desktop-gate-cutaway-opaque/frames/frame00180.png",
+    "en-desktop-gate-cutaway/frames/frame00180.png",
+    "en-desktop-gate-cutaway/frames/frame00360.png",
+    "zh-compact-gate-cutaway-opaque/frames/frame00240.png",
+    "zh-compact-gate-cutaway/frames/frame00240.png",
+    "zh-compact-gate-cutaway/frames/frame00360.png",
+    "en-phone-gate-cutaway-opaque/frames/frame00180.png",
+    "en-phone-gate-cutaway/frames/frame00180.png",
+    "en-phone-gate-cutaway/frames/frame00360.png"
+  ],
+  "source_tests": {
+    "passed": 734,
+    "failed": 0,
+    "ignored": 1
+  },
+  "final_opacity": 0.1,
+  "fade_seconds": 0.15,
+  "native_cases": 6,
+  "native_updates": 3480,
+  "native_saved_pngs": 66,
+  "scope": "Controlled poses and an explicit original-material render control, not an old-binary or physical-input comparison; alpha blending still tints the hero somewhat. Only listed pixels reviewed.",
+  "units": {
+    "final_checks": "27c24fd36d4a4cfc8eeb535488d60f58",
+    "final_native": "230b4a86796d4c6a8fbf89dbf5d1c958"
+  }
+}

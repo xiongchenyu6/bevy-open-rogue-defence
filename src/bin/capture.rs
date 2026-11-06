@@ -729,6 +729,13 @@ fn main() {
     if matches!(scenario, "camera-framing" | "camera-framing-touch") {
         camera_framing_capture::install(&mut apps.main, scenario == "camera-framing-touch");
     }
+    #[cfg(any(debug_assertions, feature = "dev-tools"))]
+    if matches!(scenario, "gate-cutaway" | "gate-cutaway-opaque") {
+        rogue_commander::game::gate_cutaway_capture::install(
+            &mut apps.main,
+            scenario == "gate-cutaway-opaque",
+        );
+    }
 
     if scenario == "hud-hint" {
         apps.main
@@ -1143,6 +1150,7 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     if scenario == "demon-cave"
         || scenario.starts_with("den-preview")
         || matches!(scenario, "camera-framing" | "camera-framing-touch")
+        || matches!(scenario, "gate-cutaway" | "gate-cutaway-opaque")
     {
         demon_cave_capture::configure(world);
         return;
