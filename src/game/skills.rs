@@ -2117,7 +2117,7 @@ fn cast_cinder_aura(
     }
     runtime.cooldowns[11] = BURN_TICK_SECONDS;
     let tick_damage = scaled_skill_damage(11, rank, build, vitals, runtime) * BURN_TICK_SECONDS;
-    let nearby: Vec<TargetInfo> = targets
+    let mut nearby: Vec<TargetInfo> = targets
         .iter()
         .copied()
         .filter(|target| {
@@ -2125,6 +2125,22 @@ fn cast_cinder_aura(
                 <= skill_effect_radius(11, rank).unwrap().powi(2)
         })
         .collect();
+    // Equal f32 distances are common on a circular aura edge. Resolve them by
+    // visible geometry, so storage changes cannot reassign critical rolls.
+    nearby.sort_unstable_by(|left, right| {
+        right
+            .boss
+            .cmp(&left.boss)
+            .then_with(|| {
+                origin
+                    .distance_squared(left.position)
+                    .total_cmp(&origin.distance_squared(right.position))
+            })
+            .then_with(|| left.position.z.total_cmp(&right.position.z))
+            .then_with(|| left.position.x.total_cmp(&right.position.x))
+            .then_with(|| left.position.y.total_cmp(&right.position.y))
+            .then_with(|| left.entity.to_bits().cmp(&right.entity.to_bits()))
+    });
     for target in &nearby {
         schedule_typed_strike(
             commands,
@@ -3780,6 +3796,40 @@ pub(crate) fn test_wave_order_contacts(
     assert_eq!(world.query::<&SkillStrike>().iter(world).count(), 2);
     world.run_system_once(resolve_skill_strikes).unwrap();
     (damage, to, remaining, hit_count)
+}
+
+#[cfg(test)]
+pub(crate) fn test_cinder_order_cast(world: &mut World) -> (Vec<Entity>, f32, f32, u64) {
+    use bevy::ecs::system::RunSystemOnce;
+    world.init_resource::<AttackVolleyRuntime>();
+    assert_eq!(
+        world.resource::<AttackVolleyRuntime>().resolved_this_frame,
+        0
+    );
+    assert!(world.resource::<HeroVitals>().can_act());
+    assert!(!world.resource::<GameSession>().paused && !world.resource::<GameSession>().finished);
+    assert_eq!(world.resource::<PlayerBuild>().skills[11], 4);
+    assert_eq!(world.resource::<SkillRuntime>().cooldowns[11], 0.);
+    // Persistent Cinder11 tests cooldown directly; no cast_ready/charge bypass.
+    // Only skill11 is enabled. Real dispatcher performs existing target sort.
+    world.run_system_once(cast_learned_skills).unwrap();
+    let strikes: Vec<_> = world.query::<&SkillStrike>().iter(world).collect();
+    assert_eq!(strikes.len(), 2);
+    assert!(
+        strikes
+            .iter()
+            .all(|s| !s.area && s.profile == DamageProfile::for_skill(11))
+    );
+    let damage = strikes[0].damage;
+    assert!(damage > 0. && strikes.iter().all(|s| s.damage == damage));
+    let ordered = strikes.iter().map(|s| s.target).collect();
+    let cooldown = world.resource::<SkillRuntime>().cooldowns[11];
+    let casts = world.resource::<SkillRuntime>().spell_cast_count;
+    assert_eq!(cooldown, BURN_TICK_SECONDS);
+    assert_eq!(casts, 1);
+    drop(strikes);
+    world.run_system_once(resolve_skill_strikes).unwrap();
+    (ordered, damage, cooldown, casts)
 }
 
 #[cfg(test)]

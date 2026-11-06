@@ -1,0 +1,40 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `release` profile [optimized] target(s) in 3m 10s
+     Running unittests src/lib.rs (target/release/deps/rogue_commander-37d39db57aeef6a3)
+
+running 1 test
+test game::combat::tests::gate_damage_ignores_unrelated_enemy_archetype_relocation ... FAILED
+
+failures:
+
+---- game::combat::tests::gate_damage_ignores_unrelated_enemy_archetype_relocation stdout ----
+
+thread 'game::combat::tests::gate_damage_ignores_unrelated_enemy_archetype_relocation' (767494) panicked at src/game/combat.rs:3874:9:
+assertion `left == right` failed: storage-only changes must not alter gate damage bits
+  left: 1086523963
+ right: 1086523965
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<u32, u32>
+   4: rogue_commander::game::combat::tests::gate_damage_ignores_unrelated_enemy_archetype_relocation
+   5: <rogue_commander::game::combat::tests::gate_damage_ignores_unrelated_enemy_archetype_relocation::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+
+failures:
+    game::combat::tests::gate_damage_ignores_unrelated_enemy_archetype_relocation
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 735 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--lib`

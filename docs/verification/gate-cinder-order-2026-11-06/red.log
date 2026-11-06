@@ -1,0 +1,28 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling bevy_time v0.19.0
+   Compiling bevy_math v0.19.0
+   Compiling blocking v1.6.2
+   Compiling async-lock v3.4.2
+   Compiling sysinfo v0.38.4
+   Compiling futures-macro v0.3.33
+   Compiling futures-task v0.3.33
+   Compiling cpufeatures v0.3.0
+   Compiling constant_time_eq v0.4.2
+   Compiling const-fnv1a-hash v1.1.0
+   Compiling bevy_diagnostic v0.19.0
+   Compiling blake3 v1.8.5
+   Compiling futures-util v0.3.33
+   Compiling async-fs v2.2.0
+   Compiling async-io v2.6.0
+   Compiling ron v0.12.2
+   Compiling stackfuture v0.3.1
+   Compiling async-broadcast v0.7.2
+   Compiling bevy_asset_macros v0.19.0

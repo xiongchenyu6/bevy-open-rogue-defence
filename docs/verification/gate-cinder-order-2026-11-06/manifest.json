@@ -1,0 +1,86 @@
+{
+  "README.md": {
+    "bytes": 4019,
+    "sha256": "1c53334c84472bb38093cf654fc602766f366893893ab027f58b90c2641c8d67"
+  },
+  "cinder-red.log": {
+    "bytes": 4838,
+    "sha256": "cdf14f422d4a858c03158ba975b63ad0d4e97a7dab142402d65e1372f8928dc7"
+  },
+  "clippy.log": {
+    "bytes": 1142,
+    "sha256": "a77d1b7e0748b4e3414d9c669d8dba9007b02ed2427beaca0f2b8a82343d28be"
+  },
+  "format.log": {
+    "bytes": 967,
+    "sha256": "e36e1c53f56e344362938e79a430194927b1970a78b5c7ac77b25e960d4bc752"
+  },
+  "green.log": {
+    "bytes": 214677,
+    "sha256": "3f6d841afbe5569d20e473ca76e3c5f7600b4d4dfbf40c6adc2a9d2cc0a29702"
+  },
+  "green2.log": {
+    "bytes": 12529,
+    "sha256": "a5f0fe6da23d042a3fe9e253576b8f0eea096865994b41922b85653cae5e56ca"
+  },
+  "new-cinder-order-tests.rs": {
+    "bytes": 3829,
+    "sha256": "716f7d8446c86145e4f4c677b6e69426f5b6da27883cdbff7f75e1e5ec962d5b"
+  },
+  "provenance.json": {
+    "bytes": 280,
+    "sha256": "3b0ca8e093d2f541db354bf632331c0a79970715e33fead836a2570ea6f20151"
+  },
+  "red-dev-cancelled-state.txt": {
+    "bytes": 53,
+    "sha256": "f2da641a60006a8f285e9c0b037a9a497016f5f34bf0dfea744e9a96a7d49f1e"
+  },
+  "red-release.log": {
+    "bytes": 2473,
+    "sha256": "c5d43d327030d38448a13fe31ff67bd7fc048f595d85f062b305d5103eea9f0c"
+  },
+  "red.log": {
+    "bytes": 1581,
+    "sha256": "b5a19d1c47b1c4be9c1a25b30633ca929e0487c34e05061176c59e0e4c697a8f"
+  },
+  "sim-build.log": {
+    "bytes": 1142,
+    "sha256": "2159573f549cab9bda7c91ed1bf2260df4018d81cb671a3be3b09fd2b09f0281"
+  },
+  "terminal-unit-states.json": {
+    "bytes": 881,
+    "sha256": "3ff2e98d6fa13c434ec71351d797787abcdf3f7535acb73639e93943ce2dc2fa"
+  },
+  "tests.log": {
+    "bytes": 84722,
+    "sha256": "b8ab3b1701e7873c8768030a1d1a71cdf752d9687fcdb2ca5aa9d5e65f476996"
+  },
+  "tracked-source.patch": {
+    "bytes": 7638,
+    "sha256": "16a0d5bc1f04f73b55570897789fa703659038290efb879b35b900f1218b55e1"
+  },
+  "validation-inputs-after.json": {
+    "bytes": 46495,
+    "sha256": "93bb02c9f87f9168386d455097b7a5ad28fbd48b1c833e120c858f286a3aec77"
+  },
+  "validation-inputs-before.json": {
+    "bytes": 46495,
+    "sha256": "93bb02c9f87f9168386d455097b7a5ad28fbd48b1c833e120c858f286a3aec77"
+  },
+  "validation-processes.json": {
+    "bytes": 1253,
+    "sha256": "12d2c92378874a9d5db2137b6b4e28bff4020b7a7d4b08a148826da212d004e4"
+  },
+  "validation-sequence.log": {
+    "bytes": 205,
+    "sha256": "d0c10cc76363be2178d41425fc88540ccd400bfab3c51a8dfd3563b807d2d222"
+  },
+  "validation-unit-state.txt": {
+    "bytes": 81,
+    "sha256": "8299f76f110034f7ffb02bf1963703f99597182f9f07c74325798c3623e60861"
+  },
+  "verify.py": {
+    "bytes": 1760,
+    "sha256": "804cd6f9f904ecad716ba2819a3c8b01e586e84acd8c5b9b3e2ee431a573fab7"
+  }
+}

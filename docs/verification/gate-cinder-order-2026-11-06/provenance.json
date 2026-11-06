@@ -1,0 +1,6 @@
+{
+  "base_commit": "ae8f5a4048360c985187efc57fcc512cf89359db",
+  "binary_sha256": "558f626d5c5055914296bfe1ece2a0f409493c42bce5323919cbe52bd7997996",
+  "binary_bytes": 181952360,
+  "claim": "local gate and Cinder regressions; full independent replay not run on this binary yet"
+}

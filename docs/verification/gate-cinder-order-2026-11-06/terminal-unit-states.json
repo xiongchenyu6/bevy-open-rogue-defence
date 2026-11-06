@@ -1,0 +1,22 @@
+[
+  {
+    "unit": "rogue-gate-order-red-nov6",
+    "show": "ActiveState=inactive\nSubState=dead\nInvocationID=\nResult=success\nExecMainStatus=0\n"
+  },
+  {
+    "unit": "rogue-gate-order-red-release-nov6",
+    "show": "ActiveState=failed\nSubState=failed\nInvocationID=621ec6ce97f848b5a3d261f8bfce0508\nResult=exit-code\nExecMainStatus=101\n"
+  },
+  {
+    "unit": "rogue-gate-order-green-nov6",
+    "show": "ActiveState=failed\nSubState=failed\nInvocationID=b3dbe8e9d9fc43f98765db44f4047718\nResult=exit-code\nExecMainStatus=101\n"
+  },
+  {
+    "unit": "rogue-gate-order-green2-nov6",
+    "show": "ActiveState=inactive\nSubState=dead\nInvocationID=\nResult=success\nExecMainStatus=0\n"
+  },
+  {
+    "unit": "rogue-cinder-order-red-nov6",
+    "show": "ActiveState=failed\nSubState=failed\nInvocationID=64dbeb017cfa49f384d71774fde573da\nResult=exit-code\nExecMainStatus=101\n"
+  }
+]

@@ -1,0 +1,132 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `release` profile [optimized] target(s) in 3m 08s
+     Running unittests src/lib.rs (target/release/deps/rogue_commander-37d39db57aeef6a3)
+
+running 115 tests
+test game::combat::tests::absorbed_stone_guard_survives_recruitment_without_double_stacking ... ok
+test game::combat::tests::all_twelve_archetypes_use_distinct_models ... ok
+test game::combat::tests::armor_and_shell_guard_reduction_follow_the_spec ... ok
+test game::combat::tests::backlog_wait_and_next_slot_boundaries_are_exact ... ok
+test game::combat::tests::boss_charge_cannot_tunnel_through_live_gate_but_can_pass_collapsed_gate ... ok
+test game::combat::tests::bulwark_refreshes_at_eight_seconds_and_absorbs_damage_first ... ok
+test game::combat::tests::basic_attack_counter_advances_once_per_successful_volley ... ok
+test game::combat::tests::bounced_arrow_steers_toward_moving_target_without_teleporting_and_retires_if_it_dies ... ok
+test game::combat::tests::broken_gate_redirects_zero_native_damage_rushers_using_their_breach_damage ... ok
+test game::combat::tests::broken_gate_redirects_ordinary_enemies_into_real_hero_damage ... ok
+test game::combat::tests::command_insight_multiplier_is_consumed_by_enemy_xp_rewards ... ok
+test game::combat::tests::attack_catch_up_backlog_carries_every_volley_without_dropping_over_cap_work ... ok
+test game::combat::tests::attack_backlog_is_discarded_when_no_valid_target_exists ... ok
+test game::combat::tests::auto_attack_catches_up_every_elapsed_volley_and_preserves_timer_remainder ... ok
+test game::combat::tests::damage_meter_records_mitigated_non_overkill_damage_at_the_entry_point ... ok
+test game::combat::tests::bamboo_bonus_is_a_real_weapon_volley_without_advancing_clock_or_recursing ... ok
+test game::combat::tests::announced_rush_enters_as_one_real_group_and_never_repeats_on_the_same_frame ... ok
+test game::combat::tests::damage_resolution_reports_only_actual_hp_loss_for_blood_leech ... ok
+test game::combat::tests::deaths_consume_only_lives_and_escalate_revive_time ... ok
+test game::combat::tests::archer_native_volley_aims_distinct_targets_and_attaches_real_bounces ... ok
+test game::combat::tests::elite_affix_rolls_are_deterministic_and_cover_all_eight_kinds ... ok
+test game::combat::tests::accelerated_catch_up_volleys_receive_distinct_first_frame_travel_ages ... ok
+test game::combat::tests::absorbed_melee_strikes_at_ranged_target_without_counting_another_basic_attack ... ok
+test game::combat::tests::brood_affix_uses_real_death_queue_once_and_children_cannot_hatch_again ... ok
+test game::combat::tests::burrower_crossing_reveal_radius_emerges_and_strikes_in_the_same_frame ... ok
+test game::combat::tests::damage_number_lifetime_freezes_while_paused_and_archive_start_cleans_up ... ok
+test game::combat::tests::damage_overlay_shares_hdr_target_without_tonemapping_world_twice ... ok
+test game::combat::tests::enemy_attack_messages_follow_real_contact_and_freeze_when_paused ... ok
+test game::combat::tests::disabled_director_blocks_ordinary_elites_and_due_bosses_without_advancing_state ... ok
+test game::combat::tests::area_and_ordinary_unrestricted_carriers_keep_spatial_collisions ... ok
+test game::combat::tests::checkpoint_boss_spawns_exactly_on_time_with_130_regular_shells_active ... ok
+test game::combat::tests::frenzy_and_commander_multipliers_do_not_stack_accidentally ... ok
+test game::combat::tests::finished_session_retires_every_active_enemy_shell ... ok
+test game::combat::tests::frost_mirror_uses_eighty_plus_half_effective_spell_power ... ok
+test game::combat::tests::failed_regular_pool_rent_keeps_the_front_wave_budget ... ok
+test game::combat::tests::expired_projectile_resolves_its_final_sweep_before_pool_retirement ... ok
+test game::combat::tests::hero_hunters_have_distinct_reproducible_threat_profiles ... ok
+test game::combat::tests::finished_cleanup_retires_visible_and_logic_projectiles_and_damage_numbers ... ok
+test game::combat::tests::control_time_partial_thaw_uses_only_available_movement_and_attack_seconds ... ok
+test game::combat::tests::heal_cues_require_actual_healing_and_keep_original_aura_rate ... ok
+test game::combat::tests::gate_rebuilds_repeatedly_without_losing_and_pause_preserves_timer ... ok
+test game::combat::tests::hunter_crossing_attack_radius_uses_leftover_frame_time ... ok
+test game::combat::tests::forged_bloodreaver_really_increases_armor_damage_and_inherited_lifesteal ... ok
+test game::combat::tests::expanded_bond_damage_distance_and_lifesteal_reach_actual_hp ... ok
+test game::combat::tests::landed_hits_report_kill_weight_and_survivors_to_hit_feedback ... ok
+test game::combat::tests::inherited_backlog_waits_for_native_budget_and_drains_exactly_once ... ok
+test game::combat::tests::gate_damage_ignores_unrelated_enemy_archetype_relocation ... ok
+test game::combat::tests::inherited_fallback_defers_large_step_without_native_backlog_or_double_slots ... ok
+test game::combat::tests::logic_only_projectile_still_runs_the_authoritative_damage_resolver ... ok
+test game::combat::tests::equal_front_symmetric_native_aim_uses_visible_coordinate_tie ... ok
+test game::combat::tests::equal_front_native_attacks_prefer_closest_visible_target ... ok
+test game::combat::tests::mage_inherits_genuine_archer_volley_bounces_and_warrior_cleave_after_absorption ... ok
+test game::combat::tests::gate_state_is_consistent_for_every_enemy_in_one_movement_pass ... ok
+test game::combat::tests::designated_target_missing_or_dead_never_falls_back_to_neighbor ... ok
+test game::combat::tests::merged_spawn_preserves_total_health_breach_and_rewards ... ok
+test game::combat::tests::move_towards_radius_clamps_at_threshold_and_reports_leftover_time ... ok
+test game::combat::tests::melee_target_can_leave_reach_during_windup ... ok
+test game::combat::tests::melee_audio_tests::melee_whoosh_preserves_mixed_fusion_contact_order_health_and_rng ... ok
+test game::combat::tests::melee_audio_tests::melee_whoosh_survives_same_frame_short_windup_and_real_miss ... ok
+test game::combat::tests::dagger_native_contacts_wait_for_slice_and_keep_one_real_damage_event ... ok
+test game::combat::tests::melee_basics_require_weapon_reach_and_count_one_swing ... ok
+test game::combat::tests::null_eye_reduces_ultimate_recovery_by_fifteen_percent ... ok
+test game::combat::tests::melee_audio_tests::real_melee_producer_emits_one_precontact_whoosh ... ok
+test game::combat::tests::ordinary_enemy_crossing_gate_radius_breaches_in_the_same_frame ... ok
+test game::combat::tests::native_front_priority_still_beats_a_closer_enemy_behind_it ... ok
+test game::combat::tests::nonarea_typed_strike_cannot_be_intercepted_by_overlapping_elite ... ok
+test game::combat::tests::moving_collision_ignores_cosmetic_archetype_insertion_order ... ok
+test game::combat::tests::inherited_deferred_slots_clear_on_death_and_finish_but_pause_preserves_them ... ok
+test game::combat::tests::inherited_deferred_slots_clear_when_no_legacy_target_is_reachable ... ok
+test game::combat::tests::archer_single_enemy_never_receives_duplicate_initial_arrows ... ok
+test game::combat::tests::melee_audio_tests::melee_whoosh_postcombat_pause_and_finish_consume_without_replay ... ok
+test game::combat::tests::pierce_keeps_full_damage_until_final_contact_then_redirects_a_real_arrow ... ok
+test game::combat::tests::overlap_geometry_prefers_nearest_sweep_start_center ... ok
+test game::combat::tests::native_reach_keeps_single_legacy_per_four_hits_without_extra_fallback ... ok
+test game::combat::tests::overlap_geometry_symmetric_tie_uses_visible_coordinates ... ok
+test game::combat::tests::regeneration_prevents_only_the_first_lethal_hit ... ok
+test game::combat::tests::revival_seed_prevents_death_without_charging_the_gate ... ok
+test game::combat::tests::real_frozen_ranged_enemy_cannot_attack_in_range_but_thaws_normally ... ok
+test game::combat::tests::ricochet_hits_alive_unvisited_targets_and_applies_falloff ... ok
+test game::combat::tests::serrated_splash_uses_three_meter_radius_and_caps_at_six_neighbors ... ok
+test game::combat::tests::ray_pulse_damage_follows_geometry_across_entity_allocations ... ok
+test game::combat::tests::purchased_penetration_and_leech_change_real_armored_and_resistant_target_health ... ok
+test game::combat::tests::overlap_geometry_preserves_nonzero_entry_progress_before_distance ... ok
+test game::combat::tests::orbit_blade_same_ids_ignore_cosmetic_row_order ... ok
+test game::combat::tests::siege_affix_prioritizes_live_gate_and_doubles_real_ranged_siege_damage ... ok
+test game::combat::tests::road_pressure_increases_real_gate_damage_but_not_camp_damage ... ok
+test game::combat::tests::stone_warden_guard_only_applies_near_the_gate ... ok
+test game::combat::tests::storm_coil_selects_primary_then_two_nearest_targets_stably ... ok
+test game::combat::tests::recycled_designated_carrier_can_hit_a_new_unrestricted_target ... ok
+test game::combat::tests::inherited_ranged_weapon_reaches_beyond_melee_host_without_native_hits ... ok
+test game::combat::tests::splitling_budget_waits_at_full_capacity_then_merges_into_one_released_slot ... ok
+test game::combat::tests::siege_visual_cadence_does_not_change_continuous_gate_damage ... ok
+test game::combat::tests::swept_segment_reports_entry_progress_and_handles_stationary_projectiles ... ok
+test game::combat::tests::pressure_scales_actual_wave_spawns_once_but_not_campaign_bosses ... ok
+test game::combat::tests::targeting_keeps_archive_boss_rusher_gate_order ... ok
+test game::combat::tests::melee_audio_tests::melee_whoosh_waits_for_contact_lead_and_does_not_repeat_per_target ... ok
+test game::combat::tests::single_volley_keeps_legacy_full_frame_projectile_travel ... ok
+test game::combat::tests::swept_projectile_hits_nearest_enemy_first_even_when_spawned_last ... ok
+test game::combat::tests::volatile_enters_one_warning_state_before_settlement ... ok
+test game::combat::tests::wave_pacing_uses_exact_count_over_sixty_seconds ... ok
+test game::combat::tests::stationary_collision_ignores_cosmetic_archetype_insertion_order ... ok
+test game::combat::tests::rebuilt_gate_keeps_breached_enemies_behind_it_and_front_arrivals_blocked ... ok
+test game::combat::tests::storm_matrix_same_ids_ignore_cosmetic_row_order ... ok
+test game::combat::tests::tidal_wave_critical_assignment_follows_geometry_across_allocations ... ok
+test game::combat::tests::tidal_wave_same_ids_ignore_cosmetic_row_order ... ok
+test game::combat::tests::unreachable_legacy_slots_do_not_bank_or_fire_outside_reach ... ok
+test game::combat::tests::vortex_pulse_damage_ignores_cosmetic_enemy_archetype_order ... ok
+test game::combat::tests::orbit_blade_critical_assignment_follows_geometry_across_allocations ... ok
+test game::combat::tests::ray_pulse_damage_ignores_cosmetic_query_order ... ok
+test game::combat::tests::melee_audio_tests::melee_whoosh_cancel_and_suppressed_windows_never_replay ... ok
+test game::combat::tests::weapon_contact_uses_shared_damage_resolution_and_cannot_hit_behind ... ok
+test game::combat::tests::standing_gate_blocks_every_lane_and_protects_rear_hero_from_hunters_and_burrowers ... ok
+test game::combat::tests::storm_matrix_critical_assignment_follows_geometry_across_allocations ... ok
+test game::combat::tests::melee_audio_tests::melee_whoosh_fixed_attack_has_same_contact_at_30_60_120_hz_and_speed_lead ... ok
+test game::combat::tests::inherited_fallback_preserves_four_slot_cadence_at_normal_and_32x_deltas ... ok
+
+test result: ok. 115 passed; 0 failed; 0 ignored; 0 measured; 621 filtered out; finished in 0.07s
+

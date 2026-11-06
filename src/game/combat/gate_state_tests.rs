@@ -68,3 +68,58 @@ fn gate_state_is_consistent_for_every_enemy_in_one_movement_pass() {
         "next movement sees broken gate and pursues hero"
     );
 }
+
+#[test]
+fn gate_damage_ignores_unrelated_enemy_archetype_relocation() {
+    #[derive(Component)]
+    struct UnrelatedMarker;
+
+    let run = |relocate: bool| {
+        let mut app = enemy_movement_test_app();
+        app.world_mut().resource_mut::<GameSession>().core_hp = 11.94;
+        let mut actors = Vec::new();
+        for (index, damage) in [1.0, 1.0, 1000.0].into_iter().enumerate() {
+            let mut enemy = test_enemy(100.0);
+            enemy.speed = 0.0;
+            enemy.damage = damage;
+            actors.push(
+                app.world_mut()
+                    .spawn((
+                        enemy,
+                        EnemyArchetype(11),
+                        Transform::from_xyz(2.0, 0.0, index as f32 - 1.0),
+                    ))
+                    .id(),
+            );
+        }
+        if relocate {
+            // Change storage layout only: same IDs, stats and positions.
+            app.world_mut()
+                .entity_mut(actors[0])
+                .insert(UnrelatedMarker);
+            app.world_mut()
+                .entity_mut(actors[0])
+                .remove::<UnrelatedMarker>();
+        }
+        let raw_order: Vec<_> = app
+            .world_mut()
+            .query_filtered::<Entity, With<Enemy>>()
+            .iter(app.world())
+            .collect();
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(1.0 / 60.0));
+        app.world_mut().run_system_once(move_enemies).unwrap();
+        (
+            raw_order,
+            app.world().resource::<GameSession>().core_hp.to_bits(),
+        )
+    };
+    let a = run(false);
+    let b = run(true);
+    assert_ne!(a.0, b.0, "fixture must change raw query order");
+    assert_eq!(
+        a.1, b.1,
+        "storage-only changes must not alter gate damage bits"
+    );
+}

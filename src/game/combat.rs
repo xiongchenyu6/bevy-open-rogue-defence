@@ -1125,20 +1125,40 @@ fn move_enemies(
         })
         .map(|(entity, transform, _, _)| (entity, transform.translation))
         .collect();
-    for (
-        entity,
-        enemy,
-        boss,
-        archetype,
-        breach_damage,
-        mut threat,
-        affix,
-        commander_aura,
-        speed_effect,
-        camp,
-        mut transform,
-    ) in &mut enemies.p1()
-    {
+    // Storage-only archetype moves must not reorder shared HP subtraction,
+    // interception charges or hero damage rolls. Snapshot starting geometry so
+    // moving one attacker cannot change the ordering of the remaining actors.
+    let mut movement_order: Vec<_> = enemies
+        .p1()
+        .iter()
+        .map(|entry| (entry.0, entry.10.translation))
+        .collect();
+    movement_order.sort_unstable_by(|left, right| {
+        left.1
+            .x
+            .total_cmp(&right.1.x)
+            .then_with(|| left.1.z.total_cmp(&right.1.z))
+            .then_with(|| left.1.y.total_cmp(&right.1.y))
+            .then_with(|| left.0.to_bits().cmp(&right.0.to_bits()))
+    });
+    let mut attackers = enemies.p1();
+    for &(ordered_entity, _) in movement_order.iter() {
+        let Ok((
+            entity,
+            enemy,
+            boss,
+            archetype,
+            breach_damage,
+            mut threat,
+            affix,
+            commander_aura,
+            speed_effect,
+            camp,
+            mut transform,
+        )) = attackers.get_mut(ordered_entity)
+        else {
+            continue;
+        };
         if affix.is_some_and(|affix| affix.is_volatile_pending()) {
             continue;
         }
@@ -3439,6 +3459,7 @@ mod tests {
     include!("combat/orbit_order_tests.rs");
     include!("combat/wave_order_tests.rs");
     include!("combat/gate_state_tests.rs");
+    include!("combat/cinder_order_tests.rs");
     include!("combat/designated_strike_tests.rs");
     include!("combat/native_aim_tests.rs");
 
