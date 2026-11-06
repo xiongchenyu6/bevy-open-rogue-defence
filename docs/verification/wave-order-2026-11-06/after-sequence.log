@@ -1,0 +1,4 @@
+after-focused terminal 0
+after-full terminal 0
+clippy terminal 0
+TERMINAL AFTER PASS: focused/full/strict Clippy and frozen inputs

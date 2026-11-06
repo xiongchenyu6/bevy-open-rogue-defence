@@ -1,0 +1,30 @@
+{
+  "files_sha256": {
+    "README.md": "3146127bbe5d553686d52a264571d21b56e9cea0667afe70c80e4c0807cca16f",
+    "after-focused-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "after-focused.log": "c1fac7060a540653f81380a9cf34f298ab8acce75be3407a2d6fcb6344c710d7",
+    "after-full-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "after-full.log": "e4dcc8d8739a0f1680fd24c5232983f4926b10810449deaeaf64904d923fdcf7",
+    "after-inputs-after.json": "f15484b5a86a9e60a6e36932ff0f08463a8e9f9efb650729bc1e7a1d223d8660",
+    "after-inputs.json": "f15484b5a86a9e60a6e36932ff0f08463a8e9f9efb650729bc1e7a1d223d8660",
+    "after-sequence.log": "ec8c31876459a44ab9f19daac15c271ee5e8e80a3f029484370f9ed0f546e266",
+    "after-skills.rs.gz": "3aace1dc7aaf97a407879e86a79d27876940d1eeb1f20893104a52618d0528bc",
+    "after-tidal_wave.rs.gz": "abb9bdffeaef9212954e7247a4ae8a7e2b02d5d58135f7b4adba598b627d4421",
+    "after-wave_order_tests.rs": "f9279e1566072c3eac238e0915257a78eac47dd29f19a1a860f900b1338355a4",
+    "after.py": "20ea040af18e14a890313c76edece26e145b5d0685d06510e83fd7011ab1f917",
+    "before-exit.txt": "39b8dc3fc8b44765c8e6f1adee04c5b465e555ab791cc42d0d9e810d5b64297c",
+    "before-inputs-after.json": "7dbd8dbdf938792b7ca8f9c60f70abc736836afefcfe7eb786c42bed6c5037c9",
+    "before-inputs.json": "7dbd8dbdf938792b7ca8f9c60f70abc736836afefcfe7eb786c42bed6c5037c9",
+    "before-sequence.log": "ed123df2070e62033bd3c780095b96d73077743ca5187b85fb876d90e24cc52d",
+    "before-skills.rs.gz": "3aace1dc7aaf97a407879e86a79d27876940d1eeb1f20893104a52618d0528bc",
+    "before-tests.log": "ad83c981b241d0d4e5f67b751ac1de01ff57703aa750b48dbd4044d2437cdb68",
+    "before-tidal_wave.rs.gz": "1a5998cb04b3662f25e4eb66a7ed4591275860994047f0f5a01b85d58ec824da",
+    "before-wave_order_tests.rs": "f9279e1566072c3eac238e0915257a78eac47dd29f19a1a860f900b1338355a4",
+    "before.py": "f300a1a46ee8bbef1f301cfec8f509fc00c28d6c9079cb8161eebe044bd5dbd1",
+    "clippy-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "clippy.log": "fa61660a8c1959594d4914340c0a785714d2c8a3613760f329186d452028dc93",
+    "existing-48-early-checkpoints.json": "322790a2711cdd9bc084177227c06fb8ae2755eb498a54d491f31793589da7cf",
+    "scoped.diff": "a2b8271548607c9977c59e9d43368354249a0bc26cfa0ec740b0d7e2b4626154",
+    "source-comparison.json": "1c03e950b7cd7a8b5651acadb82d7771f2aa046627aeafd77c2ce1dcfda3fb06"
+  }
+}

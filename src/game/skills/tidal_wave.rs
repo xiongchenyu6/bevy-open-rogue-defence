@@ -134,8 +134,23 @@ fn tick(
             {
                 continue;
             }
+            marked.push(target_info(target, t, enemy, boss, trial, archive));
+        }
+        // Resolve this sweep in forward travel order, then visible coordinates;
+        // cosmetic query changes and unrelated IDs cannot reassign critical rolls.
+        marked.sort_unstable_by(|a, b| {
+            (a.position - wave.origin)
+                .with_y(0.0)
+                .dot(wave.direction)
+                .total_cmp(&(b.position - wave.origin).with_y(0.0).dot(wave.direction))
+                .then_with(|| a.position.z.total_cmp(&b.position.z))
+                .then_with(|| a.position.x.total_cmp(&b.position.x))
+                .then_with(|| a.position.y.total_cmp(&b.position.y))
+                .then_with(|| a.entity.to_bits().cmp(&b.entity.to_bits()))
+        });
+        for info in &marked {
+            let target = info.entity;
             wave.hit.insert(target);
-            let info = target_info(target, t, enemy, boss, trial, archive);
             schedule_typed_strike(
                 &mut commands,
                 target,
@@ -147,8 +162,7 @@ fn tick(
                 DamageProfile::for_skill(3),
             );
             runtime.wet.insert(target, 3.0);
-            apply_control(&mut runtime, info, 1.5, 0.0, 0.0);
-            marked.push(info);
+            apply_control(&mut runtime, *info, 1.5, 0.0, 0.0);
         }
         apply_static_seals(&mut commands, &mut runtime, marked, &build, &vitals, 0.0);
         if wave.remaining <= 0.0001 || to >= DISTANCE {
@@ -156,6 +170,19 @@ fn tick(
         }
     }
 }
+// Test-only actual wave clock and private hit-memory observation.
+// Private hit memory is observed only inside this existing module.
+#[cfg(test)]
+pub(super) fn test_wave_order_step(world: &mut World, delta: f32) -> (f32, f32, usize) {
+    use bevy::ecs::system::RunSystemOnce;
+    world
+        .resource_mut::<Time>()
+        .advance_by(std::time::Duration::from_secs_f32(delta));
+    world.run_system_once(tick).unwrap();
+    let wave = world.query::<&TidalWave>().single(world).unwrap();
+    (wave.travelled, wave.remaining, wave.hit.len())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

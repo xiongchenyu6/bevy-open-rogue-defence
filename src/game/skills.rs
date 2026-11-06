@@ -3689,6 +3689,99 @@ pub(crate) fn test_orbit_order_contacts(world: &mut World) -> (usize, f32, Vec<(
     (count, damage, cooldowns)
 }
 
+// Test-only production caster and wave-contact bridges.
+#[cfg(test)]
+pub(crate) fn test_wave_order_cast(world: &mut World, primary: Entity) {
+    use bevy::ecs::system::RunSystemOnce;
+    world
+        .run_system_once(
+            move |mut commands: Commands,
+                  assets: Res<GameAssets>,
+                  mut pools: ResMut<CombatPools>,
+                  build: Res<PlayerBuild>,
+                  vitals: Res<HeroVitals>,
+                  mut runtime: ResMut<SkillRuntime>,
+                  session: Res<GameSession>,
+                  enemies: Query<(Entity, &Transform, &Enemy)>| {
+                assert_eq!(build.skills[3], 1);
+                assert!(vitals.can_act() && !session.paused && !session.finished);
+                let targets: Vec<_> = enemies
+                    .iter()
+                    .map(|(e, t, n)| target_info(e, t, n, None, None, None))
+                    .collect();
+                let first = *targets.iter().find(|t| t.entity == primary).unwrap();
+                runtime.prepare_cadence(&build.skills);
+                // Explicit controlled ready state: initial cooldown already elapsed;
+                // attack charge is earned through the actual resolved-volley helper.
+                runtime.cooldowns[3] = 0.;
+                apply_resolved_attack_volleys(
+                    &mut runtime,
+                    attack_charge_requirement(3, 1) as u32,
+                    |_| {},
+                );
+                assert!(runtime.cast_ready(3));
+                cast_tidal_fan(
+                    &mut commands,
+                    &assets,
+                    &mut pools,
+                    &build,
+                    &vitals,
+                    Vec3::ZERO,
+                    first,
+                    &targets,
+                    &mut runtime,
+                );
+            },
+        )
+        .unwrap();
+    let wave = world
+        .query::<&tidal_wave::TidalWave>()
+        .single(world)
+        .unwrap();
+    assert_eq!(wave.origin, Vec3::ZERO);
+    assert_eq!(wave.direction, Vec3::X);
+    assert_eq!(wave.travelled, 0.);
+    assert_eq!(world.resource::<SkillRuntime>().spell_cast_count, 1);
+    assert_eq!(world.query::<&SkillStrike>().iter(world).count(), 0);
+}
+
+#[cfg(test)]
+pub(crate) fn test_wave_order_contacts(
+    world: &mut World,
+    targets: [Entity; 2],
+) -> (f32, f32, f32, usize) {
+    use bevy::ecs::system::RunSystemOnce;
+    // Initial real sweep [0,.14], plus .6 slab depth, cannot reach x=1 or2.
+    let (wait_to, _, wait_hits) = tidal_wave::test_wave_order_step(world, 0.01);
+    assert!(wait_to > 0. && wait_to < 0.2 && wait_hits == 0);
+    assert_eq!(world.query::<&SkillStrike>().iter(world).count(), 0);
+    // Next actual .14s step moves beyond both target centers.
+    let (to, remaining, hit_count) = tidal_wave::test_wave_order_step(world, 0.14);
+    assert!(to > 2.0 && to < 2.2 && remaining > 0. && hit_count == 2);
+    let strikes: Vec<_> = world.query::<&SkillStrike>().iter(world).collect();
+    assert_eq!(strikes.len(), 2);
+    assert!(
+        strikes
+            .iter()
+            .all(|s| !s.area && s.profile == DamageProfile::for_skill(3))
+    );
+    let damage = strikes[0].damage;
+    assert!(damage > 0. && strikes.iter().all(|s| s.damage == damage));
+    drop(strikes);
+    for target in targets {
+        let runtime = world.resource::<SkillRuntime>();
+        assert_eq!(runtime.wet.get(&target), Some(&3.));
+        assert_eq!(runtime.controls[&target].slow_remaining, 1.5);
+    }
+    // Same slab still overlaps the x=2 target, but real wave.hit memory prevents
+    // another strike; do not clear that set or inject a made-up target cooldown.
+    let (_, _, repeated_hits) = tidal_wave::test_wave_order_step(world, 0.01);
+    assert_eq!(repeated_hits, 2);
+    assert_eq!(world.query::<&SkillStrike>().iter(world).count(), 2);
+    world.run_system_once(resolve_skill_strikes).unwrap();
+    (damage, to, remaining, hit_count)
+}
+
 #[cfg(test)]
 mod tests {
     use bevy::ecs::system::RunSystemOnce;

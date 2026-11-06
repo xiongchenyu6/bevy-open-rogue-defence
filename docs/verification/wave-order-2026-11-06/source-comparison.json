@@ -1,0 +1,27 @@
+{
+  "src/game/skills.rs::cast_tidal_fan": {
+    "identical_to_237e650": true,
+    "current_sha256": "911536c1a1a0976347f3346261a42cfdef1a31e3b676d0b42e0aa93adc17f510",
+    "frozen_sha256": "911536c1a1a0976347f3346261a42cfdef1a31e3b676d0b42e0aa93adc17f510"
+  },
+  "src/game/skills.rs::resolve_skill_strikes": {
+    "identical_to_237e650": true,
+    "current_sha256": "f69cfb1c2d0852bfc2c63bc135dbac45c0ee7149d83184c10eb47c35f906c09d",
+    "frozen_sha256": "f69cfb1c2d0852bfc2c63bc135dbac45c0ee7149d83184c10eb47c35f906c09d"
+  },
+  "src/game/skills/tidal_wave.rs::spawn": {
+    "identical_to_237e650": true,
+    "current_sha256": "3d4e397f8cf3dc37536327f004a6d9215a49e2f929be573334175295d6cacdea",
+    "frozen_sha256": "3d4e397f8cf3dc37536327f004a6d9215a49e2f929be573334175295d6cacdea"
+  },
+  "src/game/skills/tidal_wave.rs::swept_contact": {
+    "identical_to_237e650": true,
+    "current_sha256": "f51ba8a1469f37ed9d4e066f5aa11f86b2f05d3bdc6fcd40d3dce5a0dcdf86b7",
+    "frozen_sha256": "f51ba8a1469f37ed9d4e066f5aa11f86b2f05d3bdc6fcd40d3dce5a0dcdf86b7"
+  },
+  "src/game/skills/tidal_wave.rs::tick": {
+    "identical_to_237e650": true,
+    "current_sha256": "23d5f77f46ff133cbb0307b205ff4ee6cb83636e5977ffba2fe79383666f3937",
+    "frozen_sha256": "23d5f77f46ff133cbb0307b205ff4ee6cb83636e5977ffba2fe79383666f3937"
+  }
+}
