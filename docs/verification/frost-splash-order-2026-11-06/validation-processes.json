@@ -1,0 +1,79 @@
+[
+  {
+    "stage": "format",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "rustfmt",
+      "--check",
+      "--edition",
+      "2024",
+      "--config",
+      "skip_children=true",
+      "src/game/combat.rs",
+      "src/game/skills.rs",
+      "src/game/combat/cinder_order_tests.rs",
+      "src/game/combat/gate_state_tests.rs",
+      "src/game/skills/glacier_order_test_support.rs",
+      "src/game/combat/glacier_order_tests.rs",
+      "src/game/combat/frost_splash_order_tests.rs"
+    ],
+    "exit": 0,
+    "seconds": 1.8347003409871832
+  },
+  {
+    "stage": "tests",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "cargo",
+      "test",
+      "--locked",
+      "--release",
+      "--lib",
+      "-j2",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "seconds": 199.52651519299252
+  },
+  {
+    "stage": "clippy",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "cargo",
+      "clippy",
+      "--locked",
+      "--release",
+      "--all-targets",
+      "-j2",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit": 0,
+    "seconds": 38.320477102010045
+  },
+  {
+    "stage": "sim-build",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "cargo",
+      "build",
+      "--locked",
+      "--release",
+      "--bin",
+      "balance_sim",
+      "-j2"
+    ],
+    "exit": 0,
+    "seconds": 195.1563615819905
+  }
+]

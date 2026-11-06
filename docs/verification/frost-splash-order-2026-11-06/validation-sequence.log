@@ -1,0 +1,9 @@
+STAGE format begin
+STAGE format exit 0
+STAGE tests begin
+STAGE tests exit 0
+STAGE clippy begin
+STAGE clippy exit 0
+STAGE sim-build begin
+STAGE sim-build exit 0
+VALIDATION_ALL_STEPS_PASSED_INPUTS_UNCHANGED

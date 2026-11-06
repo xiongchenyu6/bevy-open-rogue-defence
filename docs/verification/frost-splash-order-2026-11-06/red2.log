@@ -1,0 +1,37 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `release` profile [optimized] target(s) in 3m 08s
+     Running unittests src/lib.rs (target/release/deps/rogue_commander-37d39db57aeef6a3)
+
+running 3 tests
+FROST_MARKET_SPLASH reverse=false reallocate=true tied=false ids=[29v0, 30v0] rows=[29v0, 30v0] distances=[1.8549002, 4.0] children=[(30.000002, DamageProfile { element: Frost, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: true, card_proc: true, melee: false, arrow: false }, 29v0), (30.000002, DamageProfile { element: Frost, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: true, card_proc: true, melee: false, arrow: false }, 30v0)] hp=[9947.5, 14970.0] source_hp=19900 rng=5218726287330236675
+FROST_MARKET_SPLASH reverse=false reallocate=false tied=true ids=[29v0, 30v0] rows=[29v0, 30v0] distances=[1.8549002, 1.8549002] children=[(30.000002, DamageProfile { element: Frost, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: true, card_proc: true, melee: false, arrow: false }, 30v0), (30.000002, DamageProfile { element: Frost, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: true, card_proc: true, melee: false, arrow: false }, 29v0)] hp=[9970.0, 14947.5] source_hp=19900 rng=5218726287330236675
+FROST_MARKET_SPLASH reverse=false reallocate=true tied=true ids=[29v0, 30v0] rows=[29v0, 30v0] distances=[1.8549002, 1.8549002] children=[(30.000002, DamageProfile { element: Frost, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: true, card_proc: true, melee: false, arrow: false }, 30v0), (30.000002, DamageProfile { element: Frost, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: true, card_proc: true, melee: false, arrow: false }, 29v0)] hp=[9970.0, 14947.5] source_hp=19900 rng=5218726287330236675
+FROST_MARKET_SPLASH reverse=true reallocate=false tied=true ids=[29v0, 30v0] rows=[30v0, 29v0] distances=[1.8549002, 1.8549002] children=[(30.000002, DamageProfile { element: Frost, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: true, card_proc: true, melee: false, arrow: false }, 30v0), (30.000002, DamageProfile { element: Frost, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: true, card_proc: true, melee: false, arrow: false }, 29v0)] hp=[9970.0, 14947.5] source_hp=19900 rng=5218726287330236675
+FROST_MARKET_SPLASH reverse=true reallocate=true tied=false ids=[30v0, 29v0] rows=[29v0, 30v0] distances=[1.8549002, 4.0] children=[(30.000002, DamageProfile { element: Frost, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: true, card_proc: true, melee: false, arrow: false }, 30v0), (30.000002, DamageProfile { element: Frost, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: true, card_proc: true, melee: false, arrow: false }, 29v0)] hp=[9947.5, 14970.0] source_hp=19900 rng=5218726287330236675
+FROST_MARKET_SPLASH reverse=true reallocate=true tied=true ids=[30v0, 29v0] rows=[29v0, 30v0] distances=[1.8549002, 1.8549002] children=[(30.000002, DamageProfile { element: Frost, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: true, card_proc: true, melee: false, arrow: false }, 30v0), (30.000002, DamageProfile { element: Frost, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: true, card_proc: true, melee: false, arrow: false }, 29v0)] hp=[9947.5, 14970.0] source_hp=19900 rng=5218726287330236675
+
+thread 'game::combat::tests::frost_market_splash_tied_targets_keep_critical_assignment_across_allocations' (1017828) panicked at src/game/combat/frost_splash_order_tests.rs:167:5:
+assertion `left == right` failed: physical neighbors must retain their splash critical rolls
+  left: ([9970.0, 14947.5], 5218726287330236675)
+ right: ([9947.5, 14970.0], 5218726287330236675)
+stack backtrace:
+test game::combat::tests::frost_market_splash_same_ids_ignore_cosmetic_rows ... ok
+test game::combat::tests::frost_market_splash_preserves_unequal_distance_priority ... ok
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<([f32; 2], u64), ([f32; 2], u64)>
+   4: rogue_commander::game::combat::tests::frost_market_splash_tied_targets_keep_critical_assignment_across_allocations
+   5: <rogue_commander::game::combat::tests::frost_market_splash_tied_targets_keep_critical_assignment_across_allocations::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+test game::combat::tests::frost_market_splash_tied_targets_keep_critical_assignment_across_allocations ... FAILED
+
+failures:
+
+failures:
+    game::combat::tests::frost_market_splash_tied_targets_keep_critical_assignment_across_allocations
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 741 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--lib`

@@ -1,0 +1,4 @@
+ActiveState=failed
+InvocationID=84c7e66408b34b719eacbdce64b54dd6
+Result=exit-code
+ExecMainStatus=101

@@ -1,0 +1,12 @@
+--- invalid-fixture-v1.rs
++++ valid-red2-fixture.rs
+@@ -120,7 +120,8 @@
+         .collect();
+     assert_eq!(children.len(), 2);
+     for (damage, profile, target) in &children {
+-        assert_eq!(*damage, 30.);
++        // Preserve the actual f32 product rather than rounding the expected value.
++        assert_eq!(*damage, 100.0_f32 * 0.30_f32);
+         assert_eq!(profile.element, DamageElement::Frost);
+         assert_eq!(profile.class, DamageClass::Attack);
+         assert!(profile.market_proc && profile.card_proc);

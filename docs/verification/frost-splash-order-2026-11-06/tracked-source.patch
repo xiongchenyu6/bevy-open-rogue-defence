@@ -1,0 +1,22 @@
+diff --git a/src/game/combat.rs b/src/game/combat.rs
+index fa17521..a5aa64d 100644
+--- a/src/game/combat.rs
++++ b/src/game/combat.rs
+@@ -3205,6 +3205,9 @@ fn splash_targets(
+     nearby.sort_by(|left, right| {
+         left.2
+             .total_cmp(&right.2)
++            .then_with(|| left.1.z.total_cmp(&right.1.z))
++            .then_with(|| left.1.x.total_cmp(&right.1.x))
++            .then_with(|| left.1.y.total_cmp(&right.1.y))
+             .then_with(|| left.0.to_bits().cmp(&right.0.to_bits()))
+     });
+     nearby
+@@ -3461,6 +3464,7 @@ mod tests {
+     include!("combat/gate_state_tests.rs");
+     include!("combat/cinder_order_tests.rs");
+     include!("combat/glacier_order_tests.rs");
++    include!("combat/frost_splash_order_tests.rs");
+     include!("combat/designated_strike_tests.rs");
+     include!("combat/native_aim_tests.rs");
+ 

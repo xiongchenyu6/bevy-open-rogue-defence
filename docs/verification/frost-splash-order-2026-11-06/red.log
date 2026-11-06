@@ -1,0 +1,70 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `release` profile [optimized] target(s) in 3m 11s
+     Running unittests src/lib.rs (target/release/deps/rogue_commander-37d39db57aeef6a3)
+
+running 3 tests
+
+thread 'game::combat::tests::frost_market_splash_tied_targets_keep_critical_assignment_across_allocations' (1006859) panicked at src/game/combat/frost_splash_order_tests.rs:123:9:
+assertion `left == right` failed
+  left: 30.000002
+ right: 30.0
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<f32, f32>
+   4: rogue_commander::game::combat::tests::frost_market_splash_outcome
+   5: rogue_commander::game::combat::tests::frost_market_splash_tied_targets_keep_critical_assignment_across_allocations
+   6: <rogue_commander::game::combat::tests::frost_market_splash_tied_targets_keep_critical_assignment_across_allocations::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+thread 'game::combat::tests::frost_market_splash_same_ids_ignore_cosmetic_rows' (1006858) panicked at src/game/combat/frost_splash_order_tests.rs:123:9:
+assertion `left == right` failed
+  left: 30.000002
+ right: 30.0
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<f32, f32>
+   4: rogue_commander::game::combat::tests::frost_market_splash_outcome
+   5: rogue_commander::game::combat::tests::frost_market_splash_same_ids_ignore_cosmetic_rows
+   6: <rogue_commander::game::combat::tests::frost_market_splash_same_ids_ignore_cosmetic_rows::{closure#0} as core::ops::function::FnOnce<()>>test game::combat::tests::frost_market_splash_tied_targets_keep_critical_assignment_across_allocations ... ::FAILEDcall_once
+
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+thread 'game::combat::tests::frost_market_splash_preserves_unequal_distance_priority' (1006857) panicked at src/game/combat/frost_splash_order_tests.rs:123:9:
+assertion `left == right` failed
+  left: 30.000002
+ right: 30.0
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed::<f32, f32>
+   4: rogue_commander::game::combat::tests::frost_market_splash_outcome
+   5: rogue_commander::game::combat::tests::frost_market_splash_preserves_unequal_distance_priority
+   6: <rogue_commander::game::combat::tests::frost_market_splash_preserves_unequal_distance_priority::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+test game::combat::tests::frost_market_splash_same_ids_ignore_cosmetic_rows ... FAILED
+test game::combat::tests::frost_market_splash_preserves_unequal_distance_priority ... FAILED
+
+failures:
+
+failures:
+    game::combat::tests::frost_market_splash_preserves_unequal_distance_priority
+    game::combat::tests::frost_market_splash_same_ids_ignore_cosmetic_rows
+    game::combat::tests::frost_market_splash_tied_targets_keep_critical_assignment_across_allocations
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 741 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--lib`

@@ -1,0 +1,98 @@
+{
+  "README.md": {
+    "bytes": 4313,
+    "sha256": "e382111bea262ad4ae634a5ba2c336c28dcda3fef5f4681e1f674f1433f90b88"
+  },
+  "clippy.log": {
+    "bytes": 1142,
+    "sha256": "92e0cd33ecf0d5604e28eaf0167dc0a71087e581d1428fb857aee5db0b2402d1"
+  },
+  "fixture-guard-correction.patch": {
+    "bytes": 528,
+    "sha256": "f65c6b1b8bec0adf8b39fc99d3016d1430677b1c9ae91ec934975e4583eb1fef"
+  },
+  "format.log": {
+    "bytes": 967,
+    "sha256": "e36e1c53f56e344362938e79a430194927b1970a78b5c7ac77b25e960d4bc752"
+  },
+  "invalid-fixture-v1-unit.txt": {
+    "bytes": 101,
+    "sha256": "2b9051fc83bb0f3ace383bd57ab90d7a74290706aadc0921fde8372f71be66a1"
+  },
+  "provenance.json": {
+    "bytes": 421,
+    "sha256": "c841d12712d585247baa2d6e6771cf769602c5190a89c93f8859f1895f285a8d"
+  },
+  "red.log": {
+    "bytes": 4471,
+    "sha256": "44c43197d64b44a91b2eef9c33255e6cef80fe24680f7aca6bd6aea5d617549d"
+  },
+  "red2.log": {
+    "bytes": 5363,
+    "sha256": "fd18a426d13ae31ec065138f4c54826c306e10cbd7e302a40bc794227f418e3d"
+  },
+  "sim-build.log": {
+    "bytes": 1142,
+    "sha256": "1f8bd7ae67bd0fdc1ebe94caa8b1fdcf5c7674eb3af277bfe8e564f8a2277b2a"
+  },
+  "tests.log": {
+    "bytes": 88595,
+    "sha256": "8bb5050a2ffbf2293d2fab642cf7235e6e334e6a0589606c6819909b35eb89e3"
+  },
+  "trace/frost-distance-evidence.json": {
+    "bytes": 8111,
+    "sha256": "c805c78c690f8a1a3aba37f9263530388d06d42473dc1ae747d4607f6e076d58"
+  },
+  "trace/frost-distance.py": {
+    "bytes": 1271,
+    "sha256": "f43dd46cf354727315d82be724e595337ed5cbd63f5f939025da015732a8a89e"
+  },
+  "trace/frost-link-conclusion.txt": {
+    "bytes": 2046,
+    "sha256": "4f92d3e94d0e69cdad7ae011a483a83c666f5ad0eb92d77ef411294c6021bdf3"
+  },
+  "trace/frost-link-raw.json": {
+    "bytes": 320680,
+    "sha256": "4d6152f96cc17fef683f3937abbdc3f34ebecfeb1db5e9b7ea4e73c58dd04553"
+  },
+  "trace/link-frost.py": {
+    "bytes": 925,
+    "sha256": "a8bd59f414c818925bf72ca851f9aa8ab00cb2ba3dae73dfcad13e6678dde78f"
+  },
+  "trace/market-frost-readonly.txt": {
+    "bytes": 3212,
+    "sha256": "b4a444a43f58c971977495ab175e5c8889cb527badcf9f5fe0baaddfedd47736"
+  },
+  "tracked-source.patch": {
+    "bytes": 853,
+    "sha256": "e9765d5ed107fe7cf8554528a082fcfd58ae1d76fcc0cc842f4f7ecaca16ce79"
+  },
+  "valid-red-unit-state.txt": {
+    "bytes": 101,
+    "sha256": "197afb8fc459ef97896afc8519143cac02ebd4cbfebd014a32c78f7a510ce5ac"
+  },
+  "validation-inputs-after.json": {
+    "bytes": 46843,
+    "sha256": "0f2369d58f229e8838d1da6181fb14baf1ce850f6c8d3fc7b9a275c2fa1cf747"
+  },
+  "validation-inputs-before.json": {
+    "bytes": 46843,
+    "sha256": "0f2369d58f229e8838d1da6181fb14baf1ce850f6c8d3fc7b9a275c2fa1cf747"
+  },
+  "validation-processes.json": {
+    "bytes": 1410,
+    "sha256": "102f5b6e1467b88b6a5f3f5f2d7035c2f041f3c20a2b2839812f0bc56b091707"
+  },
+  "validation-sequence.log": {
+    "bytes": 205,
+    "sha256": "d0c10cc76363be2178d41425fc88540ccd400bfab3c51a8dfd3563b807d2d222"
+  },
+  "validation-unit-state.txt": {
+    "bytes": 67,
+    "sha256": "3fca57d58ace38d2987b9b9cab160b81b1e8bed6b7b49e69ce41a3154416c68e"
+  },
+  "verify.py": {
+    "bytes": 1833,
+    "sha256": "f9ad9d7b50c950890984e2501f3409af2bc82fbd78218f5d45a1bbe325e1a9d2"
+  }
+}
