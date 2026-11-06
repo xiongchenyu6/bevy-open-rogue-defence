@@ -1,0 +1,45 @@
+{
+  "status": "SPATIAL_GREY_PROTOTYPE_STRONG_SAT_PASS_NOT_FINAL_ART_OR_NATIVE",
+  "asset": "target/verification/handcrafted-cave-prototype-flare-2026-11-06/handcrafted_cave_spatial_prototype_flared.glb",
+  "sha256": "d6fa53f5d700e5591e31dbe97225aa76475ada9838a13a6bdbf7020d8d3cd6ae",
+  "bytes": 57112,
+  "triangles": 648,
+  "actual_path_audit": {
+    "envelope_sha256": "feb5795a8887f46fe27e1bb92a0f88fc1abf3f406728f8bfcc03034c14e89f23",
+    "finite_exit_world_x": 8.767971792785534,
+    "height_bands": 96,
+    "continuous_spawn_z": [
+      -4.25,
+      4.25
+    ],
+    "collisions": []
+  },
+  "old_models_unchanged": 52,
+  "actual_command": [
+    "python3",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/handcrafted-cave-prototype-flare-2026-11-06/verify_prototype.py",
+    "--blockout",
+    "--asset",
+    "target/verification/handcrafted-cave-prototype-flare-2026-11-06/handcrafted_cave_spatial_prototype_flared.glb",
+    "--path-envelope",
+    "target/verification/demon-cavern-production-path-2026-11-06/production-animated-envelope.json"
+  ],
+  "actual_returncode": 0,
+  "standard_self_contained_grey_PBR": true,
+  "only_changed_source_vertex_indices": [
+    133,
+    168,
+    194,
+    197,
+    308,
+    310
+  ],
+  "source_author": "OrbitStudios / Fernando Ferreira; submitted by zisongbr",
+  "source_license": "CC0 https://opengameart.org/content/lowpoly-cave-entrance",
+  "limitations": [
+    "Static CPU exit X12.5 shows visible models; true moving native still required",
+    "Grey spatial prototype, not finished natural cave art",
+    "No textured UV bake included or required for this conservative grey PBR prototype",
+    "Original 25phase animated envelope is sampled, not proof of all animation interpolation"
+  ]
+}

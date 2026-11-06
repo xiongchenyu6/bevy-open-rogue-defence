@@ -1,0 +1,36 @@
+[
+  {
+    "case": "production-camera",
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/handcrafted-cavern-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/handcrafted-cavern-native-2026-11-06/production-camera/frames",
+      "400",
+      "den-preview",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "seconds": 22.512493704998633
+  },
+  {
+    "case": "front-board-proposal",
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/handcrafted-cavern-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/handcrafted-cavern-native-2026-11-06/front-board-proposal/frames",
+      "400",
+      "den-preview-front-board",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "seconds": 21.160590839019278
+  }
+]

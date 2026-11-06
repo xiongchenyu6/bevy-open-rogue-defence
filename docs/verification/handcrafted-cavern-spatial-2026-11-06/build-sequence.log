@@ -1,0 +1,5 @@
+STAGE clippy start
+STAGE clippy exit 0
+STAGE build start
+STAGE build exit 0
+BUILD_READY source and assets frozen; camera is diagnostic-only

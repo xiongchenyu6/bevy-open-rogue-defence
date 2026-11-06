@@ -1,0 +1,18 @@
+{
+  "stage": "Actual exported prototype payload and unchanged strong SAT",
+  "asset_sha256": "d6fa53f5d700e5591e31dbe97225aa76475ada9838a13a6bdbf7020d8d3cd6ae",
+  "payload_valid_before_SAT": true,
+  "triangle_count": 648,
+  "path_audit": {
+    "envelope_sha256": "feb5795a8887f46fe27e1bb92a0f88fc1abf3f406728f8bfcc03034c14e89f23",
+    "finite_exit_world_x": 8.767971792785534,
+    "height_bands": 96,
+    "continuous_spawn_z": [
+      -4.25,
+      4.25
+    ],
+    "collisions": []
+  },
+  "reported_triangle_details": [],
+  "no_automatic_clearance_modification": true
+}
