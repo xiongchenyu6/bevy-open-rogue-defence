@@ -96,7 +96,7 @@ struct Preview {
 pub fn install_preview(app: &mut bevy::app::SubApp, scenario: &str) {
     assert!(matches!(
         scenario,
-        "den-preview" | "den-preview-reframed" | "den-preview-front"
+        "den-preview" | "den-preview-reframed" | "den-preview-front" | "den-preview-wide"
     ));
     let world = app.world_mut();
     assert!(
@@ -131,29 +131,35 @@ pub fn install_preview(app: &mut bevy::app::SubApp, scenario: &str) {
             pose,
         ))
         .id();
-    let camera = match scenario {
-        "den-preview-front" => "front-side proposal",
-        "den-preview-reframed" => "shifted original direction proposal",
-        _ => "production",
+    let (camera, camera_proposal) = match scenario {
+        "den-preview-front" => (
+            "front-side proposal",
+            Some((Vec3::new(-6.0, 24.0, 21.0), 2.0, 24.0)),
+        ),
+        "den-preview-reframed" => (
+            "shifted original direction proposal",
+            Some((Vec3::new(10.0, 24.0, 21.0), 2.0, 24.0)),
+        ),
+        "den-preview-wide" => (
+            "whole battlefield proposal",
+            Some((Vec3::new(15.0, 24.0, 21.0), 7.0, 26.0)),
+        ),
+        _ => ("production", None),
     };
-    if scenario != "den-preview" {
+    if let Some((eye, center_x, height)) = camera_proposal {
         for (mut transform, mut projection) in world
             .query_filtered::<(&mut Transform, &mut Projection), With<Camera3d>>()
             .iter_mut(world)
         {
-            let eye_x = if scenario == "den-preview-front" {
-                -6.0
-            } else {
-                10.0
-            };
-            *transform = Transform::from_xyz(eye_x, 24.0, 21.0)
-                .looking_at(Vec3::new(2.0, 0.0, 0.0), Vec3::Y);
+            *transform =
+                Transform::from_translation(eye).looking_at(Vec3::new(center_x, 0.0, 0.0), Vec3::Y);
             if let Projection::Orthographic(projection) = &mut *projection {
                 projection.scaling_mode = bevy::camera::ScalingMode::FixedVertical {
-                    viewport_height: 24.0,
+                    viewport_height: height,
                 };
             }
         }
+        println!("[capture] den camera: eye={eye:?} center_x={center_x} vertical={height}");
     }
     world.insert_resource(Preview {
         root,

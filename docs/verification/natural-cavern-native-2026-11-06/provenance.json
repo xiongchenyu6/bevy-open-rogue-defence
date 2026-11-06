@@ -1,0 +1,9 @@
+{
+  "base_source_commit": "94722dfd278023d5e159ca5e59412f8bd984e290",
+  "source_override": "src/bin/capture/demon_cave.rs",
+  "binary_original": "target/verification/den-wide-camera-2026-11-06/capture",
+  "candidate_visual_accepted": false,
+  "camera_adopted": false,
+  "formal_assets_changed": false,
+  "scope": "Two controlled native 400-frame previews; not natural campaign or final art"
+}

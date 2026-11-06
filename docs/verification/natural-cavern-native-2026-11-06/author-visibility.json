@@ -1,0 +1,22 @@
+{
+  "fixed_roi_unchanged": true,
+  "scene_first_hit_counts": {
+    "new_inner": 366,
+    "other_surface": 109,
+    "miss": 0
+  },
+  "inner_ratio": 0.7705263157894737,
+  "actual_clearance_box_world": [
+    [
+      -50.0,
+      0.019999999552965164,
+      -7.449999809265137
+    ],
+    [
+      19.600000381469727,
+      4.949999809265137,
+      7.449999809265137
+    ]
+  ],
+  "source_blend_sha256": "fa1da8f57c0b1eea9ecc1d8928ae3e81437c7a9650c1196481c264fcb4220621"
+}

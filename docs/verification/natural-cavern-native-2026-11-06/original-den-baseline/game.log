@@ -1,0 +1,38 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+[capture] selective PNG frames: {0, 29, 59, 90, 180, 295, 319}; all 320 simulation/render updates retained
+CAPTURE_ASSET_ROOT /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/isolated-assets
+[2m2026-11-06T03:06:38.185699Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-06T03:06:38.646103Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-06T03:06:39.755389Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-06T03:06:39.755590Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-06T03:06:40.644812Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[2m2026-11-06T03:06:44.617424Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames/frame00000.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames/frame00000.png (1008354 bytes)
+[capture] PASS demon cave quiet: one giant mouth, stone arch, solid fangs and breathing mist, production camera
+[2m2026-11-06T03:06:45.892603Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames/frame00029.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames/frame00029.png (1007954 bytes)
+[2m2026-11-06T03:06:47.284163Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames/frame00059.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames/frame00059.png (1009008 bytes)
+[2m2026-11-06T03:06:48.660104Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames/frame00090.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames/frame00090.png (1008989 bytes)
+[2m2026-11-06T03:06:51.900945Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames/frame00180.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames/frame00180.png (1009643 bytes)
+[capture] PASS demon-cave: quiet cave, real wave enemies and actual emergence pulse; production camera unchanged
+[2m2026-11-06T03:06:55.994852Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames/frame00295.png
+[capture] saved 6/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames/frame00295.png (1010298 bytes)
+[2m2026-11-06T03:06:57.185562Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames/frame00319.png
+[capture] saved 7/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames/frame00319.png (1010385 bytes)
+[capture] all 7 screenshot(s) saved after 2 wait frame(s)
+[capture] PASS material finish: 68 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 320 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames

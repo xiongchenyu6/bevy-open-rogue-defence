@@ -1,0 +1,17 @@
+{
+  "command": [
+    "nix",
+    "develop",
+    "--command",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/capture",
+    "frames",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/original-den-baseline/frames",
+    "320",
+    "demon-cave",
+    "0xA11CE",
+    "1280x720"
+  ],
+  "exit": 0,
+  "seconds": 29.88176588699571,
+  "scope": "Original den, production camera, controlled quiet then real SpawnDirector waves; not the candidate actor fixture"
+}

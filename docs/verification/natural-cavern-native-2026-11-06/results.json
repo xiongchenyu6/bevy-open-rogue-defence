@@ -1,0 +1,36 @@
+[
+  {
+    "case": "production-camera",
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/production-camera/frames",
+      "400",
+      "den-preview",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "seconds": 22.41322118998505
+  },
+  {
+    "case": "wide-camera-proposal",
+    "command": [
+      "nix",
+      "develop",
+      "--command",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/capture",
+      "frames",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/natural-cavern-native-2026-11-06/wide-camera-proposal/frames",
+      "400",
+      "den-preview-wide",
+      "0xA11CE",
+      "1280x720"
+    ],
+    "exit": 0,
+    "seconds": 21.461668241012376
+  }
+]

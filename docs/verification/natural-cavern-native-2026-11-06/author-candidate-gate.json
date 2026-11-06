@@ -1,0 +1,85 @@
+{
+  "status": "TARGET_CANDIDATE_GATE_PASS_NOT_NATIVE_OR_FINAL_ART",
+  "asset": "target/verification/cavern-closed-backing-r3-2026-11-06/environment_cavern_candidate.glb",
+  "sha256": "d058912a9f56a9db4dfaf86d8ce8c03d08de855ed73faa556058a2ed38c900cf",
+  "bytes": 2470092,
+  "triangles": 15064,
+  "embedded_images": 1,
+  "image_dimensions": [
+    1024,
+    1024
+  ],
+  "uv": true,
+  "roughness": 0.97,
+  "alpha": "OPAQUE",
+  "actual_export_sat_collisions": 0,
+  "actual_geometry_sat_collisions": 0,
+  "old_models_unchanged": 52,
+  "fixed_roi_counts_including_floor": {
+    "new_inner": 366,
+    "other_surface": 109,
+    "miss": 0
+  },
+  "fixed_roi_inner_ratio": 0.7705263157894737,
+  "postclear_topology": {
+    "boundary_edges": 0,
+    "nonmanifold_edges": 0,
+    "component_vertices": [
+      7494
+    ],
+    "source_sha256": "4521ed599ee8294af44a19ba6427cc3111ccdf7520e9d4a1a472e6d5a67dbbfb"
+  },
+  "actual_gate_commands": [
+    {
+      "argv": [
+        "python3",
+        "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cavern-closed-backing-r3-2026-11-06/verify_export.py",
+        "--asset",
+        "target/verification/cavern-closed-backing-r3-2026-11-06/environment_cavern_candidate.glb",
+        "--path-envelope",
+        "target/verification/demon-cavern-production-path-2026-11-06/production-animated-envelope.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "blender",
+        "-b",
+        "--python-exit-code",
+        "1",
+        "--python",
+        "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/cavern-closed-backing-r3-2026-11-06/check_topology.py"
+      ],
+      "returncode": 0
+    }
+  ],
+  "model_bounds": [
+    [
+      -8.512835502624512,
+      -3.9695723056793213,
+      -14.792283058166504
+    ],
+    [
+      15.224193572998047,
+      9.083985328674316,
+      10.458394050598145
+    ]
+  ],
+  "predecessor_wrapper_limitation": "Original Blender default exit code was insufficient; independent Python subprocess returncode + JSON gates above are mandatory",
+  "limitations": [
+    "Not native-verified or formally accepted final art",
+    "Wide local bounds and below-ground rear body require whole-map native assessment",
+    "Original 25-phase animation envelope remains finite sampling, not formal all-frame skeletal maximum",
+    "Axis backing thickness4.295m from dense precursor is not all-cap minimum thickness"
+  ],
+  "files_sha256": {
+    "environment_cavern_candidate.glb": "d058912a9f56a9db4dfaf86d8ce8c03d08de855ed73faa556058a2ed38c900cf",
+    "bake_export.py": "e2621414f0b3e101246762fe01cb680a143fbb4745a312fe8ee57c0f9632a657",
+    "finish.py": "b0318b220047d9b3065f61e3b1ad2eb06712984154aec0d2fc8c10f2228c80d8",
+    "verify_export.py": "be5511cf87074f80dbca100c37ce08c28317b9534c80a97bfcd2d020316f50cc",
+    "postclear-visibility.json": "255cfd818ceb59c55fff756001d6c937c19dade2057ee8c9f811d2e77e5675f7",
+    "geometry-path-audit.json": "e74febb13bae53f104a758f8a9175c54b9ece611915691b64fbda814efa57620",
+    "reimport-close.png": "0d790498397cb998aecb6e1ebb9ebaa12551739570474e81e494dda70b9d644c",
+    "reimport-PROPOSAL.png": "6b80b18f5aada4ec7ad5b058721e1d642c5a93402592205756cbbc967d0ec84f"
+  }
+}

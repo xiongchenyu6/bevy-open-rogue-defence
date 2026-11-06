@@ -1,0 +1,113 @@
+{
+  "asset": "target/verification/cavern-closed-backing-r3-2026-11-06/environment_cavern_candidate.glb",
+  "sha256": "d058912a9f56a9db4dfaf86d8ce8c03d08de855ed73faa556058a2ed38c900cf",
+  "bytes": 2470092,
+  "triangles": 15064,
+  "mesh_count": 1,
+  "material_count": 1,
+  "embedded_images": 1,
+  "bevy_bounds": [
+    [
+      -8.512835502624512,
+      -3.9695723056793213,
+      -14.792283058166504
+    ],
+    [
+      15.224193572998047,
+      9.083985328674316,
+      10.458394050598145
+    ]
+  ],
+  "front_lane_clearance_y_0_7": {
+    "-4.3": [
+      1.9969,
+      3.7539,
+      7.4192,
+      10.5058
+    ],
+    "-2": [
+      7.6789,
+      11.4061
+    ],
+    "0": [
+      6.0539,
+      12.2045
+    ],
+    "2": [
+      5.8595,
+      11.8527
+    ],
+    "4.3": [
+      7.2398,
+      9.0385
+    ]
+  },
+  "existing_models_unchanged_count": 52,
+  "existing_model_sha256": {
+    "assets/models/adventure_embermaw.glb": "45148b9561c43126c37ae0e056bdd02f672bbadb336ae79223069abd450891e9",
+    "assets/models/adventure_plaguejaw.glb": "603d8ce299fc237fcec52ed9b0ba55ef825e8a6a4949d6f3601d38a980b35c14",
+    "assets/models/adventure_tidehorn.glb": "226d0a31f8de4f0c8c6d088c2c2b474179f998be2da896342c422ff3694a5b30",
+    "assets/models/boss_abyssal_leviathan.glb": "31b62a11605f08ee28962108709ce5da446544298a1be9fb856a29c96d5a057f",
+    "assets/models/boss_cinder_colossus.glb": "1e114f80de62ac2b51aba32256f2294ba79d2677753f2398a4e31bc968688629",
+    "assets/models/boss_dread_veil.glb": "cb8f89cf35a420322df167a95ab76305ebba1b72bcd715afb369161726df861c",
+    "assets/models/boss_green_regent.glb": "e83434294e0c774a074b71dbc8ec04a1e6893bcd04d4ef1169c09b92e812386d",
+    "assets/models/boss_sun_crown_magus.glb": "e5e9ac666e5112381d39a6e1d25da92512a863d538b9e74be3ff9ed87bcf1a3c",
+    "assets/models/enemy_burrow_stalker.glb": "7d67b117990ccfe73f307218f6cdd23fc4b167f4864c2c56f4a7aa089058bdf8",
+    "assets/models/enemy_chanting_acolyte.glb": "535871ee942f0b32ec1d501085fa1c6681a85d1680b6321fc8b81e60505e9a57",
+    "assets/models/enemy_core_rusher.glb": "97470fa8e184de9bed36b6d8c7bde9ecf78ff6aea7b889d58deb78a0c36c2651",
+    "assets/models/enemy_field_mender.glb": "f3be8c013e42a57069bce36226299d7766c877caa08f6b5e5ce6a3e2ef3dd13b",
+    "assets/models/enemy_gnawling.glb": "7f332313dc041f5e5e774ea93a29e2c1d4a1e7a701ce1c97c3b4de476db3c8cb",
+    "assets/models/enemy_iron_colossus.glb": "aa22df802df4c5856dfe07c21378609934783f7db7c984fedd2db73c03c629ab",
+    "assets/models/enemy_null_eye.glb": "f445886b85a52f4051736dfd4605a63e8ec248ed8ce791dba66b213774d9e898",
+    "assets/models/enemy_rift_sapper.glb": "c313125215eb1095322f7f6445dc16a1ebcc31e1120f1dee9386066f6aa02c15",
+    "assets/models/enemy_shell_guard.glb": "91a41d1932c63f98244c0f5b2207d85d6686d9ff876d34f51f44323d4500df2a",
+    "assets/models/enemy_siege_lobber.glb": "09fbaac5fe445f8d49e50085cb1bd41cb9982a83fb4f8088ebdf7bfd84ddd3b6",
+    "assets/models/enemy_split_spore.glb": "a936cdd48c3091d8561072a5d38fbb357a91325d170620d5c4f0c270ee8101b6",
+    "assets/models/enemy_void_caster.glb": "b76198b185285de8751e4fe329d0eb751bb3eecf0cc2d31a0f88af9a110d0d97",
+    "assets/models/environment_banner_blue.glb": "1c930ace50132d497fc0b19b0ac4f32607cddeb213d922f56f040dea24150bf1",
+    "assets/models/environment_border.glb": "61df555ce972c94564e258e80c44564b89dac3759a70ae0bd0cf1c43a18c8799",
+    "assets/models/environment_catapult.glb": "6c999ef0ccae6e0464ca040cf2c823c486d6dabad3c5c6700cad019aab64bbde",
+    "assets/models/environment_core.glb": "7926b81aa3f8e14e81a957a06bdc6546f168dab45bec693fe0c8a0838331c969",
+    "assets/models/environment_floor.glb": "194e1737202a2dd37246bb18fb58a765ef9754a385fc25c2c601f261a8228690",
+    "assets/models/environment_pillar.glb": "4449a9bd696d0d69fbd8d917cb16e18a789906d0252cf9b354166c8f196d5d9b",
+    "assets/models/environment_pillar_decorated.glb": "6843bffca04b689fe6bb25fec15bf848bf58c8b16a4e690276dc56c8a8fd0364",
+    "assets/models/environment_rubble_half.glb": "5f72dd19c24145bded66929f4e15ce38c4d30bafec43a556440aeec1382f9cd7",
+    "assets/models/environment_rubble_large.glb": "d9175a7d34efe6e139d6d4e29566ca522733f3c5a8d4de2809d5d90bfbfe842a",
+    "assets/models/environment_torch_lit.glb": "8fcb5a9966698958d1bc819643e8748c1bf96fd83782c5e06ec07dcf6948b060",
+    "assets/models/environment_wall.glb": "587e702791a5bd9a372421ab4101900c5871f0086c73b01c0996cea82a81d213",
+    "assets/models/environment_wall_broken.glb": "c23061dfe5050c4a44bbf14a6ea0100d5b5dcd3be3b3433fcbe6d0bbc19c4d4e",
+    "assets/models/environment_wall_gated.glb": "f8c31a3decfc713af5f479e3e3d8c824d1d8fd5d4752c2dba99eb8a4f86aed86",
+    "assets/models/environment_wall_window_closed.glb": "f7b04902a3f75749b65a5a02d88fcde034758e2ea379f0f63431e27b2e442352",
+    "assets/models/hero_ember_ranger.glb": "72b57aca948ca319fc4cd1ec7e73d03b876961d541bae4fbc9ea276cd1ae2811",
+    "assets/models/hero_frost_oracle.glb": "2e1c8163f1bf438de93b62ddc4207137304f15238c3090ac9f96d1a0a698a17a",
+    "assets/models/hero_grove_artificer.glb": "6f2050ec3e71fedec7bc978c78c2adf6e00f413b465daaaf04871240574366e7",
+    "assets/models/hero_iron_berserker.glb": "229f22f40cffe51a879cfc8ea374702ff456e1ca2fee34697ad8e2739d3a20f4",
+    "assets/models/hero_rift_dancer.glb": "e48c26c814b88c29b50142c569b6a9db7d5d81f5d7001458671822ed541d0588",
+    "assets/models/hero_solar_vanguard.glb": "196312426fea75a7197d5102f0957bb578311c76fd466682f302a51881cb7dcd",
+    "assets/models/hero_spirit_keeper.glb": "eaf361258db5e6bee518b4592e7affa433e0c876e707e0ef0bd9b3fbe6bd3d09",
+    "assets/models/hero_star_wagerer.glb": "2f61e9301d537ed573f7ea3dce7379ace67c768dc2e13be4fb7e7baa1f5ceb1e",
+    "assets/models/hero_stone_warden.glb": "5f68ad845b610a708fdb0b2b495c83c94413c59f327cf3bb36177b49ca93214a",
+    "assets/models/hero_storm_savant.glb": "e69441a01346b6cf0cb358c8470927db2635f976c9d6d53f58ac17440fe09474",
+    "assets/models/hero_tide_walker.glb": "45cd0aeccf23307e01b0d0679d76d001d97630f89443faed5b916e76ca7b7311",
+    "assets/models/hero_void_reaper.glb": "f157cbebdb669cfbc72146292d078f8392f3a20b8309ea8000dfecfdb534db7a",
+    "assets/models/summon_ancestor_colossus.glb": "1260533773a0ea4ad8fd822aa91309ec2c649e6aef1b4552d65d480c42810965",
+    "assets/models/summon_bolt_turret.glb": "134c9493f00f34f76abade04e99d496476ead7ee56854abd8e2379e210d7f18e",
+    "assets/models/summon_bone_sentry.glb": "9288659ae6e75a8f2d1cd4dc914f3ecfece98ef38e8bb573cf326f6175e13ba1",
+    "assets/models/summon_frost_wyrm.glb": "dceb2af2ea22633a1f07e07972392041ba3a92a3c61b41144438257ee7fed873",
+    "assets/models/summon_spirit_hound.glb": "87358a51514203da8021cef4d4bd6f11bdbd394c788d6944f27ad09007e438ff",
+    "assets/models/summon_tide_elemental.glb": "9de8b7e548995aeaf9e70043127f1392b4309654d53e5d7a16ab6ac27dc14b55"
+  },
+  "runtime_integrated": false,
+  "blockout": false,
+  "production_path_audit": {
+    "envelope_sha256": "feb5795a8887f46fe27e1bb92a0f88fc1abf3f406728f8bfcc03034c14e89f23",
+    "finite_exit_world_x": 8.47165958680872,
+    "height_bands": 96,
+    "continuous_spawn_z": [
+      -4.25,
+      4.25
+    ],
+    "collisions": []
+  }
+}
+DEMON_CAVERN_ASSET_PASS independent self-contained GLB, matte materials, real open mouth/depth, original models unchanged
