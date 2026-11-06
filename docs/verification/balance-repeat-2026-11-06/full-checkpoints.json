@@ -1,0 +1,20 @@
+{
+  "comparison_scope": "recorded checkpoints, not all internal simulation state",
+  "left": "target/verification/current-balance-repeat-2026-11-06/frozen/target/verification/current-full-a-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+  "right": "target/verification/current-balance-repeat-2026-11-06/frozen/target/verification/current-full-b-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+  "binary_sha256": "a83bb93da477aee5267e5fe60829647b513c40145903c0d56a7d4e5ffca67207",
+  "checkpoint_counts": [
+    57,
+    56
+  ],
+  "prefix_equal": false,
+  "complete_replay": false,
+  "first_divergence": {
+    "field": "checkpoint[27].attacks",
+    "left": 1721,
+    "right": 1744,
+    "reason": "value differs",
+    "frame": 48600,
+    "right_frame": 48600
+  }
+}

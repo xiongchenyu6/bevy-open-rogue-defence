@@ -1,0 +1,36 @@
+[
+  {
+    "stage": "bin-tests",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "cargo",
+      "test",
+      "--locked",
+      "--release",
+      "--bin",
+      "balance_sim",
+      "-j2"
+    ],
+    "exit": 0,
+    "seconds": 206.34784966299776
+  },
+  {
+    "stage": "bin-build",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "cargo",
+      "build",
+      "--locked",
+      "--release",
+      "--bin",
+      "balance_sim",
+      "-j2"
+    ],
+    "exit": 0,
+    "seconds": 192.91400339000393
+  }
+]

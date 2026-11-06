@@ -1,0 +1,44 @@
+{
+  "scope": "all recorded scalar/actor bit fields, not all hidden game state",
+  "actor_counts": [
+    21600,
+    21600
+  ],
+  "first_identity": {
+    "frame": 5031,
+    "fields": {
+      "enemy_order": {
+        "a": [
+          107374179639,
+          8589931925
+        ],
+        "b": [
+          8589931925,
+          107374179639
+        ],
+        "a_present": true,
+        "b_present": true
+      }
+    }
+  },
+  "first_raw_order": {
+    "frame": 5031,
+    "a": [
+      107374179639,
+      8589931925
+    ],
+    "b": [
+      8589931925,
+      107374179639
+    ]
+  },
+  "first_numeric": null,
+  "first_missing_row": null,
+  "contact_counts": [
+    1597,
+    1597
+  ],
+  "first_contact_identity": null,
+  "first_contact_nonidentity": null,
+  "recorded_numeric_equal": true
+}
