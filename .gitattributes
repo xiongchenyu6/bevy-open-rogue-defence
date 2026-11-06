@@ -1,0 +1,2 @@
+# Verification manifests hash the original captured bytes, including raw logs.
+docs/verification/cave-feel-package-2026-11-06/** -text
