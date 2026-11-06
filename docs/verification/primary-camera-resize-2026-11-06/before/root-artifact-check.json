@@ -1,0 +1,9 @@
+{
+  "verdict": "ROOT_ARTIFACT_BYTES_PASS",
+  "manifest_files": 892,
+  "tar_files": 893,
+  "binary_sha256": "c75c07856ba49cf3cee4a997e6cf0ec95fbc8abc13334c49607e2ffe71187ce5",
+  "tar_sha256": "be05b0cfecbee23740d92dd973fa7d74323fa79127e8dbbbe41e7dbfa92e970e",
+  "source_commit": "4b518c296c7aeaf45c51dfb8141691ce06adcce2",
+  "scope": "Exact file/tar bytes and current cave asset verified; runtime smoke still separate"
+}

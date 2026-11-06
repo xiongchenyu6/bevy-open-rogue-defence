@@ -1,0 +1,22 @@
+{
+  "README.md": "905234d2e579eac40b917121e1dd944dd0aa2090b612407a0fba3397b9a3ae13",
+  "before/artifact.json": "8d77eba5dd39e417bb34277a2b9b1e493c37e6586f7150ab5b1737ef57af9a9d",
+  "before/build-process.json": "0012327c11ac27a2f8f57b1672b3d8fd92cd468ce8d064f4b0b2376558cc589e",
+  "before/failure.json": "929be95fbe03ca7398ec4b00d556b5336ecd36da509433a785e03294d736953b",
+  "before/manager.log": "ac25ab78edb711761d764f5d60bfb159c1db3289d58809fafe97693e0aa7ab06",
+  "before/old-camera.rs": "549b69843c2e125295ac75b8c0bebfbc763170e9d4bf2dfeab0033233c09e58e",
+  "before/root-artifact-check.json": "9c14d70e3f429f341b71650eee4bf0e6c58671c6926a144af8b63bbd4aca5f6d",
+  "before/smoke/battle.png": "b9c2f25ad551e8c69befbc0465c6473e31184523842d5c0009b95e1853270d1e",
+  "before/smoke/fullscreen-chinese.png": "1a1b8d78ff30cffcf049839319a724e6f75d1b85bb37ecedb9199e2e06b743f7",
+  "before/smoke/game.log": "b5322b0de2acea5c2ef5c5e088fbbb89edb2cafe334ed8c05c9963a991946964",
+  "before/smoke-process.json": "59ce8c7016be3515ce463d30a70d27f0604a1ca3be7d9d3387a967063e15f2b5",
+  "before/smoke.log": "eea682a416127f6bb779f09260e24df2ad5fc88c969868282cce8999d2a02500",
+  "checks/check-sequence.log": "715e1f89e35d3c80371ca70902cf8c0335f710313436e15e26bbc97ef76f1628",
+  "checks/check.py": "92395ca505f45678a019311a491674e463e66170b906ef2fb0e74e2e2fca1577",
+  "checks/clippy.log": "c5301bd29b0ea7571f0a13effeff482fc67fe8fbe6ece0778f663a4aa82f2722",
+  "checks/full-tests.log": "fc84a956ecc6adb3768cce4ff0e4e95c8084ba7721b6ff5bc440d7249900b456",
+  "checks/inputs-after.json": "7846a70df354255feed5687a791a423f7c43273e30217d436d5f00037ea288f3",
+  "checks/inputs-before.json": "7846a70df354255feed5687a791a423f7c43273e30217d436d5f00037ea288f3",
+  "checks/processes.json": "ee2e1e707e0f8619f0a4455f42f52556499b67ca4d6a50abf2c9d4f712f25339",
+  "verify.py": "fa4f9f393a032b524b8f2ae7674ab56315061764b76547594a58704d320a0072"
+}

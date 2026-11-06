@@ -1,0 +1,13 @@
+X Error of failed request:  BadWindow (invalid Window parameter)
+  Major opcode of failed request:  3 (X_GetWindowAttributes)
+  Resource id in failed request:  0x400002
+  Serial number of failed request:  18
+  Current serial number in output stream:  19
+Traceback (most recent call last):
+  File "/harness/smoke_runtime.py", line 297, in <module>
+    main()
+  File "/harness/smoke_runtime.py", line 254, in main
+    wait(lambda: geometry(win)['WIDTH'] == '1280' and geometry(win)['HEIGHT'] == '720', app)
+  File "/harness/smoke_runtime.py", line 186, in wait
+    raise RuntimeError('Game exited before the expected UI state; inspect game.log')
+RuntimeError: Game exited before the expected UI state; inspect game.log

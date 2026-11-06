@@ -1,0 +1,39 @@
+[
+  {
+    "stage": "clippy",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "cargo",
+      "clippy",
+      "--locked",
+      "--release",
+      "--all-targets",
+      "-j2",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit": 0,
+    "seconds": 36.14684686699184
+  },
+  {
+    "stage": "full-tests",
+    "args": [
+      "nix",
+      "develop",
+      "--command",
+      "cargo",
+      "test",
+      "--locked",
+      "--release",
+      "--lib",
+      "-j2",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "seconds": 194.26560458901804
+  }
+]

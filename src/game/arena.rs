@@ -16,12 +16,17 @@ pub struct ArenaPlugin;
 
 impl Plugin for ArenaPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup_arena).add_systems(
-            Update,
-            camera::update_battle_camera
-                .after(super::combat::CombatSet)
-                .before(super::hit_feedback::HitFeedbackSet),
-        );
+        app.add_systems(Startup, setup_arena)
+            .add_systems(
+                Update,
+                camera::update_battle_camera
+                    .after(super::combat::CombatSet)
+                    .before(super::hit_feedback::HitFeedbackSet),
+            )
+            .add_systems(
+                PostUpdate,
+                camera::sync_primary_window_camera_sizes.before(bevy::camera::CameraUpdateSystems),
+            );
     }
 }
 

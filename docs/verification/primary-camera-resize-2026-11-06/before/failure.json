@@ -1,0 +1,9 @@
+{
+  "source": "4b518c296c7aeaf45c51dfb8141691ce06adcce2",
+  "build_exit": 0,
+  "smoke_exit": 1,
+  "failure": "F11 fullscreen -> windowed renders with depth1600x900 and color1280x720, fatal validation",
+  "scope": "Real immutable offline SDK/X11 software Vulkan reproduction, not a timeout or hypothetical warning",
+  "suspected_mechanism": "3D projection unconditional change refreshes computed target size separately from shared-target2D camera; not yet traced at failing frame",
+  "package_status": "rejected; never promoted"
+}

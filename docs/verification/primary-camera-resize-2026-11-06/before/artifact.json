@@ -1,0 +1,9 @@
+{
+  "source_commit": "4b518c296c7aeaf45c51dfb8141691ce06adcce2",
+  "package_directory": "target/desktop-packages-cave-feel-r2-nov6/rogue-commander-linux",
+  "tar": "target/desktop-packages-cave-feel-r2-nov6/rogue-commander-linux-0.1.0.tar.gz",
+  "tar_bytes": 62253064,
+  "tar_sha256": "be05b0cfecbee23740d92dd973fa7d74323fa79127e8dbbbe41e7dbfa92e970e",
+  "binary_sha256": "c75c07856ba49cf3cee4a997e6cf0ec95fbc8abc13334c49607e2ffe71187ce5",
+  "scope": "Offline read-only Ubuntu24/X11 software Vulkan short flow only; no full chapter, natural forge, hardware or Steam claim"
+}

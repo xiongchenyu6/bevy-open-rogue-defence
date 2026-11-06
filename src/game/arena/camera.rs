@@ -1,5 +1,9 @@
 //! Responsive framing keeps the battlefield angle fixed and pans only at HUD edges.
-use bevy::{camera::ScalingMode, prelude::*, window::PrimaryWindow};
+use bevy::{
+    camera::{RenderTarget, ScalingMode},
+    prelude::*,
+    window::{PrimaryWindow, WindowRef},
+};
 
 use super::super::{ControlScheme, GameSession, Hero, mobile_layout::hud_metrics};
 
@@ -113,12 +117,23 @@ pub(super) fn update_battle_camera(
     };
     let size = Vec2::new(window.width().max(1.0), window.height().max(1.0));
     for (mut transform, mut projection, mut camera) in &mut cameras {
-        let Projection::Orthographic(orthographic) = &mut *projection else {
-            continue;
+        let span = vertical_span(size);
+        let needs_projection_update = match projection.as_ref() {
+            Projection::Orthographic(orthographic) => match orthographic.scaling_mode {
+                ScalingMode::FixedVertical { viewport_height } => viewport_height != span,
+                _ => true,
+            },
+            _ => continue,
         };
-        orthographic.scaling_mode = ScalingMode::FixedVertical {
-            viewport_height: vertical_span(size),
-        };
+        // A mutable dereference alone marks Projection changed. Do not dirty
+        // the 3D camera every frame while its same-target 2D overlay waits for
+        // the actual resize event to refresh its render-target size.
+        if needs_projection_update && let Projection::Orthographic(orthographic) = &mut *projection
+        {
+            orthographic.scaling_mode = ScalingMode::FixedVertical {
+                viewport_height: span,
+            };
+        }
         let next_base = if (session.paused || session.finished) && camera.previous_size == size {
             camera.previous_base
         } else if session.paused || session.finished {
@@ -140,9 +155,35 @@ pub(super) fn update_battle_camera(
         };
         // Never overwrite the current transform: it can still contain last
         // frame's shake, which apply_screen_shake removes after this system.
-        transform.translation += next_base - camera.previous_base;
+        let delta = next_base - camera.previous_base;
+        if delta != Vec3::ZERO {
+            transform.translation += delta;
+        }
         camera.previous_base = next_base;
         camera.previous_size = size;
+    }
+}
+
+/// Programmatic display-mode restoration can change Window.resolution before
+/// Winit emits WindowResized. Refresh every camera sharing that primary window
+/// together, including the damage-number overlay, before Bevy computes targets.
+pub(super) fn sync_primary_window_camera_sizes(
+    windows: Query<(Entity, &Window), With<PrimaryWindow>>,
+    mut cameras: Query<(&Camera, &RenderTarget, &mut Projection)>,
+) {
+    let Ok((primary, window)) = windows.single() else {
+        return;
+    };
+    let size = window.physical_size();
+    for (camera, target, mut projection) in &mut cameras {
+        let primary_target = match target {
+            RenderTarget::Window(WindowRef::Primary) => true,
+            RenderTarget::Window(WindowRef::Entity(entity)) => *entity == primary,
+            _ => false,
+        };
+        if primary_target && camera.physical_target_size() != Some(size) {
+            projection.set_changed();
+        }
     }
 }
 
@@ -351,6 +392,155 @@ mod tests {
         assert!(touch.distance(keyboard) > 1.0);
         let point = Vec3::new(-10.0, BODY_CENTER_HEIGHT, 12.0);
         assert!((bevy_projected(point, touch, Vec2::new(667.0, 375.0)).y - 219.0).abs() < 0.001);
+    }
+
+    #[derive(Resource, Default)]
+    struct CameraChanges(Vec<(bool, bool)>);
+
+    fn record_camera_changes(
+        cameras: Query<(Ref<Projection>, Ref<Transform>), With<BattleCamera>>,
+        mut changes: ResMut<CameraChanges>,
+    ) {
+        let (projection, transform) = cameras.single().unwrap();
+        changes
+            .0
+            .push((projection.is_changed(), transform.is_changed()));
+    }
+
+    #[test]
+    fn unchanged_camera_does_not_dirty_projection_or_transform() {
+        let (mut app, window, hero, _) = fixture((1280, 720), Vec3::new(-8.2, 0.0, 0.0));
+        app.init_resource::<CameraChanges>()
+            .add_systems(Last, record_camera_changes);
+        app.update();
+        app.update();
+        assert_eq!(
+            app.world().resource::<CameraChanges>().0.last(),
+            Some(&(false, false))
+        );
+        app.world_mut()
+            .get_mut::<Transform>(hero)
+            .unwrap()
+            .translation = Vec3::new(-10.0, 0.0, 12.0);
+        app.update();
+        assert_eq!(
+            app.world().resource::<CameraChanges>().0.last(),
+            Some(&(false, true))
+        );
+        app.world_mut()
+            .get_mut::<Window>(window)
+            .unwrap()
+            .resolution
+            .set(390.0, 844.0);
+        app.update();
+        assert_eq!(
+            app.world().resource::<CameraChanges>().0.last(),
+            Some(&(true, true))
+        );
+        app.update();
+        assert_eq!(
+            app.world().resource::<CameraChanges>().0.last(),
+            Some(&(false, false))
+        );
+    }
+
+    #[derive(Resource, Default)]
+    struct TargetProjectionChanges(Vec<bool>);
+
+    fn record_target_projection_changes(
+        cameras: Query<Ref<Projection>, With<Camera>>,
+        mut changes: ResMut<TargetProjectionChanges>,
+    ) {
+        changes.0 = cameras
+            .iter()
+            .map(|projection| projection.is_changed())
+            .collect();
+    }
+
+    #[test]
+    fn paired_camera_programmatic_resize_is_synchronized_before_bevy_update() {
+        use bevy::{
+            render::{camera::camera_system, texture::ManualTextureViews},
+            window::{WindowCreated, WindowResized, WindowScaleFactorChanged},
+        };
+
+        let (mut app, window, _, camera) = fixture((1280, 720), Vec3::new(-8.2, 0.0, 0.0));
+        app.init_resource::<Assets<Image>>()
+            .init_resource::<ManualTextureViews>()
+            .init_resource::<TargetProjectionChanges>()
+            .add_systems(Last, record_target_projection_changes)
+            .add_message::<WindowCreated>()
+            .add_message::<WindowResized>()
+            .add_message::<WindowScaleFactorChanged>()
+            .add_message::<AssetEvent<Image>>()
+            .add_systems(PostUpdate, camera_system);
+        app.world_mut()
+            .entity_mut(camera)
+            .insert((Camera::default(), RenderTarget::default()));
+        let overlay = app
+            .world_mut()
+            .spawn((
+                Camera::default(),
+                RenderTarget::default(),
+                Projection::from(OrthographicProjection::default_2d()),
+            ))
+            .id();
+        app.update();
+        let sizes = |app: &App| {
+            [camera, overlay].map(|entity| {
+                app.world()
+                    .get::<Camera>(entity)
+                    .unwrap()
+                    .physical_target_size()
+                    .unwrap()
+            })
+        };
+        assert_eq!(sizes(&app), [UVec2::new(1280, 720); 2]);
+        // Display restoration can update Window.resolution before Winit posts
+        // WindowResized. A no-op 3D Projection write used to refresh only that
+        // camera here, while the same-target overlay retained its old size.
+        app.world_mut()
+            .get_mut::<Window>(window)
+            .unwrap()
+            .resolution
+            .set(1600.0, 900.0);
+        app.update();
+        assert_eq!(sizes(&app), [UVec2::new(1280, 720); 2]);
+        // Actual Bevy camera_system negative: when only the 3D projection is
+        // dirty, its cached target refreshes but its overlay remains stale.
+        app.world_mut()
+            .get_mut::<Projection>(camera)
+            .unwrap()
+            .set_changed();
+        app.update();
+        assert_eq!(sizes(&app), [UVec2::new(1600, 900), UVec2::new(1280, 720)]);
+        app.add_systems(
+            PostUpdate,
+            sync_primary_window_camera_sizes.before(camera_system),
+        );
+        app.update();
+        assert_eq!(sizes(&app), [UVec2::new(1600, 900); 2]);
+        app.world_mut()
+            .get_mut::<Window>(window)
+            .unwrap()
+            .resolution
+            .set(1280.0, 720.0);
+        app.update();
+        assert_eq!(sizes(&app), [UVec2::new(1280, 720); 2]);
+        // A portrait transition also changes the production vertical span;
+        // synchronizing all primary-target cameras is still required.
+        app.world_mut()
+            .get_mut::<Window>(window)
+            .unwrap()
+            .resolution
+            .set(390.0, 844.0);
+        app.update();
+        assert_eq!(sizes(&app), [UVec2::new(390, 844); 2]);
+        app.update();
+        assert_eq!(
+            app.world().resource::<TargetProjectionChanges>().0,
+            [false, false]
+        );
     }
 
     #[test]

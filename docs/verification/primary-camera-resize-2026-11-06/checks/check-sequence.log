@@ -1,0 +1,5 @@
+STAGE clippy begin
+STAGE clippy terminal 0
+STAGE full-tests begin
+STAGE full-tests terminal 0
+RESIZE_SOURCE_CHECKS_PASS; standalone fullscreen/portrait runtime acceptance still required
