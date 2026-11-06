@@ -1,0 +1,5 @@
+STAGE post-glacier-full-a-nov6 begin
+STAGE post-glacier-full-a-nov6 valid win actual_seed 48880 elapsed 1560.317
+STAGE post-glacier-full-b-nov6 begin
+STAGE post-glacier-full-b-nov6 valid win actual_seed 48880 elapsed 1560.318
+CURRENT_FULL_PAIR_EXECUTED; no equality claim until comparisons

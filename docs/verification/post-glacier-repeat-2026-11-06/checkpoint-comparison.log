@@ -1,0 +1,20 @@
+{
+  "comparison_scope": "recorded checkpoints, not all internal simulation state",
+  "left": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-glacier-repeat-2026-11-06/frozen/target/verification/post-glacier-full-a-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+  "right": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-glacier-repeat-2026-11-06/frozen/target/verification/post-glacier-full-b-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+  "binary_sha256": "db3d1fc93dc987a5227f1b2b67ee2bb42dd05e8ea8446ff18e32a750cf1c6274",
+  "checkpoint_counts": [
+    57,
+    57
+  ],
+  "prefix_equal": false,
+  "complete_replay": false,
+  "first_divergence": {
+    "field": "checkpoint[53].rng_state",
+    "left": 7069510257418570336,
+    "right": 4349890132387911718,
+    "reason": "value differs",
+    "frame": 95400,
+    "right_frame": 95400
+  }
+}

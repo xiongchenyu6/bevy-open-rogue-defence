@@ -1,0 +1,8 @@
+{
+  "sha256": "db3d1fc93dc987a5227f1b2b67ee2bb42dd05e8ea8446ff18e32a750cf1c6274",
+  "bytes": 181953088,
+  "source_commit": "3d42d0be0b5d1df5c4e80a420da202194c6a49c4",
+  "build_receipt": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/glacier-order-2026-11-06/validation-processes.json",
+  "build_input_manifest_sha256": "63e03f25d1f784b82f2f2c839116aa6515bfdbb8d9988e87764055d8e32d9f42",
+  "reused_completed_validated_build": true
+}

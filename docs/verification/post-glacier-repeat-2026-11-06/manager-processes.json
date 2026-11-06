@@ -1,0 +1,43 @@
+[
+  {
+    "stage": "freeze-ready",
+    "args": [
+      "/etc/profiles/per-user/freeman.xiong/bin/python3",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-glacier-repeat-2026-11-06/freeze-ready.py"
+    ],
+    "exit": 0,
+    "seconds": 0.5215317739639431
+  },
+  {
+    "stage": "pair",
+    "args": [
+      "/etc/profiles/per-user/freeman.xiong/bin/python3",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-glacier-repeat-2026-11-06/run-full.py"
+    ],
+    "exit": 0,
+    "seconds": 413.08420082903467
+  },
+  {
+    "stage": "checkpoint-comparison",
+    "args": [
+      "/etc/profiles/per-user/freeman.xiong/bin/python3",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-glacier-repeat-2026-11-06/frozen/tools/compare_balance_replays.py",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-glacier-repeat-2026-11-06/frozen/target/verification/post-glacier-full-a-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-glacier-repeat-2026-11-06/frozen/target/verification/post-glacier-full-b-nov6/active-h2-behind-sbeef-c5-t0.jsonl"
+    ],
+    "exit": 1,
+    "seconds": 35.44305612199241
+  },
+  {
+    "stage": "recorded-comparison",
+    "args": [
+      "/etc/profiles/per-user/freeman.xiong/bin/python3",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-glacier-repeat-2026-11-06/analysis/compare-recorded.py",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-glacier-repeat-2026-11-06/frozen/target/verification/post-glacier-full-a-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-glacier-repeat-2026-11-06/frozen/target/verification/post-glacier-full-b-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-glacier-repeat-2026-11-06/full-recorded"
+    ],
+    "exit": 0,
+    "seconds": 47.802684413967654
+  }
+]

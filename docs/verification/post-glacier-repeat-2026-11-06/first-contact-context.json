@@ -1,0 +1,97 @@
+{
+  "index_zero_based": 93232,
+  "a": {
+    "outer_ordinal": "4",
+    "candidate_ordinal": "0",
+    "progress_bits": "0",
+    "projectile": "13342v3",
+    "projectile_bits": "17179855841",
+    "enemy": "38242v22",
+    "enemy_bits": "98784209565",
+    "profile": "DamageProfile { element: Frost, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: true, card_proc: true, melee: false, arrow: false }",
+    "base_damage": "176.6006317138672",
+    "scaled_base_damage": "634.276611328125",
+    "raw_damage": "1109.984130859375",
+    "final_damage": "1109.984130859375",
+    "critical_roll": "0.03539334237575531",
+    "critical_roll_bits": "1024522396",
+    "crit_multiplier": "1.75",
+    "hp_before": "4133.60400390625",
+    "hp_after": "3023.619873046875",
+    "hp_before_bits": "1166093525",
+    "hp_after_bits": "1161624043",
+    "hp_damage": "1109.984130859375",
+    "rng_before_crit": "3184583265459014936",
+    "rng_after_crit": "1575706881966237186",
+    "rng_after_resolution": "1575706881966237186",
+    "elapsed_bits": "1153290676"
+  },
+  "b": {
+    "outer_ordinal": "4",
+    "candidate_ordinal": "0",
+    "progress_bits": "0",
+    "projectile": "13342v3",
+    "projectile_bits": "17179855841",
+    "enemy": "38381v25",
+    "enemy_bits": "111669111314",
+    "profile": "DamageProfile { element: Frost, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: true, card_proc: true, melee: false, arrow: false }",
+    "base_damage": "176.6006317138672",
+    "scaled_base_damage": "634.276611328125",
+    "raw_damage": "1109.984130859375",
+    "final_damage": "1109.984130859375",
+    "critical_roll": "0.03539334237575531",
+    "critical_roll_bits": "1024522396",
+    "crit_multiplier": "1.75",
+    "hp_before": "3023.619873046875",
+    "hp_after": "1913.6357421875",
+    "hp_before_bits": "1161624043",
+    "hp_after_bits": "1156527192",
+    "hp_damage": "1109.984130859375",
+    "rng_before_crit": "3184583265459014936",
+    "rng_after_crit": "1575706881966237186",
+    "rng_after_resolution": "1575706881966237186",
+    "elapsed_bits": "1153290676"
+  },
+  "a_actor_context": {
+    "frame": 94475,
+    "previous_target": [
+      98784209565,
+      1166093525,
+      1166093525,
+      1093132518,
+      0,
+      1076677837,
+      1075629260
+    ],
+    "current_target": [
+      98784209565,
+      1161624043,
+      1166093525,
+      1093128253,
+      0,
+      1076677837,
+      1075629260
+    ]
+  },
+  "b_actor_context": {
+    "frame": 94475,
+    "previous_target": [
+      111669111314,
+      1166093525,
+      1166093525,
+      1092755030,
+      0,
+      0,
+      1075629260
+    ],
+    "current_target": [
+      111669111314,
+      1143031112,
+      1166093525,
+      1092750765,
+      0,
+      0,
+      1075629260
+    ]
+  }
+}

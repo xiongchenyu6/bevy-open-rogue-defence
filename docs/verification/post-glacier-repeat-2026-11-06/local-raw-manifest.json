@@ -1,0 +1,22 @@
+[
+  {
+    "path": "target/verification/post-glacier-repeat-2026-11-06/frozen/target/verification/post-glacier-full-a-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+    "bytes": 912718104,
+    "sha256": "ff3452800d2486edb4e6b61aa52972f6be0d0cd569596189c4882e591fa83cee"
+  },
+  {
+    "path": "target/verification/post-glacier-repeat-2026-11-06/frozen/target/verification/post-glacier-full-a-nov6/active-h2-behind-sbeef-c5-t0.stderr",
+    "bytes": 124554926,
+    "sha256": "c706e8b608dfa5b7164814603129790dcbe7709dd27c8a8827d56c327b205474"
+  },
+  {
+    "path": "target/verification/post-glacier-repeat-2026-11-06/frozen/target/verification/post-glacier-full-b-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+    "bytes": 912239785,
+    "sha256": "b8225fc4de4eb6462dd44f77c811951b1548321b0fa76d913df25f26fd3766ff"
+  },
+  {
+    "path": "target/verification/post-glacier-repeat-2026-11-06/frozen/target/verification/post-glacier-full-b-nov6/active-h2-behind-sbeef-c5-t0.stderr",
+    "bytes": 124505659,
+    "sha256": "68d13f14637ba8505f77e75095f3ae3c28c6606cb3df5a775eba6cfe060e0cf8"
+  }
+]
