@@ -90,11 +90,14 @@ struct Preview {
     removed: Vec<Entity>,
     frame: u32,
     actors: Vec<Entity>,
-    reframed: bool,
+    camera: &'static str,
 }
 
 pub fn install_preview(app: &mut bevy::app::SubApp, scenario: &str) {
-    assert!(matches!(scenario, "den-preview" | "den-preview-reframed"));
+    assert!(matches!(
+        scenario,
+        "den-preview" | "den-preview-reframed" | "den-preview-front"
+    ));
     let world = app.world_mut();
     assert!(
         !world.resource::<CampaignMenu>().0,
@@ -128,14 +131,23 @@ pub fn install_preview(app: &mut bevy::app::SubApp, scenario: &str) {
             pose,
         ))
         .id();
-    let reframed = scenario == "den-preview-reframed";
-    if reframed {
+    let camera = match scenario {
+        "den-preview-front" => "front-side proposal",
+        "den-preview-reframed" => "shifted original direction proposal",
+        _ => "production",
+    };
+    if scenario != "den-preview" {
         for (mut transform, mut projection) in world
             .query_filtered::<(&mut Transform, &mut Projection), With<Camera3d>>()
             .iter_mut(world)
         {
-            *transform =
-                Transform::from_xyz(10.0, 24.0, 21.0).looking_at(Vec3::new(2.0, 0.0, 0.0), Vec3::Y);
+            let eye_x = if scenario == "den-preview-front" {
+                -6.0
+            } else {
+                10.0
+            };
+            *transform = Transform::from_xyz(eye_x, 24.0, 21.0)
+                .looking_at(Vec3::new(2.0, 0.0, 0.0), Vec3::Y);
             if let Projection::Orthographic(projection) = &mut *projection {
                 projection.scaling_mode = bevy::camera::ScalingMode::FixedVertical {
                     viewport_height: 24.0,
@@ -150,7 +162,7 @@ pub fn install_preview(app: &mut bevy::app::SubApp, scenario: &str) {
         removed,
         frame: 0,
         actors: Vec::new(),
-        reframed,
+        camera,
     });
     app.add_systems(Last, observe);
     println!(
@@ -237,8 +249,8 @@ fn observe(world: &mut World) {
                 .any(|name| name.as_str() == "Demon den")
         );
         println!(
-            "[capture] PASS den-preview: candidate imported, old den absent, actual parent retained, three moving maximum-scale models, reframed={}",
-            preview.reframed
+            "[capture] PASS den-preview: candidate imported, old den absent, actual parent retained, three moving maximum-scale models, camera={}",
+            preview.camera
         );
     }
     world.insert_resource(preview);

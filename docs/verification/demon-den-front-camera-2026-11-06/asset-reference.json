@@ -1,0 +1,753 @@
+{
+  "asset_root": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-native-preview-r31-2026-11-06/assets",
+  "manifest": {
+    "files": [
+      {
+        "file": "audio/SOURCES.md",
+        "sha256": "5129753d14647318bc3a993ecb455db0342acfecbdecf30571ac85e6b6e8622d"
+      },
+      {
+        "file": "audio/arena_loop.ogg",
+        "sha256": "c6a269ae4b73aa96bc8bee690f760921389a2ef48d9dcaddb943e8c2effd3624"
+      },
+      {
+        "file": "audio/bond_complete.wav",
+        "sha256": "ed3da5a746467bbd874a2bea2318383d075eaa9e20fe2125be6310fd0d54637f"
+      },
+      {
+        "file": "audio/boss_spawn.wav",
+        "sha256": "799ea0bb9382071e21fd75c49a4173edde63ab8cc2278e10f33207ce74d27cf5"
+      },
+      {
+        "file": "audio/crit.wav",
+        "sha256": "da1a342b7dc3ff64733826a461a7c490edd00d6edfb7eb692cda6a9423df535b"
+      },
+      {
+        "file": "audio/draft.wav",
+        "sha256": "714416a9922817cc44fdb9a71b2163d34a5af4cd14a1c4214e945d6127f658ca"
+      },
+      {
+        "file": "audio/gate_hit.wav",
+        "sha256": "3ca2ee5b462115ae95938ab6164f0769349757e7365241d53d0bd9b0d49115c9"
+      },
+      {
+        "file": "audio/hero_hurt.wav",
+        "sha256": "9aae78c346eb496b9e8be6bcb58eca254d16595bdb40630358df4c611e2f0158"
+      },
+      {
+        "file": "audio/hit_magic.wav",
+        "sha256": "604608cf0dffe8bf412a7dab1250d25a051ec9cb1ff8d90c432960990c58ebb8"
+      },
+      {
+        "file": "audio/hit_physical.wav",
+        "sha256": "cdbb5e513505a1930c4e2fb1112bb25ea5d988a8926b2a9b3a219b9db95656b3"
+      },
+      {
+        "file": "audio/impact.wav",
+        "sha256": "306b9393339ff15ad19f5a6861b6f801c48a19c9ee9f3580fdb3fb9539319d36"
+      },
+      {
+        "file": "audio/kill.wav",
+        "sha256": "33590c86f42b207ee959082afea324e78ace57723f646f6dbb9071ab582498c8"
+      },
+      {
+        "file": "audio/kill_heavy.wav",
+        "sha256": "07b83c8535b837bcf249627265a7d0fad43c2188dd32c4bd8f167eeb054acc10"
+      },
+      {
+        "file": "audio/shot.wav",
+        "sha256": "fae9b8ef16e59b99478b6b9d3ccdd7f81955b8c4240da532d7666653602374e3"
+      },
+      {
+        "file": "audio/ultimate.wav",
+        "sha256": "82c386aa805e1006f3ce2c45f6d10f5b296a4082ce7f9ded94665c0341272e02"
+      },
+      {
+        "file": "fonts/OFL.txt",
+        "sha256": "babcfe66c8a098b2fa279bc724a3a342f8124f77ce18941fbcc1bbb39823cded"
+      },
+      {
+        "file": "fonts/SOURCE.md",
+        "sha256": "5e51364296e049ba81ae2a79dfe419e4cf28394894da6c27dd006fdc9339496e"
+      },
+      {
+        "file": "fonts/glyphs.txt",
+        "sha256": "8f25b852bdddb4fc69eb97144b5b3be9d3371b17ffd06317b89c33eecf31142c"
+      },
+      {
+        "file": "fonts/rogue_commander_ui.ttf",
+        "sha256": "b069c53af20e3937118139f7c39ef7bfd30977bfcc2872b68ee4e28ff6f3c2f1"
+      },
+      {
+        "file": "licenses/ENVIRONMENT.md",
+        "sha256": "8f201a0620db9737d2f78f0dc3901b217fa1684526e4aec620a20f212db3f694"
+      },
+      {
+        "file": "licenses/KayKit-Adventurers-CC0.txt",
+        "sha256": "ae322141814056dda0deea7540d74c41d87aee1da319977cd1bd84ee5a923629"
+      },
+      {
+        "file": "licenses/KayKit-Dungeon-Remastered-CC0.txt",
+        "sha256": "c5f17abf619731f57f6bbff450f6484214605c13aa96bb75bbcfc70930941ff7"
+      },
+      {
+        "file": "licenses/KayKit-Medieval-Hexagon-CC0.txt",
+        "sha256": "893a2b22391f4589070ba416f2cdb11bc5f54ad9a543d4f59f6d22b19072f39c"
+      },
+      {
+        "file": "licenses/KayKit-Skeletons-CC0.txt",
+        "sha256": "5d822abca4e08c5a91d329e5372b3dc605cba8d994f752cb0f7dfdb7a0a79954"
+      },
+      {
+        "file": "licenses/Quaternius-CC0-legalcode-source.json",
+        "sha256": "bf765f928b90a08dd448024759784d0cdea6f39a9e9562835ce259c0170dd82a"
+      },
+      {
+        "file": "licenses/Quaternius-CC0-legalcode.txt",
+        "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+      },
+      {
+        "file": "licenses/cast-source-manifest.json",
+        "sha256": "9e032f9174b24e7f70499a4c55e2f36df888468b0400352025787b7455698ce2"
+      },
+      {
+        "file": "licenses/catapult-model.json",
+        "sha256": "e5b463ab073359c666e619cf8181f96ef0cf92897ed5d9b2a2568e97c24d427a"
+      },
+      {
+        "file": "licenses/creature-source-manifest.json",
+        "sha256": "4186516b43338d1ee36b45629cca43c9a19b6f65e01b12a9feea0522e87e9c56"
+      },
+      {
+        "file": "licenses/environment-models.json",
+        "sha256": "c5268dad9bc68fd92a1bfd66c8141507c7f8c6f6f49cef48ee944b4573ee04a3"
+      },
+      {
+        "file": "models/SOURCES.md",
+        "sha256": "ac6e96683bb9a66ad5e68fa8d2a69aeb243956ea25287f22f06cc3dc2a0fb7ea"
+      },
+      {
+        "file": "models/adventure-manifest.json",
+        "sha256": "efd086e879e36087a87419eeb3c2e134e8408634f30b2e347da04ba9574c404d"
+      },
+      {
+        "file": "models/adventure_embermaw.glb",
+        "sha256": "45148b9561c43126c37ae0e056bdd02f672bbadb336ae79223069abd450891e9"
+      },
+      {
+        "file": "models/adventure_plaguejaw.glb",
+        "sha256": "603d8ce299fc237fcec52ed9b0ba55ef825e8a6a4949d6f3601d38a980b35c14"
+      },
+      {
+        "file": "models/adventure_tidehorn.glb",
+        "sha256": "226d0a31f8de4f0c8c6d088c2c2b474179f998be2da896342c422ff3694a5b30"
+      },
+      {
+        "file": "models/boss_abyssal_leviathan.glb",
+        "sha256": "31b62a11605f08ee28962108709ce5da446544298a1be9fb856a29c96d5a057f"
+      },
+      {
+        "file": "models/boss_cinder_colossus.glb",
+        "sha256": "1e114f80de62ac2b51aba32256f2294ba79d2677753f2398a4e31bc968688629"
+      },
+      {
+        "file": "models/boss_dread_veil.glb",
+        "sha256": "cb8f89cf35a420322df167a95ab76305ebba1b72bcd715afb369161726df861c"
+      },
+      {
+        "file": "models/boss_green_regent.glb",
+        "sha256": "e83434294e0c774a074b71dbc8ec04a1e6893bcd04d4ef1169c09b92e812386d"
+      },
+      {
+        "file": "models/boss_sun_crown_magus.glb",
+        "sha256": "e5e9ac666e5112381d39a6e1d25da92512a863d538b9e74be3ff9ed87bcf1a3c"
+      },
+      {
+        "file": "models/cast-manifest.json",
+        "sha256": "2994b33b2ec2e9fbbf8a1fb22f238b34c23a437b72e717760b32da4e2f724f8f"
+      },
+      {
+        "file": "models/enemy_burrow_stalker.glb",
+        "sha256": "7d67b117990ccfe73f307218f6cdd23fc4b167f4864c2c56f4a7aa089058bdf8"
+      },
+      {
+        "file": "models/enemy_chanting_acolyte.glb",
+        "sha256": "535871ee942f0b32ec1d501085fa1c6681a85d1680b6321fc8b81e60505e9a57"
+      },
+      {
+        "file": "models/enemy_core_rusher.glb",
+        "sha256": "97470fa8e184de9bed36b6d8c7bde9ecf78ff6aea7b889d58deb78a0c36c2651"
+      },
+      {
+        "file": "models/enemy_field_mender.glb",
+        "sha256": "f3be8c013e42a57069bce36226299d7766c877caa08f6b5e5ce6a3e2ef3dd13b"
+      },
+      {
+        "file": "models/enemy_gnawling.glb",
+        "sha256": "7f332313dc041f5e5e774ea93a29e2c1d4a1e7a701ce1c97c3b4de476db3c8cb"
+      },
+      {
+        "file": "models/enemy_iron_colossus.glb",
+        "sha256": "aa22df802df4c5856dfe07c21378609934783f7db7c984fedd2db73c03c629ab"
+      },
+      {
+        "file": "models/enemy_null_eye.glb",
+        "sha256": "f445886b85a52f4051736dfd4605a63e8ec248ed8ce791dba66b213774d9e898"
+      },
+      {
+        "file": "models/enemy_rift_sapper.glb",
+        "sha256": "c313125215eb1095322f7f6445dc16a1ebcc31e1120f1dee9386066f6aa02c15"
+      },
+      {
+        "file": "models/enemy_shell_guard.glb",
+        "sha256": "91a41d1932c63f98244c0f5b2207d85d6686d9ff876d34f51f44323d4500df2a"
+      },
+      {
+        "file": "models/enemy_siege_lobber.glb",
+        "sha256": "09fbaac5fe445f8d49e50085cb1bd41cb9982a83fb4f8088ebdf7bfd84ddd3b6"
+      },
+      {
+        "file": "models/enemy_split_spore.glb",
+        "sha256": "a936cdd48c3091d8561072a5d38fbb357a91325d170620d5c4f0c270ee8101b6"
+      },
+      {
+        "file": "models/enemy_void_caster.glb",
+        "sha256": "b76198b185285de8751e4fe329d0eb751bb3eecf0cc2d31a0f88af9a110d0d97"
+      },
+      {
+        "file": "models/environment_banner_blue.glb",
+        "sha256": "1c930ace50132d497fc0b19b0ac4f32607cddeb213d922f56f040dea24150bf1"
+      },
+      {
+        "file": "models/environment_border.glb",
+        "sha256": "61df555ce972c94564e258e80c44564b89dac3759a70ae0bd0cf1c43a18c8799"
+      },
+      {
+        "file": "models/environment_catapult.glb",
+        "sha256": "6c999ef0ccae6e0464ca040cf2c823c486d6dabad3c5c6700cad019aab64bbde"
+      },
+      {
+        "file": "models/environment_core.glb",
+        "sha256": "7926b81aa3f8e14e81a957a06bdc6546f168dab45bec693fe0c8a0838331c969"
+      },
+      {
+        "file": "models/environment_demon_cavern_preview.glb",
+        "sha256": "3d7bd9adbf850167e52e0723d9be9233905b86ee68b2344d2852df9c59511a1d"
+      },
+      {
+        "file": "models/environment_floor.glb",
+        "sha256": "194e1737202a2dd37246bb18fb58a765ef9754a385fc25c2c601f261a8228690"
+      },
+      {
+        "file": "models/environment_pillar.glb",
+        "sha256": "4449a9bd696d0d69fbd8d917cb16e18a789906d0252cf9b354166c8f196d5d9b"
+      },
+      {
+        "file": "models/environment_pillar_decorated.glb",
+        "sha256": "6843bffca04b689fe6bb25fec15bf848bf58c8b16a4e690276dc56c8a8fd0364"
+      },
+      {
+        "file": "models/environment_rubble_half.glb",
+        "sha256": "5f72dd19c24145bded66929f4e15ce38c4d30bafec43a556440aeec1382f9cd7"
+      },
+      {
+        "file": "models/environment_rubble_large.glb",
+        "sha256": "d9175a7d34efe6e139d6d4e29566ca522733f3c5a8d4de2809d5d90bfbfe842a"
+      },
+      {
+        "file": "models/environment_torch_lit.glb",
+        "sha256": "8fcb5a9966698958d1bc819643e8748c1bf96fd83782c5e06ec07dcf6948b060"
+      },
+      {
+        "file": "models/environment_wall.glb",
+        "sha256": "587e702791a5bd9a372421ab4101900c5871f0086c73b01c0996cea82a81d213"
+      },
+      {
+        "file": "models/environment_wall_broken.glb",
+        "sha256": "c23061dfe5050c4a44bbf14a6ea0100d5b5dcd3be3b3433fcbe6d0bbc19c4d4e"
+      },
+      {
+        "file": "models/environment_wall_gated.glb",
+        "sha256": "f8c31a3decfc713af5f479e3e3d8c824d1d8fd5d4752c2dba99eb8a4f86aed86"
+      },
+      {
+        "file": "models/environment_wall_window_closed.glb",
+        "sha256": "f7b04902a3f75749b65a5a02d88fcde034758e2ea379f0f63431e27b2e442352"
+      },
+      {
+        "file": "models/hero_ember_ranger.glb",
+        "sha256": "72b57aca948ca319fc4cd1ec7e73d03b876961d541bae4fbc9ea276cd1ae2811"
+      },
+      {
+        "file": "models/hero_frost_oracle.glb",
+        "sha256": "2e1c8163f1bf438de93b62ddc4207137304f15238c3090ac9f96d1a0a698a17a"
+      },
+      {
+        "file": "models/hero_grove_artificer.glb",
+        "sha256": "6f2050ec3e71fedec7bc978c78c2adf6e00f413b465daaaf04871240574366e7"
+      },
+      {
+        "file": "models/hero_iron_berserker.glb",
+        "sha256": "229f22f40cffe51a879cfc8ea374702ff456e1ca2fee34697ad8e2739d3a20f4"
+      },
+      {
+        "file": "models/hero_rift_dancer.glb",
+        "sha256": "e48c26c814b88c29b50142c569b6a9db7d5d81f5d7001458671822ed541d0588"
+      },
+      {
+        "file": "models/hero_solar_vanguard.glb",
+        "sha256": "196312426fea75a7197d5102f0957bb578311c76fd466682f302a51881cb7dcd"
+      },
+      {
+        "file": "models/hero_spirit_keeper.glb",
+        "sha256": "eaf361258db5e6bee518b4592e7affa433e0c876e707e0ef0bd9b3fbe6bd3d09"
+      },
+      {
+        "file": "models/hero_star_wagerer.glb",
+        "sha256": "2f61e9301d537ed573f7ea3dce7379ace67c768dc2e13be4fb7e7baa1f5ceb1e"
+      },
+      {
+        "file": "models/hero_stone_warden.glb",
+        "sha256": "5f68ad845b610a708fdb0b2b495c83c94413c59f327cf3bb36177b49ca93214a"
+      },
+      {
+        "file": "models/hero_storm_savant.glb",
+        "sha256": "e69441a01346b6cf0cb358c8470927db2635f976c9d6d53f58ac17440fe09474"
+      },
+      {
+        "file": "models/hero_tide_walker.glb",
+        "sha256": "45cd0aeccf23307e01b0d0679d76d001d97630f89443faed5b916e76ca7b7311"
+      },
+      {
+        "file": "models/hero_void_reaper.glb",
+        "sha256": "f157cbebdb669cfbc72146292d078f8392f3a20b8309ea8000dfecfdb534db7a"
+      },
+      {
+        "file": "models/summon_ancestor_colossus.glb",
+        "sha256": "1260533773a0ea4ad8fd822aa91309ec2c649e6aef1b4552d65d480c42810965"
+      },
+      {
+        "file": "models/summon_bolt_turret.glb",
+        "sha256": "134c9493f00f34f76abade04e99d496476ead7ee56854abd8e2379e210d7f18e"
+      },
+      {
+        "file": "models/summon_bone_sentry.glb",
+        "sha256": "9288659ae6e75a8f2d1cd4dc914f3ecfece98ef38e8bb573cf326f6175e13ba1"
+      },
+      {
+        "file": "models/summon_frost_wyrm.glb",
+        "sha256": "dceb2af2ea22633a1f07e07972392041ba3a92a3c61b41144438257ee7fed873"
+      },
+      {
+        "file": "models/summon_spirit_hound.glb",
+        "sha256": "87358a51514203da8021cef4d4bd6f11bdbd394c788d6944f27ad09007e438ff"
+      },
+      {
+        "file": "models/summon_tide_elemental.glb",
+        "sha256": "9de8b7e548995aeaf9e70043127f1392b4309654d53e5d7a16ab6ac27dc14b55"
+      },
+      {
+        "file": "ui/SOURCES.md",
+        "sha256": "ccfa7157b801162bd223e275e7f82d669ebf0aa1497af104f5e63b353d075508"
+      },
+      {
+        "file": "ui/armory/SOURCE.md",
+        "sha256": "95b8d0376c1a39ed7f5cd88f7ef10925ca008b2833d57487f9dfb40741b72480"
+      },
+      {
+        "file": "ui/armory/empty-rack.png",
+        "sha256": "f2194a2247f41d8931748b6aa7af50090f65080dabfbd5e505aa2027e3b40d35"
+      },
+      {
+        "file": "ui/armory/generation.json",
+        "sha256": "3cd03c6fb8a676d181d1482c46991c41677705ebd9c41875e98e381f0bfa05da"
+      },
+      {
+        "file": "ui/armory/manifest.json",
+        "sha256": "1e0ad50f8612a067d53af687e4f629e383c154c707d824e63a976f536a40300e"
+      },
+      {
+        "file": "ui/draft_backdrop.png",
+        "sha256": "670d3699a362dc1a5e76d2b0d76a59a06723e4404b9e466e1259fdef7fcf9daa"
+      },
+      {
+        "file": "ui/icons/abandon.png",
+        "sha256": "95260323cb69e6366e3e57402d77f17481e48621ddff49527c0a3c7bbb18ab7b"
+      },
+      {
+        "file": "ui/icons/ancestor_colossus.png",
+        "sha256": "b43efce4ca7dcdb0ddc5246f9f4c59de037e335a2d9ccebea46804e6dedd8792"
+      },
+      {
+        "file": "ui/icons/arc_chain.png",
+        "sha256": "a0671d852d8602bf8daf83779cc01e48aa832edee7676528fa4738d565a83f4d"
+      },
+      {
+        "file": "ui/icons/arcane_loop.png",
+        "sha256": "ea0a9fb2dd2bac7ec2c378b8096749858a1aeed70d0f0eb9190a9d8c42255802"
+      },
+      {
+        "file": "ui/icons/arcane_star.png",
+        "sha256": "bade0e663f2b1e6eceb8be4d87674486f23c62c23c98659b63923b959c5062eb"
+      },
+      {
+        "file": "ui/icons/barbarian.png",
+        "sha256": "0a28b5c5cf3e477ccb9395b2fcd27653423ee6ee3bb1e0c3fef520341f1407dc"
+      },
+      {
+        "file": "ui/icons/blood_array.png",
+        "sha256": "8cd79afdcdf1905635c63379c04a738c226fb16c96fd2eacc74cfcc4b6486333"
+      },
+      {
+        "file": "ui/icons/blood_wheel.png",
+        "sha256": "73b1e30fd9e6fd46cfbe7f82667017dc9cd9512fc09a575c9503c4e2d1c2ef88"
+      },
+      {
+        "file": "ui/icons/bolt_turret.png",
+        "sha256": "199e56bb81254569543f7cbdd6cb744c4565c2b1dc33545fce5a4fdbdc98925e"
+      },
+      {
+        "file": "ui/icons/bond.png",
+        "sha256": "d4c055a9154cdd652fed70e279ba298259a154decd3dafde133458a93f590a50"
+      },
+      {
+        "file": "ui/icons/bone_sentry.png",
+        "sha256": "26d8ae492ee8d44604dea63068b0b70ee6395c0d2428a68b0a8b7a69f08bb1fa"
+      },
+      {
+        "file": "ui/icons/cinder_aura.png",
+        "sha256": "6cf344d940612c813d37072f4edc89ba8d33b4e769c60efc517fc05705689037"
+      },
+      {
+        "file": "ui/icons/confirm.png",
+        "sha256": "a3b16a0d8d28abdf0ac66376d9d459ee3c77c72b6bdeb163ea909490b2e6e307"
+      },
+      {
+        "file": "ui/icons/cultivation.png",
+        "sha256": "b4ea08cb9dcd3d81e4c30338b80511879b761aaaa793acfaf4f185e7638803dd"
+      },
+      {
+        "file": "ui/icons/demon_hunter.png",
+        "sha256": "857cf1f45b340cd20cf6096e29427b2fd0691b21957fe0def300099113b0a10a"
+      },
+      {
+        "file": "ui/icons/destruction.png",
+        "sha256": "ebd4ea771052c8e249edbd4f8690d33ba0ebd99f3f7e70496789b57b3082914e"
+      },
+      {
+        "file": "ui/icons/dodge.png",
+        "sha256": "0a24987233d36432ef2eb151a8228f47876cbb8c6129af7cfcae07ef575502d7"
+      },
+      {
+        "file": "ui/icons/element_archmage.png",
+        "sha256": "404b3b88bc1db168bbeea0c5b2de4a656e4e4c31535d2365cb1927935cebc52a"
+      },
+      {
+        "file": "ui/icons/element_cycle.png",
+        "sha256": "4600d88090282e20e2a771e3f0a64e0e56b5070a8cc6a4909c6e79bbeb605933"
+      },
+      {
+        "file": "ui/icons/element_master.png",
+        "sha256": "367fff88dc50ddcec4833ff6b4aa4e2089b471cb8a4288c1b1604bdd50f8e3ca"
+      },
+      {
+        "file": "ui/icons/ember_arrow.png",
+        "sha256": "f8345a449725128c4ce7f4d56329debed463b32e012ac83dabbaaf00de302b01"
+      },
+      {
+        "file": "ui/icons/ember_oath.png",
+        "sha256": "9ffe2d0155915b7fb54b7d41922da081b4cd8329b71775b5afcf0e7fb6eeae59"
+      },
+      {
+        "file": "ui/icons/ember_rebirth.png",
+        "sha256": "98ecf332d17b7f8a8677f942492fd6b84620b1e17954bab993a602819d1d080c"
+      },
+      {
+        "file": "ui/icons/energy.png",
+        "sha256": "499a447aee69a5ebd340919dfbe0ef5252d4b36c35b271ab4b8c1545879eacba"
+      },
+      {
+        "file": "ui/icons/execution_brand.png",
+        "sha256": "a1e31b8cf07a73e82e0ddb4d450cc7e7844d1e8f6d1e1ce304a26f52f7851bd0"
+      },
+      {
+        "file": "ui/icons/fate_cube.png",
+        "sha256": "e461e07e095ee954a5159ed9e9dfd7347ee58d6802c59ca8ff3f06afc8916f22"
+      },
+      {
+        "file": "ui/icons/flame_ray.png",
+        "sha256": "166423c78bf7238e74b02e431f75cf750bb8a32f78635fb845160b5aa386c690"
+      },
+      {
+        "file": "ui/icons/flying_swords.png",
+        "sha256": "5eff1c0bfb076575a520aab519180ce491900b298b3be1255d8d21e987fbe050"
+      },
+      {
+        "file": "ui/icons/forbidden_arts.png",
+        "sha256": "1aad0aefaa191a7d37a3396eb7ca0084f578f81c7564ff12e78719b353ed504e"
+      },
+      {
+        "file": "ui/icons/frost_lance.png",
+        "sha256": "0befbd9176d7ffeceae9be4b7578c91d51d6d813b039c211d47a84c4b7f0969b"
+      },
+      {
+        "file": "ui/icons/frost_wyrm.png",
+        "sha256": "6e1c242dc0325d01821ed6f99fb94a27f1da6e2ce037898ba53b20fa3af6d190"
+      },
+      {
+        "file": "ui/icons/glacier_core.png",
+        "sha256": "97fcc145923455346ea2af86c9a740687d5ded784f28221f43555ce7f9aadb70"
+      },
+      {
+        "file": "ui/icons/goblin_mine.png",
+        "sha256": "e1d8a87240ac45a3fb74ffe83def582ce082fe3e4b9cabf6afa0346ebf4e422d"
+      },
+      {
+        "file": "ui/icons/gold.png",
+        "sha256": "2769db7fd02a759c64cafdad6dcdeebe915e65027c4bac31ea149f43030674da"
+      },
+      {
+        "file": "ui/icons/ground_pulse.png",
+        "sha256": "bee6142760b3c88c4ee812185c421f8a502bdc0f567d7d0f70c17039b0f2a314"
+      },
+      {
+        "file": "ui/icons/guardian_oath.png",
+        "sha256": "d46ce61d9c1020ddd93fe17ea2b82df6fe5a46fafcf53a17ae9a7ea6b5e70427"
+      },
+      {
+        "file": "ui/icons/hunter.png",
+        "sha256": "48e9cc8822b2efb28bacc7a3e6387560b5901cef4395745f4782437f6bd4b743"
+      },
+      {
+        "file": "ui/icons/killing_intent.png",
+        "sha256": "70c526a2437c4e30814847125cb7571374c3c544b74dd5d652f6b3ae9f685edf"
+      },
+      {
+        "file": "ui/icons/later.png",
+        "sha256": "eb41ff27d147df6a549419fa6eef0eaa5d90b3c52debb5daf6170642864c91e6"
+      },
+      {
+        "file": "ui/icons/mad_scientist.png",
+        "sha256": "7ca5cea0945af5fbde1612048a6e1210356233162f9aa5ca61251cf8c31de6d3"
+      },
+      {
+        "file": "ui/icons/manifest.json",
+        "sha256": "07bcaec7904b274beb70abde7157860cb3e29a2f9733ce0496d26fbc4680cb52"
+      },
+      {
+        "file": "ui/icons/market.png",
+        "sha256": "0f5ca1191d5dee6a56c841a5d1e14bc3a6b22142798812bac1003d4536b85873"
+      },
+      {
+        "file": "ui/icons/meteor_seed.png",
+        "sha256": "6f9449ae6b2d03fd0f2f65c237b5dd484a9b8ab2213a57d4af4fe5b6fb52f95f"
+      },
+      {
+        "file": "ui/icons/mountain.png",
+        "sha256": "37403fe4b5a37b546f18fc886703f89fce0e6a1b8159eed6fae36f34c87819d1"
+      },
+      {
+        "file": "ui/icons/oath_banner.png",
+        "sha256": "e5c2ef345a3fc490ef298e2b094c3bf6a2e49fdf7dfad31034a9f5302ae19a16"
+      },
+      {
+        "file": "ui/icons/orbit_blade.png",
+        "sha256": "9c59b762e0ff02314b51416565ea15a34424b49a8c47d5f69e41f115d55720c4"
+      },
+      {
+        "file": "ui/icons/piercing_volley.png",
+        "sha256": "b8214d899837d73ab76c65ae25ec1712a8ba21492d31f372685575a316e22921"
+      },
+      {
+        "file": "ui/icons/prism_echo.png",
+        "sha256": "72db06ecaa5823510961548fa4cf1231169bcda4a0e092388e0bb83fc040a44b"
+      },
+      {
+        "file": "ui/icons/qi_ascension.png",
+        "sha256": "bfe16fdcdddcccd8a0048fa4c8c4af45a9be14243a30567542612594ddcc3ee0"
+      },
+      {
+        "file": "ui/icons/raider_fortune.png",
+        "sha256": "96190b31b0082e2bf69c92ae36dd1854be41abd6f35604793929e682b3a16424"
+      },
+      {
+        "file": "ui/icons/refresh.png",
+        "sha256": "ff521ec52c1f47c643ba2407d7856f81ca1d1242c7c8deae865cf9127360ebb7"
+      },
+      {
+        "file": "ui/icons/requiem.png",
+        "sha256": "e64b14993529e31d00d4bcb3f2e23afdfa707e17d3db507fb4fda433c652e41b"
+      },
+      {
+        "file": "ui/icons/revival_wind.png",
+        "sha256": "74c5dc3a747c6f9120806f0ffdc9711dc31a30c4a28650a6503ee61a500f5eb3"
+      },
+      {
+        "file": "ui/icons/sharpshooter.png",
+        "sha256": "3f26ec50fc1c8171917bdd1bc48f32f65b9f2303e3bc9faaa804a716b2f2922e"
+      },
+      {
+        "file": "ui/icons/shield.png",
+        "sha256": "77ffc66ef60977014e3c823c3d8b6433dc94e2344d2365ad80906696f212f574"
+      },
+      {
+        "file": "ui/icons/skill.png",
+        "sha256": "3fa6a9a632dd14ee5479f2ca9eeaedfbcaf7dc45fba19f6eb3ae1080b39effad"
+      },
+      {
+        "file": "ui/icons/skip.png",
+        "sha256": "13884f61f64fc83564224bedb06b65de5a2d0c28363b4ee9df826a44b009254c"
+      },
+      {
+        "file": "ui/icons/skull.png",
+        "sha256": "59dc73a682c5281d62640839b9b2e58f67a5d7282175d0ec75dafae333f938a5"
+      },
+      {
+        "file": "ui/icons/sky_judgment.png",
+        "sha256": "77ed28a85467f5028d2af16e6a80825f54996e286e9c01f4dd69bc4dbca76e0b"
+      },
+      {
+        "file": "ui/icons/spirit_energy.png",
+        "sha256": "6e91acfa34f478e8ac7c8d21f616e64e1b4b7d670c992ea6aaef4b5cfa0b9bb5"
+      },
+      {
+        "file": "ui/icons/spirit_hound.png",
+        "sha256": "1a4f9c47ade2888715d530988b492cc30f3b216da848c249bbbfaaa2a17a0d38"
+      },
+      {
+        "file": "ui/icons/spirit_pact.png",
+        "sha256": "402ae0f963805f704beb112f9493296ed364a52c0b49d7ca88223e7a732166cc"
+      },
+      {
+        "file": "ui/icons/static_seal.png",
+        "sha256": "02ef9391afc21f53d851d12f8d4916709078074890869fbcf7d205c58e7e3886"
+      },
+      {
+        "file": "ui/icons/storm_conduit.png",
+        "sha256": "60e9a48ce15491465483e1fd9a7f4e86d97483c1bc450df48ecf9f4be5fdf9dc"
+      },
+      {
+        "file": "ui/icons/storm_matrix.png",
+        "sha256": "a20384e238b011aece1a4df2a11c619a0ab5b8bb31a04912ebd4d82b39d3ef60"
+      },
+      {
+        "file": "ui/icons/tidal_fan.png",
+        "sha256": "975183f9bdf95eb1ef6a24533e6a3f028275cf10fb6d35cbe0ce62a06cf7c440"
+      },
+      {
+        "file": "ui/icons/tide_elemental.png",
+        "sha256": "205dca394bf0b76e223ea025b3ed4be90f6e35f46864ddec72959383649100a4"
+      },
+      {
+        "file": "ui/icons/tower.png",
+        "sha256": "ce3dabe6ae0d56e4f36919df58e4510bb62bc6915718add39cfa7aaf43fe0e69"
+      },
+      {
+        "file": "ui/icons/transmute_spark.png",
+        "sha256": "7ec4bf5c4171b8c480c52add33b491ebd4b42a39d5cb9ca18b5136e7fd5e17ce"
+      },
+      {
+        "file": "ui/icons/triune_engine.png",
+        "sha256": "605be3af1368d5da2546355eb7fdcc6d28e4e40bc705bee2ff2d0ff128317338"
+      },
+      {
+        "file": "ui/icons/triune_union.png",
+        "sha256": "d7684eb5e26e26ea4b19cbe297cd6c19905532bca7dbc34500d07a80a7374406"
+      },
+      {
+        "file": "ui/icons/ultimate.png",
+        "sha256": "dbf68b97e1d97d4585c942afc6bdfc47cfdc5d11c2830e02fc8bc9fa8061c686"
+      },
+      {
+        "file": "ui/icons/vortex_column.png",
+        "sha256": "0c70d30c1d74d7ff4cee8cfcf99bbad0260e1b70749ffa205fcf931207359c5a"
+      },
+      {
+        "file": "ui/icons/windrunner.png",
+        "sha256": "ccace81b78200fa43b74ef50f729eb7c645044a42638a0f2887c2418fbd89e26"
+      },
+      {
+        "file": "ui/icons/wood.png",
+        "sha256": "739034929a505f9c5e78a390b37b08de523cec051035f34866716fd79522a51a"
+      },
+      {
+        "file": "ui/market/SOURCE.md",
+        "sha256": "b489bd57d0cabae2bd9966f9b49f36b2d782d5b284652972ea01e5ff51dd273a"
+      },
+      {
+        "file": "ui/market/equipment-atlas.png",
+        "sha256": "ea9c22a92ce0d3c251e928e04464d76b3a422fa8a677d02dcd80f933774e2160"
+      },
+      {
+        "file": "ui/market/manifest.json",
+        "sha256": "76b67a923b3f360590c2cfd05b29305590e34825e0ca2851b2909698a176f0aa"
+      },
+      {
+        "file": "ui/portraits/hero_ember_ranger.png",
+        "sha256": "4199e48fe88f0bf40497e027c18e5ec620eb280ddb54adaf8bc818ba5423215e"
+      },
+      {
+        "file": "ui/portraits/hero_frost_oracle.png",
+        "sha256": "88cf7afa62c70999000bba0cb959b3f88b382881b4b5808c1539acfc1cfaea79"
+      },
+      {
+        "file": "ui/portraits/hero_grove_artificer.png",
+        "sha256": "015f3ef30759b3dc195a98747f34b1138045aeb514fdf1fb99667dc95f851b11"
+      },
+      {
+        "file": "ui/portraits/hero_iron_berserker.png",
+        "sha256": "d9f3b8b1b153867669a4994ee63bb4c129cc2803a49debeae7a327218255aceb"
+      },
+      {
+        "file": "ui/portraits/hero_rift_dancer.png",
+        "sha256": "3e355516156881f570665c021b68c802217935de78fd741e1cba60540bc2d655"
+      },
+      {
+        "file": "ui/portraits/hero_solar_vanguard.png",
+        "sha256": "494c291d35772d5b4d5b3addc4d90867322af50a459dbd6397407b6fb100c841"
+      },
+      {
+        "file": "ui/portraits/hero_spirit_keeper.png",
+        "sha256": "e60572537d2b032b74a7fa168f3db0a0a87bf7ec5c0c0c2c223d0a24dfde1900"
+      },
+      {
+        "file": "ui/portraits/hero_star_wagerer.png",
+        "sha256": "affe9c94ae1c8ba0899c7c2dd4a35c5aedf894e3b07975477e0de4c03490b457"
+      },
+      {
+        "file": "ui/portraits/hero_stone_warden.png",
+        "sha256": "a2dc5b7362d87dd8d9350ba69d92eb801f4bc6f9ce518be89a7d2c908903f002"
+      },
+      {
+        "file": "ui/portraits/hero_storm_savant.png",
+        "sha256": "f02970edc8705b53a4032d649f7370005140198d0e712a9c2aa30c656097f8e9"
+      },
+      {
+        "file": "ui/portraits/hero_tide_walker.png",
+        "sha256": "3edf66c747e9e4206ffcb5f0f09c9c3851557d14dfa5097a0a4d7fc58b46e4de"
+      },
+      {
+        "file": "ui/portraits/hero_void_reaper.png",
+        "sha256": "cbf5a9cd20ef08c1059bf3a658d13db405196dc28c7c6646b670134ba33cb9a4"
+      },
+      {
+        "file": "ui/recipes/SOURCE.md",
+        "sha256": "baef975b86e51bc03f15711fa7eedf47b09853fdbd5304c017aacca89175acdc"
+      },
+      {
+        "file": "ui/recipes/generation.json",
+        "sha256": "4e2b1cd715598902b98e53c38c06dea4bf3b92d69d0d02852a42d9f1367e3082"
+      },
+      {
+        "file": "ui/recipes/manifest.json",
+        "sha256": "549eca78323a2a56ababdc92d1dc18ae2e2d9f1658d0045354854cd0585964aa"
+      },
+      {
+        "file": "ui/recipes/recipe-atlas.png",
+        "sha256": "37346eb5ee66513da7b055fea351b74da27e7ab20a44c9d0081b3c4858882e82"
+      }
+    ],
+    "candidate_sha256": "3d7bd9adbf850167e52e0723d9be9233905b86ee68b2344d2852df9c59511a1d",
+    "scope": "Rejected R30 replaced by new R31 only in fresh isolated preview assets"
+  }
+}

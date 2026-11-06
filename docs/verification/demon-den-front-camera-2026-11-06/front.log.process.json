@@ -1,0 +1,16 @@
+{
+  "exit": 0,
+  "elapsed": 42.61790245902375,
+  "args": [
+    "nix",
+    "develop",
+    "--command",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-front-camera-2026-11-06/capture",
+    "frames",
+    "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/demon-den-front-camera-2026-11-06/front",
+    "400",
+    "den-preview-front",
+    "0xA11CE",
+    "1280x720"
+  ]
+}
