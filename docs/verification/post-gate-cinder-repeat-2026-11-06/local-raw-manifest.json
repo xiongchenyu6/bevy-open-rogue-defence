@@ -1,0 +1,22 @@
+[
+  {
+    "path": "target/verification/post-gate-cinder-repeat-2026-11-06/frozen/target/verification/post-order-full-a-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+    "bytes": 656365136,
+    "sha256": "c9c01fccc4deeccdc0c5409399beb090d155ba9e9c263bf06526fc72da070617"
+  },
+  {
+    "path": "target/verification/post-gate-cinder-repeat-2026-11-06/frozen/target/verification/post-order-full-a-nov6/active-h2-behind-sbeef-c5-t0.stderr",
+    "bytes": 106050576,
+    "sha256": "e7e6b6f3f3bb8c7ad9ab21911eecdb205fd7938eca07614d31105a9e397c41d1"
+  },
+  {
+    "path": "target/verification/post-gate-cinder-repeat-2026-11-06/frozen/target/verification/post-order-full-b-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+    "bytes": 675247189,
+    "sha256": "81c127223d4c9ede2fbe76e5dcec34716ca3c9e60f0df38c24c314f26b82b25b"
+  },
+  {
+    "path": "target/verification/post-gate-cinder-repeat-2026-11-06/frozen/target/verification/post-order-full-b-nov6/active-h2-behind-sbeef-c5-t0.stderr",
+    "bytes": 105081728,
+    "sha256": "fb26b0de22c55df16c5d0f63268d458428c8b1901d81cb9663d46c382cd24b9a"
+  }
+]

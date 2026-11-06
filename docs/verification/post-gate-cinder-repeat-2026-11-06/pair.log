@@ -1,0 +1,5 @@
+STAGE post-order-full-a-nov6 begin
+STAGE post-order-full-a-nov6 valid win actual_seed 48880 elapsed 1559.256
+STAGE post-order-full-b-nov6 begin
+STAGE post-order-full-b-nov6 valid win actual_seed 48880 elapsed 1539.005
+CURRENT_FULL_PAIR_EXECUTED; no equality claim until comparisons

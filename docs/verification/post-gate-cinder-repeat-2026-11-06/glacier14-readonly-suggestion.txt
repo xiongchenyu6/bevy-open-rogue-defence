@@ -1,0 +1,24 @@
+READ ONLY: GlacierCore14 scheduling candidate; no test applied or executed.
+Frozen source 7e87900; binary SHA558f626d5c5055914296bfe1ece2a0f409493c42bce5323919cbe52bd7997996.
+Actual first numeric frame81007; first nonidentity contact46770, profile Frost Spell skill14.
+
+Source chain:
+skills.rs2276: real cast_rare_skills uses primary.position, 5s duration, .8s pulse, skill14 radius/damage.
+skills.rs988-1020: update_spell_zones reads actual eligible alive/radius candidates.
+skills.rs1023-1037: only StormMatrix uses center-distance/Z/X/Y; GlacierCore falls into Entity-bit ordering.
+skills.rs1039-1060: each pulse schedules strict nonarea typed strikes; GlacierCore per-target hit count controls every third pulse.
+Thus this candidate is NOT an established equal-distance tie: Entity allocation determines pulse scheduling even when distances are unequal. Same-ID cosmetic row relocation should be a passing negative-control because existing ID sort already neutralizes raw row order. Reverse allocations at identical geometry are the discriminating case.
+
+Actual contact evidence:
+Both cases carrier13165v5, outer103, candidate0, progress0, same base1001.8756713867188, scaled3710.646484375, rollbits1059146930 (noncritical), RNG12479094525577407319 ->329784548508647105, but different physical target. First contact alone has equal damage, so examine the rest of this pulse before claiming this particular roll causes first numeric difference. Actor/context HP before includes same-frame other damage and must not be equated with previous-frame HP.
+a: id=403726901544, xyz=(13.614588737487793, 0.0, 1.399223804473877), previousHP=106873.171875, maxHP=111069.0
+b: id=244813105887, xyz=(13.18947982788086, 0.0, -0.9872169494628906), previousHP=83974.9921875, maxHP=244351.796875
+
+Minimal actual regression suggestion (UNRUN):
+Reuse combat/storm_order_tests.rs real projectile_test_app/test_enemy/RunRng12628136444139491497 and cfg-test bridge test_storm_matrix_order_pulse at skills.rs869, with dedicated Glacier bridge rather than changing Storm test behavior.
+1. Only learned skill14 rank1; actual prepare_cadence, cooldown14=0, charge using attack_charge_requirement14 and apply_resolved_attack_volleys; assert cast_ready14; call actual cast_rare_skills. This is explicit controlled cast-ready setup, not injected zone.
+2. Primary at x1 and second target x2, both durable with distinct HP10000/15000, no elite/Boss, both inside actual Glacier rank1 radius. Assert one real Glacier zone, profile14, actual center at primary, lifetime5 and pulse.8.
+3. Advance Time .8, run actual update_spell_zones then resolve_skill_strikes, assert two actual strict pooled carriers/profile14; run projectile_hits. Collect HP by geometry, actual critical/noncritical loss and final RunRng, retired carriers, cast/strike counts for BOTH worlds before comparing.
+4. Two paired tests: same IDs + reverse cosmetic row order (expected already pass); reverse IDs + same positions/attributes (expected candidate fail, not yet proven). Preserve observed raw row order evidence. Seed's one-crit/one-noncrit precondition must be asserted on real resolver output, not presumed.
+5. If negative proven, only Glacier affected ordering should follow actual center distance ->Z/X/Y->Entity. Do not silently alter Vortex or pulse/radius/damage/control counters. Optional third pulse checks real per-target freeze counters stay identical after sorting; do not duplicate formula assertions.
+No source/build/matrix edits; current descriptive sample remains frozen. No claim prior gate/Cinder changes prove global determinism, nor that Glacier is original48 flip cause.

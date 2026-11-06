@@ -1,0 +1,6 @@
+FROZEN 7e87900e2eb59dfe91de0a0020d49dd1656e4e2d 201 asset paths
+STAGE bin-tests begin
+STAGE bin-tests terminal0
+STAGE bin-build begin
+STAGE bin-build terminal0
+POST_ORDER_SIMULATOR_BUILD_PASS; pair has not run yet

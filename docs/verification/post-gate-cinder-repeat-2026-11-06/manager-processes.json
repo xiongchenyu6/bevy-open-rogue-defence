@@ -1,0 +1,43 @@
+[
+  {
+    "stage": "build",
+    "args": [
+      "/etc/profiles/per-user/freeman.xiong/bin/python3",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-gate-cinder-repeat-2026-11-06/build.py"
+    ],
+    "exit": 0,
+    "seconds": 397.3230385539937
+  },
+  {
+    "stage": "pair",
+    "args": [
+      "/etc/profiles/per-user/freeman.xiong/bin/python3",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-gate-cinder-repeat-2026-11-06/run-full.py"
+    ],
+    "exit": 0,
+    "seconds": 389.3937540189945
+  },
+  {
+    "stage": "checkpoint-comparison",
+    "args": [
+      "/etc/profiles/per-user/freeman.xiong/bin/python3",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-gate-cinder-repeat-2026-11-06/frozen/tools/compare_balance_replays.py",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-gate-cinder-repeat-2026-11-06/frozen/target/verification/post-order-full-a-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-gate-cinder-repeat-2026-11-06/frozen/target/verification/post-order-full-b-nov6/active-h2-behind-sbeef-c5-t0.jsonl"
+    ],
+    "exit": 1,
+    "seconds": 27.372099604981486
+  },
+  {
+    "stage": "recorded-comparison",
+    "args": [
+      "/etc/profiles/per-user/freeman.xiong/bin/python3",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-gate-cinder-repeat-2026-11-06/analysis/compare-recorded.py",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-gate-cinder-repeat-2026-11-06/frozen/target/verification/post-order-full-a-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-gate-cinder-repeat-2026-11-06/frozen/target/verification/post-order-full-b-nov6/active-h2-behind-sbeef-c5-t0.jsonl",
+      "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-gate-cinder-repeat-2026-11-06/full-recorded"
+    ],
+    "exit": 0,
+    "seconds": 35.13704169198172
+  }
+]
