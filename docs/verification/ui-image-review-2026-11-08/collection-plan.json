@@ -1,0 +1,317 @@
+{
+  "destination": "docs/verification/ui-image-review-2026-11-08",
+  "files": [
+    {
+      "source": "target/verification/ui-layer-2026-11-08/1280x720-result.json",
+      "archive": "raw/1280x720-result.json.gz",
+      "compressed": true,
+      "bytes": 473,
+      "sha256": "47f000e34c582990970fa07a349eaf3393c660559109b7d9ad6b3f981b19d81a",
+      "stored_bytes": 261
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/1280x720.log",
+      "archive": "raw/1280x720.log.gz",
+      "compressed": true,
+      "bytes": 10224,
+      "sha256": "d0982b4380f103f830cf132c08e2109b218debd98bd403b19739b07389dd352c",
+      "stored_bytes": 2067
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/360x800-result.json",
+      "archive": "raw/360x800-result.json.gz",
+      "compressed": true,
+      "bytes": 470,
+      "sha256": "bffc508bd1db190622d7da2ad02fa33b6cee9080ba3b5757a76fc6d479b6c5a5",
+      "stored_bytes": 260
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/360x800.log",
+      "archive": "raw/360x800.log.gz",
+      "compressed": true,
+      "bytes": 10163,
+      "sha256": "ed7afe746da03f8dcf30462a66a20b443c2eaaff5e9abea73427674bcf9f2c79",
+      "stored_bytes": 2085
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/capture-source.rs",
+      "archive": "raw/capture-source.rs.gz",
+      "compressed": true,
+      "bytes": 59105,
+      "sha256": "a11f90be94d40649420d92f0d062205b72d1e1a259e3aa8584f5da728b902430",
+      "stored_bytes": 12521
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/diagnostic/build.log",
+      "archive": "raw/diagnostic/build.log.gz",
+      "compressed": true,
+      "bytes": 2491,
+      "sha256": "e88bee2806ab880f331b6d5a3de3e9794df12c68ea9e1f51f0097928a0e0c55a",
+      "stored_bytes": 639
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/diagnostic/manager.log",
+      "archive": "raw/diagnostic/manager.log.gz",
+      "compressed": true,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stored_bytes": 20
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/diagnostic/result.json",
+      "archive": "raw/diagnostic/result.json.gz",
+      "compressed": true,
+      "bytes": 318,
+      "sha256": "a7ca37c8e300546fffa216fc5c617b89121240ccd4798f2b889eee38404c84e8",
+      "stored_bytes": 196
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/diagnostic/run.py",
+      "archive": "raw/diagnostic/run.py.gz",
+      "compressed": true,
+      "bytes": 1287,
+      "sha256": "df76d4befbe12435a46b009bdb09ce0331d1579b48c93b4c13e585650d365f76",
+      "stored_bytes": 656
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/diagnostic-r2/1280x720-result.json",
+      "archive": "raw/diagnostic-r2/1280x720-result.json.gz",
+      "compressed": true,
+      "bytes": 487,
+      "sha256": "ee0178e7d9fb894c1d68e0f1bf155a43942c9d25301201e2fcb71c31fc30a1fd",
+      "stored_bytes": 252
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/diagnostic-r2/1280x720.log",
+      "archive": "raw/diagnostic-r2/1280x720.log.gz",
+      "compressed": true,
+      "bytes": 68294,
+      "sha256": "cab31a01637a6af48fd1b7381bb3cdbfbca9b56e620374237c56800bca302c5e",
+      "stored_bytes": 4650
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/diagnostic-r2/360x800-result.json",
+      "archive": "raw/diagnostic-r2/360x800-result.json.gz",
+      "compressed": true,
+      "bytes": 485,
+      "sha256": "71bf7f3b04b2d1d12c913ed511264de47ab8940dda625e75a4320de7417d4117",
+      "stored_bytes": 251
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/diagnostic-r2/360x800.log",
+      "archive": "raw/diagnostic-r2/360x800.log.gz",
+      "compressed": true,
+      "bytes": 56304,
+      "sha256": "5480c5ad7ac6acfffca1b4f190b61593ba06abcc7c4815f2ca6b6d415531a44e",
+      "stored_bytes": 4432
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/diagnostic-r2/binary.sha256",
+      "archive": "raw/diagnostic-r2/binary.sha256.gz",
+      "compressed": true,
+      "bytes": 64,
+      "sha256": "a9d3f30061c77b318e4fd9fb6720db72299cb53ebaf0905c99a9f56eed124c14",
+      "stored_bytes": 70
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/diagnostic-r2/build.log",
+      "archive": "raw/diagnostic-r2/build.log.gz",
+      "compressed": true,
+      "bytes": 1140,
+      "sha256": "fd70c3634eb21926f18f5e8e5ea7645f9557bc96ab50db55aabd26bb3e221b57",
+      "stored_bytes": 287
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/diagnostic-r2/manager.log",
+      "archive": "raw/diagnostic-r2/manager.log.gz",
+      "compressed": true,
+      "bytes": 21,
+      "sha256": "c9fa979471a369ee12aa64783efc38a4ddde8c8089827154a994665b7493f581",
+      "stored_bytes": 38
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/diagnostic-r2/result.json",
+      "archive": "raw/diagnostic-r2/result.json.gz",
+      "compressed": true,
+      "bytes": 315,
+      "sha256": "39fa5e8e51e1f269e63ab9e0a5169c2e4e79142e8fb05548db35ea2f72c11c61",
+      "stored_bytes": 194
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/diagnostic-r2/run.py",
+      "archive": "raw/diagnostic-r2/run.py.gz",
+      "compressed": true,
+      "bytes": 1293,
+      "sha256": "19563d50b2dc67fb5ff8bc7b635ac8cbeebff06b016d76deb56c7907a2999885",
+      "stored_bytes": 659
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/diagnostic-r2/selection-render-records.json",
+      "archive": "raw/diagnostic-r2/selection-render-records.json.gz",
+      "compressed": true,
+      "bytes": 43831,
+      "sha256": "1508a49a6ed0f98b401c160e88383f3b83eeb988aba30b8ed3007ee2f589403d",
+      "stored_bytes": 1483
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/experiment-summary.json",
+      "archive": "raw/experiment-summary.json.gz",
+      "compressed": true,
+      "bytes": 1043,
+      "sha256": "d5abe0093d45f90a8e92d2ac8e8b32852cbec657941fe6d6bec5c5ddf7866d5d",
+      "stored_bytes": 331
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/manager.log",
+      "archive": "raw/manager.log.gz",
+      "compressed": true,
+      "bytes": 21,
+      "sha256": "c9fa979471a369ee12aa64783efc38a4ddde8c8089827154a994665b7493f581",
+      "stored_bytes": 38
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/probe-source.rs",
+      "archive": "raw/probe-source.rs.gz",
+      "compressed": true,
+      "bytes": 3077,
+      "sha256": "d63531e45d12fd83f4cf439b9005f9212633d6135935b695f05cb0fa5402b645",
+      "stored_bytes": 1223
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/run.py",
+      "archive": "raw/run.py.gz",
+      "compressed": true,
+      "bytes": 1201,
+      "sha256": "345041bfe37210df86a14c46c450401b839b365e2a8f592197143f58389c8e70",
+      "stored_bytes": 730
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/serial/1280x720-result.json",
+      "archive": "raw/serial/1280x720-result.json.gz",
+      "compressed": true,
+      "bytes": 473,
+      "sha256": "38990a9dea5efc37d779db731f9ea35223acd425bb31342e4e6204c3f8e04344",
+      "stored_bytes": 248
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/serial/1280x720.log",
+      "archive": "raw/serial/1280x720.log.gz",
+      "compressed": true,
+      "bytes": 9610,
+      "sha256": "9341668e8e0196900005cd0e31a738f4f469a295b8e96d5568ced98dc2c37fbf",
+      "stored_bytes": 1994
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/serial/360x800-result.json",
+      "archive": "raw/serial/360x800-result.json.gz",
+      "compressed": true,
+      "bytes": 470,
+      "sha256": "93fcabf85f306aa08cca8769dc748b9ce1826692b8d7389d377e78b30ec9b0ea",
+      "stored_bytes": 246
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/serial/360x800.log",
+      "archive": "raw/serial/360x800.log.gz",
+      "compressed": true,
+      "bytes": 10413,
+      "sha256": "7f5d173bb80298d4914186a6f41f41f55d4630e8ee9e7c80935367e444ccf3de",
+      "stored_bytes": 2110
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/serial/binary.sha256",
+      "archive": "raw/serial/binary.sha256.gz",
+      "compressed": true,
+      "bytes": 64,
+      "sha256": "cbc4cd86c9e0bec631716fbac41c0f46c4e917e13b53bbf1869c9c661d293593",
+      "stored_bytes": 71
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/serial/build.log",
+      "archive": "raw/serial/build.log.gz",
+      "compressed": true,
+      "bytes": 1140,
+      "sha256": "b6874c7a8d92e4d5e1c60af68fae1821ef55ffd9d990aa511505a2c46a96c767",
+      "stored_bytes": 287
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/serial/manager.log",
+      "archive": "raw/serial/manager.log.gz",
+      "compressed": true,
+      "bytes": 21,
+      "sha256": "c9fa979471a369ee12aa64783efc38a4ddde8c8089827154a994665b7493f581",
+      "stored_bytes": 38
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/serial/result.json",
+      "archive": "raw/serial/result.json.gz",
+      "compressed": true,
+      "bytes": 315,
+      "sha256": "bd7d067cde8696ce4d6aca60b7c2e66d1bddf5b6875ff43b9de9fbfc95289635",
+      "stored_bytes": 194
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/serial/run.py",
+      "archive": "raw/serial/run.py.gz",
+      "compressed": true,
+      "bytes": 1146,
+      "sha256": "3fce003ed43563232cabf53c23ef4852c71cc04da8ea4ceeefe16204eb64a486",
+      "stored_bytes": 575
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/single-camera/360x800-result.json",
+      "archive": "raw/single-camera/360x800-result.json.gz",
+      "compressed": true,
+      "bytes": 487,
+      "sha256": "76574b965e9c758ad1971330adedf96ec1390c739c32996c6f6920b199b2dcf5",
+      "stored_bytes": 251
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/single-camera/360x800.log",
+      "archive": "raw/single-camera/360x800.log.gz",
+      "compressed": true,
+      "bytes": 39881,
+      "sha256": "cc2b214f2a41d5cbe47514d1d10b1a4cd8c27a817de6201e18c2f3833f561ff1",
+      "stored_bytes": 4256
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/single-camera/binary.sha256",
+      "archive": "raw/single-camera/binary.sha256.gz",
+      "compressed": true,
+      "bytes": 64,
+      "sha256": "1b2726d16ac477ad893a82175f7ee2da4a8eb067a06e1ff9b2636646200daca3",
+      "stored_bytes": 69
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/single-camera/build.log",
+      "archive": "raw/single-camera/build.log.gz",
+      "compressed": true,
+      "bytes": 276,
+      "sha256": "0b3fbc9d15f17b258bfe3124e5eca962a9d5d38d0e24027ed1ca3d7ee39074b3",
+      "stored_bytes": 188
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/single-camera/manager.log",
+      "archive": "raw/single-camera/manager.log.gz",
+      "compressed": true,
+      "bytes": 12,
+      "sha256": "c9007d92c5c0b83077f61b17204d6785941671c877057b7a2678e5364cd3afa5",
+      "stored_bytes": 32
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/single-camera/result.json",
+      "archive": "raw/single-camera/result.json.gz",
+      "compressed": true,
+      "bytes": 316,
+      "sha256": "d43b545976392be3a52c961cca01ae46f42f900f097ccfccc33057f492be7c0b",
+      "stored_bytes": 195
+    },
+    {
+      "source": "target/verification/ui-layer-2026-11-08/single-camera/run.py",
+      "archive": "raw/single-camera/run.py.gz",
+      "compressed": true,
+      "bytes": 1328,
+      "sha256": "f1e2d78377c9535cbe6fd7213728f5cf41a8cfd99e2dd152eff5c2a34cab993d",
+      "stored_bytes": 678
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "tool_version": "Version: ImageMagick 7.1.2-34 Q16-HDRI x86_64 c5d4ca8a0:20261014 https://imagemagick.org\nCopyright: (C) 1999 ImageMagick Studio LLC\nLicense: https://imagemagick.org/license/\nFeatures: Cipher DPC HDRI OpenMP \nDelegates (built-in): bzlib cairo djvu fftw fontconfig freetype heic jng jp2 jpeg jxl lcms lqr lzma openexr pangocairo png raqm raw rsvg tiff uhdr webp x xml zlib zstd\nCompiler: gcc (16.2)\n",
+  "images": [
+    {
+      "source": "docs/verification/decision-phase-2026-11-08/frames/phase/after-r2/native-1280x720-en/frame00100.png",
+      "jpeg": "decoded/after-r2-native-1280x720-en-100.jpg",
+      "png_bytes": 344412,
+      "png_sha256": "04f4c3d7e71fb92a764e501f5a4fa9402d041d00a6787ce2ebe36fc594c9dd6e",
+      "jpeg_sha256": "cd4eff9e3f70dc7af5e67ada4e956bb6c2295fabe1798e50b65083d37fc66c95",
+      "decoded_rgba_sha256": "15b6b54b636d9e4e56d1def9bc380dc25f30348ca72dab8242eac7b4378df75e",
+      "command": [
+        "magick",
+        "docs/verification/decision-phase-2026-11-08/frames/phase/after-r2/native-1280x720-en/frame00100.png",
+        "target/verification/ui-layer-2026-11-08/proof-preparation/decoded/after-r2-native-1280x720-en-100.jpg"
+      ]
+    },
+    {
+      "source": "docs/verification/decision-phase-2026-11-08/frames/phase/after-r2/native-1280x720-en/frame00120.png",
+      "jpeg": "decoded/after-r2-native-1280x720-en-120.jpg",
+      "png_bytes": 344412,
+      "png_sha256": "04f4c3d7e71fb92a764e501f5a4fa9402d041d00a6787ce2ebe36fc594c9dd6e",
+      "jpeg_sha256": "cd4eff9e3f70dc7af5e67ada4e956bb6c2295fabe1798e50b65083d37fc66c95",
+      "decoded_rgba_sha256": "15b6b54b636d9e4e56d1def9bc380dc25f30348ca72dab8242eac7b4378df75e",
+      "command": [
+        "magick",
+        "docs/verification/decision-phase-2026-11-08/frames/phase/after-r2/native-1280x720-en/frame00120.png",
+        "target/verification/ui-layer-2026-11-08/proof-preparation/decoded/after-r2-native-1280x720-en-120.jpg"
+      ]
+    },
+    {
+      "source": "docs/verification/decision-phase-2026-11-08/frames/phase/after-r2/native-360x800-zh/frame00100.png",
+      "jpeg": "decoded/after-r2-native-360x800-zh-100.jpg",
+      "png_bytes": 89790,
+      "png_sha256": "1121b3460dd7fe972bd47241f45ef0613956e6239f672e4c618cc3f73d99cb6e",
+      "jpeg_sha256": "033362d5ba08bdc682cd174bd83474e54891e8d51355c005d5299941511f7f94",
+      "decoded_rgba_sha256": "6ee108fc26886929b89c8e8e6b68f6ab314cf386eaec81220ee10238d3208074",
+      "command": [
+        "magick",
+        "docs/verification/decision-phase-2026-11-08/frames/phase/after-r2/native-360x800-zh/frame00100.png",
+        "target/verification/ui-layer-2026-11-08/proof-preparation/decoded/after-r2-native-360x800-zh-100.jpg"
+      ]
+    },
+    {
+      "source": "docs/verification/decision-phase-2026-11-08/frames/phase/after-r2/native-360x800-zh/frame00120.png",
+      "jpeg": "decoded/after-r2-native-360x800-zh-120.jpg",
+      "png_bytes": 89790,
+      "png_sha256": "1121b3460dd7fe972bd47241f45ef0613956e6239f672e4c618cc3f73d99cb6e",
+      "jpeg_sha256": "033362d5ba08bdc682cd174bd83474e54891e8d51355c005d5299941511f7f94",
+      "decoded_rgba_sha256": "6ee108fc26886929b89c8e8e6b68f6ab314cf386eaec81220ee10238d3208074",
+      "command": [
+        "magick",
+        "docs/verification/decision-phase-2026-11-08/frames/phase/after-r2/native-360x800-zh/frame00120.png",
+        "target/verification/ui-layer-2026-11-08/proof-preparation/decoded/after-r2-native-360x800-zh-120.jpg"
+      ]
+    },
+    {
+      "source": "docs/verification/decision-phase-2026-11-08/frames/phase/after-r3/native-1280x720-en/frame00100.png",
+      "jpeg": "decoded/after-r3-native-1280x720-en-100.jpg",
+      "png_bytes": 344412,
+      "png_sha256": "04f4c3d7e71fb92a764e501f5a4fa9402d041d00a6787ce2ebe36fc594c9dd6e",
+      "jpeg_sha256": "cd4eff9e3f70dc7af5e67ada4e956bb6c2295fabe1798e50b65083d37fc66c95",
+      "decoded_rgba_sha256": "15b6b54b636d9e4e56d1def9bc380dc25f30348ca72dab8242eac7b4378df75e",
+      "command": [
+        "magick",
+        "docs/verification/decision-phase-2026-11-08/frames/phase/after-r3/native-1280x720-en/frame00100.png",
+        "target/verification/ui-layer-2026-11-08/proof-preparation/decoded/after-r3-native-1280x720-en-100.jpg"
+      ]
+    },
+    {
+      "source": "docs/verification/decision-phase-2026-11-08/frames/phase/after-r3/native-1280x720-en/frame00120.png",
+      "jpeg": "decoded/after-r3-native-1280x720-en-120.jpg",
+      "png_bytes": 344412,
+      "png_sha256": "04f4c3d7e71fb92a764e501f5a4fa9402d041d00a6787ce2ebe36fc594c9dd6e",
+      "jpeg_sha256": "cd4eff9e3f70dc7af5e67ada4e956bb6c2295fabe1798e50b65083d37fc66c95",
+      "decoded_rgba_sha256": "15b6b54b636d9e4e56d1def9bc380dc25f30348ca72dab8242eac7b4378df75e",
+      "command": [
+        "magick",
+        "docs/verification/decision-phase-2026-11-08/frames/phase/after-r3/native-1280x720-en/frame00120.png",
+        "target/verification/ui-layer-2026-11-08/proof-preparation/decoded/after-r3-native-1280x720-en-120.jpg"
+      ]
+    },
+    {
+      "source": "docs/verification/decision-phase-2026-11-08/frames/phase/after-r3/native-360x800-zh/frame00100.png",
+      "jpeg": "decoded/after-r3-native-360x800-zh-100.jpg",
+      "png_bytes": 89790,
+      "png_sha256": "1121b3460dd7fe972bd47241f45ef0613956e6239f672e4c618cc3f73d99cb6e",
+      "jpeg_sha256": "033362d5ba08bdc682cd174bd83474e54891e8d51355c005d5299941511f7f94",
+      "decoded_rgba_sha256": "6ee108fc26886929b89c8e8e6b68f6ab314cf386eaec81220ee10238d3208074",
+      "command": [
+        "magick",
+        "docs/verification/decision-phase-2026-11-08/frames/phase/after-r3/native-360x800-zh/frame00100.png",
+        "target/verification/ui-layer-2026-11-08/proof-preparation/decoded/after-r3-native-360x800-zh-100.jpg"
+      ]
+    },
+    {
+      "source": "docs/verification/decision-phase-2026-11-08/frames/phase/after-r3/native-360x800-zh/frame00120.png",
+      "jpeg": "decoded/after-r3-native-360x800-zh-120.jpg",
+      "png_bytes": 89790,
+      "png_sha256": "1121b3460dd7fe972bd47241f45ef0613956e6239f672e4c618cc3f73d99cb6e",
+      "jpeg_sha256": "033362d5ba08bdc682cd174bd83474e54891e8d51355c005d5299941511f7f94",
+      "decoded_rgba_sha256": "6ee108fc26886929b89c8e8e6b68f6ab314cf386eaec81220ee10238d3208074",
+      "command": [
+        "magick",
+        "docs/verification/decision-phase-2026-11-08/frames/phase/after-r3/native-360x800-zh/frame00120.png",
+        "target/verification/ui-layer-2026-11-08/proof-preparation/decoded/after-r3-native-360x800-zh-120.jpg"
+      ]
+    }
+  ]
+}
