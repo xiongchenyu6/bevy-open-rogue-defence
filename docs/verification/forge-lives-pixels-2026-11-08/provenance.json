@@ -1,0 +1,11 @@
+{
+  "base_commit": "ee48a0b07a192138bdafe57074a73b9120bae66f",
+  "sources": {
+    "tools/desktop/campaign_equipment_runtime.py": "b58aa9f61e6cd8a4ee23f4efa34c50b54d9dc559b0ba2263e9a4b15b58353023",
+    "tools/desktop/test_campaign_equipment_runtime.py": "fee45d1eb89b8e3a18d5076dc8555f11aed939dbc40c27f946f9c1b5a608b84c"
+  },
+  "fixtures": {
+    "existing_r2_png": "237f36401d29e4da479fe8f8a092895509ec6ab5c237299e81ee56ed0ceab77f",
+    "r3_last_png": "47f772d387300526ca9c477676741bab12438c867c14a1c5320d064e81da9dcf"
+  }
+}

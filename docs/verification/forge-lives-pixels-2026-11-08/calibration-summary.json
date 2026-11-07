@@ -1,0 +1,41 @@
+{
+  "rows": 48,
+  "images": [
+    "earned-forge-materials-r2-2026-11-08/forge/resume-timer-source.png",
+    "earned-forge-materials-r3-2026-11-08/forge/resume-timer-source-0015.png"
+  ],
+  "chosen_reads": [
+    {
+      "image": "earned-forge-materials-r2-2026-11-08/forge/resume-timer-source.png",
+      "sha256": "237f36401d29e4da479fe8f8a092895509ec6ab5c237299e81ee56ed0ceab77f",
+      "crop": "90x20+20+82",
+      "method": "gray",
+      "scale": 300,
+      "text": "LIVES 3"
+    },
+    {
+      "image": "earned-forge-materials-r2-2026-11-08/forge/resume-timer-source.png",
+      "sha256": "237f36401d29e4da479fe8f8a092895509ec6ab5c237299e81ee56ed0ceab77f",
+      "crop": "90x20+20+82",
+      "method": "gray",
+      "scale": 400,
+      "text": "LIVES3"
+    },
+    {
+      "image": "earned-forge-materials-r3-2026-11-08/forge/resume-timer-source-0015.png",
+      "sha256": "47f772d387300526ca9c477676741bab12438c867c14a1c5320d064e81da9dcf",
+      "crop": "90x20+20+82",
+      "method": "gray",
+      "scale": 300,
+      "text": "LIVES 3"
+    },
+    {
+      "image": "earned-forge-materials-r3-2026-11-08/forge/resume-timer-source-0015.png",
+      "sha256": "47f772d387300526ca9c477676741bab12438c867c14a1c5320d064e81da9dcf",
+      "crop": "90x20+20+82",
+      "method": "gray",
+      "scale": 400,
+      "text": "LIVES 3"
+    }
+  ]
+}

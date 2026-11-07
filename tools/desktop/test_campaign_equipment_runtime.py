@@ -14,6 +14,24 @@ from campaign_equipment_runtime import (affordable_gear, market_wallet, inventor
 
 
 class EquipmentPolicyParsing(unittest.TestCase):
+    def test_incomplete_life_candidate_requires_positive_exact_pixel_validation(self):
+        rows = [('LVES3', 23, 87, 76, 99)]
+        self.assertEqual(public_panel_state(rows), 'unknown')
+        for lives, expected in [(3, 'battle'), (0, 'unknown')]:
+            with patch('campaign_equipment_runtime.battle_lives_pixels', return_value=lives) as read:
+                self.assertEqual(public_panel_state(rows, Path('current.png'), None), expected)
+                read.assert_called_once_with(Path('current.png'), None)
+        with patch('campaign_equipment_runtime.battle_lives_pixels', side_effect=AssertionError('unclear')):
+            with self.assertRaises(AssertionError):
+                public_panel_state(rows, Path('current.png'), None)
+
+    def test_actual_current_incomplete_life_label_is_confirmed_by_two_pixel_reads(self):
+        from campaign_equipment_runtime import battle_lives_pixels
+        image = Path(__file__).resolve().parents[2] / 'docs/verification/forge-lives-pixels-2026-11-08/unknown-hud.png'
+        rows = [('LVES3', 23, 87, 76, 99)]
+        self.assertEqual(battle_lives_pixels(image, None), 3)
+        self.assertEqual(public_panel_state(rows, image, None), 'battle')
+
     def test_purchase_passively_waits_for_exact_debit_with_one_input(self):
         offer=dict(name='Wind Boots',price=160,category='Equipment',index=0)
         click=Mock();shot=Mock(side_effect=[Path('early.png'),Path('settled.png')]);records=[]

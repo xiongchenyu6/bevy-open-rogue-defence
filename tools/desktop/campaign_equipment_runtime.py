@@ -486,6 +486,25 @@ def battle_level_pixels(path, env):
     return text
 
 
+def battle_lives_pixels(path, env):
+    """Require complete matching life labels from two independently scaled crops."""
+    reads = []
+    with tempfile.TemporaryDirectory(prefix='rogue-lives-') as directory:
+        for scale in (300, 400):
+            crop = Path(directory) / f'lives-{scale}.png'
+            subprocess.run(['convert', str(path), '-crop', '90x20+20+82',
+                '-colorspace', 'Gray', '-negate', '-resize', f'{scale}%',
+                '-bordercolor', 'white', '-border', '20', str(crop)],
+                env=env, check=True, capture_output=True)
+            text = subprocess.check_output(['tesseract', str(crop), 'stdout', '-l', 'eng',
+                '--psm', '7'], env=env, text=True, stderr=subprocess.PIPE).strip()
+            match = re.fullmatch(r'LIVES\s*(\d+)', text)
+            assert match, f'Unreadable complete life label pixels: {text!r}'
+            reads.append(int(match[1]))
+    assert len(set(reads)) == 1, f'Conflicting life label pixels: {reads!r}'
+    return reads[0]
+
+
 def public_panel_state(rows, image=None, env=None):
     if any(find_text(rows, title) for title in ('NO LIVES REMAIN', 'CHAPTER CLEARED')):
         return 'terminal'
@@ -504,6 +523,12 @@ def public_panel_state(rows, image=None, env=None):
            and re.fullmatch(r'LEVEL\s*\d+\s+\d+\s*/\s*\d+\s*XP', text.strip(), re.I)
            for text, x, y, *_ in rows):
         return 'battle'
+    # Incomplete whole-frame life lettering only requests a fresh exact pixel read.
+    if image is not None and any(x < 100 and 70 <= y < 110
+            and re.match(r'^L[A-Z]{2,5}\s*\d+', text, re.I)
+            for text, x, y, *_ in rows):
+        if battle_lives_pixels(image, env) > 0:
+            return 'battle'
     # A spatial LEVEL/numeric/XP candidate only requests fresh pixel validation;
     # OCR letters in the level token only request the strict numeric pixel read;
     # they never become guessed/corrected numeric values.

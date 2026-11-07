@@ -1,0 +1,62 @@
+{
+  "raw/tests-and-calibration/command.json.gz": {
+    "bytes": 518,
+    "sha256": "70fac32409c347dea37620900c28a68d078fe7734995ec100571c7f9b48d7abe"
+  },
+  "raw/tests-and-calibration/run-tests.py.gz": {
+    "bytes": 829,
+    "sha256": "0932504bc58fa5d4cc38811fd6be91767b4a68ca02a077c3fb95003ba8f565f9"
+  },
+  "raw/tests-and-calibration/tests.log.gz": {
+    "bytes": 220,
+    "sha256": "3d1e087472bd69075c36ba6d5776cc8a3542a3432d65fb48d1e8a86ead025bcd"
+  },
+  "raw/tests-and-calibration/command.log.gz": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw/tests-and-calibration/full-classification.json.gz": {
+    "bytes": 7547,
+    "sha256": "6513c6fdfe18cad6358fe55805248425f917ed5e1ded2923a1b20bd5f2896c8a"
+  },
+  "raw/tests-and-calibration/calibrate.py.gz": {
+    "bytes": 1092,
+    "sha256": "9ca84434d69b0d04d6faf609d3633592f75d5bcb1d7083f6ce0c8a1be673ada1"
+  },
+  "raw/tests-and-calibration/calibration.jsonl.gz": {
+    "bytes": 11416,
+    "sha256": "3ad2429568ff2da10dd6e25cf67f614f19c2d0281fcb850ae6ac73b185822d2a"
+  },
+  "raw/tests-and-calibration/manager.log.gz": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw/tests-and-calibration/tests-result.json.gz": {
+    "bytes": 659,
+    "sha256": "8b1c6ec4a8aab68983bee1007a74b6cba18657bfa31a1b2be2815806983e8ea3"
+  },
+  "raw/natural-r3/forge.log.gz": {
+    "bytes": 922,
+    "sha256": "4cccc27ec516193af9e2de702335d82f2efd9ab41c9004a7f493ec53113d0e45"
+  },
+  "raw/natural-r3/forge-process.json.gz": {
+    "bytes": 1017,
+    "sha256": "e48602bb9ef88d197f3385198f6c8f48f7ebb0f526091becadc8a34231d7cee3"
+  },
+  "raw/natural-r3/manager.log.gz": {
+    "bytes": 1963,
+    "sha256": "daf7bf344dd237209225be64538107b0087d09624c3fe6264ceb9f74abeca630"
+  },
+  "raw/natural-r3/forge/result.json.gz": {
+    "bytes": 3435,
+    "sha256": "409c1db0e6c90cd8c338d0ea2ce281dd8c456919c7faf2c8030dcfd82d11806e"
+  },
+  "raw/natural-r3/forge/harness-snapshot.json.gz": {
+    "bytes": 885,
+    "sha256": "c4d51f0477a502c23e0aeb70d0f002b3ad6ef81734d0faf231a4a9a83066883d"
+  },
+  "raw/natural-r3/forge/initial-save-provenance.json.gz": {
+    "bytes": 200,
+    "sha256": "9b52d5b388564c3dc5466f845ec9ca4bcc7a7617cf4df5f86ad8f329c72fcc1a"
+  }
+}
