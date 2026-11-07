@@ -1,0 +1,18 @@
+import gzip,hashlib,json,re,sys
+from pathlib import Path
+D=Path(sys.argv[1]).resolve()
+def sha(b):return hashlib.sha256(b).hexdigest()
+m=json.loads((D/'SHA256.json').read_text());assert set(m)=={str(f.relative_to(D)) for f in D.rglob('*') if f.is_file() and f.name!='SHA256.json'}
+for n,h in m.items():assert sha((D/n).read_bytes())==h,n
+raw={}
+for n,x in json.loads((D/'raw-manifest.json').read_text()).items():
+ b=gzip.decompress((D/n).read_bytes());assert sha(b)==x['sha256'] and len(b)==x['bytes'];raw[n.removeprefix('raw/').removesuffix('.gz')]=b
+for n in ['tests-result.json','tests-before-order-review-result.json']:assert json.loads(raw[n])['returncode']==0
+for n in ['tests.log','tests-before-order-review.log']:assert re.search(rb'Ran 123 tests',raw[n]) and re.search(rb'\nOK\s*$',raw[n])
+assert json.loads(raw['prior-replay-result.json'])['returncode']==0
+replay=json.loads(raw['prior-replay.log']);assert replay['actual_prior_restart_magic_penetration']==0 and replay['evidence']
+prov=json.loads((D/'provenance.json').read_text());assert len(prov['sources'])==2
+for n,h in prov['sources'].items():assert sha((D/'source'/n).read_bytes())==h
+assert sha((D/'prior-restart-strength.png').read_bytes())==prov['prior_fixture_sha256']
+assert gzip.decompress((D/'source.patch.gz').read_bytes()).startswith(b'diff --git ')
+print('PASS exact archive/raw bytes,both123-test receipts,2 source snapshots and actual prior restart0% pixel replay.')

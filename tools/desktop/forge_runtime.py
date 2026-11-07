@@ -130,6 +130,28 @@ def verify_recipe_selection(title, materials, action):
     assert action.strip() == 'Forge equipment', ('Recipe is not ready', action)
 
 
+def magic_penetration_from_rows(rows):
+    """Read only the labeled offense percentage, rejecting missing/conflicting values."""
+    values, evidence = set(), []
+    for row in rows:
+        text, left, top, right, bottom = row
+        inline = re.fullmatch(r'Magic penetration\s+(\d+(?:\.\d+)?)%', text.strip(), re.I)
+        if inline:
+            values.add(float(inline[1]))
+            evidence.append(row)
+        elif normalized(text) == 'magicpenetration':
+            for candidate in rows:
+                value, x, y, _, lower = candidate
+                match = re.fullmatch(r'(\d+(?:\.\d+)?)%', value.strip())
+                if match and right < x < left + 285 and abs((y + lower - top - bottom) / 2) <= 8:
+                    values.add(float(match[1]))
+                    evidence.extend((row, candidate))
+    assert len(values) == 1, ('No unique labeled magic penetration percentage', evidence)
+    value = values.pop()
+    assert 0 <= value <= 100, ('Invalid magic penetration percentage', value)
+    return value, evidence
+
+
 def verify_crafted_inventory(count, details, acquired):
     assert set(acquired) == MATERIALS and len(acquired) == 2
     assert count == 1 and details == ['astralprism'], \
@@ -233,6 +255,16 @@ def main():
             lambda: call(['xdotool','mouseup','1']), time.monotonic()+20, observations)
         rows = lines()
         assert not inventory_open(rows) and not find_text(rows, 'Close'), 'Equipment did not close'
+    def inspect_magic_penetration(prefix, expected):
+        click(178,44);wait('ATTRIBUTES')
+        image=shot(prefix+'.png')
+        value,evidence=magic_penetration_from_rows(ocr_screenshot(image,env))
+        report.setdefault('magic_penetration_observations',[]).append(
+            dict(screenshot=image.name,value=value,expected=expected,rows=evidence))
+        assert value==expected, ('Equipment magic penetration mismatch',value,expected)
+        key('Escape')
+        assert find_text(lines(),'ATTRIBUTES') is None, 'Attributes did not close'
+
     def inspect_inventory(prefix):
         rows = lines(); count = inventory_count(rows)
         details = []
@@ -420,10 +452,12 @@ def main():
                     verify_crafted_inventory(count,details,report['acquired_materials'])
                     report['crafted_inventory_ocr']=dict(count=count,names=details)
                     shot('crafted-inventory.png');close_inventory()
+                    inspect_magic_penetration('crafted-magic-penetration',20.0)
                     report['inventory_verified']=True
                     report['crafting']='Astral Prism crafted from two same-run naturally purchased materials'
                     break
                 close_inventory()
+                inspect_magic_penetration('material-magic-penetration',10.0 if name=='Arc Lens' else 0.0)
             else:
                 close_market_panel()
             stop.clear();worker=threading.Thread(target=operate,daemon=True);worker.start();time.sleep(12)

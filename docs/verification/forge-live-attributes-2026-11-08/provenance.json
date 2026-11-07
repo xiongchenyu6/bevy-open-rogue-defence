@@ -1,0 +1,8 @@
+{
+  "base_commit": "945130f0c5ac1ffcbc92d9741aca7ac61ac338b4",
+  "sources": {
+    "tools/desktop/forge_runtime.py": "9a96660953e56a22ae9699b784febb5c3736072086807330f91c612fdb4592db",
+    "tools/desktop/test_forge_runtime.py": "c0d7a3fd101eb9a1e87d300938751d6cf1a48dee06198f04b7adbd044d03b0cd"
+  },
+  "prior_fixture_sha256": "d23e8daaf8e0f60475a8e803ad543b97862de5b9ade464ad89dbab4dcb081957"
+}

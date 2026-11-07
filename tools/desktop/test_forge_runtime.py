@@ -12,6 +12,20 @@ from campaign_equipment_runtime import (crop_text, screenshot_wallet, inspected_
 
 
 class ForgePolicyTests(unittest.TestCase):
+    def test_magic_penetration_requires_its_own_unambiguous_percentage(self):
+        label=('Magic penetration',501,475,617,490)
+        value=('20.0%',748,475,780,487)
+        unrelated=('Critical chance 95.0%',500,300,780,315)
+        self.assertEqual(forge_runtime.magic_penetration_from_rows([label,value,unrelated])[0],20.0)
+        self.assertEqual(forge_runtime.magic_penetration_from_rows(
+            [('Magic penetration 10.0%',501,475,780,490)])[0],10.0)
+        for rows in ([unrelated], [label,('20.0',748,475,780,487)],
+                     [label,('20.0%',748,445,780,457)],
+                     [label,value,('Magic penetration 10.0%',501,475,780,490)],
+                     [('Magic penetration 120.0%',501,475,780,490)]):
+            with self.assertRaises(AssertionError):
+                forge_runtime.magic_penetration_from_rows(rows)
+
     def test_forge_uses_the_same_single_click_purchase_observer(self):
         from campaign_equipment_runtime import purchase_market_offer
         self.assertIs(forge_runtime.purchase_market_offer,purchase_market_offer)
