@@ -78,6 +78,7 @@ fn position_picker_settings(
     menu: Res<crate::game::campaign_ui::CampaignMenu>,
     session: Res<GameSession>,
     language: Res<GameLanguage>,
+    equipment: Option<Res<crate::game::equipment_ui::EquipmentPanelState>>,
     mut labels: Query<&mut Text, With<SettingsLauncherLabel>>,
     mut nodes: Query<
         (
@@ -112,6 +113,13 @@ fn position_picker_settings(
     }
     for (mut node, launcher, header) in &mut nodes {
         if launcher {
+            node.reborrow()
+                .map_unchanged(|n| &mut n.display)
+                .set_if_neq(if equipment.as_ref().is_some_and(|state| state.open()) {
+                    Display::None
+                } else {
+                    Display::Flex
+                });
             node.reborrow()
                 .map_unchanged(|n| &mut n.left)
                 .set_if_neq(layout.left);

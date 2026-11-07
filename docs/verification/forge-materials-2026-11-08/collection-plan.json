@@ -1,0 +1,889 @@
+{
+  "destination": "docs/verification/forge-materials-2026-11-08",
+  "files": [
+    {
+      "source": "after-chain0-1280x720-en-result.json",
+      "archive": "raw/after-chain0-1280x720-en-result.json.gz",
+      "sha256": "6ba6b9bb1bc95325d71b415724a2bd0619893d36c05a66a21da95cb6828bfe87",
+      "bytes": 490,
+      "stored_bytes": 256
+    },
+    {
+      "source": "after-chain0-1280x720-en.log",
+      "archive": "raw/after-chain0-1280x720-en.log.gz",
+      "sha256": "1ec2860f09917bb0439ae77ad337e5f16941cec207fe3340e795b036c28bc8c7",
+      "bytes": 7429,
+      "stored_bytes": 1821
+    },
+    {
+      "source": "after-chain0-360x800-en-result.json",
+      "archive": "raw/after-chain0-360x800-en-result.json.gz",
+      "sha256": "526e605b3c8f9f97f5943ed61b3330f8befaf6bd8d76325083892e57df675eef",
+      "bytes": 488,
+      "stored_bytes": 256
+    },
+    {
+      "source": "after-chain0-360x800-en.log",
+      "archive": "raw/after-chain0-360x800-en.log.gz",
+      "sha256": "b7f171af15459c340739d49ec0504a82e553f7515ab6ef0d9ee6546b4011e0fa",
+      "bytes": 7416,
+      "stored_bytes": 1816
+    },
+    {
+      "source": "after-chain1-1280x720-zh-result.json",
+      "archive": "raw/after-chain1-1280x720-zh-result.json.gz",
+      "sha256": "a46ddb9c103d01cb266ff8a38fc8f8c70cde83f89702297c8b6de99e22daced4",
+      "bytes": 489,
+      "stored_bytes": 256
+    },
+    {
+      "source": "after-chain1-1280x720-zh.log",
+      "archive": "raw/after-chain1-1280x720-zh.log.gz",
+      "sha256": "ba1ffeff4496396afcf5039da91515a8c3b9b6c126f4479ce1d6f779da1c0542",
+      "bytes": 7385,
+      "stored_bytes": 1801
+    },
+    {
+      "source": "after-chain1-360x800-zh-result.json",
+      "archive": "raw/after-chain1-360x800-zh-result.json.gz",
+      "sha256": "f42f6769c97a19b32c9234f0762a15f7a214b0c032213f456907b2bcbfd12810",
+      "bytes": 488,
+      "stored_bytes": 258
+    },
+    {
+      "source": "after-chain1-360x800-zh.log",
+      "archive": "raw/after-chain1-360x800-zh.log.gz",
+      "sha256": "4b3609da6e8e035521a2b0bed7482d13d8dad25d91878f2f2979243dd1249bd3",
+      "bytes": 7372,
+      "stored_bytes": 1791
+    },
+    {
+      "source": "before-chain0-1280x720-en-result.json",
+      "archive": "raw/before-chain0-1280x720-en-result.json.gz",
+      "sha256": "5d4a3c6c8985532d0e7a24d49e65dfbda88085f03d5a6278705bc1e1cbd9ca14",
+      "bytes": 489,
+      "stored_bytes": 270
+    },
+    {
+      "source": "before-chain0-1280x720-en.log",
+      "archive": "raw/before-chain0-1280x720-en.log.gz",
+      "sha256": "13957caeb0c5e64f1edeb066da32e3d91d262037221a0bda7d9051ec4ae6af45",
+      "bytes": 8120,
+      "stored_bytes": 1870
+    },
+    {
+      "source": "before-chain1-360x800-zh-result.json",
+      "archive": "raw/before-chain1-360x800-zh-result.json.gz",
+      "sha256": "64d1f90f5ec211a5f4eebc3fc15ee5c2866587243220d623afc20c42b13bc052",
+      "bytes": 487,
+      "stored_bytes": 272
+    },
+    {
+      "source": "before-chain1-360x800-zh.log",
+      "archive": "raw/before-chain1-360x800-zh.log.gz",
+      "sha256": "02c7cf07da26af54b091059a9cfaf5feadbd3becdc9f91f2962abe151e7ce00e",
+      "bytes": 7199,
+      "stored_bytes": 1749
+    },
+    {
+      "source": "build-result.json",
+      "archive": "raw/build-result.json.gz",
+      "sha256": "3da1a0b5ad90bf4c9d773823f168b90cc024441e85c20dcfd1aec58736add6ec",
+      "bytes": 398,
+      "stored_bytes": 211
+    },
+    {
+      "source": "build.log",
+      "archive": "raw/build.log.gz",
+      "sha256": "070f84787fb988f8cdc2e9eb27d0cf064a4b9442be9f6f51f8c9adffbc4b8f48",
+      "bytes": 2797,
+      "stored_bytes": 787
+    },
+    {
+      "source": "build.py",
+      "archive": "raw/build.py.gz",
+      "sha256": "024052f21b1ca49b61140fd579c60641932056ef6d33a9f78ebced045d91f72f",
+      "bytes": 638,
+      "stored_bytes": 390
+    },
+    {
+      "source": "candidate.sha256",
+      "archive": "raw/candidate.sha256.gz",
+      "sha256": "4694ee0145ae544d4010f99615d36b44fdb0ea1e78cf3037bd00d5d54e49fdd9",
+      "bytes": 64,
+      "stored_bytes": 71
+    },
+    {
+      "source": "captures.log",
+      "archive": "raw/captures.log.gz",
+      "sha256": "9c24978e7cdbdf38229bb79bf293030a6ada854056445397324788a6b509486f",
+      "bytes": 161,
+      "stored_bytes": 85
+    },
+    {
+      "source": "edges/after-chain0-320x667-en-result.json",
+      "archive": "raw/edges/after-chain0-320x667-en-result.json.gz",
+      "sha256": "045e99814419fb539ea8e826d53d4db0d89b9dbfc90622d10c303f51b90697e0",
+      "bytes": 500,
+      "stored_bytes": 261
+    },
+    {
+      "source": "edges/after-chain0-320x667-en.log",
+      "archive": "raw/edges/after-chain0-320x667-en.log.gz",
+      "sha256": "fc66f99e775ba5ed1a6e809e103bc670f3ac0da9a714e8a7b2f4dadc00a1a523",
+      "bytes": 7556,
+      "stored_bytes": 1822
+    },
+    {
+      "source": "edges/after-chain1-320x667-zh-result.json",
+      "archive": "raw/edges/after-chain1-320x667-zh-result.json.gz",
+      "sha256": "3076eb4390b1bce64f09ec4b5c7e1c09fa251d735d5d93b216bf1621171a4ae7",
+      "bytes": 499,
+      "stored_bytes": 261
+    },
+    {
+      "source": "edges/after-chain1-320x667-zh.log",
+      "archive": "raw/edges/after-chain1-320x667-zh.log.gz",
+      "sha256": "9934e95f05b2eaacf957a795ba849fbadfba5f0081a65c7272ff36b71f0763fa",
+      "bytes": 7512,
+      "stored_bytes": 1803
+    },
+    {
+      "source": "edges/after-chain1-852x393-zh-result.json",
+      "archive": "raw/edges/after-chain1-852x393-zh-result.json.gz",
+      "sha256": "ae8652f57a15b08b358ded87fa737815738ab07ac61057d5909eb89f0071ec68",
+      "bytes": 499,
+      "stored_bytes": 260
+    },
+    {
+      "source": "edges/after-chain1-852x393-zh.log",
+      "archive": "raw/edges/after-chain1-852x393-zh.log.gz",
+      "sha256": "5c74e63f6f90c077b0e7dbff26cc7d01e71c079554e5d90b318a0a1c0631df1d",
+      "bytes": 7512,
+      "stored_bytes": 1800
+    },
+    {
+      "source": "edges/candidate.sha256",
+      "archive": "raw/edges/candidate.sha256.gz",
+      "sha256": "11784c63b752bcb37f849aefb750f562e72803a9e09cc071ee897f6e25d9e51c",
+      "bytes": 64,
+      "stored_bytes": 70
+    },
+    {
+      "source": "edges/manager.log",
+      "archive": "raw/edges/manager.log.gz",
+      "sha256": "1a36b2493094bc81fc3e61a14c5a9bc212c91313b643cad41af84f33a626c348",
+      "bytes": 78,
+      "stored_bytes": 64
+    },
+    {
+      "source": "edges/run.py",
+      "archive": "raw/edges/run.py.gz",
+      "sha256": "dbe5484c2cfafb537633cde954f5b8162171f9abf6f2c51509d9e52a300610ea",
+      "bytes": 1457,
+      "stored_bytes": 876
+    },
+    {
+      "source": "final-source.patch",
+      "archive": "raw/final-source.patch.gz",
+      "sha256": "3c8c46fecd19bc7c9d53c15cd6f275bb5ecbfd4c8de8f639cf26dad409f99f0f",
+      "bytes": 19683,
+      "stored_bytes": 5362
+    },
+    {
+      "source": "independent-r5-stats.json",
+      "archive": "raw/independent-r5-stats.json.gz",
+      "sha256": "ec866e68413d37c3f95a1704b379ae3134d56078725aa6824da8c4c97f20b40b",
+      "bytes": 37853,
+      "stored_bytes": 1336
+    },
+    {
+      "source": "manager.log",
+      "archive": "raw/manager.log.gz",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "stored_bytes": 20
+    },
+    {
+      "source": "r2/build-result.json",
+      "archive": "raw/r2/build-result.json.gz",
+      "sha256": "5bd1f0de610588cabe6cd913832c40b1610c017e9b2b8881254a8c9399fc9a86",
+      "bytes": 397,
+      "stored_bytes": 210
+    },
+    {
+      "source": "r2/build.log",
+      "archive": "raw/r2/build.log.gz",
+      "sha256": "ea753e160a7b7feaccef312a6e7c79af5338a485ba77392352bc641a27ec363d",
+      "bytes": 4297,
+      "stored_bytes": 835
+    },
+    {
+      "source": "r2/build.py",
+      "archive": "raw/r2/build.py.gz",
+      "sha256": "6cb6e7574281b5666c68fa18e395796cc61e9058b5ea1f983ed80046ad17a27b",
+      "bytes": 641,
+      "stored_bytes": 392
+    },
+    {
+      "source": "r2/manager.log",
+      "archive": "raw/r2/manager.log.gz",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "stored_bytes": 20
+    },
+    {
+      "source": "r3/build-result.json",
+      "archive": "raw/r3/build-result.json.gz",
+      "sha256": "bc7072b308c6ab0b87b2344e95f7cf8418c90fd9abf2ae28609ea30e7118bdac",
+      "bytes": 396,
+      "stored_bytes": 209
+    },
+    {
+      "source": "r3/build.log",
+      "archive": "raw/r3/build.log.gz",
+      "sha256": "985c33ba433618f8cff59ff3779256935044b102778121173b8a6f117c35c19e",
+      "bytes": 1140,
+      "stored_bytes": 286
+    },
+    {
+      "source": "r3/build.py",
+      "archive": "raw/r3/build.py.gz",
+      "sha256": "0b4862d4244d2871bf2f758f1cc17dcd102f380849e272c93c5812f9d4a7fed4",
+      "bytes": 641,
+      "stored_bytes": 392
+    },
+    {
+      "source": "r3/inputs.json",
+      "archive": "raw/r3/inputs.json.gz",
+      "sha256": "d0330c8935560e9087803b5c4eded22c19818a4e019ebcb603e153dd4bfeaa62",
+      "bytes": 42076,
+      "stored_bytes": 19603
+    },
+    {
+      "source": "r3/manager.log",
+      "archive": "raw/r3/manager.log.gz",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "stored_bytes": 20
+    },
+    {
+      "source": "r3/source/src/bin/capture/crafting.rs",
+      "archive": "raw/r3/source/src/bin/capture/crafting.rs.gz",
+      "sha256": "ecdbb2a80e1076b68e2e1d4a824b373a1e521021d3d39541d0e7c6459e9fdff8",
+      "bytes": 12646,
+      "stored_bytes": 3450
+    },
+    {
+      "source": "r3/source/src/game/crafting.rs",
+      "archive": "raw/r3/source/src/game/crafting.rs.gz",
+      "sha256": "8ec0bb362de956d22b637f3b4d08b90a2a1de223cdd483c3fb5228288fc54955",
+      "bytes": 10277,
+      "stored_bytes": 2717
+    },
+    {
+      "source": "r3/source/src/game/equipment_ui/materials.rs",
+      "archive": "raw/r3/source/src/game/equipment_ui/materials.rs.gz",
+      "sha256": "3b683e03bae67c6fba0eb6197a7480dcb2245915266decd137d022e9599be146",
+      "bytes": 5425,
+      "stored_bytes": 1854
+    },
+    {
+      "source": "r3/source/src/game/equipment_ui/panel.rs",
+      "archive": "raw/r3/source/src/game/equipment_ui/panel.rs.gz",
+      "sha256": "bb186a75488c80394c616bace173d216687b60ac84347e14b22ea6ecd9947930",
+      "bytes": 16094,
+      "stored_bytes": 3453
+    },
+    {
+      "source": "r3/source/src/game/equipment_ui.rs",
+      "archive": "raw/r3/source/src/game/equipment_ui.rs.gz",
+      "sha256": "b250636c09e1346b0c49a5603ee49a316d9031ca3b170b359a17a4b0cc473de5",
+      "bytes": 28769,
+      "stored_bytes": 6250
+    },
+    {
+      "source": "r4/after-chain0-1280x720-en-result.json",
+      "archive": "raw/r4/after-chain0-1280x720-en-result.json.gz",
+      "sha256": "966a3d47080371b33db3e08bf5189192240fe8b89e6024f1ca6b1c175fa7ae8b",
+      "bytes": 495,
+      "stored_bytes": 259
+    },
+    {
+      "source": "r4/after-chain0-1280x720-en.log",
+      "archive": "raw/r4/after-chain0-1280x720-en.log.gz",
+      "sha256": "50c4fd0fd34bd7839cb6f188e1aa6f556dd685c49780625a2d3da698e89ad0f7",
+      "bytes": 7530,
+      "stored_bytes": 1823
+    },
+    {
+      "source": "r4/after-chain0-360x800-en-result.json",
+      "archive": "raw/r4/after-chain0-360x800-en-result.json.gz",
+      "sha256": "3956e0cdbc3b353da222d5df0441c508d157bb88aa6be90cfb9caff28d9a44a0",
+      "bytes": 494,
+      "stored_bytes": 259
+    },
+    {
+      "source": "r4/after-chain0-360x800-en.log",
+      "archive": "raw/r4/after-chain0-360x800-en.log.gz",
+      "sha256": "9fe8d36ac034f07c48c71d56470d0f285c2e475640492689e86ee12c74e069f8",
+      "bytes": 7517,
+      "stored_bytes": 1816
+    },
+    {
+      "source": "r4/after-chain1-1280x720-zh-result.json",
+      "archive": "raw/r4/after-chain1-1280x720-zh-result.json.gz",
+      "sha256": "48317ecc21304d58193ce7c07f788a044593a1154f6d2e381b54e00c9c2b1461",
+      "bytes": 496,
+      "stored_bytes": 260
+    },
+    {
+      "source": "r4/after-chain1-1280x720-zh.log",
+      "archive": "raw/r4/after-chain1-1280x720-zh.log.gz",
+      "sha256": "743ef1a86c4adc4065645ffe6d1e5b17fd7d19e6e479ba7ba0fab06c7e90b0d8",
+      "bytes": 7486,
+      "stored_bytes": 1805
+    },
+    {
+      "source": "r4/after-chain1-360x800-zh-result.json",
+      "archive": "raw/r4/after-chain1-360x800-zh-result.json.gz",
+      "sha256": "b5c1a2c7d3c783286509d416e89c8b19b21b4213f24b4a87b9b79602bc5ed86d",
+      "bytes": 493,
+      "stored_bytes": 260
+    },
+    {
+      "source": "r4/after-chain1-360x800-zh.log",
+      "archive": "raw/r4/after-chain1-360x800-zh.log.gz",
+      "sha256": "c509332d612c8fbe7b32c454d44566f624c13d715dc9f8fb1c7ae335338d3817",
+      "bytes": 7473,
+      "stored_bytes": 1800
+    },
+    {
+      "source": "r4/candidate.sha256",
+      "archive": "raw/r4/candidate.sha256.gz",
+      "sha256": "11784c63b752bcb37f849aefb750f562e72803a9e09cc071ee897f6e25d9e51c",
+      "bytes": 64,
+      "stored_bytes": 70
+    },
+    {
+      "source": "r4/capture-build-result.json",
+      "archive": "raw/r4/capture-build-result.json.gz",
+      "sha256": "67bdd44b770379e3e2ae411523eb5154049fe0b3ea0c9d82f374ece577e74ebf",
+      "bytes": 396,
+      "stored_bytes": 209
+    },
+    {
+      "source": "r4/capture-build.log",
+      "archive": "raw/r4/capture-build.log.gz",
+      "sha256": "5cbac74dd41e35a74c724ec8e2c73e9be48510c57ff74debac6a06922af6cb13",
+      "bytes": 1140,
+      "stored_bytes": 285
+    },
+    {
+      "source": "r4/capture-clippy-result.json",
+      "archive": "raw/r4/capture-clippy-result.json.gz",
+      "sha256": "d755965920d5dc3c3db268bb2f14170c90872b99cb4dd50c1ccbdfce01ba04b0",
+      "bytes": 433,
+      "stored_bytes": 222
+    },
+    {
+      "source": "r4/capture-clippy.log",
+      "archive": "raw/r4/capture-clippy.log.gz",
+      "sha256": "dc9a1c5ee6d965e9288a1a551061eb8ff18f1bd18dde28725e5f11bf82885e5c",
+      "bytes": 1140,
+      "stored_bytes": 286
+    },
+    {
+      "source": "r4/captures.py",
+      "archive": "raw/r4/captures.py.gz",
+      "sha256": "9b6717cf3492c0645a0a89736c6e4fce1fc3fa4c48a1f1b0ba4a2c25d0572d73",
+      "bytes": 1475,
+      "stored_bytes": 880
+    },
+    {
+      "source": "r4/inputs-after.json",
+      "archive": "raw/r4/inputs-after.json.gz",
+      "sha256": "d65e4481488b0cf3e19efd2088779dd5f13cd844c885c12571a5cd6daaf437d3",
+      "bytes": 42076,
+      "stored_bytes": 19612
+    },
+    {
+      "source": "r4/inputs.json",
+      "archive": "raw/r4/inputs.json.gz",
+      "sha256": "d65e4481488b0cf3e19efd2088779dd5f13cd844c885c12571a5cd6daaf437d3",
+      "bytes": 42076,
+      "stored_bytes": 19612
+    },
+    {
+      "source": "r4/library-tests-result.json",
+      "archive": "raw/r4/library-tests-result.json.gz",
+      "sha256": "28041c51c9afae3b57273ddf5798ceda085f66e85e394160635fc2e3a19fb10d",
+      "bytes": 233,
+      "stored_bytes": 157
+    },
+    {
+      "source": "r4/library-tests.log",
+      "archive": "raw/r4/library-tests.log.gz",
+      "sha256": "b790d1b7295eb441def06523f19d6633da99cd1d686b5cc35f595d2ebd35b4ba",
+      "bytes": 78346,
+      "stored_bytes": 20101
+    },
+    {
+      "source": "r4/manager.log",
+      "archive": "raw/r4/manager.log.gz",
+      "sha256": "a26c683c302653f0271c872b0c4c17d99553eb8fea779f6924155405d6eb05b6",
+      "bytes": 110,
+      "stored_bytes": 111
+    },
+    {
+      "source": "r4/native-result.json",
+      "archive": "raw/r4/native-result.json.gz",
+      "sha256": "34ea99d971e8ca9bec7904fdc8b0e1ff8d87d07b9179292a4016b9f065eaa353",
+      "bytes": 230,
+      "stored_bytes": 199
+    },
+    {
+      "source": "r4/native.log",
+      "archive": "raw/r4/native.log.gz",
+      "sha256": "16b91f7cc41dc966340514d2c21998decb417805abf8dc1c17fd214f206bf89d",
+      "bytes": 106,
+      "stored_bytes": 71
+    },
+    {
+      "source": "r4/release-clippy-result.json",
+      "archive": "raw/r4/release-clippy-result.json.gz",
+      "sha256": "78d7569ae45a71502e8c6b3b2088e46af40527b5a2f3edbacbf5a8b8e342c363",
+      "bytes": 244,
+      "stored_bytes": 163
+    },
+    {
+      "source": "r4/release-clippy.log",
+      "archive": "raw/r4/release-clippy.log.gz",
+      "sha256": "be0b633fc274b87918c37df79d4fb240e7f19db14a16dee72e9585ec656b5006",
+      "bytes": 278,
+      "stored_bytes": 186
+    },
+    {
+      "source": "r4/run.py",
+      "archive": "raw/r4/run.py.gz",
+      "sha256": "cce29838b3ef89c8fa27a3c3706737cdf85c14e9dca39f232a8a1f167e39063b",
+      "bytes": 2056,
+      "stored_bytes": 977
+    },
+    {
+      "source": "r4/source/src/bin/capture/crafting.rs",
+      "archive": "raw/r4/source/src/bin/capture/crafting.rs.gz",
+      "sha256": "4d61e543db4b67c955885ccba7da9a74198286a9148d8a47bf3e2ca5327f5642",
+      "bytes": 14197,
+      "stored_bytes": 3684
+    },
+    {
+      "source": "r4/source/src/game/crafting.rs",
+      "archive": "raw/r4/source/src/game/crafting.rs.gz",
+      "sha256": "8ec0bb362de956d22b637f3b4d08b90a2a1de223cdd483c3fb5228288fc54955",
+      "bytes": 10277,
+      "stored_bytes": 2717
+    },
+    {
+      "source": "r4/source/src/game/equipment_ui/materials.rs",
+      "archive": "raw/r4/source/src/game/equipment_ui/materials.rs.gz",
+      "sha256": "a97b78e956a1e44dff734ddb25dccbceed3b4e05e1a6e4d149f1b45ec1bac5fb",
+      "bytes": 6699,
+      "stored_bytes": 1926
+    },
+    {
+      "source": "r4/source/src/game/equipment_ui/panel.rs",
+      "archive": "raw/r4/source/src/game/equipment_ui/panel.rs.gz",
+      "sha256": "bb186a75488c80394c616bace173d216687b60ac84347e14b22ea6ecd9947930",
+      "bytes": 16094,
+      "stored_bytes": 3453
+    },
+    {
+      "source": "r4/source/src/game/equipment_ui.rs",
+      "archive": "raw/r4/source/src/game/equipment_ui.rs.gz",
+      "sha256": "a3599c44f0e42577d860ed07d702e53cdc425b2983ffef71b9dfc95771cbce08",
+      "bytes": 28804,
+      "stored_bytes": 6260
+    },
+    {
+      "source": "r4/source/src/game/settings/entry_layout.rs",
+      "archive": "raw/r4/source/src/game/settings/entry_layout.rs.gz",
+      "sha256": "bd7d4a4c0869a9bfd8eafa46a0d61c301a5c2b7561da388ea83e60a5e47045e0",
+      "bytes": 13345,
+      "stored_bytes": 3222
+    },
+    {
+      "source": "r5/after-chain0-1280x720-en-result.json",
+      "archive": "raw/r5/after-chain0-1280x720-en-result.json.gz",
+      "sha256": "7ca11f783b54bf67da4b1e1ac0adc607c51914b815a11466588a15c2fcceb87e",
+      "bytes": 496,
+      "stored_bytes": 258
+    },
+    {
+      "source": "r5/after-chain0-1280x720-en.log",
+      "archive": "raw/r5/after-chain0-1280x720-en.log.gz",
+      "sha256": "64b1648f76c914c3cef57346b046b8c3eb8387ca7eb6ec23acdce4417f8465e0",
+      "bytes": 7530,
+      "stored_bytes": 1823
+    },
+    {
+      "source": "r5/after-chain0-320x667-en-result.json",
+      "archive": "raw/r5/after-chain0-320x667-en-result.json.gz",
+      "sha256": "501f8bd33337adc74bb62f68dab45266e3c0a98e6974a82d804dae77a65aa03f",
+      "bytes": 494,
+      "stored_bytes": 259
+    },
+    {
+      "source": "r5/after-chain0-320x667-en.log",
+      "archive": "raw/r5/after-chain0-320x667-en.log.gz",
+      "sha256": "377dc94f8d495309554bcdb45c4d31346c65c01443af17a71ce8ca05c37f9b27",
+      "bytes": 7517,
+      "stored_bytes": 1818
+    },
+    {
+      "source": "r5/after-chain0-360x800-en-result.json",
+      "archive": "raw/r5/after-chain0-360x800-en-result.json.gz",
+      "sha256": "38943b7fbf8927e6484fdf03d8fd4e90d3e520e4ddfa736fbf46ecc48bb22448",
+      "bytes": 494,
+      "stored_bytes": 258
+    },
+    {
+      "source": "r5/after-chain0-360x800-en.log",
+      "archive": "raw/r5/after-chain0-360x800-en.log.gz",
+      "sha256": "3006c991871c5c0805c25792968d8bb02be0d67d90354b91cb8c34e92efb9c44",
+      "bytes": 7517,
+      "stored_bytes": 1820
+    },
+    {
+      "source": "r5/after-chain1-1280x720-zh-result.json",
+      "archive": "raw/r5/after-chain1-1280x720-zh-result.json.gz",
+      "sha256": "ee3416128d8e7c33c25e2482df8aa5e895fab2399b56e7ff62029e2298f8e2a5",
+      "bytes": 495,
+      "stored_bytes": 259
+    },
+    {
+      "source": "r5/after-chain1-1280x720-zh.log",
+      "archive": "raw/r5/after-chain1-1280x720-zh.log.gz",
+      "sha256": "98f6fff70d05d5e1a12d46d59af67fe8349744bfb850b82a633998f187e58eb0",
+      "bytes": 7486,
+      "stored_bytes": 1805
+    },
+    {
+      "source": "r5/after-chain1-320x667-zh-result.json",
+      "archive": "raw/r5/after-chain1-320x667-zh-result.json.gz",
+      "sha256": "2b616c1b0e033df12a16e6dfaa666cbd523358342f916f9d3f5ae7adc75bf7c7",
+      "bytes": 494,
+      "stored_bytes": 261
+    },
+    {
+      "source": "r5/after-chain1-320x667-zh.log",
+      "archive": "raw/r5/after-chain1-320x667-zh.log.gz",
+      "sha256": "9ad5d1dbe6046a10b89224c3c68135a48a8edb1e1500507346892373dda8d1b6",
+      "bytes": 7473,
+      "stored_bytes": 1802
+    },
+    {
+      "source": "r5/after-chain1-360x800-zh-result.json",
+      "archive": "raw/r5/after-chain1-360x800-zh-result.json.gz",
+      "sha256": "7a404782c2f274eefe4e30223c960521befdb9f493935c2515ddbfd1be5a6060",
+      "bytes": 494,
+      "stored_bytes": 260
+    },
+    {
+      "source": "r5/after-chain1-360x800-zh.log",
+      "archive": "raw/r5/after-chain1-360x800-zh.log.gz",
+      "sha256": "6c030886107a2fc392746ac27fd846c3d904ce8ebb1c2f86b37b36563f48b15b",
+      "bytes": 7473,
+      "stored_bytes": 1801
+    },
+    {
+      "source": "r5/after-chain1-852x393-zh-result.json",
+      "archive": "raw/r5/after-chain1-852x393-zh-result.json.gz",
+      "sha256": "c1b360e4f3f8b3d6e88c0668c9fef1f0cf86ef38df6858d7510ba90403376f21",
+      "bytes": 491,
+      "stored_bytes": 257
+    },
+    {
+      "source": "r5/after-chain1-852x393-zh.log",
+      "archive": "raw/r5/after-chain1-852x393-zh.log.gz",
+      "sha256": "53ebba7f58410ad4d1785c0dedfdbe06c2683908c301f9c23bedf6bfac72bdab",
+      "bytes": 7473,
+      "stored_bytes": 1796
+    },
+    {
+      "source": "r5/candidate.sha256",
+      "archive": "raw/r5/candidate.sha256.gz",
+      "sha256": "16a09010fbcb4da88b99f3fda547fccb3f5d4ef8fb6331bbd5303c04b467e453",
+      "bytes": 64,
+      "stored_bytes": 71
+    },
+    {
+      "source": "r5/capture-build-result.json",
+      "archive": "raw/r5/capture-build-result.json.gz",
+      "sha256": "fc098568374560158f6583260505584df209dece075fa077684da9fd8ed76a0c",
+      "bytes": 397,
+      "stored_bytes": 209
+    },
+    {
+      "source": "r5/capture-build.log",
+      "archive": "raw/r5/capture-build.log.gz",
+      "sha256": "fddce1d2ab7f3c39eed84824a1086603077d3a960c4301e20358ceb05b88830a",
+      "bytes": 1140,
+      "stored_bytes": 286
+    },
+    {
+      "source": "r5/capture-clippy-result.json",
+      "archive": "raw/r5/capture-clippy-result.json.gz",
+      "sha256": "e80475789e50795288a064c558d6a8cf54c308f7b0af78699cd2b4795af29b70",
+      "bytes": 434,
+      "stored_bytes": 223
+    },
+    {
+      "source": "r5/capture-clippy.log",
+      "archive": "raw/r5/capture-clippy.log.gz",
+      "sha256": "54f1a809d708d1c9f943fd835b118f0a6e362f618debbe15f298f94419e2b1d9",
+      "bytes": 1139,
+      "stored_bytes": 285
+    },
+    {
+      "source": "r5/captures.py",
+      "archive": "raw/r5/captures.py.gz",
+      "sha256": "4ab79b93460b839004ffbb01e123f2be22fe4f3b5808ea90a6ad13ee2215c276",
+      "bytes": 1532,
+      "stored_bytes": 900
+    },
+    {
+      "source": "r5/inputs-after.json",
+      "archive": "raw/r5/inputs-after.json.gz",
+      "sha256": "fd339606bb0f8caaad2c75169a72bb0a9c6599dce206b37caeeb055c172e466f",
+      "bytes": 42076,
+      "stored_bytes": 19604
+    },
+    {
+      "source": "r5/inputs.json",
+      "archive": "raw/r5/inputs.json.gz",
+      "sha256": "fd339606bb0f8caaad2c75169a72bb0a9c6599dce206b37caeeb055c172e466f",
+      "bytes": 42076,
+      "stored_bytes": 19604
+    },
+    {
+      "source": "r5/isolated-library-tests-result.json",
+      "archive": "raw/r5/isolated-library-tests-result.json.gz",
+      "sha256": "90aa6ba82a242acbb5becc2c034529e57e63d27d8b8ef117ab29e72bc9a36527",
+      "bytes": 1124,
+      "stored_bytes": 373
+    },
+    {
+      "source": "r5/isolated-library-tests.log",
+      "archive": "raw/r5/isolated-library-tests.log.gz",
+      "sha256": "caf3f510d0a787ebf0b45e826023d6d89fc7119762ea778b9dced7396517ad3f",
+      "bytes": 78233,
+      "stored_bytes": 20072
+    },
+    {
+      "source": "r5/isolated-tests-manager.log",
+      "archive": "raw/r5/isolated-tests-manager.log.gz",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "stored_bytes": 20
+    },
+    {
+      "source": "r5/isolated-tests.py",
+      "archive": "raw/r5/isolated-tests.py.gz",
+      "sha256": "8058f4a52513d6edf006088f7325526d79d01db1fe3b266a654b700d00bd3080",
+      "bytes": 1149,
+      "stored_bytes": 654
+    },
+    {
+      "source": "r5/library-tests-result.json",
+      "archive": "raw/r5/library-tests-result.json.gz",
+      "sha256": "f7d0e6b6171d894c13ac509dee06ee403556ce38065d568fdf728978b84046e3",
+      "bytes": 233,
+      "stored_bytes": 158
+    },
+    {
+      "source": "r5/library-tests.log",
+      "archive": "raw/r5/library-tests.log.gz",
+      "sha256": "b24a33f1dbf6b0f1f8f44d081505e85c0e6e0affbeae89b98ece2e22620009d6",
+      "bytes": 78346,
+      "stored_bytes": 20100
+    },
+    {
+      "source": "r5/manager.log",
+      "archive": "raw/r5/manager.log.gz",
+      "sha256": "a26c683c302653f0271c872b0c4c17d99553eb8fea779f6924155405d6eb05b6",
+      "bytes": 110,
+      "stored_bytes": 111
+    },
+    {
+      "source": "r5/native-result.json",
+      "archive": "raw/r5/native-result.json.gz",
+      "sha256": "746cd2d1c65e45220e4d9ad9df5ac9b3de97dfa534703f0a6960e03f2a9117d9",
+      "bytes": 232,
+      "stored_bytes": 200
+    },
+    {
+      "source": "r5/native.log",
+      "archive": "raw/r5/native.log.gz",
+      "sha256": "d8a685e57d078329b91dc3ea4338c67d17e3c88a301690836386c7ca7aa49bc5",
+      "bytes": 184,
+      "stored_bytes": 94
+    },
+    {
+      "source": "r5/release-clippy-result.json",
+      "archive": "raw/r5/release-clippy-result.json.gz",
+      "sha256": "3da34bcdc9d97ccce488f1152810a8c4928104f2b3e392465a4c3f12b119bc7f",
+      "bytes": 245,
+      "stored_bytes": 163
+    },
+    {
+      "source": "r5/release-clippy.log",
+      "archive": "raw/r5/release-clippy.log.gz",
+      "sha256": "beae6561c5d5d6f25229534f35e740349f899ed19211b7b8965b9a294acd20fa",
+      "bytes": 278,
+      "stored_bytes": 186
+    },
+    {
+      "source": "r5/review-candidates.json",
+      "archive": "raw/r5/review-candidates.json.gz",
+      "sha256": "4ada97e362572a1733b537a19fe434dc0eab107a183da1f38a599b446ce82b78",
+      "bytes": 1989,
+      "stored_bytes": 231
+    },
+    {
+      "source": "r5/root-acceptance.json",
+      "archive": "raw/r5/root-acceptance.json.gz",
+      "sha256": "f24b647ce9f572e3fbe8bec97fd836a9f59b7596f8a0df5a44fe6ffe9a1218f5",
+      "bytes": 3231,
+      "stored_bytes": 909
+    },
+    {
+      "source": "r5/run.py",
+      "archive": "raw/r5/run.py.gz",
+      "sha256": "8bc52363997afd276e5c9d994df79a07f28ff2f6c748ef9e6de61f406ef9d02d",
+      "bytes": 2287,
+      "stored_bytes": 1021
+    },
+    {
+      "source": "r5/source/src/bin/capture/crafting.rs",
+      "archive": "raw/r5/source/src/bin/capture/crafting.rs.gz",
+      "sha256": "955c87d640551944c4b2864e9efa8c8ad2c4090ef4db988eff3c72ef7d288298",
+      "bytes": 14544,
+      "stored_bytes": 3749
+    },
+    {
+      "source": "r5/source/src/game/crafting.rs",
+      "archive": "raw/r5/source/src/game/crafting.rs.gz",
+      "sha256": "8ec0bb362de956d22b637f3b4d08b90a2a1de223cdd483c3fb5228288fc54955",
+      "bytes": 10277,
+      "stored_bytes": 2717
+    },
+    {
+      "source": "r5/source/src/game/equipment_ui/materials.rs",
+      "archive": "raw/r5/source/src/game/equipment_ui/materials.rs.gz",
+      "sha256": "03fbf34b1b90e24e37712b1aa2faa92f648bba542ce51afb2ce8fc4cefb93a31",
+      "bytes": 6816,
+      "stored_bytes": 1979
+    },
+    {
+      "source": "r5/source/src/game/equipment_ui/panel.rs",
+      "archive": "raw/r5/source/src/game/equipment_ui/panel.rs.gz",
+      "sha256": "ce40413a25895764b35f12251251bf94a777e48a1cbc9c348bfa80e6384de944",
+      "bytes": 16235,
+      "stored_bytes": 3500
+    },
+    {
+      "source": "r5/source/src/game/equipment_ui.rs",
+      "archive": "raw/r5/source/src/game/equipment_ui.rs.gz",
+      "sha256": "a3599c44f0e42577d860ed07d702e53cdc425b2983ffef71b9dfc95771cbce08",
+      "bytes": 28804,
+      "stored_bytes": 6260
+    },
+    {
+      "source": "r5/source/src/game/settings/entry_layout.rs",
+      "archive": "raw/r5/source/src/game/settings/entry_layout.rs.gz",
+      "sha256": "bd7d4a4c0869a9bfd8eafa46a0d61c301a5c2b7561da388ea83e60a5e47045e0",
+      "bytes": 13345,
+      "stored_bytes": 3222
+    },
+    {
+      "source": "r5/source.patch",
+      "archive": "raw/r5/source.patch.gz",
+      "sha256": "8ee3a4de74c9b4803fca4541fa60bec7c98515b18e78af4bb477a7139c32a1c5",
+      "bytes": 15119,
+      "stored_bytes": 4272
+    },
+    {
+      "source": "r5/unit-state.txt",
+      "archive": "raw/r5/unit-state.txt.gz",
+      "sha256": "985c3867e695cbd7899293ae24e6fbc2ea1f3231ca2e2f9ec6bbdad87f699f69",
+      "bytes": 67,
+      "stored_bytes": 77
+    },
+    {
+      "source": "run-captures.py",
+      "archive": "raw/run-captures.py.gz",
+      "sha256": "71114689f4cf7924501a3c29d657243db92b7c4b75ba1fe1a71177635c4d988d",
+      "bytes": 1528,
+      "stored_bytes": 891
+    }
+  ],
+  "selected_images": [
+    "r5/after-chain0-1280x720-en/frame00035.png",
+    "r5/after-chain0-1280x720-en/frame00215.png",
+    "r5/after-chain0-1280x720-en/frame00237.png",
+    "r5/after-chain0-1280x720-en/frame00257.png",
+    "r5/after-chain0-1280x720-en/frame00270.png",
+    "r5/after-chain0-1280x720-en/frame00273.png",
+    "r5/after-chain0-320x667-en/frame00035.png",
+    "r5/after-chain0-320x667-en/frame00215.png",
+    "r5/after-chain0-320x667-en/frame00237.png",
+    "r5/after-chain0-320x667-en/frame00257.png",
+    "r5/after-chain0-320x667-en/frame00270.png",
+    "r5/after-chain0-320x667-en/frame00273.png",
+    "r5/after-chain0-360x800-en/frame00035.png",
+    "r5/after-chain0-360x800-en/frame00215.png",
+    "r5/after-chain0-360x800-en/frame00237.png",
+    "r5/after-chain0-360x800-en/frame00257.png",
+    "r5/after-chain0-360x800-en/frame00270.png",
+    "r5/after-chain0-360x800-en/frame00273.png",
+    "r5/after-chain1-1280x720-zh/frame00035.png",
+    "r5/after-chain1-1280x720-zh/frame00215.png",
+    "r5/after-chain1-1280x720-zh/frame00237.png",
+    "r5/after-chain1-1280x720-zh/frame00257.png",
+    "r5/after-chain1-1280x720-zh/frame00270.png",
+    "r5/after-chain1-1280x720-zh/frame00273.png",
+    "r5/after-chain1-320x667-zh/frame00035.png",
+    "r5/after-chain1-320x667-zh/frame00215.png",
+    "r5/after-chain1-320x667-zh/frame00237.png",
+    "r5/after-chain1-320x667-zh/frame00257.png",
+    "r5/after-chain1-320x667-zh/frame00270.png",
+    "r5/after-chain1-320x667-zh/frame00273.png",
+    "r5/after-chain1-360x800-zh/frame00035.png",
+    "r5/after-chain1-360x800-zh/frame00215.png",
+    "r5/after-chain1-360x800-zh/frame00237.png",
+    "r5/after-chain1-360x800-zh/frame00257.png",
+    "r5/after-chain1-360x800-zh/frame00270.png",
+    "r5/after-chain1-360x800-zh/frame00273.png",
+    "r5/after-chain1-852x393-zh/frame00035.png",
+    "r5/after-chain1-852x393-zh/frame00215.png",
+    "r5/after-chain1-852x393-zh/frame00237.png",
+    "r5/after-chain1-852x393-zh/frame00257.png",
+    "r5/after-chain1-852x393-zh/frame00270.png",
+    "r5/after-chain1-852x393-zh/frame00273.png",
+    "before-chain0-1280x720-en/frame00215.png",
+    "before-chain1-360x800-zh/frame00215.png",
+    "after-chain0-360x800-en/frame00215.png",
+    "edges/after-chain1-852x393-zh/frame00215.png",
+    "r5/review/after-chain0-1280x720-en.jpg",
+    "r5/review/after-chain0-320x667-en.jpg",
+    "r5/review/after-chain0-360x800-en.jpg",
+    "r5/review/after-chain1-1280x720-zh.jpg",
+    "r5/review/after-chain1-320x667-zh.jpg",
+    "r5/review/after-chain1-360x800-zh.jpg",
+    "r5/review/after-chain1-852x393-zh.jpg",
+    "r5/review/landscape-ready.jpg",
+    "review/desktop-ready-r3.jpg",
+    "review/phone-ready-r3.jpg"
+  ]
+}

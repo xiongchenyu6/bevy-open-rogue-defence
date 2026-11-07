@@ -77,6 +77,96 @@ fn text(world: &mut World, wanted: &str) -> String {
         .0
         .clone()
 }
+fn material_status(world: &mut World) -> String {
+    let visible: Vec<_> = world
+        .query::<(&Name, &Node)>()
+        .iter(world)
+        .filter(|(_, node)| node.display != Display::None)
+        .filter_map(|(name, _)| {
+            name.as_str()
+                .strip_prefix("Crafting material ")?
+                .parse::<usize>()
+                .ok()
+        })
+        .collect();
+    world
+        .query::<(&Name, &Text)>()
+        .iter(world)
+        .filter(|(name, _)| {
+            name.as_str()
+                .strip_prefix("Crafting material status ")
+                .and_then(|index| index.parse::<usize>().ok())
+                .is_some_and(|index| visible.contains(&index))
+        })
+        .map(|(_, text)| text.0.as_str())
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+fn audit_material_art(world: &mut World, expected: usize) {
+    let detail_height = world
+        .query::<(&Name, &ComputedNode)>()
+        .iter(world)
+        .find(|(name, _)| name.as_str() == "Equipment detail scroll")
+        .unwrap()
+        .1
+        .size()
+        .y;
+    assert!(
+        detail_height >= 40.0,
+        "forge details remain readable at every viewport: {detail_height}"
+    );
+    assert!(
+        world
+            .query::<(&Name, &Node)>()
+            .iter(world)
+            .any(|(name, node)| name.as_str() == "Settings open" && node.display == Display::None),
+        "settings launcher must not cover forge recipes"
+    );
+    let roots: Vec<_> = world
+        .query::<(&Name, &Node, &ComputedNode, &UiGlobalTransform)>()
+        .iter(world)
+        .filter(|(name, node, _, _)| {
+            name.as_str()
+                .strip_prefix("Crafting material ")
+                .is_some_and(|index| index.parse::<usize>().is_ok())
+                && node.display != Display::None
+        })
+        .map(|(name, _, node, transform)| {
+            (name.as_str().to_owned(), node.size(), transform.translation)
+        })
+        .collect();
+    assert_eq!(
+        roots.len(),
+        expected,
+        "selected recipe shows precisely its ingredients"
+    );
+    for index in 0..expected {
+        let (_, size, center) = roots
+            .iter()
+            .find(|(name, _, _)| *name == format!("Crafting material {index}"))
+            .unwrap();
+        assert!(size.x > 40. && size.y > 40.);
+        let (image, art, transform) = world
+            .query::<(&Name, &ImageNode, &ComputedNode, &UiGlobalTransform)>()
+            .iter(world)
+            .find(|(name, _, _, _)| name.as_str() == format!("Crafting material art {index}"))
+            .map(|(_, image, node, transform)| (image.clone(), *node, *transform))
+            .unwrap();
+        assert!(image.rect.is_some(), "material uses an authored atlas crop");
+        assert!(
+            world
+                .resource::<AssetServer>()
+                .is_loaded_with_dependencies(image.image.id())
+        );
+        assert!(
+            ((transform.translation - *center).abs() + art.size() * 0.5)
+                .cmple(*size * 0.5 + Vec2::ONE)
+                .all(),
+            "material portrait remains inside its slot"
+        );
+    }
+    println!("[capture] MATERIAL_ART count={expected} atlas_loaded=true bounded=true");
+}
 fn exercise(world: &mut World) {
     world.resource_mut::<CraftCapture>().frame += 1;
     let state = world.resource::<CraftCapture>();
@@ -107,7 +197,7 @@ fn exercise(world: &mut World) {
         30 | 210 => press(world, &format!("Crafting recipe {}", first.index())),
         35 => {
             assert!(
-                text(world, "Crafting material status").contains('○'),
+                material_status(world).contains('○'),
                 "missing materials actually shown"
             );
             assert!(!world.resource::<CraftingState>().acquired(first));
@@ -144,7 +234,8 @@ fn exercise(world: &mut World) {
             .press(KeyCode::KeyB),
         200 => assert_eq!(text(world, "Equipment count"), "5"),
         215 | 237 | 257 => {
-            let status = text(world, "Crafting material status");
+            audit_material_art(world, if frame == 257 { 3 } else { 2 });
+            let status = material_status(world);
             assert!(
                 status.contains('✓') && !status.contains('○'),
                 "all genuine ingredient rows ready: {status}"
@@ -208,7 +299,17 @@ fn exercise(world: &mut World) {
             );
         }
         235 => press(world, &format!("Crafting recipe {}", second.index())),
-        255 => press(world, &format!("Crafting recipe {}", advanced.index())),
+        251 | 255 => press(world, &format!("Crafting recipe {}", advanced.index())),
+        253 => press(world, &format!("Crafting recipe {}", first.index())),
+        254 => {
+            audit_material_art(world, 2);
+            let status = material_status(world);
+            assert_eq!(
+                status.matches('✓').count() + status.matches('○').count(),
+                2,
+                "hidden third ingredient must not enter the visible status audit"
+            );
+        }
         275 => press(world, "Crafting confirm"),
         271 => {
             for (name, mut interaction) in

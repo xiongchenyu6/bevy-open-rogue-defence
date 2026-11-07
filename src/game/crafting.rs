@@ -107,7 +107,7 @@ impl RecipeId {
         )
     }
 
-    fn ingredients(self) -> &'static [Ingredient] {
+    pub(crate) fn ingredients(self) -> &'static [Ingredient] {
         use Ingredient::{Crafted, Gear};
         match self {
             Self::Bloodreaver => &[
@@ -138,12 +138,18 @@ impl RecipeId {
     }
 }
 #[derive(Clone, Copy)]
-enum Ingredient {
+pub(crate) enum Ingredient {
     Gear(MarketItem),
     Crafted(RecipeId),
 }
 impl Ingredient {
-    fn name(self, language: GameLanguage) -> &'static str {
+    pub(crate) fn image_node(self, assets: &AssetServer) -> ImageNode {
+        match self {
+            Self::Gear(item) => item.image_node(assets),
+            Self::Crafted(recipe) => recipe.image_node(assets),
+        }
+    }
+    pub(crate) fn name(self, language: GameLanguage) -> &'static str {
         match self {
             Self::Gear(item) => item.name(language),
             Self::Crafted(recipe) => recipe.name(language),
@@ -171,29 +177,16 @@ impl CraftingState {
     }
     pub(crate) fn ready(&self, recipe: RecipeId, market: &MarketEffects) -> bool {
         !self.acquired(recipe)
-            && recipe.ingredients().iter().all(|item| match item {
-                Ingredient::Gear(item) => market.equipment().contains(item),
-                Ingredient::Crafted(recipe) => self.owns(*recipe),
-            })
+            && recipe
+                .ingredients()
+                .iter()
+                .all(|item| self.has_ingredient(*item, market))
     }
-    pub(crate) fn material_status(
-        &self,
-        recipe: RecipeId,
-        market: &MarketEffects,
-        language: GameLanguage,
-    ) -> String {
-        recipe
-            .ingredients()
-            .iter()
-            .map(|item| {
-                let owned = match item {
-                    Ingredient::Gear(item) => market.equipment().contains(item),
-                    Ingredient::Crafted(recipe) => self.owns(*recipe),
-                };
-                format!("{} {}", if owned { "✓" } else { "○" }, item.name(language))
-            })
-            .collect::<Vec<_>>()
-            .join(" + ")
+    pub(crate) fn has_ingredient(&self, ingredient: Ingredient, market: &MarketEffects) -> bool {
+        match ingredient {
+            Ingredient::Gear(item) => market.equipment().contains(&item),
+            Ingredient::Crafted(recipe) => self.owns(recipe),
+        }
     }
     fn craft(
         &mut self,

@@ -9,6 +9,7 @@ use bevy::{
 
 #[path = "equipment_ui/panel.rs"]
 mod panel;
+mod materials;
 use panel::panel;
 
 const EMPTY_ARMORY_IMAGE: &str = "ui/armory/empty-rack.png";
@@ -62,8 +63,6 @@ struct Recipe(RecipeId);
 #[derive(Component)]
 struct ConfirmCraft;
 #[derive(Component)]
-struct MaterialStatus;
-#[derive(Component)]
 struct CraftAction;
 #[derive(Component)]
 struct Count;
@@ -97,7 +96,10 @@ pub(crate) fn install(app: &mut App) {
                 .after(bevy::ui::UiSystems::Focus)
                 .after(SettingsInputSet),
         )
-        .add_systems(Update, (feedback, details, scroll, reveal_empty_armory).chain());
+        .add_systems(
+            Update,
+            (feedback, details, materials::update, scroll, reveal_empty_armory).chain(),
+        );
 }
 
 pub(crate) fn spawn_entry(parent: &mut ChildSpawnerCommands, assets: &AssetServer) {
@@ -591,7 +593,6 @@ fn details(
         let value = match name.as_str() {
             "Equipment detail name" => detail_name.clone(),
             "Equipment detail effect" => detail_effect.clone(),
-            "Crafting material status" => crafting.material_status(recipe, &market, *language),
             "Crafting result" => action.into(),
             _ => continue,
         };

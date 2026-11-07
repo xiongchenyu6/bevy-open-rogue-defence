@@ -10,15 +10,16 @@ pub(super) fn panel(
     let (owned, crafted, crafting_tab) = inventory;
     let compact = crate::game::mobile_layout::hud_metrics(size.x, size.y).compact;
     let portrait = size.x < 560.0;
+    let short = size.y < 540.0;
     let width = (size.x - 24.0).min(880.0);
-    let height = (size.y - 24.0).min(560.0);
+    let height = (size.y - 24.0).min(if portrait { 760.0 } else { 560.0 });
     let padding = if compact { 8.0 } else { 12.0 };
     let grid_width = if compact {
         (width - padding * 2.0) * 0.38
     } else {
         320.0
     };
-    let preview_size = if compact { 88.0 } else { 176.0 };
+    let preview_size = if short { 48.0 } else if compact { 88.0 } else { 176.0 };
     let empty = !crafting_tab && owned.is_empty() && crafted.is_empty();
     let preview_box = if empty {
         if compact { Vec2::new(110.0, 73.0) } else { Vec2::new(220.0, 147.0) }
@@ -65,8 +66,8 @@ pub(super) fn panel(
                     Node {
                         flex_grow: 1.0, min_width: px(0), min_height: px(0),
                         width: if portrait { percent(100) } else { Val::Auto },
-                        flex_direction: FlexDirection::Column, row_gap: px(8),
-                        padding: UiRect::all(px(if compact { 6.0 } else { 10.0 })),
+                        flex_direction: FlexDirection::Column, row_gap: px(if short { 6.0 } else { 8.0 }),
+                        padding: UiRect::all(px(if short { 4.0 } else if compact { 6.0 } else { 10.0 })),
                         border: UiRect::all(px(1)), ..default()
                     },
                     BackgroundColor(Color::srgb(0.045, 0.07, 0.085)),
@@ -111,20 +112,16 @@ pub(super) fn panel(
                                 TextFont { font_size: FontSize::Px(if compact { 16.0 } else { 20.0 }), ..default() },
                                 TextColor(GOLD), TextLayout::linebreak(LineBreak::WordOrCharacter),
                             ));
-                            if crafting_tab {
-                                identity.spawn((
-                                    MaterialStatus, Name::new("Crafting material status"), Text::new(""),
-                                    TextFont { font_size: FontSize::Px(12.0), ..default() },
-                                    TextColor(IVORY), TextLayout::linebreak(LineBreak::WordOrCharacter),
-                                ));
-                            }
                         });
                     });
+                    if crafting_tab {
+                        materials::spawn(selected, compact, short);
+                    }
                     selected.spawn((
                         DetailScroll, Name::new("Equipment detail scroll"), ScrollPosition::default(),
                         crate::game::controller_input::ControllerDetailScroll, Interaction::default(),
                         Node {
-                            width: percent(100), min_height: px(0), flex_grow: 1.0,
+                            width: percent(100), min_height: px(if short { 40.0 } else { 0.0 }), flex_grow: 1.0,
                             overflow: Overflow::scroll_y(), flex_direction: FlexDirection::Column,
                             padding: UiRect::top(px(8)), border: UiRect::top(px(1)), ..default()
                         }, BorderColor::all(Color::srgba(0.90, 0.72, 0.42, 0.35)),
@@ -287,8 +284,11 @@ fn collection(
                     Button, Recipe(recipe), Name::new(format!("Crafting recipe {}", recipe.index())),
                     card_node(compact, true), BackgroundColor(PANEL),
                     BorderColor::all(crate::game::rarity::rarity_color(recipe.rarity())),
-                )).with_children(|card| card_content(card, recipe.image_node(assets),
-                    recipe.art_size(icon), recipe.rarity(), (!compact).then_some(recipe.name(language))));
+                )).with_children(|card| {
+                    card_content(card, recipe.image_node(assets), recipe.art_size(icon),
+                        recipe.rarity(), (!compact).then_some(recipe.name(language)));
+                    materials::badge(card, assets, recipe);
+                });
             }
             return;
         }
