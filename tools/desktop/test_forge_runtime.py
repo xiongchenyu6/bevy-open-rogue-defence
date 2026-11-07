@@ -119,6 +119,29 @@ class ForgePolicyTests(unittest.TestCase):
         image = Path(__file__).resolve().parents[2] / 'docs/verification/forge-startup-clock-2026-11-08/failure-running.png'
         self.assertEqual(screenshot_battle_seconds(image, None), 23 * 60 + 38)
 
+    def test_unrecognized_hud_is_reobserved_without_sending_input(self):
+        choose = Mock()
+        observations = []
+        with patch('forge_runtime.public_panel_state', side_effect=['unknown', 'battle']):
+            value = visible_hud_value(Mock(side_effect=['unclear', 'clear']), Mock(return_value=1410),
+                Mock(return_value=[]), choose, 90, now=lambda: 0, pause=Mock(), observations=observations)
+        self.assertEqual(value, 1410)
+        choose.assert_not_called()
+        self.assertEqual([row['state'] for row in observations], ['unknown', 'battle'])
+
+    def test_unreadable_classification_and_metric_are_retained_before_valid_read(self):
+        observations = []
+        choose = Mock()
+        with patch('forge_runtime.public_panel_state', side_effect=[AssertionError('unclear level'), 'battle', 'battle']):
+            value = visible_hud_value(Mock(side_effect=['level', 'digits', 'clear']),
+                Mock(side_effect=[ValueError('unclear timer'), 1405]), Mock(return_value=[]), choose,
+                90, now=lambda: 0, pause=Mock(), observations=observations)
+        self.assertEqual(value, 1405)
+        choose.assert_not_called()
+        self.assertEqual(observations[0]['classification_error'], 'unclear level')
+        self.assertEqual(observations[1]['metric_error'], 'unclear timer')
+        self.assertEqual(observations[2]['value'], 1405)
+
     def test_consumption_requires_only_output_and_both_earned_materials(self):
         verify_crafted_inventory(1,['astralprism'],['Echo Core','Arc Lens'])
         for count,details,acquired in [(2,['astralprism','arclens'],['Arc Lens','Echo Core']),
@@ -153,12 +176,14 @@ class ForgePolicyTests(unittest.TestCase):
         self.assertEqual(choose.call_args_list,[unittest.mock.call('1'),unittest.mock.call('1')])
         self.assertEqual(rows.call_args_list,[unittest.mock.call('recruit20'),unittest.mock.call('hud1'),unittest.mock.call('recruit40'),unittest.mock.call('hud2')])
 
-    def test_visible_hud_value_unknown_hud_fails_without_input(self):
-        choose=Mock()
-        with self.assertRaisesRegex(AssertionError,'Unknown'):
-            visible_hud_value(lambda:'unknown',Mock(side_effect=AssertionError('unreadable')),
-                lambda image:[('GATE 1000/1000',20,20,150,40)],choose,90,now=lambda:0)
+    def test_visible_hud_value_unknown_hud_waits_until_deadline_without_input(self):
+        choose, metric = Mock(), Mock()
+        with self.assertRaisesRegex(AssertionError, 'deadline'):
+            visible_hud_value(lambda: 'unknown', metric,
+                lambda image: [('GATE 1000/1000', 20, 20, 150, 40)], choose, 90,
+                now=Mock(side_effect=[0, 0, 90]), pause=Mock())
         choose.assert_not_called()
+        metric.assert_not_called()
 
     def test_visible_hud_value_terminal_returns_pending_without_metric_or_keys(self):
         metric=Mock(return_value=1);send=Mock()

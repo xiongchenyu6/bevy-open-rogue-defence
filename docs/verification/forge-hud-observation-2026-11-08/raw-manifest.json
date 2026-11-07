@@ -1,0 +1,62 @@
+{
+  "raw/tests/run-tests.py.gz": {
+    "bytes": 832,
+    "sha256": "7c838ed5e741b1b10847586afe4deb839ed55768cf95faac53c03d5b5a175864"
+  },
+  "raw/tests/tests.log.gz": {
+    "bytes": 20,
+    "sha256": "5ed321bce1f0091ed4b438161637abb3bc8b8e8e4e459d07f3a64593ea0e5b2c"
+  },
+  "raw/tests/interruption.json.gz": {
+    "bytes": 252,
+    "sha256": "765b496c6b5e7317f59f3db2fde18ec414b38a547d00d229fe17061a7b314309"
+  },
+  "raw/tests/manager.log.gz": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw/tests/tests-result.json.gz": {
+    "bytes": 662,
+    "sha256": "d7ea61b1cb01f02ecbd7ff01eeb40cc873f94a7dcaac2ee3ac818868891e3bf5"
+  },
+  "raw/tests/r2/run-tests.py.gz": {
+    "bytes": 835,
+    "sha256": "270c6f6ec57d926db5b7619ba859ef462339d042b63ea6b71643088babbbf759"
+  },
+  "raw/tests/r2/tests.log.gz": {
+    "bytes": 218,
+    "sha256": "8021c05413b00522caa0c3b2c2b298aed99209c80ad288869c82061a55cb2bc0"
+  },
+  "raw/tests/r2/manager.log.gz": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw/tests/r2/tests-result.json.gz": {
+    "bytes": 658,
+    "sha256": "2e2d5b3bc3039312fbff05e879bf808bfdffee6f440b66c6dfd11a1aa8d97e9e"
+  },
+  "raw/natural-r2/forge.log.gz": {
+    "bytes": 864,
+    "sha256": "98c51f449a2e86c9316610e6024bdea92dcba83f5cdb7e86d804f40167686e6d"
+  },
+  "raw/natural-r2/forge-process.json.gz": {
+    "bytes": 1016,
+    "sha256": "8b1e0695f53203e848655de73ec72c20f9aeca80fca503572cd6c659c8119564"
+  },
+  "raw/natural-r2/manager.log.gz": {
+    "bytes": 1962,
+    "sha256": "003b6158a172ac92e9ca8dd7fdee8e4be051a554b161d76dcd1dbdea6ddf7123"
+  },
+  "raw/natural-r2/forge/result.json.gz": {
+    "bytes": 1876,
+    "sha256": "adae98a2a263da41a82a42496f5ba19112dfee7bf7228088fa149bf2ff73f5de"
+  },
+  "raw/natural-r2/forge/harness-snapshot.json.gz": {
+    "bytes": 885,
+    "sha256": "da7996e9306aef29423a3dc67df4f117a395b1f08976ddb932bf663f06c3dddd"
+  },
+  "raw/natural-r2/forge/initial-save-provenance.json.gz": {
+    "bytes": 200,
+    "sha256": "9b52d5b388564c3dc5466f845ec9ca4bcc7a7617cf4df5f86ad8f329c72fcc1a"
+  }
+}

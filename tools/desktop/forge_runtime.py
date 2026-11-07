@@ -21,22 +21,41 @@ FORGE_ACTION_CROP = '180x24+720+546'
 MATERIALS = frozenset(('Arc Lens', 'Echo Core'))
 
 
-def visible_hud_value(shot, read_value, read_rows, choose, deadline, now=time.monotonic, env=None):
-    """Classify same-frame public overlays before accepting any HUD metric."""
+def visible_hud_value(shot, read_value, read_rows, choose, deadline,
+                      now=time.monotonic, env=None, pause=time.sleep, observations=None):
+    """Accept a metric only from recognized uncovered pixels within the shared deadline."""
     while now() < deadline:
         image = shot()
-        state = public_panel_state(read_rows(image), image, env)
+        record = dict(screenshot=str(image), state='unreadable')
+        if observations is not None:
+            observations.append(record)
+        try:
+            state = public_panel_state(read_rows(image), image, env)
+        except AssertionError as error:
+            record['classification_error'] = str(error)
+            pause(.2)
+            continue
+        record['state'] = state
         if state == 'terminal':
             return None
         assert now() < deadline, 'HUD observation deadline exhausted'
         if state == 'choice':
             choose('1')
+            record['input'] = '1'
             continue
-        assert state == 'battle', 'Unknown or covered public HUD'
-        value = read_value(image)
+        if state != 'battle':
+            pause(.2)
+            continue
+        try:
+            value = read_value(image)
+        except (AssertionError, ValueError) as error:
+            record['metric_error'] = str(error)
+            pause(.2)
+            continue
         assert now() < deadline, 'HUD read exceeded deadline'
+        record['value'] = value
         return value
-    raise AssertionError('Recognized choices did not expose a HUD within90seconds')
+    raise AssertionError('Recognized choices did not expose a readable HUD within the observation deadline')
 
 
 def player_cycle(send, stopped):
@@ -154,8 +173,10 @@ def main():
                 shutil.copy2(image,evidence)
                 report.setdefault('hud_choices',[]).append(dict(screenshot=evidence.name,rows=rows))
             return rows
-        value=visible_hud_value(lambda:shot(prefix+'-source.png'),
-            lambda image:reader(image,env),rows_for,key,time.monotonic()+90,env=env)
+        observations = report.setdefault('metric_observations', [])
+        value=visible_hud_value(lambda:shot(prefix+f'-source-{len(observations):04}.png'),
+            lambda image:reader(image,env),rows_for,key,time.monotonic()+90,env=env,
+            observations=observations)
         if value is None:
             terminal(lines())
             raise AssertionError('Observed terminal no longer readable; proof remains pending')

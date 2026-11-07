@@ -1,0 +1,9 @@
+{
+  "base_commit": "7398f34d29f6e89a04730237d0049ea090f892aa",
+  "sources": {
+    "tools/desktop/forge_runtime.py": "3672240b5c35faed09661b10ebe88874e479d94c161ba6ec705c3e22907f7a3b",
+    "tools/desktop/test_forge_runtime.py": "cb14867218b1fff41f253a5be982afb3445ab6c5140f2975a3d02080ea85d5cb"
+  },
+  "scope": "Passive public HUD reobservations under unchanged existing deadline; choice key only after positive recognized choice. No new natural craft acceptance.",
+  "fixture_sha256": "237f36401d29e4da479fe8f8a092895509ec6ab5c237299e81ee56ed0ceab77f"
+}
