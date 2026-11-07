@@ -1,0 +1,5 @@
+{
+  "build_and_smoke_authorized": true,
+  "expected_source_commit": "d629e50d733bf3aaeaf708bb59c220bfd866469d",
+  "basis": "Root proceeds under existing user game-fix and commit authorization after actual regression and full-pair verification"
+}

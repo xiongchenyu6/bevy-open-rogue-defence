@@ -1,0 +1,127 @@
+[
+  {
+    "original": "smoke/after-public-skill-battle-progress-00.png",
+    "jpeg": "review/00-after-public-skill-battle-progress-00.jpg",
+    "sha256": "912851bdc3136cd7070277bada7baba62c2ec4fdcae1c35a3c21826fb98505a8"
+  },
+  {
+    "original": "smoke/after-public-skill-battle-progress-01.png",
+    "jpeg": "review/01-after-public-skill-battle-progress-01.jpg",
+    "sha256": "25c993f7ae48843a121118940706791cc7e24f7f8646329ddc8226fb22bcdb18"
+  },
+  {
+    "original": "smoke/after-public-skill-battle-progress-02.png",
+    "jpeg": "review/02-after-public-skill-battle-progress-02.jpg",
+    "sha256": "77e1a09665daab0cf322f4a7c26dc76b63ad369a105ca2f209612e4339e8730f"
+  },
+  {
+    "original": "smoke/battle.png",
+    "jpeg": "review/03-battle.jpg",
+    "sha256": "a62ef13579e446070979b2352c31ab5196f6043b41942f6659e0eac46b1dea28"
+  },
+  {
+    "original": "smoke/current-ui.png",
+    "jpeg": "review/04-current-ui.jpg",
+    "sha256": "441b1562d24d1a5b8aa9c778c086dff7623e1a10da1da0b67f6562df272382c0"
+  },
+  {
+    "original": "smoke/fullscreen-chinese.png",
+    "jpeg": "review/05-fullscreen-chinese.jpg",
+    "sha256": "9cf233575a6cd79c2987485b3ee13e66b2ae5b3b3aeb8432cfb5f2f786eefde3"
+  },
+  {
+    "original": "smoke/guide.png",
+    "jpeg": "review/06-guide.jpg",
+    "sha256": "7733671744b30b527ff0119fca8ed1211e008509b360d62f236f69edaa886979"
+  },
+  {
+    "original": "smoke/initial-battle-progress-00.png",
+    "jpeg": "review/07-initial-battle-progress-00.jpg",
+    "sha256": "2a6dc789077d5d068f4dcf9d6ca664c534141d200758d3421f70b8a0dbfd5bc3"
+  },
+  {
+    "original": "smoke/initial-battle-progress-01.png",
+    "jpeg": "review/08-initial-battle-progress-01.jpg",
+    "sha256": "498726756c01bc514ec47f7b9777e1ee234bd28b29496c801e56dfafe419ba00"
+  },
+  {
+    "original": "smoke/public-portrait-after-skill.png",
+    "jpeg": "review/09-public-portrait-after-skill.jpg",
+    "sha256": "120b2eea5bff1b7c4062c1e249988221cf5fc464d32a90a688d30a73470a137a"
+  },
+  {
+    "original": "smoke/public-portrait-held-1.png",
+    "jpeg": "review/10-public-portrait-held-1.jpg",
+    "sha256": "1f32a16055ac145422e57535101c2e8a01782fad2220e8d34f0fdd36a005e2ea"
+  },
+  {
+    "original": "smoke/public-portrait-skill.png",
+    "jpeg": "review/11-public-portrait-skill.jpg",
+    "sha256": "82a1f4466bfa1e4463023c1082ee6ff7f61a105499346680315398745b48fafa"
+  },
+  {
+    "original": "smoke/public-skill-battle-resumed.png",
+    "jpeg": "review/12-public-skill-battle-resumed.jpg",
+    "sha256": "422e9bb57f43919f9bd378d3f8460924daf4c3f3fef810b38dd6387d815c8c07"
+  },
+  {
+    "original": "smoke/quit-chinese.png",
+    "jpeg": "review/13-quit-chinese.jpg",
+    "sha256": "c4be1473c1e486a4a877415d1e7e95a3f1f93161bed405c0ecb57fc18561e713"
+  },
+  {
+    "original": "smoke/recruit.png",
+    "jpeg": "review/14-recruit.jpg",
+    "sha256": "6b857e58459037faf58f179db641d1e975849d79cd614820912932e6fe3ee3e2"
+  },
+  {
+    "original": "smoke/restart-battle-chinese.png",
+    "jpeg": "review/15-restart-battle-chinese.jpg",
+    "sha256": "8b8b2565f5c4cfb0e2d9246641e9ecbfe0ba7d8b28a3d5100ffdf5e20020fb90"
+  },
+  {
+    "original": "smoke/restart-battle-progress-00.png",
+    "jpeg": "review/16-restart-battle-progress-00.jpg",
+    "sha256": "559523fcb6e382c126e5ced194f97aeb288794aef1299d5c6fb87b4cf467019a"
+  },
+  {
+    "original": "smoke/restart-battle-progress-01.png",
+    "jpeg": "review/17-restart-battle-progress-01.jpg",
+    "sha256": "804a4afad4dbaf88ecb1f97814cb46b34bf0e26dd1851def7f50dab55a933c81"
+  },
+  {
+    "original": "smoke/restart-battle-progress-02.png",
+    "jpeg": "review/18-restart-battle-progress-02.jpg",
+    "sha256": "e56f836354ff01b3969bffe0d827842fd97401e30640543331b4d2beefdc2837"
+  },
+  {
+    "original": "smoke/restart-battle-progress-03.png",
+    "jpeg": "review/19-restart-battle-progress-03.jpg",
+    "sha256": "244ebe6a1a0043e73e808a39fe2935f0fdbfd46fc53068b421e833f0895feb86"
+  },
+  {
+    "original": "smoke/restart-chinese.png",
+    "jpeg": "review/20-restart-chinese.jpg",
+    "sha256": "1a260a21f0643cfa3ff211595b49ed60255672279e95ab2ed13308946c89ddc3"
+  },
+  {
+    "original": "smoke/restart-quit-chinese.png",
+    "jpeg": "review/21-restart-quit-chinese.jpg",
+    "sha256": "441b1562d24d1a5b8aa9c778c086dff7623e1a10da1da0b67f6562df272382c0"
+  },
+  {
+    "original": "smoke/restart-recruit-chinese.png",
+    "jpeg": "review/22-restart-recruit-chinese.jpg",
+    "sha256": "0f721c715b1e030788369d32be8fe577c65d6b63df2fbcb8d14fa2320e44bbeb"
+  },
+  {
+    "original": "smoke/settings-chinese.png",
+    "jpeg": "review/23-settings-chinese.jpg",
+    "sha256": "35063448a95901f9a50d0e2eb03ad7c43ae05d4a2b9f586f55daac516b79ef1f"
+  },
+  {
+    "original": "smoke/startup.png",
+    "jpeg": "review/24-startup.jpg",
+    "sha256": "c2eb721c8f41eef5c0ccb646319ad20bd094e6807b0701124131a88f9f0c713a"
+  }
+]

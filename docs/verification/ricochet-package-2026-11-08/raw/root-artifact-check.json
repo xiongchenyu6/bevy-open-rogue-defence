@@ -1,0 +1,28 @@
+{
+  "result": "PASS",
+  "source_commit": "d629e50d733bf3aaeaf708bb59c220bfd866469d",
+  "source_inputs": 552,
+  "manifest_files": 892,
+  "tar_files": 893,
+  "binary_sha256": "bad2dd4c80c41562e099226d8d1984452bac79e3f7cddf33e8049c098c8e9dd9",
+  "tar_sha256": "c797f5e001e9abb864df225e47121398c2113ba9777f21f7d2f700bb0509cc33",
+  "three_clock_pairs": {
+    "initial": [
+      1498,
+      1492
+    ],
+    "after-public-skill": [
+      1476,
+      1470
+    ],
+    "restart": [
+      1487,
+      1481
+    ]
+  },
+  "root_viewed_originals": 25,
+  "known_visual_findings": [
+    "Early after-public-skill progress00 retains narrow viewport with white extension; later desktop observations recover."
+  ],
+  "review_method": "Root reviewed25 originals via five independent JPEG sheets with exact review-files mapping"
+}
