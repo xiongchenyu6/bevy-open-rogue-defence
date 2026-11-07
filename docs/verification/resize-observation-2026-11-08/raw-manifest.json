@@ -1,0 +1,74 @@
+{
+  "raw/root-reviewed.json.gz": {
+    "bytes": 377,
+    "sha256": "b50df7da668f811be1467a6667d3db140b3ce09c2db9120beeed7302c94e1f1f"
+  },
+  "raw/harness-provenance.json.gz": {
+    "bytes": 786,
+    "sha256": "907555b0e2b861f44dbda0849339e55e5e6250c81267ce60141450f99281db19"
+  },
+  "raw/runtime.log.gz": {
+    "bytes": 3965,
+    "sha256": "dd2ce683b42d38f0f65be65f203fd7f895afe74baf58b1c2965fd834ff2b0f2e"
+  },
+  "raw/run.py.gz": {
+    "bytes": 1141,
+    "sha256": "7e23b3fc2433a413818a536a8bcc44cc8f689fac3db470aae2c98f327bdd5a07"
+  },
+  "raw/process.json.gz": {
+    "bytes": 980,
+    "sha256": "4530921c2d94e9058d87651729062fe97a98e1eab1fc74fe4725c17d424a98e2"
+  },
+  "raw/runtime/xvfb.log.gz": {
+    "bytes": 2348,
+    "sha256": "b987a262609a3720f450ab6815ed90b2069dd47b7b012959ca19c325aebf5d55"
+  },
+  "raw/runtime/battle-progress.json.gz": {
+    "bytes": 5626,
+    "sha256": "ce5593ba7c02032249e6daa30cbce186eb80367f0e723b6b5cea7d70cfbf8ae0"
+  },
+  "raw/runtime/restart.log.gz": {
+    "bytes": 11300,
+    "sha256": "5d9d12054dfc9db62ac1c4daa433eb65ccbf349dee0aac1ef8c11769afb05877"
+  },
+  "raw/runtime/game.log.gz": {
+    "bytes": 21632,
+    "sha256": "0cc362150c974dcee8333eed76aa3e4b0c900c9377059edf1e5d1179cfef97a7"
+  },
+  "raw/runtime/result.json.gz": {
+    "bytes": 6252,
+    "sha256": "fac9840669c8d1bf5577b594bd36c74cde60f4436a9a46c014d6ab138bc6714a"
+  },
+  "raw/runtime/resize-observations.json.gz": {
+    "bytes": 4914,
+    "sha256": "233623436d074fa1d8c7bef0bae28350270782e64ea356a54a89e6fee1b02bb3"
+  },
+  "raw/runtime/wm.log.gz": {
+    "bytes": 85,
+    "sha256": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c"
+  },
+  "raw/harness/forge_restart_runtime.py.gz": {
+    "bytes": 9632,
+    "sha256": "659c983316e5c8f4f7c9e4cb3949a626277d7eb4282141743b7525a28f28d737"
+  },
+  "raw/harness/campaign_runtime.py.gz": {
+    "bytes": 18356,
+    "sha256": "76ce1daa5939dbbbdcbc0b68162f62b59ce178c14228e1cecb1c8f50684c0591"
+  },
+  "raw/harness/forge_runtime.py.gz": {
+    "bytes": 29487,
+    "sha256": "24313dcedfc2d66b0b2e2d2128372632947681a69ffdd61a8547cdc9b2f69c58"
+  },
+  "raw/harness/campaign_equipment_runtime.py.gz": {
+    "bytes": 43074,
+    "sha256": "670760a3067ba39278110b48d253ccf2bfad35ca069c6772d2efe6469b6dbe37"
+  },
+  "raw/harness/smoke_runtime.py.gz": {
+    "bytes": 22262,
+    "sha256": "a41555a89871123a786b65d83a585c8b9387c1ccfc68e91140a203bdc8291a8d"
+  },
+  "raw/harness/forge_refresh.py.gz": {
+    "bytes": 4319,
+    "sha256": "c40e9e61179f9ae55d767bd6c9f1333e7b6bced398cd292a190870e701423063"
+  }
+}

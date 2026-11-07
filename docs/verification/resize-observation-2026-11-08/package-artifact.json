@@ -1,0 +1,9 @@
+{
+  "source_commit": "d629e50d733bf3aaeaf708bb59c220bfd866469d",
+  "package_directory": "target/desktop-packages-ricochet-nov8/rogue-commander-linux",
+  "tar": "target/desktop-packages-ricochet-nov8/rogue-commander-linux-0.1.0.tar.gz",
+  "tar_bytes": 62350719,
+  "tar_sha256": "c797f5e001e9abb864df225e47121398c2113ba9777f21f7d2f700bb0509cc33",
+  "binary_sha256": "bad2dd4c80c41562e099226d8d1984452bac79e3f7cddf33e8049c098c8e9dd9",
+  "scope": "Offline read-only Ubuntu24/X11 software Vulkan short flow only; no full chapter, natural forge, hardware or Steam claim"
+}

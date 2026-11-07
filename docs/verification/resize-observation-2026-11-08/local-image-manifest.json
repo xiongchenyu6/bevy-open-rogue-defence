@@ -1,0 +1,194 @@
+{
+  "runtime/initial-battle-progress-01.png": {
+    "bytes": 740194,
+    "sha256": "0127e7ffbc86bc0b0d96597ddecd04806d60a9640c5f500360aba5d33dfdd01b"
+  },
+  "runtime/resize-0-4.png": {
+    "bytes": 740589,
+    "sha256": "548f10565fe0d35c51aef017a9d18eda79430e11815856caf0a57f531add2a3a"
+  },
+  "runtime/restart-quit-chinese.png": {
+    "bytes": 48893,
+    "sha256": "ee7675aecdb6736f2b076049c84195c3536a07d4f2898c73eda18aea04b40a59"
+  },
+  "runtime/restart-chinese.png": {
+    "bytes": 88118,
+    "sha256": "5e1de05db88e926f19da2e74bffa647c98932f86da3a1630f08e182d0c82d807"
+  },
+  "runtime/resize-0-2.png": {
+    "bytes": 739542,
+    "sha256": "9cd8cf532520f8b401d68c90382e21adef5e03c4cf0c8a050fa0e54f56b609e1"
+  },
+  "runtime/resize-2-2.png": {
+    "bytes": 739936,
+    "sha256": "137a3226452cc5283e7450f1bdc59d4502bc797e11e2e791b8f2e0dc258c0e47"
+  },
+  "runtime/battle.png": {
+    "bytes": 741207,
+    "sha256": "c112ebbc007a21dc6fef28ee8b660fd5b5142825cb6fa3c1f03655963dfac105"
+  },
+  "runtime/recruit.png": {
+    "bytes": 313539,
+    "sha256": "4cec78af3e50c2aad1cb8e883036ac841afdedd86e3a6ecf77e67b0835ac2731"
+  },
+  "runtime/resize-3-4.png": {
+    "bytes": 748027,
+    "sha256": "d179c1d613b6873e83e3a69b6a19795ca440e34006c7c877b6a366d4947589f2"
+  },
+  "runtime/restart-battle-progress-00.png": {
+    "bytes": 740537,
+    "sha256": "5b3f7bea47cc718e4acd0596ba1b1412fbe8933b41fb72a1d6427fefd5f47923"
+  },
+  "runtime/resize-2-3.png": {
+    "bytes": 740886,
+    "sha256": "36cf2c60145775bb11450e8bfa3af68a11fa29144f50e8dd2ec8b409f143e420"
+  },
+  "runtime/resize-3-2.png": {
+    "bytes": 740567,
+    "sha256": "0adfac6009e68e646b913ed2346328f74114bc296147072f981d6383c04d5f40"
+  },
+  "runtime/restart-battle-chinese.png": {
+    "bytes": 742070,
+    "sha256": "a4166403b50b1057dcf6f9c3b3a0feeafd529a7da76b846f1ff2a435386bbca0"
+  },
+  "runtime/public-portrait-after-skill.png": {
+    "bytes": 281249,
+    "sha256": "695d0f2a452351e8ed09782b16a4bf619d2c617346209a99c245a8d7d97aeeb8"
+  },
+  "runtime/public-skill-battle-resumed.png": {
+    "bytes": 744702,
+    "sha256": "ffe295eeadbcc80c82a06b04e2f60f27af11e978bbf5cbe6b8676c5b500e0a56"
+  },
+  "runtime/resize-3-5.png": {
+    "bytes": 739250,
+    "sha256": "8b56f9e2ba7b9c908d23a24b43bc8bc4607d09fccd42a30a0d234a8c23df7f99"
+  },
+  "runtime/resize-0-3.png": {
+    "bytes": 739141,
+    "sha256": "ff6b0456763bb8131facf4135ea2265204fa5a3fabaf08818ef99a94b1d58948"
+  },
+  "runtime/restart-battle-progress-02.png": {
+    "bytes": 741244,
+    "sha256": "618bbd23458e2a32e0e5d5b493d888548effd96620034bd1fdca54497a498b08"
+  },
+  "runtime/current-ui.png": {
+    "bytes": 48893,
+    "sha256": "ee7675aecdb6736f2b076049c84195c3536a07d4f2898c73eda18aea04b40a59"
+  },
+  "runtime/resize-0-5.png": {
+    "bytes": 739240,
+    "sha256": "fafb239cf4c763fc385e7a07418d311c8c71638a0d86bbe4b7f66955a6708e07"
+  },
+  "runtime/resize-2-0.png": {
+    "bytes": 307224,
+    "sha256": "1ce6543b90fe538a68423a44abfd51d1c9d31ac82e40be6e742ee779792ef9b7"
+  },
+  "runtime/quit-chinese.png": {
+    "bytes": 48894,
+    "sha256": "562a89fbee0cf9c0d53d82aabf418cddf54043bceab5e6968cce859d1bde8b2e"
+  },
+  "runtime/resize-3-3.png": {
+    "bytes": 747254,
+    "sha256": "630c95d05f82a40787f420309a4c2f2d542f8d305b750b715bd7e13d7d0e8b65"
+  },
+  "runtime/resize-2-1.png": {
+    "bytes": 750720,
+    "sha256": "bacf757bf8198dbf3f4cfd64c7c6b0341407f3a7952b2f4247cebc5ea13ea7cb"
+  },
+  "runtime/public-portrait-skill.png": {
+    "bytes": 67335,
+    "sha256": "770d3ac407b31df0a30b996b79f53bc038fa76c7dd13d123a35ce37af84ab486"
+  },
+  "runtime/resize-1-4.png": {
+    "bytes": 742335,
+    "sha256": "d97e0c5273bd2c278031dd0dbc5f52b7fb62fa34b9320627a0a7adeb68f35dd4"
+  },
+  "runtime/resize-2-5.png": {
+    "bytes": 739028,
+    "sha256": "c54375a726a3f9ca4e7f4a2f538e47de63a1122451ab81cb095ce8a8c4fdd9d8"
+  },
+  "runtime/resize-1-0.png": {
+    "bytes": 308971,
+    "sha256": "a22a069dd3448fc553366f47d690a5fa521e0b5e093727c972be77094da2e3df"
+  },
+  "runtime/after-public-skill-battle-progress-00.png": {
+    "bytes": 739210,
+    "sha256": "08feaf82498aea18532d293e43b08ef8afe0b78cce716433027a52c8336fa8c6"
+  },
+  "runtime/fullscreen-chinese.png": {
+    "bytes": 43789,
+    "sha256": "9cf233575a6cd79c2987485b3ee13e66b2ae5b3b3aeb8432cfb5f2f786eefde3"
+  },
+  "runtime/resize-1-2.png": {
+    "bytes": 739500,
+    "sha256": "fc3d92a71070aecd5818753147506b4a71e1296679e8503a3e46a91af846b899"
+  },
+  "runtime/resize-3-0.png": {
+    "bytes": 298640,
+    "sha256": "f856528d3334379b37f0cc097dd26634baefcf500a53ed57edd220fb4ceb7321"
+  },
+  "runtime/resize-3-1.png": {
+    "bytes": 750826,
+    "sha256": "c5106880b8266d643beb4200a9394bdb9ce9c2fae2bb5eae4b9f71f8f2d36839"
+  },
+  "runtime/initial-battle-progress-00.png": {
+    "bytes": 737872,
+    "sha256": "35234e83569a7e75224ed2b7b463d31da0b8f6d22b661fb99f5d170fab0085bb"
+  },
+  "runtime/after-public-skill-battle-progress-01.png": {
+    "bytes": 740281,
+    "sha256": "67fc3a754087d35c9149a93eada3fedaa1cb143486ce6ad57a4e30d86abb5553"
+  },
+  "runtime/resize-1-3.png": {
+    "bytes": 741546,
+    "sha256": "71c496780beb6b8e1999df63a254508bc125b24bc492772e298ce6187c0e4a7f"
+  },
+  "runtime/restart-battle-progress-03.png": {
+    "bytes": 740525,
+    "sha256": "81ad7490297a3fccd6464d93a10d46c119b64c59856ea91daa5316120601e023"
+  },
+  "runtime/public-portrait-held-1.png": {
+    "bytes": 285698,
+    "sha256": "7c3bba6bf3ab85230f447f226bc293fdbe5dee8e749d7b61bea65d98fa4e3a69"
+  },
+  "runtime/resize-1-5.png": {
+    "bytes": 738942,
+    "sha256": "6856d5a1b7ea8f2dc18e9b5bc483a6e8422259342aa0176c0b0dedf92f4bdf9d"
+  },
+  "runtime/resize-0-0.png": {
+    "bytes": 299094,
+    "sha256": "bb621d12e8e948a9a33a57dae59d5d2ffead2436c3b1ec4a4f8845fa0c1cd237"
+  },
+  "runtime/restart-battle-progress-01.png": {
+    "bytes": 743344,
+    "sha256": "60aacb68dae1849faae37799ddf08d7dcaa5cbfa8e66b5dc521c4de12177f3ac"
+  },
+  "runtime/resize-2-4.png": {
+    "bytes": 742775,
+    "sha256": "0b4e9ba32677e1ea8cbbcc0d03ed4cfee8d1c077bffd38dd702f299876938606"
+  },
+  "runtime/resize-1-1.png": {
+    "bytes": 753418,
+    "sha256": "17571d00ac87916ece100ef99f70f9909e9afe168dc51e4d47623aea89b2cc23"
+  },
+  "runtime/guide.png": {
+    "bytes": 355246,
+    "sha256": "5dd9621144d5cc8a677650c4951018e1e3b27d02531db1c8ab089b733ee81e5c"
+  },
+  "runtime/startup.png": {
+    "bytes": 92859,
+    "sha256": "d1877cbddcdc8c4b759539e3247757de58b8df6d90d3050f508d5cfd70b2e606"
+  },
+  "runtime/restart-recruit-chinese.png": {
+    "bytes": 300355,
+    "sha256": "1ee8fec0f768fb906fecc69e62ed959a87b0893861b3c4d9f9f39d0358d020a5"
+  },
+  "runtime/resize-0-1.png": {
+    "bytes": 750107,
+    "sha256": "aad80c5435f85dd53b7cec0f246d98f5bbeb286e3cca2305c06e92d588b31316"
+  },
+  "runtime/settings-chinese.png": {
+    "bytes": 40636,
+    "sha256": "35063448a95901f9a50d0e2eb03ad7c43ae05d4a2b9f586f55daac516b79ef1f"
+  }
+}
