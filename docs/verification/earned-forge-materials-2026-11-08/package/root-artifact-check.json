@@ -1,0 +1,61 @@
+{
+  "result": "PASS",
+  "source_commit": "5e8981d2a00b5857f2398fe421c99af538121569",
+  "source_inputs": 552,
+  "manifest_files": 892,
+  "tar_files": 893,
+  "binary_sha256": "360acd439c3f3f301e312aceedcf4e8879a824c9e4d19eb9fbb7a3fb08984701",
+  "tar_sha256": "0fc0bbbdc69102c8dc6d7fcf6be717c8d4e76cf9ad005563161206a15bbf01ad",
+  "three_clock_pairs": {
+    "initial": [
+      1498,
+      1492
+    ],
+    "after-public-skill": [
+      1453,
+      1447
+    ],
+    "restart": [
+      1472,
+      1466
+    ]
+  },
+  "root_viewed_originals": 31,
+  "known_visual_findings": [
+    "after-public-skill-battle-progress-00.png retains narrow viewport and white extension during resize; subsequent frames restore desktop geometry",
+    "Long phone skill details require scrolling"
+  ],
+  "review_method": "All31 master original PNGs independently decoded into six labeled JPEG contact sheets and reviewed.",
+  "ocr_rejections": [
+    {
+      "phase": "after-public-skill",
+      "screenshot": "after-public-skill-battle-progress-00.png",
+      "error": "Unreadable battle countdown pixels: [(300, ''), (400, '')]",
+      "blockers": []
+    },
+    {
+      "phase": "after-public-skill",
+      "screenshot": "after-public-skill-battle-progress-02.png",
+      "error": "Unreadable battle countdown pixels: [(300, '24:31'), (400, '12431')]",
+      "blockers": []
+    },
+    {
+      "phase": "after-public-skill",
+      "screenshot": "after-public-skill-battle-progress-04.png",
+      "error": "Unreadable battle countdown pixels: [(300, '24:19'), (400, '12419')]",
+      "blockers": []
+    },
+    {
+      "phase": "restart",
+      "screenshot": "restart-battle-progress-01.png",
+      "error": "Unreadable battle countdown pixels: [(300, '24:51'), (400, '2451')]",
+      "blockers": []
+    },
+    {
+      "phase": "restart",
+      "screenshot": "restart-battle-progress-03.png",
+      "error": "Unreadable battle countdown pixels: [(300, '24:39'), (400, '12439')]",
+      "blockers": []
+    }
+  ]
+}

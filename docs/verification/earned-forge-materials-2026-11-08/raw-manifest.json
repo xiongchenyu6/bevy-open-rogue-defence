@@ -1,0 +1,98 @@
+{
+  "raw/restart-process.json.gz": {
+    "bytes": 1428,
+    "sha256": "5928f9fdb5c9f5909ea5f4463e804b937d5ccae4239a4f8c30b9dfaadcecc281"
+  },
+  "raw/forge.log.gz": {
+    "bytes": 793,
+    "sha256": "6c9ca7e095c8f71ac696d3cac2bed1f5fa32fea025fbdbd24dc2ab267baf5c86"
+  },
+  "raw/restart.log.gz": {
+    "bytes": 170,
+    "sha256": "6099892bde8ae72f24ce019137ad5b9baa1e99349b1a0407bf5f7895e34865cb"
+  },
+  "raw/run.py.gz": {
+    "bytes": 3447,
+    "sha256": "fd7f88b0edf6a18a8ed26e282d962363e721ce5faf954f8d75352ddfe6e8acfb"
+  },
+  "raw/forge-process.json.gz": {
+    "bytes": 1016,
+    "sha256": "c962a107c56389b0067cf5314ee8124b0e43ea8ec3a2a5c2a613a0507d4fadaa"
+  },
+  "raw/restart/restart-game.log.gz": {
+    "bytes": 19049,
+    "sha256": "9ff15b10a1c3b5fb3799a49922e56248dce870d0fe230dd0ffc3b4eebd9b4ae3"
+  },
+  "raw/restart/xvfb.log.gz": {
+    "bytes": 2348,
+    "sha256": "b987a262609a3720f450ab6815ed90b2069dd47b7b012959ca19c325aebf5d55"
+  },
+  "raw/restart/result.json.gz": {
+    "bytes": 13630,
+    "sha256": "931a02da24c0e783c803e5bea845628f0414e417fb355da9d1d4ec272c738229"
+  },
+  "raw/restart/wm.log.gz": {
+    "bytes": 85,
+    "sha256": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c"
+  },
+  "raw/forge/xvfb.log.gz": {
+    "bytes": 1174,
+    "sha256": "f172a1b0f5cf2a0d462c51dfc335af1a1dfc8e873cb66f61d018c8b1b35fe416"
+  },
+  "raw/forge/game.log.gz": {
+    "bytes": 174029,
+    "sha256": "f57eca3c6d9c6a0604c912d1ef5e8929c0c559192bbfb7563a66aacf807d8e79"
+  },
+  "raw/forge/result.json.gz": {
+    "bytes": 89800,
+    "sha256": "654a8fb54b3aa62387f112696b1ea0d13084cdc49b0cec21bda5a602a5a78284"
+  },
+  "raw/forge/harness-snapshot.json.gz": {
+    "bytes": 885,
+    "sha256": "2969cca1b4c1ca54131fe89eff2045c724cee7db64aff4608cd93a734b53ad53"
+  },
+  "raw/forge/progress.json.gz": {
+    "bytes": 60,
+    "sha256": "99c7370f4e9a51dc1d53b1b11b8db2c7fddb346b1c790d2ad4da560c34f6777a"
+  },
+  "raw/forge/initial-save-provenance.json.gz": {
+    "bytes": 200,
+    "sha256": "9b52d5b388564c3dc5466f845ec9ca4bcc7a7617cf4df5f86ad8f329c72fcc1a"
+  },
+  "raw/forge/wm.log.gz": {
+    "bytes": 228,
+    "sha256": "79fe15966a42c84c0b68678cedf6063c823228bb9a9c3adfcc1d713289662c3d"
+  },
+  "raw/forge/harness-source/forge_restart_runtime.py.gz": {
+    "bytes": 9632,
+    "sha256": "659c983316e5c8f4f7c9e4cb3949a626277d7eb4282141743b7525a28f28d737"
+  },
+  "raw/forge/harness-source/campaign_runtime.py.gz": {
+    "bytes": 18356,
+    "sha256": "76ce1daa5939dbbbdcbc0b68162f62b59ce178c14228e1cecb1c8f50684c0591"
+  },
+  "raw/forge/harness-source/forge_runtime.py.gz": {
+    "bytes": 26101,
+    "sha256": "af495d8e54bff5e3a94cae3c7164f81e55ee82961e5caee1178ba183413cee39"
+  },
+  "raw/forge/harness-source/campaign_equipment_runtime.py.gz": {
+    "bytes": 43074,
+    "sha256": "670760a3067ba39278110b48d253ccf2bfad35ca069c6772d2efe6469b6dbe37"
+  },
+  "raw/forge/harness-source/smoke_runtime.py.gz": {
+    "bytes": 21095,
+    "sha256": "2d21bedab46f22d421c9d3a18f0368e76436012841a11bd6d3ad0c9cc0bd67a7"
+  },
+  "raw/forge/harness-source/forge_refresh.py.gz": {
+    "bytes": 4319,
+    "sha256": "c40e9e61179f9ae55d767bd6c9f1333e7b6bced398cd292a190870e701423063"
+  },
+  "raw/unit-state.txt.gz": {
+    "bytes": 81,
+    "sha256": "8299f76f110034f7ffb02bf1963703f99597182f9f07c74325798c3623e60861"
+  },
+  "raw/journal.log.gz": {
+    "bytes": 2836,
+    "sha256": "e2049e882b99d86a8892a35da95a9af62fa50ecf05be3cf1485101416f4f6412"
+  }
+}
