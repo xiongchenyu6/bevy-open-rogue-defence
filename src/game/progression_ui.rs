@@ -32,6 +32,8 @@ pub(super) struct BuildHeading;
 #[derive(Component)]
 pub(super) struct BuildGallery;
 #[derive(Component)]
+pub(super) struct BuildGalleryHint;
+#[derive(Component)]
 pub(super) struct BuildFooter;
 #[derive(Component)]
 pub(super) struct BuildArt;
@@ -114,6 +116,13 @@ fn name(language: GameLanguage, choice: DraftChoice) -> String {
         DraftChoice::Bond(card) => bond_card_name(language, card),
         DraftChoice::ReplaceBond(family) => bond_name(language, family),
         DraftChoice::Encounter(event) => event.name(language).to_owned(),
+    }
+}
+fn gallery_hint(language: GameLanguage, count: usize) -> String {
+    if language.is_chinese() {
+        format!("共{count}张 · 上下拖动查看")
+    } else {
+        format!("{count} cards · swipe to browse")
     }
 }
 fn short_name(language: GameLanguage, choice: DraftChoice) -> String {
@@ -234,6 +243,20 @@ pub(super) fn spawn_draft_ui(
                             BuildCopy::Heading(kind),
                             label(heading, 32.0, IVORY),
                         ));
+                        header.spawn((
+                            BuildGalleryHint,
+                            BuildCopy::GalleryHint(draft.choices.len()),
+                            Name::new("Draft gallery hint"),
+                            Node {
+                                width: percent(100),
+                                height: px(16),
+                                flex_shrink: 0.0,
+                                display: Display::None,
+                                ..default()
+                            },
+                            TextLayout::no_wrap(),
+                            label(gallery_hint(language, draft.choices.len()), 13.0, MUTED),
+                        ));
                         header
                             .spawn((
                                 BuildHeaderActions,
@@ -275,6 +298,9 @@ pub(super) fn spawn_draft_ui(
                 content
                     .spawn((
                         BuildGallery,
+                        Name::new("Draft gallery"),
+                        ScrollPosition::default(),
+                        bevy::ui::RelativeCursorPosition::default(),
                         Node {
                             width: percent(100),
                             justify_content: JustifyContent::Center,
@@ -321,9 +347,14 @@ pub(super) fn spawn_draft_ui(
                                     BorderColor::all(EDGE),
                                 ))
                                 .with_children(|card| {
-                                    card.spawn((BuildArt, art(id, 200.0)));
+                                    card.spawn((
+                                        BuildArt,
+                                        Name::new(format!("Build art {index}")),
+                                        art(id, 200.0),
+                                    ));
                                     card.spawn((
                                         BuildTitle,
+                                        Name::new(format!("Build title {index}")),
                                         BuildCopy::Card(choice),
                                         label(short_name(language, choice), 22.0, IVORY),
                                         Node {
@@ -346,12 +377,15 @@ pub(super) fn spawn_draft_ui(
                                                 .with_linebreak(LineBreak::WordOrCharacter),
                                         ));
                                     }
-                                    card.spawn(Node {
-                                        column_gap: px(4),
-                                        height: px(10),
-                                        align_items: AlignItems::Center,
-                                        ..default()
-                                    })
+                                    card.spawn((
+                                        Name::new(format!("Build pips {index}")),
+                                        Node {
+                                            column_gap: px(4),
+                                            height: px(10),
+                                            align_items: AlignItems::Center,
+                                            ..default()
+                                        },
+                                    ))
                                     .with_children(|pips| {
                                         for point in 0..cap {
                                             pips.spawn((
@@ -420,6 +454,7 @@ pub(super) fn spawn_draft_ui(
                         footer
                             .spawn((
                                 BuildDetailScroll,
+                                bevy::ui::RelativeCursorPosition::default(),
                                 ScrollPosition::default(),
                                 crate::game::controller_input::ControllerDetailScroll,
                                 Node {
@@ -813,7 +848,10 @@ fn choice_available(choice: DraftChoice, session: &GameSession) -> bool {
 pub(super) fn scroll_details(
     mut wheel: MessageReader<bevy::input::mouse::MouseWheel>,
     touches: Res<Touches>,
-    mut bodies: Query<&mut ScrollPosition, With<BuildDetailScroll>>,
+    mut bodies: Query<
+        (&bevy::ui::RelativeCursorPosition, &mut ScrollPosition),
+        Or<(With<BuildDetailScroll>, With<BuildGallery>)>,
+    >,
 ) {
     let delta: f32 = wheel
         .read()
@@ -826,8 +864,10 @@ pub(super) fn scroll_details(
         })
         .sum();
     let drag = touches.iter().map(|touch| -touch.delta().y).sum::<f32>();
-    for mut position in &mut bodies {
-        position.0.y = (position.0.y + delta + drag).max(0.0);
+    for (cursor, mut position) in &mut bodies {
+        if cursor.cursor_over() {
+            position.0.y = (position.0.y + delta + drag).max(0.0);
+        }
     }
 }
 
@@ -1023,6 +1063,7 @@ mod tests {
 
 #[derive(Component)]
 pub(super) enum BuildCopy {
+    GalleryHint(usize),
     Heading(DraftKind),
     Card(DraftChoice),
     Trade(EncounterId),
@@ -1040,6 +1081,7 @@ pub(super) fn refresh_language(
         text.reborrow()
             .map_unchanged(|value| &mut value.0)
             .set_if_neq(match copy {
+                BuildCopy::GalleryHint(count) => gallery_hint(*language, *count),
                 BuildCopy::Card(choice) => short_name(*language, *choice),
                 BuildCopy::Trade(event) => trade_line(*language, *event),
                 BuildCopy::Heading(_)

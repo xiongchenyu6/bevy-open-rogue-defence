@@ -1,0 +1,13 @@
+{
+  "binary_scope": "prior draft-header main R4 executable, not whole-source43ba7e6",
+  "prior_proof": "docs/verification/draft-header-2026-11-07",
+  "binary_sha256": "726b469593c0a1da458714d90a215d30650419d6dd626a4ba34d9b3dc46e7c4c",
+  "main_to_pointer_only_changed": [
+    "src/bin/capture/immediate_choice.rs"
+  ],
+  "layout_files_equal_commit43ba7e6": [
+    "src/game/progression_ui.rs",
+    "src/game/progression_ui/layout.rs"
+  ],
+  "before_public_360": "separate public52 SDK screenshot from docs/verification/current-package-2026-11-07/frames/smoke/public-portrait-skill.png, referenced in local bulk hashes; not the same native baseline executable"
+}

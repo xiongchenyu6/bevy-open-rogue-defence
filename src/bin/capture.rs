@@ -1,5 +1,8 @@
 #[path = "capture/draft_layout.rs"]
 mod draft_layout;
+#[cfg(any(debug_assertions, feature = "dev-tools"))]
+#[path = "capture/phone_draft.rs"]
+mod phone_draft_capture;
 
 use std::{collections::BTreeSet, env, fs, path::PathBuf, time::Duration};
 
@@ -588,6 +591,10 @@ fn main() {
     } else if matches!(scenario, "campaign" | "campaign-reload" | "archive-hud") {
         campaign_capture::install(&mut apps.main);
     }
+    #[cfg(any(debug_assertions, feature = "dev-tools"))]
+    if scenario.starts_with("phone-draft-") {
+        phone_draft_capture::install(&mut apps.main);
+    }
     if scenario.starts_with("immediate-") {
         immediate_choice_capture::install(&mut apps.main);
     }
@@ -1091,6 +1098,11 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     }
     if scenario.starts_with("adventure-") {
         adventure_boss_capture::configure(world, scenario);
+        return;
+    }
+    #[cfg(any(debug_assertions, feature = "dev-tools"))]
+    if scenario.starts_with("phone-draft-") {
+        phone_draft_capture::configure(world, scenario);
         return;
     }
     if scenario.starts_with("immediate-") {

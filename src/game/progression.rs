@@ -73,6 +73,39 @@ const FIRST_FREE_BOND_AT: f32 = 12.0;
 const FIRST_AUTO_BOND_AT: f32 = 18.0;
 const EPIC_SKILL_UNLOCK_AT: f32 = 12.0 * 60.0;
 const FREE_SKILL_LEVELS: [u32; 5] = [5, 10, 15, 20, 25];
+/// Controlled native layout probe using the same renderer and real localized catalog.
+#[cfg(any(debug_assertions, feature = "dev-tools"))]
+pub fn capture_open_draft(world: &mut World, choices: Vec<DraftChoice>) {
+    use bevy::ecs::system::RunSystemOnce;
+    world
+        .run_system_once(
+            move |mut commands: Commands,
+                  mut draft: ResMut<DraftState>,
+                  mut session: ResMut<GameSession>,
+                  mut economy: ResMut<SkillEconomy>,
+                  language: Res<GameLanguage>| {
+                if let Some(root) = draft.root.take() {
+                    commands.entity(root).despawn();
+                }
+                draft.choices = choices.clone();
+                economy.pending_payment = Some(SkillDrawPayment::Free);
+                session.paused = true;
+                spawn_draft_ui(
+                    &mut commands,
+                    &mut draft,
+                    DraftKind::Skill,
+                    session.skill_rerolls,
+                    *language,
+                );
+            },
+        )
+        .unwrap();
+}
+
+#[cfg(test)]
+#[path = "progression/draft_touch_tests.rs"]
+mod draft_touch_tests;
+
 #[cfg(test)]
 const SKILL_SLOT_LIMIT: usize = 6;
 const BOND_SLOT_LIMIT: usize = 7;
@@ -946,11 +979,59 @@ fn tags_match_preference(tags: &[Tag], selected: &SelectedHero, build: &PlayerBu
     })
 }
 
+#[derive(Default)]
+struct DraftTouchChoice {
+    pending: Option<(u64, Entity, usize, Vec2)>,
+    dragged: bool,
+}
+
+impl DraftTouchChoice {
+    fn release_choice(
+        &mut self,
+        root: Entity,
+        pressed: Option<usize>,
+        touches: &Touches,
+    ) -> Option<usize> {
+        if let Some(touch) = touches.iter_just_pressed().next() {
+            self.pending = pressed.map(|index| (touch.id(), root, index, touch.position()));
+            self.dragged = false;
+        }
+        let (id, pending_root, index, start) = self.pending?;
+        if pending_root != root || touches.just_canceled(id) {
+            self.pending = None;
+            self.dragged = false;
+            return None;
+        }
+        if let Some(touch) = touches.get_pressed(id) {
+            self.dragged |= touch.position().distance(start) > 10.0;
+        }
+        if let Some(touch) = touches.iter_just_released().find(|touch| touch.id() == id) {
+            let accepted = !self.dragged && touch.position().distance(start) <= 10.0;
+            self.pending = None;
+            if !accepted {
+                return None;
+            }
+            Some(index)
+        } else {
+            if touches.get_pressed(id).is_none() {
+                self.pending = None;
+                self.dragged = false;
+            }
+            None
+        }
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
 fn handle_draft_buttons(
     mut commands: Commands,
     interactions: Query<(&Interaction, &DraftButton), Changed<Interaction>>,
-    mouse: Option<Res<ButtonInput<MouseButton>>>,
-    touches: Res<Touches>,
+    galleries: Query<&Node, With<presentation::BuildGallery>>,
+    pointer: (
+        Local<DraftTouchChoice>,
+        Option<Res<ButtonInput<MouseButton>>>,
+        Res<Touches>,
+    ),
     mut preview: ResMut<BuildPreview>,
     mut session: ResMut<GameSession>,
     mut build: ResMut<PlayerBuild>,
@@ -964,24 +1045,43 @@ fn handle_draft_buttons(
     mut vitals: ResMut<HeroVitals>,
     mut rng: ResMut<RunRng>,
 ) {
+    let (mut gesture, mouse, touches) = pointer;
     if draft.root.is_none() {
         return;
     }
-    let held_pointer = mouse
-        .as_deref()
-        .is_some_and(|mouse| mouse.pressed(MouseButton::Left))
-        || touches.iter().next().is_some();
-    let fresh_pointer = mouse
-        .as_deref()
-        .is_some_and(|mouse| mouse.just_pressed(MouseButton::Left))
-        || touches.iter_just_pressed().next().is_some();
-    if held_pointer && !fresh_pointer {
-        return;
-    }
-    let Some(index) = interactions.iter().find_map(|(interaction, button)| {
+    let scrolling = galleries
+        .iter()
+        .any(|node| node.overflow.y == OverflowAxis::Scroll);
+    let pressed = interactions.iter().find_map(|(interaction, button)| {
         (*interaction == Interaction::Pressed && button.0 < draft.choices.len()).then_some(button.0)
-    }) else {
-        return;
+    });
+    let index = if scrolling
+        && (gesture.pending.is_some()
+            || touches.iter().next().is_some()
+            || touches.iter_just_released().next().is_some())
+    {
+        let Some(index) = gesture.release_choice(draft.root.unwrap(), pressed, &touches) else {
+            return;
+        };
+        index
+    } else {
+        gesture.pending = None;
+        gesture.dragged = false;
+        let held_pointer = mouse
+            .as_deref()
+            .is_some_and(|mouse| mouse.pressed(MouseButton::Left))
+            || touches.iter().next().is_some();
+        let fresh_pointer = mouse
+            .as_deref()
+            .is_some_and(|mouse| mouse.just_pressed(MouseButton::Left))
+            || touches.iter_just_pressed().next().is_some();
+        if held_pointer && !fresh_pointer {
+            return;
+        }
+        let Some(index) = pressed else {
+            return;
+        };
+        index
     };
     preview.index = Some(index);
     preview.root = draft.root;

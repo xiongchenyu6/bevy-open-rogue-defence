@@ -1,0 +1,817 @@
+{
+  "before-320x667/frame00100.png": {
+    "sha256": "dc4e31efc41a65ce30586d124e991972716c58dbbc3a730fea2c7641d2f4e954",
+    "bytes": 87277,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "before-320x667/frame00180.png": {
+    "sha256": "dc4e31efc41a65ce30586d124e991972716c58dbbc3a730fea2c7641d2f4e954",
+    "bytes": 87277,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "before-320x667/frame00239.png": {
+    "sha256": "dc4e31efc41a65ce30586d124e991972716c58dbbc3a730fea2c7641d2f4e954",
+    "bytes": 87277,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "before-360x800/frame00100.png": {
+    "sha256": "4bfec1a383c9a7ceaf500391c2ce718b9871f856204d9d072d3e5fb96bc426e9",
+    "bytes": 103609,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "before-360x800/frame00180.png": {
+    "sha256": "4bfec1a383c9a7ceaf500391c2ce718b9871f856204d9d072d3e5fb96bc426e9",
+    "bytes": 103609,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "before-360x800/frame00239.png": {
+    "sha256": "4bfec1a383c9a7ceaf500391c2ce718b9871f856204d9d072d3e5fb96bc426e9",
+    "bytes": 103609,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "before-public-360.png": {
+    "sha256": "8ad9f62d9d914d69058c4b03ad7f7b0f3469d3406fa75f31c267532e3b788ca5",
+    "bytes": 84506,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r1-parameter-count/before-public-360.png": {
+    "sha256": "8ad9f62d9d914d69058c4b03ad7f7b0f3469d3406fa75f31c267532e3b788ca5",
+    "bytes": 84506,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r2/before-public-360.png": {
+    "sha256": "8ad9f62d9d914d69058c4b03ad7f7b0f3469d3406fa75f31c267532e3b788ca5",
+    "bytes": 84506,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r3/before-public-360.png": {
+    "sha256": "8ad9f62d9d914d69058c4b03ad7f7b0f3469d3406fa75f31c267532e3b788ca5",
+    "bytes": 84506,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r4/before-public-360.png": {
+    "sha256": "8ad9f62d9d914d69058c4b03ad7f7b0f3469d3406fa75f31c267532e3b788ca5",
+    "bytes": 84506,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r4/capture": {
+    "sha256": "37327917217486ae39530c601f88de95f59805840cc50db3a4d5908409221f6f",
+    "bytes": 490001824,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r5/before-public-360.png": {
+    "sha256": "8ad9f62d9d914d69058c4b03ad7f7b0f3469d3406fa75f31c267532e3b788ca5",
+    "bytes": 84506,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-en-3/frame00100.png": {
+    "sha256": "616cab16af4a56b086e6db3b6414cd2ab0e48db7eebb6085137ff69826ac8c94",
+    "bytes": 59577,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-en-3/frame00180.png": {
+    "sha256": "c703e4674be84f1e1e2533cd70326764973752f5adf6d391a0e0f785eb0054d6",
+    "bytes": 59544,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-en-3/frame00205.png": {
+    "sha256": "fcb4b76132fd004c9cfb48560c57e27975e9988e4df17fa14e58a600d8eba0a4",
+    "bytes": 260364,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-en-3/frame00239.png": {
+    "sha256": "b03b80a4593d3ea773d099b25013f0d124cab4403dc993794ddf77c572c756b2",
+    "bytes": 260672,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-en-6/frame00100.png": {
+    "sha256": "6d65bb8dbff147e6111441e2e796c0f147d97415edd576bde9e501da03685f73",
+    "bytes": 57343,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-en-6/frame00180.png": {
+    "sha256": "9bf440fc1aa0e65fcaf01fa8efdfd7d8d97c42154b4b8be908c838004264e290",
+    "bytes": 67964,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-en-6/frame00205.png": {
+    "sha256": "bf0e7a062cdcc29ae78b855dd37cdb052efee4be73c02a45aede199605104928",
+    "bytes": 260364,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-en-6/frame00239.png": {
+    "sha256": "b03b80a4593d3ea773d099b25013f0d124cab4403dc993794ddf77c572c756b2",
+    "bytes": 260672,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-zh-3/frame00100.png": {
+    "sha256": "6a4e92b7afb4fd3a49b98cbf1a00e5b79d7a629a2fae4ea28c7943f83af25a44",
+    "bytes": 56222,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-zh-3/frame00180.png": {
+    "sha256": "522bc828f341c49209ada8fce4049c634fba4a1b5fb724755cc876ffb7ec7a55",
+    "bytes": 56218,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-zh-3/frame00205.png": {
+    "sha256": "fdb24796f86e9deae514df43e9ccc69334502e5e6dcf35d97a83111473413b89",
+    "bytes": 263083,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-zh-3/frame00239.png": {
+    "sha256": "2e3de03ebd44d86526ba80270298e33a82df4c2841c7260bb3b24c59b03d7684",
+    "bytes": 263130,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-zh-6/frame00100.png": {
+    "sha256": "c51a02154defa9ef99d8d705e7dd0711fc435c747dbfa2b7ebc3f09ec73830d0",
+    "bytes": 54999,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-zh-6/frame00180.png": {
+    "sha256": "760b9f144d5fb93700a9fea5c9d085620c4df66394a5325cee1b4e929c5b060e",
+    "bytes": 58970,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-zh-6/frame00205.png": {
+    "sha256": "fdb24796f86e9deae514df43e9ccc69334502e5e6dcf35d97a83111473413b89",
+    "bytes": 263083,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-320x667-zh-6/frame00239.png": {
+    "sha256": "2e3de03ebd44d86526ba80270298e33a82df4c2841c7260bb3b24c59b03d7684",
+    "bytes": 263130,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-en-3/frame00100.png": {
+    "sha256": "d4ce679aedbe55993c769b93b2725d4af1c14246d7335cbc97d0b5d9a986adea",
+    "bytes": 78742,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-en-3/frame00180.png": {
+    "sha256": "d4ce679aedbe55993c769b93b2725d4af1c14246d7335cbc97d0b5d9a986adea",
+    "bytes": 78742,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-en-3/frame00205.png": {
+    "sha256": "1f9887d5e3a8212abce2aab1059b75854e2ee42a28b51ec8b26ef2e5549a72cd",
+    "bytes": 345651,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-en-3/frame00239.png": {
+    "sha256": "02bf2f80143145bc718454e32f5c7bd18df74a03d3b97936d513373ab541b8e0",
+    "bytes": 346002,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-en-6/frame00100.png": {
+    "sha256": "954d2ed78133079479692156fc59b1689d1a36827e4f6a13914ede8f790f32c3",
+    "bytes": 76531,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-en-6/frame00180.png": {
+    "sha256": "6cdaab93bd996eecbde3465ac9428f46405e7e6ac7347801913fdc26eefbce75",
+    "bytes": 86550,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-en-6/frame00205.png": {
+    "sha256": "1f9887d5e3a8212abce2aab1059b75854e2ee42a28b51ec8b26ef2e5549a72cd",
+    "bytes": 345651,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-en-6/frame00239.png": {
+    "sha256": "02bf2f80143145bc718454e32f5c7bd18df74a03d3b97936d513373ab541b8e0",
+    "bytes": 346002,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-zh-3/frame00100.png": {
+    "sha256": "429f1b5b0ae8bbe6d2c29ad5b83aa19b7f0c887d901ecb4877c79a7eb43432f8",
+    "bytes": 68541,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-zh-3/frame00180.png": {
+    "sha256": "429f1b5b0ae8bbe6d2c29ad5b83aa19b7f0c887d901ecb4877c79a7eb43432f8",
+    "bytes": 68541,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-zh-3/frame00205.png": {
+    "sha256": "3e8edd01aa9daf2a713be75003f49ba11a451f7450da7abd096a0f9452844d68",
+    "bytes": 348319,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-zh-3/frame00239.png": {
+    "sha256": "bed0756265dd8837a9a4cd03444ee1b33abea514a4b9734f73d2cdbf99dccfb9",
+    "bytes": 348310,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-zh-6/frame00100.png": {
+    "sha256": "8e52f458c53548fe14dd4573623c52a78768d1d098835cd83ed0daf720925de1",
+    "bytes": 67565,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-zh-6/frame00180.png": {
+    "sha256": "e885fd96fb425a51b35231f293a6c9c83987283ede5ae5cdec1c583a176efced",
+    "bytes": 69773,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-zh-6/frame00205.png": {
+    "sha256": "3e8edd01aa9daf2a713be75003f49ba11a451f7450da7abd096a0f9452844d68",
+    "bytes": 348319,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/after-360x800-zh-6/frame00239.png": {
+    "sha256": "bed0756265dd8837a9a4cd03444ee1b33abea514a4b9734f73d2cdbf99dccfb9",
+    "bytes": 348310,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/before-public-360.png": {
+    "sha256": "8ad9f62d9d914d69058c4b03ad7f7b0f3469d3406fa75f31c267532e3b788ca5",
+    "bytes": 84506,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r6/capture": {
+    "sha256": "efbd5b601e1875c8e0866df1750037bf4aa16481ca4e87ded2283fbc58acae4e",
+    "bytes": 490001936,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-en-3/frame00100.png": {
+    "sha256": "e6830380f71e39c6ed92b165028bd763a3cedf350587f829497344d41067b132",
+    "bytes": 59604,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-en-3/frame00180.png": {
+    "sha256": "d9b2875b013db2adf2c4c6468409fd585818c179a2e7683d4022f973a0281f34",
+    "bytes": 59567,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-en-3/frame00205.png": {
+    "sha256": "bf0e7a062cdcc29ae78b855dd37cdb052efee4be73c02a45aede199605104928",
+    "bytes": 260364,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-en-3/frame00239.png": {
+    "sha256": "b03b80a4593d3ea773d099b25013f0d124cab4403dc993794ddf77c572c756b2",
+    "bytes": 260672,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-en-6/frame00100.png": {
+    "sha256": "c0df705e2b99b2a79ff69949b2a5bc77d6abeede2321069009c83e5eb6b2610c",
+    "bytes": 57388,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-en-6/frame00180.png": {
+    "sha256": "1c6e8101745fc6ec0f2160f540bb9c806b0c3a95fa07e8de93962218984266f8",
+    "bytes": 68001,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-en-6/frame00205.png": {
+    "sha256": "bf0e7a062cdcc29ae78b855dd37cdb052efee4be73c02a45aede199605104928",
+    "bytes": 260364,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-en-6/frame00239.png": {
+    "sha256": "b03b80a4593d3ea773d099b25013f0d124cab4403dc993794ddf77c572c756b2",
+    "bytes": 260672,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-zh-3/frame00100.png": {
+    "sha256": "72fd2cb2d8abcc6932108d69ecd83c135ad90455fe07bb89f6b7db1e77b61967",
+    "bytes": 56291,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-zh-3/frame00180.png": {
+    "sha256": "b47d83d0745b718cba817221eeb6e25ba6d0fd2eae49f5142c2a83464dac3563",
+    "bytes": 56287,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-zh-3/frame00205.png": {
+    "sha256": "fdb24796f86e9deae514df43e9ccc69334502e5e6dcf35d97a83111473413b89",
+    "bytes": 263083,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-zh-3/frame00239.png": {
+    "sha256": "2e3de03ebd44d86526ba80270298e33a82df4c2841c7260bb3b24c59b03d7684",
+    "bytes": 263130,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-zh-6/frame00100.png": {
+    "sha256": "1f22f7d4e8bd12cdf16a96413159d11907992f09c0baed433621a7add8b94428",
+    "bytes": 55112,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-zh-6/frame00180.png": {
+    "sha256": "e2d036c377aaec970dd48beecf657de30837c371f0bbc1c8c1e19012d77fc0c7",
+    "bytes": 59197,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-zh-6/frame00205.png": {
+    "sha256": "fdb24796f86e9deae514df43e9ccc69334502e5e6dcf35d97a83111473413b89",
+    "bytes": 263083,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-320x667-zh-6/frame00239.png": {
+    "sha256": "2e3de03ebd44d86526ba80270298e33a82df4c2841c7260bb3b24c59b03d7684",
+    "bytes": 263130,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-en-3/frame00100.png": {
+    "sha256": "d55d08440e39871605ca670f98a42ef6097dfe5b2ff0339448cd7d0bacb73b57",
+    "bytes": 78698,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-en-3/frame00180.png": {
+    "sha256": "d55d08440e39871605ca670f98a42ef6097dfe5b2ff0339448cd7d0bacb73b57",
+    "bytes": 78698,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-en-3/frame00205.png": {
+    "sha256": "1f9887d5e3a8212abce2aab1059b75854e2ee42a28b51ec8b26ef2e5549a72cd",
+    "bytes": 345651,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-en-3/frame00239.png": {
+    "sha256": "02bf2f80143145bc718454e32f5c7bd18df74a03d3b97936d513373ab541b8e0",
+    "bytes": 346002,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-en-6/frame00100.png": {
+    "sha256": "db92c7611c44a908a69f97e6e6a54b746f469428a5cffcf44318168be9dd7d0f",
+    "bytes": 76485,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-en-6/frame00180.png": {
+    "sha256": "731771c85b3d1fdf77f0df669934cd8df0d4be3160a1804129a5592da8ee3077",
+    "bytes": 86522,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-en-6/frame00205.png": {
+    "sha256": "1f9887d5e3a8212abce2aab1059b75854e2ee42a28b51ec8b26ef2e5549a72cd",
+    "bytes": 345651,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-en-6/frame00239.png": {
+    "sha256": "02bf2f80143145bc718454e32f5c7bd18df74a03d3b97936d513373ab541b8e0",
+    "bytes": 346002,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-zh-3/frame00100.png": {
+    "sha256": "654e021a3eff459b2aba2d4e18d19dcccbb370e6e327b5daefa647ae17a50bb5",
+    "bytes": 68342,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-zh-3/frame00180.png": {
+    "sha256": "654e021a3eff459b2aba2d4e18d19dcccbb370e6e327b5daefa647ae17a50bb5",
+    "bytes": 68342,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-zh-3/frame00205.png": {
+    "sha256": "3e8edd01aa9daf2a713be75003f49ba11a451f7450da7abd096a0f9452844d68",
+    "bytes": 348319,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-zh-3/frame00239.png": {
+    "sha256": "bed0756265dd8837a9a4cd03444ee1b33abea514a4b9734f73d2cdbf99dccfb9",
+    "bytes": 348310,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-zh-6/frame00100.png": {
+    "sha256": "4a42ee12bf50dfe90f5abfe10bd1d2d969634c7485d730dec9cacb1ddf3a7293",
+    "bytes": 67340,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-zh-6/frame00180.png": {
+    "sha256": "f5a8c699da70b7eeeb763164a5d650177441ee36378a200bd96d80365eafe999",
+    "bytes": 69790,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-zh-6/frame00205.png": {
+    "sha256": "3e8edd01aa9daf2a713be75003f49ba11a451f7450da7abd096a0f9452844d68",
+    "bytes": 348319,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/after-360x800-zh-6/frame00239.png": {
+    "sha256": "bed0756265dd8837a9a4cd03444ee1b33abea514a4b9734f73d2cdbf99dccfb9",
+    "bytes": 348310,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/before-public-360.png": {
+    "sha256": "8ad9f62d9d914d69058c4b03ad7f7b0f3469d3406fa75f31c267532e3b788ca5",
+    "bytes": 84506,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/build-controls-before/build-bond/frame00049.png": {
+    "sha256": "5cec79c64c8cc98a87d60f05742edd169075fb201592846785c777ff90d9f07a",
+    "bytes": 295948,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/build-controls-before/build-skill/frame00049.png": {
+    "sha256": "c7e8b5155938eea65824c45976ae2ec69f8f4876959270f004dec4cce2468e39",
+    "bytes": 340434,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/capture": {
+    "sha256": "72b0ed75a78811e0d5fe5be38d95d8292f730063dc42bdd771198990def92cb9",
+    "bytes": 490063088,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/supplement/compact/frame00100.png": {
+    "sha256": "5b8107f8c4d3f0185ef4acb4594d2a885e7f09cd6f37fee177728b0b198c12a3",
+    "bytes": 108189,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/supplement/compact/frame00180.png": {
+    "sha256": "5b8107f8c4d3f0185ef4acb4594d2a885e7f09cd6f37fee177728b0b198c12a3",
+    "bytes": 108189,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/supplement/compact/frame00239.png": {
+    "sha256": "5b8107f8c4d3f0185ef4acb4594d2a885e7f09cd6f37fee177728b0b198c12a3",
+    "bytes": 108189,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/supplement/continuous-desktop/frame00100.png": {
+    "sha256": "92fcd36c546e0d817bf2ccf10a4cf0deba02ac90bf23fb6d578e25d442fc87c6",
+    "bytes": 332342,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/supplement/continuous-desktop/frame00180.png": {
+    "sha256": "177c600137aaf46e7c031dedc9d3813979d88c329810951ebcef4ae782c31277",
+    "bytes": 985123,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/supplement/continuous-desktop/frame00239.png": {
+    "sha256": "fc2d9da2024badcf36ea1355d956d14f738bd76c79bee039fa3481784290790a",
+    "bytes": 991041,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/supplement/desktop/frame00100.png": {
+    "sha256": "0b66efadc63288fffd730e5f271ecf3498eb3a1995ad8acb714181f409c54557",
+    "bytes": 297592,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/supplement/desktop/frame00180.png": {
+    "sha256": "0b66efadc63288fffd730e5f271ecf3498eb3a1995ad8acb714181f409c54557",
+    "bytes": 297592,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r7/supplement/desktop/frame00239.png": {
+    "sha256": "0b66efadc63288fffd730e5f271ecf3498eb3a1995ad8acb714181f409c54557",
+    "bytes": 297592,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r8/before-public-360.png": {
+    "sha256": "8ad9f62d9d914d69058c4b03ad7f7b0f3469d3406fa75f31c267532e3b788ca5",
+    "bytes": 84506,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-en-3/frame00100.png": {
+    "sha256": "e6830380f71e39c6ed92b165028bd763a3cedf350587f829497344d41067b132",
+    "bytes": 59604,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-en-3/frame00180.png": {
+    "sha256": "d9b2875b013db2adf2c4c6468409fd585818c179a2e7683d4022f973a0281f34",
+    "bytes": 59567,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-en-3/frame00205.png": {
+    "sha256": "bf0e7a062cdcc29ae78b855dd37cdb052efee4be73c02a45aede199605104928",
+    "bytes": 260364,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-en-3/frame00239.png": {
+    "sha256": "b03b80a4593d3ea773d099b25013f0d124cab4403dc993794ddf77c572c756b2",
+    "bytes": 260672,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-en-6/frame00100.png": {
+    "sha256": "a79e97e698e71c1cb4a829d08973f445a4d213ecd97eb5ccbc261ff71a1b154a",
+    "bytes": 61089,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-en-6/frame00180.png": {
+    "sha256": "03a62f626ce955af279b8f42fef6e2d3ba4e81af1d9ec3716ab579b8a9b5b3f2",
+    "bytes": 71702,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-en-6/frame00205.png": {
+    "sha256": "bf0e7a062cdcc29ae78b855dd37cdb052efee4be73c02a45aede199605104928",
+    "bytes": 260364,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-en-6/frame00239.png": {
+    "sha256": "b03b80a4593d3ea773d099b25013f0d124cab4403dc993794ddf77c572c756b2",
+    "bytes": 260672,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-zh-3/frame00100.png": {
+    "sha256": "72fd2cb2d8abcc6932108d69ecd83c135ad90455fe07bb89f6b7db1e77b61967",
+    "bytes": 56291,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-zh-3/frame00180.png": {
+    "sha256": "b47d83d0745b718cba817221eeb6e25ba6d0fd2eae49f5142c2a83464dac3563",
+    "bytes": 56287,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-zh-3/frame00205.png": {
+    "sha256": "fdb24796f86e9deae514df43e9ccc69334502e5e6dcf35d97a83111473413b89",
+    "bytes": 263083,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-zh-3/frame00239.png": {
+    "sha256": "2e3de03ebd44d86526ba80270298e33a82df4c2841c7260bb3b24c59b03d7684",
+    "bytes": 263130,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-zh-6/frame00100.png": {
+    "sha256": "b55ca1e6f329450d92c22b1bca332aa76ef8ccc4d2845519d102185add23d392",
+    "bytes": 58320,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-zh-6/frame00180.png": {
+    "sha256": "6fa57d6267b2f53805cef98802cc98e42a1e39812e23f0fc7452d6d6c432d9b7",
+    "bytes": 62406,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-zh-6/frame00205.png": {
+    "sha256": "40d8cd88faff833cfac78c659159521f638e0d997a91fcc0dbc76c5d267906a6",
+    "bytes": 263083,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-320x667-zh-6/frame00239.png": {
+    "sha256": "2e3de03ebd44d86526ba80270298e33a82df4c2841c7260bb3b24c59b03d7684",
+    "bytes": 263130,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-en-3/frame00100.png": {
+    "sha256": "d55d08440e39871605ca670f98a42ef6097dfe5b2ff0339448cd7d0bacb73b57",
+    "bytes": 78698,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-en-3/frame00180.png": {
+    "sha256": "d55d08440e39871605ca670f98a42ef6097dfe5b2ff0339448cd7d0bacb73b57",
+    "bytes": 78698,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-en-3/frame00205.png": {
+    "sha256": "1f9887d5e3a8212abce2aab1059b75854e2ee42a28b51ec8b26ef2e5549a72cd",
+    "bytes": 345651,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-en-3/frame00239.png": {
+    "sha256": "02bf2f80143145bc718454e32f5c7bd18df74a03d3b97936d513373ab541b8e0",
+    "bytes": 346002,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-en-6/frame00100.png": {
+    "sha256": "9211c3adef8f877e1f9d41e60af2368646f461e8192a672238d880ddf88ae254",
+    "bytes": 80176,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-en-6/frame00180.png": {
+    "sha256": "666304b83676314f499f30d36b2d45ea5b653412fa97727a4bddc77713b3bf79",
+    "bytes": 90213,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-en-6/frame00205.png": {
+    "sha256": "1f9887d5e3a8212abce2aab1059b75854e2ee42a28b51ec8b26ef2e5549a72cd",
+    "bytes": 345651,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-en-6/frame00239.png": {
+    "sha256": "02bf2f80143145bc718454e32f5c7bd18df74a03d3b97936d513373ab541b8e0",
+    "bytes": 346002,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-zh-3/frame00100.png": {
+    "sha256": "654e021a3eff459b2aba2d4e18d19dcccbb370e6e327b5daefa647ae17a50bb5",
+    "bytes": 68342,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-zh-3/frame00180.png": {
+    "sha256": "654e021a3eff459b2aba2d4e18d19dcccbb370e6e327b5daefa647ae17a50bb5",
+    "bytes": 68342,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-zh-3/frame00205.png": {
+    "sha256": "3e8edd01aa9daf2a713be75003f49ba11a451f7450da7abd096a0f9452844d68",
+    "bytes": 348319,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-zh-3/frame00239.png": {
+    "sha256": "bed0756265dd8837a9a4cd03444ee1b33abea514a4b9734f73d2cdbf99dccfb9",
+    "bytes": 348310,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-zh-6/frame00100.png": {
+    "sha256": "e780bd414ee7d29f5f2d5a1a7633106f301921c02b1666db42e17dcaf1a2d160",
+    "bytes": 70548,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-zh-6/frame00180.png": {
+    "sha256": "06544b41a8d1938d47e28e04c6d676bd68d994f3cb6675e57b820481d883f14e",
+    "bytes": 72999,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-zh-6/frame00205.png": {
+    "sha256": "3e8edd01aa9daf2a713be75003f49ba11a451f7450da7abd096a0f9452844d68",
+    "bytes": 348319,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/after-360x800-zh-6/frame00239.png": {
+    "sha256": "bed0756265dd8837a9a4cd03444ee1b33abea514a4b9734f73d2cdbf99dccfb9",
+    "bytes": 348310,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/before-public-360.png": {
+    "sha256": "8ad9f62d9d914d69058c4b03ad7f7b0f3469d3406fa75f31c267532e3b788ca5",
+    "bytes": 84506,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/capture": {
+    "sha256": "77fb7a31e9cc3fd156fc2db0e8600e1891088685403d92cb61f03b616949ced0",
+    "bytes": 490209880,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/final-build-controls/build-bond/frame00100.png": {
+    "sha256": "5cec79c64c8cc98a87d60f05742edd169075fb201592846785c777ff90d9f07a",
+    "bytes": 295948,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/final-build-controls/build-bond/frame00179.png": {
+    "sha256": "5cec79c64c8cc98a87d60f05742edd169075fb201592846785c777ff90d9f07a",
+    "bytes": 295948,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/final-build-controls/build-skill/frame00100.png": {
+    "sha256": "c7e8b5155938eea65824c45976ae2ec69f8f4876959270f004dec4cce2468e39",
+    "bytes": 340434,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/final-build-controls/build-skill/frame00179.png": {
+    "sha256": "c7e8b5155938eea65824c45976ae2ec69f8f4876959270f004dec4cce2468e39",
+    "bytes": 340434,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/supp-compact/frame00100.png": {
+    "sha256": "5b8107f8c4d3f0185ef4acb4594d2a885e7f09cd6f37fee177728b0b198c12a3",
+    "bytes": 108189,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/supp-compact/frame00180.png": {
+    "sha256": "5b8107f8c4d3f0185ef4acb4594d2a885e7f09cd6f37fee177728b0b198c12a3",
+    "bytes": 108189,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/supp-compact/frame00239.png": {
+    "sha256": "5b8107f8c4d3f0185ef4acb4594d2a885e7f09cd6f37fee177728b0b198c12a3",
+    "bytes": 108189,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/supp-continuous-desktop/frame00100.png": {
+    "sha256": "92fcd36c546e0d817bf2ccf10a4cf0deba02ac90bf23fb6d578e25d442fc87c6",
+    "bytes": 332342,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/supp-continuous-desktop/frame00180.png": {
+    "sha256": "df49ebc6105ba4b480efecee709aac5829aef3bbecfdba758e0ac2a577ebf28a",
+    "bytes": 985115,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/supp-continuous-desktop/frame00239.png": {
+    "sha256": "cdc9f954c54b7294b42432da79ee7167f2bd7137b8fa8e2633ae15d00cfa755f",
+    "bytes": 991032,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/supp-desktop/frame00100.png": {
+    "sha256": "0b66efadc63288fffd730e5f271ecf3498eb3a1995ad8acb714181f409c54557",
+    "bytes": 297592,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/supp-desktop/frame00180.png": {
+    "sha256": "0b66efadc63288fffd730e5f271ecf3498eb3a1995ad8acb714181f409c54557",
+    "bytes": 297592,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "r9/supp-desktop/frame00239.png": {
+    "sha256": "0b66efadc63288fffd730e5f271ecf3498eb3a1995ad8acb714181f409c54557",
+    "bytes": 297592,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/before-public-360.png": {
+    "sha256": "8ad9f62d9d914d69058c4b03ad7f7b0f3469d3406fa75f31c267532e3b788ca5",
+    "bytes": 84506,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/capture": {
+    "sha256": "3f1ea886d801beba59db8c765d3dd8581eba9247174899c9ff7181b4cb89900d",
+    "bytes": 490215944,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-bond/frame00034.png": {
+    "sha256": "5266e2879cfedd9408be9418a18b73fe2b13a89d3df595e21e305d10c389af0e",
+    "bytes": 83631,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-bond/frame00040.png": {
+    "sha256": "2af2d1e1ecbf9f672cb29296a26db9d1e4ce7cb66c6784b5d9e1e906287f9169",
+    "bytes": 73322,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-bond/frame00110.png": {
+    "sha256": "f783f57fc43a80fc752d4b53f43c2158b65e353feac4973565d6332acc08b93f",
+    "bytes": 67112,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-bond/frame00180.png": {
+    "sha256": "c014f69836e6bb54d5094e4ecc4c770b423393c90a8f46ddb688042ff8d5b580",
+    "bytes": 76760,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-bond/frame00250.png": {
+    "sha256": "48ec6f3a707ed710a59f08412709e8dbf4469db43d94ce2f32fea97781a635de",
+    "bytes": 344912,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-bond/frame00294.png": {
+    "sha256": "004baeab7ffb6b669f9c24c68b66104eac9647fafa1ccc4337fee6ee46cb4ffc",
+    "bytes": 346252,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-bond/frame00319.png": {
+    "sha256": "2f12899b2688bf006f8013c60740bf03228edb69b681f9b1cad06cebdf10b525",
+    "bytes": 346113,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-skill/frame00034.png": {
+    "sha256": "2def15ec88b05567850daefae39708f6bf5f86bd16f3effa6eda7edf07c0a880",
+    "bytes": 84732,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-skill/frame00040.png": {
+    "sha256": "1d9f113095918acbcff1b20e7e5453d46b03b5252d6c53b0acbd3ff1b5ce2a67",
+    "bytes": 80557,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-skill/frame00110.png": {
+    "sha256": "630d5773ac5873e824cfc669b82e74da194ab639dc8079c73c9ade47e3eec040",
+    "bytes": 83960,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-skill/frame00180.png": {
+    "sha256": "84c57e53cb2172cd2a6d59d0dabb4120d20194704935b80f70d5ae270c38232c",
+    "bytes": 344191,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-skill/frame00250.png": {
+    "sha256": "34cf9b7267992c37ba59ac05eaa8decfdbc6e41097327d8c7e9b80ed87fa7e11",
+    "bytes": 344706,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-skill/frame00294.png": {
+    "sha256": "409f8484d23a3ab4ef945a9df44dac2061c8b27d9bcffa9b2719516562f0bea6",
+    "bytes": 344704,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-skill/frame00319.png": {
+    "sha256": "bfb777cdc6a71ba155caec1a05241ae1209284ee3b3f7767b9f87c039b5370c4",
+    "bytes": 344735,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-skill-paid/frame00034.png": {
+    "sha256": "2def15ec88b05567850daefae39708f6bf5f86bd16f3effa6eda7edf07c0a880",
+    "bytes": 84732,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-skill-paid/frame00040.png": {
+    "sha256": "1d9f113095918acbcff1b20e7e5453d46b03b5252d6c53b0acbd3ff1b5ce2a67",
+    "bytes": 80557,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-skill-paid/frame00110.png": {
+    "sha256": "630d5773ac5873e824cfc669b82e74da194ab639dc8079c73c9ade47e3eec040",
+    "bytes": 83960,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-skill-paid/frame00180.png": {
+    "sha256": "360c86bc02563cd27401b16bcb3408f5c376dc469b1c32bf7e5df63b410c6edb",
+    "bytes": 79847,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-skill-paid/frame00250.png": {
+    "sha256": "b7a212956ed1a06230120d9d5b89ea33595c141d059892db127fcec2423cde3f",
+    "bytes": 347445,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-skill-paid/frame00294.png": {
+    "sha256": "b7a212956ed1a06230120d9d5b89ea33595c141d059892db127fcec2423cde3f",
+    "bytes": 347445,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  },
+  "touch-continuation/touch-immediate-skill-paid/frame00319.png": {
+    "sha256": "b7a212956ed1a06230120d9d5b89ea33595c141d059892db127fcec2423cde3f",
+    "bytes": 347445,
+    "reason": "local rendered image, executable or transient save omitted from Git"
+  }
+}

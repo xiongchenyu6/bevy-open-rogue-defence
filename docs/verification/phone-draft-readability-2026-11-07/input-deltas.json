@@ -1,0 +1,107 @@
+[
+  {
+    "before": "baseline",
+    "after": "r1-parameter-count/",
+    "changed": {}
+  },
+  {
+    "before": "r1-parameter-count/",
+    "after": "r2/",
+    "changed": {
+      "src/bin/capture/phone_draft.rs": {
+        "before": "d3f711e59d96ea958963584c28cbd5d74fe62ace1eca993991dedbee95094c65",
+        "after": "7dab4c0d2bb612452b2732a75cfa6f846d31051568bdd025319bb4b821b90836"
+      },
+      "src/game/progression.rs": {
+        "before": "94a789659f945b13251901f0b4e8475a3829ac9002c051a32f289ac3d3168da6",
+        "after": "ad1656905b168fb579a6a1dc6792916ef60d89c67cae3eca8f51f2e9d737f2ae"
+      },
+      "src/game/progression_ui.rs": {
+        "before": "3c79dc34490b3d978d0bf1684b88d8308314395de4afa31f3d82bc51026e43fb",
+        "after": "ae4c8bf14be7119fd5f934df056193f7148d75d9017c2fa02d2e038fddeeeb3f"
+      }
+    }
+  },
+  {
+    "before": "r2/",
+    "after": "r3/",
+    "changed": {
+      "src/game/progression_ui/layout.rs": {
+        "before": "8204999ab6b2bb3e9d6c19cf3cb197a83f2694dc8687e38fee2bbab28cf30ede",
+        "after": "847dae5794d28a537189b83fb5e2f4b7a194036e7f45be62aed3de9d74e8fa73"
+      }
+    }
+  },
+  {
+    "before": "r3/",
+    "after": "r4/",
+    "changed": {
+      "src/game/progression.rs": {
+        "before": "ad1656905b168fb579a6a1dc6792916ef60d89c67cae3eca8f51f2e9d737f2ae",
+        "after": "eadaf72e33a56e4a67eddc457f5b45d55b6a216bd3bb53ec57fc240c0c5489da"
+      }
+    }
+  },
+  {
+    "before": "r4/",
+    "after": "r5/",
+    "changed": {
+      "src/bin/capture/phone_draft.rs": {
+        "before": "7dab4c0d2bb612452b2732a75cfa6f846d31051568bdd025319bb4b821b90836",
+        "after": "dd6525d3eedf829546bcb1a732b18b9391bc3f81bcae02adffb0da39315fd34d"
+      }
+    }
+  },
+  {
+    "before": "r5/",
+    "after": "r6/",
+    "changed": {
+      "src/bin/capture/phone_draft.rs": {
+        "before": "dd6525d3eedf829546bcb1a732b18b9391bc3f81bcae02adffb0da39315fd34d",
+        "after": "d1528300308da26e081f6da8d83fb7ff99b2143fa3d2f8a30a4801f4fef2c38a"
+      }
+    }
+  },
+  {
+    "before": "r6/",
+    "after": "r7/",
+    "changed": {
+      "src/bin/capture/phone_draft.rs": {
+        "before": "d1528300308da26e081f6da8d83fb7ff99b2143fa3d2f8a30a4801f4fef2c38a",
+        "after": "ec469698aa3739396bce256a135185036be5f13377d712d2e08c3c1b7f8c94d7"
+      },
+      "src/game/progression_ui/layout.rs": {
+        "before": "847dae5794d28a537189b83fb5e2f4b7a194036e7f45be62aed3de9d74e8fa73",
+        "after": "5a554f34c520039c5fd362020c285707e8ca8042612638aedf202630432a4cb2"
+      }
+    }
+  },
+  {
+    "before": "r7/",
+    "after": "r8/",
+    "changed": {
+      "src/bin/capture/phone_draft.rs": {
+        "before": "ec469698aa3739396bce256a135185036be5f13377d712d2e08c3c1b7f8c94d7",
+        "after": "215afe8e49aa9045d149a671d2ba688a9d73c15473929d9a28cb9652a27a3867"
+      },
+      "src/game/progression_ui.rs": {
+        "before": "ae4c8bf14be7119fd5f934df056193f7148d75d9017c2fa02d2e038fddeeeb3f",
+        "after": "8daecf847f1378364cb6f840f37b12ec8b1fd5c62254c16c3b00ae9090b78f03"
+      },
+      "src/game/progression_ui/layout.rs": {
+        "before": "5a554f34c520039c5fd362020c285707e8ca8042612638aedf202630432a4cb2",
+        "after": "626c47cf52327072cf8164fd13e052062b1640e46b5c4e677a51aed1b884c7ba"
+      }
+    }
+  },
+  {
+    "before": "r8/",
+    "after": "r9/",
+    "changed": {
+      "src/game/progression_ui.rs": {
+        "before": "8daecf847f1378364cb6f840f37b12ec8b1fd5c62254c16c3b00ae9090b78f03",
+        "after": "c0a0361fb5b78dead707e22748715997467c174bf93349add071f3dd47c2dfab"
+      }
+    }
+  }
+]

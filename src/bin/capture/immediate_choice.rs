@@ -2,7 +2,11 @@
 use bevy::prelude::*;
 use bevy::{
     camera::RenderTarget,
-    input::{ButtonState, mouse::MouseButtonInput},
+    input::{
+        ButtonState,
+        mouse::MouseButtonInput,
+        touch::{TouchInput, TouchPhase},
+    },
     window::{CursorMoved, WindowRef},
 };
 use rogue_commander::game::{
@@ -14,6 +18,8 @@ struct Pointer {
     saved_targets: Vec<(Entity, RenderTarget)>,
     down: bool,
     release_at: u32,
+    touch: bool,
+    position: Vec2,
 }
 #[derive(Resource)]
 struct Probe {
@@ -62,6 +68,12 @@ pub fn install(app: &mut bevy::app::SubApp) {
         world.resource_mut::<SkillEconomy>().paid_draws = 0;
     }
     world.resource_mut::<SkillEconomy>().first_free_granted = true;
+    let touch = match std::env::var("ROGUE_CAPTURE_TOUCH").ok().as_deref() {
+        None | Some("0") => false,
+        Some("1") => true,
+        Some(value) => panic!("ROGUE_CAPTURE_TOUCH must be0or1, got {value}"),
+    };
+    world.insert_resource(Pointer { touch, ..default() });
     app.init_resource::<Pointer>()
         .add_systems(First, input)
         .add_systems(PreUpdate, restore.after(bevy::ui::UiSystems::Focus))
@@ -102,11 +114,22 @@ fn input(world: &mut World) {
         .find(|entity| world.get::<Window>(*entity).is_some())
         .expect("virtual capture window");
     if world.resource::<Pointer>().down && frame >= world.resource::<Pointer>().release_at {
-        world.write_message(MouseButtonInput {
-            button: MouseButton::Left,
-            state: ButtonState::Released,
-            window,
-        });
+        if world.resource::<Pointer>().touch {
+            world.write_message(TouchInput {
+                phase: TouchPhase::Ended,
+                position: world.resource::<Pointer>().position,
+                window,
+                force: None,
+                id: 91,
+            });
+            println!("[capture] actual touch Ended frame={frame}");
+        } else {
+            world.write_message(MouseButtonInput {
+                button: MouseButton::Left,
+                state: ButtonState::Released,
+                window,
+            });
+        }
         world.resource_mut::<Pointer>().down = false;
     }
     if world.resource::<Pointer>().down && label.is_none() {
@@ -147,20 +170,36 @@ fn input(world: &mut World) {
             .unwrap_or_else(|| panic!("missing actual three-choice control {label}"));
         let scale = world.get::<Window>(window).unwrap().scale_factor();
         let logical = position / scale;
-        world
-            .get_mut::<Window>(window)
-            .unwrap()
-            .set_cursor_position(Some(logical));
-        world.write_message(CursorMoved {
-            window,
-            position: logical,
-            delta: None,
-        });
-        world.write_message(MouseButtonInput {
-            button: MouseButton::Left,
-            state: ButtonState::Pressed,
-            window,
-        });
+        if world.resource::<Pointer>().touch {
+            world
+                .get_mut::<Window>(window)
+                .unwrap()
+                .set_cursor_position(None);
+            world.resource_mut::<Pointer>().position = logical;
+            world.write_message(TouchInput {
+                phase: TouchPhase::Started,
+                position: logical,
+                window,
+                force: None,
+                id: 91,
+            });
+            println!("[capture] actual touch Started {label} frame={frame} position={logical:?}");
+        } else {
+            world
+                .get_mut::<Window>(window)
+                .unwrap()
+                .set_cursor_position(Some(logical));
+            world.write_message(CursorMoved {
+                window,
+                position: logical,
+                delta: None,
+            });
+            world.write_message(MouseButtonInput {
+                button: MouseButton::Left,
+                state: ButtonState::Pressed,
+                window,
+            });
+        }
         let targets: Vec<_> = world
             .query_filtered::<(Entity, &RenderTarget), With<Camera>>()
             .iter(world)
@@ -203,7 +242,7 @@ fn contains_text(world: &World, entity: Entity, needle: &str) -> bool {
         })
 }
 fn audit_paid(world: &mut World) {
-    let frame = world.resource::<Probe>().frame;
+    let frame = audit_frame(world);
     if matches!(frame, 30 | 100 | 170 | 240) {
         let hand = match frame {
             30 => 0,
@@ -222,6 +261,7 @@ fn audit_paid(world: &mut World) {
         assert!(session.paused && world.resource::<DraftState>().root.is_some());
         assert_eq!(world.resource::<DraftState>().choices.len(), 3);
         world.resource_mut::<Probe>().before = count(world);
+        world.resource_mut::<Probe>().payment = world.resource::<GameSession>().gold;
         println!("[capture] paid-chain-stage hand-{hand} frame={frame}");
     }
     if matches!(frame, 36 | 106 | 176 | 246) {
@@ -283,12 +323,56 @@ fn audit_paid(world: &mut World) {
         );
     }
 }
+fn audit_frame(world: &World) -> u32 {
+    let actual = world.resource::<Probe>().frame;
+    let touch = world.resource::<Pointer>().touch;
+    let stage = actual.saturating_sub(if touch { 4 } else { 0 });
+    if touch
+        && matches!(
+            stage,
+            30 | 36 | 45 | 100 | 106 | 115 | 170 | 176 | 185 | 240 | 246 | 255 | 290
+        )
+    {
+        println!("[capture] TOUCH_AUDIT actual_frame={actual} stage_frame={stage}");
+    }
+    stage
+}
+
 fn audit(world: &mut World) {
-    if world.resource::<Probe>().paid {
+    let actual_frame = world.resource::<Probe>().frame;
+    let paid = world.resource::<Probe>().paid;
+    if world.resource::<Pointer>().touch
+        && (matches!(actual_frame, 36 | 106 | 176) || (paid && actual_frame == 246))
+    {
+        assert_eq!(
+            count(world),
+            world.resource::<Probe>().before,
+            "held touch cannot settle before release"
+        );
+        assert!(world.resource::<DraftState>().root.is_some());
+        if paid {
+            assert_eq!(
+                world.resource::<GameSession>().gold,
+                world.resource::<Probe>().payment,
+                "held touch cannot charge next hand"
+            );
+        } else if world.resource::<Probe>().bond {
+            assert_eq!(
+                world.resource::<GameSession>().wood,
+                world.resource::<Probe>().payment
+            );
+        }
+        println!(
+            "[capture] TOUCH_HELD_BEFORE_RELEASE frame={actual_frame} count={} payment={}",
+            count(world),
+            world.resource::<Probe>().payment
+        );
+    }
+    if paid {
         audit_paid(world);
         return;
     }
-    let frame = world.resource::<Probe>().frame;
+    let frame = audit_frame(world);
     let bond = world.resource::<Probe>().bond;
     if matches!(frame, 30 | 100 | 170) {
         let choices = world.resource::<DraftState>().choices.len();
@@ -387,8 +471,13 @@ fn audit(world: &mut World) {
         assert_eq!(world.resource::<Probe>().round, 3);
         assert!(world.resource::<DraftState>().root.is_none());
         println!(
-            "[capture] PASS immediate-{}: three real mouse choices2/1/0, one settlement/payment per hand, held mouse no duplicate",
-            if bond { "bond" } else { "skill" }
+            "[capture] PASS immediate-{}: three real {} choices2/1/0, one settlement/payment per hand, held pointer no duplicate",
+            if bond { "bond" } else { "skill" },
+            if world.resource::<Pointer>().touch {
+                "touch"
+            } else {
+                "mouse"
+            }
         );
     }
 }

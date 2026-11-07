@@ -1,0 +1,1 @@
+{"command": ["nix", "develop", "--command", "cargo", "test", "--locked", "--release", "--lib", "-j2"], "returncode": 0, "elapsed": 2.2300991939846426}

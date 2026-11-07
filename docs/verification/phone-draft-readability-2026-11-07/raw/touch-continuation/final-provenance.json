@@ -1,0 +1,12 @@
+{
+  "source_inputs": 397,
+  "current_matches": true,
+  "touch_before_after_equal": true,
+  "r9_delta": [
+    "src/bin/capture/immediate_choice.rs"
+  ],
+  "library_inputs_equal": true,
+  "r9_binary_sha256": "77fb7a31e9cc3fd156fc2db0e8600e1891088685403d92cb61f03b616949ced0",
+  "touch_binary_sha256": "3f1ea886d801beba59db8c765d3dd8581eba9247174899c9ff7181b4cb89900d",
+  "launch_invocation_receipt": "bc5fee907ec94df39991146f91050c0d"
+}

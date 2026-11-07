@@ -119,6 +119,8 @@ pub use localization::{GameLanguage, LocalizationPlugin};
 pub use market::{prepare_attribute_growth_market, prepare_crafting_market};
 pub use mobile_layout::ControlScheme;
 pub use pooling::{CombatPoolSnapshot, CombatPools, DamageNumberPoolMetrics, PoolMetrics};
+#[cfg(any(debug_assertions, feature = "dev-tools"))]
+pub use progression::capture_open_draft;
 pub use progression::{
     SkillEconomy, available_bond_cards, available_bond_cards_at, bond_cost, skill_cost,
 };

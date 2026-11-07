@@ -1,0 +1,68 @@
+[
+  {
+    "stage": "r1-parameter-count",
+    "status": "compile-invalid",
+    "evidence": "touch-tests-result.json / touch-tests.log",
+    "reason": "18 system parameters exceeded Bevy's supported16"
+  },
+  {
+    "stage": "r2",
+    "status": "compile-invalid",
+    "evidence": "touch-tests-result.json / touch-tests.log",
+    "reason": "ambiguous float type before native execution"
+  },
+  {
+    "stage": "r3",
+    "status": "strict-check-failed",
+    "evidence": "library-tests.log / clippy.log",
+    "reason": "773 library tests passed; two Clippy findings retained"
+  },
+  {
+    "stage": "r4",
+    "status": "capture-fixture-failed",
+    "evidence": "after-320x667-en-3.log",
+    "reason": "draft suppression prevented the controlled hand from opening; zero titles"
+  },
+  {
+    "stage": "r5",
+    "status": "dev-strict-check-failed",
+    "evidence": "capture-clippy.log",
+    "reason": "unused PlayerBuild import"
+  },
+  {
+    "stage": "r6",
+    "status": "technical-pass-visual-rejected",
+    "evidence": "eight after-case receipts and selected original PNG",
+    "reason": "Sharpshooter wrapped into two lines; prior bounds assertion allowed the fragment"
+  },
+  {
+    "stage": "r7",
+    "status": "technical-pass-revision-requested",
+    "evidence": "773 library tests, strict checks, eight phone cases and same-binary supplements",
+    "reason": "readable gallery still lacked an initial cue that six cards include a hidden row"
+  },
+  {
+    "stage": "r8",
+    "status": "font-coverage-failed",
+    "evidence": "library-tests-result.json / library-tests.log",
+    "reason": "772 passed, one failed, one ignored; hint added uncovered \u6ed1 U+6ED1"
+  },
+  {
+    "stage": "r9",
+    "status": "source-and-eleven-native-pass-manager-cli-failed",
+    "evidence": "773 library tests, strict checks, eight phone cases, three supplements; original invalid build-control CLI receipt retained",
+    "reason": "valid same-binary final-build-controls completed the remaining two native cases without source changes"
+  },
+  {
+    "stage": "r9/final-build-controls",
+    "status": "passed",
+    "evidence": "two 180-update native receipts, valid screenshot frames100,179",
+    "reason": "same frozen R9 executable and source inputs"
+  },
+  {
+    "stage": "touch-continuation",
+    "status": "passed",
+    "evidence": "strict release/dev Clippy, capture build, three320-update normal-entry touch cases",
+    "reason": "capture-only immediate_choice delta; library inputs identical to R9"
+  }
+]

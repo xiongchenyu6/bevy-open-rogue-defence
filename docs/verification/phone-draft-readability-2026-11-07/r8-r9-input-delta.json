@@ -1,0 +1,10 @@
+{
+  "changed": {
+    "src/game/progression_ui.rs": {
+      "r8": "8daecf847f1378364cb6f840f37b12ec8b1fd5c62254c16c3b00ae9090b78f03",
+      "r9": "c0a0361fb5b78dead707e22748715997467c174bf93349add071f3dd47c2dfab"
+    }
+  },
+  "all_assets_and_font_bytes_unchanged": true,
+  "change": "Chinese hint uses existing covered \u62d6 instead of missing \u6ed1; English hint unchanged"
+}

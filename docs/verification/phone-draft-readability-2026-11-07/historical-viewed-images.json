@@ -1,0 +1,30 @@
+[
+  {
+    "source": "before-320x667/frame00100.png",
+    "archive": "frames/before-320x667-100.png",
+    "sha256": "dc4e31efc41a65ce30586d124e991972716c58dbbc3a730fea2c7641d2f4e954",
+    "reviewed_by": "root",
+    "scope": "baseline old layout"
+  },
+  {
+    "source": "before-360x800/frame00100.png",
+    "archive": "frames/before-360x800-100.png",
+    "sha256": "4bfec1a383c9a7ceaf500391c2ce718b9871f856204d9d072d3e5fb96bc426e9",
+    "reviewed_by": "root",
+    "scope": "baseline old layout"
+  },
+  {
+    "source": "r6/after-320x667-en-6/frame00100.png",
+    "archive": "frames/r6-sharpshooter-wrap-negative.png",
+    "sha256": "6d65bb8dbff147e6111441e2e796c0f147d97415edd576bde9e501da03685f73",
+    "reviewed_by": "root",
+    "scope": "R6 technical pass with visual word fragmentation"
+  },
+  {
+    "source": "r7/after-320x667-en-6/frame00100.png",
+    "archive": "frames/r7-no-browse-hint.png",
+    "sha256": "c0df705e2b99b2a79ff69949b2a5bc77d6abeede2321069009c83e5eb6b2610c",
+    "reviewed_by": "root",
+    "scope": "R7 readable titles with undisclosed extra row"
+  }
+]

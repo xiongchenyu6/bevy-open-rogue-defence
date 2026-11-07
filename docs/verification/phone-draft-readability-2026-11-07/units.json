@@ -1,0 +1,53 @@
+{
+  "r7": {
+    "unit": "rogue-phone-draft-readability-r7-nov7",
+    "launch_invocation": "bc1df8991f894f0a8939ad4173ac377f",
+    "terminal_observed": {
+      "ActiveState": "inactive",
+      "Result": "success",
+      "ExecMainStatus": 0
+    }
+  },
+  "r7-supplement": {
+    "unit": "rogue-phone-draft-supplement-r7-nov7",
+    "launch_invocation": "983fa19feaef4e4a92103b204de3026a"
+  },
+  "r8": {
+    "unit": "rogue-phone-draft-readability-r8-nov7",
+    "launch_invocation": "23c90031c13a4154b7da7a4d9acff47b",
+    "terminal_observed": {
+      "ActiveState": "failed",
+      "Result": "exit-code",
+      "ExecMainStatus": 1
+    }
+  },
+  "r9": {
+    "unit": "rogue-phone-draft-readability-r9-nov7",
+    "launch_invocation": "484d9e65c3f84dc192f498c05aad505f",
+    "terminal_observed": {
+      "ActiveState": "failed",
+      "Result": "exit-code",
+      "ExecMainStatus": 1
+    },
+    "failure": "180 is outside the valid screenshot range of a 180-update capture; first build control exited before application startup"
+  },
+  "scope": "Invocation IDs record actual launches. Terminal systemctl InvocationID may be empty; status observations are stored separately.",
+  "r9-final-controls": {
+    "unit": "rogue-phone-draft-final-controls-nov7",
+    "launch_invocation": "d76ee9e3d6bf4901b8da2768f01133a0",
+    "terminal_observed": {
+      "ActiveState": "inactive",
+      "Result": "success",
+      "ExecMainStatus": 0
+    }
+  },
+  "touch-continuation": {
+    "unit": "rogue-phone-draft-touch-continuation-nov7",
+    "launch_invocation": "bc5fee907ec94df39991146f91050c0d",
+    "terminal_observed": {
+      "ActiveState": "inactive",
+      "Result": "success",
+      "ExecMainStatus": 0
+    }
+  }
+}

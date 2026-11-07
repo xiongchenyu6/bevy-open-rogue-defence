@@ -1,0 +1,188 @@
+[
+  {
+    "source": "before-320x667/frame00100.png",
+    "archive": "frames/before-320x667-100.png",
+    "sha256": "dc4e31efc41a65ce30586d124e991972716c58dbbc3a730fea2c7641d2f4e954",
+    "reviewed_by": "root",
+    "scope": "baseline old layout",
+    "category": "historical"
+  },
+  {
+    "source": "before-360x800/frame00100.png",
+    "archive": "frames/before-360x800-100.png",
+    "sha256": "4bfec1a383c9a7ceaf500391c2ce718b9871f856204d9d072d3e5fb96bc426e9",
+    "reviewed_by": "root",
+    "scope": "baseline old layout",
+    "category": "historical"
+  },
+  {
+    "source": "r6/after-320x667-en-6/frame00100.png",
+    "archive": "frames/r6-sharpshooter-wrap-negative.png",
+    "sha256": "6d65bb8dbff147e6111441e2e796c0f147d97415edd576bde9e501da03685f73",
+    "reviewed_by": "root",
+    "scope": "R6 technical pass with visual word fragmentation",
+    "category": "historical"
+  },
+  {
+    "source": "r7/after-320x667-en-6/frame00100.png",
+    "archive": "frames/r7-no-browse-hint.png",
+    "sha256": "c0df705e2b99b2a79ff69949b2a5bc77d6abeede2321069009c83e5eb6b2610c",
+    "reviewed_by": "root",
+    "scope": "R7 readable titles with undisclosed extra row",
+    "category": "historical"
+  },
+  {
+    "source": "r9/after-320x667-en-3/frame00100.png",
+    "archive": "frames/after-320x667-en-3-100.png",
+    "sha256": "e6830380f71e39c6ed92b165028bd763a3cedf350587f829497344d41067b132",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/after-320x667-en-3/frame00180.png",
+    "archive": "frames/after-320x667-en-3-180.png",
+    "sha256": "d9b2875b013db2adf2c4c6468409fd585818c179a2e7683d4022f973a0281f34",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/after-320x667-en-6/frame00100.png",
+    "archive": "frames/after-320x667-en-6-100.png",
+    "sha256": "a79e97e698e71c1cb4a829d08973f445a4d213ecd97eb5ccbc261ff71a1b154a",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/after-320x667-en-6/frame00180.png",
+    "archive": "frames/after-320x667-en-6-180.png",
+    "sha256": "03a62f626ce955af279b8f42fef6e2d3ba4e81af1d9ec3716ab579b8a9b5b3f2",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/after-320x667-zh-3/frame00100.png",
+    "archive": "frames/after-320x667-zh-3-100.png",
+    "sha256": "72fd2cb2d8abcc6932108d69ecd83c135ad90455fe07bb89f6b7db1e77b61967",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/after-320x667-zh-3/frame00180.png",
+    "archive": "frames/after-320x667-zh-3-180.png",
+    "sha256": "b47d83d0745b718cba817221eeb6e25ba6d0fd2eae49f5142c2a83464dac3563",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/after-320x667-zh-6/frame00100.png",
+    "archive": "frames/after-320x667-zh-6-100.png",
+    "sha256": "b55ca1e6f329450d92c22b1bca332aa76ef8ccc4d2845519d102185add23d392",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/after-320x667-zh-6/frame00180.png",
+    "archive": "frames/after-320x667-zh-6-180.png",
+    "sha256": "6fa57d6267b2f53805cef98802cc98e42a1e39812e23f0fc7452d6d6c432d9b7",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/after-360x800-en-3/frame00100.png",
+    "archive": "frames/after-360x800-en-3-100.png",
+    "sha256": "d55d08440e39871605ca670f98a42ef6097dfe5b2ff0339448cd7d0bacb73b57",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/after-360x800-en-3/frame00180.png",
+    "archive": "frames/after-360x800-en-3-180.png",
+    "sha256": "d55d08440e39871605ca670f98a42ef6097dfe5b2ff0339448cd7d0bacb73b57",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/after-360x800-en-6/frame00100.png",
+    "archive": "frames/after-360x800-en-6-100.png",
+    "sha256": "9211c3adef8f877e1f9d41e60af2368646f461e8192a672238d880ddf88ae254",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/after-360x800-en-6/frame00180.png",
+    "archive": "frames/after-360x800-en-6-180.png",
+    "sha256": "666304b83676314f499f30d36b2d45ea5b653412fa97727a4bddc77713b3bf79",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/after-360x800-zh-3/frame00100.png",
+    "archive": "frames/after-360x800-zh-3-100.png",
+    "sha256": "654e021a3eff459b2aba2d4e18d19dcccbb370e6e327b5daefa647ae17a50bb5",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/after-360x800-zh-3/frame00180.png",
+    "archive": "frames/after-360x800-zh-3-180.png",
+    "sha256": "654e021a3eff459b2aba2d4e18d19dcccbb370e6e327b5daefa647ae17a50bb5",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/after-360x800-zh-6/frame00100.png",
+    "archive": "frames/after-360x800-zh-6-100.png",
+    "sha256": "e780bd414ee7d29f5f2d5a1a7633106f301921c02b1666db42e17dcaf1a2d160",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/after-360x800-zh-6/frame00180.png",
+    "archive": "frames/after-360x800-zh-6-180.png",
+    "sha256": "06544b41a8d1938d47e28e04c6d676bd68d994f3cb6675e57b820481d883f14e",
+    "reviewed_by": "root",
+    "category": "final-phone"
+  },
+  {
+    "source": "r9/supp-desktop/frame00100.png",
+    "archive": "frames/supp-desktop-100.png",
+    "sha256": "0b66efadc63288fffd730e5f271ecf3498eb3a1995ad8acb714181f409c54557",
+    "reviewed_by": "root",
+    "category": "final-supplement"
+  },
+  {
+    "source": "r9/supp-compact/frame00100.png",
+    "archive": "frames/supp-compact-100.png",
+    "sha256": "5b8107f8c4d3f0185ef4acb4594d2a885e7f09cd6f37fee177728b0b198c12a3",
+    "reviewed_by": "root",
+    "category": "final-supplement"
+  },
+  {
+    "source": "r9/supp-continuous-desktop/frame00100.png",
+    "archive": "frames/supp-continuous-desktop-100.png",
+    "sha256": "92fcd36c546e0d817bf2ccf10a4cf0deba02ac90bf23fb6d578e25d442fc87c6",
+    "reviewed_by": "root",
+    "category": "final-supplement"
+  },
+  {
+    "source": "touch-continuation/touch-immediate-skill/frame00034.png",
+    "archive": "frames/touch-immediate-skill-34.png",
+    "sha256": "2def15ec88b05567850daefae39708f6bf5f86bd16f3effa6eda7edf07c0a880",
+    "reviewed_by": "root",
+    "category": "final-touch"
+  },
+  {
+    "source": "touch-continuation/touch-immediate-bond/frame00034.png",
+    "archive": "frames/touch-immediate-bond-34.png",
+    "sha256": "5266e2879cfedd9408be9418a18b73fe2b13a89d3df595e21e305d10c389af0e",
+    "reviewed_by": "root",
+    "category": "final-touch"
+  },
+  {
+    "source": "touch-continuation/touch-immediate-skill-paid/frame00034.png",
+    "archive": "frames/touch-immediate-skill-paid-34.png",
+    "sha256": "2def15ec88b05567850daefae39708f6bf5f86bd16f3effa6eda7edf07c0a880",
+    "reviewed_by": "root",
+    "category": "final-touch"
+  }
+]

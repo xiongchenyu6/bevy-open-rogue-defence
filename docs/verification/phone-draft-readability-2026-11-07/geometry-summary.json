@@ -1,0 +1,90 @@
+{
+  "after-320x667-en-3": {
+    "hint_observations": 0,
+    "title_observations": 6,
+    "last_card_inner_parts": [
+      "art",
+      "pips",
+      "title"
+    ],
+    "logged_last_card_containment": true,
+    "all_card_inner_containment": "executed native assertions in frozen probe; all other art/pips rectangles are not logged"
+  },
+  "after-320x667-en-6": {
+    "hint_observations": 2,
+    "title_observations": 12,
+    "last_card_inner_parts": [
+      "art",
+      "pips",
+      "title"
+    ],
+    "logged_last_card_containment": true,
+    "all_card_inner_containment": "executed native assertions in frozen probe; all other art/pips rectangles are not logged"
+  },
+  "after-320x667-zh-3": {
+    "hint_observations": 0,
+    "title_observations": 6,
+    "last_card_inner_parts": [
+      "art",
+      "pips",
+      "title"
+    ],
+    "logged_last_card_containment": true,
+    "all_card_inner_containment": "executed native assertions in frozen probe; all other art/pips rectangles are not logged"
+  },
+  "after-320x667-zh-6": {
+    "hint_observations": 2,
+    "title_observations": 12,
+    "last_card_inner_parts": [
+      "art",
+      "pips",
+      "title"
+    ],
+    "logged_last_card_containment": true,
+    "all_card_inner_containment": "executed native assertions in frozen probe; all other art/pips rectangles are not logged"
+  },
+  "after-360x800-en-3": {
+    "hint_observations": 0,
+    "title_observations": 6,
+    "last_card_inner_parts": [
+      "art",
+      "pips",
+      "title"
+    ],
+    "logged_last_card_containment": true,
+    "all_card_inner_containment": "executed native assertions in frozen probe; all other art/pips rectangles are not logged"
+  },
+  "after-360x800-en-6": {
+    "hint_observations": 2,
+    "title_observations": 12,
+    "last_card_inner_parts": [
+      "art",
+      "pips",
+      "title"
+    ],
+    "logged_last_card_containment": true,
+    "all_card_inner_containment": "executed native assertions in frozen probe; all other art/pips rectangles are not logged"
+  },
+  "after-360x800-zh-3": {
+    "hint_observations": 0,
+    "title_observations": 6,
+    "last_card_inner_parts": [
+      "art",
+      "pips",
+      "title"
+    ],
+    "logged_last_card_containment": true,
+    "all_card_inner_containment": "executed native assertions in frozen probe; all other art/pips rectangles are not logged"
+  },
+  "after-360x800-zh-6": {
+    "hint_observations": 2,
+    "title_observations": 12,
+    "last_card_inner_parts": [
+      "art",
+      "pips",
+      "title"
+    ],
+    "logged_last_card_containment": true,
+    "all_card_inner_containment": "executed native assertions in frozen probe; all other art/pips rectangles are not logged"
+  }
+}

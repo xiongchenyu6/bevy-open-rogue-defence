@@ -1,0 +1,1 @@
+{"command": ["nix", "develop", "--command", "cargo", "clippy", "--locked", "--release", "--all-targets", "-j2", "--", "-D", "warnings"], "returncode": 0, "elapsed": 25.959547678998206}

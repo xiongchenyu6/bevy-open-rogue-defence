@@ -1,0 +1,1 @@
+{"command": ["nix", "develop", "--command", "cargo", "test", "--locked", "--release", "--lib", "phone_gallery_", "-j2"], "returncode": 0, "elapsed": 3.3460148259764537}

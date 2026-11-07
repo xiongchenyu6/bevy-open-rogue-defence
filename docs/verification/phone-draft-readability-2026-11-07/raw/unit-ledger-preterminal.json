@@ -1,0 +1,68 @@
+[
+  {
+    "stage": "r1",
+    "unit": "rogue-phone-draft-readability-nov7",
+    "launch_invocation_tool_receipt": "82bf583bb12d4f9b981dfc25a1d3beef",
+    "retained_systemctl_state": "LoadState=loaded\nActiveState=failed\nInvocationID=82bf583bb12d4f9b981dfc25a1d3beef\nResult=exit-code\nExecMainStatus=1\n"
+  },
+  {
+    "stage": "r2",
+    "unit": "rogue-phone-draft-readability-r2-nov7",
+    "launch_invocation_tool_receipt": "053cd0660a7149e789916de5ddca1d69",
+    "retained_systemctl_state": "LoadState=loaded\nActiveState=failed\nInvocationID=053cd0660a7149e789916de5ddca1d69\nResult=exit-code\nExecMainStatus=1\n"
+  },
+  {
+    "stage": "r3",
+    "unit": "rogue-phone-draft-readability-r3-nov7",
+    "launch_invocation_tool_receipt": "0cc4b4c92621475589535b7c69c26966",
+    "retained_systemctl_state": "LoadState=loaded\nActiveState=failed\nInvocationID=0cc4b4c92621475589535b7c69c26966\nResult=exit-code\nExecMainStatus=1\n"
+  },
+  {
+    "stage": "r4",
+    "unit": "rogue-phone-draft-readability-r4-nov7",
+    "launch_invocation_tool_receipt": "56a328b73b6c4ef089260636e90a4f6d",
+    "retained_systemctl_state": "LoadState=loaded\nActiveState=failed\nInvocationID=56a328b73b6c4ef089260636e90a4f6d\nResult=exit-code\nExecMainStatus=1\n"
+  },
+  {
+    "stage": "r5",
+    "unit": "rogue-phone-draft-readability-r5-nov7",
+    "launch_invocation_tool_receipt": "0ee5e506ff2c4e2f9f64a9a842ae66a9",
+    "retained_systemctl_state": "LoadState=loaded\nActiveState=failed\nInvocationID=0ee5e506ff2c4e2f9f64a9a842ae66a9\nResult=exit-code\nExecMainStatus=1\n"
+  },
+  {
+    "stage": "r6",
+    "unit": "rogue-phone-draft-readability-r6-nov7",
+    "launch_invocation_tool_receipt": "b6d24b69d1ae456ba14b61df8b0e5321",
+    "retained_systemctl_state": "LoadState=not-found\nActiveState=inactive\nInvocationID=\nResult=success\nExecMainStatus=0\n"
+  },
+  {
+    "stage": "r7",
+    "unit": "rogue-phone-draft-readability-r7-nov7",
+    "launch_invocation_tool_receipt": "bc1df8991f894f0a8939ad4173ac377f",
+    "retained_systemctl_state": "LoadState=not-found\nActiveState=inactive\nInvocationID=\nResult=success\nExecMainStatus=0\n"
+  },
+  {
+    "stage": "r7-supplement",
+    "unit": "rogue-phone-draft-supplement-r7-nov7",
+    "launch_invocation_tool_receipt": "983fa19feaef4e4a92103b204de3026a",
+    "retained_systemctl_state": "LoadState=not-found\nActiveState=inactive\nInvocationID=\nResult=success\nExecMainStatus=0\n"
+  },
+  {
+    "stage": "r7-build-controls",
+    "unit": "rogue-phone-draft-build-controls-before-nov7",
+    "launch_invocation_tool_receipt": "acc9cc245941454d973380d4433f91a4",
+    "retained_systemctl_state": "LoadState=not-found\nActiveState=inactive\nInvocationID=\nResult=success\nExecMainStatus=0\n"
+  },
+  {
+    "stage": "r8",
+    "unit": "rogue-phone-draft-readability-r8-nov7",
+    "launch_invocation_tool_receipt": "23c90031c13a4154b7da7a4d9acff47b",
+    "retained_systemctl_state": "LoadState=loaded\nActiveState=failed\nInvocationID=23c90031c13a4154b7da7a4d9acff47b\nResult=exit-code\nExecMainStatus=1\n"
+  },
+  {
+    "stage": "r9",
+    "unit": "rogue-phone-draft-readability-r9-nov7",
+    "launch_invocation_tool_receipt": "484d9e65c3f84dc192f498c05aad505f",
+    "retained_systemctl_state": "LoadState=loaded\nActiveState=active\nInvocationID=484d9e65c3f84dc192f498c05aad505f\nResult=success\nExecMainStatus=0\n"
+  }
+]

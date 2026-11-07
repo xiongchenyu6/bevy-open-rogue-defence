@@ -1,0 +1,1 @@
+{"command": ["nix", "develop", "--command", "cargo", "test", "--locked", "--release", "--lib", "scroll_card_", "-j2"], "returncode": 101, "elapsed": 28.11081640498014}
