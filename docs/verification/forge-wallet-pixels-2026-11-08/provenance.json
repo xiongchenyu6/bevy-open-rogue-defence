@@ -1,0 +1,9 @@
+{
+  "base_commit": "c27011cfe371c367d4ff70de8999cfd7ad168ba2",
+  "sources": {
+    "tools/desktop/smoke_runtime.py": "2d21bedab46f22d421c9d3a18f0368e76436012841a11bd6d3ad0c9cc0bd67a7",
+    "tools/desktop/test_smoke_runtime.py": "7fd1401bc1bb613456eaba6afbb4f006aead2b70f2fd07440a620411b454b8b5",
+    "tools/desktop/test_campaign_equipment_runtime.py": "fc060030fd46f61dc5cd898a6a5b76b70e814bb6eb332c411fae4ccadf4fa8b0"
+  },
+  "fixture_sha256": "9c90032bad6f5b7249dade47d05beba46e209b0d2957bc00afa1ce7eac8f3437"
+}

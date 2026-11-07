@@ -14,6 +14,18 @@ from campaign_equipment_runtime import (affordable_gear, market_wallet, inventor
 
 
 class EquipmentPolicyParsing(unittest.TestCase):
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'), 'Screenshot OCR tools unavailable')
+    def test_actual_arc_lens_ack_replay_requires_exact_debit_from_both_visible_wallets(self):
+        image = Path(__file__).resolve().parents[2] / 'docs/verification/forge-wallet-pixels-2026-11-08/purchase-117.png'
+        click, records = Mock(), []
+        offer = dict(name='Arc Lens', price=180, category='Equipment', index=1)
+        result = purchase_market_offer(click, lambda name: image, None, offer, 297, 100,
+                                       records, 'actual-arc', now=lambda: 0, pause=Mock())
+        self.assertEqual(result[1], 117)
+        click.assert_called_once_with()
+        self.assertTrue(records[-1]['exact_debit'])
+        self.assertEqual(records[-1]['hud'], 117)
+
     def test_incomplete_life_candidate_requires_positive_exact_pixel_validation(self):
         rows = [('LVES3', 23, 87, 76, 99)]
         self.assertEqual(public_panel_state(rows), 'unknown')

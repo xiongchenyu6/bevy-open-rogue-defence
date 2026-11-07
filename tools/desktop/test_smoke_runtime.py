@@ -13,6 +13,13 @@ spec.loader.exec_module(smoke)
 class VisibleActionTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'),
                          'Native screenshot OCR requires Tesseract and ImageMagick')
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'), 'Screenshot OCR tools unavailable')
+    def test_actual_arc_lens_purchase_wallet_keeps_both_leading_ones(self):
+        image = Path(__file__).resolve().parents[2] / 'docs/verification/forge-wallet-pixels-2026-11-08/purchase-117.png'
+        value, bounds, text = smoke.read_hud_wallet(image)
+        self.assertEqual((value, text), (117, '117'))
+        self.assertEqual(bounds, (163, 180))
+
     def test_actual_wallet_digits_do_not_collapse_repeated_ones(self):
         root = Path(__file__).resolve().parents[2] / 'docs/verification'
         cases = [('hud-wallet-2026-11-05/before.png', 291),

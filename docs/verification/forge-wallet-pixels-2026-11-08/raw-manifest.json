@@ -1,0 +1,78 @@
+{
+  "raw/tests-and-calibration/thresholds.py.gz": {
+    "bytes": 1632,
+    "sha256": "fc008019076a5fac8b6c7661899642b90730a5f9f9412621b2eb0802bbeac39a"
+  },
+  "raw/tests-and-calibration/thresholds.jsonl.gz": {
+    "bytes": 7539,
+    "sha256": "d0f42f0f9866ec1f0d470d5ed8d7f17d88b5aa2becf4dff15c687f84f3885e0a"
+  },
+  "raw/tests-and-calibration/run-tests.py.gz": {
+    "bytes": 830,
+    "sha256": "b1ec3bc70857e30e83040120b3610ee16abe962cfe700f301f3177b4baf5c886"
+  },
+  "raw/tests-and-calibration/tests.log.gz": {
+    "bytes": 222,
+    "sha256": "819b75e1be109d5eab34d83a6dfdfa838ce6316e2598e35026c6bb75d9b472df"
+  },
+  "raw/tests-and-calibration/command.log.gz": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw/tests-and-calibration/calibrate.py.gz": {
+    "bytes": 1559,
+    "sha256": "389d0f2a009858657586d8519557aafb0449f848acd24f2468cba812d9d773ee"
+  },
+  "raw/tests-and-calibration/calibration.jsonl.gz": {
+    "bytes": 13697,
+    "sha256": "8ee3dc126d8413f30978bfbdef4b7d06a4eebdc6b2de7d3230aca68c52f50e5f"
+  },
+  "raw/tests-and-calibration/manager.log.gz": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw/tests-and-calibration/tests-result.json.gz": {
+    "bytes": 659,
+    "sha256": "4446d5e9283320544cbd6ef975bdf4bd58cdbe1b8462dae3bfc4156a217010d8"
+  },
+  "raw/r4-ledger/failure-ledger.json.gz": {
+    "bytes": 2467,
+    "sha256": "3ddd420c57013e7db9f008577aae4a1c8c25d4a482f6066922606a2139bb3829"
+  },
+  "raw/r4-ledger/failure-image-provenance.json.gz": {
+    "bytes": 274,
+    "sha256": "4e2b317f6ca17f7f041bf6886d06e62a1fe09d004f470913ce1b9df275721878"
+  },
+  "raw/r4-ledger/live-ledger.json.gz": {
+    "bytes": 1659,
+    "sha256": "04c4050bd906e9fe1181f6a4d507e6baed1c4cc5dcfcc611b8dd145b9f5664cc"
+  },
+  "raw/r4-ledger/authorization.json.gz": {
+    "bytes": 29,
+    "sha256": "47e08437b703d5dc866ee780c0cf907cfaa0b75d0e77585645d6ee12fa5704c8"
+  },
+  "raw/natural-r4/forge.log.gz": {
+    "bytes": 1507,
+    "sha256": "4517cd963aa7996b4f633532e8c0ec3fb74d1b4e81fdc338a3117416ab27b503"
+  },
+  "raw/natural-r4/forge-process.json.gz": {
+    "bytes": 1016,
+    "sha256": "a8070bb39d99c3aa0e5b022558226c875b70fee852a5a79056ebe38eab7cc869"
+  },
+  "raw/natural-r4/manager.log.gz": {
+    "bytes": 1962,
+    "sha256": "84a0f724ffb4a6932ce30d783f6d4f572e02b9208a6655e735c2267310be0625"
+  },
+  "raw/natural-r4/forge/result.json.gz": {
+    "bytes": 60090,
+    "sha256": "ffebde8fe658133cdc0e388edc0037117a29992eacd4e25227698f40955d0862"
+  },
+  "raw/natural-r4/forge/harness-snapshot.json.gz": {
+    "bytes": 885,
+    "sha256": "993a76ba53579a4b05a18f24d3fc9cf364a86dc88454edc643ef66fafa0b1bba"
+  },
+  "raw/natural-r4/forge/initial-save-provenance.json.gz": {
+    "bytes": 200,
+    "sha256": "9b52d5b388564c3dc5466f845ec9ca4bcc7a7617cf4df5f86ad8f329c72fcc1a"
+  }
+}
