@@ -1,0 +1,30 @@
+{
+  "raw/build.log.gz": {
+    "bytes": 1316,
+    "sha256": "2f801e21984d9aae57f29b03e2fdc8a9b2349cd44f6533b13a9530dd6103b346"
+  },
+  "raw/manager.log.gz": {
+    "bytes": 1126,
+    "sha256": "535696fcad73b39f819a216b8aceb0708cf517e0ac6786fc8dc0a9aa98441f43"
+  },
+  "raw/smoke/game.log.gz": {
+    "bytes": 17327,
+    "sha256": "b7608240439d2df411f1b67c029beb1bc1820145654dcb7935ac9d46742ec736"
+  },
+  "raw/smoke/restart.log.gz": {
+    "bytes": 12161,
+    "sha256": "89080d1c703944be1db8eb37f33a0a0f360776567be2f8d71b588e20cc8e2f60"
+  },
+  "raw/smoke/wm.log.gz": {
+    "bytes": 85,
+    "sha256": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c"
+  },
+  "raw/smoke/xvfb.log.gz": {
+    "bytes": 2348,
+    "sha256": "b987a262609a3720f450ab6815ed90b2069dd47b7b012959ca19c325aebf5d55"
+  },
+  "raw/smoke.log.gz": {
+    "bytes": 4241,
+    "sha256": "4457dfa3b168a2eaae704d3bec79fc860485b580fc75e0bf2df8a9018317794b"
+  }
+}

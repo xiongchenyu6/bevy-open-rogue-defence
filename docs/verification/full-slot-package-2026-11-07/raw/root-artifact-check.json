@@ -1,0 +1,29 @@
+{
+  "result": "PASS",
+  "source_commit": "1404e94f807101da5964c63fef11a4552ead5b5f",
+  "source_inputs": 549,
+  "manifest_files": 892,
+  "tar_files": 893,
+  "binary_sha256": "0748fee5d4ee38d4c9cc81cc30aa459d471e52ec9495eab4870cb432401fe695",
+  "tar_sha256": "a1436be7f2205e844cbd7dc886931d945dad557ee358da7d4957ef10878a0a29",
+  "three_clock_pairs": {
+    "initial": [
+      1498,
+      1492
+    ],
+    "after-public-skill": [
+      1475,
+      1469
+    ],
+    "restart": [
+      1486,
+      1480
+    ]
+  },
+  "root_viewed_originals": 25,
+  "known_visual_findings": [
+    "after-public-skill-battle-progress-00.png retains narrow viewport and white extension during resize",
+    "current-ui.png has incomplete final UI presentation"
+  ],
+  "known_ocr_rejection": "restart-battle-progress-01.png lacks colon at300scale and was rejected"
+}

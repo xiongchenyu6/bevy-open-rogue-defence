@@ -1,0 +1,102 @@
+{
+  "smoke/after-public-skill-battle-progress-00.png": {
+    "bytes": 308023,
+    "sha256": "064a491426ef74089ee2d5868d625bfb2d3f5c209d54c7ae2d8e8a3036d92c04"
+  },
+  "smoke/after-public-skill-battle-progress-01.png": {
+    "bytes": 744109,
+    "sha256": "a591cf5dc9f503fe4561bf3871704c0fa09134d322f7ca7a217ad919009536cd"
+  },
+  "smoke/after-public-skill-battle-progress-02.png": {
+    "bytes": 742965,
+    "sha256": "f3582244e2dbc382903683bf11de52eb996ea384cb11440cfb99d7827f717b42"
+  },
+  "smoke/battle.png": {
+    "bytes": 740243,
+    "sha256": "361dd5879c41da42d2549422a3b42843424bf22cf713ffb483c211d2ba6d54da"
+  },
+  "smoke/current-ui.png": {
+    "bytes": 48901,
+    "sha256": "aad026e3b15b13baed84a0c1cd31ad4c94b6a2b91eb322817442ed8372a20bf4"
+  },
+  "smoke/fullscreen-chinese.png": {
+    "bytes": 43788,
+    "sha256": "51c3876f02c222d704ae023652c513cbafb4141704c88ab3688a1116170d336c"
+  },
+  "smoke/guide.png": {
+    "bytes": 355251,
+    "sha256": "7733671744b30b527ff0119fca8ed1211e008509b360d62f236f69edaa886979"
+  },
+  "smoke/initial-battle-progress-00.png": {
+    "bytes": 738663,
+    "sha256": "1f435aab3d9720ffc55d0c588488a11dd3a2035f8b3fc3c11ce9a3921c61f3f3"
+  },
+  "smoke/initial-battle-progress-01.png": {
+    "bytes": 741593,
+    "sha256": "655e51de65b643ae6a41b4796dcb070ad8506efb163d69334260b17b3c0c83c3"
+  },
+  "smoke/public-portrait-after-skill.png": {
+    "bytes": 282434,
+    "sha256": "15ce8217724c3a7b208064c9cecff11d42873da9984841d1132dd419e6be205f"
+  },
+  "smoke/public-portrait-held-1.png": {
+    "bytes": 282460,
+    "sha256": "c3e5071176345dcfd8721e63bc01e158b0c5f179ec003fc0c39e0a28a64716bb"
+  },
+  "smoke/public-portrait-skill.png": {
+    "bytes": 69211,
+    "sha256": "e0828b7ffd841483d810d7b417618c9933e4dd276c07cb381633e95c1bbf4e46"
+  },
+  "smoke/public-skill-battle-resumed.png": {
+    "bytes": 741740,
+    "sha256": "84101504847594c56353d2f23d2cf3a4d2e49549184a23936bd9ca3366182b11"
+  },
+  "smoke/quit-chinese.png": {
+    "bytes": 48893,
+    "sha256": "c4be1473c1e486a4a877415d1e7e95a3f1f93161bed405c0ecb57fc18561e713"
+  },
+  "smoke/recruit.png": {
+    "bytes": 314038,
+    "sha256": "443d2f9ea5c8de1981871f9a0b6c3d3c1fb8e5501f7a35b4b23828d189b94a9e"
+  },
+  "smoke/restart-battle-chinese.png": {
+    "bytes": 742245,
+    "sha256": "a26ff18480a94c7a191439cf951b0ad8b5fc0198984afb3ba2d94244734c11ff"
+  },
+  "smoke/restart-battle-progress-00.png": {
+    "bytes": 740166,
+    "sha256": "5def383bd8acafa5b226e7903d1d32733032e9697f1af35adc9fff8d5ede64e0"
+  },
+  "smoke/restart-battle-progress-01.png": {
+    "bytes": 741820,
+    "sha256": "63287340d4afb707946d60e7d96c00692d80814dad0ebea9780647254c9861fa"
+  },
+  "smoke/restart-battle-progress-02.png": {
+    "bytes": 742512,
+    "sha256": "6570ac4db3c5380524da7c43e040bf7b646e0296538e7ce70cde38f10eb0bf1b"
+  },
+  "smoke/restart-battle-progress-03.png": {
+    "bytes": 742372,
+    "sha256": "d6dba911ae87fa5463fc1c4aadc4e66258a2e6d1561ec4bcd7d2d50d62b9fe30"
+  },
+  "smoke/restart-chinese.png": {
+    "bytes": 88118,
+    "sha256": "5e1de05db88e926f19da2e74bffa647c98932f86da3a1630f08e182d0c82d807"
+  },
+  "smoke/restart-quit-chinese.png": {
+    "bytes": 48901,
+    "sha256": "aad026e3b15b13baed84a0c1cd31ad4c94b6a2b91eb322817442ed8372a20bf4"
+  },
+  "smoke/restart-recruit-chinese.png": {
+    "bytes": 300658,
+    "sha256": "93368e6c1848615fe2346d356b3abd677fa64ff0a8dbb9688ec88fb459d5c1bf"
+  },
+  "smoke/settings-chinese.png": {
+    "bytes": 40636,
+    "sha256": "35063448a95901f9a50d0e2eb03ad7c43ae05d4a2b9f586f55daac516b79ef1f"
+  },
+  "smoke/startup.png": {
+    "bytes": 92859,
+    "sha256": "c2eb721c8f41eef5c0ccb646319ad20bd094e6807b0701124131a88f9f0c713a"
+  }
+}

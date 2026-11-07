@@ -1,0 +1,12 @@
+{
+  "commit": "1404e94f807101da5964c63fef11a4552ead5b5f",
+  "files": {
+    "smoke_runtime.py": "ef6d8cc46ab888eb755c831ecc403fbaa2c4e202bc70d81334969a0bb29df41f",
+    "campaign_runtime.py": "76ce1daa5939dbbbdcbc0b68162f62b59ce178c14228e1cecb1c8f50684c0591",
+    "campaign_equipment_runtime.py": "674909c39cf601765e45980bc028d4efa09ffe723a732c57a219812cd135f872",
+    "forge_runtime.py": "6d6d336287e4ce33741c723940d3eff689e7211e2ce3ef7383122b114fc61e93",
+    "forge_refresh.py": "c40e9e61179f9ae55d767bd6c9f1333e7b6bced398cd292a190870e701423063",
+    "forge_restart_runtime.py": "659c983316e5c8f4f7c9e4cb3949a626277d7eb4282141743b7525a28f28d737"
+  },
+  "scope": "Short flow only now; six modules include ForgeV3 forge_refresh import transitively required by restart"
+}
