@@ -1,0 +1,30 @@
+{
+  "extracted/a-ordinary.gz": {
+    "source": "target/verification/vortex-allocation-2026-11-08/frozen/target/verification/vortex-allocation-pair-a-nov8/active-h1-behind-s1-c0-t0.jsonl",
+    "filter": "JSON type neither trace nor runner_metadata",
+    "selected_rows": 202,
+    "uncompressed_sha256": "0cff66bb78a2f1d78152509ae68a0f9749fd4be99e95d122ae568348d3b29cd2",
+    "uncompressed_bytes": 133902
+  },
+  "extracted/a-contacts.gz": {
+    "source": "target/verification/vortex-allocation-2026-11-08/frozen/target/verification/vortex-allocation-pair-a-nov8/active-h1-behind-s1-c0-t0.stderr",
+    "filter": "stderr lines containing PROJECTILE_HIT",
+    "selected_rows": 10218,
+    "uncompressed_sha256": "9aace37e1a81852f99bf83e82532a9b7ce3d1ee583e4e8d2974d89025c9f323b",
+    "uncompressed_bytes": 13231419
+  },
+  "extracted/b-ordinary.gz": {
+    "source": "target/verification/vortex-allocation-2026-11-08/frozen/target/verification/vortex-allocation-pair-b-nov8/active-h1-behind-s1-c0-t0.jsonl",
+    "filter": "JSON type neither trace nor runner_metadata",
+    "selected_rows": 202,
+    "uncompressed_sha256": "dbe7bfbc5f9dbdcd45de5b8d5a081fcb3e6aafc2e4bb504012212c5d23cdd765",
+    "uncompressed_bytes": 133896
+  },
+  "extracted/b-contacts.gz": {
+    "source": "target/verification/vortex-allocation-2026-11-08/frozen/target/verification/vortex-allocation-pair-b-nov8/active-h1-behind-s1-c0-t0.stderr",
+    "filter": "stderr lines containing PROJECTILE_HIT",
+    "selected_rows": 10218,
+    "uncompressed_sha256": "13811dfa8c66aaeb4e5ba2c3e948e0f053114a15605557b89da7e31f1fe77b33",
+    "uncompressed_bytes": 13230150
+  }
+}

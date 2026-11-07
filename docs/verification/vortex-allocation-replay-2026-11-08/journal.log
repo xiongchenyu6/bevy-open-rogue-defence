@@ -1,0 +1,7 @@
+2026-11-08T06:34:20+08:00 game systemd[1941]: Started [systemd-run] /usr/bin/env python3 -u /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/vortex-allocation-2026-11-08/run-pair.py.
+2026-11-08T06:34:21+08:00 game env[1746888]: START vortex-allocation-pair-a-nov8
+2026-11-08T06:36:55+08:00 game env[1746888]: END vortex-allocation-pair-a-nov8 win 1508.875
+2026-11-08T06:36:55+08:00 game env[1746888]: START vortex-allocation-pair-b-nov8
+2026-11-08T06:40:04+08:00 game env[1746888]: END vortex-allocation-pair-b-nov8 win 1508.875
+2026-11-08T06:40:04+08:00 game env[1746888]: PAIR TERMINAL; equality pending independent comparison
+2026-11-08T06:40:04+08:00 game systemd[1941]: rogue-vortex-allocation-pair-nov8.service: Consumed 8min 29.581s CPU time over 5min 43.422s wall clock time, 2.5G memory peak.
