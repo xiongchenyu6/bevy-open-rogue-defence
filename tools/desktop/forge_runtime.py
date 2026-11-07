@@ -257,11 +257,25 @@ def main():
         assert not inventory_open(rows) and not find_text(rows, 'Close'), 'Equipment did not close'
     def inspect_magic_penetration(prefix, expected):
         click(178,44);wait('ATTRIBUTES')
-        image=shot(prefix+'.png')
-        value,evidence=magic_penetration_from_rows(ocr_screenshot(image,env))
-        report.setdefault('magic_penetration_observations',[]).append(
-            dict(screenshot=image.name,value=value,expected=expected,rows=evidence))
-        assert value==expected, ('Equipment magic penetration mismatch',value,expected)
+        observations=report.setdefault('magic_penetration_observations',[])
+        for attempt in range(4):
+            image=shot(prefix+f'-{attempt:02}.png')
+            record=dict(screenshot=image.name,expected=expected)
+            observations.append(record)
+            try:
+                value,evidence=magic_penetration_from_rows(ocr_screenshot(image,env))
+            except AssertionError as error:
+                record['read_error']=str(error)
+                if attempt==3:
+                    raise
+                call(['xdotool','mousemove','--window',win,'700','500'])
+                call(['xdotool','click','--repeat','2','--delay','150','5'])
+                record['input']='scroll_down_2'
+                time.sleep(.5)
+                continue
+            record.update(value=value,rows=evidence)
+            assert value==expected, ('Equipment magic penetration mismatch',value,expected)
+            break
         key('Escape')
         assert find_text(lines(),'ATTRIBUTES') is None, 'Attributes did not close'
 

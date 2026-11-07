@@ -1,0 +1,11 @@
+{
+  "base_commit": "0118267d6d70a6072a53cd34bc8e426b6ebe29c7",
+  "sources": {
+    "tools/desktop/forge_runtime.py": "df9ca7bb759a3b9ac555f6fa6366fedf9e059ff59abebdfe11667f96da35cdd6"
+  },
+  "images": {
+    "material-magic-penetration.png": "b04b3e9d1302dbba441d5e3e83302255407a2b442722c600d9ea3f45fbea75cf",
+    "crafted-magic-penetration.png": "0e73d790be75d953e6cb7b0b5528052d4456d2dbb57a74374389fb2b36b69bed",
+    "crafted-inventory.png": "0b2cedc091a1f13ba06b6755c480bb03d9c7c4292d7b8a7a4f29eb0e6ce80ef0"
+  }
+}
