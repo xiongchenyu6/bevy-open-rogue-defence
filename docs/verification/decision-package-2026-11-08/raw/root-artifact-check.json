@@ -1,0 +1,30 @@
+{
+  "result": "PASS",
+  "source_commit": "6f24fe71f0b99aad630d9a89306e914aecc5ed25",
+  "source_inputs": 551,
+  "manifest_files": 892,
+  "tar_files": 893,
+  "binary_sha256": "bc421dce56f28b4d551f43302d562ef938f830da3a8bc721103ff86fda86bfe5",
+  "tar_sha256": "260041c461904b7dfb8ff582efa0bff81af1b1ef1cf1fd3eecab12379896b34e",
+  "three_clock_pairs": {
+    "initial": [
+      1498,
+      1492
+    ],
+    "after-public-skill": [
+      1476,
+      1470
+    ],
+    "restart": [
+      1486,
+      1480
+    ]
+  },
+  "root_viewed_originals": 25,
+  "known_visual_findings": [
+    "after-public-skill-battle-progress-00.png retains narrow viewport and white extension during resize; later observations restore desktop geometry",
+    "Phone detailed skill description continues below visible footer and requires scrolling"
+  ],
+  "review_method": "All25 original PNGs decoded with ImageMagick into five labeled JPEG contact sheets; portrait skill and final quit additionally reviewed full-size JPEG. Original PNGs retained.",
+  "known_ocr_rejection": "restart-battle-progress-01.png at300scale2452 lacked colon and was rejected"
+}
