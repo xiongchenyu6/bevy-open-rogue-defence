@@ -1,0 +1,14 @@
+{
+  "base_commit": "fdac46e21d7158f19c8f26e6b28a6b6e8fe96fd8",
+  "sources": {
+    "tools/desktop/forge_runtime.py": "a54e0141cdd965fd2b7332f8599da66ae24bb77ede51cbe4bc8597c2ad94f360",
+    "tools/desktop/campaign_equipment_runtime.py": "1c0faea21e7e75f4a6095ff1427fe005026dcc6384dd4e197a01ae3104f39b75",
+    "tools/desktop/test_forge_runtime.py": "5c30f8ed43433892875498f2ebb788e1422ec0463206208d440d604b5206606b"
+  },
+  "fixture": {
+    "sha256": "782e1cdac7c4935a551d2cb5aaa899b3765e1256ef152e792ec04bada9c2ff14",
+    "source": "target/verification/earned-forge-materials-2026-11-08/forge/current-ui.png",
+    "expected_seconds": 1418
+  },
+  "new_fixture_test_unchanged_through_roi_fix": true
+}

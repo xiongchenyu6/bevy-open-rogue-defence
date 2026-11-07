@@ -263,11 +263,12 @@ def main():
         names=[r for r in lines() if normalized(r[0])=='stormsavant' and 150<r[2]<550];assert names
         _,x,y,r,b=min(names,key=lambda r:r[2]);click((x+r)//2,(y+b)//2)
         worker=threading.Thread(target=operate,daemon=True)
-        end=time.monotonic()+90
-        while time.monotonic()<end:
-            if any('24:' in t.replace(' ','') for t,*_ in lines()):break
-            key('1')
-        else:raise RuntimeError('Battle countdown never advanced')
+        startup_before = timer_seconds()
+        time.sleep(2)
+        startup_after = timer_seconds()
+        assert startup_after < startup_before, 'Observed battle countdown did not advance'
+        report['startup_countdown_before'] = startup_before
+        report['startup_countdown_after'] = startup_after
         print('stage: battle started; resetting actual toolbar to1x',flush=True)
         end=time.monotonic()+90
         while time.monotonic()<end:

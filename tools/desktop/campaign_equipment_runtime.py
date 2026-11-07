@@ -45,7 +45,7 @@ def battle_clock_reads(path, env):
     with tempfile.TemporaryDirectory(prefix='rogue-battle-clock-') as directory:
         for scale in (100, 200, 600):
             crop = Path(directory) / f'clock-{scale}.png'
-            subprocess.run(['convert', str(path), '-crop', '100x28+1170+20',
+            subprocess.run(['convert', str(path), '-crop', '74x24+1194+22',
                 '-resize', f'{scale}%', '-colorspace', 'Gray', '-negate',
                 '-bordercolor', 'white', '-border', '20', str(crop)],
                 env=env, check=True, capture_output=True)

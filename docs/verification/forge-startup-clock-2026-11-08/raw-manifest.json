@@ -1,0 +1,50 @@
+{
+  "raw/r2/run-tests.py.gz": {
+    "bytes": 833,
+    "sha256": "d17ffe97bcfc682b4f004d8a38ba0021baf4ac58b5a3d1f394b52875af54d251"
+  },
+  "raw/r2/tests.log.gz": {
+    "bytes": 216,
+    "sha256": "5eb80b66c966fdac26c25d1b0db2e7b451224f0ce9531b33c53976d7813c4c48"
+  },
+  "raw/r2/manager.log.gz": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw/r2/tests-result.json.gz": {
+    "bytes": 657,
+    "sha256": "83cd98167714ed8776ab27d53628a2f1122faddafb882e5e584b2c4a2c296567"
+  },
+  "raw/r1-history/forge.log.gz": {
+    "bytes": 389,
+    "sha256": "2a5a7386fcefaae11ceffb681e860e45fb48a5e26ab9206be79f4d13e5eb58f2"
+  },
+  "raw/r1-history/forge-process.json.gz": {
+    "bytes": 1008,
+    "sha256": "0408f7b474b31aec3a94a5ed2b4bb7d8d199a6aafcb785a08351e8e15632d1b0"
+  },
+  "raw/r1-history/manager.log.gz": {
+    "bytes": 1942,
+    "sha256": "d8a84988f4422c13c4c7bdf730f266d7e2054b377f52651e0bb090151cc07729"
+  },
+  "raw/r1-history/forge/result.json.gz": {
+    "bytes": 1849,
+    "sha256": "21509007b9d99cd5ae5a7e916aac8a863068ff253bc0d339a8eb49a17001f480"
+  },
+  "raw/r1-history/forge/harness-snapshot.json.gz": {
+    "bytes": 885,
+    "sha256": "e0d4dafac703d8949125e3e924adedab07624c088c93498f001f08715d9c6148"
+  },
+  "raw/r1-history/forge/initial-save-provenance.json.gz": {
+    "bytes": 200,
+    "sha256": "9b52d5b388564c3dc5466f845ec9ca4bcc7a7617cf4df5f86ad8f329c72fcc1a"
+  },
+  "raw/initial-test-failure/tests.log.gz": {
+    "bytes": 1151,
+    "sha256": "8c430b19a0d5c7031a430e977ba71b84a1022f759578889d1cad88a0a5b02675"
+  },
+  "raw/initial-test-failure/tests-result.json.gz": {
+    "bytes": 621,
+    "sha256": "baad60a48fee7470ddd875955ba154bbcbeeb422f1f4922e51ffef067ce32174"
+  }
+}

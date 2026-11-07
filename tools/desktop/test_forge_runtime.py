@@ -114,6 +114,11 @@ class ForgePolicyTests(unittest.TestCase):
             with self.subTest(title=title, materials=cards, action=action), self.assertRaises(AssertionError):
                 verify_recipe_selection(title, cards, action)
 
+    @unittest.skipUnless(shutil.which('tesseract') and shutil.which('convert'), 'Screenshot OCR tools unavailable')
+    def test_actual_startup_failure_already_has_running_23_minute_clock(self):
+        image = Path(__file__).resolve().parents[2] / 'docs/verification/forge-startup-clock-2026-11-08/failure-running.png'
+        self.assertEqual(screenshot_battle_seconds(image, None), 23 * 60 + 38)
+
     def test_consumption_requires_only_output_and_both_earned_materials(self):
         verify_crafted_inventory(1,['astralprism'],['Echo Core','Arc Lens'])
         for count,details,acquired in [(2,['astralprism','arclens'],['Arc Lens','Echo Core']),
