@@ -17,6 +17,9 @@ use presentation::{BuildPreview, spawn_draft_ui};
 
 pub struct ProgressionPlugin;
 
+#[derive(SystemSet, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub(crate) struct ProgressionSet;
+
 impl Plugin for ProgressionPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<super::selection_detail::SelectionDetail>()
@@ -32,7 +35,12 @@ impl Plugin for ProgressionPlugin {
                     .before(presentation::update_feedback),
             )
             .init_resource::<SkillEvolution>()
-            .add_systems(PreUpdate, super::skill_evolution::refresh_access);
+            .add_systems(
+                Update,
+                super::skill_evolution::refresh_access
+                    .after(super::hero::synchronize_hero_growth)
+                    .before(ProgressionSet),
+            );
         app.init_resource::<GameLanguage>()
             .init_resource::<SkillEconomy>()
             .init_resource::<RecruitmentProgress>()
@@ -46,6 +54,14 @@ impl Plugin for ProgressionPlugin {
                     check_level_up,
                     grant_free_skill_draws,
                     grant_first_free_bond_draw,
+                )
+                    .chain()
+                    .before(super::hero::synchronize_hero_growth)
+                    .before(ProgressionSet),
+            )
+            .add_systems(
+                Update,
+                (
                     request_skill_draft,
                     request_bond_draft,
                     request_encounter_draft,
@@ -60,7 +76,10 @@ impl Plugin for ProgressionPlugin {
                     presentation::update_feedback,
                     presentation::refresh_language,
                 )
-                    .chain(),
+                    .chain()
+                    .in_set(ProgressionSet)
+                    .after(super::market::MarketSet)
+                    .before(super::combat::SurvivalSet),
             );
     }
 }
@@ -258,6 +277,28 @@ fn request_skill_draft(
     if session.skill_points == 0 && session.gold < paid_cost {
         return;
     }
+    let picker_trace = std::env::var("ROGUE_SIM_PICKER_TRACE").is_ok_and(|value| value == "1");
+    if picker_trace {
+        // All debug strings below contain only ASCII enum names and numeric fields.
+        let paths_debug = format!("{:?}", evolution.paths);
+        println!(
+            "{{\"type\":\"picker_entry\",\"elapsed\":{},\"elapsed_bits\":{},\"rng\":{},\"level\":{},\"capacity\":{},\"selected_hero\":{},\"selected_locked\":{},\"skill_missed_preference\":{},\"bond_missed_preference\":{},\"raw_ranks\":{:?},\"owned_bond_cards\":{:?},\"late_tiers\":{:?},\"late_paths_debug\":{:?},\"unlocked_stage\":{}}}",
+            session.elapsed,
+            session.elapsed.to_bits(),
+            rng.state(),
+            session.level,
+            evolution.skill_capacity(),
+            selected.kind as u8,
+            selected.locked,
+            drought.skill_missed_preference,
+            drought.bond_missed_preference,
+            build.skills,
+            build.owned_bond_cards,
+            evolution.tiers,
+            paths_debug,
+            evolution.unlocked_stage
+        );
+    }
     let choices = pick_skill_choices(
         &mut rng,
         session.level,
@@ -267,7 +308,20 @@ fn request_skill_draft(
         &mut drought,
         evolution.skill_capacity(),
     );
+    let rng_after_pick = rng.state();
     let choices = late_skill_choices(choices, &build, &evolution, &mut rng);
+    if picker_trace {
+        let choices_debug = format!("{choices:?}");
+        println!(
+            "{{\"type\":\"picker_exit\",\"elapsed\":{},\"elapsed_bits\":{},\"rng_after_pick\":{rng_after_pick},\"rng\":{},\"skill_missed_preference\":{},\"offered\":{},\"choices_debug\":{:?}}}",
+            session.elapsed,
+            session.elapsed.to_bits(),
+            rng.state(),
+            drought.skill_missed_preference,
+            !choices.is_empty(),
+            choices_debug
+        );
+    }
     if choices.is_empty() {
         return;
     }
@@ -288,6 +342,12 @@ fn request_skill_draft(
         choices,
         *language,
     );
+}
+
+#[cfg(test)]
+pub(super) fn test_request_skill_draft(world: &mut World) {
+    use bevy::ecs::system::RunSystemOnce;
+    world.run_system_once(request_skill_draft).unwrap();
 }
 
 fn request_bond_draft(

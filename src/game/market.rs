@@ -14,6 +14,9 @@ pub(crate) struct MarketArt(pub [Handle<Image>; 2]);
 
 pub struct MarketPlugin;
 
+#[derive(SystemSet, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub(crate) struct MarketSet;
+
 impl Plugin for MarketPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<GameLanguage>()
@@ -37,6 +40,7 @@ impl Plugin for MarketPlugin {
                     refresh_market_language,
                 )
                     .chain()
+                    .in_set(MarketSet)
                     .before(SurvivalSet)
                     .before(super::bonds::BondSet)
                     .before(super::ui::update_resource_counters),
@@ -589,6 +593,11 @@ struct MarketState {
     paused_by_market: bool,
     notice: [String; 2],
     notice_timer: f32,
+}
+
+#[cfg(test)]
+pub(crate) fn test_stock_generation(world: &World) -> u32 {
+    world.resource::<MarketState>().stock_generation
 }
 
 impl Default for MarketState {

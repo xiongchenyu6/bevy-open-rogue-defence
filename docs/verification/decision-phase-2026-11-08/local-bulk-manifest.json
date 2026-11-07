@@ -1,0 +1,82 @@
+{
+  "target/verification/decision-phase-2026-11-07/after-r2/balance-sim": {
+    "bytes": 181957048,
+    "sha256": "e2314cb6c6a896b993c1908c0b63f490746295afd6fbbcc57fd72229cb10d87d"
+  },
+  "target/verification/decision-phase-2026-11-07/after-r2/capture": {
+    "bytes": 490435328,
+    "sha256": "2534fe01986109012fea0879544619524cc70c7d75e4cb3df15c576e7d4f5a55"
+  },
+  "target/verification/decision-phase-2026-11-07/after-r3/balance-sim": {
+    "bytes": 181957640,
+    "sha256": "c740d3834865f053c86e7fb0fb24058595585bd82a2cd53c923709f7bbe4fcae"
+  },
+  "target/verification/decision-phase-2026-11-07/after-r3/capture": {
+    "bytes": 490433928,
+    "sha256": "744a5512939508e558683b51f66ff8d61a4778ee4f75410b567db1d22edcbb27"
+  },
+  "target/verification/decision-phase-2026-11-07/after-r3/native-360x800-zh/frame00179.png": {
+    "bytes": 341955,
+    "sha256": "1b53fd952a8d3082b828ae2c32ca5ad7ec975b84f467e78178da933118b8fb7d"
+  },
+  "target/verification/decision-phase-2026-11-07/after-r3/native-360x800-zh/frame00159.png": {
+    "bytes": 341972,
+    "sha256": "6bc59ddab3f7cc3184f702198d5635a84260d1c65aa124545a5182f04e51c48b"
+  },
+  "target/verification/decision-phase-2026-11-07/after-r3/native-1280x720-en/frame00179.png": {
+    "bytes": 987736,
+    "sha256": "526df5549e917cbeabac732e21cd5557b5f020bde41ce3aed6bca783fb8be6ee"
+  },
+  "target/verification/decision-phase-2026-11-07/after-r3/native-1280x720-en/frame00159.png": {
+    "bytes": 986998,
+    "sha256": "a51e00f9bd4569f45a9039f5d8bd0e7412e4864b73fca4dc28507578e2363d85"
+  },
+  "target/verification/decision-phase-2026-11-07/after-r2/native-360x800-zh/frame00179.png": {
+    "bytes": 341955,
+    "sha256": "1b53fd952a8d3082b828ae2c32ca5ad7ec975b84f467e78178da933118b8fb7d"
+  },
+  "target/verification/decision-phase-2026-11-07/after-r2/native-360x800-zh/frame00159.png": {
+    "bytes": 341972,
+    "sha256": "6bc59ddab3f7cc3184f702198d5635a84260d1c65aa124545a5182f04e51c48b"
+  },
+  "target/verification/decision-phase-2026-11-07/after-r2/native-1280x720-en/frame00179.png": {
+    "bytes": 987744,
+    "sha256": "1009541b881f7d22c3d530846e65e262994c69d945da27febe383cf0c356c0fd"
+  },
+  "target/verification/decision-phase-2026-11-07/after-r2/native-1280x720-en/frame00159.png": {
+    "bytes": 986998,
+    "sha256": "a51e00f9bd4569f45a9039f5d8bd0e7412e4864b73fca4dc28507578e2363d85"
+  },
+  "target/verification/picker-order-2026-11-07/frozen/balance-sim": {
+    "bytes": 181944816,
+    "sha256": "6a7f2bb157c3ce605c0e281cd586fb81dbf8aa3fa056901bb62839a2ce3bebde"
+  },
+  "target/verification/picker-order-2026-11-07/frozen/target/verification/picker-trace-a/simulator-snapshot": {
+    "bytes": 181944816,
+    "sha256": "6a7f2bb157c3ce605c0e281cd586fb81dbf8aa3fa056901bb62839a2ce3bebde"
+  },
+  "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r2-b/simulator-snapshot": {
+    "bytes": 181957048,
+    "sha256": "e2314cb6c6a896b993c1908c0b63f490746295afd6fbbcc57fd72229cb10d87d"
+  },
+  "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r2-a/simulator-snapshot": {
+    "bytes": 181957048,
+    "sha256": "e2314cb6c6a896b993c1908c0b63f490746295afd6fbbcc57fd72229cb10d87d"
+  },
+  "target/verification/picker-order-2026-11-07/frozen/target/verification/picker-trace-r2-a/simulator-snapshot": {
+    "bytes": 181944816,
+    "sha256": "6a7f2bb157c3ce605c0e281cd586fb81dbf8aa3fa056901bb62839a2ce3bebde"
+  },
+  "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r3-b/simulator-snapshot": {
+    "bytes": 181957640,
+    "sha256": "c740d3834865f053c86e7fb0fb24058595585bd82a2cd53c923709f7bbe4fcae"
+  },
+  "target/verification/picker-order-2026-11-07/frozen/target/verification/picker-trace-r2-b/simulator-snapshot": {
+    "bytes": 181944816,
+    "sha256": "6a7f2bb157c3ce605c0e281cd586fb81dbf8aa3fa056901bb62839a2ce3bebde"
+  },
+  "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r3-a/simulator-snapshot": {
+    "bytes": 181957640,
+    "sha256": "c740d3834865f053c86e7fb0fb24058595585bd82a2cd53c923709f7bbe4fcae"
+  }
+}

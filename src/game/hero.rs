@@ -45,6 +45,7 @@ impl Plugin for HeroPlugin {
                     update_hero_status,
                 )
                     .chain()
+                    .before(super::progression::ProgressionSet)
                     .before(SurvivalSet),
             );
     }

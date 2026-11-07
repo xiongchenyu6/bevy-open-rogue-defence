@@ -104,8 +104,11 @@ fn record_offer(world: &mut World, frame: u32) {
     let session = world.resource::<GameSession>();
     let policy_frame = world.resource::<Policy>().frame;
     let root_bits = root.to_bits();
+    let fusion_capacity = world
+        .resource::<rogue_commander::game::HeroFusion>()
+        .skill_capacity();
     println!(
-        "{{\"type\":\"draft_offer\",\"frame\":{frame},\"policy_frame\":{policy_frame},\"elapsed\":{},\"root\":{root_bits},\"choices\":[{choices}],\"skill_ranks_by_id\":{:?},\"gold\":{},\"wood\":{},\"skill_points\":{}}}",
+        "{{\"type\":\"draft_offer\",\"frame\":{frame},\"policy_frame\":{policy_frame},\"elapsed\":{},\"root\":{root_bits},\"fusion_capacity\":{fusion_capacity},\"choices\":[{choices}],\"skill_ranks_by_id\":{:?},\"gold\":{},\"wood\":{},\"skill_points\":{}}}",
         session.elapsed, build.skills, session.gold, session.wood, session.skill_points
     );
     world.resource_mut::<Policy>().last_offer_root = Some(root);

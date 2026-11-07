@@ -24,6 +24,7 @@ impl Plugin for TrialPlugin {
                 animate_challenge_auras,
             )
                 .chain()
+                .after(super::progression::ProgressionSet)
                 .before(CombatSet),
         );
     }

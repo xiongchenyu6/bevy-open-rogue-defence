@@ -3452,6 +3452,8 @@ mod tests {
     use super::*;
 
     include!("combat/collision_order_tests.rs");
+    include!("combat/picker_rng_order_tests.rs");
+    include!("combat/decision_phase_tests.rs");
     include!("combat/storm_order_tests.rs");
     include!("combat/orbit_order_tests.rs");
     include!("combat/wave_order_tests.rs");

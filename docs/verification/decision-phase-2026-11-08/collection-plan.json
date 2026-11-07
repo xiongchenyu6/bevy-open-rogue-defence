@@ -1,0 +1,1799 @@
+{
+  "destination": "docs/verification/decision-phase-2026-11-08",
+  "selected_files": 224,
+  "stored_bytes": 18075318,
+  "files": [
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r1/focused-result.json",
+      "archive": "raw/phase/after-r1/focused-result.json.gz",
+      "bytes": 285,
+      "sha256": "7a3f2b914fd87e6121a0acffbd594a4702cc05a39c174d3123b0bb3146b4ca00",
+      "stored_bytes": 179,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r1/focused.log",
+      "archive": "raw/phase/after-r1/focused.log.gz",
+      "bytes": 8596,
+      "sha256": "6205bdef77aa21e1a9b9b8ba82fbf531a1f73597f70a994cff55b07ccc3d3864",
+      "stored_bytes": 1700,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r1/inputs.json",
+      "archive": "raw/phase/after-r1/inputs.json.gz",
+      "bytes": 41967,
+      "sha256": "e386ae5c22c336a3c09c82d6786ce9da8128c39b4f804b33d6486e67db6a520d",
+      "stored_bytes": 19557,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r1/manager.log",
+      "archive": "raw/phase/after-r1/manager.log.gz",
+      "bytes": 843,
+      "sha256": "b3e326dd37f2a87789f1b3c4e83dbdc2dfb3411549be6bee73226623fcca2ee0",
+      "stored_bytes": 368,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r1/run.py",
+      "archive": "raw/phase/after-r1/run.py.gz",
+      "bytes": 5098,
+      "sha256": "8b1550541aba78e612d875ed8e425198f0658221c46d9a9bf578ea635b61c8de",
+      "stored_bytes": 2012,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r1/source/src/bin/balance_sim.rs",
+      "archive": "raw/phase/after-r1/source/src/bin/balance_sim.rs.gz",
+      "bytes": 35981,
+      "sha256": "6b89d59516ec4f11bee360fd5c043586e9bf306cd41898f4e31d913659bf9028",
+      "stored_bytes": 8730,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r1/source/src/game/bonds.rs",
+      "archive": "raw/phase/after-r1/source/src/game/bonds.rs.gz",
+      "bytes": 51717,
+      "sha256": "d4d5a94e94d4df925b7095d016daa6fcd85290c94fdd091e19aab5123f7515b3",
+      "stored_bytes": 10043,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r1/source/src/game/combat/decision_phase_tests.rs",
+      "archive": "raw/phase/after-r1/source/src/game/combat/decision_phase_tests.rs.gz",
+      "bytes": 12200,
+      "sha256": "bdb7597ced2796257529fbdd7172059ee3d6847ceac807ea6c6b78c940b26f17",
+      "stored_bytes": 3158,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r1/source/src/game/combat/picker_rng_order_tests.rs",
+      "archive": "raw/phase/after-r1/source/src/game/combat/picker_rng_order_tests.rs.gz",
+      "bytes": 4292,
+      "sha256": "7269bc34dcdd6788e643b8f4332a02a88c89c96b894ee66b37e247dde7d9a85d",
+      "stored_bytes": 1324,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r1/source/src/game/combat.rs",
+      "archive": "raw/phase/after-r1/source/src/game/combat.rs.gz",
+      "bytes": 272667,
+      "sha256": "e9c729eac0f78659f3322d63cd6be97ca129939b28ba9dd0d110890b3b01bd83",
+      "stored_bytes": 45936,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r1/source/src/game/hero.rs",
+      "archive": "raw/phase/after-r1/source/src/game/hero.rs.gz",
+      "bytes": 47200,
+      "sha256": "c3b0741cf6a292fd54104505e58dda98354c43c14b406572f7017e9c0aa122d7",
+      "stored_bytes": 9894,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r1/source/src/game/market.rs",
+      "archive": "raw/phase/after-r1/source/src/game/market.rs.gz",
+      "bytes": 127705,
+      "sha256": "fde304069fea365abdf8848eab690d69c4e2f44f8b9b010cb272d7bec7035578",
+      "stored_bytes": 24812,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r1/source/src/game/progression.rs",
+      "archive": "raw/phase/after-r1/source/src/game/progression.rs.gz",
+      "bytes": 127708,
+      "sha256": "f3aacdee022fdf13eff5e16abac6c2b00ccb0cac25540ebd42fee61d90e37006",
+      "stored_bytes": 22330,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r1/source/src/game/skills.rs",
+      "archive": "raw/phase/after-r1/source/src/game/skills.rs.gz",
+      "bytes": 149430,
+      "sha256": "146b9661e1417d071a83fd671bf1a3a1720bad780b08657332af4fbaefd43309",
+      "stored_bytes": 27648,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r1/source/src/game/trial.rs",
+      "archive": "raw/phase/after-r1/source/src/game/trial.rs.gz",
+      "bytes": 44571,
+      "sha256": "53438646cd1343c297f9e75a5c3fd95b774c5910d0bb54082ada4be5b2a326d7",
+      "stored_bytes": 8650,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/bin-tests-result.json",
+      "archive": "raw/phase/after-r2/bin-tests-result.json.gz",
+      "bytes": 217,
+      "sha256": "8afb44afddb8f971324ed228cc6ed02f9e20e724ac44721971e8b77369c509f8",
+      "stored_bytes": 151,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/bin-tests.log",
+      "archive": "raw/phase/after-r2/bin-tests.log.gz",
+      "bytes": 997,
+      "sha256": "b202f01f72143c1b0c5910bc733e138fe1ba71c60ebb0c68359eb157e70350f9",
+      "stored_bytes": 540,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/capture-binary.sha256",
+      "archive": "raw/phase/after-r2/capture-binary.sha256.gz",
+      "bytes": 64,
+      "sha256": "7b3cefac2d022919f1b51028bec909118a8507d2f7e4360aef46b6137fdf5462",
+      "stored_bytes": 70,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/capture-build-result.json",
+      "archive": "raw/phase/after-r2/capture-build-result.json.gz",
+      "bytes": 396,
+      "sha256": "abc0c1a45903af7e478056fdad3a6afc2fd4a80f669a4c7936fc872058a6baa5",
+      "stored_bytes": 208,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/capture-build.log",
+      "archive": "raw/phase/after-r2/capture-build.log.gz",
+      "bytes": 276,
+      "sha256": "bb373ed34dea730340db74c29f6861d39484016d6b280739341ea9ae8dd9445c",
+      "stored_bytes": 188,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/focused-result.json",
+      "archive": "raw/phase/after-r2/focused-result.json.gz",
+      "bytes": 284,
+      "sha256": "3de3c8395536254dab6c5bb59ee0bb614bac3de580fe2251e2da8e23a6620ac3",
+      "stored_bytes": 179,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/focused.log",
+      "archive": "raw/phase/after-r2/focused.log.gz",
+      "bytes": 2656,
+      "sha256": "f0286ce91c667b89110d5f1e053295df93fda3a66be5ce07ce1926153860c194",
+      "stored_bytes": 785,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/inputs-after.json",
+      "archive": "raw/phase/after-r2/inputs-after.json.gz",
+      "bytes": 41967,
+      "sha256": "2a0394ef86b52875f1695d71b0cd9daf76c6544eabac53528304df34d6de7ede",
+      "stored_bytes": 19556,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/inputs.json",
+      "archive": "raw/phase/after-r2/inputs.json.gz",
+      "bytes": 41967,
+      "sha256": "2a0394ef86b52875f1695d71b0cd9daf76c6544eabac53528304df34d6de7ede",
+      "stored_bytes": 19556,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/library-tests-result.json",
+      "archive": "raw/phase/after-r2/library-tests-result.json.gz",
+      "bytes": 231,
+      "sha256": "ca266d7b13b4545e19601378f75eb8a78b77eda10c73c60f22dcbd116c982531",
+      "stored_bytes": 157,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/library-tests.log",
+      "archive": "raw/phase/after-r2/library-tests.log.gz",
+      "bytes": 78124,
+      "sha256": "32a08184483b00c5a641ab61fe76225b1a42695b08ecfcb2e3634eb923217777",
+      "stored_bytes": 20047,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/manager.log",
+      "archive": "raw/phase/after-r2/manager.log.gz",
+      "bytes": 289,
+      "sha256": "5ad5da503a71e25f7047d22d83ed3c6ceadf5cb3a17251ad30ea88fb21c6aa2a",
+      "stored_bytes": 175,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/native-1280x720-en/frame00100.png",
+      "archive": "frames/phase/after-r2/native-1280x720-en/frame00100.png",
+      "bytes": 344412,
+      "sha256": "04f4c3d7e71fb92a764e501f5a4fa9402d041d00a6787ce2ebe36fc594c9dd6e",
+      "stored_bytes": 344412,
+      "compressed": false
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/native-1280x720-en/frame00120.png",
+      "archive": "frames/phase/after-r2/native-1280x720-en/frame00120.png",
+      "bytes": 344412,
+      "sha256": "04f4c3d7e71fb92a764e501f5a4fa9402d041d00a6787ce2ebe36fc594c9dd6e",
+      "stored_bytes": 344412,
+      "compressed": false
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/native-1280x720-en-result.json",
+      "archive": "raw/phase/after-r2/native-1280x720-en-result.json.gz",
+      "bytes": 492,
+      "sha256": "de28c198129794ab63bb588c9a53b776e24e9d1a96b7b9c5ddabffd3071d5fdb",
+      "stored_bytes": 257,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/native-1280x720-en.log",
+      "archive": "raw/phase/after-r2/native-1280x720-en.log.gz",
+      "bytes": 6888,
+      "sha256": "d1362d9fedaacc016b97b6a8a24a36cd2c2287e7f38c8eb774b2820aff371ae1",
+      "stored_bytes": 1864,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/native-360x800-zh/frame00100.png",
+      "archive": "frames/phase/after-r2/native-360x800-zh/frame00100.png",
+      "bytes": 89790,
+      "sha256": "1121b3460dd7fe972bd47241f45ef0613956e6239f672e4c618cc3f73d99cb6e",
+      "stored_bytes": 89790,
+      "compressed": false
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/native-360x800-zh/frame00120.png",
+      "archive": "frames/phase/after-r2/native-360x800-zh/frame00120.png",
+      "bytes": 89790,
+      "sha256": "1121b3460dd7fe972bd47241f45ef0613956e6239f672e4c618cc3f73d99cb6e",
+      "stored_bytes": 89790,
+      "compressed": false
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/native-360x800-zh-result.json",
+      "archive": "raw/phase/after-r2/native-360x800-zh-result.json.gz",
+      "bytes": 490,
+      "sha256": "d6c04db4ea9e03e135201ddda223b3638450de77090e8cb9ffa924adb24a5c3e",
+      "stored_bytes": 254,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/native-360x800-zh.log",
+      "archive": "raw/phase/after-r2/native-360x800-zh.log.gz",
+      "bytes": 6845,
+      "sha256": "6ded4fe9c38b911d08da6c87a3575688a867578e25b4c5c0c41279ded5091f23",
+      "stored_bytes": 1887,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/release-clippy-result.json",
+      "archive": "raw/phase/after-r2/release-clippy-result.json.gz",
+      "bytes": 243,
+      "sha256": "9a34377d52dde82370576b39b35c2f354af5654d9e3f55a1276b6268cdae5444",
+      "stored_bytes": 160,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/release-clippy.log",
+      "archive": "raw/phase/after-r2/release-clippy.log.gz",
+      "bytes": 278,
+      "sha256": "09ebdfa6cb2330d852d0163ce5b7f584fe3bef6c01b83d7f34f5d25797f1690f",
+      "stored_bytes": 187,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/replay-a-result.json",
+      "archive": "raw/phase/after-r2/replay-a-result.json.gz",
+      "bytes": 786,
+      "sha256": "0e5765697769aef6f853b60ff7114263b4f95f8affdd2ad70ae9e9cc70a167d5",
+      "stored_bytes": 363,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/replay-a.log",
+      "archive": "raw/phase/after-r2/replay-a.log.gz",
+      "bytes": 1974,
+      "sha256": "43ae526da0cc3e1c205ef0e48354ac362b0f9a1caf11aca542489c562f1b570f",
+      "stored_bytes": 927,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/replay-b-result.json",
+      "archive": "raw/phase/after-r2/replay-b-result.json.gz",
+      "bytes": 784,
+      "sha256": "e2c9a45243e801d01d070e3256ef500116cdf0a33c852feb754b3773d274b1c2",
+      "stored_bytes": 362,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/replay-b.log",
+      "archive": "raw/phase/after-r2/replay-b.log.gz",
+      "bytes": 1970,
+      "sha256": "929e51d5723ceb62743622e5e81ac1bf661aa734d64fbc74728c3e35e576bd48",
+      "stored_bytes": 933,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/run.py",
+      "archive": "raw/phase/after-r2/run.py.gz",
+      "bytes": 5098,
+      "sha256": "71dc9311ad7d149ec626b9ead8335aef6e72e014ce5e3c6cde0dd13feff56675",
+      "stored_bytes": 2012,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/sim-binary.sha256",
+      "archive": "raw/phase/after-r2/sim-binary.sha256.gz",
+      "bytes": 64,
+      "sha256": "36b30435de1c3c5108a9a1c7a6b534a0c1ad94f89b6c0e63f75cc360ab13c4af",
+      "stored_bytes": 70,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/sim-build-result.json",
+      "archive": "raw/phase/after-r2/sim-build-result.json.gz",
+      "bytes": 218,
+      "sha256": "fc3f6a3f4028f7d1435adb386e186055a4777ce996bb713cb32296227ad854ba",
+      "stored_bytes": 154,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/sim-build.log",
+      "archive": "raw/phase/after-r2/sim-build.log.gz",
+      "bytes": 278,
+      "sha256": "4bce72beb8e5de3aba98bdc528e90778adb52a7e6211ccf8419addb9fafb76c0",
+      "stored_bytes": 189,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/source/src/bin/balance_sim.rs",
+      "archive": "raw/phase/after-r2/source/src/bin/balance_sim.rs.gz",
+      "bytes": 35981,
+      "sha256": "6b89d59516ec4f11bee360fd5c043586e9bf306cd41898f4e31d913659bf9028",
+      "stored_bytes": 8730,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/source/src/game/bonds.rs",
+      "archive": "raw/phase/after-r2/source/src/game/bonds.rs.gz",
+      "bytes": 51717,
+      "sha256": "d4d5a94e94d4df925b7095d016daa6fcd85290c94fdd091e19aab5123f7515b3",
+      "stored_bytes": 10043,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/source/src/game/combat/decision_phase_tests.rs",
+      "archive": "raw/phase/after-r2/source/src/game/combat/decision_phase_tests.rs.gz",
+      "bytes": 12528,
+      "sha256": "89c842f96dfcab2d3d2a45517c102d4030aa348b51e95b029b44af4f0fe57e5b",
+      "stored_bytes": 3242,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/source/src/game/combat/picker_rng_order_tests.rs",
+      "archive": "raw/phase/after-r2/source/src/game/combat/picker_rng_order_tests.rs.gz",
+      "bytes": 4292,
+      "sha256": "7269bc34dcdd6788e643b8f4332a02a88c89c96b894ee66b37e247dde7d9a85d",
+      "stored_bytes": 1324,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/source/src/game/combat.rs",
+      "archive": "raw/phase/after-r2/source/src/game/combat.rs.gz",
+      "bytes": 272667,
+      "sha256": "e9c729eac0f78659f3322d63cd6be97ca129939b28ba9dd0d110890b3b01bd83",
+      "stored_bytes": 45936,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/source/src/game/hero.rs",
+      "archive": "raw/phase/after-r2/source/src/game/hero.rs.gz",
+      "bytes": 47200,
+      "sha256": "c3b0741cf6a292fd54104505e58dda98354c43c14b406572f7017e9c0aa122d7",
+      "stored_bytes": 9894,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/source/src/game/market.rs",
+      "archive": "raw/phase/after-r2/source/src/game/market.rs.gz",
+      "bytes": 127705,
+      "sha256": "fde304069fea365abdf8848eab690d69c4e2f44f8b9b010cb272d7bec7035578",
+      "stored_bytes": 24812,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/source/src/game/progression.rs",
+      "archive": "raw/phase/after-r2/source/src/game/progression.rs.gz",
+      "bytes": 127708,
+      "sha256": "f3aacdee022fdf13eff5e16abac6c2b00ccb0cac25540ebd42fee61d90e37006",
+      "stored_bytes": 22330,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/source/src/game/skills.rs",
+      "archive": "raw/phase/after-r2/source/src/game/skills.rs.gz",
+      "bytes": 149430,
+      "sha256": "146b9661e1417d071a83fd671bf1a3a1720bad780b08657332af4fbaefd43309",
+      "stored_bytes": 27648,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r2/source/src/game/trial.rs",
+      "archive": "raw/phase/after-r2/source/src/game/trial.rs.gz",
+      "bytes": 44571,
+      "sha256": "53438646cd1343c297f9e75a5c3fd95b774c5910d0bb54082ada4be5b2a326d7",
+      "stored_bytes": 8650,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/bin-tests-result.json",
+      "archive": "raw/phase/after-r3/bin-tests-result.json.gz",
+      "bytes": 216,
+      "sha256": "bf8fee8be09fa841ca901579e666ff7c8e0b1e72716ecd4419b8e9cce5188bbe",
+      "stored_bytes": 151,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/bin-tests.log",
+      "archive": "raw/phase/after-r3/bin-tests.log.gz",
+      "bytes": 997,
+      "sha256": "43c37b30e85ef523a0efe78f23633dbceccf1f25635a66a3d21faacbc7be6955",
+      "stored_bytes": 540,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/capacity-checks-a.json",
+      "archive": "raw/phase/after-r3/capacity-checks-a.json.gz",
+      "bytes": 51,
+      "sha256": "11581d40975480a536bef4628258fe2aa18d7884ef178e3a7d080c8276cbb15f",
+      "stored_bytes": 67,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/capacity-checks-b.json",
+      "archive": "raw/phase/after-r3/capacity-checks-b.json.gz",
+      "bytes": 51,
+      "sha256": "11581d40975480a536bef4628258fe2aa18d7884ef178e3a7d080c8276cbb15f",
+      "stored_bytes": 67,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/capture-binary.sha256",
+      "archive": "raw/phase/after-r3/capture-binary.sha256.gz",
+      "bytes": 64,
+      "sha256": "b606d68ec273c54abec33eb235eef63a94399da3d068af2818b5cb54ab22e714",
+      "stored_bytes": 69,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/capture-build-result.json",
+      "archive": "raw/phase/after-r3/capture-build-result.json.gz",
+      "bytes": 395,
+      "sha256": "ff7723bfdcc97452c7de6ff4c251d3e46e102fe922d0eb31f3717d541992024b",
+      "stored_bytes": 209,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/capture-build.log",
+      "archive": "raw/phase/after-r3/capture-build.log.gz",
+      "bytes": 276,
+      "sha256": "705a90a5e7c62a3527f07ff6ac627d649e90ffab83d088cb5ec8d6f68d2b5618",
+      "stored_bytes": 188,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/capture-clippy-result.json",
+      "archive": "raw/phase/after-r3/capture-clippy-result.json.gz",
+      "bytes": 432,
+      "sha256": "b14d64f7890b605ec0c40d990c1fa7b186af51e46ed145b23eee392648204668",
+      "stored_bytes": 221,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/capture-clippy.log",
+      "archive": "raw/phase/after-r3/capture-clippy.log.gz",
+      "bytes": 276,
+      "sha256": "3a3420be2aa3e300c208484cc9819bc260fc50c8d0337566104c96e0d5f547d0",
+      "stored_bytes": 187,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/focused-result.json",
+      "archive": "raw/phase/after-r3/focused-result.json.gz",
+      "bytes": 284,
+      "sha256": "6571273e809715da10ecbff1c9a35a7a084de291b5c00e31596bc303100f7215",
+      "stored_bytes": 179,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/focused.log",
+      "archive": "raw/phase/after-r3/focused.log.gz",
+      "bytes": 2904,
+      "sha256": "340d46fa503a6a7665167bfcd528ae9b6af489491ee7290bc712a2f80f70cb70",
+      "stored_bytes": 862,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/inputs-after.json",
+      "archive": "raw/phase/after-r3/inputs-after.json.gz",
+      "bytes": 41967,
+      "sha256": "8add0025cdadd6340bd9b67c14502c34298ac709c1bad4c0597a8f4efed25287",
+      "stored_bytes": 19556,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/inputs.json",
+      "archive": "raw/phase/after-r3/inputs.json.gz",
+      "bytes": 41967,
+      "sha256": "8add0025cdadd6340bd9b67c14502c34298ac709c1bad4c0597a8f4efed25287",
+      "stored_bytes": 19556,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/library-tests-result.json",
+      "archive": "raw/phase/after-r3/library-tests-result.json.gz",
+      "bytes": 232,
+      "sha256": "a19f0bdc8eff15ddebb463bfa47c73b06b42fde293e70cd4bf3173ec773a766a",
+      "stored_bytes": 157,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/library-tests.log",
+      "archive": "raw/phase/after-r3/library-tests.log.gz",
+      "bytes": 78233,
+      "sha256": "d416c8963d1c03e1748175385b2ee22421e483dd2a8db80c64fa7ed919968d57",
+      "stored_bytes": 20073,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/manager.log",
+      "archive": "raw/phase/after-r3/manager.log.gz",
+      "bytes": 315,
+      "sha256": "21e41c9616e198df4b16d0825cc7b7e69cd122f8fd2696298e6e777ee3e5ebb9",
+      "stored_bytes": 178,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/native-1280x720-en/frame00100.png",
+      "archive": "frames/phase/after-r3/native-1280x720-en/frame00100.png",
+      "bytes": 344412,
+      "sha256": "04f4c3d7e71fb92a764e501f5a4fa9402d041d00a6787ce2ebe36fc594c9dd6e",
+      "stored_bytes": 344412,
+      "compressed": false
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/native-1280x720-en/frame00120.png",
+      "archive": "frames/phase/after-r3/native-1280x720-en/frame00120.png",
+      "bytes": 344412,
+      "sha256": "04f4c3d7e71fb92a764e501f5a4fa9402d041d00a6787ce2ebe36fc594c9dd6e",
+      "stored_bytes": 344412,
+      "compressed": false
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/native-1280x720-en-result.json",
+      "archive": "raw/phase/after-r3/native-1280x720-en-result.json.gz",
+      "bytes": 492,
+      "sha256": "17f2d57e678d745398593d3460a840243a9ab789f97850b782c1351bf7a06f16",
+      "stored_bytes": 256,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/native-1280x720-en.log",
+      "archive": "raw/phase/after-r3/native-1280x720-en.log.gz",
+      "bytes": 6888,
+      "sha256": "78c49d9bd7a1b15b49198896dd28854bb3f9b9711592a9297f3e6ff77d3093e0",
+      "stored_bytes": 1863,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/native-360x800-zh/frame00100.png",
+      "archive": "frames/phase/after-r3/native-360x800-zh/frame00100.png",
+      "bytes": 89790,
+      "sha256": "1121b3460dd7fe972bd47241f45ef0613956e6239f672e4c618cc3f73d99cb6e",
+      "stored_bytes": 89790,
+      "compressed": false
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/native-360x800-zh/frame00120.png",
+      "archive": "frames/phase/after-r3/native-360x800-zh/frame00120.png",
+      "bytes": 89790,
+      "sha256": "1121b3460dd7fe972bd47241f45ef0613956e6239f672e4c618cc3f73d99cb6e",
+      "stored_bytes": 89790,
+      "compressed": false
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/native-360x800-zh-result.json",
+      "archive": "raw/phase/after-r3/native-360x800-zh-result.json.gz",
+      "bytes": 490,
+      "sha256": "e81d4942e2d63abe883677ce765dd8ed5c44bf647388188f1e32e73e0e06f971",
+      "stored_bytes": 255,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/native-360x800-zh.log",
+      "archive": "raw/phase/after-r3/native-360x800-zh.log.gz",
+      "bytes": 6845,
+      "sha256": "3ac47376ac326081d1eab57dd06f2ee22d0f99a39348294e6777051a8ec14db6",
+      "stored_bytes": 1888,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/pair-counts.json",
+      "archive": "raw/phase/after-r3/pair-counts.json.gz",
+      "bytes": 1275,
+      "sha256": "cc88ae1b707a1a5025925922a9b2201c7dc8daf785b2970998e2559f8a1f42ed",
+      "stored_bytes": 255,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/release-clippy-result.json",
+      "archive": "raw/phase/after-r3/release-clippy-result.json.gz",
+      "bytes": 244,
+      "sha256": "eae876c53e10c9e2d6f5d5585ae21ff1d5fe590ceabac2851991944cb75cbe77",
+      "stored_bytes": 162,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/release-clippy.log",
+      "archive": "raw/phase/after-r3/release-clippy.log.gz",
+      "bytes": 278,
+      "sha256": "83cf615d2dff48dce59419527405dc2a7e8f6f19358a8abec6d02b120dbd7996",
+      "stored_bytes": 186,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/replay-a-result.json",
+      "archive": "raw/phase/after-r3/replay-a-result.json.gz",
+      "bytes": 786,
+      "sha256": "564e6c1ac02f1adfc1e97e4af1d47e0fca885b7cb7b40eafee1f7b7735e71025",
+      "stored_bytes": 364,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/replay-a.log",
+      "archive": "raw/phase/after-r3/replay-a.log.gz",
+      "bytes": 1967,
+      "sha256": "5e129f34eaddf858b08a95ab30ed562dca5b71d04818cd7188a5ec6136b3028d",
+      "stored_bytes": 927,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/replay-b-result.json",
+      "archive": "raw/phase/after-r3/replay-b-result.json.gz",
+      "bytes": 785,
+      "sha256": "d6a002a74e15ecbd580c4484db04e17bbbcb0d57471d90fd34517aa207ac4acb",
+      "stored_bytes": 364,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/replay-b.log",
+      "archive": "raw/phase/after-r3/replay-b.log.gz",
+      "bytes": 1973,
+      "sha256": "170bb9aa47c1e42a45b5d407e40d708b5be8754bfff3c88670db7e42dd8b4065",
+      "stored_bytes": 926,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/root-acceptance.json",
+      "archive": "raw/phase/after-r3/root-acceptance.json.gz",
+      "bytes": 596,
+      "sha256": "5e1178c3883d504c8b8d4deed82cb0289ab064d899b6810d7be2d9f7676fde23",
+      "stored_bytes": 280,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/run.py",
+      "archive": "raw/phase/after-r3/run.py.gz",
+      "bytes": 6482,
+      "sha256": "10133084363e784999e8ee326c479adbe74514a5cc389f14f3e6dcc5a35df4a1",
+      "stored_bytes": 2366,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/sim-binary.sha256",
+      "archive": "raw/phase/after-r3/sim-binary.sha256.gz",
+      "bytes": 64,
+      "sha256": "df9f9e9df37fff4c570ca22e7f488a6583bac3ce9bcb722dfa5d2f2d32949d1d",
+      "stored_bytes": 71,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/sim-build-result.json",
+      "archive": "raw/phase/after-r3/sim-build-result.json.gz",
+      "bytes": 217,
+      "sha256": "a5f96ea3120bfc4becf59a80ce535ee5e9a51e226dca970bfa4c80f053559d10",
+      "stored_bytes": 153,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/sim-build.log",
+      "archive": "raw/phase/after-r3/sim-build.log.gz",
+      "bytes": 278,
+      "sha256": "0893cc3a28d3c41811c4ffec045cddb58e9858c4ad6b7f750e0a9dba8eb98aaf",
+      "stored_bytes": 189,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/source/src/bin/balance_sim.rs",
+      "archive": "raw/phase/after-r3/source/src/bin/balance_sim.rs.gz",
+      "bytes": 36135,
+      "sha256": "5753ba8d7e823b0e3182c3c65e4a2ab6d9db2c3cb54ebe138bce7139764797a6",
+      "stored_bytes": 8770,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/source/src/game/bonds.rs",
+      "archive": "raw/phase/after-r3/source/src/game/bonds.rs.gz",
+      "bytes": 51717,
+      "sha256": "d4d5a94e94d4df925b7095d016daa6fcd85290c94fdd091e19aab5123f7515b3",
+      "stored_bytes": 10043,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/source/src/game/combat/decision_phase_tests.rs",
+      "archive": "raw/phase/after-r3/source/src/game/combat/decision_phase_tests.rs.gz",
+      "bytes": 16788,
+      "sha256": "0b21a8ec5a9ff7f232bd3989ba4d9ecdda3f2f2e81ab426575b5106d4426f0a1",
+      "stored_bytes": 3926,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/source/src/game/combat/picker_rng_order_tests.rs",
+      "archive": "raw/phase/after-r3/source/src/game/combat/picker_rng_order_tests.rs.gz",
+      "bytes": 4292,
+      "sha256": "7269bc34dcdd6788e643b8f4332a02a88c89c96b894ee66b37e247dde7d9a85d",
+      "stored_bytes": 1324,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/source/src/game/combat.rs",
+      "archive": "raw/phase/after-r3/source/src/game/combat.rs.gz",
+      "bytes": 272667,
+      "sha256": "e9c729eac0f78659f3322d63cd6be97ca129939b28ba9dd0d110890b3b01bd83",
+      "stored_bytes": 45936,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/source/src/game/hero.rs",
+      "archive": "raw/phase/after-r3/source/src/game/hero.rs.gz",
+      "bytes": 47200,
+      "sha256": "c3b0741cf6a292fd54104505e58dda98354c43c14b406572f7017e9c0aa122d7",
+      "stored_bytes": 9894,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/source/src/game/hero_fusion.rs",
+      "archive": "raw/phase/after-r3/source/src/game/hero_fusion.rs.gz",
+      "bytes": 16316,
+      "sha256": "7c409bb800d84c7bfa470bce5d58336d18199dad3c7bcde5c4be7f1c6239a1f9",
+      "stored_bytes": 4302,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/source/src/game/market.rs",
+      "archive": "raw/phase/after-r3/source/src/game/market.rs.gz",
+      "bytes": 127705,
+      "sha256": "fde304069fea365abdf8848eab690d69c4e2f44f8b9b010cb272d7bec7035578",
+      "stored_bytes": 24812,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/source/src/game/progression.rs",
+      "archive": "raw/phase/after-r3/source/src/game/progression.rs.gz",
+      "bytes": 127861,
+      "sha256": "830e92a81a74f840e6d10800ecd385edeed104b80761876312e33e12ccf0d52c",
+      "stored_bytes": 22332,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/source/src/game/skill_evolution.rs",
+      "archive": "raw/phase/after-r3/source/src/game/skill_evolution.rs.gz",
+      "bytes": 5571,
+      "sha256": "413f3811b722e6552867229a7d040f3cc82abf447526ac8815125deedc127266",
+      "stored_bytes": 2228,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/source/src/game/skills.rs",
+      "archive": "raw/phase/after-r3/source/src/game/skills.rs.gz",
+      "bytes": 149430,
+      "sha256": "146b9661e1417d071a83fd671bf1a3a1720bad780b08657332af4fbaefd43309",
+      "stored_bytes": 27648,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/source/src/game/trial.rs",
+      "archive": "raw/phase/after-r3/source/src/game/trial.rs.gz",
+      "bytes": 44571,
+      "sha256": "53438646cd1343c297f9e75a5c3fd95b774c5910d0bb54082ada4be5b2a326d7",
+      "stored_bytes": 8650,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/after-r3/unit-state.txt",
+      "archive": "raw/phase/after-r3/unit-state.txt.gz",
+      "bytes": 81,
+      "sha256": "8299f76f110034f7ffb02bf1963703f99597182f9f07c74325798c3623e60861",
+      "stored_bytes": 91,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before/focused.log",
+      "archive": "raw/phase/before/focused.log.gz",
+      "bytes": 2759,
+      "sha256": "96bee30ce3453c61ca9bf922efaeab09cbd4f33ad7be64f78a4d39ca8bbbbb8a",
+      "stored_bytes": 1054,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before/inputs-after.json",
+      "archive": "raw/phase/before/inputs-after.json.gz",
+      "bytes": 41967,
+      "sha256": "fbde7f53005a23e623a53a7b41d9a71228fca0463c95c98ca8f9aa6d0bc284b7",
+      "stored_bytes": 19549,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before/inputs.json",
+      "archive": "raw/phase/before/inputs.json.gz",
+      "bytes": 41967,
+      "sha256": "fbde7f53005a23e623a53a7b41d9a71228fca0463c95c98ca8f9aa6d0bc284b7",
+      "stored_bytes": 19549,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before/manager.log",
+      "archive": "raw/phase/before/manager.log.gz",
+      "bytes": 768,
+      "sha256": "c79191185e986e8eed7f532eb8c2374c8371e52253493eb84c874f31d5818d0b",
+      "stored_bytes": 348,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before/result.json",
+      "archive": "raw/phase/before/result.json.gz",
+      "bytes": 849,
+      "sha256": "1133bb58123ad610ba039383151215a608c6f1515260a7daab534bda113c8a04",
+      "stored_bytes": 362,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before/run.py",
+      "archive": "raw/phase/before/run.py.gz",
+      "bytes": 1842,
+      "sha256": "d9dd42d044bb18959c96b7ae721b42fe5a6ff233d048cd58936c632802279670",
+      "stored_bytes": 900,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before/source/src/game/combat/decision_phase_tests.rs",
+      "archive": "raw/phase/before/source/src/game/combat/decision_phase_tests.rs.gz",
+      "bytes": 6400,
+      "sha256": "faa823432c8ca786c49469fba849cf96828cfa73a2eab6af12f0853177744c82",
+      "stored_bytes": 2014,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before/source/src/game/combat.rs",
+      "archive": "raw/phase/before/source/src/game/combat.rs.gz",
+      "bytes": 272667,
+      "sha256": "e9c729eac0f78659f3322d63cd6be97ca129939b28ba9dd0d110890b3b01bd83",
+      "stored_bytes": 45936,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before/source/src/game/progression.rs",
+      "archive": "raw/phase/before/source/src/game/progression.rs.gz",
+      "bytes": 127218,
+      "sha256": "9601f87274f3d0ae59e9a52a4e08a80ba6f7235fb064b239d8838c07cd59ef4d",
+      "stored_bytes": 22236,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-capacity/focused.log",
+      "archive": "raw/phase/before-capacity/focused.log.gz",
+      "bytes": 1813,
+      "sha256": "bf4794feb8f4fcf7c92177d52050a741f1a53eaba68366a7e44db98fb23adb08",
+      "stored_bytes": 824,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-capacity/inputs-after.json",
+      "archive": "raw/phase/before-capacity/inputs-after.json.gz",
+      "bytes": 41967,
+      "sha256": "89682294deb4eda64ee7828adb54c2843b03dd264179b3e69fadbaf36315c8b0",
+      "stored_bytes": 19554,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-capacity/inputs.json",
+      "archive": "raw/phase/before-capacity/inputs.json.gz",
+      "bytes": 41967,
+      "sha256": "89682294deb4eda64ee7828adb54c2843b03dd264179b3e69fadbaf36315c8b0",
+      "stored_bytes": 19554,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-capacity/manager.log",
+      "archive": "raw/phase/before-capacity/manager.log.gz",
+      "bytes": 825,
+      "sha256": "4923016fb70a8cb6423dba3a91f1f53518e90cc5cac7557143d8ae9393c8801b",
+      "stored_bytes": 369,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-capacity/result.json",
+      "archive": "raw/phase/before-capacity/result.json.gz",
+      "bytes": 906,
+      "sha256": "efc6c2a1d0ae380744cd79bbff41918dcf02475fb828b4cb78fd036108071b42",
+      "stored_bytes": 384,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-capacity/run.py",
+      "archive": "raw/phase/before-capacity/run.py.gz",
+      "bytes": 1945,
+      "sha256": "e80a30de3fde49087679d32a8cdbd85357c7a41432a67ac70aef8cb0e63db715",
+      "stored_bytes": 938,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-capacity/source/src/game/combat/decision_phase_tests.rs",
+      "archive": "raw/phase/before-capacity/source/src/game/combat/decision_phase_tests.rs.gz",
+      "bytes": 16788,
+      "sha256": "0b21a8ec5a9ff7f232bd3989ba4d9ecdda3f2f2e81ab426575b5106d4426f0a1",
+      "stored_bytes": 3926,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-capacity/source/src/game/combat.rs",
+      "archive": "raw/phase/before-capacity/source/src/game/combat.rs.gz",
+      "bytes": 272667,
+      "sha256": "e9c729eac0f78659f3322d63cd6be97ca129939b28ba9dd0d110890b3b01bd83",
+      "stored_bytes": 45936,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-capacity/source/src/game/hero.rs",
+      "archive": "raw/phase/before-capacity/source/src/game/hero.rs.gz",
+      "bytes": 47200,
+      "sha256": "c3b0741cf6a292fd54104505e58dda98354c43c14b406572f7017e9c0aa122d7",
+      "stored_bytes": 9894,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-capacity/source/src/game/market.rs",
+      "archive": "raw/phase/before-capacity/source/src/game/market.rs.gz",
+      "bytes": 127705,
+      "sha256": "fde304069fea365abdf8848eab690d69c4e2f44f8b9b010cb272d7bec7035578",
+      "stored_bytes": 24812,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-capacity/source/src/game/progression.rs",
+      "archive": "raw/phase/before-capacity/source/src/game/progression.rs.gz",
+      "bytes": 127708,
+      "sha256": "f3aacdee022fdf13eff5e16abac6c2b00ccb0cac25540ebd42fee61d90e37006",
+      "stored_bytes": 22330,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-capacity/source/src/game/trial.rs",
+      "archive": "raw/phase/before-capacity/source/src/game/trial.rs.gz",
+      "bytes": 44571,
+      "sha256": "53438646cd1343c297f9e75a5c3fd95b774c5910d0bb54082ada4be5b2a326d7",
+      "stored_bytes": 8650,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r2/focused.log",
+      "archive": "raw/phase/before-r2/focused.log.gz",
+      "bytes": 1874,
+      "sha256": "36aaac3c7d82030371aeef4c60bf02b70eb4c91f490dced31a1f1fd5cb5b5f5c",
+      "stored_bytes": 944,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r2/inputs-after.json",
+      "archive": "raw/phase/before-r2/inputs-after.json.gz",
+      "bytes": 41967,
+      "sha256": "1bcb74ca12dde9987bd147e7f0b5b1c575e9ab44874238c3a57dc3c7ac941b41",
+      "stored_bytes": 19552,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r2/inputs.json",
+      "archive": "raw/phase/before-r2/inputs.json.gz",
+      "bytes": 41967,
+      "sha256": "1bcb74ca12dde9987bd147e7f0b5b1c575e9ab44874238c3a57dc3c7ac941b41",
+      "stored_bytes": 19552,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r2/manager.log",
+      "archive": "raw/phase/before-r2/manager.log.gz",
+      "bytes": 777,
+      "sha256": "13dae6b64ce16b332e74873575fcc7dcb2a61d9f89f605556fcb5c2e2ec9beba",
+      "stored_bytes": 350,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r2/result.json",
+      "archive": "raw/phase/before-r2/result.json.gz",
+      "bytes": 858,
+      "sha256": "a8615df2c8c83970a4c0d9c4c558a983f0901bb606c145c17e1e4c19552ba6db",
+      "stored_bytes": 364,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r2/run.py",
+      "archive": "raw/phase/before-r2/run.py.gz",
+      "bytes": 1845,
+      "sha256": "573f19eae9d347c5bbbab506153cc78ecdaf5aad0528d54b9eefca0cf49fd18b",
+      "stored_bytes": 903,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r2/source/src/game/combat/decision_phase_tests.rs",
+      "archive": "raw/phase/before-r2/source/src/game/combat/decision_phase_tests.rs.gz",
+      "bytes": 6501,
+      "sha256": "d73be9c6f009f89dcfa1f3fe67eae4f17315b1ca2f17f428125302cd1e657830",
+      "stored_bytes": 2029,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r2/source/src/game/combat.rs",
+      "archive": "raw/phase/before-r2/source/src/game/combat.rs.gz",
+      "bytes": 272667,
+      "sha256": "e9c729eac0f78659f3322d63cd6be97ca129939b28ba9dd0d110890b3b01bd83",
+      "stored_bytes": 45936,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r2/source/src/game/progression.rs",
+      "archive": "raw/phase/before-r2/source/src/game/progression.rs.gz",
+      "bytes": 127218,
+      "sha256": "9601f87274f3d0ae59e9a52a4e08a80ba6f7235fb064b239d8838c07cd59ef4d",
+      "stored_bytes": 22236,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r3/focused.log",
+      "archive": "raw/phase/before-r3/focused.log.gz",
+      "bytes": 1000,
+      "sha256": "c56e903bdbf71789f77192cc0d1c1b6460579ca6b0e1a618db409fdcf1ef4ac2",
+      "stored_bytes": 642,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r3/inputs-after.json",
+      "archive": "raw/phase/before-r3/inputs-after.json.gz",
+      "bytes": 41967,
+      "sha256": "8e8d1d712926f294329f506a2d65a1875831550f8a9cb9eb5beb97a8594c63fa",
+      "stored_bytes": 19552,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r3/inputs.json",
+      "archive": "raw/phase/before-r3/inputs.json.gz",
+      "bytes": 41967,
+      "sha256": "8e8d1d712926f294329f506a2d65a1875831550f8a9cb9eb5beb97a8594c63fa",
+      "stored_bytes": 19552,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r3/manager.log",
+      "archive": "raw/phase/before-r3/manager.log.gz",
+      "bytes": 774,
+      "sha256": "984f76d2ee51a17b3efe39feadfe01fa32e3b1ff51d3efebbd26fdec298cb8ca",
+      "stored_bytes": 348,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r3/result.json",
+      "archive": "raw/phase/before-r3/result.json.gz",
+      "bytes": 855,
+      "sha256": "d539d0079bb70d287a1e1e1c8e295676c13784c538c38fb5f2e10e1bbba53ba1",
+      "stored_bytes": 362,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r3/run.py",
+      "archive": "raw/phase/before-r3/run.py.gz",
+      "bytes": 1845,
+      "sha256": "ef68e78ec58830f0e363e14a988102fae8ca61622578bc6b6d54d6d4147682f8",
+      "stored_bytes": 903,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r3/source/src/game/combat/decision_phase_tests.rs",
+      "archive": "raw/phase/before-r3/source/src/game/combat/decision_phase_tests.rs.gz",
+      "bytes": 6949,
+      "sha256": "03bf7b108a77d2dbbd9b8b8c0d8f3385c4452472784d05ad2cbc2f59397ac03f",
+      "stored_bytes": 2154,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r3/source/src/game/combat.rs",
+      "archive": "raw/phase/before-r3/source/src/game/combat.rs.gz",
+      "bytes": 272667,
+      "sha256": "e9c729eac0f78659f3322d63cd6be97ca129939b28ba9dd0d110890b3b01bd83",
+      "stored_bytes": 45936,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/decision-phase-2026-11-07/before-r3/source/src/game/progression.rs",
+      "archive": "raw/phase/before-r3/source/src/game/progression.rs.gz",
+      "bytes": 127218,
+      "sha256": "9601f87274f3d0ae59e9a52a4e08a80ba6f7235fb064b239d8838c07cd59ef4d",
+      "stored_bytes": 22236,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/HEAD.txt",
+      "archive": "raw/picker/HEAD.txt.gz",
+      "bytes": 41,
+      "sha256": "99ee5ad12e1f0ef8c016fd706241e4ed9e61aac4d5887821572342bd02042ac7",
+      "stored_bytes": 59,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/analyze.py",
+      "archive": "raw/picker/analyze.py.gz",
+      "bytes": 2870,
+      "sha256": "a5ccca3597f7f379cb6ca7a7519264a518b2080fd696d683d35a42e749d58168",
+      "stored_bytes": 1326,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/asset-inputs.json",
+      "archive": "raw/picker/asset-inputs.json.gz",
+      "bytes": 19110,
+      "sha256": "5cdf2fbffeab4177d8266a62c067116491a130089cec6039edd96346d7947b10",
+      "stored_bytes": 9450,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/bin-tests-result.json",
+      "archive": "raw/picker/bin-tests-result.json.gz",
+      "bytes": 164,
+      "sha256": "6d43ed292555af0118d7b033a0a32751f5360341d823909f0020fa08ce8cfad1",
+      "stored_bytes": 141,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/bin-tests.log",
+      "archive": "raw/picker/bin-tests.log.gz",
+      "bytes": 997,
+      "sha256": "710a5457e932e6b2b72878a7f5323980b8f71b6326aa41cbd91c07571f6731df",
+      "stored_bytes": 541,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/binary.sha256",
+      "archive": "raw/picker/binary.sha256.gz",
+      "bytes": 64,
+      "sha256": "2734046c49795560b1990e361562ff9cdc7f3c866db75f1c511a311cd041e709",
+      "stored_bytes": 69,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/build-result.json",
+      "archive": "raw/picker/build-result.json.gz",
+      "bytes": 166,
+      "sha256": "f0c59dab934a135b681ed44e71c4d55a9ecf533d3c46bf9324beba76e89fb2ea",
+      "stored_bytes": 143,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/build.log",
+      "archive": "raw/picker/build.log.gz",
+      "bytes": 278,
+      "sha256": "263a5aee5c5f6294f3fd221be1276310f27bdb4115cfdf7dad38af277fb4e472",
+      "stored_bytes": 189,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/clippy-result.json",
+      "archive": "raw/picker/clippy-result.json.gz",
+      "bytes": 183,
+      "sha256": "209403f88671cfd18f1f594f672d4939cd9f72d916b4b61c31e3b9d4005134d2",
+      "stored_bytes": 150,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/clippy.log",
+      "archive": "raw/picker/clippy.log.gz",
+      "bytes": 278,
+      "sha256": "e629d9ab0ac96b6c71e244513ee9343213f8516581e315b38bd77c26bf4367af",
+      "stored_bytes": 186,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/compare-decision-after-r3-independent.py",
+      "archive": "raw/picker/compare-decision-after-r3-independent.py.gz",
+      "bytes": 2641,
+      "sha256": "817bcabce9a6168b9884247e06d9e9eed6063ea9019bd245b5406c6e91614a53",
+      "stored_bytes": 1295,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/compare-independent.py",
+      "archive": "raw/picker/compare-independent.py.gz",
+      "bytes": 3252,
+      "sha256": "e73ec9a3acf878163ae6203b1977649d866b83cea49c1f7be1b3c8453ce1566e",
+      "stored_bytes": 1316,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/compare-phase-after-r2-independent.py",
+      "archive": "raw/picker/compare-phase-after-r2-independent.py.gz",
+      "bytes": 2646,
+      "sha256": "17a3e0d33d3482c95ee9d0aa969bd52832b8faf7d2924b0120e10931a5ad0da6",
+      "stored_bytes": 1290,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/compare-phase-after-r3-independent.py",
+      "archive": "raw/picker/compare-phase-after-r3-independent.py.gz",
+      "bytes": 2646,
+      "sha256": "08cb72948c733cee03b9f2d74e6154114880f8a826ea03f8e0c998941badda34",
+      "stored_bytes": 1291,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/compare-r2-independent.py",
+      "archive": "raw/picker/compare-r2-independent.py.gz",
+      "bytes": 2596,
+      "sha256": "72d1a992eaa36f8238719217a02d79dd32cf129851ce1f4777cf8aeb6d4222c2",
+      "stored_bytes": 1279,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/comparison.json",
+      "archive": "raw/picker/comparison.json.gz",
+      "bytes": 14745,
+      "sha256": "a796d214ec29f77bba2412f6ab15e184fae4a55f175141d90ae5122b8c6f851a",
+      "stored_bytes": 2379,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/contact-field-differences.json",
+      "archive": "raw/picker/contact-field-differences.json.gz",
+      "bytes": 4600,
+      "sha256": "073738f8de9f86bbe38e580a790f2fa904945c1610b97d5672fad897809bc504",
+      "stored_bytes": 1006,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/decision-phase-after-r2-context.json",
+      "archive": "raw/picker/decision-phase-after-r2-context.json.gz",
+      "bytes": 18477,
+      "sha256": "580a2e075ea0df2aaa3eaf1efb964eff337ac7810614bf89e726c763a633570a",
+      "stored_bytes": 1630,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/decision-phase-after-r2-independent-comparison.json",
+      "archive": "raw/picker/decision-phase-after-r2-independent-comparison.json.gz",
+      "bytes": 35437190,
+      "sha256": "1549ccafbb0e1b479af1c7473cfaa4d2f95a57c6995c4a0c15ecdfed85f08c7a",
+      "stored_bytes": 3240924,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/decision-phase-after-r3-independent-comparison.json",
+      "archive": "raw/picker/decision-phase-after-r3-independent-comparison.json.gz",
+      "bytes": 33817126,
+      "sha256": "f9c803fa6101e4ec4d7a0e965ba6522da360418586fb4c3dc3be54631dce9851",
+      "stored_bytes": 3131293,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/focused-picker-rows.json",
+      "archive": "raw/picker/focused-picker-rows.json.gz",
+      "bytes": 5694,
+      "sha256": "01e49088956e0fcc7eaeb0e153c385ea4c9d5a426d8c12143ec3fb532adb2ad3",
+      "stored_bytes": 457,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/focused-result.json",
+      "archive": "raw/picker/focused-result.json.gz",
+      "bytes": 199,
+      "sha256": "e26550ce46a81b99a113988e9d477c6d24b3330f0a40f5b029e7e94d2e180411",
+      "stored_bytes": 157,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/focused.log",
+      "archive": "raw/picker/focused.log.gz",
+      "bytes": 5343,
+      "sha256": "a4149950faa5bcdafa3d0cefaf4b2350bd242f8415118526ff7529f77c34d988",
+      "stored_bytes": 972,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/src/game/campaign_progress.rs",
+      "archive": "raw/picker/frozen/src/game/campaign_progress.rs.gz",
+      "bytes": 22813,
+      "sha256": "6cd722aa53e900dd0d447c47f2b3cab56b7fc98f81da5298d91287e668a2cc73",
+      "stored_bytes": 5934,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r2-a/active-h1-behind-s1-c0-t0-state/campaign.txt",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r2-a/active-h1-behind-s1-c0-t0-state/campaign.txt.gz",
+      "bytes": 53,
+      "sha256": "f10a4756e217b4359e30be75cc0ee02583ca6433349b0207d270fa51b03aae2e",
+      "stored_bytes": 61,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r2-a/active-h1-behind-s1-c0-t0.jsonl",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r2-a/active-h1-behind-s1-c0-t0.jsonl.gz",
+      "bytes": 131964,
+      "sha256": "98a20edd170fcb4c132e31f30ec705de7ff8688f038435299801b02ab24d4e95",
+      "stored_bytes": 11212,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r2-a/active-h1-behind-s1-c0-t0.stderr",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r2-a/active-h1-behind-s1-c0-t0.stderr.gz",
+      "bytes": 14111512,
+      "sha256": "79294be2051e97d065bd6d56b6e0082315ade1dab5be83e8d03f43bebc07cb56",
+      "stored_bytes": 1248923,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r2-a/summary.json",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r2-a/summary.json.gz",
+      "bytes": 3936,
+      "sha256": "88e3b1949d6ab14355a897be63c59518320a2427f09f26e1c76eb043b41f526a",
+      "stored_bytes": 1227,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r2-b/active-h1-behind-s1-c0-t0-state/campaign.txt",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r2-b/active-h1-behind-s1-c0-t0-state/campaign.txt.gz",
+      "bytes": 53,
+      "sha256": "f10a4756e217b4359e30be75cc0ee02583ca6433349b0207d270fa51b03aae2e",
+      "stored_bytes": 61,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r2-b/active-h1-behind-s1-c0-t0.jsonl",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r2-b/active-h1-behind-s1-c0-t0.jsonl.gz",
+      "bytes": 132264,
+      "sha256": "763c66741bd117f21c715bbd2ef36157ef4f82e126dde3deb09d87b5f644c5ab",
+      "stored_bytes": 11250,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r2-b/active-h1-behind-s1-c0-t0.stderr",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r2-b/active-h1-behind-s1-c0-t0.stderr.gz",
+      "bytes": 14750127,
+      "sha256": "4733a6a56e1888fb76cd69135389e90d88a51090000939126360a0a0fe7884ea",
+      "stored_bytes": 1315785,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r2-b/summary.json",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r2-b/summary.json.gz",
+      "bytes": 3932,
+      "sha256": "086d76acc30cc9243aef18ed578a3e04bf0261bf2457950702d94f6bb7aa9fe6",
+      "stored_bytes": 1233,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r3-a/active-h1-behind-s1-c0-t0-state/campaign.txt",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r3-a/active-h1-behind-s1-c0-t0-state/campaign.txt.gz",
+      "bytes": 53,
+      "sha256": "f10a4756e217b4359e30be75cc0ee02583ca6433349b0207d270fa51b03aae2e",
+      "stored_bytes": 61,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r3-a/active-h1-behind-s1-c0-t0.jsonl",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r3-a/active-h1-behind-s1-c0-t0.jsonl.gz",
+      "bytes": 133401,
+      "sha256": "a3bb79a0c598b24c5f359302d03e756761c896c1e732ccbec0c3192a3956dc4b",
+      "stored_bytes": 11222,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r3-a/active-h1-behind-s1-c0-t0.stderr",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r3-a/active-h1-behind-s1-c0-t0.stderr.gz",
+      "bytes": 14103965,
+      "sha256": "646ba7ac52ea91254bb8f651801d9f6aba0388c03ceadc9ab6d56654425334b4",
+      "stored_bytes": 1258056,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r3-a/summary.json",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r3-a/summary.json.gz",
+      "bytes": 3929,
+      "sha256": "c6bff813820bb0b7dbeb0ddd755b5727e9fb9abce305c4985455eb84377b1157",
+      "stored_bytes": 1225,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r3-b/active-h1-behind-s1-c0-t0-state/campaign.txt",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r3-b/active-h1-behind-s1-c0-t0-state/campaign.txt.gz",
+      "bytes": 53,
+      "sha256": "f10a4756e217b4359e30be75cc0ee02583ca6433349b0207d270fa51b03aae2e",
+      "stored_bytes": 61,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r3-b/active-h1-behind-s1-c0-t0.jsonl",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r3-b/active-h1-behind-s1-c0-t0.jsonl.gz",
+      "bytes": 133244,
+      "sha256": "c1d474e4023665f58f5ea5b106e78c7fb718fe8ad4231e70e0d5f517bf6fdc14",
+      "stored_bytes": 11334,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r3-b/active-h1-behind-s1-c0-t0.stderr",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r3-b/active-h1-behind-s1-c0-t0.stderr.gz",
+      "bytes": 14100091,
+      "sha256": "4224e80b0824aeccdd93135adabee3e8636da48a16b2fb9a27725315ca5c08f1",
+      "stored_bytes": 1260903,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/decision-phase-after-r3-b/summary.json",
+      "archive": "raw/picker/frozen/target/verification/decision-phase-after-r3-b/summary.json.gz",
+      "bytes": 3935,
+      "sha256": "d4e94efdbaa6436e1c530a95b682ef20b6fc06daf70277d88397bd55aa0aacc1",
+      "stored_bytes": 1224,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/picker-trace-a/active-h1-behind-s1-c0-t0-state/campaign.txt",
+      "archive": "raw/picker/frozen/target/verification/picker-trace-a/active-h1-behind-s1-c0-t0-state/campaign.txt.gz",
+      "bytes": 53,
+      "sha256": "f10a4756e217b4359e30be75cc0ee02583ca6433349b0207d270fa51b03aae2e",
+      "stored_bytes": 61,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/picker-trace-a/active-h1-behind-s1-c0-t0.jsonl",
+      "archive": "raw/picker/frozen/target/verification/picker-trace-a/active-h1-behind-s1-c0-t0.jsonl.gz",
+      "bytes": 132378,
+      "sha256": "e5f476ccec8e367f20d2c08d7a47fea3b592e41af9ce4ebbe790f67e78eba54e",
+      "stored_bytes": 11102,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/picker-trace-a/active-h1-behind-s1-c0-t0.stderr",
+      "archive": "raw/picker/frozen/target/verification/picker-trace-a/active-h1-behind-s1-c0-t0.stderr.gz",
+      "bytes": 526,
+      "sha256": "da715f28549611f8920f9f9115e5f6d9cba2aeb5de28289b15de01ed05455135",
+      "stored_bytes": 373,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/picker-trace-a/summary.json",
+      "archive": "raw/picker/frozen/target/verification/picker-trace-a/summary.json.gz",
+      "bytes": 3884,
+      "sha256": "32528f2af60a7c720226a9f19c9cbb7a92f5cc3462bc4f017b02fb336088f217",
+      "stored_bytes": 1203,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/picker-trace-r2-a/active-h1-behind-s1-c0-t0-state/campaign.txt",
+      "archive": "raw/picker/frozen/target/verification/picker-trace-r2-a/active-h1-behind-s1-c0-t0-state/campaign.txt.gz",
+      "bytes": 53,
+      "sha256": "f10a4756e217b4359e30be75cc0ee02583ca6433349b0207d270fa51b03aae2e",
+      "stored_bytes": 61,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/picker-trace-r2-a/active-h1-behind-s1-c0-t0.jsonl",
+      "archive": "raw/picker/frozen/target/verification/picker-trace-r2-a/active-h1-behind-s1-c0-t0.jsonl.gz",
+      "bytes": 132378,
+      "sha256": "e3507be8b91d29d965813e3c29e27e07c5efeef45ef1509b2abff01340aad7af",
+      "stored_bytes": 11091,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/picker-trace-r2-a/active-h1-behind-s1-c0-t0.stderr",
+      "archive": "raw/picker/frozen/target/verification/picker-trace-r2-a/active-h1-behind-s1-c0-t0.stderr.gz",
+      "bytes": 13015585,
+      "sha256": "0f2ea515f524f3568a24dfd36eb162f4ecb6db0407b4989bbe84fe9d5a008f78",
+      "stored_bytes": 1184704,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/picker-trace-r2-a/summary.json",
+      "archive": "raw/picker/frozen/target/verification/picker-trace-r2-a/summary.json.gz",
+      "bytes": 3893,
+      "sha256": "22e0b4869cfed7fb19d4ab6ad608db38c3728c2cef776d3fcce1b6b297b3e20e",
+      "stored_bytes": 1204,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/picker-trace-r2-b/active-h1-behind-s1-c0-t0-state/campaign.txt",
+      "archive": "raw/picker/frozen/target/verification/picker-trace-r2-b/active-h1-behind-s1-c0-t0-state/campaign.txt.gz",
+      "bytes": 53,
+      "sha256": "f10a4756e217b4359e30be75cc0ee02583ca6433349b0207d270fa51b03aae2e",
+      "stored_bytes": 61,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/picker-trace-r2-b/active-h1-behind-s1-c0-t0.jsonl",
+      "archive": "raw/picker/frozen/target/verification/picker-trace-r2-b/active-h1-behind-s1-c0-t0.jsonl.gz",
+      "bytes": 132376,
+      "sha256": "99ec6df6533c7fed30e95391104f24e36ab0e224824334f4d7aba7b2613a454c",
+      "stored_bytes": 11101,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/picker-trace-r2-b/active-h1-behind-s1-c0-t0.stderr",
+      "archive": "raw/picker/frozen/target/verification/picker-trace-r2-b/active-h1-behind-s1-c0-t0.stderr.gz",
+      "bytes": 13016850,
+      "sha256": "235cc28a8275548e4ba41017b03749e218c49520b66e8ef7d49af047e8dac6f9",
+      "stored_bytes": 1185713,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/target/verification/picker-trace-r2-b/summary.json",
+      "archive": "raw/picker/frozen/target/verification/picker-trace-r2-b/summary.json.gz",
+      "bytes": 3893,
+      "sha256": "621cb03610ee1cc09ffaee8f3753608e2ce9057f2407fea2e2d470593c54d99c",
+      "stored_bytes": 1205,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/frozen/tools/run_balance_matrix.py",
+      "archive": "raw/picker/frozen/tools/run_balance_matrix.py.gz",
+      "bytes": 10753,
+      "sha256": "50eff0681feb775984932ec4d9876a5ec1f4b67a9678a3fe73c0b71b23027d9a",
+      "stored_bytes": 3645,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/inputs-after-build.json",
+      "archive": "raw/picker/inputs-after-build.json.gz",
+      "bytes": 41854,
+      "sha256": "581a0ecc765ef62f3931bff5f7c25a9d8c6d2788677e7253c31424de9aee9f36",
+      "stored_bytes": 19501,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/inputs-final.json",
+      "archive": "raw/picker/inputs-final.json.gz",
+      "bytes": 41855,
+      "sha256": "e0c4efb913ab6775710529042554360c1000815c779c2848296cc3a28e494d0d",
+      "stored_bytes": 19502,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/inputs.json",
+      "archive": "raw/picker/inputs.json.gz",
+      "bytes": 41854,
+      "sha256": "581a0ecc765ef62f3931bff5f7c25a9d8c6d2788677e7253c31424de9aee9f36",
+      "stored_bytes": 19501,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/library-tests-result.json",
+      "archive": "raw/picker/library-tests-result.json.gz",
+      "bytes": 149,
+      "sha256": "5f8adf57d3afbb810564da501ba86ea3990dd33408bf38e431106f6788f8de8a",
+      "stored_bytes": 132,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/library-tests.log",
+      "archive": "raw/picker/library-tests.log.gz",
+      "bytes": 77835,
+      "sha256": "65157d4e0191189c42c53db1d03d535307ff047bc2067573d2c20d9d131ab9f9",
+      "stored_bytes": 20177,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/manager.log",
+      "archive": "raw/picker/manager.log.gz",
+      "bytes": 528,
+      "sha256": "c6a3bff84ce85e4996434833ad6b473079b16a151f246f5248c7c22e5679bfba",
+      "stored_bytes": 326,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/r2/diagnostic-env.json",
+      "archive": "raw/picker/r2/diagnostic-env.json.gz",
+      "bytes": 264,
+      "sha256": "2c76211cf889bed0fd7748d8773e715219d17b160a764cc763e4dab7579c2b37",
+      "stored_bytes": 230,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/r2/inputs-after-runs.json",
+      "archive": "raw/picker/r2/inputs-after-runs.json.gz",
+      "bytes": 41854,
+      "sha256": "581a0ecc765ef62f3931bff5f7c25a9d8c6d2788677e7253c31424de9aee9f36",
+      "stored_bytes": 19501,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/r2/inputs.json",
+      "archive": "raw/picker/r2/inputs.json.gz",
+      "bytes": 41854,
+      "sha256": "581a0ecc765ef62f3931bff5f7c25a9d8c6d2788677e7253c31424de9aee9f36",
+      "stored_bytes": 19501,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/r2/manager.log",
+      "archive": "raw/picker/r2/manager.log.gz",
+      "bytes": 73,
+      "sha256": "8ddbb28031bbe84673fa6501a6c88d4a983b8b7313c68a42a2325508987de606",
+      "stored_bytes": 70,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/r2/observed-counts.json",
+      "archive": "raw/picker/r2/observed-counts.json.gz",
+      "bytes": 140,
+      "sha256": "8405d46f9a9ce767cbce24e719d733f052ca569a70b8e936235a3bf86eb43a2a",
+      "stored_bytes": 76,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/r2/replay-a-result.json",
+      "archive": "raw/picker/r2/replay-a-result.json.gz",
+      "bytes": 650,
+      "sha256": "4641800529de9d2091cf0fc04f84acbd4e1772a4f48b86f163c9beb2fe090eb8",
+      "stored_bytes": 336,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/r2/replay-a.log",
+      "archive": "raw/picker/r2/replay-a.log.gz",
+      "bytes": 1953,
+      "sha256": "e699130f9d0d930666c857060012bbfbbd7f404e3eb61ec2a3cb60f43815ca87",
+      "stored_bytes": 913,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/r2/replay-b-result.json",
+      "archive": "raw/picker/r2/replay-b-result.json.gz",
+      "bytes": 650,
+      "sha256": "74de2e2bf8b19461fb2045c3985436463981fb30e01ba6d90ff5102648a9960e",
+      "stored_bytes": 336,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/r2/replay-b.log",
+      "archive": "raw/picker/r2/replay-b.log.gz",
+      "bytes": 1953,
+      "sha256": "2d7be8c8d74316b6c791c036bff72861e987f072525565160af5eeae6b598205",
+      "stored_bytes": 913,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/r2/run.py",
+      "archive": "raw/picker/r2/run.py.gz",
+      "bytes": 2641,
+      "sha256": "c48503fd14d90268bff5b61c29a72f88b7e503cef8a348e9b40fe870ca28f537",
+      "stored_bytes": 1246,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/r2/unit-state.json",
+      "archive": "raw/picker/r2/unit-state.json.gz",
+      "bytes": 293,
+      "sha256": "3db698773d4f25ae599aa6ffe875f04cf968978642f6198d120a7f33fd925876",
+      "stored_bytes": 230,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/r2-contact-difference-context.json",
+      "archive": "raw/picker/r2-contact-difference-context.json.gz",
+      "bytes": 5520,
+      "sha256": "4026f63d005763f90f7d26e05119823fc0f9db9e10834b1e7a66d485b1552e62",
+      "stored_bytes": 1021,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/r2-independent-comparison.json",
+      "archive": "raw/picker/r2-independent-comparison.json.gz",
+      "bytes": 16874188,
+      "sha256": "a9b9d4bef1d0375ffcb4e1f3732bcaa7b438dd04a8ca954d7f6eaa93cdeb1bca",
+      "stored_bytes": 1021660,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/replay-a-result.json",
+      "archive": "raw/picker/replay-a-result.json.gz",
+      "bytes": 646,
+      "sha256": "202a32f07ef17de26472e294bde19ec2e94449e6edc177a31fd5638135451ca8",
+      "stored_bytes": 334,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/replay-a.log",
+      "archive": "raw/picker/replay-a.log.gz",
+      "bytes": 1947,
+      "sha256": "955aee9eb1106b9263a7738e93fb033f3654efaa67cc6f6abe8d3d83fc8ed24e",
+      "stored_bytes": 913,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/run.py",
+      "archive": "raw/picker/run.py.gz",
+      "bytes": 4000,
+      "sha256": "5ab142302d6dd42e52656fbf70d2dfadcc3aa37dd776b35b6f6fae9258238143",
+      "stored_bytes": 1608,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/source/src/bin/balance_sim.rs",
+      "archive": "raw/picker/source/src/bin/balance_sim.rs.gz",
+      "bytes": 35981,
+      "sha256": "6b89d59516ec4f11bee360fd5c043586e9bf306cd41898f4e31d913659bf9028",
+      "stored_bytes": 8730,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/source/src/game/combat/picker_rng_order_tests.rs",
+      "archive": "raw/picker/source/src/game/combat/picker_rng_order_tests.rs.gz",
+      "bytes": 4292,
+      "sha256": "7269bc34dcdd6788e643b8f4332a02a88c89c96b894ee66b37e247dde7d9a85d",
+      "stored_bytes": 1324,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/source/src/game/combat.rs",
+      "archive": "raw/picker/source/src/game/combat.rs.gz",
+      "bytes": 272619,
+      "sha256": "a266e51a2b374fd57740022bb80eb9c83d430eec936d22889165915e983a121a",
+      "stored_bytes": 45924,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/source/src/game/progression.rs",
+      "archive": "raw/picker/source/src/game/progression.rs.gz",
+      "bytes": 127218,
+      "sha256": "9601f87274f3d0ae59e9a52a4e08a80ba6f7235fb064b239d8838c07cd59ef4d",
+      "stored_bytes": 22236,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/source/src/game/resources.rs",
+      "archive": "raw/picker/source/src/game/resources.rs.gz",
+      "bytes": 31125,
+      "sha256": "b734a0a56362064926f8f28efcffee78cc86f57e0b29e191e15ebfa8d46ca992",
+      "stored_bytes": 7618,
+      "compressed": true
+    },
+    {
+      "source": "target/verification/picker-order-2026-11-07/unit-state.json",
+      "archive": "raw/picker/unit-state.json.gz",
+      "bytes": 333,
+      "sha256": "262fc2855a32c5005099f14e3ddd3db0256023f2533f5b0552616a089e920247",
+      "stored_bytes": 240,
+      "compressed": true
+    }
+  ]
+}
