@@ -1,0 +1,34 @@
+{
+  "raw/tests/run-tests.py.gz": {
+    "bytes": 828,
+    "sha256": "ad5fa02ad2150c166758f70dc160026bd5eb1cb27feff7aa4508fd15ebbcf55e"
+  },
+  "raw/tests/tests.log.gz": {
+    "bytes": 223,
+    "sha256": "c38e820b77996a109e146ebfc69faa04488ba3b317c597c4e33690f6b32cbce0"
+  },
+  "raw/tests/tests-result.json.gz": {
+    "bytes": 659,
+    "sha256": "c6334ed6f6ed4e1f1d73da170f285890808c9cf2f32dd922d52f0926d2b71ef2"
+  },
+  "raw/natural-r5/forge.log.gz": {
+    "bytes": 1571,
+    "sha256": "efa780ac583096fa813130864bd065066d5891a8eb877cb40e8d1ec6872d88be"
+  },
+  "raw/natural-r5/forge-process.json.gz": {
+    "bytes": 1015,
+    "sha256": "5af3bfcb98a625cc00cda89ce5eb1d63b55f283c6586826ddc860a3a0be1e0bb"
+  },
+  "raw/natural-r5/forge/result.json.gz": {
+    "bytes": 73688,
+    "sha256": "099e89acfe04705a450ea5a3304afd6fc497ef24571523c8d107dd2b3cd0256e"
+  },
+  "raw/natural-r5/forge/harness-snapshot.json.gz": {
+    "bytes": 885,
+    "sha256": "f6327450e663f7bb7b0d4da67d3893060fc5b548cf05d11bfdb9bc32b5ce2531"
+  },
+  "raw/natural-r5/forge/initial-save-provenance.json.gz": {
+    "bytes": 200,
+    "sha256": "9b52d5b388564c3dc5466f845ec9ca4bcc7a7617cf4df5f86ad8f329c72fcc1a"
+  }
+}

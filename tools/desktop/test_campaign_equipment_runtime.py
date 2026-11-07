@@ -456,6 +456,21 @@ class EquipmentPolicyParsing(unittest.TestCase):
         self.assertEqual([row.get('clock') for row in records],[None,1167,1167,1166,None])
         self.assertNotIn('input',records[2])
 
+    def test_inventory_opener_reobserves_ambiguous_clock_without_sending_input(self):
+        battle = [('LIVES 2', 23, 87, 70, 98)]
+        inventory = [('EQUIPMENT · 2', 213, 108, 400, 130)]
+        policy, ocr, clock = self.inventory_opener(
+            [battle, battle, inventory], [AssertionError('ambiguous countdown'), 1035])
+        records = []
+        with ocr, clock, patch('campaign_equipment_runtime.time.monotonic', return_value=0), \
+                patch('campaign_equipment_runtime.read_toolbar_speed', return_value=1):
+            result = wait_panel_open(policy.ui['shot'], None, policy.key, 90,
+                                     records, 'test', 'inventory', 2)
+        self.assertEqual(result[1], inventory)
+        self.assertEqual(records[0]['clock_error'], 'ambiguous countdown')
+        self.assertNotIn('input', records[0])
+        policy.key.assert_called_once_with('i')
+
     def test_inventory_opener_unknown_or_deadline_never_sends_input(self):
         for rows in ([('Unknown overlay',200,200,500,230)],
                      [('Settings',300,100,500,130),('LIVES2',23,87,70,98)],

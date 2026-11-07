@@ -1,0 +1,32 @@
+{
+  "base_commit": "d0a10ea79bdfc6a2452cffe8e1ff88d6e88ee447",
+  "sources": {
+    "tools/desktop/test_campaign_equipment_runtime.py": "682c17aabcad46955aa2cfb67947104d3ec72ca148d4ebdf6899e5f0a7aac83a",
+    "tools/desktop/campaign_equipment_runtime.py": "670760a3067ba39278110b48d253ccf2bfad35ca069c6772d2efe6469b6dbe37"
+  },
+  "natural_failed_invocation": "af095923333b4c61a6efb6bee11c4787",
+  "test_invocation": "64c77d7c03354e6e957610f6104d87a9",
+  "image_sha256": "c588497e4cc894a681d2a34389d6a27332e4e42d76f665ff120424b5eccfed0f",
+  "purchases": [
+    {
+      "name": "Arc Lens",
+      "price": 180,
+      "wallet_before": 291,
+      "wallet_after": 111,
+      "offer_ocr": {
+        "name": "Arc Lens",
+        "price": 180,
+        "category": "Equipment",
+        "index": 1,
+        "tile_ocr": "Arc Lens",
+        "price_ocr": "180",
+        "preview_ocr": "ArcLens + Equipment",
+        "observed_name": "ArcLens"
+      }
+    }
+  ],
+  "acquired_materials": [
+    "Arc Lens"
+  ],
+  "sealed": false
+}

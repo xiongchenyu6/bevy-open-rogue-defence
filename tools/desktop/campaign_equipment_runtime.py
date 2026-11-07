@@ -565,7 +565,11 @@ def wait_panel_open(shot, env, send, deadline, records, prefix, target_panel, vi
             record['input'] = '1'
             continue
         assert state == 'battle', f'Unexpected public screen while opening {target_panel}: {rows}'
-        clock = screenshot_battle_seconds(image, env)
+        try:
+            clock = screenshot_battle_seconds(image, env)
+        except AssertionError as error:
+            record['clock_error'] = str(error)
+            continue
         assert read_toolbar_speed(image, env) == 1, 'Panel route requires actual1x'
         record['clock'] = clock
         assert time.monotonic() < deadline, 'Panel open OCR exceeded visit budget'
