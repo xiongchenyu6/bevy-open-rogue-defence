@@ -1,3 +1,6 @@
+#[path = "capture/draft_layout.rs"]
+mod draft_layout;
+
 use std::{collections::BTreeSet, env, fs, path::PathBuf, time::Duration};
 
 use bevy::{

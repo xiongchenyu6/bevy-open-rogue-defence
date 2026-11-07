@@ -1,0 +1,5 @@
+{
+  "actual_failure": "360x800 Chinese shaped heading251x58 versus computed node280x29; width fit but two painted lines only one measured line allocated",
+  "completed": "764libpassed; seven after native240cases completed including360EN",
+  "correction": "reserve a64px minimum two-line heading at contentwidth<420, retaining all painted glyph/Settings disjoint guards"
+}

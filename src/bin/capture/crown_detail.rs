@@ -149,6 +149,9 @@ fn assert_branches(world: &World) {
 
 fn audit_detail(world: &mut World, frame: u32) {
     assert_branches(world);
+    if std::env::var_os("ROGUE_CAPTURE_DRAFT_LAYOUT").is_some() {
+        super::draft_layout::audit(world, frame);
+    }
     assert!(world.resource::<Probe>().purchased);
     let fixed = world.resource::<Probe>().expected_fixed;
     let language = *world.resource::<GameLanguage>();

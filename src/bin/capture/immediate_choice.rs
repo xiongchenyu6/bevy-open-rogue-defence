@@ -253,8 +253,8 @@ fn audit_paid(world: &mut World) {
                 .single(world)
                 .expect("real HUD skill draw button");
             assert!(
-                contains_text(world, draw, "125"),
-                "actual next paid price is125 in the HUD"
+                contains_text(world, draw, "145"),
+                "actual next paid price is145 in the HUD"
             );
             world.resource_mut::<GameSession>().paused = true;
             println!("[capture] paid-chain-stage unaffordable-stop frame={frame}");
@@ -279,7 +279,7 @@ fn audit_paid(world: &mut World) {
         assert_eq!(world.resource::<SkillEconomy>().paid_draws, 3);
         assert!(world.resource::<DraftState>().root.is_none());
         println!(
-            "[capture] PASS immediate-skill-paid: real free1→paid80→95→110, four fresh pointer choices, exact285→0, next125 unaffordable, heldclick no duplicate settlement/debit"
+            "[capture] PASS immediate-skill-paid: real free1→paid80→95→110, four fresh pointer choices, exact285→0, next145 unaffordable, heldclick no duplicate settlement/debit"
         );
     }
 }

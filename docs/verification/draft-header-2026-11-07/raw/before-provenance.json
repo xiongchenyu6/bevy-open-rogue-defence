@@ -1,0 +1,6 @@
+{
+  "commit": "74c280f",
+  "binary": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/skill-damage-modifiers-2026-11-07/capture",
+  "binary_sha256": "1112b5b53b1d810ac0048cea86993204a9b68934c43b797426b0076747a8b6f7",
+  "prior_proof": "docs/verification/skill-damage-modifiers-2026-11-07"
+}

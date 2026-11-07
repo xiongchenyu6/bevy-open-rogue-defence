@@ -1,0 +1,5 @@
+{
+  "actual_failure": "360x800 EN after update100 shaped glyph width283 exceeds heading node280; height58 valid",
+  "completed": "764librarypass; six desktop/portrait/compact aftercases240 completed with globalSettings checks",
+  "correction": "explicit WordOrCharacter wrapping and8px right ink gutter on heading; preserve full glyph fit guard"
+}

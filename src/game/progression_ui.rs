@@ -26,6 +26,8 @@ pub(super) struct BuildContent;
 #[derive(Component)]
 pub(super) struct BuildHeader;
 #[derive(Component)]
+pub(super) struct BuildHeaderActions;
+#[derive(Component)]
 pub(super) struct BuildHeading;
 #[derive(Component)]
 pub(super) struct BuildGallery;
@@ -210,6 +212,7 @@ pub(super) fn spawn_draft_ui(
                 content
                     .spawn((
                         BuildHeader,
+                        Name::new("Draft header"),
                         Node {
                             width: percent(100),
                             align_items: AlignItems::Center,
@@ -221,15 +224,28 @@ pub(super) fn spawn_draft_ui(
                     .with_children(|header| {
                         header.spawn((
                             BuildHeading,
+                            Name::new("Draft heading"),
+                            Node {
+                                min_width: px(0),
+                                padding: UiRect::right(px(8)),
+                                ..default()
+                            },
+                            TextLayout::default().with_linebreak(LineBreak::WordOrCharacter),
                             BuildCopy::Heading(kind),
                             label(heading, 32.0, IVORY),
                         ));
                         header
-                            .spawn(Node {
-                                column_gap: px(8),
-                                flex_shrink: 0.0,
-                                ..default()
-                            })
+                            .spawn((
+                                BuildHeaderActions,
+                                Name::new("Draft actions"),
+                                Node {
+                                    column_gap: px(8),
+                                    row_gap: px(8),
+                                    flex_shrink: 0.0,
+                                    justify_content: JustifyContent::FlexEnd,
+                                    ..default()
+                                },
+                            ))
                             .with_children(|actions| {
                                 crate::game::selection_detail::spawn_toggle(actions);
                                 if refreshable {
@@ -455,184 +471,9 @@ fn action(parent: &mut ChildSpawnerCommands, action: DraftAction, id: &str) {
         });
 }
 
-#[derive(Clone, Copy)]
-struct Layout {
-    width: f32,
-    height: f32,
-    header: f32,
-    footer: f32,
-    gap: f32,
-    card_width: f32,
-    card_height: f32,
-    icon: f32,
-    compact: bool,
-    count: usize,
-}
-fn layout(width: f32, height: f32, count: usize) -> Layout {
-    let compact = height < 540.0;
-    let width =
-        (width - if compact { 40.0 } else { 80.0 }).min(if count > 3 { 1420.0 } else { 1060.0 });
-    let height = (height - if compact { 24.0 } else { 90.0 }).min(720.0);
-    let header = if compact { 48.0 } else { 86.0 };
-    let footer = if compact { 126.0 } else { 210.0 };
-    let gap = if compact { 8.0 } else { 18.0 };
-    let count = count.max(1);
-    let card_width = (width - gap * (count - 1) as f32 - 1.0) / count as f32;
-    let card_height = height - header - footer - gap * 2.0;
-    let icon = (card_width * 0.8)
-        .min(card_height - if compact { 74.0 } else { 112.0 })
-        .clamp(32.0, 290.0);
-    Layout {
-        width,
-        height,
-        header,
-        footer,
-        gap,
-        card_width,
-        card_height,
-        icon,
-        compact,
-        count,
-    }
-}
-
-pub(super) fn update_layout(
-    draft: Res<DraftState>,
-    windows: Query<&Window, With<PrimaryWindow>>,
-    target: Option<Res<CaptureTarget>>,
-    images: Option<Res<Assets<Image>>>,
-    mut nodes: Query<(
-        &mut Node,
-        Has<BuildContent>,
-        Has<BuildHeader>,
-        Has<BuildGallery>,
-        Has<DraftButton>,
-        Has<BuildFooter>,
-        Has<BuildArt>,
-    )>,
-    mut fonts: Query<(
-        &mut TextFont,
-        Has<BuildHeading>,
-        Has<BuildTitle>,
-        Has<BuildDetailTitle>,
-        Has<BuildDetail>,
-        Has<BuildTradeLine>,
-    )>,
-) {
-    if draft.root.is_none() {
-        return;
-    }
-    let size = windows
-        .single()
-        .map(|w| (w.width(), w.height()))
-        .unwrap_or_else(|_| {
-            target
-                .as_ref()
-                .and_then(|t| images.as_ref()?.get(&t.0))
-                .map(|i| (i.width() as f32, i.height() as f32))
-                .unwrap_or((1280.0, 720.0))
-        });
-    let m = layout(size.0, size.1, draft.choices.len());
-    // Encounter cards give the saved icon height to their benefit/cost lines.
-    let icon = if draft.kind == Some(DraftKind::Encounter) {
-        (m.icon * 0.55).max(40.0)
-    } else {
-        m.icon
-    };
-    for (mut node, content, header, gallery, card, footer, art) in &mut nodes {
-        if content {
-            node.reborrow()
-                .map_unchanged(|value| &mut value.width)
-                .set_if_neq(px(m.width));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.height)
-                .set_if_neq(px(m.height));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.row_gap)
-                .set_if_neq(px(m.gap));
-        }
-        if header {
-            node.reborrow()
-                .map_unchanged(|value| &mut value.height)
-                .set_if_neq(px(m.header));
-        }
-        if gallery {
-            node.reborrow()
-                .map_unchanged(|value| &mut value.height)
-                .set_if_neq(px(m.card_height));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.column_gap)
-                .set_if_neq(px(m.gap));
-        }
-        if card {
-            node.reborrow()
-                .map_unchanged(|value| &mut value.width)
-                .set_if_neq(px(m.card_width));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.height)
-                .set_if_neq(px(m.card_height));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.row_gap)
-                .set_if_neq(px(if m.compact { 7 } else { 14 }));
-        }
-        if footer {
-            node.reborrow()
-                .map_unchanged(|value| &mut value.height)
-                .set_if_neq(px(m.footer));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.padding)
-                .set_if_neq(UiRect {
-                    left: px(if m.compact { 12 } else { 20 }),
-                    right: px(if m.compact { 116 } else { 20 }),
-                    top: px(10),
-                    bottom: px(10),
-                });
-        }
-        if art {
-            node.reborrow()
-                .map_unchanged(|value| &mut value.width)
-                .set_if_neq(px(icon));
-            node.reborrow()
-                .map_unchanged(|value| &mut value.height)
-                .set_if_neq(px(icon));
-        }
-    }
-    for (mut font, heading, title, detail_title, detail, trade) in &mut fonts {
-        if heading {
-            font.reborrow()
-                .map_unchanged(|value| &mut value.font_size)
-                .set_if_neq(FontSize::Px(if m.compact { 22.0 } else { 32.0 }));
-        }
-        if title {
-            font.reborrow()
-                .map_unchanged(|value| &mut value.font_size)
-                .set_if_neq(FontSize::Px(if m.compact && m.count > 3 {
-                    11.0
-                } else if m.compact {
-                    16.0
-                } else if m.count > 3 {
-                    17.0
-                } else {
-                    23.0
-                }));
-        }
-        if detail_title {
-            font.reborrow()
-                .map_unchanged(|value| &mut value.font_size)
-                .set_if_neq(FontSize::Px(if m.compact { 16.0 } else { 22.0 }));
-        }
-        if detail {
-            font.reborrow()
-                .map_unchanged(|value| &mut value.font_size)
-                .set_if_neq(FontSize::Px(if m.compact { 11.0 } else { 13.0 }));
-        }
-        if trade {
-            font.reborrow()
-                .map_unchanged(|value| &mut value.font_size)
-                .set_if_neq(FontSize::Px(if m.compact { 10.0 } else { 13.0 }));
-        }
-    }
-}
+#[path = "progression_ui/layout.rs"]
+mod layout;
+pub(super) use layout::update_layout;
 
 fn summary(language: GameLanguage, choice: DraftChoice, build: &PlayerBuild) -> String {
     let (current, gain, cap) = progress(choice, build);
@@ -1177,24 +1018,6 @@ mod tests {
             app.world().get::<Node>(hint).unwrap().display,
             Display::None
         );
-    }
-    #[test]
-    fn build_cards_and_actions_fit_all_supported_landscape_sizes() {
-        for (width, height) in [
-            (1280.0, 720.0),
-            (1760.0, 1350.0),
-            (844.0, 390.0),
-            (667.0, 375.0),
-        ] {
-            for count in [3, 7] {
-                let m = layout(width, height, count);
-                assert!(m.card_width >= 80.0);
-                assert!(m.card_height >= 150.0);
-                assert!(m.icon >= 60.0);
-                assert!(m.card_width * count as f32 + m.gap * (count - 1) as f32 <= m.width);
-                assert!(m.height <= height);
-            }
-        }
     }
 }
 

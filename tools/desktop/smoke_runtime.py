@@ -324,6 +324,32 @@ def main():
         click(win, 230, 340)
         battle_running(win, app, 'initial')
         screenshot(win, 'battle.png')
+        # Exercise the public G route in a real narrow window after the earned
+        # four-second free training grant. Every choice uses normal X11 input.
+        call(['xdotool', 'windowsize', win, '360', '800'])
+        wait(lambda: geometry(win)['WIDTH'] == '360' and geometry(win)['HEIGHT'] == '800', app)
+        time.sleep(2)
+        call(['xdotool', 'key', 'g'])
+        wait_text(win, app, 'Shape your arsenal')
+        screenshot(win, 'public-portrait-skill.png')
+        portrait_skill_hands = 0
+        while find_text(visible_lines(win), 'Shape your arsenal'):
+            assert portrait_skill_hands < 8, 'Public selection chain did not drain'
+            # Actual three-card layout at 360x800. Holding tests the normal
+            # pressed/released path across any automatically queued next hand.
+            call(['xdotool', 'mousemove', '--window', win, '80', '400'])
+            call(['xdotool', 'mousedown', '1'])
+            time.sleep(.3)
+            screenshot(win, f'public-portrait-held-{portrait_skill_hands + 1}.png')
+            call(['xdotool', 'mouseup', '1'])
+            time.sleep(2)
+            portrait_skill_hands += 1
+        assert portrait_skill_hands >= 1
+        screenshot(win, 'public-portrait-after-skill.png')
+        call(['xdotool', 'windowsize', win, '1280', '720'])
+        wait(lambda: geometry(win)['WIDTH'] == '1280' and geometry(win)['HEIGHT'] == '720', app)
+        battle_running(win, app, 'after-public-skill')
+        screenshot(win, 'public-skill-battle-resumed.png')
         # The small launcher caption competes with the rendered battlefield in
         # whole-frame OCR. Use its observed toolbar position, then require the
         # actual large settings-page title below, as on the Chinese quit route.
@@ -366,6 +392,9 @@ def main():
                   'language_saved_and_reloaded': True, 'normal_quit_twice': True,
                   'real_guide_after_readiness': True, 'tutorial_dismissal_saved': True,
                   'restart_skips_automatic_guide_and_runs_battle': True,
+                  'public_portrait_skill_draw': True,
+                  'portrait_skill_click_resumed_battle': True,
+                  'portrait_skill_hands': portrait_skill_hands,
                   'battle_clock_proofs': battle_proofs,
                   'battle_clock_observations': battle_observations,
                   'scope': 'Ubuntu 24.04 / X11 / software Vulkan; no Steam client or hardware performance claim'}

@@ -1,0 +1,8 @@
+{
+  "actual_failure": "844x390 EN after update100 header contains heading/actions failed: heading27px+gap8+actions48 exceeds80px",
+  "completed": "764libpass; all8baselinecases240; afterdesktopEN/ZH andportraitEN/ZH240pass",
+  "separate_review_findings": [
+    "compact footer right116 reserve is for actual Settings entry and must stay",
+    "short portrait800px needs top64px clearance from Settings open at8..52"
+  ]
+}
