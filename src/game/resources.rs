@@ -434,7 +434,7 @@ impl Default for DodgeState {
     }
 }
 
-#[derive(Resource)]
+#[derive(Resource, Clone)]
 pub struct PlayerBuild {
     pub attack_damage: f32,
     pub attacks_per_second: f32,

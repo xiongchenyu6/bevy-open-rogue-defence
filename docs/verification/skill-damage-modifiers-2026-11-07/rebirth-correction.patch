@@ -1,0 +1,65 @@
+--- a/src/game/skills.rs
++++ b/src/game/skills.rs
+@@ -654,7 +654,7 @@
+         vitals.deaths = vitals.deaths.saturating_sub(1);
+     }
+     vitals.alive = true;
+-    vitals.health = vitals.max_health * (0.35 * skill_utility_multiplier(25)).min(0.9);
++    vitals.health = ember_rebirth_health(vitals.max_health);
+     vitals.revive_remaining = 0.0;
+     vitals.invulnerable_remaining = vitals
+         .invulnerable_remaining
+@@ -3089,6 +3089,10 @@
+     .max(1.0)
+         * SKILLS[index].rarity.skill_power_multiplier())
+         * triune_skill_multiplier(index, &runtime.triune)
++}
++
++pub(crate) fn ember_rebirth_health(max_health: f32) -> f32 {
++    max_health * (0.35 * skill_utility_multiplier(25)).min(0.9)
+ }
+ 
+ pub(crate) fn blood_wheel_damage(build: &PlayerBuild) -> f32 {
+--- a/src/game/skill_details.rs
++++ b/src/game/skill_details.rs
+@@ -219,9 +219,14 @@
+     ) -> f32 {
+         let mut candidate = build.clone();
+         candidate.skills[usize::from(skill.0)] = rank;
++        let mut damage_vitals = vitals.clone();
++        if skill.0 == 25 {
++            damage_vitals.alive = true;
++            damage_vitals.health = skills::ember_rebirth_health(vitals.max_health);
++        }
+         base_damage
+             * self.bonds.damage_multiplier(profile)
+-            * market_outgoing_damage_multiplier(self.market, profile, &candidate, vitals)
++            * market_outgoing_damage_multiplier(self.market, profile, &candidate, &damage_vitals)
+             * self.encounters.outgoing_damage_multiplier()
+     }
+ }
+@@ -291,11 +296,19 @@
+             .expect("primary damage preview has an authored skill profile");
+         lines.push(format!(
+             "{}: {adjusted_a:.1} → {adjusted_b:.1}",
+-            language.pick(
+-                "With current bonuses (non-critical)",
+-                "计入当前增伤（非暴击）"
+-            )
+-        ));
++            if i == 25 {
++                language.pick("After rebirth bonuses (non-critical)", "返生后增伤（非暴击）")
++            } else {
++                language.pick("With current bonuses (non-critical)", "计入当前增伤（非暴击）")
++            }
++        ));
++        if i == 25 {
++            lines.push(format!(
++                "{} {:.1}%",
++                language.pick("Health restored before burst", "爆燃前恢复生命"),
++                skills::ember_rebirth_health(100.0)
++            ));
++        }
+         if i == 23 {
+             let profile = DamageProfile::for_skill(23).with_burn();
+             let return_a = damage_context.adjusted_profile(skill, rank, a, profile, build, vitals);

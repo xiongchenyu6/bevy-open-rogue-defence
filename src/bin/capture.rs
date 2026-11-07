@@ -666,7 +666,7 @@ fn main() {
     if scenario.starts_with("crafting-") {
         crafting_capture::install(&mut apps.main);
     }
-    if scenario == "crown-detail" {
+    if matches!(scenario, "crown-detail" | "crown-damage-preview") {
         crown_detail_capture::install(&mut apps.main);
     }
     if scenario.starts_with("equipment-empty") {
@@ -1177,8 +1177,8 @@ fn configure_scenario(world: &mut World, scenario: &str) {
         crafting_capture::configure(world, scenario);
         return;
     }
-    if scenario == "crown-detail" {
-        crown_detail_capture::configure(world);
+    if matches!(scenario, "crown-detail" | "crown-damage-preview") {
+        crown_detail_capture::configure(world, scenario);
         return;
     }
     if scenario.starts_with("equipment-empty") {

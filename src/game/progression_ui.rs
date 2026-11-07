@@ -708,6 +708,11 @@ pub(super) fn update_feedback(
     detail: Option<Res<crate::game::selection_detail::SelectionDetail>>,
     vitals: Option<Res<crate::game::HeroVitals>>,
     runtime: Option<Res<crate::game::skills::SkillRuntime>>,
+    modifiers: (
+        Res<crate::game::bonds::BondRuntime>,
+        Res<crate::game::market::MarketEffects>,
+        Res<crate::game::encounters::EncounterState>,
+    ),
     mut cards: Query<(
         Entity,
         &DraftButton,
@@ -740,6 +745,11 @@ pub(super) fn update_feedback(
     if draft.root.is_none() {
         return;
     }
+    let damage_context = crate::game::skill_details::DamagePreviewContext {
+        bonds: &modifiers.0,
+        market: &modifiers.1,
+        encounters: &modifiers.2,
+    };
     let mut hovered_index = None;
     for (entity, button, interaction, focused, disabled, mut bg, mut border) in &mut cards {
         let selected = preview.root == draft.root && preview.index == Some(button.0);
@@ -879,12 +889,20 @@ pub(super) fn update_feedback(
                 runtime.as_deref(),
             ) {
                 (choice, false, _, _) => short_summary(*language, choice, &build),
-                (DraftChoice::ReplaceSkill { new, .. }, true, Some(vitals), Some(runtime)) => {
+                (DraftChoice::ReplaceSkill { old, new }, true, Some(vitals), Some(runtime)) => {
+                    let mut replacement_build = (*build).clone();
+                    replacement_build.skills[usize::from(old.0)] = 0;
                     format!(
                         "{}\n\n{}",
                         summary(*language, choice, &build),
                         crate::game::skill_details::detailed(
-                            *language, new, 0, &build, vitals, runtime
+                            *language,
+                            new,
+                            0,
+                            &replacement_build,
+                            vitals,
+                            runtime,
+                            damage_context
                         )
                     )
                 }
@@ -903,7 +921,8 @@ pub(super) fn update_feedback(
                         build.skill_rank(skill),
                         &build,
                         vitals,
-                        runtime
+                        runtime,
+                        damage_context
                     )
                 ),
                 (DraftChoice::Skill(skill), true, Some(vitals), Some(runtime)) => {
@@ -914,6 +933,7 @@ pub(super) fn update_feedback(
                         &build,
                         vitals,
                         runtime,
+                        damage_context,
                     )
                 }
                 (DraftChoice::Encounter(event), _, _, _) if !event.affordable(&session) => {
@@ -975,6 +995,61 @@ mod tests {
     use super::*;
     use crate::game::SkillId;
     #[test]
+    fn replacement_details_transfer_crown_bonus_without_mutating_the_live_build() {
+        use crate::game::{
+            HeroVitals,
+            market::{MarketEffects, MarketItem},
+            skills::SkillRuntime,
+        };
+        let mut build = PlayerBuild::default();
+        build.skills.fill(0);
+        build.skills[0] = 5;
+        for index in 27..=31 {
+            build.skills[index] = 1;
+        }
+        let mut session = GameSession::default();
+        let mut vitals = HeroVitals::default();
+        let mut market = MarketEffects::default();
+        MarketItem::AscendantCrown.apply(&mut session, &mut build, &mut vitals, &mut market);
+        let original = build.skills;
+        let runtime = SkillRuntime::default();
+        let raw =
+            crate::game::skills::skill_preview_damage(26, 1, &build, &vitals, &runtime).unwrap();
+        let expected = format!("{:.1} → {:.1}", raw * 1.3, raw * 1.3);
+        let mut app = App::new();
+        app.insert_resource(build)
+            .insert_resource(session)
+            .insert_resource(vitals)
+            .insert_resource(runtime)
+            .insert_resource(market)
+            .init_resource::<crate::game::bonds::BondRuntime>()
+            .init_resource::<crate::game::encounters::EncounterState>()
+            .insert_resource(GameLanguage::English)
+            .add_systems(Update, update_feedback);
+        let root = app.world_mut().spawn_empty().id();
+        app.insert_resource(DraftState {
+            root: Some(root),
+            choices: vec![DraftChoice::ReplaceSkill {
+                old: SkillId(0),
+                new: SkillId(26),
+            }],
+            ..default()
+        })
+        .insert_resource(BuildPreview {
+            root: Some(root),
+            index: Some(0),
+        });
+        let detail = app.world_mut().spawn((BuildDetail, Text::default())).id();
+        for language in [GameLanguage::English, GameLanguage::SimplifiedChinese] {
+            app.insert_resource(language);
+            app.update();
+            let text = &app.world().get::<Text>(detail).unwrap().0;
+            assert!(text.contains(&expected), "{text}");
+            assert_eq!(app.world().resource::<PlayerBuild>().skills, original);
+        }
+    }
+
+    #[test]
     fn simple_mode_also_shortens_bond_and_ur_evolution_choices() {
         let build = PlayerBuild::default();
         for language in [GameLanguage::English, GameLanguage::SimplifiedChinese] {
@@ -999,6 +1074,9 @@ mod tests {
         let mut app = App::new();
         app.init_resource::<PlayerBuild>()
             .init_resource::<GameSession>()
+            .init_resource::<crate::game::bonds::BondRuntime>()
+            .init_resource::<crate::game::market::MarketEffects>()
+            .init_resource::<crate::game::encounters::EncounterState>()
             .insert_resource(GameLanguage::SimplifiedChinese)
             .add_systems(Update, update_feedback);
         let root = app.world_mut().spawn_empty().id();
@@ -1176,6 +1254,9 @@ mod live_language_tests {
                 .init_resource::<PlayerBuild>()
                 .init_resource::<GameSession>()
                 .init_resource::<RunRng>()
+                .init_resource::<crate::game::bonds::BondRuntime>()
+                .init_resource::<crate::game::market::MarketEffects>()
+                .init_resource::<crate::game::encounters::EncounterState>()
                 .add_systems(Update, (refresh_language, update_feedback));
             let choices = if kind == DraftKind::Skill {
                 vec![

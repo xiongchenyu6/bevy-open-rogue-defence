@@ -1,0 +1,320 @@
+{
+  "scope": "Retained local bulk, omitted from portable archive",
+  "files": [
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-capture",
+      "bytes": 489418512,
+      "sha256": "82c7b25789935ffd3dc6469ae961fcf7c2a8ba1fdf9d14b84d9f3a3bddb256b4"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/capture",
+      "bytes": 489441144,
+      "sha256": "1112b5b53b1d810ac0048cea86993204a9b68934c43b797426b0076747a8b6f7"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-en/frame00330.png",
+      "bytes": 997385,
+      "sha256": "8cdeb68e1e7a3a79256a5ae2e0e6af68cf48d2396fa65722a7ff8bcfce5b3633"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-en/frame00180.png",
+      "bytes": 296058,
+      "sha256": "1f263bb67d5837362800406a8b9fdfaf1a50b8a74e443ceb2aa8ea0f24fc58d3"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-en/frame00100.png",
+      "bytes": 296058,
+      "sha256": "1f263bb67d5837362800406a8b9fdfaf1a50b8a74e443ceb2aa8ea0f24fc58d3"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-en/frame00225.png",
+      "bytes": 991082,
+      "sha256": "04a2598bc7fd13b789f1c190894f8cce11790139e94510a028cdc011ffb68382"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-en/frame00479.png",
+      "bytes": 997105,
+      "sha256": "5825899c65a82390765cc2023958030e9ac9df45a03f01e51d916a0ba45a586d"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-en/frame00450.png",
+      "bytes": 998350,
+      "sha256": "816378b6120c1f6203ad821b83ff7c47ca6f62542382594a002e743dd7573539"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-zh/frame00330.png",
+      "bytes": 1019237,
+      "sha256": "abd7784e8e86d9bf678a21f64a87c79f92d9057b59a6cf7a490bb0022a434d30"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-zh/frame00180.png",
+      "bytes": 175912,
+      "sha256": "e3815bb8006b51c6d2dbbe9a29500118a2787e515aa548c471d57f1346615e56"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-zh/frame00100.png",
+      "bytes": 175912,
+      "sha256": "e3815bb8006b51c6d2dbbe9a29500118a2787e515aa548c471d57f1346615e56"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-zh/frame00225.png",
+      "bytes": 1010536,
+      "sha256": "d03a7ffcbabbdea6c9957302a06ca9f41286a58369e36a4e0ad0eed3f3cb441e"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-zh/frame00479.png",
+      "bytes": 1017726,
+      "sha256": "64b290964b101e7cb08ff2536486b5765c6c64ce7e629d9aed7bd73df8e79dbc"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-zh/frame00450.png",
+      "bytes": 1020058,
+      "sha256": "0e6486ebb50c4993c0e11e1b30a1eac6fd2e19401f176f5be3318c74cda3dcab"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-zh/frame00330.png",
+      "bytes": 998389,
+      "sha256": "86232c480dd020e36bec683b34ba4fee361fa24db7589ad2c2962d2715b1dd73"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-zh/frame00180.png",
+      "bytes": 284665,
+      "sha256": "33f71a78ce5ed45e227bf6025a3fd59ccaf6643f0ace16e27019ed1287b56885"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-zh/frame00100.png",
+      "bytes": 284665,
+      "sha256": "33f71a78ce5ed45e227bf6025a3fd59ccaf6643f0ace16e27019ed1287b56885"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-zh/frame00225.png",
+      "bytes": 990168,
+      "sha256": "80f3cd24389a066e8c2bebe1624807ccbfdd1d280a62389e9c75990d7c2b9c0b"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-zh/frame00479.png",
+      "bytes": 998127,
+      "sha256": "12cb452337f4ce768c08a6ed8cb0f7551fd6440b540ec2e09ede3ffb698e9bdd"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-zh/frame00450.png",
+      "bytes": 999297,
+      "sha256": "a12edc38003a29bfd4ccad9f43abb28784f474e1a2d70470fce35126f7f0f3d9"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-en/frame00330.png",
+      "bytes": 1018489,
+      "sha256": "50ed499c2a1c1cce5dc40cc07971ab908bf1096688a03f3e864edfef652d34f8"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-en/frame00180.png",
+      "bytes": 193719,
+      "sha256": "69e408fcd04a32027abf101b74383848a9e95f4bc27ada6374d9a3818e941b57"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-en/frame00100.png",
+      "bytes": 193719,
+      "sha256": "69e408fcd04a32027abf101b74383848a9e95f4bc27ada6374d9a3818e941b57"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-en/frame00225.png",
+      "bytes": 1011377,
+      "sha256": "e46cda273b89880d89c22cdb11118a170ac0549bf9e14f1b6886367e2b5d64a2"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-en/frame00479.png",
+      "bytes": 1017001,
+      "sha256": "ffd9c3b4ccf62effcce95f65ec34dbf337b6514c0233e85080aeab0acb1fa046"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-en/frame00450.png",
+      "bytes": 1019305,
+      "sha256": "a889a001568183870981f4174d77f917c0355ba66e8f4efeb9fd5b57b10d077c"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-en/frame00330.png",
+      "bytes": 1018489,
+      "sha256": "50ed499c2a1c1cce5dc40cc07971ab908bf1096688a03f3e864edfef652d34f8"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-en/frame00180.png",
+      "bytes": 192196,
+      "sha256": "bc5a3817a661dbc20476ba0343d0b17d55f1f7dac0ef9584fc7ddff8d3101af4"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-en/frame00100.png",
+      "bytes": 192196,
+      "sha256": "bc5a3817a661dbc20476ba0343d0b17d55f1f7dac0ef9584fc7ddff8d3101af4"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-en/frame00225.png",
+      "bytes": 1011377,
+      "sha256": "e46cda273b89880d89c22cdb11118a170ac0549bf9e14f1b6886367e2b5d64a2"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-en/frame00479.png",
+      "bytes": 1017001,
+      "sha256": "ffd9c3b4ccf62effcce95f65ec34dbf337b6514c0233e85080aeab0acb1fa046"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-en/frame00450.png",
+      "bytes": 1019305,
+      "sha256": "a889a001568183870981f4174d77f917c0355ba66e8f4efeb9fd5b57b10d077c"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-zh/frame00330.png",
+      "bytes": 1019237,
+      "sha256": "abd7784e8e86d9bf678a21f64a87c79f92d9057b59a6cf7a490bb0022a434d30"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-zh/frame00180.png",
+      "bytes": 176725,
+      "sha256": "ad295e7685f235be616182b90bce8395deeee06a4cfeb0933a6e224e2d3ae2dd"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-zh/frame00100.png",
+      "bytes": 176725,
+      "sha256": "ad295e7685f235be616182b90bce8395deeee06a4cfeb0933a6e224e2d3ae2dd"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-zh/frame00225.png",
+      "bytes": 1010536,
+      "sha256": "d03a7ffcbabbdea6c9957302a06ca9f41286a58369e36a4e0ad0eed3f3cb441e"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-zh/frame00479.png",
+      "bytes": 1017727,
+      "sha256": "acd1a13370373aad5a3019fafe8702cfe3dd46510a6259fa8892f966cb509aa8"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-zh/frame00450.png",
+      "bytes": 1020058,
+      "sha256": "0e6486ebb50c4993c0e11e1b30a1eac6fd2e19401f176f5be3318c74cda3dcab"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-zh/frame00330.png",
+      "bytes": 998381,
+      "sha256": "d9b94a95d2c17767801e354be2b73dbd56d331e7dd62e7eaefc53928b0374f46"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-zh/frame00180.png",
+      "bytes": 283831,
+      "sha256": "f68e38b99e8edc6fd9ed54594eb12a32fc331bf7156e96730a18eea54fa7b8a8"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-zh/frame00100.png",
+      "bytes": 283831,
+      "sha256": "f68e38b99e8edc6fd9ed54594eb12a32fc331bf7156e96730a18eea54fa7b8a8"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-zh/frame00225.png",
+      "bytes": 990160,
+      "sha256": "7d416e57fda2150f9829c156c79d3e244b74f062ba1b6ba5b481a8100063ef70"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-zh/frame00479.png",
+      "bytes": 998119,
+      "sha256": "c6b2ca82f08fc5a64d1accd1780460bac30fa891eb19c30ba1582feb12e7818c"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/before-zh/frame00450.png",
+      "bytes": 999289,
+      "sha256": "56b447c9c91c78c6d7f22e6c7be22a4b8f995ba2ac9ae2737fed27b8950e5fea"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/capture",
+      "bytes": 489441144,
+      "sha256": "26a0c2bf56b2caf9386f299a929c4bdd3cdb348ce606aa5f1cc8d34f38d36e11"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-en/frame00330.png",
+      "bytes": 997379,
+      "sha256": "acbf86b4d211be8d4b3acfeaf5ea0f21624c7fbb2add449378057a6f42e24d95"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-en/frame00180.png",
+      "bytes": 297592,
+      "sha256": "0b66efadc63288fffd730e5f271ecf3498eb3a1995ad8acb714181f409c54557"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-en/frame00100.png",
+      "bytes": 297592,
+      "sha256": "0b66efadc63288fffd730e5f271ecf3498eb3a1995ad8acb714181f409c54557"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-en/frame00225.png",
+      "bytes": 991075,
+      "sha256": "63c9c562a3d39fb9b53cb27ccfcab465380caba46a9c1ab4ec3a238172e58687"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-en/frame00479.png",
+      "bytes": 997097,
+      "sha256": "fdc4e50662ac421d230f0280c922bf2a7696708e9ea791914a40b79f8d1ad0bb"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/after-en/frame00450.png",
+      "bytes": 998345,
+      "sha256": "1bf00358d7168fbe67dab603c47f8a0cb3b8b6b44b942a0a24c98d4d5ea27f7b"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-zh/frame00330.png",
+      "bytes": 998389,
+      "sha256": "06d745c1ea0a7e51fb5834ffbf184d8774b99a3a715fc3fc79a255727def9bb4"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-zh/frame00180.png",
+      "bytes": 284665,
+      "sha256": "33f71a78ce5ed45e227bf6025a3fd59ccaf6643f0ace16e27019ed1287b56885"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-zh/frame00100.png",
+      "bytes": 284665,
+      "sha256": "33f71a78ce5ed45e227bf6025a3fd59ccaf6643f0ace16e27019ed1287b56885"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-zh/frame00225.png",
+      "bytes": 990168,
+      "sha256": "40154b2c05c0aa2d5aee6afa1d2d4a9f53dbcba4ac22b71fcd4c0e9be66ac14f"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-zh/frame00479.png",
+      "bytes": 998127,
+      "sha256": "d733e052def0bf09a7bf4385ec8b90373c5a2f352a44ded96c44963d462381c2"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-zh/frame00450.png",
+      "bytes": 999297,
+      "sha256": "5a4ac5241582083f23322956f89bd70b28525c54c79014d3691fc4da7a9a6883"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-en/frame00330.png",
+      "bytes": 997385,
+      "sha256": "8cdeb68e1e7a3a79256a5ae2e0e6af68cf48d2396fa65722a7ff8bcfce5b3633"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-en/frame00180.png",
+      "bytes": 297592,
+      "sha256": "0b66efadc63288fffd730e5f271ecf3498eb3a1995ad8acb714181f409c54557"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-en/frame00100.png",
+      "bytes": 297592,
+      "sha256": "0b66efadc63288fffd730e5f271ecf3498eb3a1995ad8acb714181f409c54557"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-en/frame00225.png",
+      "bytes": 991074,
+      "sha256": "5ab28cb58b05c12f3fb7c0e5f8634d4aa269592fea9b97d87519e80718b007af"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-en/frame00479.png",
+      "bytes": 997105,
+      "sha256": "5825899c65a82390765cc2023958030e9ac9df45a03f01e51d916a0ba45a586d"
+    },
+    {
+      "path": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-en/frame00450.png",
+      "bytes": 998350,
+      "sha256": "816378b6120c1f6203ad821b83ff7c47ca6f62542382594a002e743dd7573539"
+    }
+  ]
+}

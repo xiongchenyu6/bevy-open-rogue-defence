@@ -1552,6 +1552,7 @@ mod tests {
             .init_resource::<MarketEffects>()
             .init_resource::<HeroVitals>()
             .init_resource::<EncounterState>()
+            .init_resource::<crate::game::bonds::BondRuntime>()
             .add_plugins(ProgressionPlugin);
         app.update();
         app

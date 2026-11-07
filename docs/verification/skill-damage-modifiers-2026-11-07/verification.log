@@ -1,0 +1,731 @@
+{
+  "status": "PASS",
+  "final_library": {
+    "passed": 764,
+    "failed": 0,
+    "ignored": 1
+  },
+  "producer_cases": {
+    "before-en": {
+      "status": "PASS",
+      "matched_noncritical": [
+        {
+          "observed_frame": 209,
+          "hp_before_bits": 1195593728,
+          "hp_after_bits": 1195377156,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:13.290523Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2536v0 enemy_bits=4294964759 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.07980351895093918 critical_roll_bits=1034121223 crit_multiplier=1.0 hp_before=50000.0 hp_after=49154.015625 hp_before_bits=1195593728 hp_after_bits=1195377156 hp_damage=845.9828491210938 rng_before_crit=15568827715586617645 rng_after_crit=7899899159055273359 rng_after_resolution=7899899159055273359 elapsed_bits=1127610245",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 244,
+          "hp_before_bits": 1195377156,
+          "hp_after_bits": 1195160584,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:15.085407Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2576v1 projectile_bits=8589932015 enemy=2536v0 enemy_bits=4294964759 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.13923010230064392 critical_roll_bits=1041142358 crit_multiplier=1.0 hp_before=49154.015625 hp_after=48308.03125 hp_before_bits=1195377156 hp_after_bits=1195160584 hp_damage=845.9828491210938 rng_before_crit=4090715109156898132 rng_after_crit=16294907066546662878 rng_after_resolution=16294907066546662878 elapsed_bits=1127686720",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 278,
+          "hp_before_bits": 1195160584,
+          "hp_after_bits": 1194944012,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:16.219236Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2536v0 enemy_bits=4294964759 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.7627416849136353 critical_roll_bits=1061372682 crit_multiplier=1.0 hp_before=48308.03125 hp_after=47462.046875 hp_before_bits=1195160584 hp_after_bits=1194944012 hp_damage=845.9828491210938 rng_before_crit=13526401266113417733 rng_after_crit=3779297730011830369 rng_after_resolution=3779297730011830369 elapsed_bits=1127761010",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 313,
+          "hp_before_bits": 1194944012,
+          "hp_after_bits": 1194727440,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:17.753393Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2576v1 projectile_bits=8589932015 enemy=2536v0 enemy_bits=4294964759 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8146010041236877 critical_roll_bits=1062242737 crit_multiplier=1.0 hp_before=47462.046875 hp_after=46616.0625 hp_before_bits=1194944012 hp_after_bits=1194727440 hp_damage=845.9828491210938 rng_before_crit=4809716149477455633 rng_after_crit=5719519341586805567 rng_after_resolution=5719519341586805567 elapsed_bits=1127837485",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 347,
+          "hp_before_bits": 1194727440,
+          "hp_after_bits": 1194510868,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:19.310105Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2536v0 enemy_bits=4294964759 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.33866646885871887 critical_roll_bits=1051551153 crit_multiplier=1.0 hp_before=46616.0625 hp_after=45770.078125 hp_before_bits=1194727440 hp_after_bits=1194510868 hp_damage=845.9828491210938 rng_before_crit=4827264086922911513 rng_after_crit=6659793275107716583 rng_after_resolution=6659793275107716583 elapsed_bits=1127911775",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 382,
+          "hp_before_bits": 1194510868,
+          "hp_after_bits": 1194294296,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:20.470100Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2576v1 projectile_bits=8589932015 enemy=2536v0 enemy_bits=4294964759 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8014328479766846 critical_roll_bits=1062021812 crit_multiplier=1.0 hp_before=45770.078125 hp_after=44924.09375 hp_before_bits=1194510868 hp_after_bits=1194294296 hp_damage=845.9828491210938 rng_before_crit=2616876449198218620 rng_after_crit=16525339991002338630 rng_after_resolution=16525339991002338630 elapsed_bits=1127988250",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 416,
+          "hp_before_bits": 1194294296,
+          "hp_after_bits": 1194077724,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:21.622304Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2536v0 enemy_bits=4294964759 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.14843736588954926 critical_roll_bits=1041760247 crit_multiplier=1.0 hp_before=44924.09375 hp_after=44078.109375 hp_before_bits=1194294296 hp_after_bits=1194077724 hp_damage=845.9828491210938 rng_before_crit=12205473793540179052 rng_after_crit=7711893193322612196 rng_after_resolution=7711893193322612196 elapsed_bits=1128062540",
+          "expected_crown_only": 845.9828491210938
+        }
+      ],
+      "critical_before450": [],
+      "unmatched_resolver": [],
+      "excluded_post450": [
+        {
+          "observed_frame": 451,
+          "hp_before_bits": 1194077724,
+          "hp_after_bits": 1193861152,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:22.786187Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2576v1 projectile_bits=8589932015 enemy=2536v0 enemy_bits=4294964759 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.1387399435043335 critical_roll_bits=1041109464 crit_multiplier=1.0 hp_before=44078.109375 hp_after=43232.125 hp_before_bits=1194077724 hp_after_bits=1193861152 hp_damage=845.9828491210938 rng_before_crit=18239476987921416815 rng_after_crit=2834210592324015659 rng_after_resolution=2834210592324015659 elapsed_bits=1128139015"
+        }
+      ],
+      "pre450_intervals": 7,
+      "actor": "2536v0"
+    },
+    "before-portrait-en": {
+      "status": "PASS",
+      "matched_noncritical": [
+        {
+          "observed_frame": 209,
+          "hp_before_bits": 1195593728,
+          "hp_after_bits": 1195377156,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:18.677540Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.07980351895093918 critical_roll_bits=1034121223 crit_multiplier=1.0 hp_before=50000.0 hp_after=49154.015625 hp_before_bits=1195593728 hp_after_bits=1195377156 hp_damage=845.9828491210938 rng_before_crit=15568827715586617645 rng_after_crit=7899899159055273359 rng_after_resolution=7899899159055273359 elapsed_bits=1127610245",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 244,
+          "hp_before_bits": 1195377156,
+          "hp_after_bits": 1195160584,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:20.478461Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2576v1 projectile_bits=8589932015 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.13923010230064392 critical_roll_bits=1041142358 crit_multiplier=1.0 hp_before=49154.015625 hp_after=48308.03125 hp_before_bits=1195377156 hp_after_bits=1195160584 hp_damage=845.9828491210938 rng_before_crit=4090715109156898132 rng_after_crit=16294907066546662878 rng_after_resolution=16294907066546662878 elapsed_bits=1127686720",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 278,
+          "hp_before_bits": 1195160584,
+          "hp_after_bits": 1194944012,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:21.589207Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.7627416849136353 critical_roll_bits=1061372682 crit_multiplier=1.0 hp_before=48308.03125 hp_after=47462.046875 hp_before_bits=1195160584 hp_after_bits=1194944012 hp_damage=845.9828491210938 rng_before_crit=13526401266113417733 rng_after_crit=3779297730011830369 rng_after_resolution=3779297730011830369 elapsed_bits=1127761010",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 313,
+          "hp_before_bits": 1194944012,
+          "hp_after_bits": 1194727440,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:22.910796Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2576v1 projectile_bits=8589932015 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8146010041236877 critical_roll_bits=1062242737 crit_multiplier=1.0 hp_before=47462.046875 hp_after=46616.0625 hp_before_bits=1194944012 hp_after_bits=1194727440 hp_damage=845.9828491210938 rng_before_crit=4809716149477455633 rng_after_crit=5719519341586805567 rng_after_resolution=5719519341586805567 elapsed_bits=1127837485",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 347,
+          "hp_before_bits": 1194727440,
+          "hp_after_bits": 1194510868,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:24.507149Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.33866646885871887 critical_roll_bits=1051551153 crit_multiplier=1.0 hp_before=46616.0625 hp_after=45770.078125 hp_before_bits=1194727440 hp_after_bits=1194510868 hp_damage=845.9828491210938 rng_before_crit=4827264086922911513 rng_after_crit=6659793275107716583 rng_after_resolution=6659793275107716583 elapsed_bits=1127911775",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 382,
+          "hp_before_bits": 1194510868,
+          "hp_after_bits": 1194294296,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:25.636361Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2576v1 projectile_bits=8589932015 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8014328479766846 critical_roll_bits=1062021812 crit_multiplier=1.0 hp_before=45770.078125 hp_after=44924.09375 hp_before_bits=1194510868 hp_after_bits=1194294296 hp_damage=845.9828491210938 rng_before_crit=2616876449198218620 rng_after_crit=16525339991002338630 rng_after_resolution=16525339991002338630 elapsed_bits=1127988250",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 416,
+          "hp_before_bits": 1194294296,
+          "hp_after_bits": 1194077724,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:26.791849Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.14843736588954926 critical_roll_bits=1041760247 crit_multiplier=1.0 hp_before=44924.09375 hp_after=44078.109375 hp_before_bits=1194294296 hp_after_bits=1194077724 hp_damage=845.9828491210938 rng_before_crit=12205473793540179052 rng_after_crit=7711893193322612196 rng_after_resolution=7711893193322612196 elapsed_bits=1128062540",
+          "expected_crown_only": 845.9828491210938
+        }
+      ],
+      "critical_before450": [],
+      "unmatched_resolver": [],
+      "excluded_post450": [
+        {
+          "observed_frame": 451,
+          "hp_before_bits": 1194077724,
+          "hp_after_bits": 1193861152,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:27.963445Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2576v1 projectile_bits=8589932015 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.1387399435043335 critical_roll_bits=1041109464 crit_multiplier=1.0 hp_before=44078.109375 hp_after=43232.125 hp_before_bits=1194077724 hp_after_bits=1193861152 hp_damage=845.9828491210938 rng_before_crit=18239476987921416815 rng_after_crit=2834210592324015659 rng_after_resolution=2834210592324015659 elapsed_bits=1128139015"
+        }
+      ],
+      "pre450_intervals": 7,
+      "actor": "2520v0"
+    },
+    "before-zh": {
+      "status": "PASS",
+      "matched_noncritical": [
+        {
+          "observed_frame": 209,
+          "hp_before_bits": 1195593728,
+          "hp_after_bits": 1195377156,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:38.220362Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2593v0 enemy_bits=4294964702 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.07980351895093918 critical_roll_bits=1034121223 crit_multiplier=1.0 hp_before=50000.0 hp_after=49154.015625 hp_before_bits=1195593728 hp_after_bits=1195377156 hp_damage=845.9828491210938 rng_before_crit=15568827715586617645 rng_after_crit=7899899159055273359 rng_after_resolution=7899899159055273359 elapsed_bits=1127610245",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 244,
+          "hp_before_bits": 1195377156,
+          "hp_after_bits": 1195160584,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:39.938290Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2609v1 projectile_bits=8589931982 enemy=2593v0 enemy_bits=4294964702 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.13923010230064392 critical_roll_bits=1041142358 crit_multiplier=1.0 hp_before=49154.015625 hp_after=48308.03125 hp_before_bits=1195377156 hp_after_bits=1195160584 hp_damage=845.9828491210938 rng_before_crit=4090715109156898132 rng_after_crit=16294907066546662878 rng_after_resolution=16294907066546662878 elapsed_bits=1127686720",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 278,
+          "hp_before_bits": 1195160584,
+          "hp_after_bits": 1194944012,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:41.095097Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2593v0 enemy_bits=4294964702 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.7627416849136353 critical_roll_bits=1061372682 crit_multiplier=1.0 hp_before=48308.03125 hp_after=47462.046875 hp_before_bits=1195160584 hp_after_bits=1194944012 hp_damage=845.9828491210938 rng_before_crit=13526401266113417733 rng_after_crit=3779297730011830369 rng_after_resolution=3779297730011830369 elapsed_bits=1127761010",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 313,
+          "hp_before_bits": 1194944012,
+          "hp_after_bits": 1194727440,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:42.383520Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2609v1 projectile_bits=8589931982 enemy=2593v0 enemy_bits=4294964702 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8146010041236877 critical_roll_bits=1062242737 crit_multiplier=1.0 hp_before=47462.046875 hp_after=46616.0625 hp_before_bits=1194944012 hp_after_bits=1194727440 hp_damage=845.9828491210938 rng_before_crit=4809716149477455633 rng_after_crit=5719519341586805567 rng_after_resolution=5719519341586805567 elapsed_bits=1127837485",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 347,
+          "hp_before_bits": 1194727440,
+          "hp_after_bits": 1194510868,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:44.006815Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2593v0 enemy_bits=4294964702 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.33866646885871887 critical_roll_bits=1051551153 crit_multiplier=1.0 hp_before=46616.0625 hp_after=45770.078125 hp_before_bits=1194727440 hp_after_bits=1194510868 hp_damage=845.9828491210938 rng_before_crit=4827264086922911513 rng_after_crit=6659793275107716583 rng_after_resolution=6659793275107716583 elapsed_bits=1127911775",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 382,
+          "hp_before_bits": 1194510868,
+          "hp_after_bits": 1194294296,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:45.269128Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2609v1 projectile_bits=8589931982 enemy=2593v0 enemy_bits=4294964702 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8014328479766846 critical_roll_bits=1062021812 crit_multiplier=1.0 hp_before=45770.078125 hp_after=44924.09375 hp_before_bits=1194510868 hp_after_bits=1194294296 hp_damage=845.9828491210938 rng_before_crit=2616876449198218620 rng_after_crit=16525339991002338630 rng_after_resolution=16525339991002338630 elapsed_bits=1127988250",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 416,
+          "hp_before_bits": 1194294296,
+          "hp_after_bits": 1194077724,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:46.427416Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2593v0 enemy_bits=4294964702 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.14843736588954926 critical_roll_bits=1041760247 crit_multiplier=1.0 hp_before=44924.09375 hp_after=44078.109375 hp_before_bits=1194294296 hp_after_bits=1194077724 hp_damage=845.9828491210938 rng_before_crit=12205473793540179052 rng_after_crit=7711893193322612196 rng_after_resolution=7711893193322612196 elapsed_bits=1128062540",
+          "expected_crown_only": 845.9828491210938
+        }
+      ],
+      "critical_before450": [],
+      "unmatched_resolver": [],
+      "excluded_post450": [
+        {
+          "observed_frame": 451,
+          "hp_before_bits": 1194077724,
+          "hp_after_bits": 1193861152,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:26:47.631194Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2609v1 projectile_bits=8589931982 enemy=2593v0 enemy_bits=4294964702 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.1387399435043335 critical_roll_bits=1041109464 crit_multiplier=1.0 hp_before=44078.109375 hp_after=43232.125 hp_before_bits=1194077724 hp_after_bits=1193861152 hp_damage=845.9828491210938 rng_before_crit=18239476987921416815 rng_after_crit=2834210592324015659 rng_after_resolution=2834210592324015659 elapsed_bits=1128139015"
+        }
+      ],
+      "pre450_intervals": 7,
+      "actor": "2593v0"
+    },
+    "before-portrait-zh": {
+      "status": "PASS",
+      "matched_noncritical": [
+        {
+          "observed_frame": 209,
+          "hp_before_bits": 1195593728,
+          "hp_after_bits": 1195377156,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:43.052092Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.07980351895093918 critical_roll_bits=1034121223 crit_multiplier=1.0 hp_before=50000.0 hp_after=49154.015625 hp_before_bits=1195593728 hp_after_bits=1195377156 hp_damage=845.9828491210938 rng_before_crit=15568827715586617645 rng_after_crit=7899899159055273359 rng_after_resolution=7899899159055273359 elapsed_bits=1127610245",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 244,
+          "hp_before_bits": 1195377156,
+          "hp_after_bits": 1195160584,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:44.846443Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2612v1 projectile_bits=8589931979 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.13923010230064392 critical_roll_bits=1041142358 crit_multiplier=1.0 hp_before=49154.015625 hp_after=48308.03125 hp_before_bits=1195377156 hp_after_bits=1195160584 hp_damage=845.9828491210938 rng_before_crit=4090715109156898132 rng_after_crit=16294907066546662878 rng_after_resolution=16294907066546662878 elapsed_bits=1127686720",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 278,
+          "hp_before_bits": 1195160584,
+          "hp_after_bits": 1194944012,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:45.960186Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.7627416849136353 critical_roll_bits=1061372682 crit_multiplier=1.0 hp_before=48308.03125 hp_after=47462.046875 hp_before_bits=1195160584 hp_after_bits=1194944012 hp_damage=845.9828491210938 rng_before_crit=13526401266113417733 rng_after_crit=3779297730011830369 rng_after_resolution=3779297730011830369 elapsed_bits=1127761010",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 313,
+          "hp_before_bits": 1194944012,
+          "hp_after_bits": 1194727440,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:47.354783Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2612v1 projectile_bits=8589931979 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8146010041236877 critical_roll_bits=1062242737 crit_multiplier=1.0 hp_before=47462.046875 hp_after=46616.0625 hp_before_bits=1194944012 hp_after_bits=1194727440 hp_damage=845.9828491210938 rng_before_crit=4809716149477455633 rng_after_crit=5719519341586805567 rng_after_resolution=5719519341586805567 elapsed_bits=1127837485",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 347,
+          "hp_before_bits": 1194727440,
+          "hp_after_bits": 1194510868,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:48.949342Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.33866646885871887 critical_roll_bits=1051551153 crit_multiplier=1.0 hp_before=46616.0625 hp_after=45770.078125 hp_before_bits=1194727440 hp_after_bits=1194510868 hp_damage=845.9828491210938 rng_before_crit=4827264086922911513 rng_after_crit=6659793275107716583 rng_after_resolution=6659793275107716583 elapsed_bits=1127911775",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 382,
+          "hp_before_bits": 1194510868,
+          "hp_after_bits": 1194294296,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:50.112427Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2612v1 projectile_bits=8589931979 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8014328479766846 critical_roll_bits=1062021812 crit_multiplier=1.0 hp_before=45770.078125 hp_after=44924.09375 hp_before_bits=1194510868 hp_after_bits=1194294296 hp_damage=845.9828491210938 rng_before_crit=2616876449198218620 rng_after_crit=16525339991002338630 rng_after_resolution=16525339991002338630 elapsed_bits=1127988250",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 416,
+          "hp_before_bits": 1194294296,
+          "hp_after_bits": 1194077724,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:51.263611Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.14843736588954926 critical_roll_bits=1041760247 crit_multiplier=1.0 hp_before=44924.09375 hp_after=44078.109375 hp_before_bits=1194294296 hp_after_bits=1194077724 hp_damage=845.9828491210938 rng_before_crit=12205473793540179052 rng_after_crit=7711893193322612196 rng_after_resolution=7711893193322612196 elapsed_bits=1128062540",
+          "expected_crown_only": 845.9828491210938
+        }
+      ],
+      "critical_before450": [],
+      "unmatched_resolver": [],
+      "excluded_post450": [
+        {
+          "observed_frame": 451,
+          "hp_before_bits": 1194077724,
+          "hp_after_bits": 1193861152,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:52.401615Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2612v1 projectile_bits=8589931979 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.1387399435043335 critical_roll_bits=1041109464 crit_multiplier=1.0 hp_before=44078.109375 hp_after=43232.125 hp_before_bits=1194077724 hp_after_bits=1193861152 hp_damage=845.9828491210938 rng_before_crit=18239476987921416815 rng_after_crit=2834210592324015659 rng_after_resolution=2834210592324015659 elapsed_bits=1128139015"
+        }
+      ],
+      "pre450_intervals": 7,
+      "actor": "2580v0"
+    },
+    "after-en": {
+      "status": "PASS",
+      "matched_noncritical": [
+        {
+          "observed_frame": 209,
+          "hp_before_bits": 1195593728,
+          "hp_after_bits": 1195377156,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:47:29.761097Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2556v0 enemy_bits=4294964739 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.07980351895093918 critical_roll_bits=1034121223 crit_multiplier=1.0 hp_before=50000.0 hp_after=49154.015625 hp_before_bits=1195593728 hp_after_bits=1195377156 hp_damage=845.9828491210938 rng_before_crit=15568827715586617645 rng_after_crit=7899899159055273359 rng_after_resolution=7899899159055273359 elapsed_bits=1127610245",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 244,
+          "hp_before_bits": 1195377156,
+          "hp_after_bits": 1195160584,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:47:31.482677Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2600v1 projectile_bits=8589931991 enemy=2556v0 enemy_bits=4294964739 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.13923010230064392 critical_roll_bits=1041142358 crit_multiplier=1.0 hp_before=49154.015625 hp_after=48308.03125 hp_before_bits=1195377156 hp_after_bits=1195160584 hp_damage=845.9828491210938 rng_before_crit=4090715109156898132 rng_after_crit=16294907066546662878 rng_after_resolution=16294907066546662878 elapsed_bits=1127686720",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 278,
+          "hp_before_bits": 1195160584,
+          "hp_after_bits": 1194944012,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:47:32.597561Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2556v0 enemy_bits=4294964739 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.7627416849136353 critical_roll_bits=1061372682 crit_multiplier=1.0 hp_before=48308.03125 hp_after=47462.046875 hp_before_bits=1195160584 hp_after_bits=1194944012 hp_damage=845.9828491210938 rng_before_crit=13526401266113417733 rng_after_crit=3779297730011830369 rng_after_resolution=3779297730011830369 elapsed_bits=1127761010",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 313,
+          "hp_before_bits": 1194944012,
+          "hp_after_bits": 1194727440,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:47:33.917038Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2600v1 projectile_bits=8589931991 enemy=2556v0 enemy_bits=4294964739 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8146010041236877 critical_roll_bits=1062242737 crit_multiplier=1.0 hp_before=47462.046875 hp_after=46616.0625 hp_before_bits=1194944012 hp_after_bits=1194727440 hp_damage=845.9828491210938 rng_before_crit=4809716149477455633 rng_after_crit=5719519341586805567 rng_after_resolution=5719519341586805567 elapsed_bits=1127837485",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 347,
+          "hp_before_bits": 1194727440,
+          "hp_after_bits": 1194510868,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:47:35.429882Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2556v0 enemy_bits=4294964739 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.33866646885871887 critical_roll_bits=1051551153 crit_multiplier=1.0 hp_before=46616.0625 hp_after=45770.078125 hp_before_bits=1194727440 hp_after_bits=1194510868 hp_damage=845.9828491210938 rng_before_crit=4827264086922911513 rng_after_crit=6659793275107716583 rng_after_resolution=6659793275107716583 elapsed_bits=1127911775",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 382,
+          "hp_before_bits": 1194510868,
+          "hp_after_bits": 1194294296,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:47:36.535447Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2600v1 projectile_bits=8589931991 enemy=2556v0 enemy_bits=4294964739 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8014328479766846 critical_roll_bits=1062021812 crit_multiplier=1.0 hp_before=45770.078125 hp_after=44924.09375 hp_before_bits=1194510868 hp_after_bits=1194294296 hp_damage=845.9828491210938 rng_before_crit=2616876449198218620 rng_after_crit=16525339991002338630 rng_after_resolution=16525339991002338630 elapsed_bits=1127988250",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 416,
+          "hp_before_bits": 1194294296,
+          "hp_after_bits": 1194077724,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:47:37.703168Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2556v0 enemy_bits=4294964739 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.14843736588954926 critical_roll_bits=1041760247 crit_multiplier=1.0 hp_before=44924.09375 hp_after=44078.109375 hp_before_bits=1194294296 hp_after_bits=1194077724 hp_damage=845.9828491210938 rng_before_crit=12205473793540179052 rng_after_crit=7711893193322612196 rng_after_resolution=7711893193322612196 elapsed_bits=1128062540",
+          "expected_crown_only": 845.9828491210938
+        }
+      ],
+      "critical_before450": [],
+      "unmatched_resolver": [],
+      "excluded_post450": [
+        {
+          "observed_frame": 451,
+          "hp_before_bits": 1194077724,
+          "hp_after_bits": 1193861152,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:47:38.824082Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2600v1 projectile_bits=8589931991 enemy=2556v0 enemy_bits=4294964739 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.1387399435043335 critical_roll_bits=1041109464 crit_multiplier=1.0 hp_before=44078.109375 hp_after=43232.125 hp_before_bits=1194077724 hp_after_bits=1193861152 hp_damage=845.9828491210938 rng_before_crit=18239476987921416815 rng_after_crit=2834210592324015659 rng_after_resolution=2834210592324015659 elapsed_bits=1128139015"
+        }
+      ],
+      "pre450_intervals": 7,
+      "actor": "2556v0"
+    },
+    "after-portrait-en": {
+      "status": "PASS",
+      "matched_noncritical": [
+        {
+          "observed_frame": 209,
+          "hp_before_bits": 1195593728,
+          "hp_after_bits": 1195377156,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:06.871009Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.07980351895093918 critical_roll_bits=1034121223 crit_multiplier=1.0 hp_before=50000.0 hp_after=49154.015625 hp_before_bits=1195593728 hp_after_bits=1195377156 hp_damage=845.9828491210938 rng_before_crit=15568827715586617645 rng_after_crit=7899899159055273359 rng_after_resolution=7899899159055273359 elapsed_bits=1127610245",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 244,
+          "hp_before_bits": 1195377156,
+          "hp_after_bits": 1195160584,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:08.601547Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2612v1 projectile_bits=8589931979 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.13923010230064392 critical_roll_bits=1041142358 crit_multiplier=1.0 hp_before=49154.015625 hp_after=48308.03125 hp_before_bits=1195377156 hp_after_bits=1195160584 hp_damage=845.9828491210938 rng_before_crit=4090715109156898132 rng_after_crit=16294907066546662878 rng_after_resolution=16294907066546662878 elapsed_bits=1127686720",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 278,
+          "hp_before_bits": 1195160584,
+          "hp_after_bits": 1194944012,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:09.685803Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.7627416849136353 critical_roll_bits=1061372682 crit_multiplier=1.0 hp_before=48308.03125 hp_after=47462.046875 hp_before_bits=1195160584 hp_after_bits=1194944012 hp_damage=845.9828491210938 rng_before_crit=13526401266113417733 rng_after_crit=3779297730011830369 rng_after_resolution=3779297730011830369 elapsed_bits=1127761010",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 313,
+          "hp_before_bits": 1194944012,
+          "hp_after_bits": 1194727440,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:10.921456Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2612v1 projectile_bits=8589931979 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8146010041236877 critical_roll_bits=1062242737 crit_multiplier=1.0 hp_before=47462.046875 hp_after=46616.0625 hp_before_bits=1194944012 hp_after_bits=1194727440 hp_damage=845.9828491210938 rng_before_crit=4809716149477455633 rng_after_crit=5719519341586805567 rng_after_resolution=5719519341586805567 elapsed_bits=1127837485",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 347,
+          "hp_before_bits": 1194727440,
+          "hp_after_bits": 1194510868,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:12.441448Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.33866646885871887 critical_roll_bits=1051551153 crit_multiplier=1.0 hp_before=46616.0625 hp_after=45770.078125 hp_before_bits=1194727440 hp_after_bits=1194510868 hp_damage=845.9828491210938 rng_before_crit=4827264086922911513 rng_after_crit=6659793275107716583 rng_after_resolution=6659793275107716583 elapsed_bits=1127911775",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 382,
+          "hp_before_bits": 1194510868,
+          "hp_after_bits": 1194294296,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:13.610327Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2612v1 projectile_bits=8589931979 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8014328479766846 critical_roll_bits=1062021812 crit_multiplier=1.0 hp_before=45770.078125 hp_after=44924.09375 hp_before_bits=1194510868 hp_after_bits=1194294296 hp_damage=845.9828491210938 rng_before_crit=2616876449198218620 rng_after_crit=16525339991002338630 rng_after_resolution=16525339991002338630 elapsed_bits=1127988250",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 416,
+          "hp_before_bits": 1194294296,
+          "hp_after_bits": 1194077724,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:14.692085Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.14843736588954926 critical_roll_bits=1041760247 crit_multiplier=1.0 hp_before=44924.09375 hp_after=44078.109375 hp_before_bits=1194294296 hp_after_bits=1194077724 hp_damage=845.9828491210938 rng_before_crit=12205473793540179052 rng_after_crit=7711893193322612196 rng_after_resolution=7711893193322612196 elapsed_bits=1128062540",
+          "expected_crown_only": 845.9828491210938
+        }
+      ],
+      "critical_before450": [],
+      "unmatched_resolver": [],
+      "excluded_post450": [
+        {
+          "observed_frame": 451,
+          "hp_before_bits": 1194077724,
+          "hp_after_bits": 1193861152,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:15.795638Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2612v1 projectile_bits=8589931979 enemy=2580v0 enemy_bits=4294964715 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.1387399435043335 critical_roll_bits=1041109464 crit_multiplier=1.0 hp_before=44078.109375 hp_after=43232.125 hp_before_bits=1194077724 hp_after_bits=1193861152 hp_damage=845.9828491210938 rng_before_crit=18239476987921416815 rng_after_crit=2834210592324015659 rng_after_resolution=2834210592324015659 elapsed_bits=1128139015"
+        }
+      ],
+      "pre450_intervals": 7,
+      "actor": "2580v0"
+    },
+    "after-zh": {
+      "status": "PASS",
+      "matched_noncritical": [
+        {
+          "observed_frame": 209,
+          "hp_before_bits": 1195593728,
+          "hp_after_bits": 1195377156,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:47:53.712194Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2447v0 enemy_bits=4294964848 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.07980351895093918 critical_roll_bits=1034121223 crit_multiplier=1.0 hp_before=50000.0 hp_after=49154.015625 hp_before_bits=1195593728 hp_after_bits=1195377156 hp_damage=845.9828491210938 rng_before_crit=15568827715586617645 rng_after_crit=7899899159055273359 rng_after_resolution=7899899159055273359 elapsed_bits=1127610245",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 244,
+          "hp_before_bits": 1195377156,
+          "hp_after_bits": 1195160584,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:47:55.426475Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2475v1 projectile_bits=8589932116 enemy=2447v0 enemy_bits=4294964848 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.13923010230064392 critical_roll_bits=1041142358 crit_multiplier=1.0 hp_before=49154.015625 hp_after=48308.03125 hp_before_bits=1195377156 hp_after_bits=1195160584 hp_damage=845.9828491210938 rng_before_crit=4090715109156898132 rng_after_crit=16294907066546662878 rng_after_resolution=16294907066546662878 elapsed_bits=1127686720",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 278,
+          "hp_before_bits": 1195160584,
+          "hp_after_bits": 1194944012,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:47:56.498196Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2447v0 enemy_bits=4294964848 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.7627416849136353 critical_roll_bits=1061372682 crit_multiplier=1.0 hp_before=48308.03125 hp_after=47462.046875 hp_before_bits=1195160584 hp_after_bits=1194944012 hp_damage=845.9828491210938 rng_before_crit=13526401266113417733 rng_after_crit=3779297730011830369 rng_after_resolution=3779297730011830369 elapsed_bits=1127761010",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 313,
+          "hp_before_bits": 1194944012,
+          "hp_after_bits": 1194727440,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:47:57.803415Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2475v1 projectile_bits=8589932116 enemy=2447v0 enemy_bits=4294964848 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8146010041236877 critical_roll_bits=1062242737 crit_multiplier=1.0 hp_before=47462.046875 hp_after=46616.0625 hp_before_bits=1194944012 hp_after_bits=1194727440 hp_damage=845.9828491210938 rng_before_crit=4809716149477455633 rng_after_crit=5719519341586805567 rng_after_resolution=5719519341586805567 elapsed_bits=1127837485",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 347,
+          "hp_before_bits": 1194727440,
+          "hp_after_bits": 1194510868,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:47:59.344772Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2447v0 enemy_bits=4294964848 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.33866646885871887 critical_roll_bits=1051551153 crit_multiplier=1.0 hp_before=46616.0625 hp_after=45770.078125 hp_before_bits=1194727440 hp_after_bits=1194510868 hp_damage=845.9828491210938 rng_before_crit=4827264086922911513 rng_after_crit=6659793275107716583 rng_after_resolution=6659793275107716583 elapsed_bits=1127911775",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 382,
+          "hp_before_bits": 1194510868,
+          "hp_after_bits": 1194294296,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:00.481426Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2475v1 projectile_bits=8589932116 enemy=2447v0 enemy_bits=4294964848 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8014328479766846 critical_roll_bits=1062021812 crit_multiplier=1.0 hp_before=45770.078125 hp_after=44924.09375 hp_before_bits=1194510868 hp_after_bits=1194294296 hp_damage=845.9828491210938 rng_before_crit=2616876449198218620 rng_after_crit=16525339991002338630 rng_after_resolution=16525339991002338630 elapsed_bits=1127988250",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 416,
+          "hp_before_bits": 1194294296,
+          "hp_after_bits": 1194077724,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:01.586474Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2447v0 enemy_bits=4294964848 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.14843736588954926 critical_roll_bits=1041760247 crit_multiplier=1.0 hp_before=44924.09375 hp_after=44078.109375 hp_before_bits=1194294296 hp_after_bits=1194077724 hp_damage=845.9828491210938 rng_before_crit=12205473793540179052 rng_after_crit=7711893193322612196 rng_after_resolution=7711893193322612196 elapsed_bits=1128062540",
+          "expected_crown_only": 845.9828491210938
+        }
+      ],
+      "critical_before450": [],
+      "unmatched_resolver": [],
+      "excluded_post450": [
+        {
+          "observed_frame": 451,
+          "hp_before_bits": 1194077724,
+          "hp_after_bits": 1193861152,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:48:02.706882Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2475v1 projectile_bits=8589932116 enemy=2447v0 enemy_bits=4294964848 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.1387399435043335 critical_roll_bits=1041109464 crit_multiplier=1.0 hp_before=44078.109375 hp_after=43232.125 hp_before_bits=1194077724 hp_after_bits=1193861152 hp_damage=845.9828491210938 rng_before_crit=18239476987921416815 rng_after_crit=2834210592324015659 rng_after_resolution=2834210592324015659 elapsed_bits=1128139015"
+        }
+      ],
+      "pre450_intervals": 7,
+      "actor": "2447v0"
+    },
+    "after-portrait-zh": {
+      "status": "PASS",
+      "matched_noncritical": [
+        {
+          "observed_frame": 209,
+          "hp_before_bits": 1195593728,
+          "hp_after_bits": 1195377156,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:30.299184Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.07980351895093918 critical_roll_bits=1034121223 crit_multiplier=1.0 hp_before=50000.0 hp_after=49154.015625 hp_before_bits=1195593728 hp_after_bits=1195377156 hp_damage=845.9828491210938 rng_before_crit=15568827715586617645 rng_after_crit=7899899159055273359 rng_after_resolution=7899899159055273359 elapsed_bits=1127610245",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 244,
+          "hp_before_bits": 1195377156,
+          "hp_after_bits": 1195160584,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:31.986660Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=0 candidate_ordinal=0 progress_bits=0 projectile=2576v1 projectile_bits=8589932015 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.13923010230064392 critical_roll_bits=1041142358 crit_multiplier=1.0 hp_before=49154.015625 hp_after=48308.03125 hp_before_bits=1195377156 hp_after_bits=1195160584 hp_damage=845.9828491210938 rng_before_crit=4090715109156898132 rng_after_crit=16294907066546662878 rng_after_resolution=16294907066546662878 elapsed_bits=1127686720",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 278,
+          "hp_before_bits": 1195160584,
+          "hp_after_bits": 1194944012,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:33.144995Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.7627416849136353 critical_roll_bits=1061372682 crit_multiplier=1.0 hp_before=48308.03125 hp_after=47462.046875 hp_before_bits=1195160584 hp_after_bits=1194944012 hp_damage=845.9828491210938 rng_before_crit=13526401266113417733 rng_after_crit=3779297730011830369 rng_after_resolution=3779297730011830369 elapsed_bits=1127761010",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 313,
+          "hp_before_bits": 1194944012,
+          "hp_after_bits": 1194727440,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:34.382463Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2576v1 projectile_bits=8589932015 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8146010041236877 critical_roll_bits=1062242737 crit_multiplier=1.0 hp_before=47462.046875 hp_after=46616.0625 hp_before_bits=1194944012 hp_after_bits=1194727440 hp_damage=845.9828491210938 rng_before_crit=4809716149477455633 rng_after_crit=5719519341586805567 rng_after_resolution=5719519341586805567 elapsed_bits=1127837485",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 347,
+          "hp_before_bits": 1194727440,
+          "hp_after_bits": 1194510868,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:35.945118Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.33866646885871887 critical_roll_bits=1051551153 crit_multiplier=1.0 hp_before=46616.0625 hp_after=45770.078125 hp_before_bits=1194727440 hp_after_bits=1194510868 hp_damage=845.9828491210938 rng_before_crit=4827264086922911513 rng_after_crit=6659793275107716583 rng_after_resolution=6659793275107716583 elapsed_bits=1127911775",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 382,
+          "hp_before_bits": 1194510868,
+          "hp_after_bits": 1194294296,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:37.073707Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2576v1 projectile_bits=8589932015 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.8014328479766846 critical_roll_bits=1062021812 crit_multiplier=1.0 hp_before=45770.078125 hp_after=44924.09375 hp_before_bits=1194510868 hp_after_bits=1194294296 hp_damage=845.9828491210938 rng_before_crit=2616876449198218620 rng_after_crit=16525339991002338630 rng_after_resolution=16525339991002338630 elapsed_bits=1127988250",
+          "expected_crown_only": 845.9828491210938
+        },
+        {
+          "observed_frame": 416,
+          "hp_before_bits": 1194294296,
+          "hp_after_bits": 1194077724,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:38.206392Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2806v0 projectile_bits=4294964489 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.14843736588954926 critical_roll_bits=1041760247 crit_multiplier=1.0 hp_before=44924.09375 hp_after=44078.109375 hp_before_bits=1194294296 hp_after_bits=1194077724 hp_damage=845.9828491210938 rng_before_crit=12205473793540179052 rng_after_crit=7711893193322612196 rng_after_resolution=7711893193322612196 elapsed_bits=1128062540",
+          "expected_crown_only": 845.9828491210938
+        }
+      ],
+      "critical_before450": [],
+      "unmatched_resolver": [],
+      "excluded_post450": [
+        {
+          "observed_frame": 451,
+          "hp_before_bits": 1194077724,
+          "hp_after_bits": 1193861152,
+          "base": 650.7560424804688,
+          "hp_damage": 845.9828491210938,
+          "critical_multiplier": 1.0,
+          "raw": "2026-11-07T07:49:39.349347Z TRACE rogue_commander::projectile_hit: PROJECTILE_HIT outer_ordinal=1 candidate_ordinal=0 progress_bits=0 projectile=2576v1 projectile_bits=8589932015 enemy=2520v0 enemy_bits=4294964775 profile=DamageProfile { element: Frost, class: Summon, applies_burn: false, burn_tick: false, skill_index: Some(26), market_proc: false, card_proc: false, melee: false, arrow: false } base_damage=650.7560424804688 scaled_base_damage=650.7560424804688 raw_damage=845.9828491210938 final_damage=845.9828491210938 critical_roll=0.1387399435043335 critical_roll_bits=1041109464 crit_multiplier=1.0 hp_before=44078.109375 hp_after=43232.125 hp_before_bits=1194077724 hp_after_bits=1193861152 hp_damage=845.9828491210938 rng_before_crit=18239476987921416815 rng_after_crit=2834210592324015659 rng_after_resolution=2834210592324015659 elapsed_bits=1128139015"
+        }
+      ],
+      "pre450_intervals": 7,
+      "actor": "2520v0"
+    }
+  },
+  "scope": "Final R3 archive only, actual typed producer/HP-bit/UI observations. Controlled fixture, sourceguard test evidence, no physical input or earned progression claim"
+}

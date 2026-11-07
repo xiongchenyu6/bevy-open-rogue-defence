@@ -2,9 +2,9 @@
 //! This is UI reachability evidence, not naturally earned equipment progression.
 use bevy::{prelude::*, ui::UiSystems};
 use rogue_commander::game::{
-    ActiveSkill, AttackClock, Autoplay, ControlScheme, DraftChoice, DraftState, GameLanguage,
-    GameSession, PlayerBuild, SelectedHero, SelectionDetail, SkillId, SpawnDirector,
-    prepare_crafting_market,
+    ActiveSkill, AttackClock, Autoplay, ControlScheme, DraftChoice, DraftState, Enemy, GameAssets,
+    GameLanguage, GameSession, Hero, HeroKind, PlayerBuild, PlayerSummon, SelectedHero,
+    SelectionDetail, SkillId, SpawnDirector, prepare_crafting_market,
 };
 
 const SKILL: usize = 26;
@@ -17,9 +17,35 @@ struct Probe {
     gold: u32,
     price: u32,
     purchased: bool,
+    damage_case: bool,
+    expect_modifiers: bool,
+    raw_preview: Option<f32>,
+    adjusted_preview: Option<f32>,
+    target: Option<Entity>,
+    target_position: Vec3,
+    previous_hp: f32,
+    saw_imported_wyrm: bool,
+    hp_intervals: u32,
+    matches_display: bool,
 }
 
-pub fn configure(world: &mut World) {
+pub fn configure(world: &mut World, scenario: &str) {
+    let damage_case = scenario == "crown-damage-preview";
+    let expect_modifiers = if damage_case {
+        match std::env::var("EXPECT_SKILL_DAMAGE_MODIFIERS")
+            .expect("crown-damage-preview requires EXPECT_SKILL_DAMAGE_MODIFIERS=0 or 1")
+            .as_str()
+        {
+            "0" => false,
+            "1" => true,
+            _ => panic!("EXPECT_SKILL_DAMAGE_MODIFIERS must be 0 or 1"),
+        }
+    } else {
+        false
+    };
+    if damage_case {
+        world.resource_mut::<SelectedHero>().kind = HeroKind::StormSavant;
+    }
     let expected_fixed = match std::env::var("EXPECT_CROWN_DETAIL_FIXED")
         .expect("crown-detail requires EXPECT_CROWN_DETAIL_FIXED=0 or 1")
         .as_str()
@@ -43,6 +69,16 @@ pub fn configure(world: &mut World) {
         gold: 0,
         price: 0,
         purchased: false,
+        damage_case,
+        expect_modifiers,
+        raw_preview: None,
+        adjusted_preview: None,
+        target: None,
+        target_position: Vec3::ZERO,
+        previous_hp: 50_000.0,
+        saw_imported_wyrm: false,
+        hp_intervals: 0,
+        matches_display: false,
     });
 }
 
@@ -145,6 +181,45 @@ fn audit_detail(world: &mut World, frame: u32) {
             "baseline must expose real rank6-to5 damage downgrade"
         );
     }
+    if world.resource::<Probe>().damage_case {
+        let expect_modifiers = world.resource::<Probe>().expect_modifiers;
+        assert_eq!(
+            format!("{current:.1}"),
+            "650.8",
+            "controlled StormSavant/rank6 base"
+        );
+        let adjusted = detail.lines().find(|line| {
+            line.starts_with("With current bonuses (non-critical):")
+                || line.starts_with("计入当前增伤（非暴击）:")
+        });
+        let displayed = if expect_modifiers {
+            let line = adjusted.expect("actual adjusted damage UI line");
+            let (_, values) = line.split_once(':').unwrap();
+            let (a, b) = values.trim().split_once(" → ").unwrap();
+            let a: f32 = a.parse().expect("adjusted current damage");
+            let b: f32 = b.parse().expect("adjusted next damage");
+            assert!(a.is_finite() && b.is_finite());
+            assert_eq!(a, b);
+            assert_eq!(
+                format!("{a:.1}"),
+                "846.0",
+                "controlled Crown-only outgoing display"
+            );
+            Some(a)
+        } else {
+            assert!(
+                adjusted.is_none(),
+                "old baseline must not invent an adjusted line"
+            );
+            None
+        };
+        let mut probe = world.resource_mut::<Probe>();
+        probe.raw_preview = Some(current);
+        probe.adjusted_preview = displayed;
+        println!(
+            "CROWN_DAMAGE_CARD frame={frame} base_display={current} adjusted_display={displayed:?} modifiers_expected={expect_modifiers}"
+        );
+    }
     println!("CROWN_DETAIL_TEXT frame={frame} language={language:?} fixed={fixed} text={detail:?}");
     println!(
         "CROWN_DETAIL_DAMAGE frame={frame} current={current} next={next} actual_rank=6 branches=3"
@@ -219,7 +294,168 @@ fn exercise(world: &mut World) {
         100 | 180 => audit_detail(world, frame),
         _ => {}
     }
-    if frame >= 80 {
+    let damage_case = world.resource::<Probe>().damage_case;
+    if frame >= 80 && (!damage_case || frame < 190) {
         interact(world, "Build card 0", Interaction::Hovered);
+    }
+    if damage_case {
+        match frame {
+            190 => interact(world, "Build later", Interaction::Pressed),
+            195 => {
+                assert!(world.resource::<DraftState>().root.is_none());
+                assert!(!world.resource::<GameSession>().paused);
+            }
+            200 => spawn_damage_target(world),
+            _ => {}
+        }
+        if frame > 200 {
+            observe_damage(world, frame);
+        }
+    }
+}
+
+fn spawn_damage_target(world: &mut World) {
+    assert!(world.resource::<DraftState>().root.is_none());
+    assert!(!world.resource::<GameSession>().paused);
+    let position = world
+        .query_filtered::<&Transform, With<Hero>>()
+        .single(world)
+        .unwrap()
+        .translation
+        + Vec3::new(5.5, 0.0, 1.0);
+    let scene = world.resource::<GameAssets>().enemy_scenes[0].clone();
+    let target = world
+        .spawn((
+            Name::new("Controlled Crown frost damage target"),
+            WorldAssetRoot(scene),
+            Transform::from_translation(position).with_scale(Vec3::splat(0.8)),
+            Enemy {
+                hp: 50_000.0,
+                max_hp: 50_000.0,
+                speed: 0.0,
+                damage: 0.0,
+                xp: 0,
+                wood: 0,
+                gold: 0,
+                kill_credit: 0,
+                elite: false,
+            },
+        ))
+        .id();
+    let mut probe = world.resource_mut::<Probe>();
+    assert!(
+        probe.target.is_none(),
+        "only one stationary target is created"
+    );
+    probe.target = Some(target);
+    probe.target_position = position;
+    println!(
+        "CROWN_DAMAGE_TARGET frame=200 actor={target:?} position={position:?} initial_hp=50000 armor_component=false"
+    );
+}
+
+fn imported_mesh(world: &World, root: Entity) -> bool {
+    let mut pending = vec![root];
+    while let Some(entity) = pending.pop() {
+        if world.get::<Mesh3d>(entity).is_some() {
+            return true;
+        }
+        if let Some(children) = world.get::<Children>(entity) {
+            pending.extend(children.iter());
+        }
+    }
+    false
+}
+
+fn observe_damage(world: &mut World, frame: u32) {
+    assert!(!world.resource::<GameSession>().paused);
+    assert!(
+        world.resource::<DraftState>().root.is_none(),
+        "Later must keep the pending draft closed"
+    );
+    assert!(
+        world.resource::<AttackClock>().0.is_paused(),
+        "ordinary attacks remain disabled"
+    );
+    assert!(world.resource::<ActiveSkill>().remaining > 9_000.0);
+    assert!(
+        world
+            .resource::<PlayerBuild>()
+            .skills
+            .iter()
+            .enumerate()
+            .all(|(index, rank)| { *rank == if index == SKILL { 6 } else { 0 } })
+    );
+    let target = world
+        .resource::<Probe>()
+        .target
+        .expect("actual static target");
+    assert_eq!(
+        world.query::<&Enemy>().iter(world).count(),
+        1,
+        "only the controlled target is present"
+    );
+    let position = world.get::<Transform>(target).unwrap().translation;
+    assert_eq!(
+        position,
+        world.resource::<Probe>().target_position,
+        "target must never move into the projectile"
+    );
+    let scene = world.resource::<GameAssets>().summon_scenes[4].id();
+    let wyrms: Vec<_> = world
+        .query_filtered::<(Entity, &WorldAssetRoot, &InheritedVisibility), With<PlayerSummon>>()
+        .iter(world)
+        .filter(|(_, root, visible)| root.0.id() == scene && visible.get())
+        .map(|(entity, _, _)| entity)
+        .collect();
+    if wyrms.iter().any(|entity| imported_mesh(world, *entity)) {
+        if !world.resource::<Probe>().saw_imported_wyrm {
+            println!(
+                "CROWN_DAMAGE_WYRM frame={frame} public_player_summon=true actual_scene4=true imported_mesh=true"
+            );
+        }
+        world.resource_mut::<Probe>().saw_imported_wyrm = true;
+    }
+    let hp = world.get::<Enemy>(target).unwrap().hp;
+    let previous = world.resource::<Probe>().previous_hp;
+    if hp < previous {
+        let damage = previous - hp;
+        let probe = world.resource::<Probe>();
+        let raw = probe
+            .raw_preview
+            .expect("actual UI raw number was recorded");
+        let display = probe.adjusted_preview.unwrap_or(raw * 1.30);
+        let matches = format!("{damage:.1}") == format!("{display:.1}");
+        println!(
+            "CROWN_DAMAGE_HP frame={frame} actor={target:?} hp_before={previous} hp_after={hp} before_bits={} after_bits={} damage={damage} raw_display={raw} adjusted_display={:?} display_rounding_match={matches}",
+            previous.to_bits(),
+            hp.to_bits(),
+            probe.adjusted_preview
+        );
+        let mut probe = world.resource_mut::<Probe>();
+        probe.hp_intervals += 1;
+        probe.matches_display |= matches;
+    }
+    world.resource_mut::<Probe>().previous_hp = hp;
+    if frame == 450 {
+        let probe = world.resource::<Probe>();
+        assert!(
+            probe.saw_imported_wyrm,
+            "actual producer must create a visible imported FrostWyrm"
+        );
+        assert!(
+            probe.hp_intervals > 0 && hp > 0.0,
+            "real damage must hit the surviving target"
+        );
+        assert!(
+            probe.matches_display,
+            "at least one actual HP interval must match the controlled outgoing display rounding"
+        );
+        // DamageProfile is private to the library. The native runner must also
+        // validate the real projectile_hit trace; do not forge that observation.
+        println!(
+            "[capture] PASS crown-damage-preview: actual purchase/G/Later, imported scene4 PlayerSummon, stationary target and real HP loss; modifier_ui={}; resolver_profile_and_noncritical_require_external_trace=true",
+            probe.expect_modifiers
+        );
     }
 }

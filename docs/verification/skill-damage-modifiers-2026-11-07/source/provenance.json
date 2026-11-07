@@ -1,0 +1,94 @@
+{
+  "original_commit": "304a087db2302a58905969af7de34ba8244421af",
+  "changed_input_paths": [
+    "src/game/progression.rs",
+    "src/game/progression_ui.rs",
+    "src/game/resources.rs",
+    "src/game/skill_details.rs",
+    "src/game/skill_details/tests.rs",
+    "src/game/skills.rs"
+  ],
+  "source_snapshots": [
+    {
+      "stage": "before",
+      "path": "src/game/skill_details.rs",
+      "archive": "source/before/src/game/skill_details.rs"
+    },
+    {
+      "stage": "after",
+      "path": "src/game/skill_details.rs",
+      "archive": "source/after/src/game/skill_details.rs"
+    },
+    {
+      "stage": "before",
+      "path": "src/game/skill_details/tests.rs",
+      "archive": "source/before/src/game/skill_details/tests.rs"
+    },
+    {
+      "stage": "after",
+      "path": "src/game/skill_details/tests.rs",
+      "archive": "source/after/src/game/skill_details/tests.rs"
+    },
+    {
+      "stage": "before",
+      "path": "src/game/progression_ui.rs",
+      "archive": "source/before/src/game/progression_ui.rs"
+    },
+    {
+      "stage": "after",
+      "path": "src/game/progression_ui.rs",
+      "archive": "source/after/src/game/progression_ui.rs"
+    },
+    {
+      "stage": "before",
+      "path": "src/game/progression.rs",
+      "archive": "source/before/src/game/progression.rs"
+    },
+    {
+      "stage": "after",
+      "path": "src/game/progression.rs",
+      "archive": "source/after/src/game/progression.rs"
+    },
+    {
+      "stage": "before",
+      "path": "src/game/resources.rs",
+      "archive": "source/before/src/game/resources.rs"
+    },
+    {
+      "stage": "after",
+      "path": "src/game/resources.rs",
+      "archive": "source/after/src/game/resources.rs"
+    },
+    {
+      "stage": "before",
+      "path": "src/game/skills.rs",
+      "archive": "source/before/src/game/skills.rs"
+    },
+    {
+      "stage": "after",
+      "path": "src/game/skills.rs",
+      "archive": "source/after/src/game/skills.rs"
+    },
+    {
+      "stage": "before",
+      "path": "src/bin/capture.rs",
+      "archive": "source/before/src/bin/capture.rs"
+    },
+    {
+      "stage": "after",
+      "path": "src/bin/capture.rs",
+      "archive": "source/after/src/bin/capture.rs"
+    },
+    {
+      "stage": "before",
+      "path": "src/bin/capture/crown_detail.rs",
+      "archive": "source/before/src/bin/capture/crown_detail.rs"
+    },
+    {
+      "stage": "after",
+      "path": "src/bin/capture/crown_detail.rs",
+      "archive": "source/after/src/bin/capture/crown_detail.rs"
+    }
+  ],
+  "fixture_scope": "Installed capture source copies match both frozen stages. Original304 source and exact installed patch reconstruct baseline. Controlled native rank5/wallet/stock/target, actual production purchase/summon HP path."
+}

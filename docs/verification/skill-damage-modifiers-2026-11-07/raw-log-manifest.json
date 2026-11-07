@@ -1,0 +1,212 @@
+[
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/library-tests.log",
+    "archive": "logs/library-tests.log.gz",
+    "raw_bytes": 76774,
+    "raw_sha256": "2f68825d95d4a8504717be6570ef0b1f9d09b41756932b833b61ccbb53529b5c"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/before-manager.log",
+    "archive": "logs/before-manager.log.gz",
+    "raw_bytes": 174,
+    "raw_sha256": "f4346e6424019b11ca193f0a79dee37516813bd1410c82682c4a144d0381e6f8"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/after-zh.log",
+    "archive": "logs/after-zh.log.gz",
+    "raw_bytes": 19481,
+    "raw_sha256": "264481f919b3e86905294be3c013b5bdc274a218307054a57c2dd1f23f515e7f"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/build.log",
+    "archive": "logs/build.log.gz",
+    "raw_bytes": 276,
+    "raw_sha256": "5c02df3419f933e96aac32b32176beb1589874b7fe208c128377a4847336b143"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/clippy.log",
+    "archive": "logs/clippy.log.gz",
+    "raw_bytes": 278,
+    "raw_sha256": "3e1b0ef907974d739935c66a7c53f2558094066a02baf5d34d793a578720a3d4"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/after-zh-verify.log",
+    "archive": "logs/after-zh-verify.log.gz",
+    "raw_bytes": 2715,
+    "raw_sha256": "01c411a6c8131a6a0b02e75338c6342a0e36bd941ee17fd8aeb1c58d115a2449"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-en.log",
+    "archive": "logs/before-portrait-en.log.gz",
+    "raw_bytes": 19318,
+    "raw_sha256": "a2848502f5f25affabd799c27ea19a8dd7dfd612fef70662e82c851e7b770265"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/focused-tests.log",
+    "archive": "logs/focused-tests.log.gz",
+    "raw_bytes": 307941,
+    "raw_sha256": "f85ebe20aeae5659473eb836f72575ce4043aa42f7330585b0587f8963774e95"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-en.log",
+    "archive": "logs/after-portrait-en.log.gz",
+    "raw_bytes": 19702,
+    "raw_sha256": "600d04fb5074716b901cc18ef94d7edd2878119cf4ed88d9b9d6a8bb49eeb5c7"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-en-verify.log",
+    "archive": "logs/after-portrait-en-verify.log.gz",
+    "raw_bytes": 2715,
+    "raw_sha256": "44cb8c58074703ad109acca799df2a30961319f71cf111983173d744b62f7ff6"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-zh-verify.log",
+    "archive": "logs/after-portrait-zh-verify.log.gz",
+    "raw_bytes": 2715,
+    "raw_sha256": "365056b1ca671718dc1a91845e7b2eb870567f6e557cbe3839b3a99982c2a4ab"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-en-verify.log",
+    "archive": "logs/before-portrait-en-verify.log.gz",
+    "raw_bytes": 2716,
+    "raw_sha256": "f4aa3e48c3d817ba0bd3896aa2c7fe69a38de373f26fe46627e5c71e2528d04c"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/before-en-verify.log",
+    "archive": "logs/before-en-verify.log.gz",
+    "raw_bytes": 2716,
+    "raw_sha256": "7622e3c2dff2356b05617af966af01328dacd7c1cce03fc37b79bc1ef25b98d5"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/after-en-verify.log",
+    "archive": "logs/after-en-verify.log.gz",
+    "raw_bytes": 2715,
+    "raw_sha256": "c55ae0dde9d95e25fe36a9392dac8460df34cfadec9af611eb9bbc3896998d1b"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/before-build.log",
+    "archive": "logs/before-build.log.gz",
+    "raw_bytes": 1403,
+    "raw_sha256": "06ba3d00c6429562ac5d33d87b1bf5391a53150067d0fc75478655969e5d1d73"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/after-en.log",
+    "archive": "logs/after-en.log.gz",
+    "raw_bytes": 19581,
+    "raw_sha256": "301eea604c2e57bbe4e928e21d140a082df39f262a4bfbf15433a5d617967bd1"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-zh-verify.log",
+    "archive": "logs/before-portrait-zh-verify.log.gz",
+    "raw_bytes": 2716,
+    "raw_sha256": "15f09c99e5bbca0b92dcad84a8b8e4a5122415c0bfcc86c63b4afb1b6bb122dd"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/before-zh-verify.log",
+    "archive": "logs/before-zh-verify.log.gz",
+    "raw_bytes": 2716,
+    "raw_sha256": "1281e418115c12dc70d718d16e0f8518c8c42bb4eb0f352d5a00c2faff8a063a"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/after-manager.log",
+    "archive": "logs/after-manager.log.gz",
+    "raw_bytes": 527,
+    "raw_sha256": "a1becc8eaf770ad5af34bec104d14f16eaf4392d44f9b05124baac9a45f576e7"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/after-portrait-zh.log",
+    "archive": "logs/after-portrait-zh.log.gz",
+    "raw_bytes": 19602,
+    "raw_sha256": "648063675917628d7fea46575b50abc09b118f653feec0b4276a8a000d325f02"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/before-en.log",
+    "archive": "logs/before-en.log.gz",
+    "raw_bytes": 20061,
+    "raw_sha256": "35f124aef1c87efc7f9b65a853cb4668ebb03e748dd3cb6d5a792532e5cfc466"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/before-portrait-zh.log",
+    "archive": "logs/before-portrait-zh.log.gz",
+    "raw_bytes": 19272,
+    "raw_sha256": "956a125dce67bd0146ea5693cb5eb9119a0a857170f8321e939717f925e73d4a"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/before-zh.log",
+    "archive": "logs/before-zh.log.gz",
+    "raw_bytes": 19151,
+    "raw_sha256": "88b2121ba2fc986729c1ba0bb8ae5ef3ef172b66e50bc245cfcad17157d9d3e6"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/r1-missing-font-and-rebirth-review/library-tests.log",
+    "archive": "logs/r1-missing-font-and-rebirth-review/library-tests.log.gz",
+    "raw_bytes": 77426,
+    "raw_sha256": "f0c1eac7d24861d693a6f775b37b7ec4a060dc97e8f7b501a6daa9e6e88d7877"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/r1-missing-font-and-rebirth-review/focused-tests.log",
+    "archive": "logs/r1-missing-font-and-rebirth-review/focused-tests.log.gz",
+    "raw_bytes": 307480,
+    "raw_sha256": "aeff53b48d80b0de95b951e511eca8d4cd5640700bb797b6341293fd48ec9128"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/r1-missing-font-and-rebirth-review/after-manager.log",
+    "archive": "logs/r1-missing-font-and-rebirth-review/after-manager.log.gz",
+    "raw_bytes": 904,
+    "raw_sha256": "c744675e54538cabdb933ce0485a3a342f684ca222bc125ad2b1898dab3050d7"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/library-tests.log",
+    "archive": "logs/r2-before-replacement-review/library-tests.log.gz",
+    "raw_bytes": 76649,
+    "raw_sha256": "dd49734c0e5508c2b84b98b1087d12848033dff6e48ca049f519318609ac14d3"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-zh.log",
+    "archive": "logs/r2-before-replacement-review/after-zh.log.gz",
+    "raw_bytes": 19481,
+    "raw_sha256": "d1aa5053a9935835e9b8242fbc0d19d066486f1a7475cfc433f07fd672113f02"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/build.log",
+    "archive": "logs/r2-before-replacement-review/build.log.gz",
+    "raw_bytes": 276,
+    "raw_sha256": "b17d1ac447271374ecdd659c72f7903948adb00dc308617daa5396453cb34713"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/clippy.log",
+    "archive": "logs/r2-before-replacement-review/clippy.log.gz",
+    "raw_bytes": 278,
+    "raw_sha256": "6563fe4b062586ef8580a591800ed5cbc30e7e8dd1ad8dc477fdbd2748504416"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-zh-verify.log",
+    "archive": "logs/r2-before-replacement-review/after-zh-verify.log.gz",
+    "raw_bytes": 2715,
+    "raw_sha256": "000726c8381c7406026a060a849533a13df8568e5f76422a678009ab2bc2c917"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/focused-tests.log",
+    "archive": "logs/r2-before-replacement-review/focused-tests.log.gz",
+    "raw_bytes": 307941,
+    "raw_sha256": "7843a6719ad9e29a5fe805cb3d2525544f8a923ffcba4d9e79525c3b6d4c750f"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-en-verify.log",
+    "archive": "logs/r2-before-replacement-review/after-en-verify.log.gz",
+    "raw_bytes": 2715,
+    "raw_sha256": "365056b1ca671718dc1a91845e7b2eb870567f6e557cbe3839b3a99982c2a4ab"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-en.log",
+    "archive": "logs/r2-before-replacement-review/after-en.log.gz",
+    "raw_bytes": 19581,
+    "raw_sha256": "d0122424fb380f1bb83d3f68661c470835974f7e592b59c194a4fffca4a4e60b"
+  },
+  {
+    "original": "target/verification/skill-damage-modifiers-2026-11-07/r2-before-replacement-review/after-manager.log",
+    "archive": "logs/r2-before-replacement-review/after-manager.log.gz",
+    "raw_bytes": 239,
+    "raw_sha256": "f3260e1ab7683adecd230c73f804829a41dfd7ea7794fd1723a645119f69dcb1"
+  }
+]

@@ -1,0 +1,1 @@
+{"command": ["nix", "develop", "--command", "cargo", "test", "--locked", "--release", "--lib", "skill_details", "-j2", "--", "--nocapture"], "returncode": 0}

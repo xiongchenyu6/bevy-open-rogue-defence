@@ -1,0 +1,1 @@
+{"command": ["python3", "target/verification/skill-preview-modifiers-implementation-2026-11-06/producer-fixture/verify-producer.py", "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/skill-damage-modifiers-2026-11-07/before-portrait-zh.log", "--modifiers", "0", "--frames", "480"], "returncode": 0}

@@ -1,0 +1,4 @@
+{
+  "result": "763passed0failed1ignored; strictClippy; EN/ZHnative480andproducerPASS",
+  "review": "Valid full-slot ReplaceSkill clears old highest skill and changes Crown owner; preview retained old skill. Root correcting actual UI branch and regression before final acceptance."
+}

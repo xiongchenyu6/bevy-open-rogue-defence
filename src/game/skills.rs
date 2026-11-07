@@ -654,7 +654,7 @@ fn intercept_ember_rebirth(
         vitals.deaths = vitals.deaths.saturating_sub(1);
     }
     vitals.alive = true;
-    vitals.health = vitals.max_health * (0.35 * skill_utility_multiplier(25)).min(0.9);
+    vitals.health = ember_rebirth_health(vitals.max_health);
     vitals.revive_remaining = 0.0;
     vitals.invulnerable_remaining = vitals
         .invulnerable_remaining
@@ -2556,7 +2556,7 @@ fn cast_rare_skills(
                 max_distance: (build.attack_range + 2.0).clamp(7.0, 16.0) * rank_size(wheel_rank),
                 traveled: 0.0,
                 returning: false,
-                damage: build.attack_damage * 0.9 * skill_utility_multiplier(23),
+                damage: blood_wheel_damage(build),
                 burn_cap: 3,
                 outbound_hits: HashSet::new(),
                 return_hits: HashSet::new(),
@@ -3091,6 +3091,14 @@ pub(crate) fn scaled_skill_damage(
         * triune_skill_multiplier(index, &runtime.triune)
 }
 
+pub(crate) fn ember_rebirth_health(max_health: f32) -> f32 {
+    max_health * (0.35 * skill_utility_multiplier(25)).min(0.9)
+}
+
+pub(crate) fn blood_wheel_damage(build: &PlayerBuild) -> f32 {
+    build.attack_damage * 0.9 * skill_utility_multiplier(23)
+}
+
 pub(crate) fn skill_preview_damage(
     index: usize,
     rank: u8,
@@ -3100,6 +3108,7 @@ pub(crate) fn skill_preview_damage(
 ) -> Option<f32> {
     match index {
         7 => Some(build.attack_damage * 0.6),
+        23 => Some(blood_wheel_damage(build)),
         18 => Some(infection::damage_per_tick(rank, vitals.attack_damage())),
         20 | 21 | 28 | 29 => None,
         _ => Some(scaled_skill_damage(index, rank, build, vitals, runtime)),

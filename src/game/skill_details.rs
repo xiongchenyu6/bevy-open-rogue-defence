@@ -1,5 +1,9 @@
 //! Player-facing numbers derive from the same functions as combat.
+use super::bonds::{BondRuntime, DamageProfile};
+use super::combat::market_outgoing_damage_multiplier;
 use super::content::{SkillTrigger, Tag};
+use super::encounters::EncounterState;
+use super::market::MarketEffects;
 use super::skills::{self, SkillRuntime};
 use super::{GameLanguage, HeroVitals, PlayerBuild, SkillId};
 
@@ -111,6 +115,14 @@ fn formula(language: GameLanguage, skill: SkillId) -> String {
             )
             .into();
     }
+    if i == 23 {
+        return format!(
+            "{} 0.90 × {} × {:.2}",
+            language.pick("Formula", "公式"),
+            language.pick("attack damage", "攻击力"),
+            skill.definition().rarity.skill_power_multiplier()
+        );
+    }
     let power = skill.definition().effect.power;
     let mut terms = vec![format!(
         "{:.0} + {:.0} × {}",
@@ -166,6 +178,59 @@ fn utility(language: GameLanguage, i: usize, rank: u8) -> String {
     }
 }
 
+/// Read-only player-side damage context. No target or RNG is selected here.
+#[derive(Clone, Copy)]
+pub(crate) struct DamagePreviewContext<'a> {
+    pub(crate) bonds: &'a BondRuntime,
+    pub(crate) market: &'a MarketEffects,
+    pub(crate) encounters: &'a EncounterState,
+}
+
+impl DamagePreviewContext<'_> {
+    fn adjusted(
+        self,
+        skill: SkillId,
+        rank: u8,
+        base_damage: f32,
+        build: &PlayerBuild,
+        vitals: &HeroVitals,
+    ) -> Option<f32> {
+        // Utilities have no generic damage profile. Fate's authored outcomes
+        // use different profiles, so never invent a Some(29) outgoing bonus.
+        if matches!(skill.0, 20 | 21 | 28 | 29) {
+            return None;
+        }
+        let profile = if skill.0 == 23 {
+            DamageProfile::PHYSICAL_ATTACK
+        } else {
+            DamageProfile::for_skill(usize::from(skill.0))
+        };
+        Some(self.adjusted_profile(skill, rank, base_damage, profile, build, vitals))
+    }
+
+    fn adjusted_profile(
+        self,
+        skill: SkillId,
+        rank: u8,
+        base_damage: f32,
+        profile: DamageProfile,
+        build: &PlayerBuild,
+        vitals: &HeroVitals,
+    ) -> f32 {
+        let mut candidate = build.clone();
+        candidate.skills[usize::from(skill.0)] = rank;
+        let mut damage_vitals = vitals.clone();
+        if skill.0 == 25 {
+            damage_vitals.alive = true;
+            damage_vitals.health = skills::ember_rebirth_health(vitals.max_health);
+        }
+        base_damage
+            * self.bonds.damage_multiplier(profile)
+            * market_outgoing_damage_multiplier(self.market, profile, &candidate, &damage_vitals)
+            * self.encounters.outgoing_damage_multiplier()
+    }
+}
+
 pub(crate) fn detailed(
     language: GameLanguage,
     skill: SkillId,
@@ -173,6 +238,7 @@ pub(crate) fn detailed(
     build: &PlayerBuild,
     vitals: &HeroVitals,
     runtime: &SkillRuntime,
+    damage_context: DamagePreviewContext<'_>,
 ) -> String {
     let i = skill.0 as usize;
     let rank = current.max(1);
@@ -197,7 +263,9 @@ pub(crate) fn detailed(
             || i == 23
             || super::bonds::DamageProfile::for_skill(i).element
                 == super::bonds::DamageElement::Physical;
-        let kind = if i == 18 {
+        let kind = if i == 23 {
+            language.pick("physical outbound hit", "物理出程每击")
+        } else if i == 18 {
             language.pick("physical infection tick", "物理疫蚀每跳")
         } else if skill.definition().tags.contains(&Tag::Summon) {
             if physical {
@@ -211,14 +279,54 @@ pub(crate) fn detailed(
             language.pick("magical", "魔法")
         };
         lines.push(format!(
-            "{} ({kind}): {}{a:.1} → {b:.1}",
+            "{} ({kind}; {}): {}{a:.1} → {b:.1}",
             language.pick("Damage", "伤害"),
+            language.pick("base formula", "基础公式"),
             if current == 0 {
                 language.pick("unlearned; rank 1 ", "未学习；1级 ")
             } else {
                 ""
             }
         ));
+        let adjusted_a = damage_context
+            .adjusted(skill, rank, a, build, vitals)
+            .expect("primary damage preview has an authored skill profile");
+        let adjusted_b = damage_context
+            .adjusted(skill, next, b, build, vitals)
+            .expect("primary damage preview has an authored skill profile");
+        lines.push(format!(
+            "{}: {adjusted_a:.1} → {adjusted_b:.1}",
+            if i == 25 {
+                language.pick(
+                    "After rebirth bonuses (non-critical)",
+                    "返生后增伤（非暴击）",
+                )
+            } else {
+                language.pick(
+                    "With current bonuses (non-critical)",
+                    "计入当前增伤（非暴击）",
+                )
+            }
+        ));
+        if i == 25 {
+            lines.push(format!(
+                "{} {:.1}%",
+                language.pick("Health restored before burst", "爆燃前恢复生命"),
+                skills::ember_rebirth_health(100.0)
+            ));
+        }
+        if i == 23 {
+            let profile = DamageProfile::for_skill(23).with_burn();
+            let return_a = damage_context.adjusted_profile(skill, rank, a, profile, build, vitals);
+            let return_b = damage_context.adjusted_profile(skill, next, b, profile, build, vitals);
+            lines.push(format!(
+                "{} {return_a:.1} → {return_b:.1}",
+                language.pick(
+                    "Flame return hit with bonuses (non-critical)",
+                    "火焰返程每击增伤后（非暴击）"
+                )
+            ));
+        }
         lines.push(formula(language, skill));
         lines.push(format!(
             "{} {:.1} · {} {:.1} · {} {:.1}",
@@ -234,8 +342,8 @@ pub(crate) fn detailed(
         lines.push(
             language
                 .pick(
-                    "Values include active power bonuses; before enemy armor/resistance.",
-                    "数值包含当前强度增幅；尚未扣除敌人护甲或抗性。",
+                    "Base formulas use current attributes. Adjusted damage is before target type, distance, critical hits, random rolls and defenses; finite summons use new-cast values.",
+                    "基础公式使用当前属性。增伤后数值未计目标类型、距离、暴击、随机和防御；限时召唤物按新召唤计算。",
                 )
                 .into(),
         );
@@ -246,6 +354,10 @@ pub(crate) fn detailed(
             utility(language, i, next)
         ));
         if i == 29 {
+            lines.push(language.pick(
+                "Fate outcome damage below is base formula only; outcome-specific outgoing bonuses are not included.",
+                "下列命运结果伤害为基础公式，未计各结果独立的结算增伤。"
+            ).into());
             let mult = skill.definition().rarity.skill_power_multiplier();
             let spell = skills::effective_spell_power(vitals, runtime);
             let summon = skills::effective_summon_power(vitals, runtime);

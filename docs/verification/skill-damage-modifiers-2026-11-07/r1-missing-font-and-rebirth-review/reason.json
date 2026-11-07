@@ -1,0 +1,6 @@
+{
+  "focused": "11passed",
+  "library": "761passed1failed1ignored",
+  "failure": "new Chinese word uses missing U+4EC5 glyph",
+  "additional_read_only_audit": "Skill25 preview used current low health while actual rebirth restores50.75percent before burst; correct preview to real post-heal state"
+}

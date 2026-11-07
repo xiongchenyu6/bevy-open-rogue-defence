@@ -1,0 +1,7 @@
+{
+  "head_when_prepared": "d36e0e5eb104d7f33c3b91d0b36e6d91ca411704",
+  "files": {
+    "src/bin/capture/crown_detail.rs": "0c522d651768f98fdf0dcd815abf775ac783fc6e3005adce2e8b2e1936a150a5",
+    "src/bin/capture.rs": "99312f79b3787f9ec5fa73d3f6a7222b7832ae4f23d1d6ab6eb421eb4acdb65e"
+  }
+}
