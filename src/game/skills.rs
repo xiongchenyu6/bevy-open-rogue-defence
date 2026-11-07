@@ -3846,6 +3846,40 @@ pub(crate) fn test_cinder_order_cast(world: &mut World) -> (Vec<Entity>, f32, f3
     (ordered, damage, cooldown, casts)
 }
 
+/// Controlled resolved-basic-attack boundary using the real fourth-hit caster.
+#[cfg(test)]
+pub(crate) fn test_cast_piercing_volley(world: &mut World) {
+    use bevy::ecs::system::RunSystemOnce;
+    world
+        .run_system_once(
+            |mut commands: Commands,
+             assets: Res<GameAssets>,
+             mut pools: ResMut<CombatPools>,
+             build: Res<PlayerBuild>,
+             vitals: Res<HeroVitals>,
+             mut runtime: ResMut<SkillRuntime>,
+             enemies: Query<(Entity, &Transform, &Enemy)>| {
+                let (entity, transform, enemy) = enemies.single().unwrap();
+                let target = target_info(entity, transform, enemy, None, None, None);
+                assert_eq!(runtime.attack_count, 0);
+                apply_resolved_attack_volleys(&mut runtime, 4, |runtime| {
+                    cast_attack_procs(
+                        &mut commands,
+                        &assets,
+                        &mut pools,
+                        &build,
+                        &vitals,
+                        Vec3::ZERO,
+                        target,
+                        runtime,
+                    );
+                });
+                assert_eq!(runtime.attack_count, 4);
+            },
+        )
+        .unwrap();
+}
+
 #[cfg(test)]
 mod tests {
     use bevy::ecs::system::RunSystemOnce;

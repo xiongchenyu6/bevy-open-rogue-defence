@@ -74,9 +74,14 @@ pub(super) fn emit(
             lifetime: 1.4,
         },
     )?;
+    let profile = if basic_attacks::weapon(shot.kind) == basic_attacks::BasicWeapon::Crossbow {
+        DamageProfile::PHYSICAL_ATTACK.as_arrow()
+    } else {
+        DamageProfile::PHYSICAL_ATTACK
+    };
     commands
         .entity(entity)
-        .insert((DamageProfile::PHYSICAL_ATTACK, WeaponFlight::new(shot.kind)));
+        .insert((profile, WeaponFlight::new(shot.kind)));
     if basic_attacks::is_starter_ember_arrow(shot.kind, shot.level) {
         commands
             .entity(entity)

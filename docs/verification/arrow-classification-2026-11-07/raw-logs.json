@@ -1,0 +1,110 @@
+{
+  "raw/after-manager.log.gz": {
+    "bytes": 365,
+    "sha256": "d30390779baff8fcf65894a265ad97edde98296841d7f64ba74bead27c00414a"
+  },
+  "raw/after-r1-clippy-helper-placement/after-manager.log.gz": {
+    "bytes": 365,
+    "sha256": "d30390779baff8fcf65894a265ad97edde98296841d7f64ba74bead27c00414a"
+  },
+  "raw/after-r1-clippy-helper-placement/clippy.log.gz": {
+    "bytes": 954,
+    "sha256": "59a8e40a4bf35ceeed36bc81b5752227a85e1569ab97820c8e8f6a7a79bf0283"
+  },
+  "raw/after-r1-clippy-helper-placement/focused.log.gz": {
+    "bytes": 6368,
+    "sha256": "55aa40c966ecf31a08419512fc5acb3049b1be20c91ea19b3b65e57729d33b4f"
+  },
+  "raw/after-r1-clippy-helper-placement/library.log.gz": {
+    "bytes": 77285,
+    "sha256": "c2fb0ba0a4d3449a1676fecb72b6411d53258d28e7fdbb099b629a954708cff1"
+  },
+  "raw/after-r2-capture-counter-access/r2-clippy.log.gz": {
+    "bytes": 685,
+    "sha256": "2a9b44278bc2f60d493eb916a7baa19d7d8c8bb5c74d2acd7199a6a610246f53"
+  },
+  "raw/after-r2-capture-counter-access/r2-focused.log.gz": {
+    "bytes": 6368,
+    "sha256": "03899f0ad7c9e56f3a3f492b0f94d7392d64dd395596d7f7266cd8e34979df16"
+  },
+  "raw/after-r2-capture-counter-access/r2-library.log.gz": {
+    "bytes": 77285,
+    "sha256": "8cd11a6afe9ce35549b15eab2237a92f2e21f74b2b78e68d6fcdf31b758375a1"
+  },
+  "raw/after-r2-capture-counter-access/r2-manager.log.gz": {
+    "bytes": 1123,
+    "sha256": "712c6528185eb0c4dafe7ff80ee4156bac7abbfc7d59427ac4b7993b00b44bd8"
+  },
+  "raw/clippy.log.gz": {
+    "bytes": 954,
+    "sha256": "59a8e40a4bf35ceeed36bc81b5752227a85e1569ab97820c8e8f6a7a79bf0283"
+  },
+  "raw/focused.log.gz": {
+    "bytes": 6368,
+    "sha256": "55aa40c966ecf31a08419512fc5acb3049b1be20c91ea19b3b65e57729d33b4f"
+  },
+  "raw/library.log.gz": {
+    "bytes": 77285,
+    "sha256": "c2fb0ba0a4d3449a1676fecb72b6411d53258d28e7fdbb099b629a954708cff1"
+  },
+  "raw/r2-clippy.log.gz": {
+    "bytes": 685,
+    "sha256": "2a9b44278bc2f60d493eb916a7baa19d7d8c8bb5c74d2acd7199a6a610246f53"
+  },
+  "raw/r2-focused.log.gz": {
+    "bytes": 6368,
+    "sha256": "03899f0ad7c9e56f3a3f492b0f94d7392d64dd395596d7f7266cd8e34979df16"
+  },
+  "raw/r2-library.log.gz": {
+    "bytes": 77285,
+    "sha256": "8cd11a6afe9ce35549b15eab2237a92f2e21f74b2b78e68d6fcdf31b758375a1"
+  },
+  "raw/r2-manager.log.gz": {
+    "bytes": 1123,
+    "sha256": "712c6528185eb0c4dafe7ff80ee4156bac7abbfc7d59427ac4b7993b00b44bd8"
+  },
+  "raw/r3-capture-build.log.gz": {
+    "bytes": 276,
+    "sha256": "c075f8948fa29b45cdc62ccba1c15a79ff2235727d13631ab09b22ea4edf89e7"
+  },
+  "raw/r3-clippy.log.gz": {
+    "bytes": 277,
+    "sha256": "4f327e6b0cf3c1557ac14c2baf697426a6d4e2f1b7b4099c5da6cabc119921cf"
+  },
+  "raw/r3-desktop-card0.log.gz": {
+    "bytes": 366556,
+    "sha256": "bda58b415a3fb0ecfb6d7866096d4a6a01f147d3543994b664bf302e90335df2"
+  },
+  "raw/r3-desktop-card1.log.gz": {
+    "bytes": 599149,
+    "sha256": "e8820d6da75fd56219aa11e8a80732a6ea7706156d00c29065409e05d5339417"
+  },
+  "raw/r3-focused.log.gz": {
+    "bytes": 6255,
+    "sha256": "df69ad92e1de0926263c9d53b46fb86f0f86e9191a771f5af2b7d366fbf61d30"
+  },
+  "raw/r3-library.log.gz": {
+    "bytes": 77285,
+    "sha256": "886c7a48cdb725340b976b045f160217a4936e8d3dffe65298f2abcf3756cd1d"
+  },
+  "raw/r3-manager.log.gz": {
+    "bytes": 322,
+    "sha256": "cf4a812377a96ca5d30879c8cde2de442ff07fcd0939f8f5f59e0afddb7e1e10"
+  },
+  "raw/r3-phone-card0.log.gz": {
+    "bytes": 366534,
+    "sha256": "43ac8c2a2a71177610a7dfed16d17d2ecde51f4211c9eddcd6dc5cf95e9eb2aa"
+  },
+  "raw/r3-phone-card1.log.gz": {
+    "bytes": 599124,
+    "sha256": "65288ffd527c506d8923d050431bdb93ee63cef9ab531391a8ea93975f860bbd"
+  },
+  "raw/red-manager.log.gz": {
+    "bytes": 35,
+    "sha256": "e14909b827cf9368eedb47d8e9e0f48fa0c5f21d8384e296abebf5e34a9421a0"
+  },
+  "raw/red.log.gz": {
+    "bytes": 2662,
+    "sha256": "5b4d2fea8a081457a594a76d82eacc86f8ce4411c1bc2cfce9196afd4e701c90"
+  }
+}

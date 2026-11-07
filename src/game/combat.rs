@@ -7298,4 +7298,5 @@ mod tests {
         );
     }
     include!("combat/ranged_release_tests.rs");
+    include!("combat/arrow_classification_tests.rs");
 }

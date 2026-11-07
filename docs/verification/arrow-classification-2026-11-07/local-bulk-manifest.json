@@ -1,0 +1,86 @@
+{
+  "r3-capture": {
+    "bytes": 489658880,
+    "sha256": "61316810ea4477c030c56446cf0e1f470a25174443ef791c592ef46ef8871d6a"
+  },
+  "r3-desktop-card0/frame00120.png": {
+    "bytes": 960183,
+    "sha256": "807dbacfbb1934dbd9a03347b5908de1d029960b39538cd88f601a60921a2272"
+  },
+  "r3-desktop-card0/frame00180.png": {
+    "bytes": 960754,
+    "sha256": "c25773572a0f3207ff1dbf43f4d1aa8c2b6ea720155ca768a87a05ec03d7ef71"
+  },
+  "r3-desktop-card0/frame00240.png": {
+    "bytes": 961707,
+    "sha256": "69c17bde32b064dcbe8217ca1aa0cbabfadc2e86ebe2c3d4870fbbbf057d0adb"
+  },
+  "r3-desktop-card0/frame00295.png": {
+    "bytes": 964466,
+    "sha256": "6a4054ec929029edecf9b8dd0518cf0a7ced4eedd47efb7308b4d08e6572607c"
+  },
+  "r3-desktop-card0/frame00330.png": {
+    "bytes": 960710,
+    "sha256": "5c638074d0b3526a4c4af9730d3a79bc206f87f9ac3b20bdb60befdb94049da7"
+  },
+  "r3-desktop-card1/frame00120.png": {
+    "bytes": 967725,
+    "sha256": "07c49afc1d7fbe1a95aa94be3e7ad365311bdcd8586420c42638a39c9cdf5eb7"
+  },
+  "r3-desktop-card1/frame00180.png": {
+    "bytes": 968580,
+    "sha256": "34da46874ed5c9d77d60a8da2583b3f16b05c29d79d9e2a5c5e3e2d9d432be05"
+  },
+  "r3-desktop-card1/frame00240.png": {
+    "bytes": 968055,
+    "sha256": "683786a0cb98408491914e556d44c6656d3ba5ed71a362afba92b5ea30a0057d"
+  },
+  "r3-desktop-card1/frame00295.png": {
+    "bytes": 970086,
+    "sha256": "21b014a0f564f3399aee5ca2de4a1a950127bc4050dcfa9d1a15ed15243d8a70"
+  },
+  "r3-desktop-card1/frame00330.png": {
+    "bytes": 967973,
+    "sha256": "fdf695f4ff63cee95f555de1c0429d222b5851bd0fbeb6e14e88e1bff8642d5e"
+  },
+  "r3-phone-card0/frame00120.png": {
+    "bytes": 921286,
+    "sha256": "6471613f59b3fc3ed9c9e301489ba8bdbe1281a04458c7a52feb6e8e00ea5c02"
+  },
+  "r3-phone-card0/frame00180.png": {
+    "bytes": 920140,
+    "sha256": "332eb5c733ae43640033cda1e764c74ef3b5e018779d562b9c4376db39b759c3"
+  },
+  "r3-phone-card0/frame00240.png": {
+    "bytes": 921622,
+    "sha256": "21772d0ba8e87790aa4410f1ccbf12db9affa67f7ffaafd7d2915c99804a2da5"
+  },
+  "r3-phone-card0/frame00295.png": {
+    "bytes": 924381,
+    "sha256": "55c5f46212a2e360ad4dfe9532ab1f7bde4b70f70f15b3a203fb077d098f3aa9"
+  },
+  "r3-phone-card0/frame00330.png": {
+    "bytes": 920849,
+    "sha256": "e5afc3ba97b39e2013137adb4bf47291abc0d3ef36b7fbb76b7ea93bbd7d84a4"
+  },
+  "r3-phone-card1/frame00120.png": {
+    "bytes": 927182,
+    "sha256": "46f0b959d8d00a0aaecba5dab839b1f861d4ad91c172ba3d6ed6fe462fc1382c"
+  },
+  "r3-phone-card1/frame00180.png": {
+    "bytes": 929407,
+    "sha256": "bcf63b621cfa3991a9e8859f2120ec4f3d11137bf2ff73bacbfa5e24503d3f01"
+  },
+  "r3-phone-card1/frame00240.png": {
+    "bytes": 927536,
+    "sha256": "859d8e17693f838bddf670c36e566b3d788e0c68e4f6792d782f789436fe24b1"
+  },
+  "r3-phone-card1/frame00295.png": {
+    "bytes": 929711,
+    "sha256": "1c81d1a78c5d8f8268d05dfe5d99f0a8e014c1fe9e274afb822392768ac6bb1a"
+  },
+  "r3-phone-card1/frame00330.png": {
+    "bytes": 927513,
+    "sha256": "f037df5e7b2ddfe0c25b906e5876d45843bed8b17586ce3f589b5b9ba4717ab8"
+  }
+}

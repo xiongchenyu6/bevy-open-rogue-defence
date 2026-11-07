@@ -1,0 +1,102 @@
+diff --git a/src/bin/capture/skill_identity.rs b/src/bin/capture/skill_identity.rs
+index 27c8a5d..2eb2a78 100644
+--- a/src/bin/capture/skill_identity.rs
++++ b/src/bin/capture/skill_identity.rs
+@@ -1,9 +1,9 @@
+ //! One learned skill per scene, with explicitly declared trigger dependencies.
+ use bevy::{prelude::*, time::Virtual};
+ use rogue_commander::game::{
+-    ActiveSkill, AttackClock, Autoplay, CampaignMenu, Enemy, GameAssets, GameSession, Hero,
+-    HeroKind, HeroVitals, PlayerBuild, SelectedHero, SkillCastTelemetry, SkillId, SpawnDirector,
+-    content::SKILLS,
++    ActiveSkill, AttackClock, Autoplay, BasicAttackCounter, BondCardId, BondId, CampaignMenu,
++    Enemy, GameAssets, GameSession, Hero, HeroKind, HeroVitals, PlayerBuild, SelectedHero,
++    SkillCastTelemetry, SkillId, SpawnDirector, content::SKILLS,
+ };
+ #[derive(Component)]
+ struct IdentityTarget;
+@@ -12,6 +12,7 @@ struct IdentityCapture {
+     index: usize,
+     rank: u8,
+     production_camera: bool,
++    arrow_card: Option<bool>,
+     max_visual_scale: f32,
+     max_zone_scale: f32,
+     frame: u32,
+@@ -42,11 +43,43 @@ pub fn configure(world: &mut World, scenario: &str) {
+     let rank = rank.parse::<u8>().expect("skill rank");
+     assert!((1..=5).contains(&rank));
+     assert!(index < SkillId::COUNT);
++    let arrow_card = std::env::var("ROGUE_CAPTURE_ARROW_CARD").ok().map(|value| {
++        assert_eq!(
++            (index, rank),
++            (7, 1),
++            "arrow-card probe requires skill-identity-7-rank-1"
++        );
++        match value.as_str() {
++            "0" => false,
++            "1" => true,
++            _ => panic!("ROGUE_CAPTURE_ARROW_CARD requires explicit 0 or 1"),
++        }
++    });
++    let hero_kind = if arrow_card.is_some() {
++        HeroKind::EmberRanger
++    } else {
++        HeroKind::StoneWarden
++    };
+     world.resource_mut::<CampaignMenu>().0 = false;
+     world.remove_resource::<Autoplay>();
+     world.resource_mut::<SelectedHero>().locked = true;
+-    world.resource_mut::<SelectedHero>().kind = HeroKind::StoneWarden;
+-    *world.resource_mut::<HeroVitals>() = HeroVitals::for_hero(HeroKind::StoneWarden, 1);
++    world.resource_mut::<SelectedHero>().kind = hero_kind;
++    *world.resource_mut::<HeroVitals>() = HeroVitals::for_hero(hero_kind, 1);
++    if let Some(card) = arrow_card {
++        // Controlled pre-owned prerequisites. Actual BondsPlugin computes every
++        // modifier and quiver state during the normal game updates.
++        let mut build = world.resource_mut::<PlayerBuild>();
++        build.owned_bond_cards.fill(false);
++        for family in [BondId::Journey, BondId::Agility, BondId::Ranger] {
++            for member in family.definition().members {
++                build.owned_bond_cards[member.index()] = true;
++            }
++        }
++        build.owned_bond_cards[BondCardId::ArcheryPiercing.index()] = card;
++        println!(
++            "ARROW_CARD_FIXTURE card={card} explicit_preowned_prerequisites=true hero=EmberRanger actual_bond_producer=true"
++        );
++    }
+     world.resource_mut::<SpawnDirector>().enabled = false;
+     world.resource_mut::<GameSession>().auto_bond_draws = false;
+     world
+@@ -56,6 +89,7 @@ pub fn configure(world: &mut World, scenario: &str) {
+         index,
+         rank,
+         production_camera,
++        arrow_card,
+         max_visual_scale: 0.,
+         max_zone_scale: 0.,
+         frame: 0,
+@@ -232,6 +266,7 @@ fn observe(
+     session: Res<GameSession>,
+     active: Res<ActiveSkill>,
+     telemetry: Res<SkillCastTelemetry>,
++    attacks: Res<BasicAttackCounter>,
+     materials: Res<Assets<StandardMaterial>>,
+     zone_materials: Query<(&Name, &MeshMaterial3d<StandardMaterial>)>,
+     assets: Res<GameAssets>,
+@@ -336,6 +371,14 @@ fn observe(
+         );
+     }
+     if frame == 295 {
++        if let Some(card) = state.arrow_card {
++            assert_eq!(build.owns_bond_card(BondCardId::ArcheryPiercing), card);
++            assert!(state.saw_signature && state.saw_damage);
++            println!(
++                "ARROW_CARD_OBSERVATION frame={frame} card={card} attacks={} base_attack={} learned_rank={} caster_every=4",
++                attacks.count(), build.attack_damage, build.skills[7]
++            );
++        }
+         assert_eq!(build.skills[index], state.rank);
+         if index == 14 {
+             assert!(

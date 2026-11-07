@@ -147,6 +147,9 @@ pub(crate) fn profile(kind: HeroKind) -> DamageProfile {
     if basic_attacks::weapon(kind).melee() {
         result = result.as_melee();
     }
+    if basic_attacks::weapon(kind) == basic_attacks::BasicWeapon::Crossbow {
+        result = result.as_arrow();
+    }
     if element == DamageElement::Flame {
         result = result.with_burn();
     }
@@ -337,6 +340,12 @@ pub(crate) fn apply_contact(
                 remaining: existing.map_or(remaining, |effect| effect.remaining.max(remaining)),
             });
     }
+}
+
+#[cfg(test)]
+pub(crate) fn test_emit_fusion_requests(world: &mut World) {
+    use bevy::ecs::system::RunSystemOnce;
+    world.run_system_once(emit).unwrap();
 }
 
 #[cfg(test)]

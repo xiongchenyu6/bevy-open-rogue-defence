@@ -1523,6 +1523,17 @@ fn apply_bond(card: BondCardId, session: &mut GameSession, build: &mut PlayerBui
     fruits
 }
 
+#[cfg(test)]
+pub(crate) fn test_acquire_bond_card(
+    card: BondCardId,
+    session: &mut GameSession,
+    build: &mut PlayerBuild,
+) {
+    assert!(bond_card_available(card, build));
+    apply_bond(card, session, build);
+    assert!(build.owns_bond_card(card));
+}
+
 pub(crate) fn reset_run(world: &mut World) {
     world.insert_resource(SkillEconomy::default());
     world.insert_resource(BondEconomy::default());

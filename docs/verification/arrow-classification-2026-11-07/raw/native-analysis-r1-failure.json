@@ -1,0 +1,11 @@
+{
+  "script": "analyze-native-r1.py",
+  "script_sha256": "532571b89aab7eee60afc2d5f6b680b5dc96192a246e115ee80e708b544b34d3",
+  "status": "failed",
+  "assertion": "pair[0]['skill7_distinct_raw_bases']==pair[1]['skill7_distinct_raw_bases']",
+  "actual_first_raw_bases": [
+    156.24609375,
+    156.24635314941406
+  ],
+  "scope": "exact raw base equality across card variants fails; retained independently from normalized multiplier check; no production or capture rerun"
+}

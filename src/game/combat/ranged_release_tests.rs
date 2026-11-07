@@ -439,7 +439,13 @@ fn ranged_real_release_preserves_committed_metadata_and_starter_boundaries() {
             assert!((projectile.velocity.length() - 11.).abs() < 0.00001);
             assert_eq!(
                 app.world().get::<DamageProfile>(entity),
-                Some(&DamageProfile::PHYSICAL_ATTACK)
+                Some(
+                    &if basic_attacks::weapon(kind) == basic_attacks::BasicWeapon::Crossbow {
+                        DamageProfile::PHYSICAL_ATTACK.as_arrow()
+                    } else {
+                        DamageProfile::PHYSICAL_ATTACK
+                    }
+                )
             );
             assert_eq!(app.world().get::<WeaponFlight>(entity).unwrap().kind, kind);
             assert_eq!(

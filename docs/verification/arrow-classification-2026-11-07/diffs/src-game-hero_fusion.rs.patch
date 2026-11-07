@@ -1,0 +1,25 @@
+--- before/src/game/hero_fusion.rs
++++ after/src/game/hero_fusion.rs
+@@ -146,6 +146,9 @@
+     let mut result = DamageProfile::new(element, DamageClass::Attack).as_card_proc();
+     if basic_attacks::weapon(kind).melee() {
+         result = result.as_melee();
++    }
++    if basic_attacks::weapon(kind) == basic_attacks::BasicWeapon::Crossbow {
++        result = result.as_arrow();
+     }
+     if element == DamageElement::Flame {
+         result = result.with_burn();
+@@ -340,6 +343,12 @@
+ }
+ 
+ #[cfg(test)]
++pub(crate) fn test_emit_fusion_requests(world: &mut World) {
++    use bevy::ecs::system::RunSystemOnce;
++    world.run_system_once(emit).unwrap();
++}
++
++#[cfg(test)]
+ mod tests {
+     use super::*;
+     #[test]

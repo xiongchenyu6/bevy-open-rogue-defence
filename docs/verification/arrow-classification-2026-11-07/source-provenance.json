@@ -1,0 +1,17 @@
+{
+  "base_commit": "36b5d3f81de00f5a77c1ef8161447d5b2fa4bf58",
+  "production_diffs": {
+    "src/game/combat/ranged_release.rs": {
+      "before": "4cececf6dc07c606c724b0434476489e3dbf1e1e1a0931123052320c7dba48d3",
+      "after": "44ceb4301dd3ec6a85d026045577b973714dc55d1efb06883716c3f40fbf0502"
+    },
+    "src/game/hero_fusion.rs": {
+      "before": "1197defdf96d4a58fbc02e80ac6d64de63ac913c23bc9e479aa9fc618ac48f11",
+      "after": "7c409bb800d84c7bfa470bce5d58336d18199dad3c7bcde5c4be7f1c6239a1f9"
+    },
+    "src/game/skills.rs": {
+      "before": "6c687aa8145515bed51ff067b1d939c246c673e6e2f23f7afed0b2990351dbaf",
+      "after": "146b9661e1417d071a83fd671bf1a3a1720bad780b08657332af4fbaefd43309"
+    }
+  }
+}

@@ -1,0 +1,1 @@
+{"command": ["nix", "develop", "--command", "cargo", "test", "--locked", "--release", "--lib", "arrow_classification_native_ember", "-j2", "--", "--nocapture"], "returncode": 101}

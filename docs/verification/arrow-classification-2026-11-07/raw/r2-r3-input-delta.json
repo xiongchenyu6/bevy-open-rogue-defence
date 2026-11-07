@@ -1,0 +1,10 @@
+{
+  "library_inputs_exact_equal": true,
+  "changed": {
+    "src/bin/capture/skill_identity.rs": {
+      "r2": "2bdaa1a1f60dd2d11c3937cee600f84e1d06c075bc0937725e83d446578fdeea",
+      "r3": "ebab890981f3fbfdb070ef207f662f93864306aa3ca2b54b330e07bb4f1c2c99"
+    }
+  },
+  "change": "capture uses existing public BasicAttackCounter.count() accessor"
+}

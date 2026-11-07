@@ -133,6 +133,10 @@ impl DamageProfile {
         };
         let mut profile = Self::new(element, class);
         profile.skill_index = Some(index as u8);
+        // Piercing Volley emits physical arrows in both combat and previews.
+        if index == 7 {
+            profile = profile.as_arrow();
+        }
         profile
     }
 }
