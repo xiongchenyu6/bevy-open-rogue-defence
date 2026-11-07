@@ -130,6 +130,28 @@ def verify_recipe_selection(title, materials, action):
     assert action.strip() == 'Forge equipment', ('Recipe is not ready', action)
 
 
+def open_attribute_panel(read_rows, open_panel, choose, deadline, observations,
+                         now=time.monotonic, pause=time.sleep):
+    requested = False
+    while now() < deadline:
+        rows = read_rows()
+        record = dict(rows=rows)
+        observations.append(record)
+        if find_text(rows, 'ATTRIBUTES'):
+            return rows
+        if choice_pending(rows):
+            choose('1')
+            record['input'] = '1'
+            requested = False
+        elif public_panel_state(rows) == 'battle' and not requested:
+            open_panel()
+            record['input'] = 'open_attributes'
+            requested = True
+        else:
+            pause(.2)
+    raise AssertionError('Attributes did not open within observation deadline')
+
+
 def magic_penetration_from_rows(rows):
     """Read only the labeled offense percentage, rejecting missing/conflicting values."""
     values, evidence = set(), []
@@ -256,7 +278,11 @@ def main():
         rows = lines()
         assert not inventory_open(rows) and not find_text(rows, 'Close'), 'Equipment did not close'
     def inspect_magic_penetration(prefix, expected):
-        click(178,44);wait('ATTRIBUTES')
+        opening=report.setdefault('attribute_open_observations',[])
+        def panel_rows():
+            image=shot(prefix+f'-open-{len(opening):02}.png')
+            return ocr_screenshot(image,env)
+        open_attribute_panel(panel_rows,lambda:click(178,44),key,time.monotonic()+90,opening)
         observations=report.setdefault('magic_penetration_observations',[])
         for attempt in range(4):
             image=shot(prefix+f'-{attempt:02}.png')

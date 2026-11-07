@@ -1,0 +1,11 @@
+{
+  "base_commit": "fe98bae9ee89c82b0664258060884ba6da199525",
+  "sources": {
+    "tools/desktop/forge_runtime.py": "24313dcedfc2d66b0b2e2d2128372632947681a69ffdd61a8547cdc9b2f69c58",
+    "tools/desktop/test_forge_runtime.py": "95dabc8958f34446e233f0bf148d8565dda2c93c4bdf4ddb10faf062a6ee191f"
+  },
+  "images": {
+    "current-ui.png": "c5ea0fd9ed09332b2739ee04e23955cefa623545d6f4e870cff904b39f8e2e93",
+    "crafted-inventory.png": "f78004f50552c9533dc93c441acf07100ed207e81910c4e65f2d6e4e988f5761"
+  }
+}

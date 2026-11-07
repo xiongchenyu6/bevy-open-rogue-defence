@@ -12,6 +12,28 @@ from campaign_equipment_runtime import (crop_text, screenshot_wallet, inspected_
 
 
 class ForgePolicyTests(unittest.TestCase):
+    def test_attribute_opener_settles_visible_choice_before_opening(self):
+        choice=[('Level 20 · Recruit a hero',40,80,500,110)]
+        battle=[('LIVES 3',23,87,70,98)]
+        attributes=[('ATTRIBUTES',200,200,300,215)]
+        read=Mock(side_effect=[choice,battle,battle,attributes])
+        open_panel,choose,records=Mock(),Mock(),[]
+        result=forge_runtime.open_attribute_panel(read,open_panel,choose,90,records,
+                                                 now=lambda:0,pause=Mock())
+        self.assertEqual(result,attributes)
+        choose.assert_called_once_with('1')
+        open_panel.assert_called_once_with()
+        self.assertEqual([r.get('input') for r in records],['1','open_attributes',None,None])
+
+    def test_attribute_opener_unknown_screen_expires_without_input(self):
+        ticks=iter([0,90])
+        open_panel,choose=Mock(),Mock()
+        with self.assertRaises(AssertionError):
+            forge_runtime.open_attribute_panel(lambda:[],open_panel,choose,90,[],
+                                              now=lambda:next(ticks),pause=Mock())
+        open_panel.assert_not_called()
+        choose.assert_not_called()
+
     def test_magic_penetration_requires_its_own_unambiguous_percentage(self):
         label=('Magic penetration',501,475,617,490)
         value=('20.0%',748,475,780,487)
