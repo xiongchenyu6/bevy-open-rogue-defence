@@ -1,0 +1,1 @@
+{"command": ["nix", "develop", "--command", "cargo", "test", "--locked", "--release", "--lib", "full_slot_", "-j2", "--", "--nocapture"], "returncode": 0, "elapsed": 216.3249563340214}

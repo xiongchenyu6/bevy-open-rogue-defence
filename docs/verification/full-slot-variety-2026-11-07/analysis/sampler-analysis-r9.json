@@ -1,0 +1,300 @@
+{
+  "rows": 4608,
+  "groups": [
+    {
+      "level": 2,
+      "elapsed": "100",
+      "remaining_owned_upgrades": 0,
+      "seeds": 256,
+      "swaps": 0,
+      "missing_owned": 0,
+      "ur": 0,
+      "swap_count_histogram": {
+        "0": 256
+      },
+      "new_rarity_counts": {}
+    },
+    {
+      "level": 2,
+      "elapsed": "100",
+      "remaining_owned_upgrades": 1,
+      "seeds": 256,
+      "swaps": 0,
+      "missing_owned": 0,
+      "ur": 0,
+      "swap_count_histogram": {
+        "0": 256
+      },
+      "new_rarity_counts": {}
+    },
+    {
+      "level": 2,
+      "elapsed": "100",
+      "remaining_owned_upgrades": 2,
+      "seeds": 256,
+      "swaps": 0,
+      "missing_owned": 0,
+      "ur": 0,
+      "swap_count_histogram": {
+        "0": 256
+      },
+      "new_rarity_counts": {}
+    },
+    {
+      "level": 3,
+      "elapsed": "100",
+      "remaining_owned_upgrades": 0,
+      "seeds": 256,
+      "swaps": 768,
+      "missing_owned": 0,
+      "ur": 0,
+      "swap_count_histogram": {
+        "3": 256
+      },
+      "new_rarity_counts": {
+        "Sr": 768
+      }
+    },
+    {
+      "level": 3,
+      "elapsed": "100",
+      "remaining_owned_upgrades": 1,
+      "seeds": 256,
+      "swaps": 661,
+      "missing_owned": 149,
+      "ur": 0,
+      "swap_count_histogram": {
+        "2": 107,
+        "3": 149
+      },
+      "new_rarity_counts": {
+        "Sr": 661
+      }
+    },
+    {
+      "level": 3,
+      "elapsed": "100",
+      "remaining_owned_upgrades": 2,
+      "seeds": 256,
+      "swaps": 544,
+      "missing_owned": 222,
+      "ur": 0,
+      "swap_count_histogram": {
+        "2": 156,
+        "1": 34,
+        "3": 66
+      },
+      "new_rarity_counts": {
+        "Sr": 544
+      }
+    },
+    {
+      "level": 7,
+      "elapsed": "719.9",
+      "remaining_owned_upgrades": 0,
+      "seeds": 256,
+      "swaps": 768,
+      "missing_owned": 0,
+      "ur": 0,
+      "swap_count_histogram": {
+        "3": 256
+      },
+      "new_rarity_counts": {
+        "Sr": 768
+      }
+    },
+    {
+      "level": 7,
+      "elapsed": "719.9",
+      "remaining_owned_upgrades": 1,
+      "seeds": 256,
+      "swaps": 661,
+      "missing_owned": 149,
+      "ur": 0,
+      "swap_count_histogram": {
+        "2": 107,
+        "3": 149
+      },
+      "new_rarity_counts": {
+        "Sr": 661
+      }
+    },
+    {
+      "level": 7,
+      "elapsed": "719.9",
+      "remaining_owned_upgrades": 2,
+      "seeds": 256,
+      "swaps": 544,
+      "missing_owned": 222,
+      "ur": 0,
+      "swap_count_histogram": {
+        "2": 156,
+        "1": 34,
+        "3": 66
+      },
+      "new_rarity_counts": {
+        "Sr": 544
+      }
+    },
+    {
+      "level": 8,
+      "elapsed": "719.9",
+      "remaining_owned_upgrades": 0,
+      "seeds": 256,
+      "swaps": 768,
+      "missing_owned": 0,
+      "ur": 0,
+      "swap_count_histogram": {
+        "3": 256
+      },
+      "new_rarity_counts": {
+        "Sr": 585,
+        "Ssr": 183
+      }
+    },
+    {
+      "level": 8,
+      "elapsed": "719.9",
+      "remaining_owned_upgrades": 1,
+      "seeds": 256,
+      "swaps": 692,
+      "missing_owned": 180,
+      "ur": 0,
+      "swap_count_histogram": {
+        "3": 180,
+        "2": 76
+      },
+      "new_rarity_counts": {
+        "Sr": 529,
+        "Ssr": 163
+      }
+    },
+    {
+      "level": 8,
+      "elapsed": "719.9",
+      "remaining_owned_upgrades": 2,
+      "seeds": 256,
+      "swaps": 600,
+      "missing_owned": 241,
+      "ur": 0,
+      "swap_count_histogram": {
+        "3": 103,
+        "2": 138,
+        "1": 15
+      },
+      "new_rarity_counts": {
+        "Sr": 460,
+        "Ssr": 140
+      }
+    },
+    {
+      "level": 8,
+      "elapsed": "720",
+      "remaining_owned_upgrades": 0,
+      "seeds": 256,
+      "swaps": 768,
+      "missing_owned": 0,
+      "ur": 28,
+      "swap_count_histogram": {
+        "3": 256
+      },
+      "new_rarity_counts": {
+        "Sr": 563,
+        "Ssr": 177,
+        "Ur": 28
+      }
+    },
+    {
+      "level": 8,
+      "elapsed": "720",
+      "remaining_owned_upgrades": 1,
+      "seeds": 256,
+      "swaps": 689,
+      "missing_owned": 177,
+      "ur": 31,
+      "swap_count_histogram": {
+        "3": 177,
+        "2": 79
+      },
+      "new_rarity_counts": {
+        "Ssr": 180,
+        "Sr": 478,
+        "Ur": 31
+      }
+    },
+    {
+      "level": 8,
+      "elapsed": "720",
+      "remaining_owned_upgrades": 2,
+      "seeds": 256,
+      "swaps": 624,
+      "missing_owned": 242,
+      "ur": 32,
+      "swap_count_histogram": {
+        "3": 126,
+        "2": 116,
+        "1": 14
+      },
+      "new_rarity_counts": {
+        "Sr": 445,
+        "Ur": 32,
+        "Ssr": 147
+      }
+    },
+    {
+      "level": 30,
+      "elapsed": "1500",
+      "remaining_owned_upgrades": 0,
+      "seeds": 256,
+      "swaps": 768,
+      "missing_owned": 0,
+      "ur": 28,
+      "swap_count_histogram": {
+        "3": 256
+      },
+      "new_rarity_counts": {
+        "Sr": 563,
+        "Ssr": 177,
+        "Ur": 28
+      }
+    },
+    {
+      "level": 30,
+      "elapsed": "1500",
+      "remaining_owned_upgrades": 1,
+      "seeds": 256,
+      "swaps": 689,
+      "missing_owned": 177,
+      "ur": 31,
+      "swap_count_histogram": {
+        "3": 177,
+        "2": 79
+      },
+      "new_rarity_counts": {
+        "Ssr": 180,
+        "Sr": 478,
+        "Ur": 31
+      }
+    },
+    {
+      "level": 30,
+      "elapsed": "1500",
+      "remaining_owned_upgrades": 2,
+      "seeds": 256,
+      "swaps": 624,
+      "missing_owned": 242,
+      "ur": 32,
+      "swap_count_histogram": {
+        "3": 126,
+        "2": 116,
+        "1": 14
+      },
+      "new_rarity_counts": {
+        "Sr": 445,
+        "Ur": 32,
+        "Ssr": 147
+      }
+    }
+  ],
+  "scope": "Independent catalog/gate/ownership/unique-ID verification of actual recorded hands. Same-seed repeat is asserted by the separate Rust regression test, not independently regenerated here."
+}

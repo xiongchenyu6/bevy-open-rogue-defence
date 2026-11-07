@@ -1,0 +1,1 @@
+{"command": ["nix", "develop", "--command", "cargo", "clippy", "--locked", "--bin", "capture", "-j1", "--target-dir", "target/market-visual", "--config", "profile.dev.opt-level=0", "--config", "profile.dev.package.\"*\".opt-level=0", "--config", "profile.dev.debug=0", "--", "-D", "warnings"], "returncode": 0, "elapsed": 11.046762989019044}

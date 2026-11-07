@@ -1,0 +1,21 @@
+{
+  "unchanged_functions": [
+    "skill_cost",
+    "bond_cost",
+    "skill_rarity_available",
+    "choose_weighted_skill_for_roll",
+    "grant_skill_rank"
+  ],
+  "assets_unchanged": true,
+  "logger_identical": true,
+  "changed_inputs": [
+    "src/bin/capture.rs",
+    "src/bin/capture/skill_variety.rs",
+    "src/game/progression.rs",
+    "src/game/progression/full_slot_tests.rs",
+    "src/game/progression_draft_tests.rs",
+    "src/game/progression_ui.rs",
+    "src/game/progression_ui/layout.rs"
+  ],
+  "scope": "Stored source byte equality and unchanged scalar helper bodies. Actual eligibility is separately checked against raw4608 sampler hands; no common-helper arithmetic is mirrored."
+}

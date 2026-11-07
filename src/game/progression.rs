@@ -267,7 +267,7 @@ fn request_skill_draft(
         &mut drought,
         evolution.skill_capacity(),
     );
-    let choices = late_skill_choices(choices, &build, &evolution, session.elapsed, &mut rng);
+    let choices = late_skill_choices(choices, &build, &evolution, &mut rng);
     if choices.is_empty() {
         return;
     }
@@ -515,7 +515,9 @@ fn pick_skill_choices(
         .filter(|id| {
             let def = id.definition();
             build.skill_rank(*id) < def.max_rank
-                && (!slots_full || build.skill_rank(*id) > 0)
+                && (!slots_full
+                    || build.skill_rank(*id) > 0
+                    || replacement_skill_available(*id, level, elapsed, build))
                 && skill_rarity_available(def.rarity, level, elapsed)
         })
         .collect();
@@ -575,14 +577,28 @@ fn pick_skill_choices(
     drought.skill_missed_preference = !choices
         .iter()
         .any(|skill| tags_match_preference(skill.definition().tags, selected, build));
-    choices.into_iter().map(DraftChoice::Skill).collect()
+    let old = if slots_full && choices.iter().any(|id| build.skill_rank(*id) == 0) {
+        let owned: Vec<_> = (0..SKILLS.len())
+            .map(|index| SkillId(index as u8))
+            .filter(|id| build.skill_rank(*id) > 0)
+            .collect();
+        Some(owned[rng.next_u32() as usize % owned.len()])
+    } else {
+        None
+    };
+    choices
+        .into_iter()
+        .map(|new| match old {
+            Some(old) if build.skill_rank(new) == 0 => DraftChoice::ReplaceSkill { old, new },
+            _ => DraftChoice::Skill(new),
+        })
+        .collect()
 }
 
 fn late_skill_choices(
     mut choices: Vec<DraftChoice>,
     build: &PlayerBuild,
     evolution: &SkillEvolution,
-    elapsed: f32,
     rng: &mut RunRng,
 ) -> Vec<DraftChoice> {
     let ready: Vec<_> = (0..SKILLS.len())
@@ -612,43 +628,19 @@ fn late_skill_choices(
         }
         choices.truncate(3);
     }
-    if active_skill_slots(build) >= evolution.skill_capacity()
-        && elapsed >= EPIC_SKILL_UNLOCK_AT
-        && !choices.iter().any(|choice| {
-            matches!(choice,
-            DraftChoice::Skill(skill) if skill.definition().rarity == Rarity::Ur)
-        })
-        && (choices.is_empty() || rng.next_u32() % 100 < Rarity::Ur.draw_weight())
-    {
-        let candidates: Vec<_> = (0..SKILLS.len())
-            .map(|index| SkillId(index as u8))
-            .filter(|skill| {
-                skill.definition().rarity == Rarity::Ur && build.skill_rank(*skill) == 0
-            })
-            .collect();
-        if !candidates.is_empty() {
-            let new =
-                candidates[(rng.unit() * candidates.len() as f32) as usize % candidates.len()];
-            let old: Vec<_> = (0..SKILLS.len())
-                .map(|index| SkillId(index as u8))
-                .filter(|skill| build.skill_rank(*skill) > 0)
-                .collect();
-            let offset = (rng.unit() * old.len() as f32) as usize % old.len();
-            let count = if choices.is_empty() { 3 } else { 1 };
-            for index in 0..count {
-                let replacement = DraftChoice::ReplaceSkill {
-                    old: old[(offset + index) % old.len()],
-                    new,
-                };
-                if choices.len() == 3 {
-                    choices[2] = replacement;
-                } else {
-                    choices.push(replacement);
-                }
-            }
-        }
-    }
+
     choices
+}
+
+fn replacement_skill_available(
+    skill: SkillId,
+    level: u32,
+    elapsed: f32,
+    build: &PlayerBuild,
+) -> bool {
+    build.skill_rank(skill) == 0
+        && skill.definition().rarity != Rarity::R
+        && skill_rarity_available(skill.definition().rarity, level, elapsed)
 }
 
 fn skill_rarity_available(rarity: Rarity, level: u32, elapsed: f32) -> bool {
@@ -1151,7 +1143,7 @@ fn handle_draft_actions(
                     DraftKind::BondReplacement | DraftKind::Encounter => return,
                 };
                 let choices = if kind == DraftKind::Skill {
-                    late_skill_choices(choices, &build, &evolution, session.elapsed, &mut rng)
+                    late_skill_choices(choices, &build, &evolution, &mut rng)
                 } else {
                     choices
                 };
@@ -1379,8 +1371,9 @@ fn choose(
             if skill_economy.pending_payment.is_none()
                 || build.skill_rank(old) == 0
                 || build.skill_rank(new) > 0
-                || new.definition().rarity != Rarity::Ur
-                || session.elapsed < EPIC_SKILL_UNLOCK_AT
+                || draft.kind != Some(DraftKind::Skill)
+                || active_skill_slots(build) < evolution.skill_capacity()
+                || !replacement_skill_available(new, session.level, session.elapsed, build)
             {
                 return;
             }
@@ -1647,6 +1640,10 @@ pub(crate) fn reset_run(world: &mut World) {
 mod draft_tests;
 
 #[cfg(test)]
+#[path = "progression/full_slot_tests.rs"]
+mod full_slot_tests;
+
+#[cfg(test)]
 mod tests {
     use super::*;
     use crate::game::DraftRoot;
@@ -1681,7 +1678,7 @@ mod tests {
         let mut rng = RunRng::default();
         // Stages may now be offered in any order; every eligible skill remains reachable.
         for _ in 0..18 {
-            let choices = late_skill_choices(Vec::new(), &build, &evolution, 0.0, &mut rng);
+            let choices = late_skill_choices(Vec::new(), &build, &evolution, &mut rng);
             if choices.is_empty() {
                 break;
             }
@@ -1699,7 +1696,7 @@ mod tests {
             }
         }
         assert_eq!(&evolution.tiers[..6], &[3; 6]);
-        assert!(late_skill_choices(Vec::new(), &build, &evolution, 0.0, &mut rng).is_empty());
+        assert!(late_skill_choices(Vec::new(), &build, &evolution, &mut rng).is_empty());
         let skill = SkillId(1);
         let mut session = GameSession::default();
         build.skills[1] = 0;
@@ -3029,29 +3026,44 @@ mod tests {
         );
     }
     #[test]
-    fn full_skill_bar_only_rolls_owned_upgrades() {
+    fn full_skill_bar_rolls_unique_new_skills_alongside_owned_upgrades() {
         let mut build = PlayerBuild::default();
-        for rank in &mut build.skills[..SKILL_SLOT_LIMIT] {
-            *rank = 1;
-        }
-        let mut rng = RunRng::default();
-        let selected = SelectedHero::default();
-        let mut drought = DraftAntiDrought::default();
-        for _ in 0..20 {
+        build.skills[..SKILL_SLOT_LIMIT].fill(1);
+        let mut replacements = 0;
+        for seed in 0..256 {
             let choices = pick_skill_choices(
-                &mut rng,
+                &mut RunRng::from_seed(seed),
                 30,
                 EPIC_SKILL_UNLOCK_AT,
                 &build,
-                &selected,
-                &mut drought,
+                &SelectedHero::default(),
+                &mut DraftAntiDrought::default(),
                 SKILL_SLOT_LIMIT,
             );
             assert_eq!(choices.len(), 3);
-            assert!(choices.into_iter().all(|choice| {
-                matches!(choice, DraftChoice::Skill(skill) if (skill.0 as usize) < SKILL_SLOT_LIMIT)
-            }));
+            let mut new_ids = Vec::new();
+            for choice in choices {
+                match choice {
+                    DraftChoice::Skill(skill) => assert!(build.skill_rank(skill) > 0),
+                    DraftChoice::ReplaceSkill { old, new } => {
+                        assert!(build.skill_rank(old) > 0);
+                        assert_eq!(build.skill_rank(new), 0);
+                        assert!(!new_ids.contains(&new));
+                        new_ids.push(new);
+                    }
+                    _ => panic!("unexpected ordinary sampler choice"),
+                }
+            }
+            replacements += new_ids.len();
+            assert!(
+                new_ids
+                    .iter()
+                    .filter(|id| id.definition().rarity == Rarity::Ur)
+                    .count()
+                    <= 1
+            );
         }
+        assert!(replacements > 0);
     }
 
     #[test]

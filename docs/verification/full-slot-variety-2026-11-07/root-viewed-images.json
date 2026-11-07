@@ -1,0 +1,70 @@
+[
+  {
+    "path": "native-before-r2/1280x720-en/frame00100.png",
+    "status": "accepted complete controlled view"
+  },
+  {
+    "path": "native-before-r2/1280x720-zh/frame00159.png",
+    "status": "accepted complete controlled view"
+  },
+  {
+    "path": "native-before-r2/360x800-en/frame00100.png",
+    "status": "accepted complete controlled view"
+  },
+  {
+    "path": "native-before-r2/360x800-zh/frame00100.png",
+    "status": "accepted complete controlled view"
+  },
+  {
+    "path": "candidate-r9/1280x720-en-Sr/frame00100.png",
+    "status": "accepted complete controlled view"
+  },
+  {
+    "path": "candidate-r9/1280x720-zh-Ssr/frame00120.png",
+    "status": "accepted complete controlled view"
+  },
+  {
+    "path": "candidate-r9/360x800-en-Ssr/frame00100.png",
+    "status": "accepted complete controlled view"
+  },
+  {
+    "path": "candidate-r9/360x800-zh-Sr/frame00120.png",
+    "status": "accepted complete controlled view"
+  },
+  {
+    "path": "candidate-r9/320x667-en-Ssr/frame00100.png",
+    "status": "accepted complete controlled view"
+  },
+  {
+    "path": "candidate-r9/ordinary-320x667/frame00100.png",
+    "status": "accepted complete controlled view"
+  },
+  {
+    "path": "candidate-r9/ordinary-360x800/frame00100.png",
+    "status": "accepted complete controlled view"
+  },
+  {
+    "path": "candidate-r9/long-320-en/frame00180.png",
+    "status": "accepted complete controlled view"
+  },
+  {
+    "path": "candidate-r9/long-320-zh/frame00100.png",
+    "status": "accepted complete controlled view"
+  },
+  {
+    "path": "native-before-r2/1280x720-zh/frame00100.png",
+    "status": "partial GPU presentation, rejected as complete view"
+  },
+  {
+    "path": "candidate-r9/1280x720-zh-Ssr/frame00100.png",
+    "status": "partial GPU presentation, rejected as complete view"
+  },
+  {
+    "path": "candidate-r9/360x800-zh-Sr/frame00100.png",
+    "status": "partial GPU presentation, rejected as complete view"
+  },
+  {
+    "path": "candidate-r9/long-320-zh/frame00180.png",
+    "status": "partial GPU presentation, rejected as complete view"
+  }
+]

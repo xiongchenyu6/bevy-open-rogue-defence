@@ -128,6 +128,27 @@ fn gallery_hint(language: GameLanguage, count: usize) -> String {
 fn short_name(language: GameLanguage, choice: DraftChoice) -> String {
     name(language, choice)
 }
+fn card_name(language: GameLanguage, choice: DraftChoice, build: &PlayerBuild) -> String {
+    if let DraftChoice::ReplaceSkill { old, new } = choice {
+        if language.is_chinese() {
+            format!(
+                "{}{}级 →\n{}1级",
+                skill_name(language, old),
+                build.skill_rank(old),
+                skill_name(language, new)
+            )
+        } else {
+            format!(
+                "{} Lv.{} →\n{} Lv.1",
+                skill_name(language, old),
+                build.skill_rank(old),
+                skill_name(language, new)
+            )
+        }
+    } else {
+        short_name(language, choice)
+    }
+}
 fn progress(choice: DraftChoice, build: &PlayerBuild) -> (u8, u8, u8) {
     match choice {
         DraftChoice::Skill(skill) => (build.skill_rank(skill), 1, skill.definition().max_rank),
@@ -516,7 +537,7 @@ fn summary(language: GameLanguage, choice: DraftChoice, build: &PlayerBuild) -> 
     match choice {
         DraftChoice::Evolution {skill,tier} => crate::game::skill_evolution::description(language,skill,tier),
         DraftChoice::EvolveUr {skill,path} => crate::game::ur_evolution::description(language,skill,path),
-        DraftChoice::ReplaceSkill {old,new} => format!("{} → {}\n{}",skill_name(language,old),skill_name(language,new),language.pick("Replace this learned skill with the UR skill at level 1. Its ascension is removed; earned permanent training is retained and cannot be earned twice.","以1级传说技能替换此已学技能，移除旧技能升华；已获永久训练保留且不可重复获取。")),
+        DraftChoice::ReplaceSkill {old,new} => format!("{} → {}\n{}",skill_name(language,old),skill_name(language,new),language.pick("Replace this learned skill with the new skill at level 1. Its ascension is removed; earned permanent training is retained and cannot be earned twice.","以1级新技能替换此已学技能，移除旧技能升华；已获永久训练保留且不可重复获取。")),
         DraftChoice::Bond(card) => {
             let def = card.definition();
             format!(
@@ -744,7 +765,7 @@ pub(super) fn update_feedback(
         .and_then(|index| draft.choices.get(index))
         .copied()
     {
-        let title = name(*language, choice);
+        let title = card_name(*language, choice, &build);
         let description = if let Some(new_bond) = draft.pending_bond_replacement {
             if language.is_chinese() {
                 format!(
@@ -877,56 +898,59 @@ mod tests {
     use crate::game::SkillId;
     #[test]
     fn replacement_details_transfer_crown_bonus_without_mutating_the_live_build() {
-        use crate::game::{
-            HeroVitals,
-            market::{MarketEffects, MarketItem},
-            skills::SkillRuntime,
-        };
-        let mut build = PlayerBuild::default();
-        build.skills.fill(0);
-        build.skills[0] = 5;
-        for index in 27..=31 {
-            build.skills[index] = 1;
-        }
-        let mut session = GameSession::default();
-        let mut vitals = HeroVitals::default();
-        let mut market = MarketEffects::default();
-        MarketItem::AscendantCrown.apply(&mut session, &mut build, &mut vitals, &mut market);
-        let original = build.skills;
-        let runtime = SkillRuntime::default();
-        let raw =
-            crate::game::skills::skill_preview_damage(26, 1, &build, &vitals, &runtime).unwrap();
-        let expected = format!("{:.1} → {:.1}", raw * 1.3, raw * 1.3);
-        let mut app = App::new();
-        app.insert_resource(build)
-            .insert_resource(session)
-            .insert_resource(vitals)
-            .insert_resource(runtime)
-            .insert_resource(market)
-            .init_resource::<crate::game::bonds::BondRuntime>()
-            .init_resource::<crate::game::encounters::EncounterState>()
-            .insert_resource(GameLanguage::English)
-            .add_systems(Update, update_feedback);
-        let root = app.world_mut().spawn_empty().id();
-        app.insert_resource(DraftState {
-            root: Some(root),
-            choices: vec![DraftChoice::ReplaceSkill {
-                old: SkillId(0),
-                new: SkillId(26),
-            }],
-            ..default()
-        })
-        .insert_resource(BuildPreview {
-            root: Some(root),
-            index: Some(0),
-        });
-        let detail = app.world_mut().spawn((BuildDetail, Text::default())).id();
-        for language in [GameLanguage::English, GameLanguage::SimplifiedChinese] {
-            app.insert_resource(language);
-            app.update();
-            let text = &app.world().get::<Text>(detail).unwrap().0;
-            assert!(text.contains(&expected), "{text}");
-            assert_eq!(app.world().resource::<PlayerBuild>().skills, original);
+        for new_skill in [12, 26] {
+            use crate::game::{
+                HeroVitals,
+                market::{MarketEffects, MarketItem},
+                skills::SkillRuntime,
+            };
+            let mut build = PlayerBuild::default();
+            build.skills.fill(0);
+            build.skills[0] = 5;
+            for index in 27..=31 {
+                build.skills[index] = 1;
+            }
+            let mut session = GameSession::default();
+            let mut vitals = HeroVitals::default();
+            let mut market = MarketEffects::default();
+            MarketItem::AscendantCrown.apply(&mut session, &mut build, &mut vitals, &mut market);
+            let original = build.skills;
+            let runtime = SkillRuntime::default();
+            let raw =
+                crate::game::skills::skill_preview_damage(new_skill, 1, &build, &vitals, &runtime)
+                    .unwrap();
+            let expected = format!("{:.1} → {:.1}", raw * 1.3, raw * 1.3);
+            let mut app = App::new();
+            app.insert_resource(build)
+                .insert_resource(session)
+                .insert_resource(vitals)
+                .insert_resource(runtime)
+                .insert_resource(market)
+                .init_resource::<crate::game::bonds::BondRuntime>()
+                .init_resource::<crate::game::encounters::EncounterState>()
+                .insert_resource(GameLanguage::English)
+                .add_systems(Update, update_feedback);
+            let root = app.world_mut().spawn_empty().id();
+            app.insert_resource(DraftState {
+                root: Some(root),
+                choices: vec![DraftChoice::ReplaceSkill {
+                    old: SkillId(0),
+                    new: SkillId(new_skill as u8),
+                }],
+                ..default()
+            })
+            .insert_resource(BuildPreview {
+                root: Some(root),
+                index: Some(0),
+            });
+            let detail = app.world_mut().spawn((BuildDetail, Text::default())).id();
+            for language in [GameLanguage::English, GameLanguage::SimplifiedChinese] {
+                app.insert_resource(language);
+                app.update();
+                let text = &app.world().get::<Text>(detail).unwrap().0;
+                assert!(text.contains(&expected), "{text}");
+                assert_eq!(app.world().resource::<PlayerBuild>().skills, original);
+            }
         }
     }
 
@@ -1071,10 +1095,11 @@ pub(super) enum BuildCopy {
 
 pub(super) fn refresh_language(
     language: Res<GameLanguage>,
+    build: Res<PlayerBuild>,
     draft: Res<DraftState>,
     mut labels: Query<(&BuildCopy, &mut Text)>,
 ) {
-    if !language.is_changed() {
+    if !language.is_changed() && !build.is_changed() && !draft.is_changed() {
         return;
     }
     for (copy, mut text) in &mut labels {
@@ -1082,7 +1107,7 @@ pub(super) fn refresh_language(
             .map_unchanged(|value| &mut value.0)
             .set_if_neq(match copy {
                 BuildCopy::GalleryHint(count) => gallery_hint(*language, *count),
-                BuildCopy::Card(choice) => short_name(*language, *choice),
+                BuildCopy::Card(choice) => card_name(*language, *choice, &build),
                 BuildCopy::Trade(event) => trade_line(*language, *event),
                 BuildCopy::Heading(_)
                     if matches!(draft.choices.first(), Some(DraftChoice::EvolveUr { .. })) =>
@@ -1208,11 +1233,11 @@ mod live_language_tests {
                     .iter(app.world())
                     .map(|text| text.0.clone())
                     .collect();
-                assert!(
-                    choices
-                        .iter()
-                        .all(|choice| titles.contains(&short_name(language, *choice)))
-                );
+                assert!(choices.iter().all(|choice| titles.contains(&card_name(
+                    language,
+                    *choice,
+                    app.world().resource::<PlayerBuild>()
+                ))));
                 if kind == DraftKind::Encounter {
                     let trades: Vec<_> = app
                         .world_mut()

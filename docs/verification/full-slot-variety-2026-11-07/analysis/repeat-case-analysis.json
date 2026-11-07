@@ -1,0 +1,180 @@
+{
+  "cases": [
+    {
+      "case": "active-h1-behind-s1-c0-t0",
+      "policy": "active",
+      "requested_starter": 1,
+      "requested_seed_hex": "1",
+      "metadata_requested_seed": 1,
+      "first_live_hero": 1,
+      "actual_run_seed": 2,
+      "outcome": "win",
+      "terminal_elapsed": 1516.18,
+      "terminal_wave": 25,
+      "deaths": 0,
+      "rank_vector": [
+        0,
+        0,
+        3,
+        2,
+        0,
+        1,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        2,
+        1,
+        0,
+        0,
+        0,
+        1,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "offers": 52,
+      "offer_sizes": {
+        "3": 50,
+        "2": 1,
+        "1": 1
+      },
+      "swap_candidates_per_offer": {
+        "0": 38,
+        "2": 6,
+        "3": 2,
+        "1": 6
+      },
+      "offered_new_rarities": {
+        "SR": 18,
+        "SSR": 5,
+        "UR": 1
+      },
+      "settled_swaps": [
+        {
+          "frame": 12336,
+          "elapsed": 202.28607,
+          "old": 12,
+          "new": 14,
+          "old_rarity": "SR",
+          "new_rarity": "SR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            45,
+            32,
+            0
+          ],
+          "funds_after": [
+            45,
+            32,
+            0
+          ]
+        },
+        {
+          "frame": 35048,
+          "elapsed": 572.8436,
+          "old": 0,
+          "new": 15,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 2,
+          "lower_rarity": false,
+          "rank_reset": true,
+          "funds_before": [
+            589,
+            23,
+            0
+          ],
+          "funds_after": [
+            589,
+            23,
+            0
+          ]
+        },
+        {
+          "frame": 46912,
+          "elapsed": 765.75793,
+          "old": 0,
+          "new": 31,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            84,
+            40,
+            0
+          ],
+          "funds_after": [
+            84,
+            40,
+            0
+          ]
+        },
+        {
+          "frame": 55496,
+          "elapsed": 904.6963,
+          "old": 14,
+          "new": 17,
+          "old_rarity": "SR",
+          "new_rarity": "SR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            1907,
+            78,
+            0
+          ],
+          "funds_after": [
+            1907,
+            78,
+            0
+          ]
+        },
+        {
+          "frame": 55504,
+          "elapsed": 904.71295,
+          "old": 15,
+          "new": 12,
+          "old_rarity": "SR",
+          "new_rarity": "SR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            397,
+            78,
+            0
+          ],
+          "funds_after": [
+            397,
+            78,
+            0
+          ]
+        }
+      ],
+      "lower_rarity_swaps": 0,
+      "rank_resets": 1,
+      "unretired_requests": 0,
+      "new_pool_contract_violations": []
+    }
+  ],
+  "scope": "Paired fixed-policy descriptive fixtures. Passive includes compulsory recruitment. Candidate violations retained for historical baseline and assessed against final source only. Crown raw rank6 is valid."
+}

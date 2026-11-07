@@ -1,0 +1,55 @@
+{
+  "base_commit": "c0e8452ce110a6ddc529fc8840eb1763c5248740",
+  "formatter": "rustfmt 1.10.0",
+  "scope": "Reconstructed from immutable Git blob using formatter; accepted only when exact historical input SHA matches. Not an original observed source copy.",
+  "files": [
+    {
+      "stage": "candidate-r5",
+      "file": "src/bin/capture/market_wallet.rs",
+      "original_sha256": "5e6f30aa2fd36ecb4315d787da63c957e777dc82943602bff70e394a90fc4490",
+      "historical_sha256": "b1080f6643db7c8807ee15f40a5c1b27f38c0a0250af8838b8c1b203f0c2df55",
+      "generated_sha256": "b1080f6643db7c8807ee15f40a5c1b27f38c0a0250af8838b8c1b203f0c2df55",
+      "matched": true
+    },
+    {
+      "stage": "candidate-r6",
+      "file": "src/bin/capture/market_wallet.rs",
+      "original_sha256": "5e6f30aa2fd36ecb4315d787da63c957e777dc82943602bff70e394a90fc4490",
+      "historical_sha256": "b1080f6643db7c8807ee15f40a5c1b27f38c0a0250af8838b8c1b203f0c2df55",
+      "generated_sha256": "b1080f6643db7c8807ee15f40a5c1b27f38c0a0250af8838b8c1b203f0c2df55",
+      "matched": true
+    },
+    {
+      "stage": "candidate-r7",
+      "file": "src/bin/capture/market_wallet.rs",
+      "original_sha256": "5e6f30aa2fd36ecb4315d787da63c957e777dc82943602bff70e394a90fc4490",
+      "historical_sha256": "b1080f6643db7c8807ee15f40a5c1b27f38c0a0250af8838b8c1b203f0c2df55",
+      "generated_sha256": "b1080f6643db7c8807ee15f40a5c1b27f38c0a0250af8838b8c1b203f0c2df55",
+      "matched": true
+    },
+    {
+      "stage": "candidate-r5",
+      "file": "src/bin/capture/skill_identity.rs",
+      "original_sha256": "ebab890981f3fbfdb070ef207f662f93864306aa3ca2b54b330e07bb4f1c2c99",
+      "historical_sha256": "ff9da2ddfa10e0b1091d8a2c5b088c8d1eca639bf8de09a2482edeb1389f71bd",
+      "generated_sha256": "ff9da2ddfa10e0b1091d8a2c5b088c8d1eca639bf8de09a2482edeb1389f71bd",
+      "matched": true
+    },
+    {
+      "stage": "candidate-r6",
+      "file": "src/bin/capture/skill_identity.rs",
+      "original_sha256": "ebab890981f3fbfdb070ef207f662f93864306aa3ca2b54b330e07bb4f1c2c99",
+      "historical_sha256": "ff9da2ddfa10e0b1091d8a2c5b088c8d1eca639bf8de09a2482edeb1389f71bd",
+      "generated_sha256": "ff9da2ddfa10e0b1091d8a2c5b088c8d1eca639bf8de09a2482edeb1389f71bd",
+      "matched": true
+    },
+    {
+      "stage": "candidate-r7",
+      "file": "src/bin/capture/skill_identity.rs",
+      "original_sha256": "ebab890981f3fbfdb070ef207f662f93864306aa3ca2b54b330e07bb4f1c2c99",
+      "historical_sha256": "ff9da2ddfa10e0b1091d8a2c5b088c8d1eca639bf8de09a2482edeb1389f71bd",
+      "generated_sha256": "ff9da2ddfa10e0b1091d8a2c5b088c8d1eca639bf8de09a2482edeb1389f71bd",
+      "matched": true
+    }
+  ]
+}

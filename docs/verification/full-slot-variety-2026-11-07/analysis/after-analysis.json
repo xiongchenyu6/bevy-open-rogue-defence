@@ -1,0 +1,1387 @@
+{
+  "cases": [
+    {
+      "case": "active-h0-behind-s1-c0-t0",
+      "policy": "active",
+      "requested_starter": 0,
+      "requested_seed_hex": "1",
+      "metadata_requested_seed": 1,
+      "first_live_hero": 2,
+      "actual_run_seed": 2,
+      "outcome": "win",
+      "terminal_elapsed": 1517.303,
+      "terminal_wave": 25,
+      "deaths": 0,
+      "rank_vector": [
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        3,
+        4,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "offers": 53,
+      "offer_sizes": {
+        "3": 51,
+        "2": 1,
+        "1": 1
+      },
+      "swap_candidates_per_offer": {
+        "0": 44,
+        "1": 4,
+        "2": 5
+      },
+      "offered_new_rarities": {
+        "SR": 9,
+        "SSR": 4,
+        "UR": 1
+      },
+      "settled_swaps": [
+        {
+          "frame": 28784,
+          "elapsed": 470.89865,
+          "old": 11,
+          "new": 14,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 2,
+          "lower_rarity": false,
+          "rank_reset": true,
+          "funds_before": [
+            18,
+            18,
+            0
+          ],
+          "funds_after": [
+            18,
+            18,
+            0
+          ]
+        },
+        {
+          "frame": 38240,
+          "elapsed": 624.52423,
+          "old": 10,
+          "new": 30,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            0,
+            55,
+            0
+          ],
+          "funds_after": [
+            0,
+            55,
+            0
+          ]
+        },
+        {
+          "frame": 55800,
+          "elapsed": 909.97955,
+          "old": 4,
+          "new": 28,
+          "old_rarity": "R",
+          "new_rarity": "UR",
+          "old_base_rank": 3,
+          "lower_rarity": false,
+          "rank_reset": true,
+          "funds_before": [
+            431,
+            78,
+            0
+          ],
+          "funds_after": [
+            431,
+            78,
+            0
+          ]
+        },
+        {
+          "frame": 73800,
+          "elapsed": 1202.7478,
+          "old": 28,
+          "new": 21,
+          "old_rarity": "UR",
+          "new_rarity": "SSR",
+          "old_base_rank": 1,
+          "lower_rarity": true,
+          "rank_reset": false,
+          "funds_before": [
+            264,
+            218,
+            0
+          ],
+          "funds_after": [
+            264,
+            218,
+            0
+          ]
+        },
+        {
+          "frame": 83720,
+          "elapsed": 1364.2224,
+          "old": 7,
+          "new": 17,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            73,
+            37,
+            0
+          ],
+          "funds_after": [
+            77,
+            37,
+            0
+          ]
+        }
+      ],
+      "lower_rarity_swaps": 1,
+      "rank_resets": 2,
+      "unretired_requests": 0,
+      "new_pool_contract_violations": []
+    },
+    {
+      "case": "active-h0-behind-s2-c0-t0",
+      "policy": "active",
+      "requested_starter": 0,
+      "requested_seed_hex": "2",
+      "metadata_requested_seed": 2,
+      "first_live_hero": 2,
+      "actual_run_seed": 3,
+      "outcome": "win",
+      "terminal_elapsed": 1500.908,
+      "terminal_wave": 25,
+      "deaths": 0,
+      "rank_vector": [
+        0,
+        1,
+        3,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "offers": 55,
+      "offer_sizes": {
+        "3": 53,
+        "2": 1,
+        "1": 1
+      },
+      "swap_candidates_per_offer": {
+        "0": 44,
+        "3": 1,
+        "1": 6,
+        "2": 4
+      },
+      "offered_new_rarities": {
+        "SR": 11,
+        "SSR": 5,
+        "UR": 1
+      },
+      "settled_swaps": [
+        {
+          "frame": 21336,
+          "elapsed": 349.51367,
+          "old": 4,
+          "new": 16,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 2,
+          "lower_rarity": false,
+          "rank_reset": true,
+          "funds_before": [
+            0,
+            9,
+            0
+          ],
+          "funds_after": [
+            0,
+            9,
+            0
+          ]
+        },
+        {
+          "frame": 47488,
+          "elapsed": 776.0424,
+          "old": 16,
+          "new": 25,
+          "old_rarity": "SR",
+          "new_rarity": "SSR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            351,
+            57,
+            0
+          ],
+          "funds_after": [
+            351,
+            57,
+            0
+          ]
+        },
+        {
+          "frame": 63104,
+          "elapsed": 1028.6088,
+          "old": 0,
+          "new": 12,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 3,
+          "lower_rarity": false,
+          "rank_reset": true,
+          "funds_before": [
+            3,
+            53,
+            0
+          ],
+          "funds_after": [
+            3,
+            53,
+            0
+          ]
+        },
+        {
+          "frame": 74168,
+          "elapsed": 1208.5226,
+          "old": 25,
+          "new": 29,
+          "old_rarity": "SSR",
+          "new_rarity": "UR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            0,
+            47,
+            0
+          ],
+          "funds_after": [
+            0,
+            47,
+            0
+          ]
+        },
+        {
+          "frame": 80728,
+          "elapsed": 1315.1595,
+          "old": 7,
+          "new": 31,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 3,
+          "lower_rarity": false,
+          "rank_reset": true,
+          "funds_before": [
+            1,
+            32,
+            0
+          ],
+          "funds_after": [
+            1,
+            32,
+            0
+          ]
+        },
+        {
+          "frame": 89696,
+          "elapsed": 1460.4705,
+          "old": 29,
+          "new": 30,
+          "old_rarity": "UR",
+          "new_rarity": "SR",
+          "old_base_rank": 1,
+          "lower_rarity": true,
+          "rank_reset": false,
+          "funds_before": [
+            1,
+            80,
+            0
+          ],
+          "funds_after": [
+            1,
+            80,
+            0
+          ]
+        }
+      ],
+      "lower_rarity_swaps": 1,
+      "rank_resets": 3,
+      "unretired_requests": 0,
+      "new_pool_contract_violations": []
+    },
+    {
+      "case": "active-h1-behind-s1-c0-t0",
+      "policy": "active",
+      "requested_starter": 1,
+      "requested_seed_hex": "1",
+      "metadata_requested_seed": 1,
+      "first_live_hero": 1,
+      "actual_run_seed": 2,
+      "outcome": "win",
+      "terminal_elapsed": 1506.514,
+      "terminal_wave": 25,
+      "deaths": 0,
+      "rank_vector": [
+        1,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "offers": 53,
+      "offer_sizes": {
+        "3": 51,
+        "2": 1,
+        "1": 1
+      },
+      "swap_candidates_per_offer": {
+        "0": 40,
+        "2": 4,
+        "3": 2,
+        "1": 7
+      },
+      "offered_new_rarities": {
+        "SR": 18,
+        "SSR": 2,
+        "UR": 1
+      },
+      "settled_swaps": [
+        {
+          "frame": 12336,
+          "elapsed": 202.28607,
+          "old": 12,
+          "new": 14,
+          "old_rarity": "SR",
+          "new_rarity": "SR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            45,
+            32,
+            0
+          ],
+          "funds_after": [
+            45,
+            32,
+            0
+          ]
+        },
+        {
+          "frame": 35048,
+          "elapsed": 572.8436,
+          "old": 0,
+          "new": 15,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 2,
+          "lower_rarity": false,
+          "rank_reset": true,
+          "funds_before": [
+            589,
+            23,
+            0
+          ],
+          "funds_after": [
+            589,
+            23,
+            0
+          ]
+        },
+        {
+          "frame": 45480,
+          "elapsed": 742.0804,
+          "old": 5,
+          "new": 22,
+          "old_rarity": "R",
+          "new_rarity": "SSR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            0,
+            56,
+            0
+          ],
+          "funds_after": [
+            0,
+            56,
+            0
+          ]
+        },
+        {
+          "frame": 55528,
+          "elapsed": 904.69916,
+          "old": 2,
+          "new": 16,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 2,
+          "lower_rarity": false,
+          "rank_reset": true,
+          "funds_before": [
+            612,
+            158,
+            0
+          ],
+          "funds_after": [
+            612,
+            158,
+            0
+          ]
+        },
+        {
+          "frame": 63968,
+          "elapsed": 1042.2456,
+          "old": 13,
+          "new": 19,
+          "old_rarity": "SR",
+          "new_rarity": "SR",
+          "old_base_rank": 3,
+          "lower_rarity": false,
+          "rank_reset": true,
+          "funds_before": [
+            25,
+            37,
+            0
+          ],
+          "funds_after": [
+            25,
+            37,
+            0
+          ]
+        }
+      ],
+      "lower_rarity_swaps": 0,
+      "rank_resets": 3,
+      "unretired_requests": 0,
+      "new_pool_contract_violations": []
+    },
+    {
+      "case": "active-h1-behind-s2-c0-t0",
+      "policy": "active",
+      "requested_starter": 1,
+      "requested_seed_hex": "2",
+      "metadata_requested_seed": 2,
+      "first_live_hero": 1,
+      "actual_run_seed": 3,
+      "outcome": "win",
+      "terminal_elapsed": 1501.391,
+      "terminal_wave": 25,
+      "deaths": 0,
+      "rank_vector": [
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        5,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "offers": 52,
+      "offer_sizes": {
+        "3": 50,
+        "2": 1,
+        "1": 1
+      },
+      "swap_candidates_per_offer": {
+        "0": 42,
+        "1": 4,
+        "2": 4,
+        "3": 2
+      },
+      "offered_new_rarities": {
+        "SR": 17,
+        "SSR": 1
+      },
+      "settled_swaps": [
+        {
+          "frame": 36016,
+          "elapsed": 589.2695,
+          "old": 7,
+          "new": 30,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 2,
+          "lower_rarity": false,
+          "rank_reset": true,
+          "funds_before": [
+            625,
+            39,
+            0
+          ],
+          "funds_after": [
+            625,
+            39,
+            0
+          ]
+        },
+        {
+          "frame": 56248,
+          "elapsed": 917.04364,
+          "old": 4,
+          "new": 15,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 4,
+          "lower_rarity": false,
+          "rank_reset": true,
+          "funds_before": [
+            485,
+            78,
+            0
+          ],
+          "funds_after": [
+            485,
+            78,
+            0
+          ]
+        },
+        {
+          "frame": 74568,
+          "elapsed": 1214.9137,
+          "old": 15,
+          "new": 31,
+          "old_rarity": "SR",
+          "new_rarity": "SR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            410,
+            218,
+            0
+          ],
+          "funds_after": [
+            410,
+            218,
+            0
+          ]
+        }
+      ],
+      "lower_rarity_swaps": 0,
+      "rank_resets": 2,
+      "unretired_requests": 0,
+      "new_pool_contract_violations": []
+    },
+    {
+      "case": "active-h2-behind-s1-c0-t0",
+      "policy": "active",
+      "requested_starter": 2,
+      "requested_seed_hex": "1",
+      "metadata_requested_seed": 1,
+      "first_live_hero": 0,
+      "actual_run_seed": 2,
+      "outcome": "win",
+      "terminal_elapsed": 1516.414,
+      "terminal_wave": 25,
+      "deaths": 0,
+      "rank_vector": [
+        5,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "offers": 53,
+      "offer_sizes": {
+        "3": 51,
+        "2": 1,
+        "1": 1
+      },
+      "swap_candidates_per_offer": {
+        "0": 43,
+        "1": 3,
+        "2": 7
+      },
+      "offered_new_rarities": {
+        "SR": 14,
+        "SSR": 3
+      },
+      "settled_swaps": [
+        {
+          "frame": 37416,
+          "elapsed": 610.7004,
+          "old": 30,
+          "new": 20,
+          "old_rarity": "SR",
+          "new_rarity": "SSR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            0,
+            55,
+            0
+          ],
+          "funds_after": [
+            0,
+            55,
+            0
+          ]
+        },
+        {
+          "frame": 45392,
+          "elapsed": 740.47235,
+          "old": 18,
+          "new": 16,
+          "old_rarity": "SR",
+          "new_rarity": "SR",
+          "old_base_rank": 2,
+          "lower_rarity": false,
+          "rank_reset": true,
+          "funds_before": [
+            21,
+            88,
+            0
+          ],
+          "funds_after": [
+            21,
+            88,
+            0
+          ]
+        },
+        {
+          "frame": 55464,
+          "elapsed": 904.44196,
+          "old": 2,
+          "new": 15,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 2,
+          "lower_rarity": false,
+          "rank_reset": true,
+          "funds_before": [
+            597,
+            167,
+            0
+          ],
+          "funds_after": [
+            597,
+            167,
+            0
+          ]
+        },
+        {
+          "frame": 63792,
+          "elapsed": 1040.2876,
+          "old": 10,
+          "new": 17,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 2,
+          "lower_rarity": false,
+          "rank_reset": true,
+          "funds_before": [
+            4,
+            93,
+            0
+          ],
+          "funds_after": [
+            4,
+            93,
+            0
+          ]
+        },
+        {
+          "frame": 83104,
+          "elapsed": 1355.4304,
+          "old": 15,
+          "new": 14,
+          "old_rarity": "SR",
+          "new_rarity": "SR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            0,
+            70,
+            0
+          ],
+          "funds_after": [
+            0,
+            70,
+            0
+          ]
+        }
+      ],
+      "lower_rarity_swaps": 0,
+      "rank_resets": 3,
+      "unretired_requests": 0,
+      "new_pool_contract_violations": []
+    },
+    {
+      "case": "active-h2-behind-s2-c0-t0",
+      "policy": "active",
+      "requested_starter": 2,
+      "requested_seed_hex": "2",
+      "metadata_requested_seed": 2,
+      "first_live_hero": 0,
+      "actual_run_seed": 3,
+      "outcome": "win",
+      "terminal_elapsed": 1501.309,
+      "terminal_wave": 25,
+      "deaths": 0,
+      "rank_vector": [
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        5,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "offers": 52,
+      "offer_sizes": {
+        "3": 50,
+        "2": 1,
+        "1": 1
+      },
+      "swap_candidates_per_offer": {
+        "0": 39,
+        "1": 6,
+        "3": 2,
+        "2": 5
+      },
+      "offered_new_rarities": {
+        "SR": 16,
+        "SSR": 5,
+        "UR": 1
+      },
+      "settled_swaps": [
+        {
+          "frame": 22656,
+          "elapsed": 370.33533,
+          "old": 10,
+          "new": 17,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            183,
+            41,
+            0
+          ],
+          "funds_after": [
+            183,
+            41,
+            0
+          ]
+        },
+        {
+          "frame": 28488,
+          "elapsed": 465.97552,
+          "old": 2,
+          "new": 13,
+          "old_rarity": "R",
+          "new_rarity": "SR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            0,
+            56,
+            0
+          ],
+          "funds_after": [
+            0,
+            56,
+            0
+          ]
+        },
+        {
+          "frame": 45336,
+          "elapsed": 740.0893,
+          "old": 13,
+          "new": 27,
+          "old_rarity": "SR",
+          "new_rarity": "UR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            7,
+            56,
+            0
+          ],
+          "funds_after": [
+            7,
+            56,
+            0
+          ]
+        },
+        {
+          "frame": 56504,
+          "elapsed": 921.37994,
+          "old": 3,
+          "new": 25,
+          "old_rarity": "R",
+          "new_rarity": "SSR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            2,
+            12,
+            0
+          ],
+          "funds_after": [
+            2,
+            12,
+            0
+          ]
+        },
+        {
+          "frame": 74520,
+          "elapsed": 1212.7883,
+          "old": 12,
+          "new": 16,
+          "old_rarity": "SR",
+          "new_rarity": "SR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            475,
+            154,
+            0
+          ],
+          "funds_after": [
+            475,
+            154,
+            0
+          ]
+        },
+        {
+          "frame": 83824,
+          "elapsed": 1362.0793,
+          "old": 16,
+          "new": 31,
+          "old_rarity": "SR",
+          "new_rarity": "SR",
+          "old_base_rank": 1,
+          "lower_rarity": false,
+          "rank_reset": false,
+          "funds_before": [
+            1,
+            0,
+            0
+          ],
+          "funds_after": [
+            1,
+            0,
+            0
+          ]
+        }
+      ],
+      "lower_rarity_swaps": 0,
+      "rank_resets": 0,
+      "unretired_requests": 0,
+      "new_pool_contract_violations": []
+    },
+    {
+      "case": "passive-h0-behind-s1-c0-t0",
+      "policy": "passive",
+      "requested_starter": 0,
+      "requested_seed_hex": "1",
+      "metadata_requested_seed": 1,
+      "first_live_hero": 2,
+      "actual_run_seed": 2,
+      "outcome": "loss",
+      "terminal_elapsed": 297.818,
+      "terminal_wave": 5,
+      "deaths": 3,
+      "rank_vector": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "offers": 0,
+      "offer_sizes": {},
+      "swap_candidates_per_offer": {},
+      "offered_new_rarities": {},
+      "settled_swaps": [],
+      "lower_rarity_swaps": 0,
+      "rank_resets": 0,
+      "unretired_requests": 0,
+      "new_pool_contract_violations": []
+    },
+    {
+      "case": "passive-h0-behind-s2-c0-t0",
+      "policy": "passive",
+      "requested_starter": 0,
+      "requested_seed_hex": "2",
+      "metadata_requested_seed": 2,
+      "first_live_hero": 2,
+      "actual_run_seed": 3,
+      "outcome": "loss",
+      "terminal_elapsed": 277.205,
+      "terminal_wave": 5,
+      "deaths": 3,
+      "rank_vector": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "offers": 0,
+      "offer_sizes": {},
+      "swap_candidates_per_offer": {},
+      "offered_new_rarities": {},
+      "settled_swaps": [],
+      "lower_rarity_swaps": 0,
+      "rank_resets": 0,
+      "unretired_requests": 0,
+      "new_pool_contract_violations": []
+    },
+    {
+      "case": "passive-h1-behind-s1-c0-t0",
+      "policy": "passive",
+      "requested_starter": 1,
+      "requested_seed_hex": "1",
+      "metadata_requested_seed": 1,
+      "first_live_hero": 1,
+      "actual_run_seed": 2,
+      "outcome": "loss",
+      "terminal_elapsed": 513.98,
+      "terminal_wave": 9,
+      "deaths": 3,
+      "rank_vector": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "offers": 0,
+      "offer_sizes": {},
+      "swap_candidates_per_offer": {},
+      "offered_new_rarities": {},
+      "settled_swaps": [],
+      "lower_rarity_swaps": 0,
+      "rank_resets": 0,
+      "unretired_requests": 0,
+      "new_pool_contract_violations": []
+    },
+    {
+      "case": "passive-h1-behind-s2-c0-t0",
+      "policy": "passive",
+      "requested_starter": 1,
+      "requested_seed_hex": "2",
+      "metadata_requested_seed": 2,
+      "first_live_hero": 1,
+      "actual_run_seed": 3,
+      "outcome": "loss",
+      "terminal_elapsed": 356.147,
+      "terminal_wave": 6,
+      "deaths": 3,
+      "rank_vector": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "offers": 0,
+      "offer_sizes": {},
+      "swap_candidates_per_offer": {},
+      "offered_new_rarities": {},
+      "settled_swaps": [],
+      "lower_rarity_swaps": 0,
+      "rank_resets": 0,
+      "unretired_requests": 0,
+      "new_pool_contract_violations": []
+    },
+    {
+      "case": "passive-h2-behind-s1-c0-t0",
+      "policy": "passive",
+      "requested_starter": 2,
+      "requested_seed_hex": "1",
+      "metadata_requested_seed": 1,
+      "first_live_hero": 0,
+      "actual_run_seed": 2,
+      "outcome": "loss",
+      "terminal_elapsed": 342.095,
+      "terminal_wave": 6,
+      "deaths": 3,
+      "rank_vector": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "offers": 0,
+      "offer_sizes": {},
+      "swap_candidates_per_offer": {},
+      "offered_new_rarities": {},
+      "settled_swaps": [],
+      "lower_rarity_swaps": 0,
+      "rank_resets": 0,
+      "unretired_requests": 0,
+      "new_pool_contract_violations": []
+    },
+    {
+      "case": "passive-h2-behind-s2-c0-t0",
+      "policy": "passive",
+      "requested_starter": 2,
+      "requested_seed_hex": "2",
+      "metadata_requested_seed": 2,
+      "first_live_hero": 0,
+      "actual_run_seed": 3,
+      "outcome": "loss",
+      "terminal_elapsed": 310.14,
+      "terminal_wave": 6,
+      "deaths": 3,
+      "rank_vector": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "offers": 0,
+      "offer_sizes": {},
+      "swap_candidates_per_offer": {},
+      "offered_new_rarities": {},
+      "settled_swaps": [],
+      "lower_rarity_swaps": 0,
+      "rank_resets": 0,
+      "unretired_requests": 0,
+      "new_pool_contract_violations": []
+    }
+  ],
+  "scope": "Paired fixed-policy descriptive fixtures. Passive includes compulsory recruitment. Candidate violations retained for historical baseline and assessed against final source only. Crown raw rank6 is valid."
+}

@@ -1,0 +1,1 @@
+{"command": ["nix", "develop", "--command", "cargo", "test", "--locked", "--release", "--bin", "balance_sim", "-j2"], "returncode": 0, "elapsed": 216.75141896901187}

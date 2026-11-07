@@ -20,8 +20,12 @@ fn skill_hands_do_not_guarantee_the_highest_rank_or_a_fixed_first_slot() {
             6,
         );
         assert_eq!(choices.len(), 3);
-        assert!(choices.iter().all(|choice| matches!(choice,
-            DraftChoice::Skill(skill) if build.skill_rank(*skill) > 0)));
+        assert!(choices.iter().all(|choice| match choice {
+            DraftChoice::Skill(skill) => build.skill_rank(*skill) > 0,
+            DraftChoice::ReplaceSkill { old, new } =>
+                build.skill_rank(*old) > 0 && replacement_skill_available(*new, 30, 600.0, &build),
+            _ => false,
+        }));
         missed_highest += usize::from(!choices.contains(&DraftChoice::Skill(SkillId(0))));
         if let DraftChoice::Skill(skill) = choices[0] {
             firsts.insert(skill.0);
@@ -50,7 +54,6 @@ fn ascensions_sample_all_eligible_skills_and_share_hands_with_normal_upgrades() 
             vec![DraftChoice::Skill(SkillId(5))],
             &build,
             &evolution,
-            600.0,
             &mut RunRng(seed),
         );
         assert_eq!(choices.len(), 3);
@@ -67,35 +70,43 @@ fn ascensions_sample_all_eligible_skills_and_share_hands_with_normal_upgrades() 
 }
 
 #[test]
-fn ur_replacements_are_rare_while_training_remains_available() {
+fn ur_replacements_compete_in_the_weighted_full_bar_pool() {
     let mut build = PlayerBuild::default();
     build.skills[..6].fill(1);
-    let evolution = SkillEvolution::default();
-    let mut rng = RunRng(0xBEEF);
-    let mut replacement_hands = 0;
-    for _ in 0..1_000 {
-        let choices = late_skill_choices(
-            vec![DraftChoice::Skill(SkillId(0))],
+    let mut ur_hands = 0;
+    let mut sr_hands = 0;
+    for seed in 0..1000 {
+        let choices = pick_skill_choices(
+            &mut RunRng::from_seed(seed),
+            30,
+            900.,
             &build,
-            &evolution,
-            900.0,
-            &mut rng,
+            &SelectedHero::default(),
+            &mut DraftAntiDrought::default(),
+            6,
         );
-        replacement_hands += usize::from(
-            choices
-                .iter()
-                .any(|choice| matches!(choice, DraftChoice::ReplaceSkill { .. })),
-        );
+        ur_hands+=usize::from(choices.iter().any(|c|matches!(c,DraftChoice::ReplaceSkill{new,..} if new.definition().rarity==Rarity::Ur)));
+        sr_hands+=usize::from(choices.iter().any(|c|matches!(c,DraftChoice::ReplaceSkill{new,..} if new.definition().rarity==Rarity::Sr)));
     }
     assert!(
-        (20..90).contains(&replacement_hands),
-        "replacement hands: {replacement_hands}"
+        ur_hands > 0 && ur_hands < sr_hands,
+        "UR={ur_hands},SR={sr_hands}"
     );
     build.skills[..6].fill(5);
+    let choices = pick_skill_choices(
+        &mut RunRng::from_seed(0xBEEF),
+        30,
+        900.,
+        &build,
+        &SelectedHero::default(),
+        &mut DraftAntiDrought::default(),
+        6,
+    );
+    assert_eq!(choices.len(), 3);
     assert!(
-        late_skill_choices(Vec::new(), &build, &evolution, 900.0, &mut rng)
+        choices
             .iter()
-            .any(|choice| matches!(choice, DraftChoice::ReplaceSkill { .. }))
+            .all(|c| matches!(c, DraftChoice::ReplaceSkill { .. }))
     );
 }
 
@@ -122,7 +133,7 @@ fn final_full_bar_hands_never_combine_owned_ur_upgrades_and_new_ur_replacements(
             &mut drought,
             6,
         );
-        let choices = late_skill_choices(choices, &build, &evolution, 900.0, &mut rng);
+        let choices = late_skill_choices(choices, &build, &evolution, &mut rng);
         assert_eq!(choices.len(), 3);
         let mut ur_cards = 0;
         for choice in choices {
@@ -131,7 +142,7 @@ fn final_full_bar_hands_never_combine_owned_ur_upgrades_and_new_ur_replacements(
                     upgraded_ur += 1;
                     ur_cards += 1;
                 }
-                DraftChoice::ReplaceSkill { .. } => {
+                DraftChoice::ReplaceSkill { new, .. } if new.definition().rarity == Rarity::Ur => {
                     replaced_ur += 1;
                     ur_cards += 1;
                 }

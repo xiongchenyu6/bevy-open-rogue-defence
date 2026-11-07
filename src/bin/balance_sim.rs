@@ -9,10 +9,10 @@ use bevy::{
     winit::WinitPlugin,
 };
 use rogue_commander::game::{
-    BasicAttackCounter, BondCardId, BondDrawButton, CombatPools, DraftButton, DraftState,
-    EncounterState, Enemy, EnemyPressureSettings, GamePlugin, GameSession, Hero, HeroVitals,
-    PlayerBuild, Projectile, RecruitmentProgress, RunRng, RunSeed, SelectedHero,
-    SkillCastTelemetry, SkillDrawButton, SkillEconomy, bond_cost, skill_cost,
+    BasicAttackCounter, BondCardId, BondDrawButton, CombatPools, DraftButton, DraftChoice,
+    DraftState, EncounterState, Enemy, EnemyPressureSettings, GamePlugin, GameSession, Hero,
+    HeroVitals, PlayerBuild, Projectile, RecruitmentProgress, RunRng, RunSeed, SelectedHero,
+    SkillCastTelemetry, SkillDrawButton, SkillEconomy, SkillId, bond_cost, skill_cost,
 };
 use std::{env, time::Duration};
 
@@ -27,7 +27,143 @@ struct Policy {
     settled: u32,
     market_step: Option<usize>,
     next_market_at: f32,
+    last_offer_root: Option<Entity>,
+    pending_offer: Option<PendingOffer>,
 }
+struct PendingOffer {
+    root: Entity,
+    frame: u32,
+    choice: DraftChoice,
+    ranks: [u8; SkillId::COUNT],
+    funds: [u32; 3],
+}
+
+/// Frozen ASCII identifiers keep this diagnostic independent of UI language.
+fn choice_record(index: usize, choice: DraftChoice, build: &PlayerBuild) -> String {
+    let rarity = choice.rarity().label();
+    let fields = match choice {
+        DraftChoice::Skill(skill) => format!(
+            "\"kind\":\"skill\",\"skill\":{},\"base_rank\":{}",
+            skill.0,
+            build.skills[usize::from(skill.0)]
+        ),
+        DraftChoice::Evolution { skill, tier } => format!(
+            "\"kind\":\"evolution\",\"skill\":{},\"base_rank\":{},\"tier\":{tier}",
+            skill.0,
+            build.skills[usize::from(skill.0)]
+        ),
+        DraftChoice::EvolveUr { skill, path } => format!(
+            "\"kind\":\"ur_evolution\",\"skill\":{},\"base_rank\":{},\"path\":{}",
+            skill.0,
+            build.skills[usize::from(skill.0)],
+            path.index()
+        ),
+        DraftChoice::ReplaceSkill { old, new } => format!(
+            "\"kind\":\"replace_skill\",\"old\":{},\"new\":{},\"old_rarity\":\"{}\",\"new_rarity\":\"{}\",\"old_base_rank\":{},\"new_base_rank\":{}",
+            old.0,
+            new.0,
+            old.definition().rarity.label(),
+            new.definition().rarity.label(),
+            build.skills[usize::from(old.0)],
+            build.skills[usize::from(new.0)]
+        ),
+        DraftChoice::Bond(card) => format!(
+            "\"kind\":\"bond\",\"card\":{},\"family\":{},\"family_rank\":{}",
+            card.index(),
+            card.family().index(),
+            build.bond(card.family())
+        ),
+        DraftChoice::ReplaceBond(family) => format!(
+            "\"kind\":\"replace_bond\",\"family\":{},\"family_rank\":{}",
+            family.index(),
+            build.bond(family)
+        ),
+        DraftChoice::Encounter(event) => {
+            format!("\"kind\":\"encounter\",\"event\":{}", event.index())
+        }
+    };
+    format!("{{\"index\":{index},\"rarity\":\"{rarity}\",{fields}}}")
+}
+
+fn record_offer(world: &mut World, frame: u32) {
+    let Some(root) = world.resource::<DraftState>().root else {
+        return;
+    };
+    if world.resource::<Policy>().last_offer_root == Some(root) {
+        return;
+    }
+    let draft = world.resource::<DraftState>();
+    let build = world.resource::<PlayerBuild>();
+    let choices = draft
+        .choices
+        .iter()
+        .enumerate()
+        .map(|(index, choice)| choice_record(index, *choice, build))
+        .collect::<Vec<_>>()
+        .join(",");
+    let session = world.resource::<GameSession>();
+    let policy_frame = world.resource::<Policy>().frame;
+    let root_bits = root.to_bits();
+    println!(
+        "{{\"type\":\"draft_offer\",\"frame\":{frame},\"policy_frame\":{policy_frame},\"elapsed\":{},\"root\":{root_bits},\"choices\":[{choices}],\"skill_ranks_by_id\":{:?},\"gold\":{},\"wood\":{},\"skill_points\":{}}}",
+        session.elapsed, build.skills, session.gold, session.wood, session.skill_points
+    );
+    world.resource_mut::<Policy>().last_offer_root = Some(root);
+}
+
+/// Observe after app.update, never add a scheduling edge to gameplay systems.
+fn record_settlement(world: &mut World, frame: u32) {
+    if world.resource::<Policy>().pending_offer.is_none() {
+        return;
+    }
+    let pending = world.resource_mut::<Policy>().pending_offer.take().unwrap();
+    let build = world.resource::<PlayerBuild>();
+    let retired = world.resource::<DraftState>().root != Some(pending.root);
+    let replacement = if let DraftChoice::ReplaceSkill { old, new } = pending.choice {
+        if retired {
+            assert_eq!(
+                build.skills[usize::from(old.0)],
+                0,
+                "settled replacement must retire the selected old skill"
+            );
+            assert_eq!(
+                build.skills[usize::from(new.0)],
+                1,
+                "settled replacement must grant one new rank"
+            );
+        }
+        format!(
+            "{{\"old\":{},\"new\":{},\"old_base_rank_before\":{},\"new_base_rank_before\":{},\"old_base_rank_after\":{},\"new_base_rank_after\":{}}}",
+            old.0,
+            new.0,
+            pending.ranks[usize::from(old.0)],
+            pending.ranks[usize::from(new.0)],
+            build.skills[usize::from(old.0)],
+            build.skills[usize::from(new.0)]
+        )
+    } else {
+        "null".to_owned()
+    };
+    let session = world.resource::<GameSession>();
+    let root_bits = pending.root.to_bits();
+    let request_policy_frame = pending.frame;
+    let policy_frame = world.resource::<Policy>().frame;
+    assert_eq!(
+        request_policy_frame, policy_frame,
+        "selection request must be observed in its same policy update"
+    );
+    println!(
+        "{{\"type\":\"draft_settlement\",\"frame\":{frame},\"policy_frame\":{policy_frame},\"request_policy_frame\":{request_policy_frame},\"elapsed\":{},\"root\":{root_bits},\"selected_index\":0,\"root_retired\":{retired},\"replacement\":{replacement},\"ranks_before\":{:?},\"ranks_after\":{:?},\"funds_before\":{:?},\"funds_after\":[{},{},{}]}}",
+        session.elapsed,
+        pending.ranks,
+        build.skills,
+        pending.funds,
+        session.gold,
+        session.wood,
+        session.skill_points
+    );
+}
+
 fn press(world: &mut World, entity: Entity) {
     if let Some(mut interaction) = world.get_mut::<Interaction>(entity) {
         *interaction = Interaction::Pressed;
@@ -155,6 +291,16 @@ fn policy(world: &mut World) {
             .iter(world)
             .find_map(|(e, b)| (b.0 == 0).then_some(e));
         if let Some(e) = e {
+            let draft = world.resource::<DraftState>();
+            let session = world.resource::<GameSession>();
+            let pending = PendingOffer {
+                root: draft.root.unwrap(),
+                frame,
+                choice: draft.choices[0],
+                ranks: world.resource::<PlayerBuild>().skills,
+                funds: [session.gold, session.wood, session.skill_points],
+            };
+            world.resource_mut::<Policy>().pending_offer = Some(pending);
             press(world, e);
         }
         return;
@@ -537,6 +683,8 @@ fn main() {
         settled: 0,
         market_step: None,
         next_market_at: 180.0,
+        last_offer_root: None,
+        pending_offer: None,
     })
     .add_plugins(GamePlugin)
     .add_systems(PreUpdate, policy.after(bevy::ui::UiSystems::Focus));
@@ -585,6 +733,8 @@ fn main() {
     };
     for frame in 1..=frames {
         app.update();
+        record_settlement(app.world_mut(), frame);
+        record_offer(app.world_mut(), frame);
         metrics.observe(app.world());
         if trace_range.is_some_and(|range| range.contains(frame)) {
             trace_update(app.world_mut(), frame);
@@ -708,6 +858,8 @@ mod tests {
             settled: 1,
             market_step: None,
             next_market_at: 180.,
+            last_offer_root: None,
+            pending_offer: None,
         });
         world.init_resource::<ButtonInput<KeyCode>>();
         world.init_resource::<rogue_commander::game::CampaignMenu>();

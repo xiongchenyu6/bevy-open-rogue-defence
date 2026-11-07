@@ -1,0 +1,11 @@
+{
+  "unit": "rogue-full-slot-baseline-nov7",
+  "launch_invocation": "9d722eb366584e7b97d09f717d20be1e",
+  "observed_at_utc": "2026-11-07T13:53:52.508769+00:00",
+  "terminal_systemctl": {
+    "ActiveState": "inactive",
+    "InvocationID": "",
+    "Result": "success",
+    "ExecMainStatus": "0"
+  }
+}

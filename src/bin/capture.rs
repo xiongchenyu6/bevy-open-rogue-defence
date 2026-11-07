@@ -3,6 +3,9 @@ mod draft_layout;
 #[cfg(any(debug_assertions, feature = "dev-tools"))]
 #[path = "capture/phone_draft.rs"]
 mod phone_draft_capture;
+#[cfg(any(debug_assertions, feature = "dev-tools"))]
+#[path = "capture/skill_variety.rs"]
+mod skill_variety_capture;
 
 use std::{collections::BTreeSet, env, fs, path::PathBuf, time::Duration};
 
@@ -592,6 +595,10 @@ fn main() {
         campaign_capture::install(&mut apps.main);
     }
     #[cfg(any(debug_assertions, feature = "dev-tools"))]
+    if scenario == "skill-variety" {
+        skill_variety_capture::install(&mut apps.main);
+    }
+    #[cfg(any(debug_assertions, feature = "dev-tools"))]
     if scenario.starts_with("phone-draft-") {
         phone_draft_capture::install(&mut apps.main);
     }
@@ -831,6 +838,15 @@ fn main() {
                     output.clone()
                 };
                 queue_screenshot(apps.main.world_mut(), target.clone(), path);
+            }
+            if scenario == "skill-variety" || scenario.starts_with("phone-draft-") {
+                // Wall-clock breathing room for this UI probe; manual simulation time is unchanged.
+                std::thread::sleep(Duration::from_millis(20));
+                if frame == 0 {
+                    println!(
+                        "[capture] UI probe waits20ms/update; synchronous pipeline compilation already enabled"
+                    );
+                }
             }
             let started = std::time::Instant::now();
             update_and_wait(&mut apps);
@@ -1099,6 +1115,10 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     if scenario.starts_with("adventure-") {
         adventure_boss_capture::configure(world, scenario);
         return;
+    }
+    #[cfg(any(debug_assertions, feature = "dev-tools"))]
+    if scenario == "skill-variety" {
+        skill_variety_capture::configure(world);
     }
     #[cfg(any(debug_assertions, feature = "dev-tools"))]
     if scenario.starts_with("phone-draft-") {

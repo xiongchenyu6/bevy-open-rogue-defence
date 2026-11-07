@@ -60,7 +60,7 @@ fn layout(width: f32, height: f32, count: usize) -> Layout {
         footer = footer.min((height - header - 2.0 * gap - 224.0).max(96.0));
     }
     let count = count.max(1);
-    let gallery_width = if phone { viewport_width - 32.0 } else { width };
+    let gallery_width = if phone { viewport_width - 16.0 } else { width };
     let columns = if phone { count.min(3) } else { count };
     let card_width = (gallery_width - gap * (columns - 1) as f32 - 1.0) / columns as f32;
     let gallery_height = height - header - footer - gap * 2.0;
@@ -326,7 +326,7 @@ pub(crate) fn update_layout(
             font.reborrow()
                 .map_unchanged(|value| &mut value.font_size)
                 .set_if_neq(FontSize::Px(if m.phone {
-                    (13.0 + (m.gallery_width - 288.0) / 20.0).clamp(13.0, 15.0)
+                    (13.0 + (size.0 - 320.0) / 20.0).clamp(13.0, 15.0)
                 } else if m.compact && m.count > 3 {
                     11.0
                 } else if m.compact {
@@ -363,7 +363,8 @@ mod tests {
         for (width, height) in [(320.0, 667.0), (360.0, 800.0)] {
             for count in [3, 6] {
                 let m = layout(width, height, count);
-                assert!(m.phone && m.gallery_width <= width - 32.0);
+                assert!(m.phone);
+                assert_eq!(m.gallery_width, width - 16.0);
                 assert!(m.card_width >= 90.0 && m.card_height == 224.0);
                 assert!(m.gallery_height >= 200.0 && m.footer >= 96.0);
                 assert!(3.0 * m.card_width + 2.0 * m.gap <= m.gallery_width);

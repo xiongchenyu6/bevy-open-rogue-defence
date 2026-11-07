@@ -1,0 +1,8 @@
+{
+  "pid": 255701,
+  "state": "Z",
+  "linux_exit_status": 0,
+  "returncode": 0,
+  "raw_proc_stat": "255701 (.cargo-wrapped) Z 253286 253286 253286 0 -1 32780 105993 1318166 0 225 138 50 35039 682 20 0 1 0 37598965 0 0 18446744073709551615 0 0 0 0 0 0 0 4096 1600 1 0 0 17 3 0 0 0 0 0 0 0 0 0 0 0 0 0\n",
+  "observation": "Focused child completed independently while the manager was SIGSTOPped; original manager did not write a focused receipt."
+}

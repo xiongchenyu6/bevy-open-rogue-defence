@@ -1,0 +1,323 @@
+[
+  {
+    "source": "baseline",
+    "case": "active-h0-behind-s1-c0-t0",
+    "outcome": "win",
+    "rank_sum": 23,
+    "learned": 9,
+    "base_capped": 1,
+    "first_base_cap_observation_window": [
+      529.857,
+      558.532
+    ],
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "baseline",
+    "case": "active-h0-behind-s2-c0-t0",
+    "outcome": "win",
+    "rank_sum": 24,
+    "learned": 8,
+    "base_capped": 2,
+    "first_base_cap_observation_window": [
+      909.66,
+      938.955
+    ],
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "baseline",
+    "case": "active-h1-behind-s1-c0-t0",
+    "outcome": "win",
+    "rank_sum": 25,
+    "learned": 9,
+    "base_capped": 1,
+    "first_base_cap_observation_window": [
+      1496.579,
+      1505.969
+    ],
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "baseline",
+    "case": "active-h1-behind-s2-c0-t0",
+    "outcome": "win",
+    "rank_sum": 27,
+    "learned": 9,
+    "base_capped": 2,
+    "first_base_cap_observation_window": [
+      880.815,
+      909.686
+    ],
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "baseline",
+    "case": "active-h2-behind-s1-c0-t0",
+    "outcome": "win",
+    "rank_sum": 24,
+    "learned": 8,
+    "base_capped": 1,
+    "first_base_cap_observation_window": [
+      1261.135,
+      1289.828
+    ],
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "baseline",
+    "case": "active-h2-behind-s2-c0-t0",
+    "outcome": "win",
+    "rank_sum": 27,
+    "learned": 9,
+    "base_capped": 2,
+    "first_base_cap_observation_window": [
+      733.446,
+      762.884
+    ],
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "baseline",
+    "case": "passive-h0-behind-s1-c0-t0",
+    "outcome": "loss",
+    "rank_sum": 1,
+    "learned": 1,
+    "base_capped": 0,
+    "first_base_cap_observation_window": null,
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "baseline",
+    "case": "passive-h0-behind-s2-c0-t0",
+    "outcome": "loss",
+    "rank_sum": 1,
+    "learned": 1,
+    "base_capped": 0,
+    "first_base_cap_observation_window": null,
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "baseline",
+    "case": "passive-h1-behind-s1-c0-t0",
+    "outcome": "loss",
+    "rank_sum": 2,
+    "learned": 2,
+    "base_capped": 0,
+    "first_base_cap_observation_window": null,
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "baseline",
+    "case": "passive-h1-behind-s2-c0-t0",
+    "outcome": "loss",
+    "rank_sum": 1,
+    "learned": 1,
+    "base_capped": 0,
+    "first_base_cap_observation_window": null,
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "baseline",
+    "case": "passive-h2-behind-s1-c0-t0",
+    "outcome": "loss",
+    "rank_sum": 1,
+    "learned": 1,
+    "base_capped": 0,
+    "first_base_cap_observation_window": null,
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "baseline",
+    "case": "passive-h2-behind-s2-c0-t0",
+    "outcome": "loss",
+    "rank_sum": 1,
+    "learned": 1,
+    "base_capped": 0,
+    "first_base_cap_observation_window": null,
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "after",
+    "case": "active-h0-behind-s1-c0-t0",
+    "outcome": "win",
+    "rank_sum": 16,
+    "learned": 9,
+    "base_capped": 0,
+    "first_base_cap_observation_window": null,
+    "selected_swaps": 5,
+    "lower_rarity_swaps": 1,
+    "rank_resets": 2
+  },
+  {
+    "source": "after",
+    "case": "active-h0-behind-s2-c0-t0",
+    "outcome": "win",
+    "rank_sum": 17,
+    "learned": 9,
+    "base_capped": 1,
+    "first_base_cap_observation_window": [
+      441.661,
+      471.356
+    ],
+    "selected_swaps": 6,
+    "lower_rarity_swaps": 1,
+    "rank_resets": 3
+  },
+  {
+    "source": "after",
+    "case": "active-h1-behind-s1-c0-t0",
+    "outcome": "win",
+    "rank_sum": 16,
+    "learned": 9,
+    "base_capped": 1,
+    "first_base_cap_observation_window": [
+      1202.052,
+      1231.666
+    ],
+    "selected_swaps": 5,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 3
+  },
+  {
+    "source": "after",
+    "case": "active-h1-behind-s2-c0-t0",
+    "outcome": "win",
+    "rank_sum": 18,
+    "learned": 9,
+    "base_capped": 1,
+    "first_base_cap_observation_window": [
+      617.913,
+      647.106
+    ],
+    "selected_swaps": 3,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 2
+  },
+  {
+    "source": "after",
+    "case": "active-h2-behind-s1-c0-t0",
+    "outcome": "win",
+    "rank_sum": 15,
+    "learned": 8,
+    "base_capped": 1,
+    "first_base_cap_observation_window": [
+      881.255,
+      909.845
+    ],
+    "selected_swaps": 5,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 3
+  },
+  {
+    "source": "after",
+    "case": "active-h2-behind-s2-c0-t0",
+    "outcome": "win",
+    "rank_sum": 20,
+    "learned": 8,
+    "base_capped": 1,
+    "first_base_cap_observation_window": [
+      1432.406,
+      1461.265
+    ],
+    "selected_swaps": 6,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "after",
+    "case": "passive-h0-behind-s1-c0-t0",
+    "outcome": "loss",
+    "rank_sum": 1,
+    "learned": 1,
+    "base_capped": 0,
+    "first_base_cap_observation_window": null,
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "after",
+    "case": "passive-h0-behind-s2-c0-t0",
+    "outcome": "loss",
+    "rank_sum": 1,
+    "learned": 1,
+    "base_capped": 0,
+    "first_base_cap_observation_window": null,
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "after",
+    "case": "passive-h1-behind-s1-c0-t0",
+    "outcome": "loss",
+    "rank_sum": 2,
+    "learned": 2,
+    "base_capped": 0,
+    "first_base_cap_observation_window": null,
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "after",
+    "case": "passive-h1-behind-s2-c0-t0",
+    "outcome": "loss",
+    "rank_sum": 1,
+    "learned": 1,
+    "base_capped": 0,
+    "first_base_cap_observation_window": null,
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "after",
+    "case": "passive-h2-behind-s1-c0-t0",
+    "outcome": "loss",
+    "rank_sum": 1,
+    "learned": 1,
+    "base_capped": 0,
+    "first_base_cap_observation_window": null,
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  },
+  {
+    "source": "after",
+    "case": "passive-h2-behind-s2-c0-t0",
+    "outcome": "loss",
+    "rank_sum": 1,
+    "learned": 1,
+    "base_capped": 0,
+    "first_base_cap_observation_window": null,
+    "selected_swaps": 0,
+    "lower_rarity_swaps": 0,
+    "rank_resets": 0
+  }
+]
