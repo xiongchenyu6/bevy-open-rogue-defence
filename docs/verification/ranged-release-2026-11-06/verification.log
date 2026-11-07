@@ -1,0 +1,38 @@
+{
+  "result": "PASS",
+  "library": [
+    756,
+    0,
+    1
+  ],
+  "review": {
+    "ember": {
+      "shared_prefix": 23,
+      "nonzero_numeric_field_difference_counts": {
+        "elapsed_bits": 23,
+        "progress_bits": 23,
+        "projectile_bits": 23,
+        "outer_ordinal": 1
+      },
+      "profiles_equal_in_shared_prefix": true
+    },
+    "ember_horizon": {
+      "last_release": 205,
+      "maximum_x_through211": 1.7480386,
+      "nearest_surface_x": 2.04,
+      "first_possible_fullstep": 212,
+      "scope": "Source/log upper bound under stationary1x fixture, not directly observed frame210 Transform; no extrapolated impact counted"
+    },
+    "storm": {
+      "shared_prefix": 13,
+      "nonzero_numeric_field_difference_counts": {
+        "elapsed_bits": 13,
+        "progress_bits": 13,
+        "projectile_bits": 13
+      },
+      "profiles_equal_in_shared_prefix": true
+    }
+  },
+  "selected_pngs": 7,
+  "limits": "Boundedfixtureonly; changedframes/progress/elapsed preserved, no global RNG/endpointHP/hardware/artist release event claim"
+}

@@ -232,6 +232,9 @@ fn catch_up_volley_travel_seconds(
         .clamp(0.0, delta.max(0.0))
 }
 
+#[path = "combat/ranged_release.rs"]
+mod ranged_release;
+
 pub struct CombatPlugin;
 
 #[derive(SystemSet, Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -270,6 +273,7 @@ impl Plugin for CombatPlugin {
                     tick_elite_affixes,
                     move_enemies,
                     auto_attack,
+                    ranged_release::release_pending,
                     super::audio::play_melee_swings,
                     basic_attacks::resolve_swings,
                     move_projectiles,
@@ -2121,59 +2125,49 @@ fn auto_attack(
                 } else {
                     Quat::from_rotation_y(spread) * base_direction
                 };
-                let (mesh, material) = attack_art
-                    .as_deref()
-                    .map(|art| art.projectile_at_level(vitals.kind, vitals.level))
-                    .unwrap_or_else(|| {
-                        (
-                            assets.projectile_mesh.clone(),
-                            assets.projectile_material.clone(),
-                        )
-                    });
-                let Some(entity) = pools.rent_projectile(
-                    &mut commands,
-                    mesh,
-                    material,
-                    Transform::from_translation(hero.translation + Vec3::Y * 0.25)
-                        .looking_to(direction, Vec3::Y)
-                        .with_scale(Vec3::splat(
-                            basic_attacks::basic_attack_visual_tier(vitals.level).projectile_scale,
-                        )),
-                    Projectile {
-                        velocity: direction * build.projectile_speed,
-                        damage: build.attack_damage,
-                        radius: 0.48,
-                        remaining_hits: build.pierce,
-                        lifetime: 1.4,
-                    },
-                ) else {
-                    break;
+                let shot = ranged_release::NativeShot {
+                    kind: vitals.kind,
+                    level: vitals.level,
+                    direction,
+                    damage: build.attack_damage,
+                    speed: build.projectile_speed,
+                    pierce: build.pierce,
+                    bounces: class_stats.bounces,
                 };
-                commands.entity(entity).insert((
-                    DamageProfile::PHYSICAL_ATTACK,
-                    WeaponFlight::new(vitals.kind),
-                ));
-                if basic_attacks::is_starter_ember_arrow(vitals.kind, vitals.level) {
-                    commands
-                        .entity(entity)
-                        .insert(super::skill_lighting::NoGroundProjection);
-                }
-                if class_stats.bounces > 0 {
-                    commands
-                        .entity(entity)
-                        .insert(basic_attacks::Ricochet::new(class_stats.bounces));
-                }
                 let is_new_completion = volley_index >= backlog_volley_count;
-                if is_new_completion && (raw_volley_count > 1 || backlog_volley_count > 0) {
-                    let new_volley_index = volley_index - backlog_volley_count;
-                    commands.entity(entity).insert(ProjectileFirstFrameTravel(
-                        catch_up_volley_travel_seconds(
+                let travel =
+                    if is_new_completion && (raw_volley_count > 1 || backlog_volley_count > 0) {
+                        Some(catch_up_volley_travel_seconds(
                             &clock,
                             raw_volley_count,
-                            new_volley_index,
+                            volley_index - backlog_volley_count,
                             time.delta_secs(),
-                        ),
+                        ))
+                    } else {
+                        None
+                    };
+                if let Some(phase) = ranged_release::release_phase(vitals.kind) {
+                    // A normal action's animation already consumes this whole
+                    // frame. Catch-up shots retain the original per-shot age;
+                    // backlog shots use the original full-frame allowance.
+                    let age = travel.unwrap_or(time.delta_secs());
+                    commands.spawn(ranged_release::PendingRangedShot::new(
+                        hero_entity,
+                        shot,
+                        clock.0.duration().as_secs_f32().clamp(0.03, 0.45) * phase - age,
                     ));
+                } else if ranged_release::emit(
+                    &mut commands,
+                    &mut pools,
+                    &assets,
+                    attack_art.as_deref(),
+                    hero.translation,
+                    shot,
+                    travel,
+                )
+                .is_none()
+                {
+                    break;
                 }
                 fired = true;
             }
@@ -4403,6 +4397,52 @@ mod tests {
         );
     }
 
+    fn native_pending_shots(app: &mut App) -> usize {
+        app.world_mut()
+            .query::<&ranged_release::PendingRangedShot>()
+            .iter(app.world())
+            .count()
+    }
+
+    fn native_active_shots(app: &mut App) -> usize {
+        app.world_mut()
+            .query::<&Projectile>()
+            .iter(app.world())
+            .count()
+    }
+
+    // Metadata/aim fixtures keep their actual selected kind. Commit once, then
+    // run the real release system across forward virtual time without another
+    // auto_attack, movement, target substitution or fabricated projectile.
+    fn release_native_for_metadata(app: &mut App, commits: u64, shots: usize) {
+        assert_eq!(
+            app.world().resource::<BasicAttackCounter>().count(),
+            commits
+        );
+        assert_eq!(native_active_shots(app), 0);
+        assert_eq!(native_pending_shots(app), shots);
+        let rng = app.world().resource::<RunRng>().state();
+        app.world_mut()
+            .run_system_once(ranged_release::release_pending)
+            .unwrap();
+        // A large fixture frame may already contain the complete windup.
+        // Every committed shot must remain either pending or actually emitted.
+        assert_eq!(native_active_shots(app) + native_pending_shots(app), shots);
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_millis(200));
+        app.world_mut()
+            .run_system_once(ranged_release::release_pending)
+            .unwrap();
+        assert_eq!(native_pending_shots(app), 0);
+        assert_eq!(native_active_shots(app), shots);
+        assert_eq!(
+            app.world().resource::<BasicAttackCounter>().count(),
+            commits
+        );
+        assert_eq!(app.world().resource::<RunRng>().state(), rng);
+    }
+
     #[test]
     fn basic_attack_counter_advances_once_per_successful_volley() {
         let mut app = App::new();
@@ -4432,13 +4472,12 @@ mod tests {
             .expect("auto attack should run");
 
         assert_eq!(app.world().resource::<BasicAttackCounter>().0, 1);
+        assert_eq!(native_active_shots(&mut app), 0);
+        assert_eq!(native_pending_shots(&mut app), 3);
         assert_eq!(
-            app.world_mut()
-                .query_filtered::<Entity, With<Projectile>>()
-                .iter(app.world())
-                .count(),
+            native_active_shots(&mut app) + native_pending_shots(&mut app),
             3,
-            "multishot projectiles still represent one basic-attack volley"
+            "three committed native shots still represent one basic-attack volley"
         );
     }
 
@@ -4446,7 +4485,8 @@ mod tests {
     fn archer_native_volley_aims_distinct_targets_and_attaches_real_bounces() {
         let mut app = projectile_test_app();
         app.init_resource::<AttackClock>()
-            .init_resource::<AttackVolleyRuntime>();
+            .init_resource::<AttackVolleyRuntime>()
+            .init_resource::<BasicAttackCounter>();
         app.world_mut().resource_mut::<HeroVitals>().kind = HeroKind::EmberRanger;
         app.world_mut().resource_mut::<HeroVitals>().level = 10;
         app.world_mut()
@@ -4461,6 +4501,7 @@ mod tests {
             .resource_mut::<Time>()
             .advance_by(std::time::Duration::from_secs(1));
         app.world_mut().run_system_once(auto_attack).unwrap();
+        release_native_for_metadata(&mut app, 1, 2);
         let mut arrows = app
             .world_mut()
             .query::<(&Projectile, &basic_attacks::Ricochet)>();
@@ -4476,7 +4517,8 @@ mod tests {
         for level in [1, 9, 10, 20, 40] {
             let mut app = projectile_test_app();
             app.init_resource::<AttackClock>()
-                .init_resource::<AttackVolleyRuntime>();
+                .init_resource::<AttackVolleyRuntime>()
+                .init_resource::<BasicAttackCounter>();
             {
                 let mut vitals = app.world_mut().resource_mut::<HeroVitals>();
                 vitals.kind = HeroKind::EmberRanger;
@@ -4494,6 +4536,7 @@ mod tests {
                 .resource_mut::<Time>()
                 .advance_by(std::time::Duration::from_secs(1));
             app.world_mut().run_system_once(auto_attack).unwrap();
+            release_native_for_metadata(&mut app, 1, 1);
             let mut arrows = app.world_mut().query::<(
                 &Projectile,
                 Option<&basic_attacks::Ricochet>,
@@ -5057,13 +5100,12 @@ mod tests {
             .expect("large-delta auto attack should run");
 
         assert_eq!(app.world().resource::<BasicAttackCounter>().0, 3);
+        assert_eq!(native_active_shots(&mut app), 0);
+        assert_eq!(native_pending_shots(&mut app), 6);
         assert_eq!(
-            app.world_mut()
-                .query_filtered::<Entity, With<Projectile>>()
-                .iter(app.world())
-                .count(),
+            native_active_shots(&mut app) + native_pending_shots(&mut app),
             6,
-            "three elapsed volleys with two shots each must all be emitted"
+            "three elapsed volleys must retain all six native shot obligations"
         );
         assert!(
             (app.world().resource::<AttackClock>().0.elapsed_secs() - 0.25).abs() < 0.000_001,
@@ -5124,6 +5166,7 @@ mod tests {
         app.add_plugins(MinimalPlugins)
             .init_resource::<GameSession>()
             .init_resource::<HeroVitals>()
+            .init_resource::<SkillRuntime>()
             .init_resource::<PlayerBuild>()
             .init_resource::<MarketEffects>()
             .init_resource::<RunRng>()
@@ -5162,6 +5205,7 @@ mod tests {
         assert_eq!(app.world().resource::<BasicAttackCounter>().0, 2);
         assert_eq!(app.world().resource::<AttackVolleyRuntime>().pending, 0);
         assert!(app.world().resource::<AttackClock>().0.elapsed_secs() < 0.001);
+        release_native_for_metadata(&mut app, 2, 2);
         let flights: Vec<_> = app
             .world_mut()
             .query::<(&Projectile, &WeaponFlight)>()
@@ -5180,7 +5224,7 @@ mod tests {
     }
 
     #[test]
-    fn accelerated_catch_up_volleys_receive_distinct_first_frame_travel_ages() {
+    fn immediate_frost_oracle_catch_up_volleys_receive_distinct_first_frame_travel_ages() {
         let mut app = projectile_test_app();
         app.init_resource::<AttackClock>()
             .init_resource::<AttackVolleyRuntime>()
@@ -5194,6 +5238,10 @@ mod tests {
             .resource_mut::<AttackClock>()
             .0
             .set_elapsed(std::time::Duration::from_millis(190));
+        // FrostOracle remains the actual immediate native route. Delayed
+        // Ember/Storm first-frame ages are covered by ranged_release tests.
+        app.world_mut().resource_mut::<HeroVitals>().kind = HeroKind::FrostOracle;
+        assert!(ranged_release::release_phase(HeroKind::FrostOracle).is_none());
         app.world_mut().spawn((Hero, Transform::default()));
         app.world_mut()
             .spawn((test_enemy(100.0), Transform::from_xyz(2.0, 0.0, 0.0)));
@@ -5253,7 +5301,7 @@ mod tests {
     }
 
     #[test]
-    fn single_volley_keeps_legacy_full_frame_projectile_travel() {
+    fn immediate_frost_oracle_single_volley_keeps_legacy_full_frame_travel() {
         let mut app = App::new();
         app.add_plugins(MinimalPlugins)
             .add_message::<EnemyAttackCue>()
@@ -5273,6 +5321,10 @@ mod tests {
             build.attacks_per_second = 2.0;
             build.projectile_speed = 10.0;
         }
+        // FrostOracle remains the actual immediate native route. Delayed
+        // Ember/Storm first-frame ages are covered by ranged_release tests.
+        app.world_mut().resource_mut::<HeroVitals>().kind = HeroKind::FrostOracle;
+        assert!(ranged_release::release_phase(HeroKind::FrostOracle).is_none());
         app.world_mut().spawn((Hero, Transform::default()));
         app.world_mut()
             .spawn((test_enemy(100.0), Transform::from_xyz(2.0, 0.0, 0.0)));
@@ -5365,11 +5417,10 @@ mod tests {
         assert_eq!(runtime.resolved_this_frame, 4);
         assert_eq!(runtime.pending, 0);
         assert_eq!(app.world().resource::<BasicAttackCounter>().0, 20);
+        assert_eq!(native_active_shots(&mut app), 0);
+        assert_eq!(native_pending_shots(&mut app), 20);
         assert_eq!(
-            app.world_mut()
-                .query_filtered::<Entity, With<Projectile>>()
-                .iter(app.world())
-                .count(),
+            native_active_shots(&mut app) + native_pending_shots(&mut app),
             20
         );
     }
@@ -7246,4 +7297,5 @@ mod tests {
             9
         );
     }
+    include!("combat/ranged_release_tests.rs");
 }

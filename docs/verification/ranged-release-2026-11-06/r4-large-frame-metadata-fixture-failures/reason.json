@@ -1,0 +1,4 @@
+{
+  "actual_result": "14focusedpassed;full750passed6failed1ignored",
+  "diagnosis": "Allsix metadata/aim/bamboo fixtures fail shared helper assert after first release that active==0. Their large action frames already exceed windup under corrected full-first-frame age. Preserve pre-release0active/allpending and exact finalshots/counter/RNG; intermediate check becomes emitted+pending==originalshots."
+}

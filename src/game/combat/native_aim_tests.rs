@@ -36,6 +36,7 @@ fn native_aim_outcome(points: &[Vec3], reverse_allocation: bool) -> (Vec3, Vec2)
     app.world_mut().run_system_once(auto_attack).unwrap();
     assert_eq!(app.world().resource::<BasicAttackCounter>().count(), 1);
     let aim = app.world().resource::<BasicAttackAim>().0.unwrap();
+    release_native_for_metadata(&mut app, 1, 1);
     let projectile = app
         .world_mut()
         .query::<&Projectile>()

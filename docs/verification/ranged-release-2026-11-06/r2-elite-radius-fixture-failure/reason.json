@@ -1,0 +1,5 @@
+{
+  "actual_result": "12 focused passed;1 failed",
+  "actual_failure": "expected untouched 10000HP but got9952 atfirst partialstep",
+  "diagnosis": "test_enemy helper defaults elite=true; elite hit radius .95 plus projectile.48 permits valid partial-step hit. Fixture intended ordinary target but didnotconfigureit. Set only near Enemy.elite=false and consistent maxhp; preserve exact no-hit/next-hit assertions and production source unchanged."
+}

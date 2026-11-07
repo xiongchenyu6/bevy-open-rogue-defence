@@ -1,0 +1,236 @@
+[
+  {
+    "original": "target/verification/ranged-release-2026-11-06/library-tests.log",
+    "archive": "logs/library-tests.log.gz",
+    "raw_bytes": 75854,
+    "raw_sha256": "daf67a5e9cf555e3d4d19bf969c53c2646e7a4b61465bc2abf88b2547ef2f2d2"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/before-manager.log",
+    "archive": "logs/before-manager.log.gz",
+    "raw_bytes": 55,
+    "raw_sha256": "e0b9845b069f0618d44baa3ecf8ba89505db9184334b303864b47215bbf9ba6b"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/after-portrait-ember.log",
+    "archive": "logs/after-portrait-ember.log.gz",
+    "raw_bytes": 75274,
+    "raw_sha256": "7abca63163d4d1395ac168809bb98f996b9bc7ba9051c51f065d2361fef30b2d"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/build.log",
+    "archive": "logs/build.log.gz",
+    "raw_bytes": 276,
+    "raw_sha256": "4784738b337e1b51ea3f8aa4768b1d3bb3af941c3173accb686fd3e58205a240"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/before-test.log",
+    "archive": "logs/before-test.log.gz",
+    "raw_bytes": 2336,
+    "raw_sha256": "6dc3221666a53c43b832b395da07253be4da277d0741d2df619082c538e0492f"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/clippy.log",
+    "archive": "logs/clippy.log.gz",
+    "raw_bytes": 278,
+    "raw_sha256": "adfe864d6770fb3db55dfec45d545eff466f0cd4700ba498286b9d98844a17ad"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/after-trace-ember.log",
+    "archive": "logs/after-trace-ember.log.gz",
+    "raw_bytes": 58976,
+    "raw_sha256": "f90e053b17e52713a952469c2b8cfb61e49b9654aee31e3d2fcec1784eef92ff"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/focused-tests.log",
+    "archive": "logs/focused-tests.log.gz",
+    "raw_bytes": 2737,
+    "raw_sha256": "1ec56c3562ba6b3e0ed8b008426ca0ef591ac4f52fd7865dad551a6fa502bff1"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/sword.log",
+    "archive": "logs/sword.log.gz",
+    "raw_bytes": 55791,
+    "raw_sha256": "ff7c6d78658d966df2f8739b1819270d452515ce7a6f5d8e9ccf4782c0caaa24"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/after-portrait-storm.log",
+    "archive": "logs/after-portrait-storm.log.gz",
+    "raw_bytes": 55952,
+    "raw_sha256": "362772063a9eb3db3b6669de833e95265aebb3fd726a691155590e214ddf3c79"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/before-trace-ember.log",
+    "archive": "logs/before-trace-ember.log.gz",
+    "raw_bytes": 61086,
+    "raw_sha256": "834965a48dcad593780502fd56c4e1818f36ccba9fbb9bfb615c248daf07dbec"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/before-trace-manager.log",
+    "archive": "logs/before-trace-manager.log.gz",
+    "raw_bytes": 157,
+    "raw_sha256": "f761ea112685ce2beca5d27b28f66e532b81b77dc7deb5461f215c1d1ae55f59"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/before-portrait-ember.log",
+    "archive": "logs/before-portrait-ember.log.gz",
+    "raw_bytes": 75337,
+    "raw_sha256": "7f0674f60f3f83135712be2983a805ac28915cdb673291ef5dddde549c19ef87"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/supplement-manager.log",
+    "archive": "logs/supplement-manager.log.gz",
+    "raw_bytes": 309,
+    "raw_sha256": "276ffedef64d83e8d81474e7c6d4b97988be022f6dff892ca661e50acc8482f3"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/phase-analysis.log",
+    "archive": "logs/phase-analysis.log.gz",
+    "raw_bytes": 615,
+    "raw_sha256": "1cc7a3dbf4ccc8b653fbb161abc5faffa048e53ac86039c6fc4c8b67048849fb"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/before-analysis.log",
+    "archive": "logs/before-analysis.log.gz",
+    "raw_bytes": 343,
+    "raw_sha256": "aa3905a81a8c91970f29457dd34f542f48327eba2f45f34d97628e62eadd0070"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/after-manager.log",
+    "archive": "logs/after-manager.log.gz",
+    "raw_bytes": 198,
+    "raw_sha256": "6ee58a4be9a610c6ed810e619f553a8098926b0fc06c4e297bbc53c74bc7fb38"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/after-trace-storm.log",
+    "archive": "logs/after-trace-storm.log.gz",
+    "raw_bytes": 44579,
+    "raw_sha256": "6b241f5466bc66b541ac7c041e677bcac9114f5b95a33654a6210ba6541f9344"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/storm.log",
+    "archive": "logs/storm.log.gz",
+    "raw_bytes": 54202,
+    "raw_sha256": "28925c26dd469fd0849de3ddacbe80ad6dffe8325c3459bb12e856a1aa5b0207"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/before-trace-storm.log",
+    "archive": "logs/before-trace-storm.log.gz",
+    "raw_bytes": 45452,
+    "raw_sha256": "faed1c752be6d7e1978b67f98cf38dbacef709b6ce68c55801665b41a3dc1729"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/ember.log",
+    "archive": "logs/ember.log.gz",
+    "raw_bytes": 56402,
+    "raw_sha256": "a09d8c3c141da6fb24f1720ba6e47707dfde2e5289f6558d6aab475d3a4cb3f0"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/before-portrait-storm.log",
+    "archive": "logs/before-portrait-storm.log.gz",
+    "raw_bytes": 55997,
+    "raw_sha256": "ecb00322b980adca491a20546c074354f4cae45aec98ba627d92fb86eafe3e96"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r1-immediate-fixture-failures/library-tests.log",
+    "archive": "logs/r1-immediate-fixture-failures/library-tests.log.gz",
+    "raw_bytes": 86217,
+    "raw_sha256": "8107cef9d15d26d00c6539ccfef87123faf16d0ef9f28944dd5d41686f8e2d9d"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r1-immediate-fixture-failures/focused-tests.log",
+    "archive": "logs/r1-immediate-fixture-failures/focused-tests.log.gz",
+    "raw_bytes": 2320,
+    "raw_sha256": "24d3c5db97b76d72a4b7c000fa66d28c9df45637f2db9e659b683f98d24786bc"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r1-immediate-fixture-failures/after-manager.log",
+    "archive": "logs/r1-immediate-fixture-failures/after-manager.log.gz",
+    "raw_bytes": 888,
+    "raw_sha256": "5cd5c9cb3ae2dd2719b4c7cd1a6e275dfac4d3bedfd1cb07f6f7f5da796a0a1f"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/library-tests.log",
+    "archive": "logs/r3-visual-age-candidate/library-tests.log.gz",
+    "raw_bytes": 74886,
+    "raw_sha256": "8b447f29bab1663fbb7690e2e850a8710383c6ae7425385dcfb4548efc6eeef4"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/build.log",
+    "archive": "logs/r3-visual-age-candidate/build.log.gz",
+    "raw_bytes": 276,
+    "raw_sha256": "1b60db7c3a6cbe5b2e89ca090c3bde1db5e3a98dd330721d7065e309784ecffa"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/clippy.log",
+    "archive": "logs/r3-visual-age-candidate/clippy.log.gz",
+    "raw_bytes": 278,
+    "raw_sha256": "560049bdc4bc9f319f1871a0f914e545767def3a271c56a5d21bafecb53d44ab"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/focused-tests.log",
+    "archive": "logs/r3-visual-age-candidate/focused-tests.log.gz",
+    "raw_bytes": 2633,
+    "raw_sha256": "9ab2507e4eac1ef3faf5169a3b5120e44260a77bc888b120fd3cfd6186e732ea"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword.log",
+    "archive": "logs/r3-visual-age-candidate/sword.log.gz",
+    "raw_bytes": 55791,
+    "raw_sha256": "b72d485a057f8b6f5eef6b8495dd6989bcd53b1d57956714f2084a81318fe9a5"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/after-manager.log",
+    "archive": "logs/r3-visual-age-candidate/after-manager.log.gz",
+    "raw_bytes": 198,
+    "raw_sha256": "6ee58a4be9a610c6ed810e619f553a8098926b0fc06c4e297bbc53c74bc7fb38"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm.log",
+    "archive": "logs/r3-visual-age-candidate/storm.log.gz",
+    "raw_bytes": 54192,
+    "raw_sha256": "f776ea816f1182c255c984e213ecbcd12ae6fcf76a687865f551fc0e4f0e36bd"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember.log",
+    "archive": "logs/r3-visual-age-candidate/ember.log.gz",
+    "raw_bytes": 56400,
+    "raw_sha256": "c0f32eabb651334761b9d3e245772ec4378d5b1b679501077885322a20726c6b"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r2-elite-radius-fixture-failure/focused-tests.log",
+    "archive": "logs/r2-elite-radius-fixture-failure/focused-tests.log.gz",
+    "raw_bytes": 3550,
+    "raw_sha256": "ea521892db04aa662609b5e885d0f4534324738d5ac0e5756c7645c8362549bf"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r2-elite-radius-fixture-failure/after-manager.log",
+    "archive": "logs/r2-elite-radius-fixture-failure/after-manager.log.gz",
+    "raw_bytes": 918,
+    "raw_sha256": "a10eb5f4ba2950a0b523190c4d43abe51e206bea31eeb809215f38c3d136dec2"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r4-large-frame-metadata-fixture-failures/library-tests.log",
+    "archive": "logs/r4-large-frame-metadata-fixture-failures/library-tests.log.gz",
+    "raw_bytes": 82146,
+    "raw_sha256": "47315033c58040e9a5ede494a43117f3c20f5359a36c5fb372f6ed1785ebaac1"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r4-large-frame-metadata-fixture-failures/focused-tests.log",
+    "archive": "logs/r4-large-frame-metadata-fixture-failures/focused-tests.log.gz",
+    "raw_bytes": 2737,
+    "raw_sha256": "c74ed32f30133427b7848f8c2fb42065ace57e99d1562cab4579bd2f4ac29f1d"
+  },
+  {
+    "original": "target/verification/ranged-release-2026-11-06/r4-large-frame-metadata-fixture-failures/after-manager.log",
+    "archive": "logs/r4-large-frame-metadata-fixture-failures/after-manager.log.gz",
+    "raw_bytes": 888,
+    "raw_sha256": "5cd5c9cb3ae2dd2719b4c7cd1a6e275dfac4d3bedfd1cb07f6f7f5da796a0a1f"
+  },
+  {
+    "original": "target/verification/attack-phase-closeup-2026-11-06/sword.log",
+    "archive": "logs/control-before-sword.log.gz",
+    "raw_bytes": 56529,
+    "raw_sha256": "2c61c3e5ad13c0751785f8cbee38c0a823313ec2a5ed77cc0d309f1cbf4fcff3"
+  }
+]

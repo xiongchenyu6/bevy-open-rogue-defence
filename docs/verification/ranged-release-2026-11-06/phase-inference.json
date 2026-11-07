@@ -1,0 +1,3237 @@
+{
+  "status": "PHASE_DIAGNOSTIC_ONLY",
+  "runs": {
+    "old-ember": {
+      "log_sha256": "834965a48dcad593780502fd56c4e1818f36ccba9fbb9bfb615c248daf07dbec",
+      "receipt": {
+        "command": [
+          "nix",
+          "develop",
+          "--command",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/attack-phase-closeup-2026-11-06/capture",
+          "frames",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ranged-release-2026-11-06/before-trace-ember",
+          "210",
+          "attack-ember",
+          "0xA11CE",
+          "1280x720"
+        ],
+        "returncode": 0,
+        "binary_sha256": "e421ed122ba22738fb4f5f977e124d6e07a66103be3f22a3b840c92fee921e4c"
+      },
+      "inference": {
+        "source_installation": {
+          "input_map": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/attack-phase-closeup-2026-11-06/inputs.json",
+          "input_map_sha256": "f06e137f8a34c6827b55b608d7d7dfb75f88d3e923250e884784aa87b3ba0c65",
+          "capture_files": {
+            "src/bin/capture/attacks.rs": "911e7483bf5e008e53bdd0115eb504e06842f6c00af8f0f180bdd22488c676d5",
+            "src/bin/capture.rs": "99312f79b3787f9ec5fa73d3f6a7222b7832ae4f23d1d6ab6eb421eb4acdb65e"
+          }
+        },
+        "rows": [
+          {
+            "frame": 11,
+            "observable_cycle_index": 0,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.10453333,
+              3.1360002
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -1.5668836200743996e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.2666666906688362,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 21,
+            "observable_cycle_index": 1,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.107146665,
+              3.2144
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -7.477223396001875e-09,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.2666666824772234,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 30,
+            "observable_cycle_index": 2,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.109759994,
+              3.2928
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -1.1952277639837305e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.2666666869522777,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 40,
+            "observable_cycle_index": 3,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.112373345,
+              3.3712006
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -1.442733293943732e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666668942733296,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 49,
+            "observable_cycle_index": 4,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.11498667,
+              3.4496005
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -1.9569053655299484e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.2666666945690537,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 58,
+            "observable_cycle_index": 5,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.117599994,
+              3.528
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -1.237744032267507e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666668737744037,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 67,
+            "observable_cycle_index": 6,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.120213345,
+              3.6064005
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -1.1519162124162818e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666668651916214,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 76,
+            "observable_cycle_index": 7,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.122826666,
+              3.6848001
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -1.0660882288071605e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.2666666856608823,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 84,
+            "observable_cycle_index": 8,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.12544,
+              3.7632003
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -1.6802603558518925e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.2666666918026036,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 93,
+            "observable_cycle_index": 9,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.12805334,
+              3.8416004
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -1.3610991306256537e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.2666666886109913,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 101,
+            "observable_cycle_index": 10,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.13066667,
+              3.9200006
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -2.3752712546842858e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666669875271254,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 109,
+            "observable_cycle_index": 11,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.13328,
+              3.9984002
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -1.3894432715488847e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666668889443274,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 117,
+            "observable_cycle_index": 12,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.13589333,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -2.0702820485718476e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666669570282053,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 124,
+            "observable_cycle_index": 13,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.13589333,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -2.0702820485718476e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666669570282053,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 132,
+            "observable_cycle_index": 14,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.13589333,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -2.0702820485718476e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666669570282053,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 140,
+            "observable_cycle_index": 15,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.13589333,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -2.0702820485718476e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666669570282053,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 148,
+            "observable_cycle_index": 16,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.13589333,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -2.0702820485718476e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666669570282053,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 156,
+            "observable_cycle_index": 17,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.13589333,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -2.0702820485718476e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666669570282053,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 164,
+            "observable_cycle_index": 18,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.13589333,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -2.0702820485718476e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666669570282053,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 172,
+            "observable_cycle_index": 19,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.13589333,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -2.0702820485718476e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666669570282053,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 179,
+            "observable_cycle_index": 20,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.13589333,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -2.0702820485718476e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666669570282053,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 187,
+            "observable_cycle_index": 21,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.13589333,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -2.0702820485718476e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666669570282053,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 195,
+            "observable_cycle_index": 22,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.13589333,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -2.0702820485718476e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666669570282053,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 204,
+            "observable_cycle_index": 23,
+            "position": [
+              -1.3853333,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.13589333,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333514099782,
+            "inferred_source_release_seconds": -2.0702820485718476e-08,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -0.26666669570282053,
+            "eligible": true,
+            "guard_rejections": []
+          }
+        ],
+        "total_observations": 24,
+        "eligible_observations": 24,
+        "spread": {
+          "min": -2.3752712546842858e-08,
+          "max": -7.477223396001875e-09,
+          "range": 1.6275489150840983e-08
+        },
+        "regular_candidate": {
+          "source_duration": 1.0666667,
+          "fraction": 0.25,
+          "source_seconds": 0.266666675
+        },
+        "assumptions": [
+          "source-confirmed hero(-2,0,0),emission+Y.25,Autoplay removed,stationary targets atX3 and spawn disabled",
+          "single observed Graph3 clip and one first-active epoch per observable cycle; multi-catchup not interpreted",
+          "positive-X collinear flight within one actual fixed1/30update and before nearest target surface: no ricochet/contact before first observation under this controlled fixture",
+          "fixed1/30 capture path assumed without optional melee-audio Automatic override; velocity/playback constant between emission and Last; distance/speed is not an instrumented emission timestamp"
+        ],
+        "limits": "Derived simulation source time only, not authored hand/string event, pixel timing or latency; no tolerance/acceptance forced against candidate. Every excluded observation and reason retained."
+      },
+      "tail_observation": {
+        "last_available_header": 210,
+        "phase_rows_after210": [],
+        "timing_rows_after80": [],
+        "releases_after210": [],
+        "unassigned_resolver_hits_after_last_header": [],
+        "scope": "No frame guessed for unassigned tail hits; screenshot wait updates can continue combat after capped phase observer."
+      }
+    },
+    "r3-ember": {
+      "log_sha256": "c0f32eabb651334761b9d3e245772ec4378d5b1b679501077885322a20726c6b",
+      "receipt": {
+        "command": [
+          "nix",
+          "develop",
+          "--command",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ranged-release-2026-11-06/capture",
+          "frames",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ranged-release-2026-11-06/ember",
+          "210",
+          "attack-ember",
+          "0xA11CE",
+          "1280x720"
+        ],
+        "returncode": 0
+      },
+      "inference": {
+        "source_installation": {
+          "input_map": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/after-inputs.json",
+          "input_map_sha256": "d40432b2d3b7d1f41671f92be646b356dc025b8177c94446ae2eea20a4e22a52",
+          "capture_files": {
+            "src/bin/capture/attacks.rs": "911e7483bf5e008e53bdd0115eb504e06842f6c00af8f0f180bdd22488c676d5",
+            "src/bin/capture.rs": "99312f79b3787f9ec5fa73d3f6a7222b7832ae4f23d1d6ab6eb421eb4acdb65e"
+          }
+        },
+        "rows": [
+          {
+            "frame": 13,
+            "observable_cycle_index": 0,
+            "position": [
+              -1.8494694,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.3136,
+              3.1360002
+            ],
+            "inferred_flight_virtual_seconds": 0.008163264642082427,
+            "inferred_source_release_seconds": 0.2880000004497766,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.021333325449776563,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 23,
+            "observable_cycle_index": 1,
+            "position": [
+              -1.7836891,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.32143998,
+              3.2144
+            ],
+            "inferred_flight_virtual_seconds": 0.011730526030368768,
+            "inferred_source_release_seconds": 0.28373337712798263,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.017066702127982614,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 33,
+            "observable_cycle_index": 2,
+            "position": [
+              -1.5740365,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.43903998,
+              3.2928
+            ],
+            "inferred_flight_virtual_seconds": 0.023099972885032533,
+            "inferred_source_release_seconds": 0.36297638928416487,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.09630971428416485,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 42,
+            "observable_cycle_index": 3,
+            "position": [
+              -1.8418262,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.33712003,
+              3.3712006
+            ],
+            "inferred_flight_virtual_seconds": 0.008577754880694139,
+            "inferred_source_release_seconds": 0.308202697599551,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.04153602259955097,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 51,
+            "observable_cycle_index": 4,
+            "position": [
+              -1.978592,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.34496003,
+              3.4496005
+            ],
+            "inferred_flight_virtual_seconds": 0.0011609544468546688,
+            "inferred_source_release_seconds": 0.34095520095965287,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.07428852595965285,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 60,
+            "observable_cycle_index": 5,
+            "position": [
+              -1.9901228,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.35279998,
+              3.528
+            ],
+            "inferred_flight_virtual_seconds": 0.0005356399132321057,
+            "inferred_source_release_seconds": 0.3509102423861171,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.0842435673861171,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 69,
+            "observable_cycle_index": 6,
+            "position": [
+              -1.8818302,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.36064005,
+              3.6064005
+            ],
+            "inferred_flight_virtual_seconds": 0.006408340563991323,
+            "inferred_source_release_seconds": 0.3375290073858514,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.07086233238585138,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 78,
+            "observable_cycle_index": 7,
+            "position": [
+              -1.6587846,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.36848,
+              3.6848001
+            ],
+            "inferred_flight_virtual_seconds": 0.018504088937093276,
+            "inferred_source_release_seconds": 0.30029613123418974,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.033629456234189725,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 86,
+            "observable_cycle_index": 8,
+            "position": [
+              -1.9404066,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.37632,
+              3.7632003
+            ],
+            "inferred_flight_virtual_seconds": 0.003231746203904556,
+            "inferred_source_release_seconds": 0.3641582917159425,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.09749161671594248,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 95,
+            "observable_cycle_index": 9,
+            "position": [
+              -1.501828,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.38416,
+              3.8416004
+            ],
+            "inferred_flight_virtual_seconds": 0.027015835140997833,
+            "inferred_source_release_seconds": 0.2803759569160087,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.013709281916008675,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 103,
+            "observable_cycle_index": 10,
+            "position": [
+              -1.576581,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.39200002,
+              3.9200006
+            ],
+            "inferred_flight_virtual_seconds": 0.02296198481561822,
+            "inferred_source_release_seconds": 0.3019890257455857,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.03532235074558571,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 111,
+            "observable_cycle_index": 11,
+            "position": [
+              -1.5539523,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.39984,
+              3.9984002
+            ],
+            "inferred_flight_virtual_seconds": 0.02418913774403471,
+            "inferred_source_release_seconds": 0.303122146806424,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.036455471806424,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 119,
+            "observable_cycle_index": 12,
+            "position": [
+              -1.4376675,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.40767998,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.030495254880694135,
+            "inferred_source_release_seconds": 0.28335691575380967,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.01669024075380965,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 126,
+            "observable_cycle_index": 13,
+            "position": [
+              -1.9596997,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.40767998,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.0021854826464208217,
+            "inferred_source_release_seconds": 0.3987702036914268,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.13210352869142677,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 134,
+            "observable_cycle_index": 14,
+            "position": [
+              -1.8670655,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.40767998,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.007209029284164856,
+            "inferred_source_release_seconds": 0.37829020725160795,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.11162353225160793,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 142,
+            "observable_cycle_index": 15,
+            "position": [
+              -1.7744312,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.40767998,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.012232581344902385,
+            "inferred_source_release_seconds": 0.35781018870332754,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.09114351370332752,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 150,
+            "observable_cycle_index": 16,
+            "position": [
+              -1.6817969,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.40767998,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.017256133405639917,
+            "inferred_source_release_seconds": 0.3373301701550472,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.07066349515504716,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 158,
+            "observable_cycle_index": 17,
+            "position": [
+              -1.5891626,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.40767998,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.022279685466377434,
+            "inferred_source_release_seconds": 0.31685015160676683,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.05018347660676681,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 166,
+            "observable_cycle_index": 18,
+            "position": [
+              -1.4965283,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.40767998,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.027303237527114964,
+            "inferred_source_release_seconds": 0.2963701330584865,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.029703458058486454,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 174,
+            "observable_cycle_index": 19,
+            "position": [
+              -1.403894,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.40767998,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.03232678958785249,
+            "inferred_source_release_seconds": 0.27589011451020606,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.009223439510206044,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 181,
+            "observable_cycle_index": 20,
+            "position": [
+              -1.9259263,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.40767998,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.004017011930585684,
+            "inferred_source_release_seconds": 0.3913034245562847,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.12463674955628468,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 189,
+            "observable_cycle_index": 21,
+            "position": [
+              -1.8332921,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.40767998,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.009040558568329719,
+            "inferred_source_release_seconds": 0.37082342811646585,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.10415675311646583,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 197,
+            "observable_cycle_index": 22,
+            "position": [
+              -1.7406578,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.40767998,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.01406411062906725,
+            "inferred_source_release_seconds": 0.35034340956818544,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.08367673456818542,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 206,
+            "observable_cycle_index": 23,
+            "position": [
+              -1.6111435,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.4158336,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.02108766268980477,
+            "inferred_source_release_seconds": 0.32986341041990513,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 0.06319673541990511,
+            "eligible": true,
+            "guard_rejections": []
+          }
+        ],
+        "total_observations": 24,
+        "eligible_observations": 24,
+        "spread": {
+          "min": 0.27589011451020606,
+          "max": 0.3987702036914268,
+          "range": 0.12288008918122073
+        },
+        "regular_candidate": {
+          "source_duration": 1.0666667,
+          "fraction": 0.25,
+          "source_seconds": 0.266666675
+        },
+        "assumptions": [
+          "source-confirmed hero(-2,0,0),emission+Y.25,Autoplay removed,stationary targets atX3 and spawn disabled",
+          "single observed Graph3 clip and one first-active epoch per observable cycle; multi-catchup not interpreted",
+          "positive-X collinear flight within one actual fixed1/30update and before nearest target surface: no ricochet/contact before first observation under this controlled fixture",
+          "fixed1/30 capture path assumed without optional melee-audio Automatic override; velocity/playback constant between emission and Last; distance/speed is not an instrumented emission timestamp"
+        ],
+        "limits": "Derived simulation source time only, not authored hand/string event, pixel timing or latency; no tolerance/acceptance forced against candidate. Every excluded observation and reason retained."
+      },
+      "tail_observation": {
+        "last_available_header": 210,
+        "phase_rows_after210": [],
+        "timing_rows_after80": [],
+        "releases_after210": [],
+        "unassigned_resolver_hits_after_last_header": [],
+        "scope": "No frame guessed for unassigned tail hits; screenshot wait updates can continue combat after capped phase observer."
+      }
+    },
+    "current-ember": {
+      "log_sha256": "a09d8c3c141da6fb24f1720ba6e47707dfde2e5289f6558d6aab475d3a4cb3f0",
+      "receipt": {
+        "command": [
+          "nix",
+          "develop",
+          "--command",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ranged-release-2026-11-06/capture",
+          "frames",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ranged-release-2026-11-06/ember",
+          "210",
+          "attack-ember",
+          "0xA11CE",
+          "1280x720"
+        ],
+        "returncode": 0
+      },
+      "inference": {
+        "source_installation": {
+          "input_map": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ranged-release-2026-11-06/after-inputs.json",
+          "input_map_sha256": "3f9c5b4aeb58537aeae06251792e056908e36d9580ddc94a6c1fa2e266a43243",
+          "capture_files": {
+            "src/bin/capture/attacks.rs": "911e7483bf5e008e53bdd0115eb504e06842f6c00af8f0f180bdd22488c676d5",
+            "src/bin/capture.rs": "99312f79b3787f9ec5fa73d3f6a7222b7832ae4f23d1d6ab6eb421eb4acdb65e"
+          }
+        },
+        "rows": [
+          {
+            "frame": 13,
+            "observable_cycle_index": 0,
+            "position": [
+              -1.7240273,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.3136,
+              3.1360002
+            ],
+            "inferred_flight_virtual_seconds": 0.014965981561822128,
+            "inferred_source_release_seconds": 0.26666667882892947,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 3.828929451277219e-09,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 23,
+            "observable_cycle_index": 1,
+            "position": [
+              -1.6857828,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.32143998,
+              3.2144
+            ],
+            "inferred_flight_virtual_seconds": 0.017039978308026033,
+            "inferred_source_release_seconds": 0.2666666737266811,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -1.2733188947677831e-09,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 32,
+            "observable_cycle_index": 2,
+            "position": [
+              -1.6493595,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.32928,
+              3.2928
+            ],
+            "inferred_flight_virtual_seconds": 0.019015211496746197,
+            "inferred_source_release_seconds": 0.2666667115835141,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 3.658351410695815e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 42,
+            "observable_cycle_index": 3,
+            "position": [
+              -1.6146299,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.33712003,
+              3.3712006
+            ],
+            "inferred_flight_virtual_seconds": 0.020898595444685468,
+            "inferred_source_release_seconds": 0.2666666724977191,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -2.502280938010415e-09,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 51,
+            "observable_cycle_index": 4,
+            "position": [
+              -1.5814792,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.34496003,
+              3.4496005
+            ],
+            "inferred_flight_virtual_seconds": 0.0226963557483731,
+            "inferred_source_release_seconds": 0.26666666986223425,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -5.1377657683815414e-09,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 60,
+            "observable_cycle_index": 5,
+            "position": [
+              -1.5498021,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.35279998,
+              3.528
+            ],
+            "inferred_flight_virtual_seconds": 0.024414202819956616,
+            "inferred_source_release_seconds": 0.2666666724511931,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -2.548806943281079e-09,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 69,
+            "observable_cycle_index": 6,
+            "position": [
+              -1.5195019,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.36064005,
+              3.6064005
+            ],
+            "inferred_flight_virtual_seconds": 0.02605738069414316,
+            "inferred_source_release_seconds": 0.26666669923595177,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 2.4235951745499307e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 78,
+            "observable_cycle_index": 7,
+            "position": [
+              -1.4904914,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.36848,
+              3.6848001
+            ],
+            "inferred_flight_virtual_seconds": 0.027630618221258132,
+            "inferred_source_release_seconds": 0.2666666952152462,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 2.0215246199217773e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 86,
+            "observable_cycle_index": 8,
+            "position": [
+              -1.4626894,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.37632,
+              3.7632003
+            ],
+            "inferred_flight_virtual_seconds": 0.029138318872017357,
+            "inferred_source_release_seconds": 0.2666666696793286,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -5.320671403463706e-09,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 95,
+            "observable_cycle_index": 9,
+            "position": [
+              -1.4360223,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.38416,
+              3.8416004
+            ],
+            "inferred_flight_virtual_seconds": 0.03058447396963123,
+            "inferred_source_release_seconds": 0.26666667256447507,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -2.4355249483853925e-09,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 103,
+            "observable_cycle_index": 10,
+            "position": [
+              -1.4104218,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.39200002,
+              3.9200006
+            ],
+            "inferred_flight_virtual_seconds": 0.0319727874186551,
+            "inferred_source_release_seconds": 0.26666667413519957,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -8.648004534705933e-10,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 111,
+            "observable_cycle_index": 11,
+            "position": [
+              -1.3858254,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.39984,
+              3.9984002
+            ],
+            "inferred_flight_virtual_seconds": 0.033306648590021685,
+            "inferred_source_release_seconds": 0.26666668961632756,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": 1.461632753718689e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 118,
+            "observable_cycle_index": 12,
+            "position": [
+              -1.9768414,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.27178666,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.0012558893709327503,
+            "inferred_source_release_seconds": 0.26666664983581456,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -2.5164185457615673e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 125,
+            "observable_cycle_index": 13,
+            "position": [
+              -1.9768414,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.27178666,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.0012558893709327503,
+            "inferred_source_release_seconds": 0.26666664983581456,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -2.5164185457615673e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 133,
+            "observable_cycle_index": 14,
+            "position": [
+              -1.9768414,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.27178666,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.0012558893709327503,
+            "inferred_source_release_seconds": 0.26666664983581456,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -2.5164185457615673e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 141,
+            "observable_cycle_index": 15,
+            "position": [
+              -1.9768414,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.27178666,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.0012558893709327503,
+            "inferred_source_release_seconds": 0.26666664983581456,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -2.5164185457615673e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 149,
+            "observable_cycle_index": 16,
+            "position": [
+              -1.9768414,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.27178666,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.0012558893709327503,
+            "inferred_source_release_seconds": 0.26666664983581456,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -2.5164185457615673e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 157,
+            "observable_cycle_index": 17,
+            "position": [
+              -1.9768414,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.27178666,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.0012558893709327503,
+            "inferred_source_release_seconds": 0.26666664983581456,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -2.5164185457615673e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 165,
+            "observable_cycle_index": 18,
+            "position": [
+              -1.9768414,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.27178666,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.0012558893709327503,
+            "inferred_source_release_seconds": 0.26666664983581456,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -2.5164185457615673e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 173,
+            "observable_cycle_index": 19,
+            "position": [
+              -1.9768414,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.27178666,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.0012558893709327503,
+            "inferred_source_release_seconds": 0.26666664983581456,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -2.5164185457615673e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 180,
+            "observable_cycle_index": 20,
+            "position": [
+              -1.9768414,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.27178666,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.0012558893709327503,
+            "inferred_source_release_seconds": 0.26666664983581456,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -2.5164185457615673e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 188,
+            "observable_cycle_index": 21,
+            "position": [
+              -1.9768414,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.27178666,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.0012558893709327503,
+            "inferred_source_release_seconds": 0.26666664983581456,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -2.5164185457615673e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 196,
+            "observable_cycle_index": 22,
+            "position": [
+              -1.9768414,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.27178666,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.0012558893709327503,
+            "inferred_source_release_seconds": 0.26666664983581456,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -2.5164185457615673e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 205,
+            "observable_cycle_index": 23,
+            "position": [
+              -1.9399614,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              18.44,
+              0.0,
+              0.0
+            ],
+            "speed": 18.44,
+            "attack_clip": [
+              3,
+              0.27994025,
+              4.0768003
+            ],
+            "inferred_flight_virtual_seconds": 0.0032558893709327516,
+            "inferred_source_release_seconds": 0.2666666392358146,
+            "regular_candidate_source_seconds": 0.266666675,
+            "difference_from_regular_candidate": -3.5764185446485186e-08,
+            "eligible": true,
+            "guard_rejections": []
+          }
+        ],
+        "total_observations": 24,
+        "eligible_observations": 24,
+        "spread": {
+          "min": 0.2666666392358146,
+          "max": 0.2666667115835141,
+          "range": 7.234769955344333e-08
+        },
+        "regular_candidate": {
+          "source_duration": 1.0666667,
+          "fraction": 0.25,
+          "source_seconds": 0.266666675
+        },
+        "assumptions": [
+          "source-confirmed hero(-2,0,0),emission+Y.25,Autoplay removed,stationary targets atX3 and spawn disabled",
+          "single observed Graph3 clip and one first-active epoch per observable cycle; multi-catchup not interpreted",
+          "positive-X collinear flight within one actual fixed1/30update and before nearest target surface: no ricochet/contact before first observation under this controlled fixture",
+          "fixed1/30 capture path assumed without optional melee-audio Automatic override; velocity/playback constant between emission and Last; distance/speed is not an instrumented emission timestamp"
+        ],
+        "limits": "Derived simulation source time only, not authored hand/string event, pixel timing or latency; no tolerance/acceptance forced against candidate. Every excluded observation and reason retained."
+      },
+      "tail_observation": {
+        "last_available_header": 210,
+        "phase_rows_after210": [],
+        "timing_rows_after80": [],
+        "releases_after210": [],
+        "unassigned_resolver_hits_after_last_header": [],
+        "scope": "No frame guessed for unassigned tail hits; screenshot wait updates can continue combat after capped phase observer."
+      }
+    },
+    "old-storm": {
+      "log_sha256": "faed1c752be6d7e1978b67f98cf38dbacef709b6ce68c55801665b41a3dc1729",
+      "receipt": {
+        "command": [
+          "nix",
+          "develop",
+          "--command",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/attack-phase-closeup-2026-11-06/capture",
+          "frames",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ranged-release-2026-11-06/before-trace-storm",
+          "210",
+          "attack-storm",
+          "0xA11CE",
+          "1280x720"
+        ],
+        "returncode": 0,
+        "binary_sha256": "e421ed122ba22738fb4f5f977e124d6e07a66103be3f22a3b840c92fee921e4c"
+      },
+      "inference": {
+        "source_installation": {
+          "input_map": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/attack-phase-closeup-2026-11-06/inputs.json",
+          "input_map_sha256": "f06e137f8a34c6827b55b608d7d7dfb75f88d3e923250e884784aa87b3ba0c65",
+          "capture_files": {
+            "src/bin/capture/attacks.rs": "911e7483bf5e008e53bdd0115eb504e06842f6c00af8f0f180bdd22488c676d5",
+            "src/bin/capture.rs": "99312f79b3787f9ec5fa73d3f6a7222b7832ae4f23d1d6ab6eb421eb4acdb65e"
+          }
+        },
+        "rows": [
+          {
+            "frame": 16,
+            "observable_cycle_index": 0,
+            "position": [
+              -1.3586667,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.0691358,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333160083161,
+            "inferred_source_release_seconds": 3.593336780904899e-09,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": -0.26133332040666324,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 31,
+            "observable_cycle_index": 1,
+            "position": [
+              -1.3586667,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.0691358,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333160083161,
+            "inferred_source_release_seconds": 3.593336780904899e-09,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": -0.26133332040666324,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 47,
+            "observable_cycle_index": 2,
+            "position": [
+              -1.3586667,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.0691358,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333160083161,
+            "inferred_source_release_seconds": 3.593336780904899e-09,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": -0.26133332040666324,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 62,
+            "observable_cycle_index": 3,
+            "position": [
+              -1.3586667,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.0691358,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333160083161,
+            "inferred_source_release_seconds": 3.593336780904899e-09,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": -0.26133332040666324,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 77,
+            "observable_cycle_index": 4,
+            "position": [
+              -1.3586667,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.0691358,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333160083161,
+            "inferred_source_release_seconds": 3.593336780904899e-09,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": -0.26133332040666324,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 93,
+            "observable_cycle_index": 5,
+            "position": [
+              -1.3586667,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.0691358,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333160083161,
+            "inferred_source_release_seconds": 3.593336780904899e-09,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": -0.26133332040666324,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 108,
+            "observable_cycle_index": 6,
+            "position": [
+              -1.3586667,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.0691358,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333160083161,
+            "inferred_source_release_seconds": 3.593336780904899e-09,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": -0.26133332040666324,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 123,
+            "observable_cycle_index": 7,
+            "position": [
+              -1.3586667,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.0691358,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333160083161,
+            "inferred_source_release_seconds": 3.593336780904899e-09,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": -0.26133332040666324,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 139,
+            "observable_cycle_index": 8,
+            "position": [
+              -1.3586667,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.0691358,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333160083161,
+            "inferred_source_release_seconds": 3.593336780904899e-09,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": -0.26133332040666324,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 154,
+            "observable_cycle_index": 9,
+            "position": [
+              -1.3586667,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.0691358,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333160083161,
+            "inferred_source_release_seconds": 3.593336780904899e-09,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": -0.26133332040666324,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 169,
+            "observable_cycle_index": 10,
+            "position": [
+              -1.3586667,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.0691358,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333160083161,
+            "inferred_source_release_seconds": 3.593336780904899e-09,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": -0.26133332040666324,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 185,
+            "observable_cycle_index": 11,
+            "position": [
+              -1.3586667,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.0691358,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333160083161,
+            "inferred_source_release_seconds": 3.593336780904899e-09,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": -0.26133332040666324,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 200,
+            "observable_cycle_index": 12,
+            "position": [
+              -1.3586667,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.0691358,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.03333333160083161,
+            "inferred_source_release_seconds": 3.593336780904899e-09,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": -0.26133332040666324,
+            "eligible": true,
+            "guard_rejections": []
+          }
+        ],
+        "total_observations": 13,
+        "eligible_observations": 13,
+        "spread": {
+          "min": 3.593336780904899e-09,
+          "max": 3.593336780904899e-09,
+          "range": 0.0
+        },
+        "regular_candidate": {
+          "source_duration": 0.9333333,
+          "fraction": 0.28,
+          "source_seconds": 0.26133332400000003
+        },
+        "assumptions": [
+          "source-confirmed hero(-2,0,0),emission+Y.25,Autoplay removed,stationary targets atX3 and spawn disabled",
+          "single observed Graph3 clip and one first-active epoch per observable cycle; multi-catchup not interpreted",
+          "positive-X collinear flight within one actual fixed1/30update and before nearest target surface: no ricochet/contact before first observation under this controlled fixture",
+          "fixed1/30 capture path assumed without optional melee-audio Automatic override; velocity/playback constant between emission and Last; distance/speed is not an instrumented emission timestamp"
+        ],
+        "limits": "Derived simulation source time only, not authored hand/string event, pixel timing or latency; no tolerance/acceptance forced against candidate. Every excluded observation and reason retained."
+      },
+      "tail_observation": {
+        "last_available_header": 210,
+        "phase_rows_after210": [],
+        "timing_rows_after80": [],
+        "releases_after210": [],
+        "unassigned_resolver_hits_after_last_header": [],
+        "scope": "No frame guessed for unassigned tail hits; screenshot wait updates can continue combat after capped phase observer."
+      }
+    },
+    "r3-storm": {
+      "log_sha256": "f776ea816f1182c255c984e213ecbcd12ae6fcf76a687865f551fc0e4f0e36bd",
+      "receipt": {
+        "command": [
+          "nix",
+          "develop",
+          "--command",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ranged-release-2026-11-06/capture",
+          "frames",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ranged-release-2026-11-06/storm",
+          "210",
+          "attack-storm",
+          "0xA11CE",
+          "1280x720"
+        ],
+        "returncode": 0
+      },
+      "inference": {
+        "source_installation": {
+          "input_map": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/after-inputs.json",
+          "input_map_sha256": "d40432b2d3b7d1f41671f92be646b356dc025b8177c94446ae2eea20a4e22a52",
+          "capture_files": {
+            "src/bin/capture/attacks.rs": "911e7483bf5e008e53bdd0115eb504e06842f6c00af8f0f180bdd22488c676d5",
+            "src/bin/capture.rs": "99312f79b3787f9ec5fa73d3f6a7222b7832ae4f23d1d6ab6eb421eb4acdb65e"
+          }
+        },
+        "rows": [
+          {
+            "frame": 20,
+            "observable_cycle_index": 0,
+            "position": [
+              -1.4440423,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.345679,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.028895930353430355,
+            "inferred_source_release_seconds": 0.2857467021481393,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 0.024413378148139264,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 35,
+            "observable_cycle_index": 1,
+            "position": [
+              -1.6705112,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.345679,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.017125197505197507,
+            "inferred_source_release_seconds": 0.31016007310960503,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 0.048826749109604994,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 50,
+            "observable_cycle_index": 2,
+            "position": [
+              -1.8969802,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.00535445945945946,
+            "inferred_source_release_seconds": 0.26543765485108106,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 0.004104330851081028,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 66,
+            "observable_cycle_index": 3,
+            "position": [
+              -1.4821155,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.345679,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.02691707380457381,
+            "inferred_source_release_seconds": 0.2898509970658524,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 0.028517673065852345,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 81,
+            "observable_cycle_index": 4,
+            "position": [
+              -1.7085844,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.345679,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.015146340956340962,
+            "inferred_source_release_seconds": 0.3142643680273181,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 0.052931044027318075,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 96,
+            "observable_cycle_index": 5,
+            "position": [
+              -1.9350532,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.0033756133056133046,
+            "inferred_source_release_seconds": 0.2695419282087734,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 0.00820860420877334,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 112,
+            "observable_cycle_index": 6,
+            "position": [
+              -1.5201888,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.345679,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.024938212058212065,
+            "inferred_source_release_seconds": 0.2939553027635759,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 0.032621978763575865,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 127,
+            "observable_cycle_index": 7,
+            "position": [
+              -1.7466576,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.345679,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.013167484407484407,
+            "inferred_source_release_seconds": 0.3183686629450312,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 0.057035338945031155,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 142,
+            "observable_cycle_index": 8,
+            "position": [
+              -1.9731265,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.001396751559251559,
+            "inferred_source_release_seconds": 0.2736462339064969,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 0.01231290990649686,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 158,
+            "observable_cycle_index": 9,
+            "position": [
+              -1.5582621,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.345679,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.02295935031185031,
+            "inferred_source_release_seconds": 0.2980596084612994,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 0.036726284461299386,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 173,
+            "observable_cycle_index": 10,
+            "position": [
+              -1.7847308,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.345679,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.011188627858627863,
+            "inferred_source_release_seconds": 0.32247295786274427,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 0.061139633862744236,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 189,
+            "observable_cycle_index": 11,
+            "position": [
+              -1.3698664,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.345679,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.03275122661122661,
+            "inferred_source_release_seconds": 0.27775053241754677,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 0.016417208417546736,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 204,
+            "observable_cycle_index": 12,
+            "position": [
+              -1.5963352,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.345679,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.020980498960498965,
+            "inferred_source_release_seconds": 0.30216389259900206,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 0.040830568599002026,
+            "eligible": true,
+            "guard_rejections": []
+          }
+        ],
+        "total_observations": 13,
+        "eligible_observations": 13,
+        "spread": {
+          "min": 0.26543765485108106,
+          "max": 0.32247295786274427,
+          "range": 0.05703530301166321
+        },
+        "regular_candidate": {
+          "source_duration": 0.9333333,
+          "fraction": 0.28,
+          "source_seconds": 0.26133332400000003
+        },
+        "assumptions": [
+          "source-confirmed hero(-2,0,0),emission+Y.25,Autoplay removed,stationary targets atX3 and spawn disabled",
+          "single observed Graph3 clip and one first-active epoch per observable cycle; multi-catchup not interpreted",
+          "positive-X collinear flight within one actual fixed1/30update and before nearest target surface: no ricochet/contact before first observation under this controlled fixture",
+          "fixed1/30 capture path assumed without optional melee-audio Automatic override; velocity/playback constant between emission and Last; distance/speed is not an instrumented emission timestamp"
+        ],
+        "limits": "Derived simulation source time only, not authored hand/string event, pixel timing or latency; no tolerance/acceptance forced against candidate. Every excluded observation and reason retained."
+      },
+      "tail_observation": {
+        "last_available_header": 210,
+        "phase_rows_after210": [],
+        "timing_rows_after80": [],
+        "releases_after210": [],
+        "unassigned_resolver_hits_after_last_header": [],
+        "scope": "No frame guessed for unassigned tail hits; screenshot wait updates can continue combat after capped phase observer."
+      }
+    },
+    "current-storm": {
+      "log_sha256": "28925c26dd469fd0849de3ddacbe80ad6dffe8325c3459bb12e856a1aa5b0207",
+      "receipt": {
+        "command": [
+          "nix",
+          "develop",
+          "--command",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ranged-release-2026-11-06/capture",
+          "frames",
+          "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ranged-release-2026-11-06/storm",
+          "210",
+          "attack-storm",
+          "0xA11CE",
+          "1280x720"
+        ],
+        "returncode": 0
+      },
+      "inference": {
+        "source_installation": {
+          "input_map": "/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ranged-release-2026-11-06/after-inputs.json",
+          "input_map_sha256": "3f9c5b4aeb58537aeae06251792e056908e36d9580ddc94a6c1fa2e266a43243",
+          "capture_files": {
+            "src/bin/capture/attacks.rs": "911e7483bf5e008e53bdd0115eb504e06842f6c00af8f0f180bdd22488c676d5",
+            "src/bin/capture.rs": "99312f79b3787f9ec5fa73d3f6a7222b7832ae4f23d1d6ab6eb421eb4acdb65e"
+          }
+        },
+        "rows": [
+          {
+            "frame": 19,
+            "observable_cycle_index": 0,
+            "position": [
+              -1.8589069,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.007333321205821205,
+            "inferred_source_release_seconds": 0.2613333491533576,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 2.5153357563478806e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 34,
+            "observable_cycle_index": 1,
+            "position": [
+              -1.8589069,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.007333321205821205,
+            "inferred_source_release_seconds": 0.2613333491533576,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 2.5153357563478806e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 50,
+            "observable_cycle_index": 2,
+            "position": [
+              -1.8589069,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.007333321205821205,
+            "inferred_source_release_seconds": 0.2613333491533576,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 2.5153357563478806e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 65,
+            "observable_cycle_index": 3,
+            "position": [
+              -1.8589069,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.007333321205821205,
+            "inferred_source_release_seconds": 0.2613333491533576,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 2.5153357563478806e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 80,
+            "observable_cycle_index": 4,
+            "position": [
+              -1.8589069,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.007333321205821205,
+            "inferred_source_release_seconds": 0.2613333491533576,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 2.5153357563478806e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 96,
+            "observable_cycle_index": 5,
+            "position": [
+              -1.8589069,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.007333321205821205,
+            "inferred_source_release_seconds": 0.2613333491533576,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 2.5153357563478806e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 111,
+            "observable_cycle_index": 6,
+            "position": [
+              -1.8589069,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.007333321205821205,
+            "inferred_source_release_seconds": 0.2613333491533576,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 2.5153357563478806e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 126,
+            "observable_cycle_index": 7,
+            "position": [
+              -1.8589069,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.007333321205821205,
+            "inferred_source_release_seconds": 0.2613333491533576,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 2.5153357563478806e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 142,
+            "observable_cycle_index": 8,
+            "position": [
+              -1.8589069,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.007333321205821205,
+            "inferred_source_release_seconds": 0.2613333491533576,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 2.5153357563478806e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 157,
+            "observable_cycle_index": 9,
+            "position": [
+              -1.8589069,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.007333321205821205,
+            "inferred_source_release_seconds": 0.2613333491533576,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 2.5153357563478806e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 172,
+            "observable_cycle_index": 10,
+            "position": [
+              -1.8589069,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.007333321205821205,
+            "inferred_source_release_seconds": 0.2613333491533576,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 2.5153357563478806e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 188,
+            "observable_cycle_index": 11,
+            "position": [
+              -1.8589069,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.007333321205821205,
+            "inferred_source_release_seconds": 0.2613333491533576,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 2.5153357563478806e-08,
+            "eligible": true,
+            "guard_rejections": []
+          },
+          {
+            "frame": 203,
+            "observable_cycle_index": 12,
+            "position": [
+              -1.8589069,
+              0.25,
+              0.0
+            ],
+            "velocity": [
+              19.24,
+              0.0,
+              0.0
+            ],
+            "speed": 19.24,
+            "attack_clip": [
+              3,
+              0.2765432,
+              2.074074
+            ],
+            "inferred_flight_virtual_seconds": 0.007333321205821205,
+            "inferred_source_release_seconds": 0.2613333491533576,
+            "regular_candidate_source_seconds": 0.26133332400000003,
+            "difference_from_regular_candidate": 2.5153357563478806e-08,
+            "eligible": true,
+            "guard_rejections": []
+          }
+        ],
+        "total_observations": 13,
+        "eligible_observations": 13,
+        "spread": {
+          "min": 0.2613333491533576,
+          "max": 0.2613333491533576,
+          "range": 0.0
+        },
+        "regular_candidate": {
+          "source_duration": 0.9333333,
+          "fraction": 0.28,
+          "source_seconds": 0.26133332400000003
+        },
+        "assumptions": [
+          "source-confirmed hero(-2,0,0),emission+Y.25,Autoplay removed,stationary targets atX3 and spawn disabled",
+          "single observed Graph3 clip and one first-active epoch per observable cycle; multi-catchup not interpreted",
+          "positive-X collinear flight within one actual fixed1/30update and before nearest target surface: no ricochet/contact before first observation under this controlled fixture",
+          "fixed1/30 capture path assumed without optional melee-audio Automatic override; velocity/playback constant between emission and Last; distance/speed is not an instrumented emission timestamp"
+        ],
+        "limits": "Derived simulation source time only, not authored hand/string event, pixel timing or latency; no tolerance/acceptance forced against candidate. Every excluded observation and reason retained."
+      },
+      "tail_observation": {
+        "last_available_header": 210,
+        "phase_rows_after210": [],
+        "timing_rows_after80": [],
+        "releases_after210": [],
+        "unassigned_resolver_hits_after_last_header": [],
+        "scope": "No frame guessed for unassigned tail hits; screenshot wait updates can continue combat after capped phase observer."
+      }
+    }
+  },
+  "pending": [],
+  "scope": "Old/R3/current conditional inference only; not full numeric after-trace comparison or acceptance"
+}

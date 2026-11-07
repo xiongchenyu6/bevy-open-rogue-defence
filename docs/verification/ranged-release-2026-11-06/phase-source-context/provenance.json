@@ -1,0 +1,7 @@
+{
+  "scope": "Read-only copied capture installation sources; identical hashes in actual R3 frozen input map. Actual production source untouched.",
+  "files": {
+    "src/bin/capture/attacks.rs": "911e7483bf5e008e53bdd0115eb504e06842f6c00af8f0f180bdd22488c676d5",
+    "src/bin/capture.rs": "99312f79b3787f9ec5fa73d3f6a7222b7832ae4f23d1d6ab6eb421eb4acdb65e"
+  }
+}

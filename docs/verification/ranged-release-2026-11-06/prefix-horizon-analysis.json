@@ -1,0 +1,207 @@
+{
+  "ember": {
+    "shared_prefix_fields": {
+      "critical": {
+        "shared_prefix": 23,
+        "difference_count": 0,
+        "differences": []
+      },
+      "rng": {
+        "shared_prefix": 23,
+        "difference_count": 0,
+        "differences": []
+      },
+      "hp": {
+        "shared_prefix": 23,
+        "difference_count": 0,
+        "differences": []
+      },
+      "damage": {
+        "shared_prefix": 23,
+        "difference_count": 0,
+        "differences": []
+      }
+    },
+    "before_hits": 24,
+    "after_hits": 23,
+    "first_numeric_difference": {
+      "index": 0,
+      "before": {
+        "frame": 17,
+        "fields": {
+          "outer_ordinal": "0",
+          "candidate_ordinal": "0",
+          "progress_bits": "1059087876",
+          "base_damage": "50.0",
+          "scaled_base_damage": "50.0",
+          "raw_damage": "50.0",
+          "final_damage": "50.0",
+          "critical_roll": "0.9636202454566956",
+          "critical_roll_bits": "1064742865",
+          "crit_multiplier": "1.0",
+          "hp_before": "100000.0",
+          "hp_after": "99950.0",
+          "hp_before_bits": "1203982336",
+          "hp_after_bits": "1203975936",
+          "hp_damage": "50.0",
+          "rng_before_crit": "3875666393666272671",
+          "rng_after_crit": "3901232937218994468",
+          "rng_after_resolution": "3901232937218994468",
+          "elapsed_bits": "1058083088"
+        },
+        "profile": "DamageProfile { element: Physical, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: false, card_proc: false, melee: false, arrow: false }"
+      },
+      "after": {
+        "frame": 20,
+        "fields": {
+          "outer_ordinal": "0",
+          "candidate_ordinal": "0",
+          "progress_bits": "1043715807",
+          "base_damage": "50.0",
+          "scaled_base_damage": "50.0",
+          "raw_damage": "50.0",
+          "final_damage": "50.0",
+          "critical_roll": "0.9636202454566956",
+          "critical_roll_bits": "1064742865",
+          "crit_multiplier": "1.0",
+          "hp_before": "100000.0",
+          "hp_after": "99950.0",
+          "hp_before_bits": "1203982336",
+          "hp_after_bits": "1203975936",
+          "hp_damage": "50.0",
+          "rng_before_crit": "3875666393666272671",
+          "rng_after_crit": "3901232937218994468",
+          "rng_after_resolution": "3901232937218994468",
+          "elapsed_bits": "1059760808"
+        },
+        "profile": "DamageProfile { element: Physical, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: false, card_proc: false, melee: false, arrow: false }"
+      }
+    },
+    "endpoint_equality_not_claimed": true
+  },
+  "storm": {
+    "shared_prefix_fields": {
+      "critical": {
+        "shared_prefix": 13,
+        "difference_count": 0,
+        "differences": []
+      },
+      "rng": {
+        "shared_prefix": 13,
+        "difference_count": 0,
+        "differences": []
+      },
+      "hp": {
+        "shared_prefix": 13,
+        "difference_count": 0,
+        "differences": []
+      },
+      "damage": {
+        "shared_prefix": 13,
+        "difference_count": 0,
+        "differences": []
+      }
+    },
+    "before_hits": 13,
+    "after_hits": 13,
+    "first_numeric_difference": {
+      "index": 0,
+      "before": {
+        "frame": 22,
+        "fields": {
+          "outer_ordinal": "0",
+          "candidate_ordinal": "0",
+          "progress_bits": "1051965822",
+          "base_damage": "48.0",
+          "scaled_base_damage": "48.0",
+          "raw_damage": "48.0",
+          "final_damage": "48.0",
+          "critical_roll": "0.9636202454566956",
+          "critical_roll_bits": "1064742865",
+          "crit_multiplier": "1.0",
+          "hp_before": "100000.0",
+          "hp_after": "99952.0",
+          "hp_before_bits": "1203982336",
+          "hp_after_bits": "1203976192",
+          "hp_damage": "48.0",
+          "rng_before_crit": "3875666393666272671",
+          "rng_after_crit": "3901232937218994468",
+          "rng_after_resolution": "3901232937218994468",
+          "elapsed_bits": "1060879288"
+        },
+        "profile": "DamageProfile { element: Physical, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: false, card_proc: false, melee: false, arrow: false }"
+      },
+      "after": {
+        "frame": 26,
+        "fields": {
+          "outer_ordinal": "0",
+          "candidate_ordinal": "0",
+          "progress_bits": "1040591727",
+          "base_damage": "48.0",
+          "scaled_base_damage": "48.0",
+          "raw_damage": "48.0",
+          "final_damage": "48.0",
+          "critical_roll": "0.9636202454566956",
+          "critical_roll_bits": "1064742865",
+          "crit_multiplier": "1.0",
+          "hp_before": "100000.0",
+          "hp_after": "99952.0",
+          "hp_before_bits": "1203982336",
+          "hp_after_bits": "1203976192",
+          "hp_damage": "48.0",
+          "rng_before_crit": "3875666393666272671",
+          "rng_after_crit": "3901232937218994468",
+          "rng_after_resolution": "3901232937218994468",
+          "elapsed_bits": "1063116248"
+        },
+        "profile": "DamageProfile { element: Physical, class: Attack, applies_burn: false, burn_tick: false, skill_index: None, market_proc: false, card_proc: false, melee: false, arrow: false }"
+      }
+    },
+    "endpoint_equality_not_claimed": true
+  },
+  "ember_horizon": {
+    "last_active_release": {
+      "frame": 205,
+      "entity": "2818v0",
+      "added_tick": 167629,
+      "kind": "EmberRanger",
+      "position": [
+        -1.9399614,
+        0.25,
+        0.0
+      ],
+      "velocity": [
+        18.44,
+        0.0,
+        0.0
+      ],
+      "clips": [
+        [
+          3,
+          0.27994025,
+          4.0768003
+        ]
+      ],
+      "speed": 18.44,
+      "distance_from_controlled_fixture_origin": 0.06003859999999994,
+      "raw": "PROJECTILE_RELEASE frame=205 entity=2818v0 added_tick=167629 hero=EmberRanger position=Vec3(-1.9399614, 0.25, 0.0) velocity=Vec3(18.44, 0.0, 0.0) clips=[(3, 0.27994025, 4.0768003)]",
+      "observable_cycle_index": 23,
+      "updates_after_observable_cycle_start": 2,
+      "attack_clip": [
+        3,
+        0.27994025,
+        4.0768003
+      ]
+    },
+    "observed_last_contact_frame": 203,
+    "capture_updates": 210,
+    "extra_screenshot_wait_updates": 1,
+    "controlled_nearest_surface_x": 2.04,
+    "derived_x_at210": 1.1333719333333332,
+    "derived_x_at_end_with_wait": 1.7480386,
+    "derived_first_possible_surface_update": 212,
+    "within_original_projectile_lifetime": true,
+    "basis": "Logged frame205 fresh carrier x\u22121.9399614,vx18.44; controlled fixed1/30, targetx3, ordinaryradius.48+projectileradius.48. No latercontact inrawtrace; lifespan1.4s vs<.21s flight throughwait. Conditional straightstationaryfixture extrapolation, not a directly logged frame210Transform.",
+    "claim": "24 emitted/23 contacts consistent with last arrow still in flight beyond fixed horizon; no extra hit or final endpoint HP equality claimed"
+  }
+}

@@ -1,0 +1,2365 @@
+{
+  "scope": "Omitted localPNG/executable bulk; original retainednotportablearchive",
+  "files": [
+    {
+      "path": "target/verification/ranged-release-2026-11-06/capture",
+      "bytes": 489315824,
+      "sha256": "a66ff6ff8cf459f952017ccf4af3762ec157836e79de95775dc665390c185beb"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-trace-ember/frame00010.png",
+      "bytes": 938621,
+      "sha256": "bd088a573a2a88c47b75b826853c8389ae79acba203069b07bafc9d4ce2a5522"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-trace-ember/frame00020.png",
+      "bytes": 939624,
+      "sha256": "ab99c5bc15baef3c40fd9b98e80417fa0c5a43987606c9f06885c1c0bfeea206"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-trace-ember/frame00013.png",
+      "bytes": 939015,
+      "sha256": "c0f069f8715c0e3cb955d43e464372fa71c2180fb66dc76f22d406d490a257c7"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-trace-ember/frame00023.png",
+      "bytes": 939629,
+      "sha256": "093f6ae08fc569f01df9fbce548e379f93712ad42dbdf17e19915f084fce6c6c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00014.png",
+      "bytes": 1014667,
+      "sha256": "05f6da280c239bb68825e2f8f5dd4a1c1bffd31d924a8ec3e4e1d0a5797ec9e6"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00017.png",
+      "bytes": 1014644,
+      "sha256": "2a4a853ced7c9ad7f4993d394e00c2b69f324915bc926204aa552376aa575d3e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00019.png",
+      "bytes": 1014520,
+      "sha256": "8ba4e65b6c40d914c922e71c9d5a420c42ccc9c33176c3e41bb8a7c3c7d4f4f1"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00010.png",
+      "bytes": 1014757,
+      "sha256": "99a24b8c2f1d50513a3f6daded063536e5d0e54eb4f56281de160d0768339b02"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00031.png",
+      "bytes": 1016278,
+      "sha256": "9895510a42a5b3d22904ba8d3f07b2ec884f392b75e11fd7fd9431fbaf912421"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00012.png",
+      "bytes": 1014915,
+      "sha256": "478d8901aea88a2f1cf32f4d1969804397de67a49b7f5befa8cbd8ab4e7add98"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00029.png",
+      "bytes": 1015949,
+      "sha256": "1c6a0c7db126fed49c2a047d092daa6d9edec532113417eab97b1471de492d3c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00032.png",
+      "bytes": 1016111,
+      "sha256": "5e944550cef4339de2ac9e1ad777c9eeb8d7fdb1ab1cb6624319f25567c0c60f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00021.png",
+      "bytes": 1015587,
+      "sha256": "eaae863e4743247273c81f64b738bb8038ba8629f683c43ac4bf3b6d83649b13"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00034.png",
+      "bytes": 1015981,
+      "sha256": "44adfdec4e6d788676b1c39526472e6802ca8c0e74b5844b1e500ce9025c00ee"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00009.png",
+      "bytes": 1013887,
+      "sha256": "7b5476eaeb806a7912138a79d572a7df9daa69a21b609ca0a743d6e9208d0556"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00015.png",
+      "bytes": 1014828,
+      "sha256": "393fbab67e3e5c94b259fcda1d1cea381be4d7d9c0c5dee4453474b4894bec96"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00035.png",
+      "bytes": 1015713,
+      "sha256": "b783815db36f8e19839e71b4e04ecf0b3ed91797c33ab57171eb8ce5a3dbb819"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00011.png",
+      "bytes": 1014766,
+      "sha256": "88a963b00e8bbaf88277d60d9cb02544322d82266059668e4ad89a6ff3f11643"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00016.png",
+      "bytes": 1014270,
+      "sha256": "918dbd057bad0629a6fcc68b407640ff5e8944e892597c9d7ccf27fda773f4bb"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00018.png",
+      "bytes": 1014506,
+      "sha256": "76358eeab101fb214195a0c0b3c467a809680133efafe7b812b16f88e88c9a6c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00020.png",
+      "bytes": 1015875,
+      "sha256": "43c35715cddfb61a8331a91ab87811df2bf23faf8a765286527f20644c414915"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00030.png",
+      "bytes": 1016131,
+      "sha256": "2a2657d321044058df4960686ad11fc9a63c609e8e1adb8ec33d666d0c66d8b3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00013.png",
+      "bytes": 1014777,
+      "sha256": "ff1e265be6f00b01c20b0fdedbd40829391f18e152ab189b98bc5998357a6e95"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00023.png",
+      "bytes": 1015637,
+      "sha256": "eb1528ccbbff5b5e58891e79df812ad074e59203396430000f48b64d6f415fe4"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00022.png",
+      "bytes": 1015511,
+      "sha256": "1cebfe1754822e1eb07ab1a5a9f4310fc2854de0f7a0780dd6d43d7ca4613e59"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-ember/frame00033.png",
+      "bytes": 1016195,
+      "sha256": "6e85759275274b440d15a93dc18ae7be5089e2c5990030f1695573c42da987a0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00014.png",
+      "bytes": 1014670,
+      "sha256": "a7fec710e721c19cd032392d728f68047dbd35ba81de2fe532b8d71ea2fe2cf5"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00017.png",
+      "bytes": 1015120,
+      "sha256": "11ec44ba8c55f913a3927c46e4c96f2ae31b3a0bf4b04910d1a8174f6c5c1b1b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00019.png",
+      "bytes": 1014990,
+      "sha256": "0b38259581b46ce216189206adf61927753b2525f3bf00e8f52e1e911a5e405f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00010.png",
+      "bytes": 1014858,
+      "sha256": "bf2fd5b280db50c89fdec57f2e3d34f9ab16aa1b59738a5297d905294ecec82a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00031.png",
+      "bytes": 1015573,
+      "sha256": "26b2eccd6efa63a0bffa60325309f8efee64bf6d5f820a932b3d1d7b14635b8c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00012.png",
+      "bytes": 1015095,
+      "sha256": "14e021d58df3a7f72e39cda64474ebb9073b8da659b08fc31d5e11fd5336380d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00029.png",
+      "bytes": 1015745,
+      "sha256": "13820ea00921d3cb377b3dacfedc1633f30318e1e70ad200f5b1b83d3d85aae5"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00032.png",
+      "bytes": 1015670,
+      "sha256": "e41cb81bd57b551c3167ae6b1076a8005e1efecd0aaf333e7eb9571a89979f7b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00021.png",
+      "bytes": 1014946,
+      "sha256": "c3347b5a9483f0f1bd94860737af20bce5b5f76b06a3901ed4361fb738216a85"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00034.png",
+      "bytes": 1015364,
+      "sha256": "de3c19ccc8c38dfdf920e1cdbbac9ba442a6698b2b55d101ba70461358b9bcc3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00009.png",
+      "bytes": 1014835,
+      "sha256": "62b1a5af7e1ce4925d7c62258a29b735bb23acc32282300702c67554ad01a6cd"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00015.png",
+      "bytes": 1014712,
+      "sha256": "c948def6cae7c5ba10fdbfa189e72806eff48748ea1228cc9cb7fe3339afa9fa"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00035.png",
+      "bytes": 1015477,
+      "sha256": "67aae6ed6112a395d690c666b0c832429cf72f62a05d42744ec5f0700eed1e45"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00011.png",
+      "bytes": 1014767,
+      "sha256": "211049c95b5d7d0444dff46e63e11dc87579aa8a3d9bf9e4368d2bfbc5d69571"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00016.png",
+      "bytes": 1014625,
+      "sha256": "d875061bc7e9150e7cd4bb0f8b6cfb2b181a7017f1a7e2e85ad6b72d6b6909c8"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00018.png",
+      "bytes": 1015157,
+      "sha256": "6c1957c9c4af3f9ed239134affb8051fe512ca9f76153a6f568a19cccce3cec3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00020.png",
+      "bytes": 1014886,
+      "sha256": "3151a7041c082bd5ff47b6c73a1d786546784501ccb8d7cc840678eb7dadebb0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00030.png",
+      "bytes": 1015374,
+      "sha256": "013a96982e95215d4a117bcafe8fcb4b96088d13760185433d22c3c03fe4fac7"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00013.png",
+      "bytes": 1014805,
+      "sha256": "c7aff96585c98b1258bec9d46c7cb0cb0602aa513b6029c105bce5b5ea8592eb"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00023.png",
+      "bytes": 1015333,
+      "sha256": "d93502686a8517fe9fcc54ecfff88370e601fbf27f6817222bfba7820a69c081"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00022.png",
+      "bytes": 1015595,
+      "sha256": "f061977e5a9f17f620f811a7becc0d7c6f9871d6c505a6cbcfb08a0ba9376536"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-portrait-storm/frame00033.png",
+      "bytes": 1015602,
+      "sha256": "2c41305b148da2e02128b8d6451c81a4f18029071c9ac266d37408fb3e30c5b3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00014.png",
+      "bytes": 939234,
+      "sha256": "9a264b7d4ca88165dfee7724171447967b17e446c2f4eb02a9f4ca980b31adbc"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00017.png",
+      "bytes": 937468,
+      "sha256": "7ebc04b3a80cdfdb2227dc01ee6b4440a883e39b2d9b91a486516934350c96ae"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00026.png",
+      "bytes": 938721,
+      "sha256": "e9dc60df075b9c2b5b0de03881564d7f9db18f7dcc62b9e1f407c332b43515c7"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00007.png",
+      "bytes": 936225,
+      "sha256": "04ffe90697f20d4d88b311894ffbb5d7e5647cef693c1d1020aaf8257c5e720a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00019.png",
+      "bytes": 937396,
+      "sha256": "fce1cef88356094fd6d7ee52bf78ffda0260dde6227d6ab4265aaec475286376"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00010.png",
+      "bytes": 938443,
+      "sha256": "b23de4db21b9e422d9ad4eabbe7e8cc48e7f722938951cac2ca74d4cd8d1c9ef"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00054.png",
+      "bytes": 939191,
+      "sha256": "44301a7efd63ddee0f5115ad0023a9a47a0b7877b2ae60eacfdc9edcedd1df88"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00031.png",
+      "bytes": 940641,
+      "sha256": "bdd9bedca119f7922efea7cc676c43c878c863b660c4d4b8f1c1e159f4f0d16e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00024.png",
+      "bytes": 939692,
+      "sha256": "4a4cf70328e70e7ab86a408c3926509d98b061113164e1dc2263abe527965669"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00042.png",
+      "bytes": 941418,
+      "sha256": "c67d091d5ef0cf50533154b329ea1266e05802a5c27d086f8337cf5fcf6d135f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00002.png",
+      "bytes": 936414,
+      "sha256": "b1aaab0f12d663929fae8bb60b7a6b6864957223a793b3b0fc1d56dbdcfe0dc9"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00046.png",
+      "bytes": 939340,
+      "sha256": "5284ef7cf55e82d6b7103a22c839fa1e93414030a138b7cb17ff00007d993af6"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00059.png",
+      "bytes": 940753,
+      "sha256": "d88a7ef34d382114c8d60e45b1d88b8d60de1bd11a9b67804b8aedd1c39fbf5b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00012.png",
+      "bytes": 938919,
+      "sha256": "9f7f1ce2ec55fc1253b32dd90bc16a0b60ebe70cf21fb137ec58c2892dc813c2"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00006.png",
+      "bytes": 936277,
+      "sha256": "bdd3f8ed00e5738e97a04e24ad04f7105a5669f092921fc516e1f1425e25b62e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00029.png",
+      "bytes": 940378,
+      "sha256": "e6de0ca5aaff83690d6e064c367e7a638e43fa5f8a239efbf840b1a5953a14fd"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00032.png",
+      "bytes": 941113,
+      "sha256": "21f12de9cbfddc2a6d4e4f2327e15b055717d7e19f0dcdf63ade83f606a6f954"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00021.png",
+      "bytes": 939576,
+      "sha256": "16589a0e13a46d1652bfd984b05eabc5b54f427315f1a34573ea4de3c641821e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00005.png",
+      "bytes": 936405,
+      "sha256": "433c54a56ac51e4268016d1943a6745f3c9dfc07e8d09a39c80f7c06a22d42e3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00038.png",
+      "bytes": 940524,
+      "sha256": "cf9da9ace5ff6ced7691235427f13c5f9d47b6beeed3abae0a8d4976eb7f96cc"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00034.png",
+      "bytes": 940339,
+      "sha256": "45eb4abf680a367370f2cf18efcde2c34a12af2a4d2ed322d70a18fec57410bd"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00055.png",
+      "bytes": 939141,
+      "sha256": "4be91034fdb8d2e9634c871046ea1241be0f1705ebf6082d2507ac3deb7f0ea0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00048.png",
+      "bytes": 940951,
+      "sha256": "a94f9e1b0e2c6b7d5486dead6533917927a1870caa7e8588b773c104f9931586"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00009.png",
+      "bytes": 936253,
+      "sha256": "cae46ba79c4cca874539938e950b3ef1494b36024740bb512e09d6fb70aabdc8"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00028.png",
+      "bytes": 938546,
+      "sha256": "7b0635227d7762468a08d3b164d2b4d15cf71e899ad47ffe6e27dc386c88757a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00056.png",
+      "bytes": 939938,
+      "sha256": "1aa178f78419d27708ae2ff38164a4ce861e17604841498c8ec2717532b57ff3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00050.png",
+      "bytes": 940307,
+      "sha256": "0a4f73b4bbd99335be9a5e6dbd8a7804298da0061fedd971f82c1a0ee5e37731"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00039.png",
+      "bytes": 940997,
+      "sha256": "0f21282ccc8175b808ab079bdc71379c69ebb9e485e1818f2d909b5b6966053f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00036.png",
+      "bytes": 939661,
+      "sha256": "88602bae8aebe3356d6839abf61e62874261ccca707cf17038125c4cb866384e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00003.png",
+      "bytes": 936334,
+      "sha256": "137919e25f24a91f27ec5923c7ccb4c8d1a9bb198466a7bbabc52d072ddaee3c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00015.png",
+      "bytes": 939009,
+      "sha256": "d2d1e54929f5ee1323fd3a6f956dbd57c522b6e5ef4f66ac9dd688a116acacc5"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00047.png",
+      "bytes": 940058,
+      "sha256": "6f50df425f11e53fc47066abdc3f06958b367288fbaea5cec6966d2169277794"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00035.png",
+      "bytes": 940091,
+      "sha256": "fc9c087cb429bf6f4fa0b6be49d8ea44dd29150b2bf83ede47fd3a13379305ee"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00011.png",
+      "bytes": 938815,
+      "sha256": "8358ad99172d37c72946c86653f8a8613ad5ae8018765a0185aa9e43dd57c9c1"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00016.png",
+      "bytes": 937821,
+      "sha256": "429366a5adc67653b0eb56c0fbfe42493863b9b86db7b3854aef0306e1fc0b37"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00057.png",
+      "bytes": 940824,
+      "sha256": "1837e19a41c8d5a4f0a61b9adb82f4bcf4bf4d8a4540317f4e5a728c15000f0e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00018.png",
+      "bytes": 937281,
+      "sha256": "d0200ac8bd9fc4bd7648631bc8cd515f4814abafc2411299b96d72813da238b5"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00020.png",
+      "bytes": 939207,
+      "sha256": "9b56230e056bb985e1545e46018a075d1df28ce6805db9aaaa24d91533eaf5c8"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00027.png",
+      "bytes": 938639,
+      "sha256": "3b2e310fb2b202faf6d9fc7d58be25bfcc44ff6f82f9dca1a9892fd1241327ae"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00025.png",
+      "bytes": 939478,
+      "sha256": "2d80a2e10db084269dedab3879120a2dfcba953ef2f5bf3208855ff634f91d57"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00052.png",
+      "bytes": 939968,
+      "sha256": "b42e0aac2bfd97b648464ef91559025ba50c547d606d70dbc4d18bf8f848b0a9"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00030.png",
+      "bytes": 940446,
+      "sha256": "8731be44dd8326ed07ba8f4ea3361f683ed083eea3296b40875c71f08260a3e9"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00060.png",
+      "bytes": 940995,
+      "sha256": "905359f59bc203da2976f446cbbbdf5075678c410a4b7df371c6761a553c4207"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00013.png",
+      "bytes": 938847,
+      "sha256": "f6dac5800d83d0f4289ac5e698d6d694bb7430d764917848df676cdd91b7f294"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00044.png",
+      "bytes": 939932,
+      "sha256": "87814851f6da7dfa6a7f92c4bf7819068c9e503e1ebdf79441602b90cf741dec"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00053.png",
+      "bytes": 939750,
+      "sha256": "ddca64869bcfdb5cbac09a7600b808dbd973f8efaf6189a9b1c0a59e9b99b6a4"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00023.png",
+      "bytes": 940056,
+      "sha256": "f62ff8c5d895edd48057a19de715b39d91bec15a053edaf6d7534ed1ec2e1f57"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00004.png",
+      "bytes": 936253,
+      "sha256": "bdc192e141084ca89151859519f464c2fadeb2f555fa768702bd526c35f73a8c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00051.png",
+      "bytes": 940693,
+      "sha256": "232450054a628d8aeeaf6c4fd59f4b7f9930d6b6a84193231265fd98d97c02d0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00040.png",
+      "bytes": 940471,
+      "sha256": "bbf5940446a29d00b621a37d7b127f5dd77ff8704dc136c984e3e8d028953d82"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00058.png",
+      "bytes": 940431,
+      "sha256": "8ae19a39f954f99f1b83081934ea6e82c414e82431e13addf3e35f94592ee75e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00000.png",
+      "bytes": 940588,
+      "sha256": "d538e426ee208064c5aa696e7c0f3f197009f26f1c75c247127e585bf59a92cb"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00022.png",
+      "bytes": 939743,
+      "sha256": "f9d8b267f29f7accfc9a78620067cc44777c19fa5b4b7f5f249b78c7663db3da"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00033.png",
+      "bytes": 941052,
+      "sha256": "1597e08c2c147f6aacd21755a38ebc5ca14b844011581ec2ddaeee82d83743c1"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00041.png",
+      "bytes": 940876,
+      "sha256": "3918e55f1fb99319e0a9eafd02c5bf695f1dd486f0c45eae27cbaf7a0ef198fb"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00045.png",
+      "bytes": 939652,
+      "sha256": "e1b721c6ea3261806ffe7287410ac8e24259f9093bf58d4692e24c8f609be34c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00008.png",
+      "bytes": 936461,
+      "sha256": "b1618956443fee0c511ad0a989b0cd604f6bd888e674f7327b8d92ccc9b3ba10"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00037.png",
+      "bytes": 939570,
+      "sha256": "2f1ec2c884895166053976d5eb9a16bbdda737aefc814e4d6b1ad1e88859ec24"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00001.png",
+      "bytes": 936214,
+      "sha256": "2fdbf504654507313be09de104dd8c7fe7250a5ee11adc089a2c751c3ea18e6b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00043.png",
+      "bytes": 940315,
+      "sha256": "b9806e41f619760a1fcdfb748eb63825fbea704a89c57260008283613044a717"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/ember/frame00049.png",
+      "bytes": 939905,
+      "sha256": "e660422a1c08838b3675b6b0076f27f9db77f4189a70b306556a8e7025eb5374"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00014.png",
+      "bytes": 944219,
+      "sha256": "4a342edff642908236b44b5f9bf02ff8fe67c177f0faeea63e51bfd2bb98613c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00017.png",
+      "bytes": 945194,
+      "sha256": "36ed23c7ce64995f1f9e859e272d6b2df31b6ccc7e608ab979a369b2d1352689"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00026.png",
+      "bytes": 946055,
+      "sha256": "aa1bd8921c4952697c6e9d2c8661344fad285b73debac9fdad038ecf3761b9c3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00007.png",
+      "bytes": 946142,
+      "sha256": "efc8a7c8f513753dd2ec31536f037f881938b0878cf23c57e88bfd05bec10440"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00019.png",
+      "bytes": 949354,
+      "sha256": "cf3a54bd702ae00f9e21b9364e659f6757373b3c40495df78211d5062acaa6f2"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00010.png",
+      "bytes": 948025,
+      "sha256": "ce9aae0257dd52eb20490619b17fda563ee1c9414186c1a966f8626f0a5e7bf1"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00054.png",
+      "bytes": 951495,
+      "sha256": "c219d1f618c23b860040fe460dde61563104ae7ba88f23a123911c20ef6a95d6"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00031.png",
+      "bytes": 951389,
+      "sha256": "6ad0679a71bc81452dd80f730f3647d7a59e560ac89a18bd642adf6187d89559"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00024.png",
+      "bytes": 947692,
+      "sha256": "a16856a3d4a0931f1cc10e061d494551d108ce59d928d0454d23772bf25ac1f6"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00042.png",
+      "bytes": 951888,
+      "sha256": "9921f88718293461bdeee022b7cf24d7e4ff9dd96ea119df049b33576e9dee39"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00002.png",
+      "bytes": 944320,
+      "sha256": "8d32d9435e05d59feafdedb5a54bcb8ccc4d906cb9fdb85e4555bd40e498892d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00046.png",
+      "bytes": 950847,
+      "sha256": "25441b71439e4fcad58df34af1b52480e92af1cbeeb0b7d4900bd9a6624f63a5"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00059.png",
+      "bytes": 950009,
+      "sha256": "95172d600a200ca77d5a7bc57961f8cb769e3a349a57a07e09c1bb13f4737d00"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00012.png",
+      "bytes": 945193,
+      "sha256": "5d5d8f7be06e8587f2cd08df5ed430518b865b49bac61253ae25eb2f410c6954"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00006.png",
+      "bytes": 945452,
+      "sha256": "ba7dd6a0c94f31d89fe28e919a083095695ff78ff78db83f10edd4484df5e9fe"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00029.png",
+      "bytes": 947217,
+      "sha256": "765a4a914770c6ebc71288baf3efd57bcfc5d30268dd4d32876008fc77aad819"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00032.png",
+      "bytes": 951510,
+      "sha256": "f579ac1f86c9510d89bc69efafb28bdf12cc4f0e9d83afd83d54e62985488393"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00021.png",
+      "bytes": 949737,
+      "sha256": "9b70ecf8d5753c87d98dcf8c2268b8b16d5e00d9fa33c6c652800df1ec3156ad"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00005.png",
+      "bytes": 945089,
+      "sha256": "fdd200a0e6108f1ba810571db56af3d0cba633a36b0e260d3cc18764e8d4416b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00038.png",
+      "bytes": 946650,
+      "sha256": "b102c545d5d7278785ae90cdd5ca5b9d33ee099cc9c79ec27afa660899f0dd87"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00034.png",
+      "bytes": 951257,
+      "sha256": "2f9aa7ae5d112fae2b7a3381c1eb058bfba1514beeddf17568818d4d85066f3f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00055.png",
+      "bytes": 951277,
+      "sha256": "4ab2a8024f465ae93a7abda4a9ad8aba2afb86db8fe03a9bdbf15e6514df8f17"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00048.png",
+      "bytes": 949213,
+      "sha256": "ecdb47e8da5f82870ddc6e870842647c722fdc143c509531944348e1ec2ce81b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00009.png",
+      "bytes": 947670,
+      "sha256": "716886ec62e1589e2f9d812ee956e17c2b5dc4cdb80f772cec15f7ca3617bd21"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00028.png",
+      "bytes": 946130,
+      "sha256": "85fd559e3a717234d56f83d3902fbc891780106200a5c70ccbcb1ce3779630ab"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00056.png",
+      "bytes": 951030,
+      "sha256": "0333832c83ba8e5078edc8b80b124e0c0172bf4b6f9fc05ecdb7623f14479b2e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00050.png",
+      "bytes": 946131,
+      "sha256": "26cd891c692cef2cffa56bf75db303337e15780eccd10fe2241a5f5abd33a216"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00039.png",
+      "bytes": 946627,
+      "sha256": "3a070809eec5024b2e532a83a74644e96a2a1b95b431ca7af8a6416f55693da6"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00036.png",
+      "bytes": 949531,
+      "sha256": "02ed020ad1e8d07b66529bdc15798ee1d0e22d009ecf0aadf8ca45412334763d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00003.png",
+      "bytes": 944485,
+      "sha256": "b229b02ed5826b6df9e5ffa8d418bd30d5dbfcaf3c7580048085891a1cbf4f78"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00015.png",
+      "bytes": 944129,
+      "sha256": "7500280014cdfa84ed14b69088dd327a190334c0d1da04b629dc6c5041912ddd"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00047.png",
+      "bytes": 949159,
+      "sha256": "73302aa224ca63e52d617595effeac5f672ea8499870367b95714242505fda6f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00035.png",
+      "bytes": 949660,
+      "sha256": "ddfe5944c26e85e9c8edd6a5e86743f12a16e006ad5380e6e781b6ffb304d0fc"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00011.png",
+      "bytes": 949382,
+      "sha256": "959a22f5820564e6d6e1c88646f28f63563bff79bc8439e33baced9b751da943"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00016.png",
+      "bytes": 943767,
+      "sha256": "20007136221936ff42f9405a84ab7fee6ab73d6bceef79219e87d9182fc9db7b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00057.png",
+      "bytes": 951215,
+      "sha256": "44e43abadff80c7736992e4e686cb2b5511c26cb9298914e1581a09ed71ff042"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00018.png",
+      "bytes": 947413,
+      "sha256": "af15199c182fe40025e84ce290f7cf798abbe683178340b5d9323f2adbc3e912"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00020.png",
+      "bytes": 949271,
+      "sha256": "2b91066bc2efe24393e6a7153daaa2ce9ae03a7669ba2d1d47ddfe29fc11dc83"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00027.png",
+      "bytes": 945985,
+      "sha256": "4b6aebf169160fd81650a60e483e6b2f4e90a8840dc7032277e6071d668274c5"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00025.png",
+      "bytes": 946885,
+      "sha256": "87b3b88976d2dbadfa5c44cd1aed8b26646a682dac31ccdd533ca40c48f7fbfc"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00052.png",
+      "bytes": 946230,
+      "sha256": "3d8e43c575517b3b21c27cbb424ae98e4a07e1ffa3c97f69cc1f6ce399cccf99"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00030.png",
+      "bytes": 951616,
+      "sha256": "48320e7232f93cbf5f1df4088f22f32934c2a2d56b71ba98daa82ddbefff3da7"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00060.png",
+      "bytes": 948845,
+      "sha256": "4af7d9fc8f441e0a04e95304e27b7df0a39edf84b68875c2870a8319342c9094"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00013.png",
+      "bytes": 944819,
+      "sha256": "1250cb4678805a8d42cdf4ef1a5efd3511e5a3821a08998e25d240ab2330ff8d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00044.png",
+      "bytes": 951233,
+      "sha256": "4e9d7b6609e27b1630d0787be06be7fb559e9c0fee3eb681ad4cfeb977f0ff8a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00053.png",
+      "bytes": 947123,
+      "sha256": "b4527ae5280dd8842bf7b53073913dad46363447568e63342598177f315f1f35"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00023.png",
+      "bytes": 947695,
+      "sha256": "467bc346bb2fcbf151aeceff7b8cb4d2a88b0666b2a3adaa097286ecfd60f830"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00004.png",
+      "bytes": 944849,
+      "sha256": "bd9ac4ec969a1a22ea9100ba6187af2ceb7a38e19c02af26b4ae4f7d5e9d078f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00051.png",
+      "bytes": 946352,
+      "sha256": "d4e510628deb546ead607017cbb533491c8a3565128393e8612fc5c4357c9b26"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00040.png",
+      "bytes": 946539,
+      "sha256": "1b95352d36d5609dd98cd35cb214bcaec5bb754e597bfe7786e48b7a8bd1d1bd"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00058.png",
+      "bytes": 951113,
+      "sha256": "b1e1c5015be0e839336c6a6d73a9eda80985e52569edfbfbd4537b5bbb7895a7"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00000.png",
+      "bytes": 947062,
+      "sha256": "3083687160bc646fea6650b20fb1b8a0fe00e341918d3ad8d0ec6b67c05115a4"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00022.png",
+      "bytes": 949414,
+      "sha256": "990315ff04c8b36bc472180c6de50c5bf00ed7b56cbdfb661363a9e57b237eaf"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00033.png",
+      "bytes": 951682,
+      "sha256": "3f94a05c859497734e3fd4587164f6b59b437f2d34c7bee23e3482cd1da492e8"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00041.png",
+      "bytes": 947743,
+      "sha256": "2b85d221ec8af7183e08d900c2ab4ab1f8bf0b910e94c09ade85720eca0f6707"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00045.png",
+      "bytes": 951318,
+      "sha256": "088ff60c193f279cc131a104be730cab4d4a4d50819293dcc31d5da8beab21c4"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00008.png",
+      "bytes": 947028,
+      "sha256": "349fca8c53d598d5d2c3bca0369803b2c34f450c13580d35f4b6866dc3b4bd7b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00037.png",
+      "bytes": 948208,
+      "sha256": "630cbeea5047e89bd33f5ee9503839da179adc80276eac458969a9ec0b2e7aeb"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00001.png",
+      "bytes": 943909,
+      "sha256": "892bdaabeb679577a6e803bb0c2b6cb7cdf50cf8d1b9615d55498c7727d2cc8c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00043.png",
+      "bytes": 951569,
+      "sha256": "da65fe121abc2afcb8554c2bd98e8110b66f43a0ea00480c85c71083948981c0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/sword/frame00049.png",
+      "bytes": 947669,
+      "sha256": "2ca1a9b28ece282dc2a1b48479fd7cd120de07d198ef31339f9fea8fb4107f54"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00014.png",
+      "bytes": 936645,
+      "sha256": "ce0b8040e9201837dd7475d2ba2557d105c411141c4b27c13a7fa48328a91272"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00017.png",
+      "bytes": 939407,
+      "sha256": "c898638921dd8a47ac111f4ef79edbcc3efd3c43423f48281e464defe52bf996"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00026.png",
+      "bytes": 939963,
+      "sha256": "56cea50f18668312f90d899b8f713b31f89455280384739ca2e5c0dcceb42a8b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00007.png",
+      "bytes": 937053,
+      "sha256": "ff34bf11df41e8b31babbd5d814cb8266f97555b4a63cda54edbadcc15f7b933"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00019.png",
+      "bytes": 938993,
+      "sha256": "95752f1f9b198f7e34b83ce08b0fce1353176619243019376d00105f033d964d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00010.png",
+      "bytes": 936909,
+      "sha256": "466f1bb119f1e84d0759d25b9dffa18fd779f99d3243dfda4504af998ddb2932"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00054.png",
+      "bytes": 941003,
+      "sha256": "40b168fda96bafa6a1888a0cc0415d08c31c3c9e1598a364d106fd0a4bb840c4"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00031.png",
+      "bytes": 940638,
+      "sha256": "2759567c037ef3e83430e211fcf6a2e3a3212de580a88356e3c143fc67f2ef63"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00024.png",
+      "bytes": 940144,
+      "sha256": "a97a4002f2b74ae19f077250decd7c642c3b0345346b0aebc208ff3106244b6d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00042.png",
+      "bytes": 941188,
+      "sha256": "0b9892c2f2a4d99d894f45758b73c0e595a42decb66ab11ba3e4a3ac8060168e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00002.png",
+      "bytes": 937003,
+      "sha256": "5993330fb62d028ea9d4f96aacbb5fb13348e2ea510ed42a9feaaf94a1092ff8"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00046.png",
+      "bytes": 939975,
+      "sha256": "da7eb02282f16b7794df3ac01293b7d6547e4e5715316a7d9704528812962b31"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00059.png",
+      "bytes": 940959,
+      "sha256": "f3c466308df9005068f9ad7e1470a7fee1c7ebf427a3dfaf23c38192ce85b96c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00012.png",
+      "bytes": 936868,
+      "sha256": "4462455ac85d0d830c7689c141504bd735411cd55b0e026b9b5c8838a1ba3d66"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00006.png",
+      "bytes": 937016,
+      "sha256": "6080d77cc0a1d313643f7d8b14f5666311f1a63c13aada543e6e1ad7575c8b3f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00029.png",
+      "bytes": 940507,
+      "sha256": "8b05efe7309ff452af0632cdd6ad2e1b8cd43a5a284ea1e899f7f539252340bc"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00032.png",
+      "bytes": 941014,
+      "sha256": "e75ffe428a1d27e126067d83c50739fe52c8ca2e6c8f2e9c5eaa1e012c0f8fe1"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00021.png",
+      "bytes": 940471,
+      "sha256": "95684486f140d765f872f02bced81b05d86fcd93fd50dab89e6cd5f8ef71d22d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00005.png",
+      "bytes": 937101,
+      "sha256": "ccaee6b57b07bb67b1edbf772e6e7cf02ee44cca319b087306b0ddfafa1f883d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00038.png",
+      "bytes": 941801,
+      "sha256": "58294e35715b805e685b8f4c5648b31ec5a914c0b55e1c5595dfd286f165c516"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00034.png",
+      "bytes": 940576,
+      "sha256": "d0ba85c0dd0ebce04f5a73562f72918779b41d0e2932330f2f80fa14a5a85899"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00055.png",
+      "bytes": 941408,
+      "sha256": "2e591413531bd21a848486ae23a91ac25ba44d542fe0d2b0995425b1f5e67e06"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00048.png",
+      "bytes": 940497,
+      "sha256": "3e62aa90ca24f8affb6cb573dce6701b5cf7d783a9814af615e5a47ffd83ae50"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00009.png",
+      "bytes": 936920,
+      "sha256": "a3a68b0583e37dd6aae270a49129993a571cd1ba4313316aa021be35b77f637a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00028.png",
+      "bytes": 940360,
+      "sha256": "cd3a4f19e0941af12c222713ca176496001e2a01f5380eef14aac5cfbf8df5c0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00056.png",
+      "bytes": 940524,
+      "sha256": "d65237885a67fc88c3461b6112d6aec7d189d986b29bc6c2a484313d8a9743ba"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00050.png",
+      "bytes": 939809,
+      "sha256": "7bb95882c6be01dc61a23a22813e30180a0afcb329510d82eb25a8c8ddc7a458"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00039.png",
+      "bytes": 941850,
+      "sha256": "ad1d5aabb7072b37aea931d4dbb25cf2464c15653c2634919ce7171ad6f73069"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00036.png",
+      "bytes": 942139,
+      "sha256": "4b3bf98b1e4a391b707556b3df89f5d1d86f2edee042ce6de4377cb8942fc1e3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00003.png",
+      "bytes": 937017,
+      "sha256": "7b60aa63c098ffcd2b6faf89d1d291021f0d5acd637d70405cbef61533d0f746"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00015.png",
+      "bytes": 939070,
+      "sha256": "9ddc37c3c0bc32ab7c4374f11349eb626c56d159e782269d57e47a345653cab5"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00047.png",
+      "bytes": 940254,
+      "sha256": "eb9c20659827ada2514db8aa0766ed3d8f8289feaee6fee6d0a34988132ce234"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00035.png",
+      "bytes": 941297,
+      "sha256": "301ec7d636f986d80407739cc8578d941cd8a825bece365d24e6c49639b85790"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00011.png",
+      "bytes": 937132,
+      "sha256": "7ddaa101f14653a74107369c37891b137fe87dd8b3e4f6249ed380997b32330f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00016.png",
+      "bytes": 939200,
+      "sha256": "661465e9711452a0347a5197ad6b35f7e36e6ccba81d1ce0bb04f5958f4a98db"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00057.png",
+      "bytes": 940640,
+      "sha256": "0ed0856a48d38d149e4c5e2bb7f5a303e32d6f0fb050bdd4bafd6229d5ead2e9"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00018.png",
+      "bytes": 939190,
+      "sha256": "23878fd5bb01bdc32f27461e9f8bf90df6609f7dc0685a731d70d7f17732172e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00020.png",
+      "bytes": 939683,
+      "sha256": "f2ac1d01706160d3d240efc1e1f4f68dedd0ca09691696b23d0d78acbb3542ed"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00027.png",
+      "bytes": 940072,
+      "sha256": "077e7cc6493c65f2d0ae0be9523e5abfa31e405372338e26ca8de6ea5ce4eaea"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00025.png",
+      "bytes": 938584,
+      "sha256": "50720a54b7c5c278f6493f70d51de92231fc3882bedd3d7c9969121e4af60cec"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00052.png",
+      "bytes": 941441,
+      "sha256": "84c1e705e9381aa18605ddc72fffa71fb6cc87a3a820187a52dd23918c3a51be"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00030.png",
+      "bytes": 940041,
+      "sha256": "98255c4fa490f41a0c93fcc6f998b3a4802903be1055c47fb2d73e569b3dea40"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00060.png",
+      "bytes": 940764,
+      "sha256": "c7d24f47176fa310033a7a4451cbfe1751f066ab863912ca7c1703c4951ec14d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00013.png",
+      "bytes": 936781,
+      "sha256": "fae050183b8deb2acc7b56cfa752370cbc1883a14361cddbc9bf2b6d9f557ca8"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00044.png",
+      "bytes": 940980,
+      "sha256": "45c326d8da7abca4306960b3f33874e0f04ae67956bef83b645fa8e0a6446603"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00053.png",
+      "bytes": 941398,
+      "sha256": "a52aedb9240eb6f557b6b96a591e1109f1d1e8508d1fd7120a679a8414d6e515"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00023.png",
+      "bytes": 940211,
+      "sha256": "3c75b0787cd7461e6077a23d50bafe9e61c1628fa48837930a81bf65b2d43784"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00004.png",
+      "bytes": 937069,
+      "sha256": "016113e1d20dca394de81aaf336c058e67b5055c664874b54d9d00004800de0d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00051.png",
+      "bytes": 940731,
+      "sha256": "11f1b0be45fe5bb21419bdc58209e4d272ebabd9a1ccac7ca9604b32c7915056"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00040.png",
+      "bytes": 940995,
+      "sha256": "974f1c6d71952d82b66af4f17ab5c6a759db1a5ed38fbba3933061a784abdd84"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00058.png",
+      "bytes": 940815,
+      "sha256": "9048e51df6ddce9108d36a428350dc5ebe2179bace80685e243a3dc9f395ceab"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00000.png",
+      "bytes": 940767,
+      "sha256": "c12687d4590f4e5a38b5f3e8756993ef8adfc321b87ec8aa71d49088b38804b2"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00022.png",
+      "bytes": 940429,
+      "sha256": "7d0153979218aa78d277d8cbd98ffdc61f392fa62e6898c1edb3a8309183164c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00033.png",
+      "bytes": 940736,
+      "sha256": "14fc1975cf88c30b39a0fdceb5f0f4b31ad53811b4998ce02fd4cd7c2197fba5"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00041.png",
+      "bytes": 941232,
+      "sha256": "073bf3cd8719122a43763d67559345c4e775b36e87488890fe8a65b337e71788"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00045.png",
+      "bytes": 939885,
+      "sha256": "5207bdf54fecbae4cfd407e2d46b74961efd7cc24e0d19e3132b3efdbf1c4c36"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00008.png",
+      "bytes": 937084,
+      "sha256": "d9c04ebaf5d7d57b635e826caa3c2fb0278b42838c393b9d39f5219522864a9e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00037.png",
+      "bytes": 942068,
+      "sha256": "959f6cdc7c827196a44ce670677427d6ff770a7daf2d1941229bcb4f88b5d4de"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00001.png",
+      "bytes": 936876,
+      "sha256": "5e05c134edaedcb866e15777c13b4fb41ab86fea14be17b9f27ab8a5233d3243"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00043.png",
+      "bytes": 941112,
+      "sha256": "0154ec97a7747d1aa805937eaedd8147f44c29ca78bb9c9e1509f3e02cafc2a0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/storm/frame00049.png",
+      "bytes": 940028,
+      "sha256": "d7701c2db9f7b06e4975432883ff8910a87bc3e1fac6136f118da2b8e99b3a8e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00014.png",
+      "bytes": 1014818,
+      "sha256": "3fbd8f51431101d149d94eea1ba6933a07f162b3febbeb1f5d243685bf95bfe0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00017.png",
+      "bytes": 1015335,
+      "sha256": "84cf287c8d1f4b15f5ac62d77d73d85c336c7d7c6e883836828ac21a33d1c710"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00019.png",
+      "bytes": 1015265,
+      "sha256": "5886d8c2ef5c942bb40b07a20cb6e7a984ecc3c02a31c0b196c7b21914340313"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00010.png",
+      "bytes": 1014755,
+      "sha256": "80fcd1a96b9d4224abbd0926741d05336dff726353419d946f491f91d258410b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00031.png",
+      "bytes": 1016320,
+      "sha256": "cb0208a802355f787b40867c8fcc08bee8d7f74776c2ef2fb315dab88980221c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00012.png",
+      "bytes": 1014980,
+      "sha256": "4972969799de3a520e79b5c3beb78c5960573cb789f3e3fbc8dbbe7d0858b971"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00029.png",
+      "bytes": 1016019,
+      "sha256": "dc7665a7b4e94e83dd1a6b39856a4bf37d08d749caff8495a7d415f700c1218b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00032.png",
+      "bytes": 1015935,
+      "sha256": "e44d42b5e5bf1192fb2469f3a1067ae19e7e665731e79c8fcbfe226dc792d4f4"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00021.png",
+      "bytes": 1015448,
+      "sha256": "5e49e28c0c16bd89e3f82c7f2a7a3adfcf21685d969825403a5eddfbca8c9e51"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00034.png",
+      "bytes": 1015976,
+      "sha256": "e98620a3b691bcfe7ec54636b757079c9b9873e269149a1c0f54d2c767ecc209"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00009.png",
+      "bytes": 1013897,
+      "sha256": "bbe7ad67fdef8ba37a3cd8fb10d221d9c5f17c98a83151c1ffe7ce90d5934542"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00015.png",
+      "bytes": 1014878,
+      "sha256": "8aa3f290c4aa9414a114175a2c017bd71b95dae3d2f3d508979d34405fe7e8b4"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00035.png",
+      "bytes": 1016104,
+      "sha256": "bc3c2c7c3db6c8f056f8a2006895740e5ec75bb962cb1748c3982a18c5459648"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00011.png",
+      "bytes": 1014806,
+      "sha256": "634e92210a4d88dcc0d02ed766a483cf134affa6d457732d6e3c710f71ccf995"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00016.png",
+      "bytes": 1014237,
+      "sha256": "d2107d20ffe83f6417d9c9359589b4d6759bc1d64734b643dc6787a13665b0d1"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00018.png",
+      "bytes": 1015209,
+      "sha256": "75e4182d080519026ad00fa0d444ba1a010426b9c1cb1aca6d7f284d13c17eef"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00020.png",
+      "bytes": 1015832,
+      "sha256": "b917b6d8241160eb0b20fbcce4363b5256096103ef8ef4308e5010aea8ffb75d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00030.png",
+      "bytes": 1016351,
+      "sha256": "ea2e382cc043557a67b3cf8ff8a567dd85537526fa39267573c43da03e814a1d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00013.png",
+      "bytes": 1014937,
+      "sha256": "94f2818ecd75670d264217fbf9c487af1763f34062b156d5c89e352fcb95b974"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00023.png",
+      "bytes": 1015653,
+      "sha256": "effdfc22b7d221773d4aaa2421d04cf14477632f5da110b1734caa82d98c8563"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00022.png",
+      "bytes": 1015454,
+      "sha256": "dd81f752d3897234565ad8c6c1af3f6ffdee1989a734fa2e3b51e833e66c7918"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-ember/frame00033.png",
+      "bytes": 1016245,
+      "sha256": "ce9d66ec56f093e6b661b9c254cb8f76c4a7b2b08acd5cdc053a1de652da48ec"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/capture",
+      "bytes": 489319920,
+      "sha256": "e35c3a3eec08393c519a54e4eae5858e51ea1a9deb3fc570454efb7e05d409fd"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00014.png",
+      "bytes": 1014664,
+      "sha256": "900f4bee013714ba21bc3aa90f5c7f5e5e83116cc55b93aacf7469e86bf63e61"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00017.png",
+      "bytes": 1015347,
+      "sha256": "557933f21af18ca4033533a5f2daa994e862da7f261638a5e99537143830ef50"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00019.png",
+      "bytes": 1015670,
+      "sha256": "9b8d896955df7e64c288254c37bcc5066a99b8af70ffc440aabcc987dac7b2db"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00010.png",
+      "bytes": 1014853,
+      "sha256": "1a0c8e089a30586007e24b6356de4cd6895fde4fe787490194bbba08dd85efeb"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00031.png",
+      "bytes": 1015727,
+      "sha256": "17027f9779594fd38e4767ca72924284b6be97a1368054391865b787440a581f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00012.png",
+      "bytes": 1015089,
+      "sha256": "0cf78c3efaf6a461c9596b203921f3de75ea364be2dc99600a946c75ce64e047"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00029.png",
+      "bytes": 1015481,
+      "sha256": "6f3edd782016a140c87b1509a0c21177073c71c30b15b35c55032f17f5c6f699"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00032.png",
+      "bytes": 1015865,
+      "sha256": "da38db8149516fe626028e0ddaedf9dd4088ce8de9755b61d19f3436aec8fc0b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00021.png",
+      "bytes": 1014884,
+      "sha256": "f8047d407080f9c1828b703f9625bde97da8352212730675054bc023a2c1d7e7"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00034.png",
+      "bytes": 1015998,
+      "sha256": "728ef5236794922be67f76f24de684da1f2deafaeb29ba855cf781a52adab925"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00009.png",
+      "bytes": 1014829,
+      "sha256": "2f9c56680e1729c4aa4f2cb9f00d49c4bf7835b111cb81b62f3e7b0c24b00f47"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00015.png",
+      "bytes": 1014742,
+      "sha256": "f87ffbde896986e86c83e884bcfc1b9f7242ec36880288787489f18dd9b59529"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00035.png",
+      "bytes": 1016005,
+      "sha256": "5c21afd0617f457dde240cb500b9051c60c3e008efceb34e1cdf8e98d69ce408"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00011.png",
+      "bytes": 1014760,
+      "sha256": "15d591d18b19aeb6fe1747f7c2e963a52bbd1bec527236401e3bdb896c10454a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00016.png",
+      "bytes": 1014640,
+      "sha256": "91f511272240a3d6823407af489a6f418f00ec02646c8ddad836a850e2605763"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00018.png",
+      "bytes": 1015381,
+      "sha256": "d15cd4af21ca962d8185f40a9af1a4236cd4d38a47173c19dd809225467137d0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00020.png",
+      "bytes": 1015498,
+      "sha256": "ec62516ce9b26b2ba5799ccbcb8aca5b2ecfd9c2cbe977e50137c796fb5d3667"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00030.png",
+      "bytes": 1015456,
+      "sha256": "6073786948067499fe2ca8293a6b20f11cf1f5bbad4bd6d86428da5455d35166"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00013.png",
+      "bytes": 1014805,
+      "sha256": "5330bfdb678917f066c4afb8775ce166cf713f459f5752d1c1c2bec09691645e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00023.png",
+      "bytes": 1015580,
+      "sha256": "164bb2cfddc40fbdfe8f2fd120926dedba2eea1cd270fbbc884dfbcd7870236a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00022.png",
+      "bytes": 1015827,
+      "sha256": "c9cd72e6a5eda7fec60c1c88cef9dc81dd93a2dab89a429a4c2cdae490306c37"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-portrait-storm/frame00033.png",
+      "bytes": 1015870,
+      "sha256": "37b9cc5bd2c885ea2e1d5a916aad6e1a10f661b6ff59e92095fa0c555de98c80"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-trace-storm/frame00019.png",
+      "bytes": 939000,
+      "sha256": "355088209d523486fed69c0402a00f27719a7d763b3fc9c2180dc53727425a68"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-trace-storm/frame00034.png",
+      "bytes": 940583,
+      "sha256": "50f8936293ccee971513d67551045ac80491b9b2585d3348abe668094512eb11"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-trace-storm/frame00015.png",
+      "bytes": 939070,
+      "sha256": "1472bfffc7ab16213de000ef7c4c1ec0f8a7e3d3c57b5b507e85bbaae203d34e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-trace-storm/frame00030.png",
+      "bytes": 940041,
+      "sha256": "c6d2535014632d39a7d4c204e9392dbda6e8e1af8594d11a1f2a968144f35264"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-trace-storm/frame00019.png",
+      "bytes": 940114,
+      "sha256": "09c8d96a2c348a6b6f31af787811680129496ad307c53ed06ceb8fe7c20ab766"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-trace-storm/frame00034.png",
+      "bytes": 941838,
+      "sha256": "2bc38992b8b0d931cef53645aea8f2a5f5841ea98de7e7e31e869f3ad736766c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-trace-storm/frame00015.png",
+      "bytes": 939762,
+      "sha256": "41fce65c054bbe822ebab68a256084e1db0b2c4d843600f44aff7ffbcd281d9c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/before-trace-storm/frame00030.png",
+      "bytes": 940678,
+      "sha256": "790c607a2df41860c690fa813a41985fcd99b712a6a01481943b9a925a7b2695"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-trace-ember/frame00010.png",
+      "bytes": 938435,
+      "sha256": "e217d7ee5bc9543e7c769617b65e83f12e524597c4cf84fafaff2efe67b99da9"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-trace-ember/frame00020.png",
+      "bytes": 939207,
+      "sha256": "9b56230e056bb985e1545e46018a075d1df28ce6805db9aaaa24d91533eaf5c8"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-trace-ember/frame00013.png",
+      "bytes": 938839,
+      "sha256": "213f6d3ee00e34dcaf82a66d2bef10f76e59d8a03664b0d718d99885fb940ec7"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/after-trace-ember/frame00023.png",
+      "bytes": 940056,
+      "sha256": "f62ff8c5d895edd48057a19de715b39d91bec15a053edaf6d7534ed1ec2e1f57"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00014.png",
+      "bytes": 939248,
+      "sha256": "873827d0e2a6c6f088da30855db34f64702d3384ebfb861d9561498543b4afe2"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00017.png",
+      "bytes": 937443,
+      "sha256": "e26f81b10e4646f5bcf81a9f2fa0b4d3b5810e662e24f12733f9c5d3aa18b6d5"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00026.png",
+      "bytes": 938699,
+      "sha256": "887bfe062360e5bc9ca10e3507b8733b30bce6a54ee98e0e3d753d5f00ff340d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00007.png",
+      "bytes": 936225,
+      "sha256": "04ffe90697f20d4d88b311894ffbb5d7e5647cef693c1d1020aaf8257c5e720a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00019.png",
+      "bytes": 937390,
+      "sha256": "6323b23427d8d7d7e6e2b89fbd387dbeecbe23b5043a67a66711a80c0a45fed9"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00010.png",
+      "bytes": 938443,
+      "sha256": "b23de4db21b9e422d9ad4eabbe7e8cc48e7f722938951cac2ca74d4cd8d1c9ef"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00054.png",
+      "bytes": 939237,
+      "sha256": "bb9ba2af47376d2588e7729443c6cb47df9a72d1e8a536a27759aec110307b52"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00031.png",
+      "bytes": 940551,
+      "sha256": "b5bb5cf64f101bb7fff96723646a2b95b1b4865acea8872287878e0af746b771"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00024.png",
+      "bytes": 939754,
+      "sha256": "b6a796072b736e90d110b9bf91438d7026d5e404db811e0e1b8ba0df60196100"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00042.png",
+      "bytes": 941383,
+      "sha256": "b8ccebed2fc8b99d1b2a375ef914269b8d32b90faef6d7066c4c1597b80d503a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00002.png",
+      "bytes": 936414,
+      "sha256": "b1aaab0f12d663929fae8bb60b7a6b6864957223a793b3b0fc1d56dbdcfe0dc9"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00046.png",
+      "bytes": 939309,
+      "sha256": "40d1d8f6e1af273c331190874389b3a73ff4ea4c49e199fff39a5c0cec320b28"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00059.png",
+      "bytes": 940677,
+      "sha256": "9a063802a338c22689f7d3e647a9759cb4263928de349552a2586f5936018baf"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00012.png",
+      "bytes": 938924,
+      "sha256": "c30d62015ae89eb5271ca40b36267096184e9649af81981620947f4ef836a25a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00006.png",
+      "bytes": 936285,
+      "sha256": "a0ac1535bd52dcfb1dc84e85401a3b47b3115b7e231ea897dac731e878e10c70"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00029.png",
+      "bytes": 940378,
+      "sha256": "c8f3fd7d279b8554f2d53cc38373af1850367ceda1918d6a2b7557b6505e3d89"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00032.png",
+      "bytes": 941033,
+      "sha256": "b3c39dd3f5e6c5f7f477b465d8ff27f40faa51447add3beda5a8acc3c0b717f7"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00021.png",
+      "bytes": 939576,
+      "sha256": "0d3b4b0009fbda50b17f4314aa052c4d69fc913b3ceb0947d2935ad5bbe88657"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00005.png",
+      "bytes": 936405,
+      "sha256": "433c54a56ac51e4268016d1943a6745f3c9dfc07e8d09a39c80f7c06a22d42e3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00038.png",
+      "bytes": 940524,
+      "sha256": "cf9da9ace5ff6ced7691235427f13c5f9d47b6beeed3abae0a8d4976eb7f96cc"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00034.png",
+      "bytes": 940405,
+      "sha256": "5517736ff5f35b4bd8c0625da98ab992ad04d592ec579fa87a054e88844f25da"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00055.png",
+      "bytes": 939308,
+      "sha256": "fe949ea6ebdaf289c5aa0b553bc5846b7228ce06c44be00cb9ea307d1167194a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00048.png",
+      "bytes": 940847,
+      "sha256": "8139e2372ccfaea54532f639f1e1211b50d2948674e5dc24fba5aa1a9916dd72"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00009.png",
+      "bytes": 936253,
+      "sha256": "cae46ba79c4cca874539938e950b3ef1494b36024740bb512e09d6fb70aabdc8"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00028.png",
+      "bytes": 938548,
+      "sha256": "87a628d7ad2ec2ca7a2065945cde46973f0b66ef826a091b71772ee704b44620"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00056.png",
+      "bytes": 938972,
+      "sha256": "227487fcd4abb0c8a570fbee7ae6ca86283b7894ffe31fed5b9d9d40abb24cf3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00050.png",
+      "bytes": 940254,
+      "sha256": "5d75a5ece1f357fcecfefb5ab4b1e7229b1bc3cb26e4f9a065cabe1b7721025b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00039.png",
+      "bytes": 940991,
+      "sha256": "4e8f9e456a41c9745d1d032c4e6dabc6105df6bc118d975b6084ff67a9b8cfd8"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00036.png",
+      "bytes": 939626,
+      "sha256": "fc183191543ef5d69f0355364df3b7457e625902655143e068021adc31120961"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00003.png",
+      "bytes": 936334,
+      "sha256": "137919e25f24a91f27ec5923c7ccb4c8d1a9bb198466a7bbabc52d072ddaee3c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00015.png",
+      "bytes": 939105,
+      "sha256": "640352008ceb4755b0e0d0444ffe4b41ef2f6d7745c9fb714d6c86e6c7537ae3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00047.png",
+      "bytes": 939075,
+      "sha256": "baa3e52dfcce4c2b8a6f9f611f28b336a282030195aace93b13a4b71fdfca9f7"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00035.png",
+      "bytes": 940022,
+      "sha256": "b4dcd4f9cf733d9513b6426676029e2eecde7e365eed8e58437b3cfeb6c0aa83"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00011.png",
+      "bytes": 938815,
+      "sha256": "8358ad99172d37c72946c86653f8a8613ad5ae8018765a0185aa9e43dd57c9c1"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00016.png",
+      "bytes": 937837,
+      "sha256": "cdb0a022b1913575ffdd5a28e336aa3d2b52b13481023fa33631aa124f9b970f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00057.png",
+      "bytes": 940718,
+      "sha256": "8d64a393fcdd712936ae59034f335a5fd9b183830b8aa1971b454f82172c185b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00018.png",
+      "bytes": 937293,
+      "sha256": "052b650d66214fc76cc4ba75295538c37bc09f97791703f147526f897b0a142a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00020.png",
+      "bytes": 939215,
+      "sha256": "8ece9ce4e0c9f580b9b1c32087cbcc351e5bc0d63b97b665f9bd625668a6ab84"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00027.png",
+      "bytes": 938594,
+      "sha256": "6b227c7f125b3572c1535416c858edb6a231a972ec2b3a10a6517f6416fe6f66"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00025.png",
+      "bytes": 939548,
+      "sha256": "01ac75a187ddca8e1be160203da97dcdec1d2d985d01c5b17e721904e2466330"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00052.png",
+      "bytes": 940573,
+      "sha256": "2d13ee83da140708b29569bb8536823d88f93d0736d1c98b07e9f2e202f90c8c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00030.png",
+      "bytes": 940446,
+      "sha256": "8731be44dd8326ed07ba8f4ea3361f683ed083eea3296b40875c71f08260a3e9"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00060.png",
+      "bytes": 940764,
+      "sha256": "a7e3ce207c7cb72f525f448372ba3e775104fad8504fcc24f96c7f9e345e9017"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00013.png",
+      "bytes": 938860,
+      "sha256": "5f91d9dcf8d2b383cfb229702fa01d52d0ee92b87fab9de4f0093e6fb8f00bce"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00044.png",
+      "bytes": 940027,
+      "sha256": "53718620fd498c60c7c9f9b0500952278bbbd8324eb97b1b1334477b778ce0b8"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00053.png",
+      "bytes": 939964,
+      "sha256": "f20b42eaa1286440baaf969d3768fcb2de9adf659493bfe8de517104fffe9ffe"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00023.png",
+      "bytes": 940033,
+      "sha256": "7baa69abf285ef44fe50eef67d0ce1935b16b4307f732f0e0b6c71192fa9a176"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00004.png",
+      "bytes": 936253,
+      "sha256": "bdc192e141084ca89151859519f464c2fadeb2f555fa768702bd526c35f73a8c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00051.png",
+      "bytes": 940515,
+      "sha256": "a18314c04b2bcd773429ec63cd822c8ca7e521841bab88d23916dc28d3734fd3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00040.png",
+      "bytes": 940471,
+      "sha256": "bbf5940446a29d00b621a37d7b127f5dd77ff8704dc136c984e3e8d028953d82"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00058.png",
+      "bytes": 940426,
+      "sha256": "b327bec35495d6a615e2aad81158bf86679a938fec0bbe5c29842bd0b7802e4a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00000.png",
+      "bytes": 940588,
+      "sha256": "0e42ec66b9a8f972a39a8cb3823c23a15a8ca9e3114e569ba70ce1414fd297aa"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00022.png",
+      "bytes": 939741,
+      "sha256": "d5099910288158fe4c6ccc47962229d438d9126f3b74beab272ae4debae72162"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00033.png",
+      "bytes": 940947,
+      "sha256": "82224e16ade4db2438f88871a9d0de366e1472319a722ac6a891da117eb28323"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00041.png",
+      "bytes": 940852,
+      "sha256": "9f2a78ad0ceb063b02aa668e4821dc9222479e1a3f70525863aa8e8217b9ab8f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00045.png",
+      "bytes": 939630,
+      "sha256": "bce80017d15d593c9632593cac8b107709b4a545f2f338be91fb9716e6ffc09f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00008.png",
+      "bytes": 936469,
+      "sha256": "84474daa41a86e63759327b278ba52bdcd919471b67e5ed8b2cc757376ec2e80"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00037.png",
+      "bytes": 939644,
+      "sha256": "0c7686e2a57e7d9b197ce41aef6cab58f25483d94d0f02ecc91360d6288923da"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00001.png",
+      "bytes": 936214,
+      "sha256": "2fdbf504654507313be09de104dd8c7fe7250a5ee11adc089a2c751c3ea18e6b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00043.png",
+      "bytes": 940380,
+      "sha256": "a0160aa1c3baa2454182dda8414f94652782b3ec35bc1e7339137482cce525d0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/ember/frame00049.png",
+      "bytes": 940069,
+      "sha256": "3c29e2263a21e3d23581ea136391bd6d237ce1ada5e04b7a772e6bdec14fffa0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00014.png",
+      "bytes": 944219,
+      "sha256": "4e39bc736374783f06c97bed5fbded1ed50ca5680bdbc6da911d99630380beb3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00017.png",
+      "bytes": 945194,
+      "sha256": "15a78c30d993ce592099180522a8f98bd8d2a9e92fa84672c0dfa6f9fe4de658"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00026.png",
+      "bytes": 946055,
+      "sha256": "089af010cbc3198b3d070c168e7115ea4c8df4ea85ddb93b2f1d8442f133204d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00007.png",
+      "bytes": 946142,
+      "sha256": "22def21a9e2edb70ff53a2ad82fd2debd095cf353d7ca42ccf610474971ade68"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00019.png",
+      "bytes": 949353,
+      "sha256": "25466c83a5dfb18fd00eb618ab49ccd64b74fe59c25f0a0b5b96c59573c2020e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00010.png",
+      "bytes": 948025,
+      "sha256": "ce9aae0257dd52eb20490619b17fda563ee1c9414186c1a966f8626f0a5e7bf1"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00054.png",
+      "bytes": 951495,
+      "sha256": "b3326f984251ae1c76d3d8522d9542e1d6b4a10f7bf8e3458986224c26462a51"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00031.png",
+      "bytes": 951389,
+      "sha256": "6ad0679a71bc81452dd80f730f3647d7a59e560ac89a18bd642adf6187d89559"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00024.png",
+      "bytes": 947692,
+      "sha256": "b357b28cca8c19ffe19854c86a3da1a3d3403ce601b82b8a269bced4602a0f9e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00042.png",
+      "bytes": 951888,
+      "sha256": "8f2c4660f9b7491aae1f92b8e8c54dcc7a8b635b9ec240d06feae8ffdb6098c8"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00002.png",
+      "bytes": 944320,
+      "sha256": "30fba317212fce87ef731aeb2ce036dbee0945f605b83df15406960b737f7d13"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00046.png",
+      "bytes": 950847,
+      "sha256": "767823081786f6d176f10ed48b35cb23dd388779ab22e2648b08c1cb696e11f5"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00059.png",
+      "bytes": 950009,
+      "sha256": "b6c00d369d4928549e86beeb19268fbd2eb6aef8603d7ecdd390f42209683b12"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00012.png",
+      "bytes": 945193,
+      "sha256": "efd3a3c597ed84dc3edd976224a4da4774bd5666faa0b34eb02d87cf0b2b1040"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00006.png",
+      "bytes": 945452,
+      "sha256": "6a82783ef820798bf722c744ed91406ddd80ce131e154389dd7884dfd1716ca0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00029.png",
+      "bytes": 947216,
+      "sha256": "d71f46b696d1ba05f2122ab630afa19dae4df65786d199b8ea45ec9cb9102a21"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00032.png",
+      "bytes": 951510,
+      "sha256": "9748fa8ae8f7a15c9de8c071aa3336b0acb9d40ff5bcf56267f07a42986c1865"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00021.png",
+      "bytes": 949737,
+      "sha256": "1499c215e9b7b08b6a73d8992328fe8d2a3805176591fd8e7cd2559816b5fbe2"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00005.png",
+      "bytes": 945089,
+      "sha256": "82c39bf490054d2d0c068fa222502172f39b9934a1cc7972ec5735b29836ce7d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00038.png",
+      "bytes": 946649,
+      "sha256": "0db6dc8c05a49ff5d61ac6e2285b4d81ccfd3b739f470deb98277963450e34c1"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00034.png",
+      "bytes": 951257,
+      "sha256": "b172cb4a63ca41f8149b0b1566d88aea6be1cb22b8576458e11b8b2a2c568871"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00055.png",
+      "bytes": 951277,
+      "sha256": "c95e39eb5765da5622dc6d4c0e5f891cc268726b36edc1bbbda8dbb1ccd14a3f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00048.png",
+      "bytes": 949212,
+      "sha256": "18023136526e3fb87be6074d0ed2fe55e93689d979a5acb59867cf3c345b1931"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00009.png",
+      "bytes": 947670,
+      "sha256": "f267685adcc87e4cfdb448dbb5611162f613097ccc47efd974fa79d0f038c48d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00028.png",
+      "bytes": 946130,
+      "sha256": "e52546652721d14c8b9da6babe45fd56632451a83429dcfa7bbbf868ed154b1a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00056.png",
+      "bytes": 951030,
+      "sha256": "54bd8f6fc9147fcaa219597e2db10660c28f725040020a8ebd88ed4bbdbfd197"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00050.png",
+      "bytes": 946131,
+      "sha256": "46140a3804a0edd54d33d4357e1fc4c2d9573a049715d9e1a61aa72954a84625"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00039.png",
+      "bytes": 946627,
+      "sha256": "93ee8cb9902dd5e40c57fd1c8ff317dceb2083194b2d781e8f164b92e2d27176"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00036.png",
+      "bytes": 949531,
+      "sha256": "02ed020ad1e8d07b66529bdc15798ee1d0e22d009ecf0aadf8ca45412334763d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00003.png",
+      "bytes": 944484,
+      "sha256": "000469145c09abb1622a596dc28c851c54afb488f7c71c1f4425ffb689a23802"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00015.png",
+      "bytes": 944129,
+      "sha256": "7500280014cdfa84ed14b69088dd327a190334c0d1da04b629dc6c5041912ddd"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00047.png",
+      "bytes": 949158,
+      "sha256": "8ff3147229003fe882c9c679f72e6eb39b1caf6d741258cb6c5bf886d26b4df7"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00035.png",
+      "bytes": 949660,
+      "sha256": "4dcb93dccdc288d965b93304b5091dfc12a613cf0b101bf75c14a7a010411077"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00011.png",
+      "bytes": 949382,
+      "sha256": "f893be9414a7fed3f7e9a8bd49592553152e9008fa8d3e9018007c1d6db95910"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00016.png",
+      "bytes": 943767,
+      "sha256": "5fc53546b29b9602a466df1a2aa0ed5fd33d7e56051f198398b063b69606306a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00057.png",
+      "bytes": 951215,
+      "sha256": "93181964af8df9ab3af2ef390d8dce9b4fa774b1955f81ee3caf0436c9e45cde"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00018.png",
+      "bytes": 947413,
+      "sha256": "af15199c182fe40025e84ce290f7cf798abbe683178340b5d9323f2adbc3e912"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00020.png",
+      "bytes": 949271,
+      "sha256": "ea25523eb1d17f3b394296d7f09d74c6ff10ed9618656b0367bb1d07aa0eb665"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00027.png",
+      "bytes": 945985,
+      "sha256": "a662eaa6eab0a35105917a90cf0e7b327a55fb20a90e8c181432203c41fa447d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00025.png",
+      "bytes": 946885,
+      "sha256": "bfe0da79edaa4b33c9c107aa338499dcff972eeeffe9b666319fabb8420877f3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00052.png",
+      "bytes": 946230,
+      "sha256": "1dedddcbb43557f0512ad1fbd080be6d1d6a7cc95b58a25a6c9b38606108743b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00030.png",
+      "bytes": 951616,
+      "sha256": "4e4537876e5b0dac98a79bc0b98d37986367ccbd98e7f9e60015a9e3c07ee9ee"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00060.png",
+      "bytes": 948845,
+      "sha256": "9a0c74f89fe98268a10737dadcd4aa919f17afac36c7ae9ed8d232245fee32c2"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00013.png",
+      "bytes": 944819,
+      "sha256": "3c8011f514a0f92169890ef83278f7afed071e2e13087c255d7199f2da6db9fd"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00044.png",
+      "bytes": 951233,
+      "sha256": "c0c9eaf516820aae1a2e8194f9f23b8218d4251083b8e9bea428018d7faebae1"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00053.png",
+      "bytes": 947123,
+      "sha256": "b4527ae5280dd8842bf7b53073913dad46363447568e63342598177f315f1f35"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00023.png",
+      "bytes": 947695,
+      "sha256": "6a4ae10c90f77664e406bfd813958fc171bde850e2cd2d230f653881ee63fc58"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00004.png",
+      "bytes": 944849,
+      "sha256": "bd9ac4ec969a1a22ea9100ba6187af2ceb7a38e19c02af26b4ae4f7d5e9d078f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00051.png",
+      "bytes": 946352,
+      "sha256": "d293f57c07c2fedd48f769003431c98b7cee2e87320de8eb47f593d82c1bea63"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00040.png",
+      "bytes": 946539,
+      "sha256": "0a325b4c897e136a470735f1a5d80d53cc7bcc9510343f06a75a0a6f3e8d9749"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00058.png",
+      "bytes": 951113,
+      "sha256": "88a4b017ea4a72152b2fc6fbf95f4ea40a1fa599e14e8d47af6f623a93cae4d8"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00000.png",
+      "bytes": 947062,
+      "sha256": "3083687160bc646fea6650b20fb1b8a0fe00e341918d3ad8d0ec6b67c05115a4"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00022.png",
+      "bytes": 949414,
+      "sha256": "3a6bbeee2e2ed73efdea0e9b193bd3ad2ab5709ec13dc8afff4a7685160d4457"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00033.png",
+      "bytes": 951681,
+      "sha256": "0dec51ec1fb6160d9cebb1e779c42a35495afcdfee4aa9f68a659703a2c02ec1"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00041.png",
+      "bytes": 947743,
+      "sha256": "2b85d221ec8af7183e08d900c2ab4ab1f8bf0b910e94c09ade85720eca0f6707"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00045.png",
+      "bytes": 951318,
+      "sha256": "71c5b5427f16eb520c0042c37adf31a4fa6f5af72b21de1fbed50bce2b16e9d4"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00008.png",
+      "bytes": 947028,
+      "sha256": "349fca8c53d598d5d2c3bca0369803b2c34f450c13580d35f4b6866dc3b4bd7b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00037.png",
+      "bytes": 948208,
+      "sha256": "eadaf393b666bf18105689b4db484c1afa42a57d8434d0416b0fc5e4c0fcded3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00001.png",
+      "bytes": 943909,
+      "sha256": "f2a230f05e6b82a7222a8c68b912fd7f3a3f0e52ea179712c007cb8894395593"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00043.png",
+      "bytes": 951569,
+      "sha256": "da65fe121abc2afcb8554c2bd98e8110b66f43a0ea00480c85c71083948981c0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/sword/frame00049.png",
+      "bytes": 947669,
+      "sha256": "8c530bba2f759c31355411791ede5b999528c343c24674ba2da76af738357d67"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00014.png",
+      "bytes": 936645,
+      "sha256": "e02e5a91a8d202f0170d0ad8c844a76207675ad9d31132871b4cc346804b0673"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00017.png",
+      "bytes": 939407,
+      "sha256": "e1906f8888af7a0227789e0ea735bee41720fea011721cbf62e16362a75943f0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00026.png",
+      "bytes": 939963,
+      "sha256": "f648d1fc4e397a4fec197780ee9db8295cdeb9697daaac680c9bf746cc950842"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00007.png",
+      "bytes": 937053,
+      "sha256": "abc6df86e27001331db43cf39f67f5a0fab5b35ee197009c0c1448665f201191"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00019.png",
+      "bytes": 938726,
+      "sha256": "f5f8e8c27d1407081d8e76ff2d4856479ef70aef039a2e310bd6a7ffeb12c475"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00010.png",
+      "bytes": 936908,
+      "sha256": "7b846f2be7897978bd36d5f37d678b1794eb3ae748d20db303e6503ce1f45779"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00054.png",
+      "bytes": 940978,
+      "sha256": "08458015caa55e2ba74f92ea32ff5599dbb04c4544464325fba79c590c928536"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00031.png",
+      "bytes": 940638,
+      "sha256": "69383fc4dd33d7b154e316362f305c4c596006242982bc83c6ad157c91fc09fa"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00024.png",
+      "bytes": 940039,
+      "sha256": "3dcfd01a27aee1b0fa720a2524ab3dcc23f5013f6101d2da7373e4bff3f25cd2"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00042.png",
+      "bytes": 941188,
+      "sha256": "188df76e0f58f35888a65ea2d12d43109cd7292b2980681846abfa0d14ebe24c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00002.png",
+      "bytes": 937002,
+      "sha256": "01f35f8593fb8f88a4cd1310f30f67ee756032e48f6b0049088fa876e5d844d4"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00046.png",
+      "bytes": 939982,
+      "sha256": "5df9f72cc31dfcafd8b10f43b6df6287d8a528e7103b4b7dee979e083572d92e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00059.png",
+      "bytes": 940959,
+      "sha256": "cc4cbd5b9edbd904734eb5eb10c091683cff2d2c18158427a83fce2a8d82bb93"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00012.png",
+      "bytes": 936868,
+      "sha256": "c9d5466531c6a1e8fad52225681fba5ca60ec4c7992f3893597abee40edbd6f3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00006.png",
+      "bytes": 937016,
+      "sha256": "fe5b5a7e0ff56046a0fd16fc74f709cf7e1b5a01ae67f6612142d2b245835d6c"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00029.png",
+      "bytes": 940507,
+      "sha256": "30b1b4214255ce9eb5f2d7205fa76366148509317ac9a3d35606b272a353157a"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00032.png",
+      "bytes": 941014,
+      "sha256": "785ded4e0ecf491eb22fbb64729a72132d1d7344434a39b4d943d38e07d4f76e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00021.png",
+      "bytes": 940367,
+      "sha256": "db6c465203223411554ed68b545fab1a33aaa9afab27f114f85e8a2ba8602d07"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00005.png",
+      "bytes": 937101,
+      "sha256": "4643c43071f17e40c2d2f9e17c1bf843ba0a4e8a74fc5afaa12bb90680979758"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00038.png",
+      "bytes": 942201,
+      "sha256": "1fe23281474132420e249b3a6095a52f8be5ec4631990911fee3d95d8585090e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00034.png",
+      "bytes": 940528,
+      "sha256": "eb83824ec72d4c8b2528c4ca4d1e035ad5956551f777e5266da3d36815e9e089"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00055.png",
+      "bytes": 941399,
+      "sha256": "79a78c4a950be0deb72a2bade1cbfd566613b79e3caec6ccb693a5b82bf05fc5"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00048.png",
+      "bytes": 940496,
+      "sha256": "f7a38175dcf37889f261bb23ad133b2820766bb0caf5d7e58efbda52a1515b88"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00009.png",
+      "bytes": 936920,
+      "sha256": "9923ca90a35871a43a83dc4a682984eefcb6f9033dc94fb7dcb4623fa438baf7"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00028.png",
+      "bytes": 940360,
+      "sha256": "cd3a4f19e0941af12c222713ca176496001e2a01f5380eef14aac5cfbf8df5c0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00056.png",
+      "bytes": 940531,
+      "sha256": "d480cb7dd26d81e194b25a32fdba88935fd4fc7fb3cb508e7391e18f49315c60"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00050.png",
+      "bytes": 939779,
+      "sha256": "ad2d8fd6fed53d7f9a2d91fa4f4c9686ffe0690405efea4099ea8e608eee19ac"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00039.png",
+      "bytes": 941655,
+      "sha256": "04079e916b6a46b9e30dec3f82728b3fd3a8a55f1f14e0f3b81a6c2551c3f94e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00036.png",
+      "bytes": 941599,
+      "sha256": "0b3ffec0f0d6472bc97ca296b8aaec61f98b2c75b7034a1d6cdcec86626828ec"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00003.png",
+      "bytes": 937017,
+      "sha256": "106927d55c8e28c842c1fb4dbb479b27ffb02a03ff998f342282092b58d0bb30"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00015.png",
+      "bytes": 939070,
+      "sha256": "9ddc37c3c0bc32ab7c4374f11349eb626c56d159e782269d57e47a345653cab5"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00047.png",
+      "bytes": 940254,
+      "sha256": "6ba8b1522c2779793d27fd45d8a20d2a14f01b0078605cf9d79d3d7101d9e646"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00035.png",
+      "bytes": 941054,
+      "sha256": "84b5340efa9862d75004ca564853c1527b35d5462722a08d410a6d4b5d53a04f"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00011.png",
+      "bytes": 937132,
+      "sha256": "666e9028878dce586eb50dd072d76d306a4a145ceee1fe6cbe2494a06ecc3895"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00016.png",
+      "bytes": 939200,
+      "sha256": "0fcb6b260177a0c75d013e0fcaab757c304ca87ca42be952b67888bb335a1846"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00057.png",
+      "bytes": 940639,
+      "sha256": "0e039fe9e10cbaebf76f7190a08a9c674df271fce0add53730ebd8ee100e5aff"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00018.png",
+      "bytes": 938552,
+      "sha256": "fa74cf24fe2aa12f549aa4994064e60e62935638b06fe9dbbcc4401a6412ea6e"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00020.png",
+      "bytes": 939318,
+      "sha256": "82e4da2ecbf96aac84525e8aa17bb03226b3a5e1bf7415cc48da85a9a52ae1a9"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00027.png",
+      "bytes": 940071,
+      "sha256": "a8e7fb050bedcd5f3c25c5b022944c49d4bc41d0957e20f7154435173f1bfec7"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00025.png",
+      "bytes": 938584,
+      "sha256": "50720a54b7c5c278f6493f70d51de92231fc3882bedd3d7c9969121e4af60cec"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00052.png",
+      "bytes": 941318,
+      "sha256": "069cb2d1353023421070a917ddf97b008721edd37743ae6717e9a9ed1656def8"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00030.png",
+      "bytes": 940033,
+      "sha256": "1abf115f0723a4ee4ff996e1d8bed306f5ba284d63ef4a689a0aa6ec83888d11"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00060.png",
+      "bytes": 940763,
+      "sha256": "ff17df95ef781eea1787a0b06c662c3d2dbf7b6dfd54a3efcce7705ee973ed66"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00013.png",
+      "bytes": 936781,
+      "sha256": "fae050183b8deb2acc7b56cfa752370cbc1883a14361cddbc9bf2b6d9f557ca8"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00044.png",
+      "bytes": 940980,
+      "sha256": "45c326d8da7abca4306960b3f33874e0f04ae67956bef83b645fa8e0a6446603"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00053.png",
+      "bytes": 941468,
+      "sha256": "84b665a86b4ff9051d00afbe8437a10b3ae09882f903a83648d090a3e503fc0b"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00023.png",
+      "bytes": 940281,
+      "sha256": "a9093613f8115d3539f6938a8b1c95b1d171614759e5b172a5a7af0ccde97603"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00004.png",
+      "bytes": 937076,
+      "sha256": "a3a55b1853c4e153a7f0f62bf18f40a66d3480ae3d613c9c235d9867014685ff"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00051.png",
+      "bytes": 940619,
+      "sha256": "390c8cee3d4931feb89c3e4afb04faad9b1c9779e4e0b90aee68a5dd7737e1e1"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00040.png",
+      "bytes": 941001,
+      "sha256": "357a915cb6a9dacdb6dedb1b6fb917072f608eb4038c45ba667f715d8796c2d3"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00058.png",
+      "bytes": 940814,
+      "sha256": "ff0a08d5aa4c69128fd0f4c2e5f91b70d191208cc467ea15cd08a6c6637276a4"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00000.png",
+      "bytes": 940767,
+      "sha256": "c12687d4590f4e5a38b5f3e8756993ef8adfc321b87ec8aa71d49088b38804b2"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00022.png",
+      "bytes": 940533,
+      "sha256": "72f539a532404ade89e396f54c7f090acc278ab24226aa605a68d1c6c97185c6"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00033.png",
+      "bytes": 940235,
+      "sha256": "7d1aad80229bbcdc31866032309a539783e14d919b5a1edfb5e69f80944a2aa7"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00041.png",
+      "bytes": 941232,
+      "sha256": "3540304549c92e78414c8bbaf8ad446e9582130d0de535845f131ca856824657"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00045.png",
+      "bytes": 939885,
+      "sha256": "5207bdf54fecbae4cfd407e2d46b74961efd7cc24e0d19e3132b3efdbf1c4c36"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00008.png",
+      "bytes": 937084,
+      "sha256": "d44fb61a9bfde25224f9f8781d618894d013441a3d61fbb7025feafad53c785d"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00037.png",
+      "bytes": 942237,
+      "sha256": "652517dc3f52e7fde44132b7b416934595e0d9572844b5ce5eeeed7520337d70"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00001.png",
+      "bytes": 936884,
+      "sha256": "8b7d3343cb7134432e8579704f837b1214a2e108b14f0cf4f045b4dfe488f8a0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00043.png",
+      "bytes": 941112,
+      "sha256": "0154ec97a7747d1aa805937eaedd8147f44c29ca78bb9c9e1509f3e02cafc2a0"
+    },
+    {
+      "path": "target/verification/ranged-release-2026-11-06/r3-visual-age-candidate/storm/frame00049.png",
+      "bytes": 939995,
+      "sha256": "f1e9e56caf3c3b1aa65d81c4f577bcabcbcab05e63415f41f497156833dec787"
+    }
+  ]
+}

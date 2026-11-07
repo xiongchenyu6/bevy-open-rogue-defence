@@ -1,0 +1,1 @@
+{"command": ["nix", "develop", "--command", "cargo", "test", "--locked", "--release", "--lib", "native_ranged_does_not_emit_at_attack_commit", "-j2", "--", "--nocapture"], "returncode": 101}

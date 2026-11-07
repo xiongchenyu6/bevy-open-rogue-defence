@@ -1,0 +1,4 @@
+{
+  "actual_result": "focused10passed; full741passed11failed1ignored",
+  "cause_under_review": "Existing tests inspect immediate projectiles; adapt actual delayed-release fixtures without dropping arrow/aim/backlog assertions. Independent review found new damage fixture also skipped hits between two moves; strengthen real schedule. No production fix accepted yet."
+}

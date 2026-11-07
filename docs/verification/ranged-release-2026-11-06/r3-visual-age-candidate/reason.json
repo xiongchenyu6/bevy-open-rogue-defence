@@ -1,0 +1,4 @@
+{
+  "actual_result": "755passed0failed1ignored, native3process0, Clippy0",
+  "not_final_acceptance": "Synchronous last phases varied; Emberthird first-active.439 vs earlier.313/.321, Storm.345/.276. Animation advances full initial delta but regular pending consumed timer residual instead; fix initial age using original movement allowance and add small-frame clock-residual invariance guard. These results preserved, not relabeled failures of prior tests."
+}
