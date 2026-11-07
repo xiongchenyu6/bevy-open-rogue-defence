@@ -107,11 +107,18 @@ fn vortex_order_outcome(reverse: bool, reallocate: bool) -> ([Entity; 2], [Optio
     app.world_mut()
         .insert_resource(RunRng(12_628_136_444_139_491_497));
     let mut targets = [Entity::PLACEHOLDER; 2];
-    for index in if reverse && reallocate { [1, 0] } else { [0, 1] } {
-        targets[index] = app.world_mut().spawn((
-            test_enemy([1000., 50.][index]),
-            Transform::from_xyz([-1., 1.][index], 0., 0.),
-        )).id();
+    for index in if reverse && reallocate {
+        [1, 0]
+    } else {
+        [0, 1]
+    } {
+        targets[index] = app
+            .world_mut()
+            .spawn((
+                test_enemy([1000., 50.][index]),
+                Transform::from_xyz([-1., 1.][index], 0., 0.),
+            ))
+            .id();
     }
     for target in targets {
         app.world_mut().get_mut::<Enemy>(target).unwrap().elite = false;
@@ -136,8 +143,7 @@ fn vortex_order_outcome(reverse: bool, reallocate: bool) -> ([Entity; 2], [Optio
             targets.to_vec()
         }
     );
-    let (strikes, pulse_remaining) =
-        crate::game::skills::test_vortex_order_pulse(app.world_mut());
+    let (strikes, pulse_remaining) = crate::game::skills::test_vortex_order_pulse(app.world_mut());
     assert_eq!(
         strikes, 2,
         "one real pulse schedules one typed strike per target"
@@ -196,8 +202,10 @@ fn vortex_critical_assignment_follows_geometry_across_allocations() {
     let forward = vortex_order_outcome(false, true);
     let reverse = vortex_order_outcome(true, true);
     assert_eq!(forward.2, reverse.2);
-    assert_eq!(forward.1, reverse.1,
-        "entity allocation must not exchange Vortex critical damage between visible targets");
+    assert_eq!(
+        forward.1, reverse.1,
+        "entity allocation must not exchange Vortex critical damage between visible targets"
+    );
 }
 
 fn overlap_geometry_outcome(
@@ -374,4 +382,85 @@ fn ray_pulse_damage_ignores_cosmetic_query_order() {
 fn ray_pulse_damage_follows_geometry_across_entity_allocations() {
     let outcomes = [false, true].map(|reverse| ray_order_outcome(reverse, true));
     assert_eq!(outcomes[0], outcomes[1]);
+}
+
+fn ricochet_geometry_outcome(reverse: bool) -> (Vec3, Vec3, [f32; 3], u64) {
+    let mut app = projectile_test_app();
+    app.world_mut()
+        .insert_resource(RunRng::from_seed(123456789));
+    let positions = [
+        Vec3::new(2., 0., 0.),
+        Vec3::new(2., 0., -2.),
+        Vec3::new(2., 0., 2.),
+    ];
+    let mut targets = [Entity::PLACEHOLDER; 3];
+    for index in if reverse { [0, 2, 1] } else { [0, 1, 2] } {
+        let mut enemy = test_enemy(1000.);
+        enemy.elite = false;
+        targets[index] = app
+            .world_mut()
+            .spawn((enemy, Transform::from_translation(positions[index])))
+            .id();
+    }
+    let projectile = app
+        .world_mut()
+        .run_system_once(|mut commands: Commands, mut pools: ResMut<CombatPools>| {
+            let entity = pools
+                .rent_projectile(
+                    &mut commands,
+                    Handle::default(),
+                    Handle::default(),
+                    Transform::from_xyz(2., 0., 0.),
+                    Projectile {
+                        velocity: Vec3::X * 20.,
+                        damage: 100.,
+                        radius: 0.1,
+                        remaining_hits: 0,
+                        lifetime: 1.,
+                    },
+                )
+                .unwrap();
+            commands.entity(entity).insert((
+                basic_attacks::Ricochet::new(1),
+                DamageProfile::PHYSICAL_ATTACK,
+            ));
+            entity
+        })
+        .unwrap();
+    app.world_mut().run_system_once(projectile_hits).unwrap();
+    let bounce = app
+        .world()
+        .get::<basic_attacks::Ricochet>(projectile)
+        .unwrap();
+    assert_eq!((bounce.remaining, bounce.bounces_used), (0, 1));
+    let target = bounce.target.unwrap();
+    let destination = app.world().get::<Transform>(target).unwrap().translation;
+    let arrow = app.world().get::<Projectile>(projectile).unwrap();
+    let velocity = arrow.velocity;
+    assert_eq!(arrow.damage, 75.);
+    assert!((arrow.lifetime - 0.45).abs() < 0.00001);
+    assert!(app.world().get::<Enemy>(targets[0]).unwrap().hp < 1000.);
+    app.world_mut()
+        .resource_mut::<Time>()
+        .advance_by(std::time::Duration::from_secs_f32(0.12));
+    app.world_mut().run_system_once(move_projectiles).unwrap();
+    app.world_mut().run_system_once(projectile_hits).unwrap();
+    let hp = targets.map(|target| app.world().get::<Enemy>(target).unwrap().hp);
+    assert_eq!(hp[1..].iter().filter(|hp| **hp < 1000.).count(), 1);
+    assert!(app.world().get::<Projectile>(projectile).is_none());
+    let rng = app.world().resource::<RunRng>().state();
+    println!(
+        "RICOCHET_GEOMETRY reverse={reverse} targets={targets:?} destination={destination:?} velocity={velocity:?} hp={hp:?} rng={rng}"
+    );
+    (destination, velocity, hp, rng)
+}
+
+#[test]
+fn ricochet_equal_distance_damage_follows_geometry_across_allocations() {
+    let forward = ricochet_geometry_outcome(false);
+    let reverse = ricochet_geometry_outcome(true);
+    assert_eq!(
+        forward, reverse,
+        "allocation must not exchange equal-distance bounce destinations or damage"
+    );
 }

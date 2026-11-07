@@ -89,6 +89,9 @@ pub(crate) fn next_ricochet_target(
             a.1.xz()
                 .distance_squared(origin.xz())
                 .total_cmp(&b.1.xz().distance_squared(origin.xz()))
+                .then_with(|| a.1.z.total_cmp(&b.1.z))
+                .then_with(|| a.1.x.total_cmp(&b.1.x))
+                .then_with(|| a.1.y.total_cmp(&b.1.y))
                 .then_with(|| a.0.to_bits().cmp(&b.0.to_bits()))
         })
 }

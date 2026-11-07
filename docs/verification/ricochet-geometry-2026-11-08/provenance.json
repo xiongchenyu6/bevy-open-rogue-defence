@@ -1,0 +1,8 @@
+{
+  "base_commit": "5206995477c8b127d713b2e3ed921ea9a0ee8152",
+  "sources": {
+    "src/game/basic_attacks/class_mechanics.rs": "399dc322e84905eec9e81261a152c570b3018a2833f23aa86f7dc5220f09e4a9",
+    "src/game/combat/collision_order_tests.rs": "58be3c00f71084e1f931a93838da0a6b60792273afc91b385101e7ecacb92235"
+  },
+  "sealed": false
+}
