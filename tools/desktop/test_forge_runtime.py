@@ -93,17 +93,26 @@ class ForgePolicyTests(unittest.TestCase):
                 observations,expected,now=lambda:0,pause=lambda _:None)
         self.assertEqual(offer_identity(result),offer_identity(expected))
         self.assertEqual(len(observations),2)
-        verify_recipe_selection('[SSR] AstralPrism','✓ ArcLens + ✓ EchoCore','Forge equipment')
-        for bad in ('ArcLens + Echo Core + Other','EchoCore + ArcLens','ArcLens Extra + EchoCore'):
+    def test_recipe_requires_exact_owned_cards_selected_recipe_and_ready_action(self):
+        materials = [dict(name='Arc Lens', status='✓ Owned'), dict(name='Echo Core', status='Owned')]
+        verify_recipe_selection('[SSR] Astral Prism', materials, 'Forge equipment')
+        for tick in ('v Owned', 'v¥ Owned', 'Owned'):
+            verify_recipe_selection('[SSR] Astral Prism', [dict(name='Arc Lens', status=tick), materials[1]], 'Forge equipment')
+        for status in ('Not Owned', 'Unowned', 'Owned Extra', 'Missing'):
             with self.assertRaises(AssertionError):
-                verify_recipe_selection('[SSR] AstralPrism',bad,'Forge equipment')
-
-    def test_recipe_requires_exact_selected_recipe_and_ready_action(self):
-        verify_recipe_selection('[SSR] Astral Prism','/ Arc Lens + ¥ Echo Core','Forge equipment')
-        for title,materials,action in [('[SSR] Suncoil','Arc Lens + Echo Core','Forge equipment'),
-                ('[SSR] Astral Prism','Arc Lens + Other Echo Core','Forge equipment'),
-                ('[SSR] Astral Prism','Arc Lens + Echo Core','Missing materials')]:
-            with self.assertRaises(AssertionError):verify_recipe_selection(title,materials,action)
+                verify_recipe_selection('[SSR] Astral Prism', [dict(name='Arc Lens', status=status), materials[1]], 'Forge equipment')
+        invalid = [
+            ('[SSR] Suncoil', materials, 'Forge equipment'),
+            ('[SSR] Astral Prism', list(reversed(materials)), 'Forge equipment'),
+            ('[SSR] Astral Prism', materials + [dict(name='Other', status='Owned')], 'Forge equipment'),
+            ('[SSR] Astral Prism', [materials[0], dict(name='Echo Core', status='Missing')], 'Forge equipment'),
+            ('[SSR] Astral Prism', [materials[0], dict(name='Other Echo Core', status='Owned')], 'Forge equipment'),
+            ('[SSR] Astral Prism', materials, 'Missing materials'),
+            ('[SSR] Astral Prism', '✓ Arc Lens + ✓ Echo Core', 'Forge equipment'),
+        ]
+        for title, cards, action in invalid:
+            with self.subTest(title=title, materials=cards, action=action), self.assertRaises(AssertionError):
+                verify_recipe_selection(title, cards, action)
 
     def test_consumption_requires_only_output_and_both_earned_materials(self):
         verify_crafted_inventory(1,['astralprism'],['Echo Core','Arc Lens'])
@@ -207,8 +216,11 @@ class ForgePolicyTests(unittest.TestCase):
             crop_text(market,f'39x23+{left+52}+384',None,True),crop_text(market,PREVIEW_CROP,None),0)
         self.assertEqual((offer['name'],offer['category'],offer['price']),('Guardian Seed','Equipment',300))
         ready=root/'earned-forge-2026-10-14/ready-materials.png'
-        verify_recipe_selection(crop_text(ready,'840x25+220+394',None),
-            crop_text(ready,'840x24+220+420',None),crop_text(ready,'250x28+515+552',None))
+        # Historical pixels retain their own layout observations.
+        self.assertEqual(selected_inventory_name(crop_text(ready,'840x25+220+394',None)), 'astralprism')
+        legacy_materials = normalized(crop_text(ready,'840x24+220+420',None))
+        self.assertIn('arclens', legacy_materials)
+        self.assertIn('echocore', legacy_materials)
         owned=root/'earned-forge-2026-10-14/crafted-inventory.png'
         self.assertEqual(selected_inventory_name(crop_text(owned,'840x25+220+445',None)),'astralprism')
 

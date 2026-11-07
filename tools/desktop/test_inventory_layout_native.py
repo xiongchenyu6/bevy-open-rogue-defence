@@ -7,14 +7,15 @@ from campaign_equipment_runtime import (
     INVENTORY_TITLE_CROP, crop_text, inventory_icons, selected_inventory_name,
 )
 from forge_runtime import (
-    FORGE_RECIPE_PRISM_CENTER, FORGE_MATERIALS_CROP, FORGE_ACTION_CROP,
+    FORGE_RECIPE_PRISM_CENTER, FORGE_ACTION_CROP, read_recipe_materials, verify_recipe_selection,
 )
 from smoke_runtime import normalized
 
 ROOT = Path(__file__).resolve().parents[2]
 PROOF = ROOT / 'docs/verification/inventory-split-2026-11-05/after'
 GEAR = PROOF / 'equipment-en-desktop/frame00230.png'
-READY = PROOF / 'controller-desktop/10-forge-ready.png'
+READY = ROOT / 'docs/verification/forge-reader-2026-11-08/frames/prism-ready-en.png'
+MISSING = READY.with_name('prism-missing-en.png')
 
 
 class NativeInventoryLayoutTests(unittest.TestCase):
@@ -35,7 +36,7 @@ class NativeInventoryLayoutTests(unittest.TestCase):
         self.assertEqual(selected_inventory_name(crop_text(GEAR, INVENTORY_TITLE_CROP, None)),
                          'bloodcontract')
         self.assertEqual(selected_inventory_name(crop_text(READY, INVENTORY_TITLE_CROP, None)),
-                         'bloodreaver')
+                         'astralprism')
         for image in (GEAR, READY):
             with self.assertRaises(AssertionError):
                 selected_inventory_name(crop_text(image, '840x25+220+445', None))
@@ -45,10 +46,15 @@ class NativeInventoryLayoutTests(unittest.TestCase):
         # Caption directly below the clicked second-card image identifies Prism.
         self.assertEqual(normalized(crop_text(READY, '144x20+371+247', None)), 'astralprism')
         self.assertEqual(normalized(crop_text(READY, '144x20+215+247', None)), 'bloodreaver')
-        materials = normalized(crop_text(READY, FORGE_MATERIALS_CROP, None))
-        self.assertIn('serrateddisc', materials)
-        self.assertIn('bloodcontract', materials)
-        self.assertEqual(crop_text(READY, FORGE_ACTION_CROP, None), 'Forge equipment')
+        materials = read_recipe_materials(READY, None)
+        self.assertEqual([card['name'] for card in materials], ['Arc Lens', 'Echo Core'])
+        verify_recipe_selection(crop_text(READY, INVENTORY_TITLE_CROP, None), materials,
+                                crop_text(READY, FORGE_ACTION_CROP, None))
+        missing = read_recipe_materials(MISSING, None)
+        self.assertEqual([card['name'] for card in missing], ['Arc Lens', 'Echo Core'])
+        with self.assertRaises(AssertionError):
+            verify_recipe_selection(crop_text(MISSING, INVENTORY_TITLE_CROP, None), missing,
+                                    crop_text(MISSING, FORGE_ACTION_CROP, None))
 
     def test_selected_art_and_distinct_recipe_art_are_nonblank(self):
         def pixels(geometry):

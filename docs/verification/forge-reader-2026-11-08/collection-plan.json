@@ -1,0 +1,67 @@
+{
+  "files": [
+    {
+      "source": "capture-result.json",
+      "archive": "raw/capture-result.json.gz",
+      "bytes": 474,
+      "sha256": "d5bd456f4e0a2ff397a9d2c69112d58c42878b27ea53c2808aab55b8c26a1967",
+      "stored_bytes": 260
+    },
+    {
+      "source": "capture.log",
+      "archive": "raw/capture.log.gz",
+      "bytes": 6611,
+      "sha256": "ca7a1e63cc2770c2444ea32b6511bbbe930be14dc41c9292539b3236ede2832d",
+      "stored_bytes": 1774
+    },
+    {
+      "source": "capture.py",
+      "archive": "raw/capture.py.gz",
+      "bytes": 944,
+      "sha256": "29bfe39561a03f2eb575b2eb497a6d81b0455266be9aa0cee69a1f2c1b75dc96",
+      "stored_bytes": 631
+    },
+    {
+      "source": "independent-ocr/calibration.log",
+      "archive": "raw/independent-ocr/calibration.log.gz",
+      "bytes": 2189,
+      "sha256": "efa093a529840b1a67546becb08d44090cefabb1faa155f190a8443353bc8266",
+      "stored_bytes": 356
+    },
+    {
+      "source": "manager.log",
+      "archive": "raw/manager.log.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stored_bytes": 20
+    },
+    {
+      "source": "run-tests.py",
+      "archive": "raw/run-tests.py.gz",
+      "bytes": 789,
+      "sha256": "f14ac188d49215eb8ffb839800145b8b22ac2f4d0540c24eb3f08e94ef4639e3",
+      "stored_bytes": 498
+    },
+    {
+      "source": "tests-manager.log",
+      "archive": "raw/tests-manager.log.gz",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stored_bytes": 20
+    },
+    {
+      "source": "tests-result.json",
+      "archive": "raw/tests-result.json.gz",
+      "bytes": 620,
+      "sha256": "b28e1738d46685d1ac0bfad85816a5e18728a1bc0af2ba57a82ae40567f404dc",
+      "stored_bytes": 358
+    },
+    {
+      "source": "tests.log",
+      "archive": "raw/tests.log.gz",
+      "bytes": 162,
+      "sha256": "0d7b7d31d6224f5c72b6d7d3ecb84bf4a1c8a2303a9926698c1047b568ca3d05",
+      "stored_bytes": 57
+    }
+  ]
+}

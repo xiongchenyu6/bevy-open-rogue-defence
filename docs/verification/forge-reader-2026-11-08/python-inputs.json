@@ -1,0 +1,5 @@
+{
+  "tools/desktop/forge_runtime.py": "bb3bc28fb1ccda5b50726df3b9c558e9ebc6884f043236e2bdd9a29ddcd33bb5",
+  "tools/desktop/test_forge_runtime.py": "250c072c9ca571fdcc2cc223a308268220edbdc4c498a86460b910bf5f3a55a5",
+  "tools/desktop/test_inventory_layout_native.py": "a1fe81d1359fde9ce177db3a511c80f9aab7464bb5b5d5d28c041b45a49da9ee"
+}

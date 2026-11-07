@@ -1,0 +1,21 @@
+{
+  "base_commit": "f40bdfd05d5d70c5ecc14bafb5954ff8f24fafa7",
+  "python_files": {
+    "tools/desktop/forge_runtime.py": "bb3bc28fb1ccda5b50726df3b9c558e9ebc6884f043236e2bdd9a29ddcd33bb5",
+    "tools/desktop/test_forge_runtime.py": "250c072c9ca571fdcc2cc223a308268220edbdc4c498a86460b910bf5f3a55a5",
+    "tools/desktop/test_inventory_layout_native.py": "a1fe81d1359fde9ce177db3a511c80f9aab7464bb5b5d5d28c041b45a49da9ee"
+  },
+  "native_inputs": 402,
+  "native_matches_frozen_r5": true,
+  "capture_sha256": "03409f8e2cf3a0c2a5800114883c2ae17e0af6470f8af765fbbe21fc2ccfd953",
+  "fixtures": {
+    "prism-ready-en.png": {
+      "sha256": "600bb6e73ddda05bd94b143265d9737875460c327f399e1088df6fc3b6437bfc",
+      "original": "target/verification/forge-reader-2026-11-08/prism-en/frame00215.png"
+    },
+    "prism-missing-en.png": {
+      "sha256": "a950f6a4d4485e5c94504b6803e8bca4609996c7eb62984ceaba9e8e9ef0da11",
+      "original": "target/verification/forge-reader-2026-11-08/prism-en/frame00035.png"
+    }
+  }
+}

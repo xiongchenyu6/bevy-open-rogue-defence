@@ -12,7 +12,10 @@ from campaign_equipment_runtime import (TILE_LEFTS, INVENTORY_TITLE_CROP, close_
 from forge_refresh import refresh_control, refresh_allowed, refresh_observation, observe_one_refresh
 
 FORGE_RECIPE_PRISM_CENTER = (443, 207)
-FORGE_MATERIALS_CROP = '310x46+744+253'
+FORGE_MATERIAL_CROPS = (
+    ('230x16+565+390', '230x16+565+408'),
+    ('230x16+817+390', '230x16+817+408'),
+)
 FORGE_ACTION_CROP = '180x24+720+546'
 
 MATERIALS = frozenset(('Arc Lens', 'Echo Core'))
@@ -89,13 +92,22 @@ def inspect_refreshed_materials(names, acquired, inspect, deadline, observations
     return offers
 
 
+def read_recipe_materials(image, env):
+    return [
+        dict(name=crop_text(image, name_crop, env),
+             status=crop_text(image, status_crop, env))
+        for name_crop, status_crop in FORGE_MATERIAL_CROPS
+    ]
+
+
 def verify_recipe_selection(title, materials, action):
     assert selected_inventory_name(title) == 'astralprism', ('Wrong recipe selected', title)
-    parts = materials.strip().split('+')
-    assert len(parts) == 2, ('Recipe needs exactly two materials', materials)
-    names = [re.sub(r"^[^A-Za-z0-9]+", '', part.strip()) for part in parts]
-    assert [normalized(name) for name in names] == ['arclens', 'echocore'], \
+    assert isinstance(materials, list) and len(materials) == 2, ('Recipe needs exactly two material cards', materials)
+    assert all(isinstance(card, dict) and set(card) == {'name', 'status'} for card in materials), materials
+    assert [normalized(card['name']) for card in materials] == ['arclens', 'echocore'], \
         ('Unreadable exact ordered recipe materials', materials)
+    assert all(re.fullmatch(r'(?:[✓✔√/]|v¥?)?\s*Owned', card['status'].strip(), re.IGNORECASE) for card in materials), \
+        ('Both recipe materials must be owned', materials)
     assert action.strip() == 'Forge equipment', ('Recipe is not ready', action)
 
 
@@ -372,7 +384,7 @@ def main():
                     click(*FORGE_RECIPE_PRISM_CENTER)
                     ready=shot('ready-materials.png')
                     title=crop_text(ready,INVENTORY_TITLE_CROP,env)
-                    materials=crop_text(ready,FORGE_MATERIALS_CROP,env)
+                    materials=read_recipe_materials(ready,env)
                     action=crop_text(ready,FORGE_ACTION_CROP,env)
                     verify_recipe_selection(title,materials,action)
                     assert inventory_count(lines())==2
