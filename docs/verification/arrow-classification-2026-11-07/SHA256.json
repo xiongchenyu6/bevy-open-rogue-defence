@@ -1,6 +1,7 @@
 {
   ".gitattributes": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
   "README.md": "499625659bdb1048f1878242856119f5a05a4c7ae7323840c68ac80b83158c54",
+  "diffs/src-game-bonds.rs.patch": "f47a2840ea9bb83ba12cf18aa9e646f1a8f301d45ef935ec39ed5bdbd8ffb9c8",
   "diffs/src-game-combat-ranged_release.rs.patch": "71b17c692201024627f0fcf9a502bd63790c2a98583921c16c9ad16456a85439",
   "diffs/src-game-hero_fusion.rs.patch": "a8287d3e472dfb6ab15d6fe0f2be5c14b09d57750e1ef080cef7cb488624e9e4",
   "diffs/src-game-skills.rs.patch": "b9efaa3e327112e7009810162bb6af4ea987bbf93bca446cc36ebf23d5e38db6",
@@ -137,10 +138,11 @@
   "raw/red.log.gz": "89ba5d07f623bf7129eb621f8f7abb37968f345ea43fd9e068e135da25c90dd0",
   "raw/red.py": "1e94ccb0e822f73a86a00357a5993bfee76dad39c55078223af601f90851b83d",
   "raw-logs.json": "c76652fd230d1082c38b3ecd5eb62851e3b6ff1a4972e5466c4221e700a54c0b",
+  "source-before/src/game/bonds.rs": "e13de03027434ad2b86fc3959d0ec9410d67d1b8d716b9d27d34052b28ed7e55",
   "source-before/src/game/combat/ranged_release.rs": "4cececf6dc07c606c724b0434476489e3dbf1e1e1a0931123052320c7dba48d3",
   "source-before/src/game/hero_fusion.rs": "1197defdf96d4a58fbc02e80ac6d64de63ac913c23bc9e479aa9fc618ac48f11",
   "source-before/src/game/skills.rs": "6c687aa8145515bed51ff067b1d939c246c673e6e2f23f7afed0b2990351dbaf",
-  "source-provenance.json": "8e037770e8c60b2d7eccd75a9e100c1f3cfe8d48b64f1ff0e7b94b7dc1897c2e",
+  "source-provenance.json": "357a2e4cc0833b0dd03a6db0d41283059a99a084cdce5bfebbb0d8d9a1d2c7af",
   "unit-state.txt": "f2da641a60006a8f285e9c0b037a9a497016f5f34bf0dfea744e9a96a7d49f1e",
-  "verify.py": "10d91221c91421615e2e5493acca6920bdc4c1dfc1ed7c675927856af8f49695"
+  "verify.py": "adbe679e988a0b2873ba340bbc7c46f98e5a2bb3c84e0d1c8384c25202099e11"
 }

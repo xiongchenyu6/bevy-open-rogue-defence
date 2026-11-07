@@ -9,6 +9,12 @@
       "before": "1197defdf96d4a58fbc02e80ac6d64de63ac913c23bc9e479aa9fc618ac48f11",
       "after": "7c409bb800d84c7bfa470bce5d58336d18199dad3c7bcde5c4be7f1c6239a1f9"
     },
+    "src/game/bonds.rs": {
+      "before": "e13de03027434ad2b86fc3959d0ec9410d67d1b8d716b9d27d34052b28ed7e55",
+      "after": "d4d5a94e94d4df925b7095d016daa6fcd85290c94fdd091e19aab5123f7515b3"
+    }
+  },
+  "test_support_diffs": {
     "src/game/skills.rs": {
       "before": "6c687aa8145515bed51ff067b1d939c246c673e6e2f23f7afed0b2990351dbaf",
       "after": "146b9661e1417d071a83fd671bf1a3a1720bad780b08657332af4fbaefd43309"

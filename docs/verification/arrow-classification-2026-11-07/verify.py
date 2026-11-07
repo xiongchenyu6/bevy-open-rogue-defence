@@ -66,7 +66,9 @@ assert j('raw/r3-library-inputs.json')=={k:v for k,v in inputs.items() if not k.
 assert j('raw/r3-capture-inputs.json')==inputs
 assert j('raw/r3-capture-build-result.json')['returncode']==0
 state=(D/'unit-state.txt').read_text();assert 'Result=success' in state and 'ExecMainStatus=0' in state
-for name,row in j('source-provenance.json')['production_diffs'].items():
+provenance=j('source-provenance.json')
+assert set(provenance['production_diffs'])=={'src/game/bonds.rs','src/game/combat/ranged_release.rs','src/game/hero_fusion.rs'}
+for name,row in (provenance['production_diffs'] | provenance['test_support_diffs']).items():
  assert digest((D/'source-before'/name).read_bytes())==row['before']
  assert inputs[name]==row['after']
 assert j('raw/after-r1-clippy-helper-placement/clippy-result.json')['returncode']!=0
