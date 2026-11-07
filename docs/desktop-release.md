@@ -1,39 +1,34 @@
 # Linux 桌面发行候选包
 
-当前通过独立短流程验收的包来自源码 `bdd6660f16514a1ba1bd506c3a58f42916183e10`，包含 `3d42d0b` 冰霜修正及此前城墙／火焰结算修正：
+当前候选包来自源码 `52dd7c82ffda81f96f65b4deade16a07c0606506`。
 
-- 目录：`target/desktop-packages-glacier-nov6/rogue-commander-linux/`
-- 压缩包：`target/desktop-packages-glacier-nov6/rogue-commander-linux-0.1.0.tar.gz`，62,295,464字节。
-- 二进制SHA256：`f10dd77c63e69916e5cf3471ff94dc1f2cbe1b591f4105977df648b5d18252a8`
-- 压缩包SHA256：`5bacb0ff3301c69bd90525252a4740c4ff7d690ef038c1e51990971f3e7d409e`
+- 目录为 `target/desktop-packages-current-nov7/rogue-commander-linux/`
+- 压缩包为 `target/desktop-packages-current-nov7/rogue-commander-linux-0.1.0.tar.gz`，62,322,004 字节。
+- 二进制 SHA256 为 `9f4f82379f5b630c38cb842275a514dd1d87a8de24706ca0dc1ac1e5c90d325f`
+- 压缩包 SHA256 为 `323d2a5ec8e5a8babb0ce9f9245bfa16bb7ab99fcff7b329ebcdded18c096899`
 
-运行包内 `rogue_commander`，保持 `assets` 和 `third-party` 同级；方向键移动。这是未发布到Steam的开发候选。
+运行包内 `rogue_commander`，保持 `assets` 和 `third-party` 同级。方向键移动。本包为开发候选。
 
-本轮让城墙逐怪结算、火焰同距目标和冰霜区域脉冲采用稳定位置顺序，避免部分无关实体变化交换伤害或暴击。冰霜伤害、范围、0.8秒脉冲和第三次冻结规则不变。对应[局部真实红绿回归](verification/glacier-order-2026-11-06/README.md)与完整库测试740通过、0失败、1既有忽略、严格Clippy和模拟器构建均有记录。包内游戏源码／资产／vendor字节与该验证输入一致，SDK未另跑740项测试。
+## 本轮包含的更改
 
-相对此前f205候选，交付清单只有游戏程序和 `version.json` 改变，全部资产保持原哈希。正式洞窟、响应式取景、镜头方向输入、窄屏HUD、城门遮挡淡出、普通木箭、近战接触反馈、挥击音效、装备插画与合成继续包含在包中；其专项受控证据仍按各自源码版本保留。
+弓手与法师的实际弹道释放随攻击动作延迟，普通命中与暴击闪色分层。技能选择分别展示基础公式和当前装备、羁绊、奇遇提供的已知非暴击增伤，修正王冠升级与替换技能的归属预览。窄屏选牌标题与操作栏分行，并验证技能、羁绊和付费连续选择。
+
+对应 [释放节奏](verification/ranged-release-2026-11-06/README.md)、[伤害预览](verification/skill-damage-modifiers-2026-11-07/README.md)及[窄屏连续选择](verification/draft-header-2026-11-07/README.md)保留各自真实回归。当前源码对应 764 项库测试通过、0 失败、1 既有忽略，严格 Clippy 通过。SDK 构建另有实际收据。
 
 ## 构建与文件核验
 
-固定Steam Runtime3 sniper SDK、Rust1.98.0，实际构建108.669秒。537项构建／运行输入前后与固定提交逐字节一致；Root独立核对892项清单文件和893个压缩包常规文件，全部压缩包条目的所有者与时间为0。ELF检查无Nix依赖或搜索路径。
+固定 Steam Runtime3 sniper SDK、Rust 1.98.0，实际构建 118.717 秒。544 项构建和运行输入前后与固定提交一致。独立核对 892 项清单文件、893 个压缩包常规文件及全部条目的归零所有者和时间。ELF 检查通过。
 
-```sh
-tools/build_desktop_linux.sh target/my-linux-package
-tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner \
-  -C target/my-linux-package -cf - rogue-commander-linux | gzip -n \
-  > target/my-linux-package/rogue-commander-linux-0.1.0.tar.gz
-```
-
-工具拒绝覆盖既有输出。实际源码、镜像、输入清单、完整短流程和截图见[新候选包证据](verification/glacier-package-2026-11-06/README.md)。六个验收helper也固定为产品提交的原始字节。
+实际镜像、输入清单、完整日志、截图及可移植核验器见[当前包证据](verification/current-package-2026-11-07/README.md)。此前 [bdd 候选包](verification/glacier-package-2026-11-06/README.md)按原版本保留。
 
 ## 实际独立运行
 
-Ubuntu24／X11／软件Vulkan，断网、只读安装包、工作目录 `/tmp`，不挂载游戏源码、Rust或Nix。实际117.161秒完成首次指南、征募、战斗计时推进、中文设置、全屏恢复、偏好重启、再次征募／战斗及两次正常退出。两次启动的精确倒计时端点分别1498→1492与1487→1481，双尺度读取一致；一次不一致的中间OCR观察被拒绝并保留，未猜读替换。
+Ubuntu 24、X11、软件 Vulkan，断网、只读安装包，工作目录 `/tmp`。实际 153.970 秒完成首次指南、征募、战斗推进、360×800 窗口公开 G 选卡、实际鼠标选择、恢复 1280×720 战斗、中文设置、全屏恢复、偏好重启、再次征募与战斗及两次正常退出。13 项结果检查通过，实际首次技能手牌为一手。
 
-Root实际查看英文战斗、中文设置和中文重启战斗，未见设置裁切，英雄在城门安全侧可辨。设置页显示测试环境无可用音频设备及自动重连提示，本次没有物理声音或主观听感验收。通用短流程也没有实际按键穿越城门；此前[三尺寸遮挡对照](verification/gate-cutaway-2026-11-06/README.md)仍为独立受控证据。
+双尺度倒计时核对分别为 1498→1493、选牌后 1475→1469、重启后 1486→1481。全部原始观察与拒绝记录保留，Root 已查看 20 张原图。恢复窗口时一帧出现旧窄视口与白色延展，后续画面恢复。一次重启 OCR 缺少冒号而被严格拒绝。
 
 ## 验收边界
 
-[同游戏逻辑的Nix模拟器完整重复](verification/post-glacier-repeat-2026-11-06/README.md)仍在后期出现冰霜普攻黑市触发效果的目标／状态差异，精确比较失败；未在SDK包重跑完整重复，不能宣称全局确定性或总体平衡。后续源码`acbdd2d`已有[一组完整记录投影匹配](verification/post-splash-repeat-2026-11-06/README.md)，但该溅射修正尚未进入本包，也不代表其他种子／职业已验证。
+手机卡名仍有逐字符换行，长技能详情需要滚动。测试环境无可用音频设备，实体音频、硬件性能及 Steam 客户端待验收。
 
-本包未重跑完整第六章、自然合成、收费刷新或旧赚取存档兼容。此前[0c真实旧档](verification/polish-next-earned-restart-2026-11-06/README.md)、[d454自然合成](verification/wallet-blades-forge-v3-2026-11-06/README.md)、[d454完整第六章](verification/wallet-blades-chapter6-2026-11-06/README.md)及[f205候选短流程](verification/gate-cutaway-package-2026-11-06/README.md)按各自版本保留，不改算本包通过。长局硬件性能、实体手柄／音频设备、Steam客户端和其他平台仍待验收；见[发售清单](release-readiness.md)。
+当前版本尚未重跑完整第六章、自然合成或旧赚取存档兼容。历史章节、平衡矩阵与整局复跑属于各自版本，详见[发售清单](release-readiness.md)。当前独立包短流程通过，整体美术、完整长局与更多英雄构筑覆盖仍在进行。

@@ -1,0 +1,4 @@
+{
+  "build_and_smoke_authorized": true,
+  "expected_source_commit": "52dd7c82ffda81f96f65b4deade16a07c0606506"
+}

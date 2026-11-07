@@ -1,0 +1,273 @@
+{
+  "package_hashes_verified": true,
+  "no_source": true,
+  "no_rust": true,
+  "no_nix": true,
+  "working_directory": "/tmp",
+  "chapter_recruit_battle": true,
+  "fullscreen_restored": true,
+  "language_saved_and_reloaded": true,
+  "normal_quit_twice": true,
+  "real_guide_after_readiness": true,
+  "tutorial_dismissal_saved": true,
+  "restart_skips_automatic_guide_and_runs_battle": true,
+  "public_portrait_skill_draw": true,
+  "portrait_skill_click_resumed_battle": true,
+  "portrait_skill_hands": 1,
+  "battle_clock_proofs": {
+    "initial": {
+      "first": {
+        "screenshot": "initial-battle-progress-00.png",
+        "observed_monotonic": 361017.059851312,
+        "blockers": [],
+        "clock_seconds": 1498,
+        "clock_reads": [
+          [
+            300,
+            "24:58"
+          ],
+          [
+            400,
+            "24:58"
+          ]
+        ],
+        "completed_monotonic": 361021.947538788
+      },
+      "second": {
+        "screenshot": "initial-battle-progress-01.png",
+        "observed_monotonic": 361023.269282018,
+        "blockers": [],
+        "clock_seconds": 1493,
+        "clock_reads": [
+          [
+            300,
+            "24:53"
+          ],
+          [
+            400,
+            "24:53"
+          ]
+        ],
+        "completed_monotonic": 361027.856307391
+      }
+    },
+    "after-public-skill": {
+      "first": {
+        "screenshot": "after-public-skill-battle-progress-01.png",
+        "observed_monotonic": 361051.354645455,
+        "blockers": [],
+        "clock_seconds": 1475,
+        "clock_reads": [
+          [
+            300,
+            "24:35"
+          ],
+          [
+            400,
+            "24:35"
+          ]
+        ],
+        "completed_monotonic": 361056.667716011
+      },
+      "second": {
+        "screenshot": "after-public-skill-battle-progress-02.png",
+        "observed_monotonic": 361058.061318766,
+        "blockers": [],
+        "clock_seconds": 1469,
+        "clock_reads": [
+          [
+            300,
+            "24:29"
+          ],
+          [
+            400,
+            "24:29"
+          ]
+        ],
+        "completed_monotonic": 361062.94371839
+      }
+    },
+    "restart": {
+      "first": {
+        "screenshot": "restart-battle-progress-02.png",
+        "observed_monotonic": 361117.345497329,
+        "blockers": [],
+        "clock_seconds": 1486,
+        "clock_reads": [
+          [
+            300,
+            "24:46"
+          ],
+          [
+            400,
+            "24:46"
+          ]
+        ],
+        "completed_monotonic": 361121.757610834
+      },
+      "second": {
+        "screenshot": "restart-battle-progress-03.png",
+        "observed_monotonic": 361123.114726736,
+        "blockers": [],
+        "clock_seconds": 1481,
+        "clock_reads": [
+          [
+            300,
+            "24:41"
+          ],
+          [
+            400,
+            "24:41"
+          ]
+        ],
+        "completed_monotonic": 361127.554259356
+      }
+    }
+  },
+  "battle_clock_observations": {
+    "initial": [
+      {
+        "screenshot": "initial-battle-progress-00.png",
+        "observed_monotonic": 361017.059851312,
+        "blockers": [],
+        "clock_seconds": 1498,
+        "clock_reads": [
+          [
+            300,
+            "24:58"
+          ],
+          [
+            400,
+            "24:58"
+          ]
+        ],
+        "completed_monotonic": 361021.947538788
+      },
+      {
+        "screenshot": "initial-battle-progress-01.png",
+        "observed_monotonic": 361023.269282018,
+        "blockers": [],
+        "clock_seconds": 1493,
+        "clock_reads": [
+          [
+            300,
+            "24:53"
+          ],
+          [
+            400,
+            "24:53"
+          ]
+        ],
+        "completed_monotonic": 361027.856307391
+      }
+    ],
+    "after-public-skill": [
+      {
+        "screenshot": "after-public-skill-battle-progress-00.png",
+        "observed_monotonic": 361047.13117937,
+        "blockers": [],
+        "clock_seconds": null,
+        "clock_reads": [],
+        "clock_error": "Unreadable battle countdown pixels: [(300, ''), (400, '')]",
+        "completed_monotonic": 361049.966703722
+      },
+      {
+        "screenshot": "after-public-skill-battle-progress-01.png",
+        "observed_monotonic": 361051.354645455,
+        "blockers": [],
+        "clock_seconds": 1475,
+        "clock_reads": [
+          [
+            300,
+            "24:35"
+          ],
+          [
+            400,
+            "24:35"
+          ]
+        ],
+        "completed_monotonic": 361056.667716011
+      },
+      {
+        "screenshot": "after-public-skill-battle-progress-02.png",
+        "observed_monotonic": 361058.061318766,
+        "blockers": [],
+        "clock_seconds": 1469,
+        "clock_reads": [
+          [
+            300,
+            "24:29"
+          ],
+          [
+            400,
+            "24:29"
+          ]
+        ],
+        "completed_monotonic": 361062.94371839
+      }
+    ],
+    "restart": [
+      {
+        "screenshot": "restart-battle-progress-00.png",
+        "observed_monotonic": 361105.898509024,
+        "blockers": [],
+        "clock_seconds": 1498,
+        "clock_reads": [
+          [
+            300,
+            "24:58"
+          ],
+          [
+            400,
+            "24:58"
+          ]
+        ],
+        "completed_monotonic": 361110.20018489
+      },
+      {
+        "screenshot": "restart-battle-progress-01.png",
+        "observed_monotonic": 361111.580389469,
+        "blockers": [],
+        "clock_seconds": null,
+        "clock_reads": [],
+        "clock_error": "Unreadable battle countdown pixels: [(300, '2452'), (400, '24:52')]",
+        "completed_monotonic": 361116.016516923
+      },
+      {
+        "screenshot": "restart-battle-progress-02.png",
+        "observed_monotonic": 361117.345497329,
+        "blockers": [],
+        "clock_seconds": 1486,
+        "clock_reads": [
+          [
+            300,
+            "24:46"
+          ],
+          [
+            400,
+            "24:46"
+          ]
+        ],
+        "completed_monotonic": 361121.757610834
+      },
+      {
+        "screenshot": "restart-battle-progress-03.png",
+        "observed_monotonic": 361123.114726736,
+        "blockers": [],
+        "clock_seconds": 1481,
+        "clock_reads": [
+          [
+            300,
+            "24:41"
+          ],
+          [
+            400,
+            "24:41"
+          ]
+        ],
+        "completed_monotonic": 361127.554259356
+      }
+    ]
+  },
+  "scope": "Ubuntu 24.04 / X11 / software Vulkan; no Steam client or hardware performance claim"
+}

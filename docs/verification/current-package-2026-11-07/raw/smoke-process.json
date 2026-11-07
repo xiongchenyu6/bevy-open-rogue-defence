@@ -1,0 +1,26 @@
+{
+  "exit": 0,
+  "elapsed": 153.9702293369919,
+  "args": [
+    "docker",
+    "run",
+    "--rm",
+    "--name",
+    "rogue-current-smoke-nov7",
+    "--network",
+    "none",
+    "--mount",
+    "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/desktop-packages-current-nov7/rogue-commander-linux,dst=/game,readonly",
+    "--mount",
+    "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/current-package-2026-11-07/smoke,dst=/verify",
+    "--mount",
+    "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/current-package-2026-11-07/smoke/harness-source,dst=/harness,readonly",
+    "--env",
+    "PACKAGE_COMMIT=52dd7c82ffda81f96f65b4deade16a07c0606506",
+    "--workdir",
+    "/tmp",
+    "sha256:0d4cccee982b31492e0f7b01a50afc1a0ec710d3166dab22e02322ce64832715",
+    "python3",
+    "/harness/smoke_runtime.py"
+  ]
+}

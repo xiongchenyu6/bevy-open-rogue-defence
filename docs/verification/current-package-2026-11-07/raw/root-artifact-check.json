@@ -1,0 +1,25 @@
+{
+  "source_commit": "52dd7c82ffda81f96f65b4deade16a07c0606506",
+  "source_inputs": 544,
+  "manifest_files": 892,
+  "tar_regular_files": 893,
+  "tar_bytes": 62322004,
+  "tar_sha256": "323d2a5ec8e5a8babb0ce9f9245bfa16bb7ab99fcff7b329ebcdded18c096899",
+  "binary_sha256": "9f4f82379f5b630c38cb842275a514dd1d87a8de24706ca0dc1ac1e5c90d325f",
+  "three_clock_pairs": {
+    "initial": [
+      1498,
+      1493
+    ],
+    "after-public-skill": [
+      1475,
+      1469
+    ],
+    "restart": [
+      1486,
+      1481
+    ]
+  },
+  "public_portrait_hands": 1,
+  "result": "PASS"
+}

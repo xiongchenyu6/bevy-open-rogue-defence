@@ -1,0 +1,9 @@
+{
+  "source_commit": "52dd7c82ffda81f96f65b4deade16a07c0606506",
+  "package_directory": "target/desktop-packages-current-nov7/rogue-commander-linux",
+  "tar": "target/desktop-packages-current-nov7/rogue-commander-linux-0.1.0.tar.gz",
+  "tar_bytes": 62322004,
+  "tar_sha256": "323d2a5ec8e5a8babb0ce9f9245bfa16bb7ab99fcff7b329ebcdded18c096899",
+  "binary_sha256": "9f4f82379f5b630c38cb842275a514dd1d87a8de24706ca0dc1ac1e5c90d325f",
+  "scope": "Offline read-only Ubuntu24/X11 software Vulkan short flow only; no full chapter, natural forge, hardware or Steam claim"
+}
