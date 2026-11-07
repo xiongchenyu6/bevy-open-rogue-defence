@@ -1,0 +1,19 @@
+{
+  "result": "PASS",
+  "source_commit": "5e8981d2a00b5857f2398fe421c99af538121569",
+  "reviewed_pngs": [
+    "forge-preview-desktop.png",
+    "forge-preview-portrait.png",
+    "forge-preview-landscape.png",
+    "forge-missing-blocked.png",
+    "after-forge-preview-battle-progress-01.png",
+    "after-forge-preview-battle-progress-02.png"
+  ],
+  "review_method": "Independent JPEG decode for three original forge viewports, blocked action screenshot byte-equal to reviewed landscape, and labeled pair of advancing battle screenshots.",
+  "blocked_byte_equal_landscape": true,
+  "after_forge_clock_pair": [
+    1456,
+    1449
+  ],
+  "scope": "Actual X11 input, fresh profile, zero gear and missing materials, no currency/stock/save/ECS injection. Does not cover earned live craft in this run."
+}

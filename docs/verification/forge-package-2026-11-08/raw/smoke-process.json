@@ -1,0 +1,26 @@
+{
+  "exit": 0,
+  "elapsed": 189.14437982003437,
+  "args": [
+    "docker",
+    "run",
+    "--rm",
+    "--name",
+    "rogue-forge-smoke-nov8",
+    "--network",
+    "none",
+    "--mount",
+    "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/desktop-packages-forge-nov8/rogue-commander-linux,dst=/game,readonly",
+    "--mount",
+    "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/forge-package-2026-11-08/smoke,dst=/verify",
+    "--mount",
+    "type=bind,src=/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/forge-package-2026-11-08/smoke/harness-source,dst=/harness,readonly",
+    "--env",
+    "PACKAGE_COMMIT=5e8981d2a00b5857f2398fe421c99af538121569",
+    "--workdir",
+    "/tmp",
+    "sha256:0d4cccee982b31492e0f7b01a50afc1a0ec710d3166dab22e02322ce64832715",
+    "python3",
+    "/harness/smoke_runtime.py"
+  ]
+}

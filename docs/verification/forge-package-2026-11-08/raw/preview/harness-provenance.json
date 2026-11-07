@@ -1,0 +1,6 @@
+{
+  "commit": "5e8981d2a00b5857f2398fe421c99af538121569",
+  "base_smoke_sha256": "ef6d8cc46ab888eb755c831ecc403fbaa2c4e202bc70d81334969a0bb29df41f",
+  "derived_sha256": "4b3248906bd71263ff596d9be93caf5f534da39f35839e3b83cf6bf5daba0f5c",
+  "scope": "Derived public-input preview adds I/Forge, three viewport checks, missing-material blocked action, close and advancing battle. No stock, currency, save or ECS injection."
+}
