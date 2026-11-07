@@ -1,0 +1,30 @@
+{
+  "extracted/a-ordinary.gz": {
+    "source": "target/verification/ricochet-geometry-2026-11-08/frozen/target/verification/ricochet-geometry-pair-a-nov8/active-h1-behind-s1-c0-t0.jsonl",
+    "filter": "JSON type neither trace nor runner_metadata",
+    "selected_rows": 202,
+    "uncompressed_bytes": 133900,
+    "uncompressed_sha256": "025e6b664fbd63263576e922558fe274a16545fcdbb8c884a380e536ae710673"
+  },
+  "extracted/a-contacts.gz": {
+    "source": "target/verification/ricochet-geometry-2026-11-08/frozen/target/verification/ricochet-geometry-pair-a-nov8/active-h1-behind-s1-c0-t0.stderr",
+    "filter": "stderr lines containing PROJECTILE_HIT",
+    "selected_rows": 10218,
+    "uncompressed_bytes": 13232478,
+    "uncompressed_sha256": "9d064fbd66414f406f8ee23b65a8f3707b536b876f4825b80490c99c49db758e"
+  },
+  "extracted/b-ordinary.gz": {
+    "source": "target/verification/ricochet-geometry-2026-11-08/frozen/target/verification/ricochet-geometry-pair-b-nov8/active-h1-behind-s1-c0-t0.jsonl",
+    "filter": "JSON type neither trace nor runner_metadata",
+    "selected_rows": 202,
+    "uncompressed_bytes": 133898,
+    "uncompressed_sha256": "1b7c19a648ab5ff92dabfe3b8238b3fc61b926b3c260f7469ac25b7f98015c09"
+  },
+  "extracted/b-contacts.gz": {
+    "source": "target/verification/ricochet-geometry-2026-11-08/frozen/target/verification/ricochet-geometry-pair-b-nov8/active-h1-behind-s1-c0-t0.stderr",
+    "filter": "stderr lines containing PROJECTILE_HIT",
+    "selected_rows": 10218,
+    "uncompressed_bytes": 13234688,
+    "uncompressed_sha256": "4f2c11bf2c01889de1d8065870be58f5d8d8c7e449631114dcda80091baaad76"
+  }
+}

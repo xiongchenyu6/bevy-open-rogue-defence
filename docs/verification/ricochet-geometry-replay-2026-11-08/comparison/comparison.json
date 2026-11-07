@@ -1,0 +1,226 @@
+{
+  "scope": "all recorded scalar/actor bit fields, not all hidden game state",
+  "actor_counts": [
+    93642,
+    93642
+  ],
+  "first_identity": {
+    "frame": 24,
+    "fields": {
+      "enemies": {
+        "a": [
+          [
+            8589932080,
+            1113325568,
+            1113325568,
+            1098923329,
+            0,
+            3176285696,
+            1073873882
+          ]
+        ],
+        "b": [
+          [
+            8589932867,
+            1113325568,
+            1113325568,
+            1098923329,
+            0,
+            3176285696,
+            1073873882
+          ]
+        ],
+        "a_present": true,
+        "b_present": true
+      },
+      "enemy_order": {
+        "a": [
+          8589932080
+        ],
+        "b": [
+          8589932867
+        ],
+        "a_present": true,
+        "b_present": true
+      }
+    }
+  },
+  "first_raw_order": {
+    "frame": 24,
+    "a": [
+      8589932080
+    ],
+    "b": [
+      8589932867
+    ]
+  },
+  "first_numeric": null,
+  "first_missing_row": null,
+  "contact_counts": [
+    10218,
+    10218
+  ],
+  "first_contact_identity": 0,
+  "first_contact_nonidentity": null,
+  "recorded_numeric_equal": true,
+  "ordinary_counts": [
+    202,
+    202
+  ],
+  "first_ordinary_identity": {
+    "index": 5,
+    "a": {
+      "type": "draft_offer",
+      "frame": 272,
+      "policy_frame": 272,
+      "elapsed": 4.133332,
+      "root": 12884900382,
+      "fusion_capacity": 6,
+      "choices": [
+        {
+          "index": 0,
+          "rarity": "R",
+          "kind": "skill",
+          "skill": 9,
+          "base_rank": 0
+        },
+        {
+          "index": 1,
+          "rarity": "R",
+          "kind": "skill",
+          "skill": 3,
+          "base_rank": 0
+        },
+        {
+          "index": 2,
+          "rarity": "R",
+          "kind": "skill",
+          "skill": 0,
+          "base_rank": 0
+        }
+      ],
+      "skill_ranks_by_id": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "gold": 18,
+      "wood": 60,
+      "skill_points": 0
+    },
+    "b": {
+      "type": "draft_offer",
+      "frame": 272,
+      "policy_frame": 272,
+      "elapsed": 4.133332,
+      "root": 4294964670,
+      "fusion_capacity": 6,
+      "choices": [
+        {
+          "index": 0,
+          "rarity": "R",
+          "kind": "skill",
+          "skill": 9,
+          "base_rank": 0
+        },
+        {
+          "index": 1,
+          "rarity": "R",
+          "kind": "skill",
+          "skill": 3,
+          "base_rank": 0
+        },
+        {
+          "index": 2,
+          "rarity": "R",
+          "kind": "skill",
+          "skill": 0,
+          "base_rank": 0
+        }
+      ],
+      "skill_ranks_by_id": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "gold": 18,
+      "wood": 60,
+      "skill_points": 0
+    }
+  },
+  "first_ordinary_numeric": null,
+  "projection_scope": {
+    "actors": "remove raw enemy_order and first Entity ID from each actor tuple; retain all remaining fields and multiset multiplicity",
+    "contacts_excluded": [
+      "enemy",
+      "enemy_bits",
+      "projectile",
+      "projectile_bits"
+    ],
+    "ordinary_excluded": [
+      "root identity",
+      "runner_metadata record"
+    ],
+    "ordinals": "both outer_ordinal and candidate_ordinal retained",
+    "terminal": "both final checkpoints must be finished, no capped-prefix success"
+  },
+  "full_recorded_match": true
+}

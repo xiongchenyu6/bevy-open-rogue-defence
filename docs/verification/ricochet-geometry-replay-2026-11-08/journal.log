@@ -1,0 +1,7 @@
+2026-11-08T07:07:18+08:00 game systemd[1941]: Started [systemd-run] /usr/bin/env python3 -u /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/ricochet-geometry-2026-11-08/run-pair.py.
+2026-11-08T07:07:19+08:00 game env[1825775]: START ricochet-geometry-pair-a-nov8
+2026-11-08T07:09:49+08:00 game env[1825775]: END ricochet-geometry-pair-a-nov8 win 1508.875
+2026-11-08T07:09:49+08:00 game env[1825775]: START ricochet-geometry-pair-b-nov8
+2026-11-08T07:12:42+08:00 game env[1825775]: END ricochet-geometry-pair-b-nov8 win 1508.875
+2026-11-08T07:12:42+08:00 game env[1825775]: PAIR TERMINAL; equality pending independent comparison
+2026-11-08T07:12:42+08:00 game systemd[1941]: rogue-ricochet-geometry-pair-nov8.service: Consumed 8min 14.034s CPU time over 5min 23.775s wall clock time, 3.4G memory peak.
