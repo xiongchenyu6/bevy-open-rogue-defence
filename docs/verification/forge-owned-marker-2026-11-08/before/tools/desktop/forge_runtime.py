@@ -1,0 +1,451 @@
+#!/usr/bin/env python3
+"""Public UI equipment proof with copied real earned campaign state; no resource injection."""
+import hashlib,json,os,re,shutil,subprocess,threading,time
+from pathlib import Path
+from smoke_runtime import ocr_screenshot,find_text,normalized,read_hud_wallet,read_toolbar_speed,wait_basic_commander
+from campaign_runtime import read_progress
+from campaign_equipment_runtime import (TILE_LEFTS, INVENTORY_TITLE_CROP, close_visible_inventory, inventory_header_rows, select_visible_inventory_item,
+    screenshot_wallet, choice_pending, crop_text, inventory_count,
+    inventory_icons, inventory_open, selected_inventory_name, market_closed,
+    has_gear_rows, screenshot_battle_seconds, wait_panel_open, public_panel_state, poll_market_offer, offer_identity, purchase_market_offer)
+
+from forge_refresh import refresh_control, refresh_allowed, refresh_observation, observe_one_refresh
+
+FORGE_RECIPE_PRISM_CENTER = (443, 207)
+FORGE_MATERIAL_CROPS = (
+    ('230x16+565+390', '230x16+565+408'),
+    ('230x16+817+390', '230x16+817+408'),
+)
+FORGE_ACTION_CROP = '180x24+720+546'
+
+MATERIALS = frozenset(('Arc Lens', 'Echo Core'))
+
+
+def visible_hud_value(shot, read_value, read_rows, choose, deadline,
+                      now=time.monotonic, env=None, pause=time.sleep, observations=None):
+    """Accept a metric only from recognized uncovered pixels within the shared deadline."""
+    while now() < deadline:
+        image = shot()
+        record = dict(screenshot=str(image), state='unreadable')
+        if observations is not None:
+            observations.append(record)
+        try:
+            state = public_panel_state(read_rows(image), image, env)
+        except AssertionError as error:
+            record['classification_error'] = str(error)
+            pause(.2)
+            continue
+        record['state'] = state
+        if state == 'terminal':
+            return None
+        assert now() < deadline, 'HUD observation deadline exhausted'
+        if state == 'choice':
+            choose('1')
+            record['input'] = '1'
+            continue
+        if state != 'battle':
+            pause(.2)
+            continue
+        try:
+            value = read_value(image)
+        except (AssertionError, ValueError) as error:
+            record['metric_error'] = str(error)
+            pause(.2)
+            continue
+        assert now() < deadline, 'HUD read exceeded deadline'
+        record['value'] = value
+        return value
+    raise AssertionError('Recognized choices did not expose a readable HUD within the observation deadline')
+
+
+def player_cycle(send, stopped):
+    for button in ('1', 'g', 'f'):
+        if stopped(): break
+        send(button)
+
+
+def material_name(name):
+    return next((canonical for canonical in MATERIALS if normalized(name) == normalized(canonical)), None)
+
+
+
+
+def natural_material(offers, wallet, acquired, complete_stock=True):
+    if complete_stock:
+        assert len(offers) == 5 and {offer['index'] for offer in offers} == set(range(5))
+    else:
+        assert len({offer['index'] for offer in offers}) == len(offers)
+        assert all(offer['index'] in range(5) for offer in offers)
+    acquired_keys = {normalized(name) for name in acquired}
+    candidates = [dict(offer, name=material_name(offer['name']), observed_name=offer['name'])
+                  for offer in offers if normalized(offer['category']) == 'equipment'
+                  and material_name(offer['name']) is not None
+                  and normalized(offer['name']) not in acquired_keys
+                  and 0 < offer['price'] <= wallet]
+    return min(candidates, key=lambda offer: (offer['price'], offer['index']), default=None)
+
+
+
+def post_refresh_phase_deadline(overall_deadline, now=time.monotonic):
+    started = now()
+    assert started < overall_deadline, 'Overall forge deadline expired after refresh'
+    return started, min(overall_deadline, started + 120)
+
+
+def inspect_refreshed_materials(names, acquired, inspect, deadline, observations, now=time.monotonic):
+    assert len(names) == 5 and all(names), 'Five observed refreshed names required'
+    acquired = {normalized(name) for name in acquired}
+    offers = []
+    for index, name in enumerate(names):
+        canonical = material_name(name)
+        record = dict(index=index, observed_name=name, inspection='names_only_not_hovered')
+        observations.append(record)
+        if canonical is None or normalized(canonical) in acquired:
+            continue
+        assert now() < deadline, 'Post-refresh material inspection deadline exhausted'
+        offer = inspect(index, deadline)
+        assert now() < deadline, 'Post-refresh material preview exceeded deadline'
+        assert material_name(offer['name']) == canonical, 'Refreshed tile/preview material mismatch'
+        record.update(inspection='full_tile_price_category_preview', offer=offer)
+        offers.append(offer)
+    return offers
+
+
+def read_recipe_materials(image, env):
+    return [
+        dict(name=crop_text(image, name_crop, env),
+             status=crop_text(image, status_crop, env))
+        for name_crop, status_crop in FORGE_MATERIAL_CROPS
+    ]
+
+
+def verify_recipe_selection(title, materials, action):
+    assert selected_inventory_name(title) == 'astralprism', ('Wrong recipe selected', title)
+    assert isinstance(materials, list) and len(materials) == 2, ('Recipe needs exactly two material cards', materials)
+    assert all(isinstance(card, dict) and set(card) == {'name', 'status'} for card in materials), materials
+    assert [normalized(card['name']) for card in materials] == ['arclens', 'echocore'], \
+        ('Unreadable exact ordered recipe materials', materials)
+    assert all(re.fullmatch(r'(?:[✓✔√/]|v¥?)?\s*Owned', card['status'].strip(), re.IGNORECASE) for card in materials), \
+        ('Both recipe materials must be owned', materials)
+    assert action.strip() == 'Forge equipment', ('Recipe is not ready', action)
+
+
+def verify_crafted_inventory(count, details, acquired):
+    assert set(acquired) == MATERIALS and len(acquired) == 2
+    assert count == 1 and details == ['astralprism'], \
+        ('Ingredients not replaced by exactly one Astral Prism', count, details)
+
+GAME,OUT=Path('/game'),Path('/verify')
+def main():
+    OUT.mkdir(exist_ok=True)
+    version=json.loads((GAME/'version.json').read_text())
+    assert version['git_commit']==os.environ['PACKAGE_COMMIT'],'Fresh fixed package required'
+    state=OUT/'state'; initial=read_progress(state/'campaign.save')
+    initial_save_hash=hashlib.sha256((state/'campaign.save').read_bytes()).hexdigest()
+    assert initial==dict(unlocked=5,currency=575,cleared='111100',upgrades=[5,0,0,0,0,0])
+    assert not Path('/nix').exists() and not shutil.which('cargo')
+    for row in json.loads((GAME/'package-manifest.json').read_text())['files']:
+        assert hashlib.sha256((GAME/row['file']).read_bytes()).hexdigest()==row['sha256']
+    env=os.environ.copy()
+    for key in ('BEVY_ASSET_ROOT','CARGO_MANIFEST_DIR','WAYLAND_DISPLAY','ROGUE_TUTORIAL_SAVE'):env.pop(key,None)
+    env.update(DISPLAY=':94',WINIT_UNIX_BACKEND='x11',XDG_CONFIG_HOME=str(state/'config'),XDG_RUNTIME_DIR=str(state),ROGUE_CAMPAIGN_SAVE=str(state/'campaign.save'),ROGUE_AUDIO_SAVE=str(state/'audio'),ROGUE_COMMANDER_LANG='en',ROGUE_COMMANDER_SEED='0xA11CE',VK_ICD_FILENAMES=str(next(Path('/usr/share/vulkan/icd.d').glob('lvp_icd*.json'))))
+    ps=[];files=[];stop=threading.Event(); worker=None
+    report=dict(package_version=version,initial_progress=initial,scope='Packaged public X11 UI, earned kills, random market stock',purchases=[],crafting='Pending same-run Arc Lens + Echo Core -> Astral Prism', acquired_materials=[])
+    def call(args):return subprocess.check_output(args,env=env,text=True).strip()
+    def start(args,name):
+        file=(OUT/name).open('w');files.append(file);p=subprocess.Popen(args,env=env,cwd='/tmp',stdout=file,stderr=subprocess.STDOUT);ps.append(p);return p
+    def shot(name):
+        p=OUT/name;call(['import','-window',win,str(p)]);return p
+    def lines():return ocr_screenshot(shot('current-ui.png'),env)
+    def wait(text,seconds=90):
+        end=time.monotonic()+seconds
+        while time.monotonic()<end:
+            assert app.poll() is None
+            found=find_text(lines(),text)
+            if found:return found
+            time.sleep(.3)
+        raise RuntimeError('Missing UI: '+text)
+    def hud_value(reader, prefix):
+        def rows_for(image):
+            rows=ocr_screenshot(image,env)
+            if choice_pending(rows):
+                evidence=OUT/f'{prefix}-choice-{len(report.get("hud_choices",[]))}.png'
+                shutil.copy2(image,evidence)
+                report.setdefault('hud_choices',[]).append(dict(screenshot=evidence.name,rows=rows))
+            return rows
+        observations = report.setdefault('metric_observations', [])
+        value=visible_hud_value(lambda:shot(prefix+f'-source-{len(observations):04}.png'),
+            lambda image:reader(image,env),rows_for,key,time.monotonic()+90,env=env,
+            observations=observations)
+        if value is None:
+            terminal(lines())
+            raise AssertionError('Observed terminal no longer readable; proof remains pending')
+        return value
+    def timer_seconds():
+        value=hud_value(screenshot_battle_seconds,'resume-timer')
+        report.setdefault('resume_timer_reads',[]).append(value)
+        return value
+    def click(x,y):
+        call(['xdotool','mousemove','--window',win,str(x),str(y)]);call(['xdotool','mousedown','1']);time.sleep(.2);call(['xdotool','mouseup','1']);time.sleep(.5)
+    def key(k):
+        call(['xdotool','keydown',k])
+        counts=report.setdefault('input_counts',{})
+        counts[k]=counts.get(k,0)+1
+        time.sleep(.3);call(['xdotool','keyup',k]);time.sleep(1)
+    def clicktext(text):
+        _,x,y,r,b=wait(text);click((x+r)//2,(y+b)//2)
+    def wallet():
+        value, raw = screenshot_wallet(shot('wallet-source.png'), env)
+        report.setdefault('wallet_ocr', []).append(raw)
+        return value
+    def drain_choices():
+        end = time.monotonic() + 90
+        for _ in range(30):
+            rows = lines(); terminal(rows)
+            if not choice_pending(rows): return
+            assert time.monotonic() < end, 'Choice queue exceeded90seconds'
+            key('1')
+        assert not choice_pending(lines()), 'Choice queue not drained after30selections'
+    def inspect_offer(index, prefix, deadline, expected=None):
+        left = TILE_LEFTS[index]
+        call(['xdotool','mousemove','--window',win,str(left+60),'365'])
+        observations=[]
+        report.setdefault('offer_preview_observations',[]).append(dict(index=index,observations=observations))
+        return poll_market_offer(shot,env,index,prefix,deadline,observations,expected)
+    def close_market_panel():
+        key('b')
+        end = time.monotonic() + 20
+        while time.monotonic() < end:
+            if market_closed(lines()): return
+            time.sleep(.3)
+        raise RuntimeError('Market did not close')
+    def close_inventory():
+        observations = report.setdefault('inventory_close_observations', [])
+        def observed_rows():
+            image = shot(f'inventory-close-{len(observations):03}.png')
+            rows = inventory_header_rows(image, env)
+            observations.append(dict(screenshot=image.name, rows=rows))
+            return rows
+        def down(x, y):
+            call(['xdotool','mousemove','--window',win,str(x),str(y)])
+            call(['xdotool','mousedown','1'])
+        close_visible_inventory(observed_rows, down,
+            lambda: call(['xdotool','mouseup','1']), time.monotonic()+20, observations)
+        rows = lines()
+        assert not inventory_open(rows) and not find_text(rows, 'Close'), 'Equipment did not close'
+    def inspect_inventory(prefix):
+        rows = lines(); count = inventory_count(rows)
+        details = []
+        end = time.monotonic() + 90
+        for index, (x, y) in enumerate(inventory_icons(count)):
+            assert time.monotonic() < end, 'Inventory search exceeded90seconds'
+            select_visible_inventory_item(
+                lambda name: shot(prefix+'-'+name), call, win, env, index,
+                min(end, time.monotonic()+10),
+                report.setdefault('inventory_selection_observations', []))
+            image = shot(f'{prefix}-icon-{index}.png')
+            text = crop_text(image, INVENTORY_TITLE_CROP, env)
+            details.append(selected_inventory_name(text))
+        assert len(set(details)) == len(details), 'Duplicate selected inventory headings'
+        report.setdefault('inventory_inspections', []).append(dict(prefix=prefix, count=count, names=details))
+        return count, details
+    def hud_wallet(dimmed=False):
+        native=shot('hud-wallet-source.png')
+        value,bounds,raw=read_hud_wallet(native,env,dimmed=dimmed)
+        report.setdefault('hud_wallet_ocr',[]).append(dict(value=value,bounds=bounds,raw=raw))
+        return value
+    def read_speed():
+        value = hud_value(read_toolbar_speed,'speed')
+        report.setdefault('speed_ocr_values', []).append(value)
+        return value
+    def terminal(rows):
+        title=next((title for title in ('NO LIVES REMAIN','CHAPTER CLEARED') if find_text(rows,title)),None)
+        if title:
+            shot('terminal.png');report['terminal']=title
+            raise RuntimeError('Terminal reached before equipment proof: '+title)
+    def operate():
+        while not stop.is_set() and app.poll() is None:
+            player_cycle(key,lambda:stop.is_set() or app.poll() is not None)
+            stop.wait(.2)
+    try:
+        start(['Xvfb',':94','-screen','0','1600x900x24','-nolisten','tcp','-ac'],'xvfb.log');time.sleep(1);start(['openbox'],'wm.log');time.sleep(1)
+        app=start([str(GAME/'rogue_commander')],'game.log')
+        end=time.monotonic()+120
+        while True:
+            try:win=call(['xdotool','search','--onlyvisible','--pid',str(app.pid)]).splitlines()[0];break
+            except (subprocess.CalledProcessError,IndexError):
+                assert time.monotonic()<end;time.sleep(.3)
+        call(['xdotool','windowactivate','--sync',win])
+        geometry=dict(line.split('=',1) for line in call(['xdotool','getwindowgeometry','--shell',win]).splitlines())
+        assert geometry['WIDTH']=='1280' and geometry['HEIGHT']=='720', 'Forge OCR route requires1280x720English'
+        wait('EXPEDITIONS');shot('startup.png');click(289,294)
+        wait_basic_commander(shot,env,key,time.monotonic()+90,
+                             report.setdefault('startup_observations',[]))
+        names=[r for r in lines() if normalized(r[0])=='stormsavant' and 150<r[2]<550];assert names
+        _,x,y,r,b=min(names,key=lambda r:r[2]);click((x+r)//2,(y+b)//2)
+        worker=threading.Thread(target=operate,daemon=True)
+        startup_before = timer_seconds()
+        time.sleep(2)
+        startup_after = timer_seconds()
+        assert startup_after < startup_before, 'Observed battle countdown did not advance'
+        report['startup_countdown_before'] = startup_before
+        report['startup_countdown_after'] = startup_after
+        print('stage: battle started; resetting actual toolbar to1x',flush=True)
+        end=time.monotonic()+90
+        while time.monotonic()<end:
+            speeds={read_speed()}
+            if speeds=={1}:
+                time.sleep(1)
+                if read_speed()==1:break
+                continue
+            if len(speeds)==1:click(1045,44)
+            else:raise RuntimeError('Cannot read actual toolbar speed')
+        else:raise RuntimeError('1x toolbar not verified')
+        report['actual_speed']=1;shot('speed1.png');worker.start()
+        print('stage: earn kills and wait for real3min unlock',flush=True)
+        unlock_deadline=time.monotonic()+900
+        last_clock=None; last_progress=time.monotonic()
+        while time.monotonic()<unlock_deadline:
+            clock=hud_value(screenshot_battle_seconds,'unlock')
+            report.setdefault('unlock_timer_reads',[]).append(clock)
+            print('stage: real unlock countdown '+str(clock),flush=True)
+            now=time.monotonic()
+            if last_clock is None or clock<last_clock:last_progress=now
+            last_clock=clock
+            report.setdefault('clock_progress',[]).append(dict(stage='unlock',remaining=clock,stall_seconds=now-last_progress,wall=now))
+            assert now-last_progress<180,'Actual simulation clock stalled for180seconds'
+            (OUT/'progress.json').write_text(json.dumps(dict(stage='unlock',remaining=clock,stall_seconds=now-last_progress)))
+            if clock<22*60:break
+            time.sleep(3)
+        else:raise RuntimeError('Real3minute unlock not observed')
+        shot('unlocked.png')
+        forge_deadline=time.monotonic()+3600
+        refresh_visits=set();refresh_count=0;refresh_spent=0
+        for attempt in range(120):
+            assert time.monotonic()<forge_deadline, "Finite earned forge wall budget exhausted"
+            stop.set();worker.join(5);assert not worker.is_alive()
+            drain_choices()
+            actual=read_speed()
+            if actual != 1:
+                click(1045,44)
+                assert read_speed() == 1, 'Actual reset speed did not reach1x'
+            opened=wait_panel_open(shot,env,key,time.monotonic()+90,
+                report.setdefault('panel_open_attempts',[]),f'market-{attempt:02}','market')
+            if opened is None:
+                terminal(lines())
+                raise AssertionError('Observed terminal no longer readable; proof remains pending')
+            market,rows=opened
+            before,raw=screenshot_wallet(market,env)
+            report.setdefault('wallet_ocr',[]).append(raw)
+            shutil.copy2(market,OUT/f'market-{attempt:02}.png')
+            offers=[]
+            visit_end=time.monotonic()+120
+            for index,left in enumerate(TILE_LEFTS):
+                assert time.monotonic()<visit_end, 'Natural market inspection exceeded120seconds'
+                offers.append(inspect_offer(index,f'market-{attempt:02}',visit_end))
+            report.setdefault('market_inspections',[]).append(dict(attempt=attempt,wallet=before,offers=offers))
+            offer=natural_material(offers,before,report['acquired_materials'])
+            if offer is None:
+                refresh_record=dict(visit=attempt,wallet=before,reserve=300,count=refresh_count,spent=refresh_spent)
+                report.setdefault('refresh_policy',[]).append(refresh_record)
+                try:
+                    control=refresh_control(shot(f'market-{attempt:02}-refresh-control.png'),env)
+                except AssertionError as error:
+                    refresh_record['skipped']=str(error)
+                else:
+                    refresh_record['control']=control
+                    if refresh_allowed(before,control['fee'],refresh_visits,attempt,refresh_count,refresh_spent):
+                        assert hud_wallet()==before==wallet(), 'Pre-refresh HUD/header wallet disagreement'
+                        old_names=tuple(normalized(item['name']) for item in offers)
+                        _,remaining=observe_one_refresh(
+                            lambda:click(*control['center']),shot,
+                            lambda image:refresh_observation(image,env,before,control['fee'],old_names),
+                            before,control['fee'],forge_deadline,
+                            report.setdefault('refresh_observations',[]),f'market-{attempt:02}')
+                        refresh_visits.add(attempt);refresh_count+=1;refresh_spent+=control['fee']
+                        refresh_record.update(completed=True,wallet_after=remaining,count_after=refresh_count,spent_after=refresh_spent)
+                        before=remaining
+                        started,visit_end=post_refresh_phase_deadline(forge_deadline)
+                        phase=dict(phase='post_refresh_material_inspection',visit=attempt,started=started,deadline=visit_end,overall_deadline=forge_deadline,inspections=[])
+                        report.setdefault('inspection_phases',[]).append(phase)
+                        names=report['refresh_observations'][-1]['stock_names']
+                        offers=inspect_refreshed_materials(names,report['acquired_materials'],
+                            lambda index,deadline:inspect_offer(index,f'market-{attempt:02}-refreshed',deadline),
+                            visit_end,phase['inspections'])
+                        report.setdefault('refreshed_market_inspections',[]).append(dict(attempt=attempt,wallet=before,observed_names=names,offers=offers,scope='Only missing recipe materials hovered; other stock names-only'))
+                        offer=natural_material(offers,before,report['acquired_materials'],complete_stock=False)
+                    else:
+                        refresh_record['skipped']='Finite refresh/reserve budget does not permit input'
+            if offer is not None:
+                name,price=offer['name'],offer['price'];left=TILE_LEFTS[offer['index']]
+                checked=inspect_offer(offer['index'],'before-purchase',visit_end,offer)
+                report['selected_material_ocr']=checked
+                assert hud_wallet()==before==wallet(), 'HUD/header wallet disagreement'
+                report['pending_purchase']=dict(name=name,price=price,wallet_before=before,offer_ocr=offer)
+                purchased,after,_,_=purchase_market_offer(
+                    lambda:click(1184,506),shot,env,offer,before,visit_end,
+                    report.setdefault('purchase_observations',[]),f'material-{attempt:02}')
+                shutil.copy2(purchased,OUT/'purchase.png')
+                report['purchases'].append(dict(name=name,price=price,wallet_before=before,wallet_after=after,offer_ocr=offer))
+                close_market_panel();drain_choices()
+                opened=wait_panel_open(shot,env,key,time.monotonic()+90,
+                    report.setdefault('inventory_open_attempts',[]),
+                    f'material-{len(report["purchases"])}','inventory')
+                if opened is None:
+                    terminal(lines())
+                    raise AssertionError('Terminal inventory observation no longer readable; craft proof remains pending')
+                count,details=inspect_inventory(f'material-{len(report["purchases"])}')
+                expected=[normalized(item) for item in [*report['acquired_materials'],name]]
+                assert count==len(expected) and set(details)==set(expected), ('Purchased materials not owned',count,details,expected)
+                shot(f'inventory-material-{len(report["purchases"])}.png')
+                report['acquired_materials'].append(name)
+                if set(report['acquired_materials'])==MATERIALS:
+                    clicktext('Forge')
+                    # Six recipe icons: second is Astral Prism. Verify actual
+                    # selected heading/materials/action before spending inputs.
+                    click(*FORGE_RECIPE_PRISM_CENTER)
+                    ready=shot('ready-materials.png')
+                    title=crop_text(ready,INVENTORY_TITLE_CROP,env)
+                    materials=read_recipe_materials(ready,env)
+                    action=crop_text(ready,FORGE_ACTION_CROP,env)
+                    verify_recipe_selection(title,materials,action)
+                    assert inventory_count(lines())==2
+                    report['ready_material_ocr']=dict(title=title,materials=materials,action=action)
+                    before_forge=hud_wallet(dimmed=True)
+                    clicktext('Forge equipment');time.sleep(.5)
+                    forged_rows=lines();shot('forged.png')
+                    assert find_text(forged_rows,'Already forged'), 'Craft action not consumed'
+                    assert hud_wallet(dimmed=True)==before_forge,'Forge charged unexpected kill credit'
+                    clicktext('Gear');count,details=inspect_inventory('crafted')
+                    verify_crafted_inventory(count,details,report['acquired_materials'])
+                    report['crafted_inventory_ocr']=dict(count=count,names=details)
+                    shot('crafted-inventory.png');close_inventory()
+                    report['inventory_verified']=True
+                    report['crafting']='Astral Prism crafted from two same-run naturally purchased materials'
+                    break
+                close_inventory()
+            else:
+                close_market_panel()
+            stop.clear();worker=threading.Thread(target=operate,daemon=True);worker.start();time.sleep(12)
+        assert report.get('inventory_verified'), 'No genuine recipe completed within finite public stock route'
+        assert report['purchases'],'No naturally affordable equipment found within120 public market requests'
+        before=timer_seconds();time.sleep(2);after=timer_seconds()
+        report['resume_countdown_before']=before;report['resume_countdown_after']=after
+        assert after<before,'Actual battlefield countdown did not resume'
+        print('stage: acquired equipment, inspected inventory/recipes, actual countdown resumed',flush=True)
+        click(640,30);wait('Settings');clicktext('Quit');time.sleep(1)
+        if app.poll() is None:clicktext('Quit game')
+        report['quit_exit']=app.wait(30);assert report['quit_exit']==0
+        report['final_progress']=read_progress(state/'campaign.save');assert report['final_progress']==initial
+        report['initial_save_sha256']=initial_save_hash
+        report['final_save_sha256']=hashlib.sha256((state/'campaign.save').read_bytes()).hexdigest()
+        assert report['final_save_sha256']==initial_save_hash, 'Campaign save bytes changed'
+        report['completed']=True
+    finally:
+        stop.set()
+        if worker and worker.ident is not None:worker.join(5)
+        (OUT/'result.json').write_text(json.dumps(report,indent=2))
+        for p in reversed(ps):
+            if p.poll() is None:p.terminate()
+        for f in files:f.close()
+if __name__=='__main__':main()

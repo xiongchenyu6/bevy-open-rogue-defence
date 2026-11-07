@@ -96,7 +96,7 @@ class ForgePolicyTests(unittest.TestCase):
     def test_recipe_requires_exact_owned_cards_selected_recipe_and_ready_action(self):
         materials = [dict(name='Arc Lens', status='✓ Owned'), dict(name='Echo Core', status='Owned')]
         verify_recipe_selection('[SSR] Astral Prism', materials, 'Forge equipment')
-        for tick in ('v Owned', 'v¥ Owned', 'Owned'):
+        for tick in ('v Owned', 'v¥ Owned', '¥ Owned', 'Owned'):
             verify_recipe_selection('[SSR] Astral Prism', [dict(name='Arc Lens', status=tick), materials[1]], 'Forge equipment')
         for status in ('Not Owned', 'Unowned', 'Owned Extra', 'Missing'):
             with self.assertRaises(AssertionError):

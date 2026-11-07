@@ -1,0 +1,46 @@
+{
+  "raw/tests/run-tests.py.gz": {
+    "bytes": 829,
+    "sha256": "699da096780efbb33339fbb4b8f8808f30e4c7d0764fb935f288373a2645b0dd"
+  },
+  "raw/tests/tests.log.gz": {
+    "bytes": 223,
+    "sha256": "73216f58a55b31df941c49238ee6a66296148e9ffcedfee23883446afb64e67b"
+  },
+  "raw/tests/tests-result.json.gz": {
+    "bytes": 659,
+    "sha256": "2bed43e0af389efa132b326c60dcb668226358263b4c9e8fdb3712bd8b7a1519"
+  },
+  "raw/natural-r6/forge.log.gz": {
+    "bytes": 1447,
+    "sha256": "565955b913861833b8b376095fa2cccc285f87e5eeb2bd0049ff161eb0032da7"
+  },
+  "raw/natural-r6/forge-process.json.gz": {
+    "bytes": 1016,
+    "sha256": "8958797eab76585ce78e8adacc9430bec1606ccc83b1855b8dae7e182172720c"
+  },
+  "raw/natural-r6/forge/result.json.gz": {
+    "bytes": 90144,
+    "sha256": "2de5e3b22b5dbd8a426d239212a0ebc3ea37ca14d028127aae9ffa9e5686180d"
+  },
+  "raw/natural-r6/forge/harness-snapshot.json.gz": {
+    "bytes": 885,
+    "sha256": "cf12aac1fdad6af09dacb15abc580e91b19db061c013e78c78f16d0a98d24f88"
+  },
+  "raw/natural-r6/forge/initial-save-provenance.json.gz": {
+    "bytes": 200,
+    "sha256": "9b52d5b388564c3dc5466f845ec9ca4bcc7a7617cf4df5f86ad8f329c72fcc1a"
+  },
+  "raw/replay/replay-ready.py.gz": {
+    "bytes": 675,
+    "sha256": "161f8385d06e68e3e922c77051071744a18b751b64d0938a5efdad4ecf06902b"
+  },
+  "raw/replay/ready-replay.log.gz": {
+    "bytes": 352,
+    "sha256": "14386420b11a595dc47a4ca80e055b15d15cda6b6e8a4b90d17f864db7473203"
+  },
+  "raw/replay/ready-replay-result.json.gz": {
+    "bytes": 514,
+    "sha256": "20ee2ac2ba35644bd9d4ffbbb08d60a7da1c2c6d14fe0d09ee94391479f366d0"
+  }
+}

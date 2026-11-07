@@ -125,7 +125,7 @@ def verify_recipe_selection(title, materials, action):
     assert all(isinstance(card, dict) and set(card) == {'name', 'status'} for card in materials), materials
     assert [normalized(card['name']) for card in materials] == ['arclens', 'echocore'], \
         ('Unreadable exact ordered recipe materials', materials)
-    assert all(re.fullmatch(r'(?:[✓✔√/]|v¥?)?\s*Owned', card['status'].strip(), re.IGNORECASE) for card in materials), \
+    assert all(re.fullmatch(r'(?:[✓✔√/¥]|v¥?)?\s*Owned', card['status'].strip(), re.IGNORECASE) for card in materials), \
         ('Both recipe materials must be owned', materials)
     assert action.strip() == 'Forge equipment', ('Recipe is not ready', action)
 

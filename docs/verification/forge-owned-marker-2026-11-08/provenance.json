@@ -1,0 +1,12 @@
+{
+  "base_commit": "fae70b12eefb3acc32f0fa51dda70cd0e7afcdde",
+  "sources": {
+    "tools/desktop/forge_runtime.py": "af495d8e54bff5e3a94cae3c7164f81e55ee82961e5caee1178ba183413cee39",
+    "tools/desktop/test_forge_runtime.py": "5ba4f9f3b6c5fe303a25eea3033ed95d4c6fdc7a7073e625a98c03b2c6b5b823"
+  },
+  "images": {
+    "ready-materials.png": "23d105a67262a96b00d0e5c2f8606f41b71787a3dcf753a3fc6af0923b0fe45b",
+    "inventory-material-1.png": "80a85c921be4a96566573a02a3b19f4b66ed53e44f24e305fe8eb3ff04357efc",
+    "inventory-material-2.png": "09786d6a7c32f54c3fceed0d7b80ca027a07ebefd5d279aa60892d2be5962212"
+  }
+}
