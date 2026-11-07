@@ -1,0 +1,15 @@
+{
+  "base_commit": "6f02516688becdd467483a441475b537607a8184",
+  "source_snapshots": {
+    "src/game/skills.rs": {
+      "sha256": "78d615bdcefc8cc2a2e09187fb7247123791152f53409b65ad49d867ad05425d",
+      "matches_after_r2_input": true
+    },
+    "src/game/combat/collision_order_tests.rs": {
+      "sha256": "a96d4ade8d67832765c338f0b8d7ecd79392bb586cbaf3c82c3ec0de1308cd8f",
+      "matches_after_r2_input": true
+    }
+  },
+  "sealed": false,
+  "early_formatter_scope": "First after input map includes four additional formatter-only file hashes. Their actual formatted byte snapshots were not saved and are not reconstructed or claimed archived."
+}

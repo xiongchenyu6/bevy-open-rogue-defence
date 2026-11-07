@@ -1,0 +1,94 @@
+{
+  "raw/before/collision_order_tests.rs.gz": {
+    "bytes": 13011,
+    "sha256": "a96d4ade8d67832765c338f0b8d7ecd79392bb586cbaf3c82c3ec0de1308cd8f"
+  },
+  "raw/before/tests.log.gz": {
+    "bytes": 3574,
+    "sha256": "534e8682acdab891b97c6112dc511143ec474a068b7cd37009df8b060a1ac8f4"
+  },
+  "raw/before/result.json.gz": {
+    "bytes": 267,
+    "sha256": "26bb2cb7d8414c7a332a6a59738e26198e81e27eefdfbc6c352d37926a2ed106"
+  },
+  "raw/before/run.py.gz": {
+    "bytes": 921,
+    "sha256": "32e7abce1a793024e64abe109f9ac1cd9547bab05298d799f53459e08bb5e482"
+  },
+  "raw/before/inputs.json.gz": {
+    "bytes": 21630,
+    "sha256": "91b2c8bdacb699287bfff95c1128f79cd368c3ad08f8d8514f84e77fc30d4db3"
+  },
+  "raw/after/collision_order_tests.rs.gz": {
+    "bytes": 13011,
+    "sha256": "a96d4ade8d67832765c338f0b8d7ecd79392bb586cbaf3c82c3ec0de1308cd8f"
+  },
+  "raw/after/tests.log.gz": {
+    "bytes": 2210,
+    "sha256": "f828ccda556575352ff6116d8c5e4097dd3bd498a892e7be896943a0c5b91d5e"
+  },
+  "raw/after/result.json.gz": {
+    "bytes": 265,
+    "sha256": "4b0e945a950ba7675d1fdee46551e79d2ca6b6c966caa92d0fd1fb8409e16323"
+  },
+  "raw/after/run.py.gz": {
+    "bytes": 1416,
+    "sha256": "5fb12b074923fbb04f4f61d498aae19cbe57c7d9eed41bb1145179a98d43d250"
+  },
+  "raw/after/library.log.gz": {
+    "bytes": 79193,
+    "sha256": "36bffc23c136fd8ad268a953f11c7a04e8a2d86016b3e37a52d7fff985c4f61e"
+  },
+  "raw/after/skills.rs.gz": {
+    "bytes": 149138,
+    "sha256": "78d615bdcefc8cc2a2e09187fb7247123791152f53409b65ad49d867ad05425d"
+  },
+  "raw/after/library-result.json.gz": {
+    "bytes": 230,
+    "sha256": "905a65a742f769ae7758df4774d351e062b0642a51f8c5052cd840ac0bbc3ad1"
+  },
+  "raw/after/inputs.json.gz": {
+    "bytes": 21630,
+    "sha256": "3aa982f2617f1640dfb826fafc080fa56034ab005b844d48eb794e3b2e845c64"
+  },
+  "raw/after-r2/clippy.log.gz": {
+    "bytes": 278,
+    "sha256": "ce0bb2f3c7f9407f562bc04f3a8068bf8b19cb2b0465819921491202756e7954"
+  },
+  "raw/after-r2/tests.log.gz": {
+    "bytes": 2210,
+    "sha256": "f828ccda556575352ff6116d8c5e4097dd3bd498a892e7be896943a0c5b91d5e"
+  },
+  "raw/after-r2/result.json.gz": {
+    "bytes": 265,
+    "sha256": "3c44ad4dae27adc2deaa3eda2c10bc3f74cd21ae394fa360013b4db9f4587a25"
+  },
+  "raw/after-r2/run.py.gz": {
+    "bytes": 2072,
+    "sha256": "b7576988ff3fec6a6c48db3a1fad6559579feaf18f6ca4a40793226d6063b170"
+  },
+  "raw/after-r2/library.log.gz": {
+    "bytes": 78329,
+    "sha256": "7725b35db69c4f23a7ec31ea16ed119926cf0ec9bb79b2a28742537869cbaca0"
+  },
+  "raw/after-r2/sim-build-result.json.gz": {
+    "bytes": 217,
+    "sha256": "e98271d464ba2368ee4977db28e906cdb09164a72277cf0c97461cd69e73b854"
+  },
+  "raw/after-r2/sim-build.log.gz": {
+    "bytes": 278,
+    "sha256": "7b0d84b744b7b290fd75026507b4568885b96e0c25a7a020ab6c84ab6266e37a"
+  },
+  "raw/after-r2/library-result.json.gz": {
+    "bytes": 231,
+    "sha256": "1d233ba422ebe7554813b5142c6d201890aac3560b119811967ce9efc6539bb8"
+  },
+  "raw/after-r2/inputs.json.gz": {
+    "bytes": 21630,
+    "sha256": "4c375d2e474286f89515162bc4a53b1dc246fd632acd9f9473d29531c11b1426"
+  },
+  "raw/after-r2/clippy-result.json.gz": {
+    "bytes": 244,
+    "sha256": "7b08c2a4f39c440ab7645c71f52acc4131a9d3e1606a48fe9912331fd2942098"
+  }
+}

@@ -99,96 +99,105 @@ fn moving_collision_ignores_cosmetic_archetype_insertion_order() {
     assert_eq!(forward.1.iter().filter(|hp| **hp < 100.).count(), 1);
 }
 
+fn vortex_order_outcome(reverse: bool, reallocate: bool) -> ([Entity; 2], [Option<f32>; 2], u64) {
+    let mut app = projectile_test_app();
+    app.init_resource::<crate::game::SkillCastTelemetry>();
+    // Recorded production stream: one noncritical draw, a spell-proc draw,
+    // one critical draw, a spell-proc draw. No extra RNG fixture calls.
+    app.world_mut()
+        .insert_resource(RunRng(12_628_136_444_139_491_497));
+    let mut targets = [Entity::PLACEHOLDER; 2];
+    for index in if reverse && reallocate { [1, 0] } else { [0, 1] } {
+        targets[index] = app.world_mut().spawn((
+            test_enemy([1000., 50.][index]),
+            Transform::from_xyz([-1., 1.][index], 0., 0.),
+        )).id();
+    }
+    for target in targets {
+        app.world_mut().get_mut::<Enemy>(target).unwrap().elite = false;
+    }
+    for target in if reverse {
+        [targets[1], targets[0]]
+    } else {
+        targets
+    } {
+        app.world_mut().entity_mut(target).insert(CosmeticReaction);
+    }
+    let query_order: Vec<_> = app
+        .world_mut()
+        .query_filtered::<Entity, With<Enemy>>()
+        .iter(app.world())
+        .collect();
+    assert_eq!(
+        query_order,
+        if reverse {
+            vec![targets[1], targets[0]]
+        } else {
+            targets.to_vec()
+        }
+    );
+    let (strikes, pulse_remaining) =
+        crate::game::skills::test_vortex_order_pulse(app.world_mut());
+    assert_eq!(
+        strikes, 2,
+        "one real pulse schedules one typed strike per target"
+    );
+    assert_eq!(pulse_remaining, 0.5, "exactly one production Vortex pulse");
+    assert_eq!(
+        app.world_mut()
+            .query::<&Projectile>()
+            .iter(app.world())
+            .count(),
+        2,
+        "two real pooled projectiles before authoritative collision"
+    );
+    app.world_mut().run_system_once(projectile_hits).unwrap();
+    assert_eq!(
+        app.world()
+            .resource::<crate::game::SkillCastTelemetry>()
+            .total,
+        0,
+        "fixture starts an existing zone, it does not fabricate a new skill cast"
+    );
+    assert_eq!(app.world().resource::<GameSession>().total_kills, 1);
+    assert_eq!(
+        app.world_mut()
+            .query::<&Projectile>()
+            .iter(app.world())
+            .count(),
+        0
+    );
+    let rng = app.world().resource::<RunRng>().state();
+    assert_eq!(
+        rng, 16_263_334_312_487_546_840,
+        "same recorded four-draw RNG budget"
+    );
+    let health = targets.map(|target| app.world().get::<Enemy>(target).map(|enemy| enemy.hp));
+    println!(
+        "VORTEX_ORDER reverse={reverse} reallocate={reallocate} targets={targets:?} enemy_query={query_order:?} health={health:?} strikes={strikes} pulse={pulse_remaining} rng={rng}"
+    );
+    (targets, health, rng)
+}
+
 #[test]
 fn vortex_pulse_damage_ignores_cosmetic_enemy_archetype_order() {
-    fn outcome(reverse: bool) -> ([Entity; 2], [Option<f32>; 2], u64) {
-        let mut app = projectile_test_app();
-        app.init_resource::<crate::game::SkillCastTelemetry>();
-        // Recorded production stream: one noncritical draw, a spell-proc draw,
-        // one critical draw, a spell-proc draw. No extra RNG fixture calls.
-        app.world_mut()
-            .insert_resource(RunRng(12_628_136_444_139_491_497));
-        let targets = [
-            app.world_mut()
-                .spawn((test_enemy(1000.), Transform::from_xyz(-1., 0., 0.)))
-                .id(),
-            app.world_mut()
-                .spawn((test_enemy(50.), Transform::from_xyz(1., 0., 0.)))
-                .id(),
-        ];
-        for target in targets {
-            app.world_mut().get_mut::<Enemy>(target).unwrap().elite = false;
-        }
-        for target in if reverse {
-            [targets[1], targets[0]]
-        } else {
-            targets
-        } {
-            app.world_mut().entity_mut(target).insert(CosmeticReaction);
-        }
-        let query_order: Vec<_> = app
-            .world_mut()
-            .query_filtered::<Entity, With<Enemy>>()
-            .iter(app.world())
-            .collect();
-        assert_eq!(
-            query_order,
-            if reverse {
-                vec![targets[1], targets[0]]
-            } else {
-                targets.to_vec()
-            }
-        );
-        let (strikes, pulse_remaining) =
-            crate::game::skills::test_vortex_order_pulse(app.world_mut());
-        assert_eq!(
-            strikes, 2,
-            "one real pulse schedules one typed strike per target"
-        );
-        assert_eq!(pulse_remaining, 0.5, "exactly one production Vortex pulse");
-        assert_eq!(
-            app.world_mut()
-                .query::<&Projectile>()
-                .iter(app.world())
-                .count(),
-            2,
-            "two real pooled projectiles before authoritative collision"
-        );
-        app.world_mut().run_system_once(projectile_hits).unwrap();
-        assert_eq!(
-            app.world()
-                .resource::<crate::game::SkillCastTelemetry>()
-                .total,
-            0,
-            "fixture starts an existing zone, it does not fabricate a new skill cast"
-        );
-        assert_eq!(app.world().resource::<GameSession>().total_kills, 1);
-        assert_eq!(
-            app.world_mut()
-                .query::<&Projectile>()
-                .iter(app.world())
-                .count(),
-            0
-        );
-        let rng = app.world().resource::<RunRng>().state();
-        assert_eq!(
-            rng, 16_263_334_312_487_546_840,
-            "same recorded four-draw RNG budget"
-        );
-        let health = targets.map(|target| app.world().get::<Enemy>(target).map(|enemy| enemy.hp));
-        println!(
-            "VORTEX_ORDER reverse={reverse} targets={targets:?} enemy_query={query_order:?} health={health:?} strikes={strikes} pulse={pulse_remaining} rng={rng}"
-        );
-        (targets, health, rng)
-    }
-    let forward = outcome(false);
-    let reverse = outcome(true);
+    let forward = vortex_order_outcome(false, false);
+    let reverse = vortex_order_outcome(true, false);
     assert_eq!(forward.0, reverse.0);
     assert_eq!(forward.2, reverse.2);
     assert_eq!(
         forward.1, reverse.1,
         "a purely cosmetic archetype migration must not reassign a zone's critical damage"
     );
+}
+
+#[test]
+fn vortex_critical_assignment_follows_geometry_across_allocations() {
+    let forward = vortex_order_outcome(false, true);
+    let reverse = vortex_order_outcome(true, true);
+    assert_eq!(forward.2, reverse.2);
+    assert_eq!(forward.1, reverse.1,
+        "entity allocation must not exchange Vortex critical damage between visible targets");
 }
 
 fn overlap_geometry_outcome(

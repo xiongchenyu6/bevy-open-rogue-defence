@@ -1,0 +1,18 @@
+{
+  "early_changed_from_before": [
+    "src/game/skills.rs",
+    "src/game/equipment_ui.rs",
+    "src/bin/capture/skill_identity.rs",
+    "src/bin/capture/market_wallet.rs",
+    "src/game/equipment_ui/panel.rs"
+  ],
+  "final_changed_from_before": [
+    "src/game/skills.rs"
+  ],
+  "early_to_final_changed": [
+    "src/game/equipment_ui.rs",
+    "src/bin/capture/skill_identity.rs",
+    "src/bin/capture/market_wallet.rs",
+    "src/game/equipment_ui/panel.rs"
+  ]
+}

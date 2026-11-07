@@ -1022,21 +1022,16 @@ fn update_spell_zones(
             affected.push(target);
         }
 
-        // Storm and Glacier pulses bind shared critical rolls to visible
-        // geometry, not unrelated allocation or cosmetic query migrations.
-        if matches!(zone.kind, ZoneKind::StormMatrix | ZoneKind::GlacierCore) {
-            affected.sort_unstable_by(|a, b| {
-                a.position
-                    .distance_squared(center)
-                    .total_cmp(&b.position.distance_squared(center))
-                    .then_with(|| a.position.z.total_cmp(&b.position.z))
-                    .then_with(|| a.position.x.total_cmp(&b.position.x))
-                    .then_with(|| a.position.y.total_cmp(&b.position.y))
-                    .then_with(|| a.entity.to_bits().cmp(&b.entity.to_bits()))
-            });
-        } else {
-            affected.sort_unstable_by_key(|target| target.entity.to_bits());
-        }
+        // Zone pulses bind shared critical rolls to visible target geometry.
+        affected.sort_unstable_by(|a, b| {
+            a.position
+                .distance_squared(center)
+                .total_cmp(&b.position.distance_squared(center))
+                .then_with(|| a.position.z.total_cmp(&b.position.z))
+                .then_with(|| a.position.x.total_cmp(&b.position.x))
+                .then_with(|| a.position.y.total_cmp(&b.position.y))
+                .then_with(|| a.entity.to_bits().cmp(&b.entity.to_bits()))
+        });
 
         for _ in 0..pulses {
             for target in &affected {
