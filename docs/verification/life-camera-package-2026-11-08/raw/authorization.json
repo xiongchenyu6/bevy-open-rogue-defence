@@ -1,0 +1,5 @@
+{
+  "build_and_smoke_authorized": true,
+  "expected_source_commit": "df51a6cddc908e5358f2cac9fa07068f46a6a5cc",
+  "basis": "Existing user authorization to implement, verify and commit game improvements; final life and camera regressions reviewed"
+}

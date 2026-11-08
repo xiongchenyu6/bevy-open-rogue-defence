@@ -1,0 +1,257 @@
+{
+  "proofs": {
+    "initial": {
+      "first": {
+        "screenshot": "initial-battle-progress-00.png",
+        "observed_monotonic": 419348.586941765,
+        "blockers": [],
+        "clock_seconds": 1499,
+        "clock_reads": [
+          [
+            300,
+            "24:59"
+          ],
+          [
+            400,
+            "24:59"
+          ]
+        ],
+        "completed_monotonic": 419352.768151724
+      },
+      "second": {
+        "screenshot": "initial-battle-progress-01.png",
+        "observed_monotonic": 419354.064062882,
+        "blockers": [],
+        "clock_seconds": 1494,
+        "clock_reads": [
+          [
+            300,
+            "24:54"
+          ],
+          [
+            400,
+            "24:54"
+          ]
+        ],
+        "completed_monotonic": 419358.724153069
+      }
+    },
+    "after-public-skill": {
+      "first": {
+        "screenshot": "after-public-skill-battle-progress-01.png",
+        "observed_monotonic": 419380.563146987,
+        "blockers": [],
+        "clock_seconds": 1476,
+        "clock_reads": [
+          [
+            300,
+            "24:36"
+          ],
+          [
+            400,
+            "24:36"
+          ]
+        ],
+        "completed_monotonic": 419385.128722685
+      },
+      "second": {
+        "screenshot": "after-public-skill-battle-progress-02.png",
+        "observed_monotonic": 419386.461335426,
+        "blockers": [],
+        "clock_seconds": 1470,
+        "clock_reads": [
+          [
+            300,
+            "24:30"
+          ],
+          [
+            400,
+            "24:30"
+          ]
+        ],
+        "completed_monotonic": 419391.38459645
+      }
+    },
+    "restart": {
+      "first": {
+        "screenshot": "restart-battle-progress-02.png",
+        "observed_monotonic": 419445.477328803,
+        "blockers": [],
+        "clock_seconds": 1486,
+        "clock_reads": [
+          [
+            300,
+            "24:46"
+          ],
+          [
+            400,
+            "24:46"
+          ]
+        ],
+        "completed_monotonic": 419449.826594491
+      },
+      "second": {
+        "screenshot": "restart-battle-progress-03.png",
+        "observed_monotonic": 419451.191918061,
+        "blockers": [],
+        "clock_seconds": 1480,
+        "clock_reads": [
+          [
+            300,
+            "24:40"
+          ],
+          [
+            400,
+            "24:40"
+          ]
+        ],
+        "completed_monotonic": 419455.568255404
+      }
+    }
+  },
+  "observations": {
+    "initial": [
+      {
+        "screenshot": "initial-battle-progress-00.png",
+        "observed_monotonic": 419348.586941765,
+        "blockers": [],
+        "clock_seconds": 1499,
+        "clock_reads": [
+          [
+            300,
+            "24:59"
+          ],
+          [
+            400,
+            "24:59"
+          ]
+        ],
+        "completed_monotonic": 419352.768151724
+      },
+      {
+        "screenshot": "initial-battle-progress-01.png",
+        "observed_monotonic": 419354.064062882,
+        "blockers": [],
+        "clock_seconds": 1494,
+        "clock_reads": [
+          [
+            300,
+            "24:54"
+          ],
+          [
+            400,
+            "24:54"
+          ]
+        ],
+        "completed_monotonic": 419358.724153069
+      }
+    ],
+    "after-public-skill": [
+      {
+        "screenshot": "after-public-skill-battle-progress-00.png",
+        "observed_monotonic": 419376.526390274,
+        "blockers": [],
+        "clock_seconds": null,
+        "clock_reads": [],
+        "clock_error": "Unreadable battle countdown pixels: [(300, ''), (400, '')]",
+        "completed_monotonic": 419379.24386816
+      },
+      {
+        "screenshot": "after-public-skill-battle-progress-01.png",
+        "observed_monotonic": 419380.563146987,
+        "blockers": [],
+        "clock_seconds": 1476,
+        "clock_reads": [
+          [
+            300,
+            "24:36"
+          ],
+          [
+            400,
+            "24:36"
+          ]
+        ],
+        "completed_monotonic": 419385.128722685
+      },
+      {
+        "screenshot": "after-public-skill-battle-progress-02.png",
+        "observed_monotonic": 419386.461335426,
+        "blockers": [],
+        "clock_seconds": 1470,
+        "clock_reads": [
+          [
+            300,
+            "24:30"
+          ],
+          [
+            400,
+            "24:30"
+          ]
+        ],
+        "completed_monotonic": 419391.38459645
+      }
+    ],
+    "restart": [
+      {
+        "screenshot": "restart-battle-progress-00.png",
+        "observed_monotonic": 419433.907162373,
+        "blockers": [],
+        "clock_seconds": 1498,
+        "clock_reads": [
+          [
+            300,
+            "24:58"
+          ],
+          [
+            400,
+            "24:58"
+          ]
+        ],
+        "completed_monotonic": 419438.288802303
+      },
+      {
+        "screenshot": "restart-battle-progress-01.png",
+        "observed_monotonic": 419439.624816349,
+        "blockers": [],
+        "clock_seconds": null,
+        "clock_reads": [],
+        "clock_error": "Unreadable battle countdown pixels: [(300, '2452'), (400, '24:52')]",
+        "completed_monotonic": 419444.102162711
+      },
+      {
+        "screenshot": "restart-battle-progress-02.png",
+        "observed_monotonic": 419445.477328803,
+        "blockers": [],
+        "clock_seconds": 1486,
+        "clock_reads": [
+          [
+            300,
+            "24:46"
+          ],
+          [
+            400,
+            "24:46"
+          ]
+        ],
+        "completed_monotonic": 419449.826594491
+      },
+      {
+        "screenshot": "restart-battle-progress-03.png",
+        "observed_monotonic": 419451.191918061,
+        "blockers": [],
+        "clock_seconds": 1480,
+        "clock_reads": [
+          [
+            300,
+            "24:40"
+          ],
+          [
+            400,
+            "24:40"
+          ]
+        ],
+        "completed_monotonic": 419455.568255404
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "source_commit": "df51a6cddc908e5358f2cac9fa07068f46a6a5cc",
+  "package_directory": "target/desktop-packages-life-camera-nov8/rogue-commander-linux",
+  "tar": "target/desktop-packages-life-camera-nov8/rogue-commander-linux-0.1.0.tar.gz",
+  "tar_bytes": 62301946,
+  "tar_sha256": "658293a040e20506171875a1fd3342088c15db60633d970a244c84042df9abbf",
+  "binary_sha256": "8d69ed5dec8fb555e6d605eb553ce1e12f0c7c38439a8d305a69564cff05e0d9",
+  "scope": "Offline read-only Ubuntu24/X11 software Vulkan short flow only; no full chapter, natural forge, hardware or Steam claim"
+}
