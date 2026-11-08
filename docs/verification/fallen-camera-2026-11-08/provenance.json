@@ -1,0 +1,16 @@
+{
+  "base_commit": "a7ca501abc6abe65660aa2ccfeb8e4bc7cf23b68",
+  "source": "src/game/arena/camera.rs",
+  "sha256": "9e5206b4397d91eb85bcb7b19cedfd2396dbed00d3cdc83b1aeb39542e7fed9f",
+  "sealed": false,
+  "baseline_visuals": {
+    "frame00149.png": {
+      "source": "docs/verification/fatal-regeneration-2026-11-08/frames/after-r3/native/frame00149.png",
+      "sha256": "b2d688848ca03573dcb96ef668980bc796952a553def815ecde4f3a9825b398d"
+    },
+    "frame00244.png": {
+      "source": "docs/verification/fatal-regeneration-2026-11-08/frames/after-r3/native/frame00244.png",
+      "sha256": "184d9f977a1a03f18e30e36ea1af5d346ac820442c31779f0147481dc3bb387c"
+    }
+  }
+}

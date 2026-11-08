@@ -1,0 +1,106 @@
+{
+  "raw/before/tests.log.gz": {
+    "bytes": 2682,
+    "sha256": "7f8f8c6a5e280e9958ba73847311600c9408ff89333c5403d5eee0203a787280"
+  },
+  "raw/before/result.json.gz": {
+    "bytes": 277,
+    "sha256": "7aff612b780cbaf375c64a9dfd108c231eeafedd89cb5c45bbf3132fb0a367d3"
+  },
+  "raw/before/run.py.gz": {
+    "bytes": 975,
+    "sha256": "ba609e6c7ce0531cf5cef796d0e37c45eb14ad15613c2676726b79b1bb52d338"
+  },
+  "raw/before/inputs.json.gz": {
+    "bytes": 21630,
+    "sha256": "5321071cc7c7e140e60a89ca1a59e3368b6ec6121f3d095d63c5a2456e663a47"
+  },
+  "raw/before/camera.rs.gz": {
+    "bytes": 23811,
+    "sha256": "58caaa79bba57603285dcbaedb44d6f73d67110b9e5f4d71454ae4ba9a82817f"
+  },
+  "raw/after/pixel-comparison.json.gz": {
+    "bytes": 864,
+    "sha256": "a5f9fda494f7affcf113a25e9da0927e9823822c2613380035f587d8a5639098"
+  },
+  "raw/after/capture-build-result.json.gz": {
+    "bytes": 395,
+    "sha256": "6d0b48dcb9e28e10809fddc3907068d0a5e74cfbcff2c5fa02ea09f9ff6a8428"
+  },
+  "raw/after/root-reviewed.json.gz": {
+    "bytes": 353,
+    "sha256": "bad47841f5534add807d9bbf9836e04efeb9ae0c5b087015e7df08d8d85a9c19"
+  },
+  "raw/after/host-profile-after.sha256.gz": {
+    "bytes": 64,
+    "sha256": "54f24a416cddb578724f6efda3e19dd4b492136d26fea68853462687cc0b49bb"
+  },
+  "raw/after/capture-build.log.gz": {
+    "bytes": 276,
+    "sha256": "67c53abaed625e54481eed7a6c55885900c7e0a45d2aa2fb7a88770090b6a40f"
+  },
+  "raw/after/clippy.log.gz": {
+    "bytes": 278,
+    "sha256": "2559ad4eec2b6f3812dc318916d51a248fcc68619932270df7cc57306db2fe1f"
+  },
+  "raw/after/tests.log.gz": {
+    "bytes": 1554,
+    "sha256": "eb433094d108f9ab26f64f4a44d9e8b80ab4c1f68706f8fe3f917059e0430e40"
+  },
+  "raw/after/isolated-environment.json.gz": {
+    "bytes": 713,
+    "sha256": "eb40fe6d218c58da92284e75f4ac2fcdc6f7d4cdc4d66adf70985553497ebd96"
+  },
+  "raw/after/result.json.gz": {
+    "bytes": 276,
+    "sha256": "e75c85fc35c17454a9b4fb3872174c2154a80499c4c1266cbf4e9bafcf8fb177"
+  },
+  "raw/after/run.py.gz": {
+    "bytes": 4185,
+    "sha256": "690c6b23b459a4fcb95c53a7fd71ba74738b8264f7337b38b0703dcdd7124e10"
+  },
+  "raw/after/capture-sha256.txt.gz": {
+    "bytes": 64,
+    "sha256": "2c579d2b0d9e1681f9be346bc69567cd6d2ff3a859091fc7cdfd255b19222269"
+  },
+  "raw/after/host-profile-before.sha256.gz": {
+    "bytes": 64,
+    "sha256": "54f24a416cddb578724f6efda3e19dd4b492136d26fea68853462687cc0b49bb"
+  },
+  "raw/after/library.log.gz": {
+    "bytes": 79701,
+    "sha256": "a1c9556fd359c0a1da7fa31e32b50f0056666df40eb76cde31d91e3e322b64a0"
+  },
+  "raw/after/native-result.json.gz": {
+    "bytes": 470,
+    "sha256": "c485f166569df1134b6ef67aa045971c323de9fddccfec32283846458ba759c5"
+  },
+  "raw/after/sim-build-result.json.gz": {
+    "bytes": 218,
+    "sha256": "29194e01da6843d66c777f37757859e0d9da153579384ad9bb5b2fcb2f8a131b"
+  },
+  "raw/after/sim-build.log.gz": {
+    "bytes": 278,
+    "sha256": "65deb2fb4c99a25aa35b3d715d313b343fc028779a98b592ac9473ac21e33d75"
+  },
+  "raw/after/library-result.json.gz": {
+    "bytes": 230,
+    "sha256": "f994e1bcd999d868e7e916c0e92626acff90a2485923aeda4e61c01fa84fabb7"
+  },
+  "raw/after/inputs.json.gz": {
+    "bytes": 21630,
+    "sha256": "c1a31a84849b7b22c732328e0928167a59602525baeb77f8465ac3b10d18a432"
+  },
+  "raw/after/camera.rs.gz": {
+    "bytes": 24142,
+    "sha256": "9e5206b4397d91eb85bcb7b19cedfd2396dbed00d3cdc83b1aeb39542e7fed9f"
+  },
+  "raw/after/native.log.gz": {
+    "bytes": 6376,
+    "sha256": "8fe977c6b30fd47e7f5da2067b13e7911da852d06345d409a0c584e4c0721343"
+  },
+  "raw/after/clippy-result.json.gz": {
+    "bytes": 244,
+    "sha256": "690a6e4b6acc37059b1a01e4645f007504bbff75dc94dc57ad739d3cf8110306"
+  }
+}

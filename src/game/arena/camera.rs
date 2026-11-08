@@ -5,7 +5,7 @@ use bevy::{
     window::{PrimaryWindow, WindowRef},
 };
 
-use super::super::{ControlScheme, GameSession, Hero, mobile_layout::hud_metrics};
+use super::super::{ControlScheme, GameSession, Hero, HeroVitals, mobile_layout::hud_metrics};
 
 const EYE: Vec3 = Vec3::new(-20.0, 25.2, 10.0);
 const FOCUS: Vec3 = Vec3::new(4.0, 1.2, 0.0);
@@ -109,6 +109,7 @@ pub(super) fn update_battle_camera(
     windows: Query<&Window, With<PrimaryWindow>>,
     session: Res<GameSession>,
     scheme: Res<ControlScheme>,
+    vitals: Res<HeroVitals>,
     heroes: Query<&Transform, (With<Hero>, Without<BattleCamera>)>,
     mut cameras: Query<(&mut Transform, &mut Projection, &mut BattleCamera), Without<Hero>>,
 ) {
@@ -116,6 +117,7 @@ pub(super) fn update_battle_camera(
         return;
     };
     let size = Vec2::new(window.width().max(1.0), window.height().max(1.0));
+    let hold_pan = session.paused || session.finished || !vitals.alive;
     for (mut transform, mut projection, mut camera) in &mut cameras {
         let span = vertical_span(size);
         let needs_projection_update = match projection.as_ref() {
@@ -134,10 +136,10 @@ pub(super) fn update_battle_camera(
                 viewport_height: span,
             };
         }
-        let next_base = if (session.paused || session.finished) && camera.previous_size == size {
+        let next_base = if hold_pan && camera.previous_size == size {
             camera.previous_base
-        } else if session.paused || session.finished {
-            // A resize changes framing, but a paused hero cannot move the camera.
+        } else if hold_pan {
+            // A resize reframes the held view while a paused or fallen hero stays off camera.
             let previous_responsive = if camera.previous_size == Vec2::ZERO {
                 EYE
             } else {
@@ -210,6 +212,7 @@ mod tests {
     fn fixture(size: (u32, u32), point: Vec3) -> (App, Entity, Entity, Entity) {
         let mut app = App::new();
         app.init_resource::<GameSession>()
+            .init_resource::<HeroVitals>()
             .init_resource::<ControlScheme>()
             .add_systems(Update, update_battle_camera);
         let window = app
@@ -551,5 +554,57 @@ mod tests {
             assert!(safe.max.cmple(size).all());
             assert!(safe.width() > 0.0 && safe.height() > 0.0);
         }
+    }
+    #[test]
+    fn fallen_hero_holds_battle_view_through_resize_then_respawn_resumes_follow() {
+        let (mut app, window, hero, camera) = fixture((1280, 720), Vec3::new(-10., 0., 12.));
+        app.update();
+        let before = app.world().get::<Transform>(camera).unwrap().translation;
+        app.world_mut()
+            .resource_mut::<crate::game::HeroVitals>()
+            .alive = false;
+        app.world_mut()
+            .get_mut::<Transform>(hero)
+            .unwrap()
+            .translation = Vec3::new(0., -1000., 0.);
+        app.update();
+        let fallen = app.world().get::<Transform>(camera).unwrap().translation;
+        println!("FALLEN_CAMERA before={before:?} fallen={fallen:?}");
+        assert_eq!(
+            fallen, before,
+            "hidden fallen hero must not pull the camera below the arena"
+        );
+        app.world_mut()
+            .get_mut::<Window>(window)
+            .unwrap()
+            .resolution
+            .set(390., 844.);
+        app.update();
+        let resized = app.world().get::<Transform>(camera).unwrap().translation;
+        let expected = before + responsive_base(Vec2::new(390., 844.))
+            - responsive_base(Vec2::new(1280., 720.));
+        assert!((resized - expected).length() < 0.001);
+        for _ in 0..4 {
+            app.update();
+            assert_eq!(
+                app.world().get::<Transform>(camera).unwrap().translation,
+                resized
+            );
+        }
+        app.world_mut()
+            .resource_mut::<crate::game::HeroVitals>()
+            .alive = true;
+        app.world_mut()
+            .get_mut::<Transform>(hero)
+            .unwrap()
+            .translation = Vec3::new(10., 0., -12.);
+        app.update();
+        let pose = app.world().get::<Transform>(camera).unwrap();
+        assert_eq!(pose.rotation, initial_transform().rotation);
+        let point =
+            app.world().get::<Transform>(hero).unwrap().translation + Vec3::Y * BODY_CENTER_HEIGHT;
+        let pixel = projected(point, pose.translation, Vec2::new(390., 844.));
+        let safe = gameplay_rect(Vec2::new(390., 844.), false);
+        assert!(pixel.distance(pixel.clamp(safe.min, safe.max)) < 0.001);
     }
 }
