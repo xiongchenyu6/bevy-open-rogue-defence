@@ -12,3 +12,7 @@ A UR skill reaching rank five offers three exclusive paths at the next skill dra
 Routes use authoritative damage, control, summon, healing and economic systems. They pause with battle time and cannot generate unbounded summons or idle currency. The route rules and balance are adaptations for this game.
 
 Skill visuals retain their identities: water waves, lightning chains/grids, fire rain, ice formations, vortex ribbons, viral tendrils, sword formations, saw blades and summon arrivals. Dedicated water fronts, orbit weapons and continuous flame rays keep their physical silhouettes. UR visuals follow real branch action events. Cosmetic particles share a 600-entity budget and do not deal damage.
+
+## Current controlled capture evidence
+
+[The current twelve-branch proof](verification/current-ur-branches-2026-11-08/README.md) records all Surge, Control and Sustain paths for UR26–29 on game source `df51a6c`. Twelve native cases complete 4800 updates with production paid draws, exclusive choice handling, runtime action and frozen-pause checks. All sixty originals are retained, with twenty-four frames independently reviewed. The fixtures provide mastery rank five, level fifty and gold 50000. Natural UR acquisition and full-campaign completion remain separate validation work.

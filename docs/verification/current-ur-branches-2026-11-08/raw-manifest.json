@@ -1,0 +1,118 @@
+{
+  "raw/result.json.gz": {
+    "bytes": 7088,
+    "sha256": "2239262ad469b4b145feaa275c76ff82e4161d1a37f434519e1f95957bb84c1e"
+  },
+  "raw/run.py.gz": {
+    "bytes": 2120,
+    "sha256": "fe17c30353156cf829750956a85552a47db7498ab6c9d52c5b5d0c0ce03510b8"
+  },
+  "raw/manager.log.gz": {
+    "bytes": 5452,
+    "sha256": "e6c4079d6540d9af0a00d0fb73ecea0215eefda4f8fde41f4f6a68d58d438558"
+  },
+  "raw/provenance.json.gz": {
+    "bytes": 43213,
+    "sha256": "2c0af783611cdfea54ecc2ca17f1c970db6ccd54e605c4c17363e25b3299eac1"
+  },
+  "raw/ur28-sustain/process.json.gz": {
+    "bytes": 511,
+    "sha256": "82072d2e18e7b23f43b737f3fae70361e28cb809ca4954b6159449c6dcca571b"
+  },
+  "raw/ur28-sustain/native.log.gz": {
+    "bytes": 4571,
+    "sha256": "c9cfa3aaa90f84531a95d9079d2cde43a4609e9bfadf816ed196f42b851300cc"
+  },
+  "raw/ur28-control/process.json.gz": {
+    "bytes": 511,
+    "sha256": "1915b603ceaa64237b51c959fa5f9799f37a300d3df8320ce561d1c93d1f14a8"
+  },
+  "raw/ur28-control/native.log.gz": {
+    "bytes": 4572,
+    "sha256": "cc825fc952014267928b540e824f27157f51cb1a1b753e9a05434401873767db"
+  },
+  "raw/ur26-control/process.json.gz": {
+    "bytes": 511,
+    "sha256": "5a12078946c703a2110ca51483d73638095f3ae2688d97350b2f0dde96153253"
+  },
+  "raw/ur26-control/native.log.gz": {
+    "bytes": 5435,
+    "sha256": "3b3b3a1192484c62c1a6cc4350272d36aad0d299e253297e2985a4d81bcbc8aa"
+  },
+  "raw/ur29-sustain/process.json.gz": {
+    "bytes": 511,
+    "sha256": "e6de0bdcf556093b6407de59bc7de8e88e11d93db10179188678c5c494435ebb"
+  },
+  "raw/ur29-sustain/native.log.gz": {
+    "bytes": 4571,
+    "sha256": "944927e62969413328957b17e58f0b768fdda7da04f52596b9b922889c5e412f"
+  },
+  "raw/ur28-surge/process.json.gz": {
+    "bytes": 503,
+    "sha256": "78c84de1edfb1bc591c4f419b294b51cca7d93e840c67e5b4b0e7c7c02f552bb"
+  },
+  "raw/ur28-surge/native.log.gz": {
+    "bytes": 4545,
+    "sha256": "338791f93a79670856994cd349b8944674766a4ccdbaa1a7bd62fb23fcd84a80"
+  },
+  "raw/ur29-control/process.json.gz": {
+    "bytes": 509,
+    "sha256": "588e8f65e0e081b4fcae7fbbda9b27c758a0168d09bbf0b54fcd5a690bff1d9e"
+  },
+  "raw/ur29-control/native.log.gz": {
+    "bytes": 4572,
+    "sha256": "ed2aa6db0acb2c6a5979473656b558123a52eae2827b8473587b64b1448a8387"
+  },
+  "raw/ur27-surge/process.json.gz": {
+    "bytes": 505,
+    "sha256": "8b87be216f1e0592fe0765c7c197edf0dafcba293391fe4775ca187e46c309c3"
+  },
+  "raw/ur27-surge/native.log.gz": {
+    "bytes": 4544,
+    "sha256": "063ea285d97d42b9a2d26f36650cffe06b32942387e1592fea44edae486620b6"
+  },
+  "raw/review/mapping.json.gz": {
+    "bytes": 4458,
+    "sha256": "68fc43519ef90b33384df462d9ebe3aa50c7e730c92c2cb1204b0005bee8ceb2"
+  },
+  "raw/ur27-sustain/process.json.gz": {
+    "bytes": 510,
+    "sha256": "fd1f585e67e22ff963d9dd9b6b07d9d556c99fca36f7e348d2d7a827d9361be0"
+  },
+  "raw/ur27-sustain/native.log.gz": {
+    "bytes": 4570,
+    "sha256": "3f68788050316a4f1aed758bc1ad2cf04982012ccd2e64e863324b9161cff2de"
+  },
+  "raw/ur26-sustain/process.json.gz": {
+    "bytes": 511,
+    "sha256": "13d2c0b94bcaba92ee6bc2de759187b6c3ac113dc310e9c77d3e1cef11ca5579"
+  },
+  "raw/ur26-sustain/native.log.gz": {
+    "bytes": 4571,
+    "sha256": "622a0d72913867a0de93cddd46647847cf1ef8011bbf18e61964b15a4d76f72f"
+  },
+  "raw/ur26-surge/process.json.gz": {
+    "bytes": 504,
+    "sha256": "692ea7716982d68025029113e6a4da59a5a6dd21a4243a67ec0c8a65078da917"
+  },
+  "raw/ur26-surge/native.log.gz": {
+    "bytes": 5410,
+    "sha256": "111e56d18350dd073078f2e4bdbaf4e7d3c968b306da0db5c9136ada93f6855a"
+  },
+  "raw/ur29-surge/process.json.gz": {
+    "bytes": 505,
+    "sha256": "f3b752b92dc80ea209d6c36984f3e0262814beef64eade6c93d92d464b878dd0"
+  },
+  "raw/ur29-surge/native.log.gz": {
+    "bytes": 4545,
+    "sha256": "4811179ff8037dbd2c6ccbafa882cc43ff54170e5dcbc5ca1a816c5ef4177cfa"
+  },
+  "raw/ur27-control/process.json.gz": {
+    "bytes": 509,
+    "sha256": "664e9a1b6606adae2283645e1945f1745cf59b9d814ede4b958448c037e557cb"
+  },
+  "raw/ur27-control/native.log.gz": {
+    "bytes": 4571,
+    "sha256": "691a902e114dfd30d908902f2965f089f514347a12a5134e547f5731fbe1f30e"
+  }
+}

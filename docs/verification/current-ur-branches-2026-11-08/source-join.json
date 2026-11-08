@@ -1,0 +1,14 @@
+{
+  "game_commit": "df51a6cddc908e5358f2cac9fa07068f46a6a5cc",
+  "source_files": {
+    "src/bin/capture/ur_evolution.rs": "17e1efbc825582e9ecd0ba617ffdf7a3bfe2df315ace047189a316ef661867f9",
+    "src/game/ur_evolution.rs": "3c9854a735d1fc67d686fbc4d8b1e250e9ace9da2d543a6c21c1b67e249a27e5",
+    "src/game/skills/ur_evolutions.rs": "a59617dd0a862caee9fc93d5be777d44c84bcaa8379b637ccf7b8010ef2d84fc",
+    "src/game/skill_evolution.rs": "413f3811b722e6552867229a7d040f3cc82abf447526ac8815125deedc127266",
+    "src/game/progression.rs": "830e92a81a74f840e6d10800ecd385edeed104b80761876312e33e12ccf0d52c",
+    "src/game/skills.rs": "78d615bdcefc8cc2a2e09187fb7247123791152f53409b65ad49d867ad05425d",
+    "src/game/resources.rs": "e9f0de94f698908c45c4d0d06e5146e6e8ad7cf2e22ddeaa5722f0b958dd62e7"
+  },
+  "capture_path": "target/verification/fallen-camera-2026-11-08/after/capture",
+  "capture_sha256": "839666d359e7c3adf23b123a740ef5c1cffc81107797cea99a2c4e8b313e3f99"
+}
