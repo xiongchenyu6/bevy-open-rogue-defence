@@ -1,0 +1,11 @@
+{
+  "base_commit": "41b4e46e1759d603dbc7eba593b7af7d7ae34c67",
+  "source_files": [
+    "src/game/bosses.rs",
+    "src/game/resources.rs",
+    "src/bin/capture/gate_revival.rs",
+    "src/game/combat/decision_phase_tests.rs"
+  ],
+  "compiled_input_count": 211,
+  "final_invocation": "023ba18fdff54565a428389033156968"
+}

@@ -1,0 +1,14 @@
+{
+  "excluded_runtime_bulk": {
+    "after-r3/capture": {
+      "bytes": 491076912,
+      "sha256": "ef80768acc12650af909b6e3a68867d5ed057cd0492c7ecc8fc324bcb7c4188c"
+    }
+  },
+  "personal_backup_metadata_only": {
+    "local_path": "target/verification/fatal-regeneration-2026-11-08/profile-isolation/observed-default-campaign.save",
+    "bytes": 53,
+    "sha256": "060649ac32b34ce2cda231a9cf1ebcdfd8e8c12f0b0b3f94e527714f6993d911",
+    "scope": "Observed after prior runs, no original pre-test bytes available. Backup contents intentionally excluded."
+  }
+}

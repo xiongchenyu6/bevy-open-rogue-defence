@@ -1,0 +1,190 @@
+{
+  "raw/before/tests.log.gz": {
+    "bytes": 3021,
+    "sha256": "106165c3ee1d26660e069630a9a296b45ccce4e9ebedf758fd1f26ba2a9ca54c"
+  },
+  "raw/before/result.json.gz": {
+    "bytes": 279,
+    "sha256": "8d2feeebbda25c56e228dcde10e652d57c86b70e5452ce117875e41ba226ef0a"
+  },
+  "raw/before/run.py.gz": {
+    "bytes": 936,
+    "sha256": "4816bfb981bfa5bc5612391f1ae7c431ce72a5c88e360c329b2104a474fbd187"
+  },
+  "raw/before/inputs.json.gz": {
+    "bytes": 21630,
+    "sha256": "1bf850eeffc46b82fee843b06b07122147499236932c99a1ea58b2764fdc9d10"
+  },
+  "raw/before/source/src/game/bosses.rs.gz": {
+    "bytes": 33181,
+    "sha256": "6d0876e9cb72d127a21b7ebc495cbd18f05eb385aa3e935048ec812456e2f810"
+  },
+  "raw/before/source/src/game/combat/decision_phase_tests.rs.gz": {
+    "bytes": 19017,
+    "sha256": "5fc1e7a15568be95d44cf40bac5cb2842bdd80dd0699832320fba312747b32de"
+  },
+  "raw/after/tests.log.gz": {
+    "bytes": 2163,
+    "sha256": "ab840e8eca1987730fc8f67973ab318cfcae0bb55a101a4ee4ffb075319ec068"
+  },
+  "raw/after/result.json.gz": {
+    "bytes": 279,
+    "sha256": "3e2c8c4c475c0cefc90747d107a0065011359d39df61bf1c89f206ce7a5e0fd1"
+  },
+  "raw/after/run.py.gz": {
+    "bytes": 2084,
+    "sha256": "2e3aa1b11de9236e660bbaefbc43754b88258174d6ab9f66f527bbbf1c4631dc"
+  },
+  "raw/after/library.log.gz": {
+    "bytes": 81252,
+    "sha256": "08540603547743126c5c1cccb217d99d4fc9913bd096255611fcc2334e6931b8"
+  },
+  "raw/after/library-result.json.gz": {
+    "bytes": 233,
+    "sha256": "4f1f6b5b6cc9336a59b1a4dc9e71ed797a2157afa8c43c52f395cdb01d56118b"
+  },
+  "raw/after/inputs.json.gz": {
+    "bytes": 21630,
+    "sha256": "b4dea41f0492c913a56c4dc3dc53d82ec465ffe6e16dd5af1a877101f3c67317"
+  },
+  "raw/after/source/src/game/bosses.rs.gz": {
+    "bytes": 33386,
+    "sha256": "f8bcc55bd81a63ce7d28d210a8647abef12c149f08e4bb3c021300dfb5d55d20"
+  },
+  "raw/after/source/src/game/resources.rs.gz": {
+    "bytes": 31626,
+    "sha256": "e9f0de94f698908c45c4d0d06e5146e6e8ad7cf2e22ddeaa5722f0b958dd62e7"
+  },
+  "raw/after/source/src/game/combat/decision_phase_tests.rs.gz": {
+    "bytes": 19734,
+    "sha256": "1460f6e5fc9ef2000f3b5aaf219b49110868a15fdd92b03d1a5c5bc854d19325"
+  },
+  "raw/after-r2/tests.log.gz": {
+    "bytes": 1079,
+    "sha256": "e84e655c58ff140ec5441f28f4271c43b2b742dbfe7b5f271312ba39dd7cceec"
+  },
+  "raw/after-r2/interruption.json.gz": {
+    "bytes": 339,
+    "sha256": "9826e9b0ab34d92684ae924c64f351648184d967ad3ce61fbb1e21ff3ad4385e"
+  },
+  "raw/after-r2/run.py.gz": {
+    "bytes": 3434,
+    "sha256": "0cfd83b8590b1b7419a7129295c0845f3eb037f9aef2632d9e45bf0defce976f"
+  },
+  "raw/after-r2/interruption-journal.txt.gz": {
+    "bytes": 837,
+    "sha256": "8c042c4ad38fca4a819bc2f41f4dd5dc0ad0617e22fdd05119db5531b6d70cac"
+  },
+  "raw/after-r2/inputs.json.gz": {
+    "bytes": 21630,
+    "sha256": "676a77ec976c974ecf195a4588f17384c418411fb155cd13e4dc00fe76dbb77d"
+  },
+  "raw/after-r2/source/src/game/bosses.rs.gz": {
+    "bytes": 33386,
+    "sha256": "f8bcc55bd81a63ce7d28d210a8647abef12c149f08e4bb3c021300dfb5d55d20"
+  },
+  "raw/after-r2/source/src/game/resources.rs.gz": {
+    "bytes": 31626,
+    "sha256": "e9f0de94f698908c45c4d0d06e5146e6e8ad7cf2e22ddeaa5722f0b958dd62e7"
+  },
+  "raw/after-r2/source/src/bin/capture/gate_revival.rs.gz": {
+    "bytes": 15469,
+    "sha256": "89556922e13e1e9997974bb0864bbf1249464826a41f64fa1ef2826e76330245"
+  },
+  "raw/after-r2/source/src/game/combat/decision_phase_tests.rs.gz": {
+    "bytes": 20109,
+    "sha256": "702ea9c331c3ea0bac7a39855d7bb0a321173a257ab68deeaac8fe3a1a727746"
+  },
+  "raw/after-r3/capture-build-result.json.gz": {
+    "bytes": 395,
+    "sha256": "93f87f85171d951fe45377e4c99d4f88c276f86c1eb59b0041872cf57fc1c6b4"
+  },
+  "raw/after-r3/root-reviewed.json.gz": {
+    "bytes": 369,
+    "sha256": "b0ea967ba0dd607d0368f9143cee095144b50832bb06148992976035e61b77c8"
+  },
+  "raw/after-r3/host-profile-after.sha256.gz": {
+    "bytes": 64,
+    "sha256": "54f24a416cddb578724f6efda3e19dd4b492136d26fea68853462687cc0b49bb"
+  },
+  "raw/after-r3/capture-build.log.gz": {
+    "bytes": 276,
+    "sha256": "2c3e00ea31f73a5e6817f228c4c38d7fe5936fa49691d9105f5b9e31834b0c27"
+  },
+  "raw/after-r3/clippy.log.gz": {
+    "bytes": 278,
+    "sha256": "e15f4100ea346e05c2a3b18984708adae092827302a65a95134eabc454d43725"
+  },
+  "raw/after-r3/tests.log.gz": {
+    "bytes": 2163,
+    "sha256": "c66e9382bd8f3525f2102360aaff0e96f9bd6ed41aa6032d7c94d2f464dd163d"
+  },
+  "raw/after-r3/isolated-environment.json.gz": {
+    "bytes": 745,
+    "sha256": "eb06c7332627998403c8e3fe164d9b0f10fc1ff669e2d9912f4ed346c88eff1d"
+  },
+  "raw/after-r3/result.json.gz": {
+    "bytes": 280,
+    "sha256": "d6a65e492658cb800a802953875c40f8e6bd65aa812624230d0e29ff250b725f"
+  },
+  "raw/after-r3/run.py.gz": {
+    "bytes": 4197,
+    "sha256": "a339fd60358d0893d97287147a2cff9b020ab312a6dbd257c0ee5f299ce80963"
+  },
+  "raw/after-r3/capture-sha256.txt.gz": {
+    "bytes": 64,
+    "sha256": "48d70f284d751eab06aef3a4e7e985080a34105cc756b71215e8a0662238f537"
+  },
+  "raw/after-r3/host-profile-before.sha256.gz": {
+    "bytes": 64,
+    "sha256": "54f24a416cddb578724f6efda3e19dd4b492136d26fea68853462687cc0b49bb"
+  },
+  "raw/after-r3/library.log.gz": {
+    "bytes": 79588,
+    "sha256": "fa2c6d40cf9c6c3b2eae867331215a9606b8380c8a354c8dfcb59d91e150fd45"
+  },
+  "raw/after-r3/native-result.json.gz": {
+    "bytes": 485,
+    "sha256": "260e7e47924d07a988816db3a06578b6da7f18e9126385254c15760a52be8528"
+  },
+  "raw/after-r3/sim-build-result.json.gz": {
+    "bytes": 218,
+    "sha256": "35ed29b68a048efe53ffb66796359a6f221270df7a945b21b836f5c532d2f767"
+  },
+  "raw/after-r3/sim-build.log.gz": {
+    "bytes": 278,
+    "sha256": "65deb2fb4c99a25aa35b3d715d313b343fc028779a98b592ac9473ac21e33d75"
+  },
+  "raw/after-r3/library-result.json.gz": {
+    "bytes": 231,
+    "sha256": "97b85c28ba78f64d5280fafaa97641902795f837ab061b075af7f98befe99795"
+  },
+  "raw/after-r3/inputs.json.gz": {
+    "bytes": 21630,
+    "sha256": "637d326e9228dc06ba7e28c806f39ee62cb3f0408bf2dfdd1640f4745f8ba6d6"
+  },
+  "raw/after-r3/native.log.gz": {
+    "bytes": 6496,
+    "sha256": "98c5e4ed2a2a1d85cd77e594966c6ed2fe33272f28b90ddd012553e0d24a6661"
+  },
+  "raw/after-r3/clippy-result.json.gz": {
+    "bytes": 244,
+    "sha256": "9aa2e240091b57e6fbc06500963ad9c8f4ae3790e65dbc38182cfa04b6d367d8"
+  },
+  "raw/after-r3/source/src/game/bosses.rs.gz": {
+    "bytes": 33386,
+    "sha256": "f8bcc55bd81a63ce7d28d210a8647abef12c149f08e4bb3c021300dfb5d55d20"
+  },
+  "raw/after-r3/source/src/game/resources.rs.gz": {
+    "bytes": 31626,
+    "sha256": "e9f0de94f698908c45c4d0d06e5146e6e8ad7cf2e22ddeaa5722f0b958dd62e7"
+  },
+  "raw/after-r3/source/src/bin/capture/gate_revival.rs.gz": {
+    "bytes": 15469,
+    "sha256": "89556922e13e1e9997974bb0864bbf1249464826a41f64fa1ef2826e76330245"
+  },
+  "raw/after-r3/source/src/game/combat/decision_phase_tests.rs.gz": {
+    "bytes": 20310,
+    "sha256": "661b261f5bd8a6543af5b70eacbb07e8e4b66d8fc5144bdd70c565181fb84fe0"
+  }
+}

@@ -87,6 +87,9 @@ fn decision_phase_app() -> App {
         );
         std::thread::sleep(std::time::Duration::from_millis(10));
     }
+    // Production-schedule tests settle artificial runs in memory.
+    app.insert_resource(super::super::CampaignProgress::default());
+    app.insert_resource(super::super::CampaignReward::default());
     decision_phase_key(
         &mut app,
         KeyCode::Digit1,
@@ -245,8 +248,11 @@ fn production_decision_phase_milestones_precede_g_including_kill_healing() {
             }
             // Acquire the effects before earning kills, as the production rule requires.
             app.update();
-            app.world_mut().resource_mut::<HeroVitals>().health = 0.;
+            app.world_mut().resource_mut::<HeroVitals>().health = 1.;
         }
+        let before_vitals = app.world().resource::<HeroVitals>();
+        let health_before = before_vitals.health;
+        let max_health_before = before_vitals.max_health;
         {
             let mut session = app.world_mut().resource_mut::<GameSession>();
             session.xp = session.xp_next;
@@ -300,7 +306,11 @@ fn production_decision_phase_milestones_precede_g_including_kill_healing() {
             6
         );
         if needs_healing {
-            assert!(app.world().resource::<HeroVitals>().health > 0.);
+            let vitals = app.world().resource::<HeroVitals>();
+            assert!(
+                vitals.health > health_before + vitals.max_health - max_health_before,
+                "kill healing must recover damage in addition to new growth capacity"
+            );
             assert_eq!(
                 app.world_mut()
                     .resource_mut::<BondRuntime>()
@@ -510,5 +520,96 @@ fn production_decision_phase_recruitment_refreshes_capacity_before_continued_g()
             .choices
             .iter()
             .all(|choice| matches!(choice, super::super::DraftChoice::Skill(_)))
+    );
+}
+
+fn fatal_boss_regeneration_outcome(
+    regeneration: bool,
+    prior_deaths: u32,
+    revival_seed: bool,
+) -> (u32, bool, bool) {
+    let mut app = decision_phase_app();
+    prepare_decision_phase(&mut app, 8);
+    if regeneration {
+        app.world_mut()
+            .resource_mut::<PlayerBuild>()
+            .owned_bond_cards[super::super::BondCardId::VitalSpring.index()] = true;
+    }
+    app.update();
+    {
+        let mut session = app.world_mut().resource_mut::<GameSession>();
+        session.core_hp = 0.;
+        session.gate_revive_remaining = 100.;
+    }
+    {
+        let mut vitals = app.world_mut().resource_mut::<HeroVitals>();
+        vitals.health = 10.;
+        vitals.deaths = prior_deaths;
+        vitals.invulnerable_remaining = 0.;
+    }
+    let hero_position = app
+        .world_mut()
+        .query_filtered::<&Transform, With<Hero>>()
+        .single(app.world())
+        .unwrap()
+        .translation;
+    let mut enemy = test_enemy(1_000_000.);
+    enemy.speed = 0.;
+    enemy.damage = 0.;
+    let boss = app
+        .world_mut()
+        .spawn((
+            enemy,
+            super::super::BossEnemy { index: 2 },
+            Transform::from_xyz(30., 0., 0.),
+        ))
+        .id();
+    if revival_seed {
+        app.insert_resource(MarketEffects::with_revival_seed_for_test());
+    }
+    super::super::bosses::test_release_fatal_circle(app.world_mut(), boss, hero_position);
+    app.update();
+    let hit = app.world().resource::<HeroVitals>();
+    assert_eq!(
+        hit.health, 0.,
+        "real boss circle must inflict lethal damage"
+    );
+    assert!(hit.alive, "boss damage precedes the next survival phase");
+    assert_eq!(hit.deaths, prior_deaths);
+    app.update();
+    let vitals = app.world().resource::<HeroVitals>();
+    let session = app.world().resource::<GameSession>();
+    if revival_seed {
+        assert!(vitals.health > vitals.max_health * 0.3);
+        assert!(vitals.invulnerable_remaining > 0.0);
+    }
+    println!(
+        "FATAL_REGEN regeneration={regeneration} prior_deaths={prior_deaths} revival_seed={revival_seed} health={} alive={} deaths={} finished={} victory={}",
+        vitals.health, vitals.alive, vitals.deaths, session.finished, session.victory
+    );
+    assert!(!session.victory);
+    (vitals.deaths, vitals.alive, session.finished)
+}
+
+#[test]
+fn production_fatal_boss_damage_consumes_life_despite_ordinary_regeneration() {
+    let outcomes = [(false, 0), (false, 2), (true, 0), (true, 2)]
+        .map(|(regeneration, deaths)| fatal_boss_regeneration_outcome(regeneration, deaths, false));
+    assert_eq!(
+        outcomes,
+        [
+            (1, false, false),
+            (3, false, true),
+            (1, false, false),
+            (3, false, true)
+        ]
+    );
+}
+
+#[test]
+fn production_fatal_boss_damage_preserves_explicit_revival_seed() {
+    assert_eq!(
+        fatal_boss_regeneration_outcome(true, 2, true),
+        (2, true, false)
     );
 }

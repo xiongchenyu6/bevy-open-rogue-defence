@@ -645,6 +645,28 @@ pub(crate) fn reset_run(world: &mut World) {
 }
 
 #[cfg(test)]
+pub(crate) fn test_release_fatal_circle(world: &mut World, boss: Entity, hero: Vec3) {
+    use bevy::ecs::system::RunSystemOnce;
+    world
+        .run_system_once(move |mut commands: Commands, session: Res<GameSession>| {
+            dangers::spawn_dangers(
+                &mut commands,
+                boss,
+                2,
+                Vec3::X * 30.,
+                Some(hero),
+                None,
+                &session,
+                0,
+                false,
+                100_000.,
+                0.,
+            );
+        })
+        .unwrap();
+}
+
+#[cfg(test)]
 mod tests {
     use super::*;
     use crate::game::archive::ArchiveEcho;

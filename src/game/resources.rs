@@ -388,7 +388,7 @@ impl HeroVitals {
     }
 
     pub fn heal(&mut self, amount: f32) -> f32 {
-        if !self.alive || amount <= 0.0 {
+        if !self.alive || self.health <= 0.0 || amount <= 0.0 {
             return 0.0;
         }
         let before = self.health;
@@ -1009,6 +1009,22 @@ mod survival_tests {
         vitals.health = vitals.max_health - 10.0;
         close(vitals.heal(100.0), 10.0);
         close(vitals.health, vitals.max_health);
+    }
+
+    #[test]
+    fn ordinary_healing_requires_a_surviving_health_pool() {
+        let mut vitals = HeroVitals {
+            health: 0.0,
+            ..default()
+        };
+        assert_eq!(vitals.heal(100.0), 0.0);
+        assert_eq!(vitals.health, 0.0);
+        vitals.alive = false;
+        assert_eq!(vitals.heal(100.0), 0.0);
+        vitals.alive = true;
+        vitals.health = 1.0;
+        assert_eq!(vitals.heal(3.0), 3.0);
+        assert_eq!(vitals.health, 4.0);
     }
 
     #[test]

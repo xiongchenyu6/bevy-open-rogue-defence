@@ -1,0 +1,1045 @@
+use std::collections::BTreeMap;
+
+use bevy::prelude::*;
+
+use super::combat::CombatSet;
+use super::content::BOSSES;
+use super::pooling::{CombatPools, EnemySceneKey};
+use super::{
+    BossEnemy, Core, Enemy, EnemyArchetype, EnemyAttackCue, EnemyAttackKind, GameAssets,
+    GameSession, Hero, ImpactFx,
+};
+
+mod dangers;
+pub use dangers::{BossDangerShape, BossPhaseCue, BossTelegraph};
+
+pub struct BossesPlugin;
+
+impl Plugin for BossesPlugin {
+    fn build(&self, app: &mut App) {
+        app.init_resource::<BossRuntime>()
+            .add_message::<BossPhaseCue>()
+            .add_systems(
+                Update,
+                (
+                    register_bosses,
+                    remove_defeated_bosses,
+                    run_boss_mechanics,
+                    dangers::tick_dangers,
+                )
+                    .chain()
+                    .after(CombatSet),
+            );
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+struct BossProfile {
+    first_cast_secs: f32,
+    period_secs: f32,
+    warning_secs: f32,
+}
+
+const BOSS_PROFILES: [BossProfile; 5] = [
+    BossProfile {
+        first_cast_secs: 3.0,
+        period_secs: 8.0,
+        warning_secs: 0.9,
+    },
+    BossProfile {
+        first_cast_secs: 4.0,
+        period_secs: 10.0,
+        warning_secs: 1.1,
+    },
+    BossProfile {
+        first_cast_secs: 4.0,
+        period_secs: 9.0,
+        warning_secs: 0.8,
+    },
+    BossProfile {
+        first_cast_secs: 3.0,
+        period_secs: 6.0,
+        warning_secs: 1.0,
+    },
+    BossProfile {
+        first_cast_secs: 3.0,
+        period_secs: 7.0,
+        warning_secs: 1.0,
+    },
+];
+
+#[derive(Resource, Default)]
+pub(crate) struct BossRuntime {
+    // Multiple bosses may overlap when a previous timed boss is still alive.
+    // Entity order keeps their state updates deterministic across processes;
+    // HashMap iteration would otherwise depend on a randomized hasher.
+    states: BTreeMap<Entity, BossState>,
+}
+
+impl BossRuntime {
+    pub(crate) fn is_enraged(&self, boss: Entity) -> bool {
+        self.states.get(&boss).is_some_and(|state| state.enraged)
+    }
+}
+
+#[derive(Debug)]
+struct BossState {
+    index: u8,
+    age_secs: f32,
+    casts_started: u32,
+    pending: Option<PendingAbility>,
+    base_speed: f32,
+    base_damage: f32,
+    action_speed_multiplier: f32,
+    enrage_stacks: u8,
+    entity: Entity,
+    summon_count: usize,
+    enraged: bool,
+}
+
+#[derive(Debug, Clone, Copy)]
+struct PendingAbility {
+    remaining_secs: f32,
+    target: Vec3,
+    variant: u8,
+}
+
+/// Marks enemies created by boss mechanics so they do not consume one of the
+/// 130 ordinary wave slots.
+#[derive(Component, Debug, Clone, Copy)]
+pub(crate) struct BossSummon(pub(crate) Entity);
+
+pub(crate) fn register_bosses(
+    mut commands: Commands,
+    assets: Option<Res<GameAssets>>,
+    mut new_bosses: Query<
+        (
+            Entity,
+            &BossEnemy,
+            &mut Enemy,
+            &Transform,
+            Option<&super::encounter_bosses::EncounterBoss>,
+        ),
+        Added<BossEnemy>,
+    >,
+    mut runtime: ResMut<BossRuntime>,
+    mut pools: ResMut<CombatPools>,
+) {
+    for (entity, boss, mut enemy, transform, adventure) in &mut new_bosses {
+        let index = usize::from(boss.index.min(4));
+        let modifiers = BOSSES[index].modifiers;
+        let health_ratio = if enemy.max_hp > 0.0 {
+            enemy.hp / enemy.max_hp
+        } else {
+            1.0
+        };
+        enemy.max_hp *= modifiers.max_hp_multiplier;
+        enemy.hp = enemy.max_hp * health_ratio;
+        enemy.speed *= modifiers.move_speed_multiplier;
+        commands.entity(entity).insert(Name::new(adventure.map_or(
+            BOSSES[index].name_en,
+            |adventure| {
+                super::encounter_bosses::ADVENTURE_BOSSES[usize::from(adventure.index)].name_en
+            },
+        )));
+        runtime.states.insert(
+            entity,
+            BossState {
+                index: index as u8,
+                age_secs: 0.0,
+                casts_started: 0,
+                pending: None,
+                base_speed: enemy.speed,
+                base_damage: enemy.damage,
+                action_speed_multiplier: modifiers.attack_speed_multiplier,
+                enrage_stacks: 0,
+                entity,
+                summon_count: 0,
+                enraged: false,
+            },
+        );
+        if let Some(assets) = assets.as_deref() {
+            spawn_ring_fx(
+                &mut commands,
+                &mut pools,
+                assets,
+                index,
+                transform.translation,
+                2.5 + index as f32 * 0.22,
+                0.7,
+            );
+        }
+    }
+}
+
+fn remove_defeated_bosses(living: Query<(), With<BossEnemy>>, mut runtime: ResMut<BossRuntime>) {
+    runtime
+        .states
+        .retain(|entity, _| living.get(*entity).is_ok());
+}
+
+fn run_boss_mechanics(
+    mut cues: MessageWriter<EnemyAttackCue>,
+    mut phases: MessageWriter<BossPhaseCue>,
+    mut commands: Commands,
+    time: Res<Time>,
+    controls: Res<super::skills::SkillRuntime>,
+    mut session: ResMut<GameSession>,
+    assets: Option<Res<GameAssets>>,
+    hero: Query<&Transform, (With<Hero>, Without<BossEnemy>)>,
+    core: Query<&Transform, (With<Core>, Without<BossEnemy>)>,
+    mut bosses: Query<
+        (
+            &BossEnemy,
+            &mut Enemy,
+            &mut Transform,
+            Option<&super::encounter_bosses::CampCombatant>,
+        ),
+        With<BossEnemy>,
+    >,
+    mut runtime: ResMut<BossRuntime>,
+    mut pools: ResMut<CombatPools>,
+    summons: Query<(&BossSummon, &Enemy), Without<BossEnemy>>,
+) {
+    if session.paused || session.finished || session.save_active {
+        return;
+    }
+    let Some(assets) = assets.as_deref() else {
+        return;
+    };
+    let hero_position = hero.single().ok().map(|transform| transform.translation);
+    let core_position = core.single().ok().map(|transform| transform.translation);
+    let delta = time.delta_secs();
+
+    for (entity, state) in &mut runtime.states {
+        let Ok((boss, mut enemy, mut transform, camp)) = bosses.get_mut(*entity) else {
+            continue;
+        };
+        let hero_position = hero_position.filter(|position| {
+            camp.is_none_or(|camp| position.xz().distance(camp.center.xz()) <= 6.0)
+        });
+        if camp.is_some() && hero_position.is_none() {
+            continue;
+        }
+        let index = usize::from(boss.index.min(4));
+        if index != usize::from(state.index) {
+            continue;
+        }
+        if enemy.hp <= 0.0 {
+            continue;
+        }
+        let delta = controls.action_delta(*entity, delta);
+        if controls.actions_blocked(*entity) || (delta <= 0.0 && time.delta_secs() > 0.0) {
+            continue;
+        }
+        if enter_second_phase(state, &enemy) {
+            phases.write(BossPhaseCue {
+                boss: *entity,
+                index: index as u8,
+                origin: transform.translation,
+            });
+        }
+        state.summon_count = summons
+            .iter()
+            .filter(|(summon, enemy)| summon.0 == *entity && enemy.hp > 0.0)
+            .count();
+        let profile = BOSS_PROFILES[index];
+        state.age_secs += delta;
+
+        if index == 4 {
+            let desired_stacks = green_regent_enrage_stacks(state.age_secs);
+            if desired_stacks > state.enrage_stacks {
+                state.enrage_stacks = desired_stacks;
+                enemy.damage = state.base_damage * green_regent_damage_multiplier(desired_stacks);
+                enemy.speed = state.base_speed * (1.0 + desired_stacks as f32 * 0.06);
+                spawn_ring_fx(
+                    &mut commands,
+                    &mut pools,
+                    assets,
+                    index,
+                    transform.translation,
+                    4.0 + desired_stacks as f32 * 0.22,
+                    0.85,
+                );
+            }
+        }
+
+        if let Some(mut pending) = state.pending.take() {
+            pending.remaining_secs -= delta;
+            if pending.remaining_secs > 0.0 {
+                state.pending = Some(pending);
+                continue;
+            }
+            if !resolve_ability(
+                &mut commands,
+                &mut pools,
+                assets,
+                &mut session,
+                state,
+                &mut enemy,
+                &mut transform,
+                core_position,
+                pending,
+            ) {
+                if pending.remaining_secs > -2.0 {
+                    state.pending = Some(pending);
+                }
+            } else {
+                cues.write(EnemyAttackCue {
+                    source: *entity,
+                    origin: transform.translation,
+                    target: pending.target,
+                    kind: match index {
+                        0 => EnemyAttackKind::Slam,
+                        3 => EnemyAttackKind::Beam,
+                        _ => EnemyAttackKind::Burst,
+                    },
+                });
+            }
+            continue;
+        }
+
+        let expected_casts = ability_cycles_elapsed(
+            state.age_secs,
+            profile.first_cast_secs,
+            profile.period_secs / state.action_speed_multiplier.max(0.01),
+        );
+        if expected_casts <= state.casts_started {
+            continue;
+        }
+
+        let variant = state.casts_started as u8;
+        state.casts_started = state.casts_started.saturating_add(1);
+        let target = warning_target(
+            index,
+            transform.translation,
+            hero_position,
+            core_position,
+            variant,
+        );
+        dangers::spawn_dangers(
+            &mut commands,
+            *entity,
+            index,
+            transform.translation,
+            hero_position,
+            core_position,
+            &session,
+            variant,
+            state.enraged,
+            enemy.damage,
+            profile.warning_secs,
+        );
+        state.pending = Some(PendingAbility {
+            remaining_secs: profile.warning_secs,
+            target,
+            variant,
+        });
+
+        if index == 1 {
+            enemy.speed = state.base_speed * 0.22;
+        }
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn resolve_ability(
+    commands: &mut Commands,
+    pools: &mut CombatPools,
+    assets: &GameAssets,
+    session: &mut GameSession,
+    state: &mut BossState,
+    enemy: &mut Enemy,
+    transform: &mut Transform,
+    core_position: Option<Vec3>,
+    pending: PendingAbility,
+) -> bool {
+    let index = usize::from(state.index);
+    match index {
+        0 => {
+            transform.translation = super::combat::stop_at_live_gate(
+                session,
+                core_position,
+                transform.translation,
+                pending.target,
+            );
+            transform.translation.y = 0.0;
+            let hits_gate =
+                core_position.is_some_and(|core| core.distance(transform.translation) <= 6.0);
+            if hits_gate {
+                session.core_hp = (session.core_hp - 32.0).max(0.0);
+            }
+            spawn_ring_fx(
+                commands,
+                pools,
+                assets,
+                index,
+                transform.translation,
+                3.6,
+                0.5,
+            );
+        }
+        1 => {
+            enemy.speed = state.base_speed;
+            let restored = enemy.max_hp * 0.08;
+            enemy.hp = (enemy.hp + restored).min(enemy.max_hp);
+            spawn_ring_fx(
+                commands,
+                pools,
+                assets,
+                index,
+                transform.translation,
+                5.0,
+                0.75,
+            );
+        }
+        2 => {
+            transform.translation = super::combat::stop_at_live_gate(
+                session,
+                core_position,
+                transform.translation,
+                pending.target,
+            );
+            transform.translation.y = 0.0;
+            if !spawn_pressure_wave(
+                commands,
+                pools,
+                assets,
+                (state.entity, transform.translation),
+                boss_summon_count(index, state.enraged, state.summon_count),
+                3,
+                session.elapsed,
+            ) {
+                return false;
+            }
+            spawn_ring_fx(
+                commands,
+                pools,
+                assets,
+                index,
+                transform.translation,
+                3.8,
+                0.55,
+            );
+        }
+        3 => {
+            let solar_phase = pending.variant.is_multiple_of(2);
+            if solar_phase {
+                enemy.speed = state.base_speed * 1.45;
+                enemy.damage = state.base_damage * 1.35;
+                if core_position.is_some_and(|core| core.distance(transform.translation) <= 11.0) {
+                    session.core_hp = (session.core_hp - 14.0).max(0.0);
+                }
+            } else {
+                enemy.speed = state.base_speed * 0.72;
+                enemy.damage = state.base_damage * 0.82;
+                enemy.hp = (enemy.hp + enemy.max_hp * 0.035).min(enemy.max_hp);
+            }
+            spawn_ring_fx(
+                commands,
+                pools,
+                assets,
+                index,
+                transform.translation,
+                if solar_phase { 7.0 } else { 3.1 },
+                0.7,
+            );
+        }
+        4 => {
+            if !spawn_pressure_wave(
+                commands,
+                pools,
+                assets,
+                (state.entity, transform.translation),
+                boss_summon_count(index, state.enraged, state.summon_count),
+                1,
+                session.elapsed,
+            ) {
+                return false;
+            }
+            spawn_ring_fx(
+                commands,
+                pools,
+                assets,
+                index,
+                transform.translation,
+                5.8,
+                0.7,
+            );
+        }
+        _ => unreachable!("boss index is clamped when registered"),
+    }
+    true
+}
+
+fn enter_second_phase(state: &mut BossState, enemy: &Enemy) -> bool {
+    if state.enraged || enemy.hp <= 0.0 || enemy.hp > enemy.max_hp * 0.5 {
+        return false;
+    }
+    state.enraged = true;
+    state.action_speed_multiplier *= 1.3;
+    true
+}
+
+fn warning_target(
+    index: usize,
+    boss: Vec3,
+    hero: Option<Vec3>,
+    core: Option<Vec3>,
+    variant: u8,
+) -> Vec3 {
+    match index {
+        0 => {
+            let gate_x =
+                core.map_or(super::resources::GATE_POSITION.x, |position| position.x) + 2.4;
+            Vec3::new(
+                (boss.x - 5.6).max(gate_x),
+                0.0,
+                hero.map_or(0.0, |position| position.z).clamp(-4.0, 4.0),
+            )
+        }
+        2 => {
+            let side = if variant.is_multiple_of(2) { 1.0 } else { -1.0 };
+            Vec3::new((boss.x + 2.4).min(13.4), 0.0, side * 3.15)
+        }
+        _ => Vec3::new(boss.x, 0.0, boss.z),
+    }
+}
+
+fn spawn_ring_fx(
+    commands: &mut Commands,
+    pools: &mut CombatPools,
+    assets: &GameAssets,
+    boss_index: usize,
+    center: Vec3,
+    radius: f32,
+    lifetime: f32,
+) {
+    pools.rent_impact_fx(
+        commands,
+        assets.fx_mesh.clone(),
+        assets.boss_materials[boss_index.min(4)].clone(),
+        Transform::from_xyz(center.x, 0.2, center.z).with_scale(Vec3::splat(0.18)),
+        ImpactFx {
+            lifetime,
+            start_scale: 0.18,
+            end_scale: radius,
+        },
+    );
+}
+
+fn boss_summon_count(index: usize, enraged: bool, active: usize) -> usize {
+    let desired = match index {
+        2 => {
+            if enraged {
+                6
+            } else {
+                3
+            }
+        }
+        4 => {
+            if enraged {
+                10
+            } else {
+                5
+            }
+        }
+        _ => 0,
+    };
+    desired.min(12_usize.saturating_sub(active))
+}
+
+fn spawn_pressure_wave(
+    commands: &mut Commands,
+    pools: &mut CombatPools,
+    assets: &GameAssets,
+    owner_origin: (Entity, Vec3),
+    count: usize,
+    scene_index: usize,
+    elapsed: f32,
+) -> bool {
+    if count == 0 {
+        return true;
+    }
+    let (owner, origin) = owner_origin;
+    let growth = 1.0 + elapsed / 600.0;
+    let hp = 115.0 * growth.powf(1.12);
+    let scene_index = scene_index.min(3);
+    let transforms: Vec<_> = (0..count)
+        .map(|unit| {
+            let centered = unit as f32 - (count as f32 - 1.0) * 0.5;
+            Transform::from_xyz(
+                (origin.x + 1.1 + unit as f32 * 0.18).min(15.6),
+                0.0,
+                if origin.z.abs() > 5.65 {
+                    origin.z + centered * 0.4
+                } else {
+                    (origin.z + centered * 1.35).clamp(-4.3, 4.3)
+                },
+            )
+            .with_scale(Vec3::splat(0.76))
+        })
+        .collect();
+    let Some(entities) = pools.rent_enemy_scene_group(
+        commands,
+        EnemySceneKey::BossSummon(scene_index as u8),
+        assets.enemy_scenes[scene_index].clone(),
+        &transforms,
+    ) else {
+        return false;
+    };
+    for entity in entities {
+        if origin.z.abs() > 5.65 {
+            commands
+                .entity(entity)
+                .insert(super::encounter_bosses::CampCombatant { center: origin });
+        }
+        commands.entity(entity).insert((
+            Enemy {
+                hp,
+                max_hp: hp,
+                speed: 2.05 + count as f32 * 0.08,
+                damage: 10.0 + elapsed / 180.0,
+                xp: 0,
+                wood: 0,
+                gold: 0,
+                kill_credit: 0,
+                elite: false,
+            },
+            EnemyArchetype(if scene_index == 1 { 1 } else { 0 }),
+            BossSummon(owner),
+        ));
+    }
+    true
+}
+
+fn ability_cycles_elapsed(age_secs: f32, first_cast_secs: f32, period_secs: f32) -> u32 {
+    if age_secs < first_cast_secs || period_secs <= 0.0 {
+        0
+    } else {
+        ((age_secs - first_cast_secs) / period_secs).floor() as u32 + 1
+    }
+}
+
+fn green_regent_enrage_stacks(age_secs: f32) -> u8 {
+    if age_secs < 90.0 {
+        0
+    } else {
+        (1 + ((age_secs - 90.0) / 10.0).floor() as u32).min(u8::MAX as u32) as u8
+    }
+}
+
+fn green_regent_damage_multiplier(stacks: u8) -> f32 {
+    1.25_f32.powi(i32::from(stacks))
+}
+
+pub(crate) fn reset_run(world: &mut World) {
+    let dangers: Vec<Entity> = world
+        .query_filtered::<Entity, With<BossTelegraph>>()
+        .iter(world)
+        .collect();
+    for entity in dangers {
+        world.despawn(entity);
+    }
+    world.insert_resource(BossRuntime::default());
+}
+
+#[cfg(test)]
+pub(crate) fn test_release_fatal_circle(world: &mut World, boss: Entity, hero: Vec3) {
+    use bevy::ecs::system::RunSystemOnce;
+    world
+        .run_system_once(move |mut commands: Commands, session: Res<GameSession>| {
+            dangers::spawn_dangers(
+                &mut commands,
+                boss,
+                2,
+                Vec3::X * 30.,
+                Some(hero),
+                None,
+                &session,
+                0,
+                false,
+                100_000.,
+                0.,
+            );
+        })
+        .unwrap();
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::game::archive::ArchiveEcho;
+
+    fn test_game_assets() -> GameAssets {
+        GameAssets {
+            hero_scenes: std::array::from_fn(|_| Handle::default()),
+            enemy_scenes: std::array::from_fn(|_| Handle::default()),
+            boss_scenes: std::array::from_fn(|_| Handle::default()),
+            adventure_scenes: default(),
+            summon_scenes: std::array::from_fn(|_| Handle::default()),
+            projectile_mesh: Handle::default(),
+            spirit_mesh: default(),
+            spirit_material: default(),
+            fx_mesh: Handle::default(),
+            enemy_material: Handle::default(),
+            enemy_materials: std::array::from_fn(|_| Handle::default()),
+            elite_material: Handle::default(),
+            boss_materials: std::array::from_fn(|_| Handle::default()),
+            hero_materials: std::array::from_fn(|_| Handle::default()),
+            projectile_material: Handle::default(),
+            storm_material: Handle::default(),
+        }
+    }
+
+    #[test]
+    fn frozen_boss_preserves_pending_windup_and_age_until_thaw() {
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<GameSession>()
+            .init_resource::<super::super::skills::SkillRuntime>()
+            .init_resource::<BossRuntime>()
+            .init_resource::<CombatPools>()
+            .insert_resource(test_game_assets())
+            .add_message::<EnemyAttackCue>()
+            .add_message::<BossPhaseCue>()
+            .add_systems(Update, (register_bosses, run_boss_mechanics).chain());
+        let boss = app
+            .world_mut()
+            .spawn((
+                BossEnemy { index: 0 },
+                Transform::default(),
+                Enemy {
+                    hp: 100.0,
+                    max_hp: 100.0,
+                    speed: 1.0,
+                    damage: 10.0,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+            ))
+            .id();
+        app.update();
+        app.world_mut()
+            .resource_mut::<BossRuntime>()
+            .states
+            .get_mut(&boss)
+            .unwrap()
+            .pending = Some(PendingAbility {
+            remaining_secs: 0.9,
+            target: Vec3::X,
+            variant: 0,
+        });
+        app.world_mut()
+            .resource_mut::<super::super::skills::SkillRuntime>()
+            .freeze_relic(boss, 1.0, false, false, 10.0);
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(0.5));
+        app.update();
+        let state = &app.world().resource::<BossRuntime>().states[&boss];
+        assert_eq!(state.age_secs, 0.0);
+        assert_eq!(state.pending.unwrap().remaining_secs, 0.9);
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 0);
+        app.world_mut()
+            .insert_resource(super::super::skills::SkillRuntime::default());
+        app.update();
+        let state = &app.world().resource::<BossRuntime>().states[&boss];
+        assert_eq!(state.age_secs, 0.5);
+        assert!((state.pending.unwrap().remaining_secs - 0.4).abs() < 0.0001);
+    }
+
+    #[test]
+    fn boss_pressure_wave_is_all_or_none_at_the_global_boundary() {
+        let assets = test_game_assets();
+        let mut world = World::new();
+        let mut pools = CombatPools::default();
+        {
+            let mut commands = world.commands();
+            pools
+                .rent_enemy_scene_group(
+                    &mut commands,
+                    EnemySceneKey::Tower,
+                    Handle::default(),
+                    &vec![Transform::default(); 156],
+                )
+                .expect("pressure fixture should fit");
+            assert!(!spawn_pressure_wave(
+                &mut commands,
+                &mut pools,
+                &assets,
+                (Entity::PLACEHOLDER, Vec3::ZERO),
+                5,
+                1,
+                1_500.0,
+            ));
+        }
+        world.flush();
+        assert_eq!(pools.enemy_metrics().active(), 156);
+        assert_eq!(
+            world
+                .query_filtered::<Entity, With<BossSummon>>()
+                .iter(&world)
+                .count(),
+            0
+        );
+    }
+
+    #[test]
+    fn half_health_phase_is_permanent_and_triggers_once_for_all_five_bosses() {
+        for index in 0..5 {
+            let mut state = BossState {
+                index,
+                age_secs: 0.0,
+                casts_started: 0,
+                pending: None,
+                base_speed: 1.0,
+                base_damage: 10.0,
+                action_speed_multiplier: 1.0,
+                enrage_stacks: 0,
+                entity: Entity::PLACEHOLDER,
+                summon_count: 0,
+                enraged: false,
+            };
+            let mut enemy = Enemy {
+                hp: 51.0,
+                max_hp: 100.0,
+                speed: 1.0,
+                damage: 10.0,
+                xp: 0,
+                wood: 0,
+                gold: 0,
+                kill_credit: 0,
+                elite: false,
+            };
+            assert!(!enter_second_phase(&mut state, &enemy));
+            enemy.hp = 50.0;
+            assert!(enter_second_phase(&mut state, &enemy));
+            enemy.hp = 80.0;
+            assert!(!enter_second_phase(&mut state, &enemy));
+            assert_eq!(state.action_speed_multiplier, 1.3);
+            assert!(state.enraged);
+        }
+    }
+
+    #[test]
+    fn exposed_phase_survives_healing_but_not_death_reset_or_entity_reuse() {
+        let mut app = App::new();
+        app.init_resource::<BossRuntime>()
+            .init_resource::<CombatPools>()
+            .add_systems(Update, (register_bosses, remove_defeated_bosses).chain());
+        let entity = app
+            .world_mut()
+            .spawn((
+                BossEnemy { index: 0 },
+                Transform::default(),
+                Enemy {
+                    hp: 100.0,
+                    max_hp: 100.0,
+                    speed: 1.0,
+                    damage: 10.0,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+            ))
+            .id();
+        app.update();
+        assert!(!app.world().resource::<BossRuntime>().is_enraged(entity));
+        let enemy = Enemy {
+            hp: 49.0,
+            max_hp: 100.0,
+            speed: 1.0,
+            damage: 10.0,
+            xp: 0,
+            wood: 0,
+            gold: 0,
+            kill_credit: 0,
+            elite: false,
+        };
+        {
+            let mut runtime = app.world_mut().resource_mut::<BossRuntime>();
+            assert!(enter_second_phase(
+                runtime.states.get_mut(&entity).unwrap(),
+                &enemy
+            ));
+        }
+        app.world_mut().get_mut::<Enemy>(entity).unwrap().hp = 80.0;
+        app.update();
+        assert!(app.world().resource::<BossRuntime>().is_enraged(entity));
+        app.world_mut().entity_mut(entity).remove::<BossEnemy>();
+        app.update();
+        assert!(!app.world().resource::<BossRuntime>().is_enraged(entity));
+        app.world_mut()
+            .entity_mut(entity)
+            .insert(BossEnemy { index: 1 });
+        app.update();
+        assert!(!app.world().resource::<BossRuntime>().is_enraged(entity));
+        app.world_mut().insert_resource(BossRuntime::default());
+        assert!(!app.world().resource::<BossRuntime>().is_enraged(entity));
+    }
+
+    #[test]
+    fn boss_summon_pressure_grows_in_phase_two_but_is_bounded_per_boss() {
+        assert_eq!(boss_summon_count(2, false, 0), 3);
+        assert_eq!(boss_summon_count(2, true, 0), 6);
+        assert_eq!(boss_summon_count(4, false, 0), 5);
+        assert_eq!(boss_summon_count(4, true, 0), 10);
+        assert_eq!(boss_summon_count(4, true, 10), 2);
+        assert_eq!(boss_summon_count(4, true, 12), 0);
+        assert_eq!(boss_summon_count(4, true, 100), 0);
+    }
+
+    #[test]
+    fn ability_periods_match_existing_boss_order() {
+        let periods: Vec<f32> = BOSS_PROFILES
+            .iter()
+            .map(|profile| profile.period_secs)
+            .collect();
+        assert_eq!(periods, [8.0, 10.0, 9.0, 6.0, 7.0]);
+    }
+
+    #[test]
+    fn ability_cycles_have_exact_boundaries() {
+        assert_eq!(ability_cycles_elapsed(2.999, 3.0, 8.0), 0);
+        assert_eq!(ability_cycles_elapsed(3.0, 3.0, 8.0), 1);
+        assert_eq!(ability_cycles_elapsed(10.999, 3.0, 8.0), 1);
+        assert_eq!(ability_cycles_elapsed(11.0, 3.0, 8.0), 2);
+        assert_eq!(ability_cycles_elapsed(43.0, 3.0, 8.0), 6);
+    }
+
+    #[test]
+    fn public_boss_health_movement_and_action_modifiers_are_runtime_inputs() {
+        let leviathan = BOSSES[1].modifiers;
+        assert_eq!(28_000.0 * leviathan.max_hp_multiplier, 47_600.0);
+        assert!((0.62 * leviathan.move_speed_multiplier - 0.372).abs() < 0.0001);
+
+        let sun_crown = BOSSES[3].modifiers;
+        let effective_period = BOSS_PROFILES[3].period_secs / sun_crown.attack_speed_multiplier;
+        assert_eq!(effective_period, 4.0);
+        assert_eq!(ability_cycles_elapsed(7.0, 3.0, effective_period), 2);
+    }
+
+    #[test]
+    fn green_regent_enrages_at_ninety_then_every_ten_seconds() {
+        assert_eq!(green_regent_enrage_stacks(89.999), 0);
+        assert_eq!(green_regent_enrage_stacks(90.0), 1);
+        assert_eq!(green_regent_enrage_stacks(99.999), 1);
+        assert_eq!(green_regent_enrage_stacks(100.0), 2);
+        assert_eq!(green_regent_enrage_stacks(130.0), 5);
+        assert!((green_regent_damage_multiplier(1) - 1.25).abs() < 0.0001);
+        assert!((green_regent_damage_multiplier(2) - 1.5625).abs() < 0.0001);
+    }
+
+    #[test]
+    fn archive_echo_without_boss_marker_is_not_trackable() {
+        let mut world = World::new();
+        let echo = world.spawn(ArchiveEcho).id();
+        let boss = world.spawn(BossEnemy { index: 4 }).id();
+        let mut query = world.query_filtered::<Entity, With<BossEnemy>>();
+        let tracked: Vec<Entity> = query.iter(&world).collect();
+        assert_eq!(tracked, [boss]);
+        assert!(!tracked.contains(&echo));
+    }
+
+    #[test]
+    fn control_time_partial_thaw_keeps_boss_pending_and_warning_in_sync() {
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<GameSession>()
+            .init_resource::<crate::game::HeroVitals>()
+            .init_resource::<crate::game::PlayerBuild>()
+            .init_resource::<crate::game::market::MarketEffects>()
+            .init_resource::<crate::game::encounters::EncounterState>()
+            .init_resource::<crate::game::skills::SkillRuntime>()
+            .init_resource::<BossRuntime>()
+            .init_resource::<CombatPools>()
+            .insert_resource(test_game_assets())
+            .add_message::<EnemyAttackCue>()
+            .add_message::<BossPhaseCue>();
+        let boss = app
+            .world_mut()
+            .spawn((
+                BossEnemy { index: 0 },
+                Transform::default(),
+                Enemy {
+                    hp: 100.,
+                    max_hp: 100.,
+                    speed: 1.,
+                    damage: 10.,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+            ))
+            .id();
+        let register = app.world_mut().register_system(register_bosses);
+        app.world_mut().run_system(register).unwrap();
+        app.world_mut()
+            .resource_mut::<BossRuntime>()
+            .states
+            .get_mut(&boss)
+            .unwrap()
+            .pending = Some(PendingAbility {
+            remaining_secs: 0.9,
+            target: Vec3::X,
+            variant: 0,
+        });
+        let session = GameSession::default();
+        {
+            let mut commands = app.world_mut().commands();
+            dangers::spawn_dangers(
+                &mut commands,
+                boss,
+                0,
+                Vec3::ZERO,
+                Some(Vec3::X),
+                None,
+                &session,
+                0,
+                false,
+                10.,
+                0.9,
+            );
+        }
+        app.world_mut().flush();
+        app.world_mut()
+            .resource_mut::<crate::game::skills::SkillRuntime>()
+            .freeze_relic(boss, 1., false, false, 0.1);
+        let tick = app
+            .world_mut()
+            .register_system(crate::game::skills::tick_skill_runtime);
+        let mechanics = app.world_mut().register_system(run_boss_mechanics);
+        let warning = app.world_mut().register_system(dangers::tick_dangers);
+        let delta = 32.0 / 60.0;
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(delta));
+        app.world_mut().run_system(tick).unwrap();
+        app.world_mut().run_system(mechanics).unwrap();
+        app.world_mut().run_system(warning).unwrap();
+        let state = &app.world().resource::<BossRuntime>().states[&boss];
+        let pending = state.pending.unwrap().remaining_secs;
+        assert!((state.age_secs - (delta - 0.1)).abs() < 0.00001);
+        assert!((pending - (0.9 - (delta - 0.1))).abs() < 0.00001);
+        let warnings: Vec<_> = app
+            .world_mut()
+            .query::<&BossTelegraph>()
+            .iter(app.world())
+            .copied()
+            .collect();
+        assert!(!warnings.is_empty());
+        for danger in warnings {
+            assert!(!danger.active);
+            assert!((danger.remaining - pending).abs() < 0.00001);
+        }
+        assert_eq!(app.world().resource::<Messages<EnemyAttackCue>>().len(), 0);
+    }
+}

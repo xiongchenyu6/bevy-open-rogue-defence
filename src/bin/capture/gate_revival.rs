@@ -326,6 +326,11 @@ fn exercise(world: &mut World) {
             }
             println!("[capture] full-health gate rebuild frame={frame} PASS");
         }
+        125 => {
+            let card = rogue_commander::game::BondCardId::VitalSpring;
+            world.resource_mut::<PlayerBuild>().owned_bond_cards[card.index()] = true;
+            println!("[capture] ordinary health regeneration active before all three lethal hits");
+        }
         130 | 225 | 350 => lethal_hit(world),
         150 | 245 => {
             let vitals = world.resource::<HeroVitals>();
