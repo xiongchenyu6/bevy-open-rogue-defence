@@ -1,0 +1,310 @@
+{
+  "raw/validation/clippy.log.gz": {
+    "bytes": 1142,
+    "sha256": "686c316e4f4f70c3dadc6cac6f06961dae2b7caf1c751b91fe1c11a5b9f10b5b"
+  },
+  "raw/validation/native-build-process.json.gz": {
+    "bytes": 221,
+    "sha256": "eaac775a6e87611f6e30a3f6cb0923c6b58c9c486e9fb1543b316d01bdd325fb"
+  },
+  "raw/validation/run.py.gz": {
+    "bytes": 1614,
+    "sha256": "59821a87d5f12f5109b7512ddd11e9854a00f888ab0ba2cc8fe94ac57731e21e"
+  },
+  "raw/validation/library.log.gz": {
+    "bytes": 79814,
+    "sha256": "a4eb331ff843e26bd0b34d48da51d8a9c60a3de95cc5f60618da98cab7ccbc85"
+  },
+  "raw/validation/library-process.json.gz": {
+    "bytes": 232,
+    "sha256": "a60d1ef5c73b6d320841af4dd5a95242a0fe65e8a5d1950c153758a53173383a"
+  },
+  "raw/validation/clippy-process.json.gz": {
+    "bytes": 243,
+    "sha256": "404e18bd736df66bd9923ee9b0ace5c9c7937e51d3a5a6a68672ca5e1ab2ab81"
+  },
+  "raw/validation/host-profile.json.gz": {
+    "bytes": 161,
+    "sha256": "1653e9e8e2f7ff3c99b8a8678b462445d987751f40087ec929837c238b17e65c"
+  },
+  "raw/validation/manager.log.gz": {
+    "bytes": 595,
+    "sha256": "de38927c34549fed3fe37599ce17c125450e28b12671b998b281b868a8bbdc6b"
+  },
+  "raw/validation/native-build.log.gz": {
+    "bytes": 278,
+    "sha256": "073b68207fff5b1dbe163bb96012c9ba219819234b7181a7376ed5ab3724db0f"
+  },
+  "raw/validation/inputs.json.gz": {
+    "bytes": 21728,
+    "sha256": "8f02a0bf4fc77fd9c6fdf3e3b459400eb4d03f8971709ba00d2bec8c6c2d5d77"
+  },
+  "raw/package/independent-artifact-check.py.gz": {
+    "bytes": 2437,
+    "sha256": "b595566fa53a5f6bfbf012dbdd0355d0a284b22d97d0a3bbdc3ec0278750b66f"
+  },
+  "raw/package/artifact.json.gz": {
+    "bytes": 579,
+    "sha256": "3e7f7aa8eab3b7f9fc20e0def0af48c66d97e5d147f7e8589957fc61a04ea264"
+  },
+  "raw/package/build.log.gz": {
+    "bytes": 1316,
+    "sha256": "cf8a4cf958408b32060bc2a7ad7364b616227bbaf1840dbe1293e7f0f83c4b2f"
+  },
+  "raw/package/harness-provenance.json.gz": {
+    "bytes": 769,
+    "sha256": "579e5157982b19a4e15844ab75748bb102dbce28ead8497a77b79ca6f5f0e5ed"
+  },
+  "raw/package/root-readelf.txt.gz": {
+    "bytes": 2074,
+    "sha256": "c0f2d89970f325564760fea0a4fe29bcb0069cb82fae6131f42ce1ebf9ce1d3f"
+  },
+  "raw/package/smoke.log.gz": {
+    "bytes": 4245,
+    "sha256": "d38c0ec0c932d8c3f467276d70ef2319ad416db8492c7f83418d4d67a9a3dfc7"
+  },
+  "raw/package/build-process.json.gz": {
+    "bytes": 226,
+    "sha256": "8353a51dcdeff729d1ea1fa70c78cee85323870f4699c86a50e113bd86dfb2ee"
+  },
+  "raw/package/build-and-smoke.py.gz": {
+    "bytes": 9942,
+    "sha256": "fc26768bb068b36838e2feff213ca8cff36ed768e9d1489f31c38d5bb0fd4237"
+  },
+  "raw/package/package-check.json.gz": {
+    "bytes": 265,
+    "sha256": "5f2fbe1351bde8659cd273690cace9d7090caf3dd500e856ceb94a72fd4c5649"
+  },
+  "raw/package/root-artifact-check.json.gz": {
+    "bytes": 690,
+    "sha256": "e8cf84d1079e8911cc1fcc7a029e96e8eb517f87ba0e06a2ee6795887c4182b5"
+  },
+  "raw/package/input-audit-before.json.gz": {
+    "bytes": 61893,
+    "sha256": "6bfc04218332b41c2ab8b89942872f00e2f8d619ff31d606e197c084994dd9b5"
+  },
+  "raw/package/smoke-process.json.gz": {
+    "bytes": 997,
+    "sha256": "2f4633908995ca88b266ea17bb03af042e2f67398ccb781b3d04ea6066fe7b91"
+  },
+  "raw/package/input-audit-after.json.gz": {
+    "bytes": 61893,
+    "sha256": "6bfc04218332b41c2ab8b89942872f00e2f8d619ff31d606e197c084994dd9b5"
+  },
+  "raw/package/tar-check.json.gz": {
+    "bytes": 82,
+    "sha256": "9d3ed03e880d1183f932ac2f2446734dd80309018fee5c8b0c8642ba24710530"
+  },
+  "raw/package/source-commit.txt.gz": {
+    "bytes": 41,
+    "sha256": "52d3c7e5af3f202d1c389fc3f532c47aa2bcd2e1abad95eca3c1de4435430182"
+  },
+  "raw/package/authorization.json.gz": {
+    "bytes": 112,
+    "sha256": "9b21d1c15899174e9dcc0dcbca98110a75df97e7b0c371e8ebed2ae48e543c16"
+  },
+  "raw/package/manager.log.gz": {
+    "bytes": 1150,
+    "sha256": "8c20b870c6891792d1ba66769d8831c39cdd1bfa2364ac413392734661fe66dc"
+  },
+  "raw/package/runtime-image.json.gz": {
+    "bytes": 86,
+    "sha256": "6f4746e9f4f46d3ac8251e9914d1ad0b6df02c2b90b3ede7f83cfc112f5a1ccb"
+  },
+  "raw/package/smoke/xvfb.log.gz": {
+    "bytes": 2348,
+    "sha256": "b987a262609a3720f450ab6815ed90b2069dd47b7b012959ca19c325aebf5d55"
+  },
+  "raw/package/smoke/battle-progress.json.gz": {
+    "bytes": 5976,
+    "sha256": "61a566c52d342f11be9fb7f68adeda4c3ae91b7939262b6fd9e291ecd2490127"
+  },
+  "raw/package/smoke/restart.log.gz": {
+    "bytes": 13022,
+    "sha256": "ae046f26c247e8c72f8f0603d980e606960901fdd9026d76b6739b5e76cc0a84"
+  },
+  "raw/package/smoke/game.log.gz": {
+    "bytes": 18188,
+    "sha256": "0b15a93a5edf77b31b68de5fcc195077e4055fdb93b67e0d10b4686bd24863b4"
+  },
+  "raw/package/smoke/result.json.gz": {
+    "bytes": 6602,
+    "sha256": "96426339a839bea86fb614e7ccb1b65f5e4ae0eaeb232ac87888b24eabd20c1e"
+  },
+  "raw/package/smoke/wm.log.gz": {
+    "bytes": 85,
+    "sha256": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c"
+  },
+  "raw/package/smoke/harness-source/forge_restart_runtime.py.gz": {
+    "bytes": 9632,
+    "sha256": "659c983316e5c8f4f7c9e4cb3949a626277d7eb4282141743b7525a28f28d737"
+  },
+  "raw/package/smoke/harness-source/campaign_runtime.py.gz": {
+    "bytes": 19308,
+    "sha256": "3059e56fbb757d85ff1f9b890b9e3abc3e6347267022987e429df9a8a8e8c885"
+  },
+  "raw/package/smoke/harness-source/forge_runtime.py.gz": {
+    "bytes": 29487,
+    "sha256": "24313dcedfc2d66b0b2e2d2128372632947681a69ffdd61a8547cdc9b2f69c58"
+  },
+  "raw/package/smoke/harness-source/campaign_equipment_runtime.py.gz": {
+    "bytes": 43740,
+    "sha256": "f877832b70c1beeff178e602bb3b17cd978f056be79bfb68bd95500db883d85d"
+  },
+  "raw/package/smoke/harness-source/smoke_runtime.py.gz": {
+    "bytes": 21095,
+    "sha256": "2d21bedab46f22d421c9d3a18f0368e76436012841a11bd6d3ad0c9cc0bd67a7"
+  },
+  "raw/package/smoke/harness-source/forge_refresh.py.gz": {
+    "bytes": 4319,
+    "sha256": "c40e9e61179f9ae55d767bd6c9f1333e7b6bced398cd292a190870e701423063"
+  },
+  "raw/diagnostic/check.log.gz": {
+    "bytes": 1442,
+    "sha256": "32eada947ea88a947b715a76a43822a873bc2d87a732922817afdfe75c73fa13"
+  },
+  "raw/diagnostic/runtime.log.gz": {
+    "bytes": 3969,
+    "sha256": "d79958f5bfe2edfc1ad05d57326a263adc46c949e76dbe64f7e5d13f62983855"
+  },
+  "raw/diagnostic/run.py.gz": {
+    "bytes": 1180,
+    "sha256": "925f83263f1647610007ffbe479115f72b0bf8722134eec9611d42ab835d7598"
+  },
+  "raw/diagnostic/manager.log.gz": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw/diagnostic/process.json.gz": {
+    "bytes": 992,
+    "sha256": "1ea196293f27a907f1c00a97b662e868022f465e865ab8957b197cc9771f766e"
+  },
+  "raw/diagnostic/runtime/xvfb.log.gz": {
+    "bytes": 2348,
+    "sha256": "b987a262609a3720f450ab6815ed90b2069dd47b7b012959ca19c325aebf5d55"
+  },
+  "raw/diagnostic/runtime/battle-progress.json.gz": {
+    "bytes": 5630,
+    "sha256": "ad8003b154c724aa4d51448bac2b124488f7756ebe5833dc82be195bd58ade5c"
+  },
+  "raw/diagnostic/runtime/restart.log.gz": {
+    "bytes": 13883,
+    "sha256": "cb7cd4e699e9545e350df45e5e119a7385d90b184c7cddb4ec38d67d6b4e5b5b"
+  },
+  "raw/diagnostic/runtime/game.log.gz": {
+    "bytes": 22493,
+    "sha256": "443d682712bbb764a08dfa9ddb74fa3ba6569b286fd25c7e9d235ae07a162b0c"
+  },
+  "raw/diagnostic/runtime/result.json.gz": {
+    "bytes": 6256,
+    "sha256": "b36fd282a79342dad50e6909cc860e0f93195a11e4982e0ea5346c2b1a2f8ce8"
+  },
+  "raw/diagnostic/runtime/resize-observations.json.gz": {
+    "bytes": 4952,
+    "sha256": "8e8b83c361ca34391d51a0ba58eb91a430b312d8bed1bdf0e6f1eaf772790893"
+  },
+  "raw/diagnostic/runtime/background-intervention.json.gz": {
+    "bytes": 120,
+    "sha256": "9194e70ff779fc7e530e47b3e1358b94e9b0d844b512af551395131e9519d4c5"
+  },
+  "raw/diagnostic/runtime/wm.log.gz": {
+    "bytes": 85,
+    "sha256": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c"
+  },
+  "raw/diagnostic/harness/forge_restart_runtime.py.gz": {
+    "bytes": 9632,
+    "sha256": "659c983316e5c8f4f7c9e4cb3949a626277d7eb4282141743b7525a28f28d737"
+  },
+  "raw/diagnostic/harness/campaign_runtime.py.gz": {
+    "bytes": 18356,
+    "sha256": "76ce1daa5939dbbbdcbc0b68162f62b59ce178c14228e1cecb1c8f50684c0591"
+  },
+  "raw/diagnostic/harness/forge_runtime.py.gz": {
+    "bytes": 29487,
+    "sha256": "24313dcedfc2d66b0b2e2d2128372632947681a69ffdd61a8547cdc9b2f69c58"
+  },
+  "raw/diagnostic/harness/campaign_equipment_runtime.py.gz": {
+    "bytes": 43074,
+    "sha256": "670760a3067ba39278110b48d253ccf2bfad35ca069c6772d2efe6469b6dbe37"
+  },
+  "raw/diagnostic/harness/smoke_runtime.py.gz": {
+    "bytes": 23052,
+    "sha256": "4f19824588737a09390a5e89fa442575f0f46aee4acfe8ae7a3c10a52da33b71"
+  },
+  "raw/diagnostic/harness/forge_refresh.py.gz": {
+    "bytes": 4319,
+    "sha256": "c40e9e61179f9ae55d767bd6c9f1333e7b6bced398cd292a190870e701423063"
+  },
+  "raw/production/runtime.log.gz": {
+    "bytes": 4464,
+    "sha256": "fb7c18dcc3248f535147b6c78daa6797e39f572c13245a8eabd052a0dac05085"
+  },
+  "raw/production/run.py.gz": {
+    "bytes": 1156,
+    "sha256": "0d1811445eedb1ada4281773887bb0c9bc7f36c8dc7c1453cb9c25e126fd739e"
+  },
+  "raw/production/manager.log.gz": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw/production/process.json.gz": {
+    "bytes": 995,
+    "sha256": "20defbcb54d2db350d0b66d3f1b115260e8b1bf44fd1223884fa719409716260"
+  },
+  "raw/production/runtime/xvfb.log.gz": {
+    "bytes": 2348,
+    "sha256": "b987a262609a3720f450ab6815ed90b2069dd47b7b012959ca19c325aebf5d55"
+  },
+  "raw/production/runtime/battle-progress.json.gz": {
+    "bytes": 6359,
+    "sha256": "c9ea659ed7cc6c4c280a7dbe602cfddaa86d4a97aa72aebb729c5050c17f2815"
+  },
+  "raw/production/runtime/restart.log.gz": {
+    "bytes": 14744,
+    "sha256": "4e89cc026a6db021d02be6efe89f434c23208a821cacd07615645e92172f8e3f"
+  },
+  "raw/production/runtime/game.log.gz": {
+    "bytes": 24215,
+    "sha256": "e02d05c701e4294e636ca9a10d7ab906ae7257c54ccf836f7d7bafe54ae422d9"
+  },
+  "raw/production/runtime/result.json.gz": {
+    "bytes": 6985,
+    "sha256": "9f8015c7577741e545ea17c01fd6cf7d1a79a9b43ffd2a350837622a497ec1a9"
+  },
+  "raw/production/runtime/resize-observations.json.gz": {
+    "bytes": 4946,
+    "sha256": "54f8264dae2ab870272512c160487249ee62f0b6d7e91cf6a81db14d18171128"
+  },
+  "raw/production/runtime/wm.log.gz": {
+    "bytes": 85,
+    "sha256": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c"
+  },
+  "raw/production/review/mapping.json.gz": {
+    "bytes": 1298,
+    "sha256": "a44d001117b88863e9b8494b8d283a2a50e7119365009c8eccd94818d22b16dc"
+  },
+  "raw/production/harness/forge_restart_runtime.py.gz": {
+    "bytes": 9632,
+    "sha256": "659c983316e5c8f4f7c9e4cb3949a626277d7eb4282141743b7525a28f28d737"
+  },
+  "raw/production/harness/campaign_runtime.py.gz": {
+    "bytes": 18356,
+    "sha256": "76ce1daa5939dbbbdcbc0b68162f62b59ce178c14228e1cecb1c8f50684c0591"
+  },
+  "raw/production/harness/forge_runtime.py.gz": {
+    "bytes": 29487,
+    "sha256": "24313dcedfc2d66b0b2e2d2128372632947681a69ffdd61a8547cdc9b2f69c58"
+  },
+  "raw/production/harness/campaign_equipment_runtime.py.gz": {
+    "bytes": 43074,
+    "sha256": "670760a3067ba39278110b48d253ccf2bfad35ca069c6772d2efe6469b6dbe37"
+  },
+  "raw/production/harness/smoke_runtime.py.gz": {
+    "bytes": 22262,
+    "sha256": "a41555a89871123a786b65d83a585c8b9387c1ccfc68e91140a203bdc8291a8d"
+  },
+  "raw/production/harness/forge_refresh.py.gz": {
+    "bytes": 4319,
+    "sha256": "c40e9e61179f9ae55d767bd6c9f1333e7b6bced398cd292a190870e701423063"
+  }
+}

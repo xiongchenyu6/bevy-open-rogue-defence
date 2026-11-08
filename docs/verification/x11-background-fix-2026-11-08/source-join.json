@@ -1,0 +1,13 @@
+{
+  "source_commit": "fda19e113b08e6e87b006e50f880568729d532df",
+  "base_commit": "c207f382330dba05fa86801e6bb2bd0699192341",
+  "sources": {
+    "Cargo.toml": "694397975f333f32b09f1bda795399b5783cb8ad3c8ae3f4ba6ca96c779e72bd",
+    "Cargo.lock": "611228b68256c7cf1d2a3bf00869b02475cc5158882fba5d403b260e2069c8a6",
+    "src/lib.rs": "d403005f8ce05a92836fb9037d486abc8dc16e2d02f5dcb1f2b08ed15605be9c",
+    "src/window_background.rs": "0a5b3c1272981384e6d2111ebd023ab49571dc6b735524a19edea6270ab8db34"
+  },
+  "baseline_absent": [
+    "src/window_background.rs"
+  ]
+}
