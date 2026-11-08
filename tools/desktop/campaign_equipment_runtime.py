@@ -46,7 +46,7 @@ def battle_clock_reads(path, env):
         for scale in (100, 200, 600):
             crop = Path(directory) / f'clock-{scale}.png'
             subprocess.run(['convert', str(path), '-crop', '74x24+1194+22',
-                '-resize', f'{scale}%', '-colorspace', 'Gray', '-negate',
+                '-resize', f'{scale}%', '-colorspace', 'Gray', '-threshold', '65%', '-negate',
                 '-bordercolor', 'white', '-border', '20', str(crop)],
                 env=env, check=True, capture_output=True)
             text = subprocess.check_output(['tesseract', str(crop), 'stdout', '-l', 'eng',
@@ -514,6 +514,13 @@ def public_panel_state(rows, image=None, env=None):
         return 'inventory'
     if has_gear_rows(rows):
         return 'market'
+    if image is not None and any(1100 <= x < 1250 and 200 <= y < 240
+            and re.match(r'^RESTOCK\s*\d{2}:\d{2}', text, re.I)
+            for text, x, y, *_ in rows):
+        # Combat effects can defeat whole-frame OCR of the market title.
+        # The restock row requests an exact title crop, never implies an open panel.
+        market_header_text(image, env)
+        return 'market'
     if any(70 <= y < 650 and normalized(text) in
             ('attributes', 'legacytraining', 'expeditions', 'settings', 'paused', 'chooseanencounter')
             for text, _, y, *_ in rows):
@@ -548,6 +555,13 @@ def wait_panel_open(shot, env, send, deadline, records, prefix, target_panel, vi
         image = shot(prefix + f'-open-{len(records):02}.png')
         rows = ocr_screenshot(image, env)
         state = public_panel_state(rows, image, env)
+        if state == 'battle' and target_panel == 'market' and image.is_file():
+            try:
+                market_header_text(image, env)
+            except AssertionError:
+                pass
+            else:
+                state = 'market'
         record = dict(visit=visit, screenshot=image.name, state=state, requests=requests)
         records.append(record)
         if state == target_panel:

@@ -1,0 +1,34 @@
+{
+  "frames/r1/current-ui.png": {
+    "source": "target/verification/post-life-public-chapter6-2026-11-08/chapter6/current-ui.png",
+    "sha256": "8592d9324b0ecd723a0437ea07b1ce811632ee28293070975bbff139849f60ab"
+  },
+  "frames/r2/base-strength.png": {
+    "source": "target/verification/post-life-public-chapter6-2026-11-08-r2/chapter6/base-strength.png",
+    "sha256": "4b5ea70f33bd72f62844f6202d0a8e76575eef6bc718d2e82ae34e301cfddd84"
+  },
+  "frames/r3/base-strength-speed.png": {
+    "source": "target/verification/post-life-public-chapter6-2026-11-08-r3/chapter6/base-strength-speed.png",
+    "sha256": "d38241383afdd61ed51091e3839fed481f41845a265ecac6c72a6ca31c63cec2"
+  },
+  "frames/r4/equipment-01-unlock-clock.png": {
+    "source": "target/verification/post-life-public-chapter6-2026-11-08-r4/chapter6/equipment-01-unlock-clock.png",
+    "sha256": "01495573204ff0dc92dd1329aa51bb1ba8f8aa5122f0e4b69e33be78616f1405"
+  },
+  "frames/r5/equipment-01-resume-before.png": {
+    "source": "target/verification/post-life-public-chapter6-2026-11-08-r5/chapter6/equipment-01-resume-before.png",
+    "sha256": "b86b6403371ad69d6702388c0e177b175203260ef7714c5c5be5934101532b91"
+  },
+  "frames/r6/equipment-01-market-open-01.png": {
+    "source": "target/verification/post-life-public-chapter6-2026-11-08-r6/chapter6/equipment-01-market-open-01.png",
+    "sha256": "b98cd3bec1205cc81a2bbbbcd5aa55100ae9558c77893d727b1be7373cac6856"
+  },
+  "frames/r7/equipment-12-market-open-81.png": {
+    "source": "target/verification/post-life-public-chapter6-2026-11-08-r7/chapter6/equipment-12-market-open-81.png",
+    "sha256": "627dd31e04bd0188395e95f8940ad4af35f9af0bb910527d2732e64eec49bb5a"
+  },
+  "frames/r8/equipment-06-market-open-51.png": {
+    "source": "target/verification/post-life-public-chapter6-2026-11-08-r8/chapter6/equipment-06-market-open-51.png",
+    "sha256": "d4c59fb38d5a93b24b36a12d4dabdfa98c76aed56fb86b0a021267d1a0ab04b5"
+  }
+}

@@ -3,7 +3,7 @@ import unittest
 import shutil
 from pathlib import Path
 from smoke_runtime import toolbar_speed, read_toolbar_speed
-from campaign_runtime import strength_from_lines, seed_from_text, strength_purchase
+from campaign_runtime import strength_from_lines, seed_from_text, strength_purchase, battle_clock_from_lines
 
 
 class ToolbarSpeedTests(unittest.TestCase):
@@ -76,3 +76,17 @@ class SeedEvidenceTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class BattleClockTests(unittest.TestCase):
+    def test_late_start_and_valid_toolbar_clock(self):
+        self.assertEqual(battle_clock_from_lines([('23:08', 1200, 25, 1260, 45)]), 1388)
+        self.assertEqual(battle_clock_from_lines([('24:59', 1200, 25, 1260, 45)]), 1499)
+
+    def test_unrelated_invalid_and_conflicting_clocks(self):
+        for lines in [[('23:08', 20, 25, 80, 45)],
+                      [('23:08', 1200, 200, 1260, 220)],
+                      [('23:60', 1200, 25, 1260, 45)],
+                      [('25:01', 1200, 25, 1260, 45)],
+                      [('23:08', 1200, 25, 1260, 45), ('23:07', 1200, 25, 1260, 45)]]:
+            self.assertIsNone(battle_clock_from_lines(lines))

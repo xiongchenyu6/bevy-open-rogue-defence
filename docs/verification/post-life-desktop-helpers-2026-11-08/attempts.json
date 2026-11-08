@@ -1,0 +1,66 @@
+[
+  {
+    "attempt": "r1",
+    "source_root": "target/verification/post-life-public-chapter6-2026-11-08",
+    "process_returncode": 1,
+    "selected_failure_pngs": [
+      "current-ui.png"
+    ]
+  },
+  {
+    "attempt": "r2",
+    "source_root": "target/verification/post-life-public-chapter6-2026-11-08-r2",
+    "process_returncode": 1,
+    "selected_failure_pngs": [
+      "base-strength.png"
+    ]
+  },
+  {
+    "attempt": "r3",
+    "source_root": "target/verification/post-life-public-chapter6-2026-11-08-r3",
+    "process_returncode": 1,
+    "selected_failure_pngs": [
+      "base-strength-speed.png"
+    ]
+  },
+  {
+    "attempt": "r4",
+    "source_root": "target/verification/post-life-public-chapter6-2026-11-08-r4",
+    "process_returncode": 1,
+    "selected_failure_pngs": [
+      "equipment-01-unlock-clock.png"
+    ]
+  },
+  {
+    "attempt": "r5",
+    "source_root": "target/verification/post-life-public-chapter6-2026-11-08-r5",
+    "process_returncode": 1,
+    "selected_failure_pngs": [
+      "equipment-01-resume-before.png"
+    ]
+  },
+  {
+    "attempt": "r6",
+    "source_root": "target/verification/post-life-public-chapter6-2026-11-08-r6",
+    "process_returncode": 1,
+    "selected_failure_pngs": [
+      "equipment-01-market-open-01.png"
+    ]
+  },
+  {
+    "attempt": "r7",
+    "source_root": "target/verification/post-life-public-chapter6-2026-11-08-r7",
+    "process_returncode": 1,
+    "selected_failure_pngs": [
+      "equipment-12-market-open-81.png"
+    ]
+  },
+  {
+    "attempt": "r8",
+    "source_root": "target/verification/post-life-public-chapter6-2026-11-08-r8",
+    "process_returncode": 1,
+    "selected_failure_pngs": [
+      "equipment-06-market-open-51.png"
+    ]
+  }
+]

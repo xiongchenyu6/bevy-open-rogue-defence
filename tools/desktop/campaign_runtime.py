@@ -25,6 +25,17 @@ def read_progress(path):
                 upgrades=[int(value) for value in lines[4].split(',')])
 
 
+def battle_clock_from_lines(text_lines):
+    values = set()
+    for text, left, top, right, bottom in text_lines:
+        match = re.fullmatch(r'(\d{1,2}):(\d{2})', text.replace(' ', ''))
+        if match and left >= 1100 and 0 <= top < 70:
+            minutes, seconds = map(int, match.groups())
+            if seconds < 60 and 0 < minutes * 60 + seconds <= 1500:
+                values.add(minutes * 60 + seconds)
+    return values.pop() if len(values) == 1 else None
+
+
 def strength_from_lines(text_lines):
     """Only accept the Strength row's first-column value, never other stats."""
     values, evidence = set(), []
@@ -154,8 +165,18 @@ def main(policy_factory=None):
         call(['xdotool', 'mousemove', '--window', win, str((left+right)//2), str((top+bottom)//2)])
         call(['xdotool', 'click', '1'])
         deadline = time.monotonic() + 120
+        previous = None
         while time.monotonic() < deadline:
-            if any('24:' in text.replace(' ', '') for text, *_ in lines(win)): break
+            clock_screen = shot(win, 'startup-clock-source.png')
+            clock_crop = OUT / 'startup-clock-crop.png'
+            call(['convert', str(clock_screen), '-crop', '120x45+1160+10',
+                  '-resize', '300%', str(clock_crop)])
+            clock_text = call(['tesseract', str(clock_crop), 'stdout', '-l', 'eng', '--psm', '7'])
+            current = battle_clock_from_lines([(clock_text.strip(), 1160, 10, 1280, 55)])
+            if previous is not None and current is not None and current < previous:
+                break
+            if current is not None:
+                previous = current
             call(['xdotool', 'key', '1']); time.sleep(.3)
         else: raise RuntimeError('Actual battle countdown did not advance after hero card click')
     def record_strength(win, app, name, expected):
@@ -164,7 +185,6 @@ def main(policy_factory=None):
         assert geometry['WIDTH'] == '1280' and geometry['HEIGHT'] == '720'
         speed_screen = shot(win, name.replace('.png', '-speed.png'))
         assert read_toolbar_speed(speed_screen, env) == 1, 'Sample attributes only after confirming actual 1x'
-        # Screenshot-confirmed public portrait rectangle: (156,22,44,44).
         call(['xdotool', 'mousemove', '--window', win, '178', '44'])
         call(['xdotool', 'click', '1'])
         wait_text(win, app, 'ATTRIBUTES')

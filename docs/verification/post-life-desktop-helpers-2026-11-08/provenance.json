@@ -1,0 +1,11 @@
+{
+  "base_commit": "522f1dae2c2ca9da62904ba262dedea21806e98c",
+  "sources": {
+    "tools/desktop/campaign_runtime.py": "053f88bac9b2e5ce35cde501481da8fce7680637fefea4d756c73cdcc84d2f13",
+    "tools/desktop/campaign_equipment_runtime.py": "f877832b70c1beeff178e602bb3b17cd978f056be79bfb68bd95500db883d85d",
+    "tools/desktop/test_campaign_runtime.py": "c83ab424fec74c4909e63ac3bd616548a16ca94effc842c3757b12e16171959f",
+    "tools/desktop/test_campaign_equipment_runtime.py": "5ebf550534769631b114bb1705572dc2783b0b1959cb89fba2e1657f0e4c39a3"
+  },
+  "live_run_excluded": "post-life-public-chapter6-2026-11-08-r9",
+  "scope": "Consumer robustness only. R9 remains live and is excluded."
+}

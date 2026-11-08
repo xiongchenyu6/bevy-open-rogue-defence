@@ -722,4 +722,16 @@ class EquipmentPolicyParsing(unittest.TestCase):
         self.assertEqual(selected_inventory_name(crop_text(detail,'840x25+220+445',None)), 'arclens')
 
 
+class MarketTitleRecoveryTests(unittest.TestCase):
+    def test_restock_candidate_requires_exact_title_pixels(self):
+        rows = [('RESTOCK 00:31 X', 1132, 215, 1240, 228)]
+        with patch('campaign_equipment_runtime.market_header_text', return_value='BLACK MARKET') as read:
+            self.assertEqual(public_panel_state(rows, Path('screen.png')), 'market')
+            read.assert_called_once()
+        with patch('campaign_equipment_runtime.market_header_text', side_effect=AssertionError('Unreadable title')):
+            with self.assertRaises(AssertionError):
+                public_panel_state(rows, Path('screen.png'))
+        self.assertEqual(public_panel_state(rows), 'unknown')
+
+
 if __name__=='__main__':unittest.main()
