@@ -1,0 +1,2710 @@
+{
+  "chapter6/equipment-11-item-8-before.png": {
+    "bytes": 387785,
+    "sha256": "23faac781437f9337f9b85ffb12c62f5b9e31c8147897b01402c8c67e61f5bcb"
+  },
+  "chapter6/run-087.png": {
+    "bytes": 778968,
+    "sha256": "55ef6cb8d9574b306f38ae81a0f324648b19419933583225d9c548e89b7e6981"
+  },
+  "chapter6/equipment-10-selected-inspect-0-1.png": {
+    "bytes": 646644,
+    "sha256": "71dccbbf84a16c83650e86ba947ad24aaf456807d7fe72d46e881d46b3ec7e3d"
+  },
+  "chapter6/run-085.png": {
+    "bytes": 757045,
+    "sha256": "817c9c589bb6532cda597f9a53bacde5d40d252c63c017f3832a3a35a8cc3917"
+  },
+  "chapter6/equipment-10-inventory-icon-7.png": {
+    "bytes": 374606,
+    "sha256": "6105a916827dec2da60a87bef04e14ef74c4d359441fadc37119bd022b103046"
+  },
+  "chapter6/run-092.png": {
+    "bytes": 763466,
+    "sha256": "3c339ee9d3ff4f9e8dcf6300b3138227e8d47d6971d59952ef6c3ae2a15e11e0"
+  },
+  "chapter6/equipment-08-close-006.png": {
+    "bytes": 782145,
+    "sha256": "e990df455d20d4faf7ac9da9e92f39f0a002feb8cfd0e85cc975230379efb674"
+  },
+  "chapter6/equipment-12-inspect-1-0.png": {
+    "bytes": 658125,
+    "sha256": "459e935a917a2af9084d06392d21b846e7a4f9c9445890820e4d8cc01e8b795a"
+  },
+  "chapter6/equipment-06-inspect-2-1.png": {
+    "bytes": 631887,
+    "sha256": "8b5bcd91b05fa0c58c92ee9c1bbb8e83bebf6e3bfd9356185439411b3dab8ccc"
+  },
+  "chapter6/equipment-07-item-4-ack-018.png": {
+    "bytes": 341198,
+    "sha256": "7c11092153bd325f04eae314a17e2612f24db10af97f03ee3d4ec165c5aac1d1"
+  },
+  "chapter6/equipment-10-inventory-icon-6.png": {
+    "bytes": 377287,
+    "sha256": "466dd266f56f8a8cd0db7dc843a0f52f518054aa4a4fa51adebfd2b77fa94acc"
+  },
+  "chapter6/equipment-07-item-3-before.png": {
+    "bytes": 337071,
+    "sha256": "c192b0a63579a021ee4853a1e66fdd54b85278ff59b429f490a2f2e2afe80fc7"
+  },
+  "chapter6/equipment-07-inventory-icon-1.png": {
+    "bytes": 322693,
+    "sha256": "3d192dd5b8e130e9feec89ee90172b9471f334c46d2da499709d95178c325db8"
+  },
+  "chapter6/equipment-06-inventory-icon-1.png": {
+    "bytes": 307484,
+    "sha256": "adfdd0973b0311309946d5d3acf8d1a321630c136295436a0146adac299eac11"
+  },
+  "chapter6/equipment-11-item-6-ack-028.png": {
+    "bytes": 378897,
+    "sha256": "ea6c282e01100c225357ed340b695402b9248bca49d806c0fd8a0537a57f2eaa"
+  },
+  "chapter6/equipment-12-item-5-ack-022.png": {
+    "bytes": 389282,
+    "sha256": "982fcb125e7b4523ca1d5819121b3bcfccb9c7e39fff405a442a84841316b6cc"
+  },
+  "chapter6/equipment-08-inventory-open-26.png": {
+    "bytes": 786860,
+    "sha256": "898730d90ab725bea16e6bfbda9d47708af82115e31f4b7ed7e46efde9bb0110"
+  },
+  "chapter6/equipment-06-resume-after.png": {
+    "bytes": 748479,
+    "sha256": "ee540963b74d1df66a764153e80b31adba6dc5a15fe24d25b969718bf7fc336c"
+  },
+  "chapter6/equipment-09-item-0-ack-002.png": {
+    "bytes": 360294,
+    "sha256": "7626a8adc3254f919fe98f1375c76486aefe1bd5adb46d4db2047078ce6e77f4"
+  },
+  "chapter6/equipment-11-market-open-37.png": {
+    "bytes": 662960,
+    "sha256": "628c7d8c4d218bc23758e128a890b8563e9f1e501a40836093d32793b19ecf87"
+  },
+  "chapter6/equipment-06-item-0-ack-001.png": {
+    "bytes": 325133,
+    "sha256": "9ee35711973df02e0b10078c085f76ee69847d4db31f162c74521b8be2b39f65"
+  },
+  "chapter6/run-043.png": {
+    "bytes": 753404,
+    "sha256": "58546f9be22444e7cfcd93b4276102477d2f03f670cd6bf59a99c1c84781c7ef"
+  },
+  "chapter6/equipment-09-item-4-ack-017.png": {
+    "bytes": 367683,
+    "sha256": "e06097950d293cef99ec53fe19fdaa33df0b823a4d8382a3090323835839e133"
+  },
+  "chapter6/run-137.png": {
+    "bytes": 767084,
+    "sha256": "96fd577eb56c66cb769a258549123c29e01c53b18dccdf2871e16b5b7acee786"
+  },
+  "chapter6/equipment-07-inspect-1-1.png": {
+    "bytes": 642480,
+    "sha256": "22962baf8c5e3fcad74ab377aeccb7b5c3b4f4f517349479ecd1beff42b8aab5"
+  },
+  "chapter6/run-008.png": {
+    "bytes": 753792,
+    "sha256": "eadf3da4af37108448ff30f51496ad3ab5f5634cc78bd3a49aa40b4bfaa5d83b"
+  },
+  "chapter6/equipment-01-inspect-2-0.png": {
+    "bytes": 631818,
+    "sha256": "ba18e563faecd6ea6a10262eaeddd53bfb46d72570658b691e193fe0a13c6b2d"
+  },
+  "chapter6/equipment-05-inspect-1-1.png": {
+    "bytes": 633510,
+    "sha256": "c88a6a9c01d1f4bf0aee9bed38ecfaf01839ccb54023841f57ee7d6358280e0b"
+  },
+  "chapter6/equipment-09-inventory-icon-3.png": {
+    "bytes": 367683,
+    "sha256": "e06097950d293cef99ec53fe19fdaa33df0b823a4d8382a3090323835839e133"
+  },
+  "chapter6/equipment-12-inspect-4-1.png": {
+    "bytes": 659825,
+    "sha256": "f67e11ab15852fae27c24ee846c1e7ccff7d516f2466ac6d78a9e1e1e23de2a0"
+  },
+  "chapter6/equipment-08-selected-inspect-0-0.png": {
+    "bytes": 638926,
+    "sha256": "3f6ac4aeff69064ed3b20218fc88f2b523a436e5fdd588e0d08aceed24ce0ebb"
+  },
+  "chapter6/equipment-11-inspect-2-1.png": {
+    "bytes": 661866,
+    "sha256": "2e3719f6ffc6c354be5bd24de250b2cc69e1fc33ee735b53613354764b0345ff"
+  },
+  "chapter6/equipment-06-item-3-ack-013.png": {
+    "bytes": 320859,
+    "sha256": "99af04e733e419647fd702ac391311dd422badd60850ff04ea3fd432c69838ed"
+  },
+  "chapter6/run-050.png": {
+    "bytes": 753743,
+    "sha256": "e75ccdd70219b07af444883a36c4158d281d18fce767d3f5509231f1e3199498"
+  },
+  "chapter6/equipment-11-item-5-ack-022.png": {
+    "bytes": 398074,
+    "sha256": "372ed87aa6540806115ab244c1852d21f888b7bdb92925004a19e85c5668dd80"
+  },
+  "chapter6/equipment-11-item-3-ack-014.png": {
+    "bytes": 394197,
+    "sha256": "786a095bd74b4224cda0b710b5183785e0e3ea00e1be71d24cb8812b938549e4"
+  },
+  "chapter6/equipment-11-item-6-before.png": {
+    "bytes": 375380,
+    "sha256": "b12af5e573587d21bfff5f45fc783e294d2af152ec5e03a02741e4d877a7a273"
+  },
+  "chapter6/run-126.png": {
+    "bytes": 786710,
+    "sha256": "ed371a3ee45e7b6b638e4448b34f5cf76150877ef10023b93bbd93d8ae270c98"
+  },
+  "chapter6/equipment-02-inspect-1-0.png": {
+    "bytes": 635766,
+    "sha256": "b303053750d96453bb8f0ed31e869a1fa553015966a287feb0d8e8a2224f8b06"
+  },
+  "chapter6/equipment-03-market-open-06.png": {
+    "bytes": 731876,
+    "sha256": "1f050d5d4084efb1df7c58a4289f45c3049f64e06fb80a879618926295daed5b"
+  },
+  "chapter6/equipment-08-inspect-3-0.png": {
+    "bytes": 637668,
+    "sha256": "e1fb9af1cf6a90b90e1d8afa426bcfa959f06f6ad38f623f38e713769f3d2421"
+  },
+  "chapter6/equipment-12-after.png": {
+    "bytes": 659327,
+    "sha256": "13a915c70d6facf9dbdafd226fbc0a6b918ab003d5fdc0701c267ce01b365edb"
+  },
+  "chapter6/equipment-05-inventory-icon-2.png": {
+    "bytes": 310783,
+    "sha256": "155847ef16b18df5a5c0451128d38ac756b6d4935fc9b8ea19ac967e707cbd22"
+  },
+  "chapter6/equipment-12-inventory-icon-6.png": {
+    "bytes": 393210,
+    "sha256": "49641baedb63191685f9b077f2dd6306e49a3fffa38723f9ad85f9be5875377c"
+  },
+  "chapter6/equipment-09-before.png": {
+    "bytes": 651561,
+    "sha256": "0f669ec49c3585794bf4e3bc0cf45e2a7e890cc06816150073e41025f2453390"
+  },
+  "chapter6/equipment-10-item-7-before.png": {
+    "bytes": 377287,
+    "sha256": "466dd266f56f8a8cd0db7dc843a0f52f518054aa4a4fa51adebfd2b77fa94acc"
+  },
+  "chapter6/equipment-08-item-1-ack-006.png": {
+    "bytes": 339379,
+    "sha256": "9b765d2e69c68df4eae8dbaf2909ccea9fb1a4a3fda7a169af243bf9c90d7260"
+  },
+  "chapter6/run-033.png": {
+    "bytes": 757422,
+    "sha256": "0c17864811248f74bb130a77052b9642f257a8d84ea8ac6ad9125c60494b9aad"
+  },
+  "chapter6/equipment-11-resume-after.png": {
+    "bytes": 787680,
+    "sha256": "32a69c87e4953b15fd707d2befe37793c225eae152ff93c7d82cd24b6b2b53a5"
+  },
+  "chapter6/equipment-06-inventory-open-19.png": {
+    "bytes": 325133,
+    "sha256": "9ee35711973df02e0b10078c085f76ee69847d4db31f162c74521b8be2b39f65"
+  },
+  "chapter6/equipment-12-item-7-ack-030.png": {
+    "bytes": 402296,
+    "sha256": "a60b232e9d8164fa1fe40f35ca44ba20a30bd537c8b7fb08d5f068f7fd362216"
+  },
+  "chapter6/equipment-10-inventory-open-35.png": {
+    "bytes": 374606,
+    "sha256": "6105a916827dec2da60a87bef04e14ef74c4d359441fadc37119bd022b103046"
+  },
+  "chapter6/equipment-04-inspect-0-1.png": {
+    "bytes": 655622,
+    "sha256": "e73d4e20d400f1c55880b596718d7b8b89b66ba5ad11105e9a64482181c99a43"
+  },
+  "chapter6/equipment-05-inspect-3-1.png": {
+    "bytes": 631212,
+    "sha256": "d332743b5ba73473354abc33aad517c50df716f4b5acc9a6f5d03df99c2291ac"
+  },
+  "chapter6/run-081.png": {
+    "bytes": 782682,
+    "sha256": "62fb8a83e9619f6baeec0ab10ece3d55a26ea2f55206641293a6157574cb1cd4"
+  },
+  "chapter6/equipment-09-inspect-4-1.png": {
+    "bytes": 651561,
+    "sha256": "0f669ec49c3585794bf4e3bc0cf45e2a7e890cc06816150073e41025f2453390"
+  },
+  "chapter6/equipment-08-inspect-1-0.png": {
+    "bytes": 638840,
+    "sha256": "d4ab2a8fb3b345f8caed3e0112a06fc113e89fe771c0b02dff0e041bcd381965"
+  },
+  "chapter6/equipment-12-item-2-before.png": {
+    "bytes": 393919,
+    "sha256": "c5683bcdbda9dc6fbee749b0ae63ffacf635f1ab704653159fe2e2063101f9b1"
+  },
+  "chapter6/equipment-10-item-4-before.png": {
+    "bytes": 381268,
+    "sha256": "ee11db6e0b92a509d39338f91773bbc560f56963fd10561bd35addfae1f44805"
+  },
+  "chapter6/equipment-12-close-001.png": {
+    "bytes": 399482,
+    "sha256": "e0bbf99cbf42727d26a90ed7e9746f321bba1f6d0523c5223877dd6c945c4070"
+  },
+  "chapter6/equipment-11-selected-inspect-0-0.png": {
+    "bytes": 663303,
+    "sha256": "7645cf16fbe0f8fb817634af7a80442f88bc216a286d81b88469482260f86179"
+  },
+  "chapter6/equipment-06-inspect-3-1.png": {
+    "bytes": 636262,
+    "sha256": "1d8915de84b61e6a4eb24c49169452919721c967a88aa13093a8422b58e46c79"
+  },
+  "chapter6/run-106.png": {
+    "bytes": 791151,
+    "sha256": "c208090402aa92ac448fe5be614e794310b7ba0d0fa3b492d5b9d9718e2c9444"
+  },
+  "chapter6/equipment-11-inspect-2-0.png": {
+    "bytes": 664742,
+    "sha256": "8ccd93ab90c7e616dd5da7ce0f4bcc7a2ee1ea90e3649b299582d1880605d442"
+  },
+  "chapter6/run-127.png": {
+    "bytes": 857436,
+    "sha256": "591d322c83531458b911d4799e3931d419b8d2af683e31ee9948a1445fc3abc2"
+  },
+  "chapter6/equipment-09-item-1-ack-005.png": {
+    "bytes": 360294,
+    "sha256": "7626a8adc3254f919fe98f1375c76486aefe1bd5adb46d4db2047078ce6e77f4"
+  },
+  "chapter6/equipment-10-inventory.png": {
+    "bytes": 374606,
+    "sha256": "6105a916827dec2da60a87bef04e14ef74c4d359441fadc37119bd022b103046"
+  },
+  "chapter6/run-105.png": {
+    "bytes": 780848,
+    "sha256": "c92db1d70373d6bf382dcb4e9433af55ec5743f8114a8a134d7e92de62cc317c"
+  },
+  "chapter6/equipment-09-item-2-ack-009.png": {
+    "bytes": 355094,
+    "sha256": "11d2d2aca5b144fa5b831701927f374fb91a8713a4f0b8075823ad19949cdc35"
+  },
+  "chapter6/equipment-05-market.png": {
+    "bytes": 630924,
+    "sha256": "b42600d05cea3345673d1918e9b7fe4e2dd855d17457d44d248111201bf05bfc"
+  },
+  "chapter6/equipment-06-item-1-ack-005.png": {
+    "bytes": 312298,
+    "sha256": "1cd97ca748665d46280bf3b89f865ac8b3423154d5b47b26f318a80dbdd26081"
+  },
+  "chapter6/equipment-11-item-7-ack-031.png": {
+    "bytes": 378897,
+    "sha256": "ea6c282e01100c225357ed340b695402b9248bca49d806c0fd8a0537a57f2eaa"
+  },
+  "chapter6/equipment-05-inspect-4-0.png": {
+    "bytes": 631212,
+    "sha256": "d332743b5ba73473354abc33aad517c50df716f4b5acc9a6f5d03df99c2291ac"
+  },
+  "chapter6/equipment-06-inspect-4-1.png": {
+    "bytes": 635964,
+    "sha256": "70d355c363a2ce903e786b3e1c8105f2e0ab305e867ac1b330b1d5bed7b36e92"
+  },
+  "chapter6/equipment-10-close-001.png": {
+    "bytes": 374606,
+    "sha256": "6105a916827dec2da60a87bef04e14ef74c4d359441fadc37119bd022b103046"
+  },
+  "chapter6/equipment-02-market-open-02.png": {
+    "bytes": 768440,
+    "sha256": "c651bc0d352d25739b1d6815e717e471d9ecd600fce6b4ba3f4be2f9b4a36f79"
+  },
+  "chapter6/equipment-09-item-0-before.png": {
+    "bytes": 359855,
+    "sha256": "752b2135f85cbadfb173dfae242c29f1f3e721117dd5f9a947de290e18a3d37c"
+  },
+  "chapter6/equipment-06-inventory-open-18.png": {
+    "bytes": 753368,
+    "sha256": "00c9ef9c91ef02acf00c0dbf894c2f260ef15c053e635b96e33ee2b30f62d3dd"
+  },
+  "chapter6/equipment-07-inspect-0-1.png": {
+    "bytes": 643824,
+    "sha256": "4c639708548c82ca301e165a20bd4b8265c970dd5718b39e18f72725c499e58b"
+  },
+  "chapter6/equipment-03-inspect-0-0.png": {
+    "bytes": 641141,
+    "sha256": "60462213cb511757475499f91912ee1dcf40e46ae11a9478996249bd4378b9aa"
+  },
+  "chapter6/equipment-12-item-2-ack-010.png": {
+    "bytes": 408245,
+    "sha256": "3a267194b511c1ecf002bdaf6a55500dc481814ea1791521612889b03ea48ded"
+  },
+  "chapter6/equipment-03-market.png": {
+    "bytes": 641141,
+    "sha256": "60462213cb511757475499f91912ee1dcf40e46ae11a9478996249bd4378b9aa"
+  },
+  "chapter6/equipment-12-selected-inspect-0-0.png": {
+    "bytes": 659825,
+    "sha256": "f67e11ab15852fae27c24ee846c1e7ccff7d516f2466ac6d78a9e1e1e23de2a0"
+  },
+  "chapter6/equipment-09-inspect-0-0.png": {
+    "bytes": 648176,
+    "sha256": "0395af0046cf765260325bff7f15be20a13938492f5ad4b593e080c370f87fa3"
+  },
+  "chapter6/equipment-05-after.png": {
+    "bytes": 633539,
+    "sha256": "285d4818442cd825c1f3b926277e38f746e831f56a0730c29b1bfafd8520eed7"
+  },
+  "chapter6/equipment-09-inspect-3-1.png": {
+    "bytes": 649324,
+    "sha256": "ca59c4b706d407b0c9988f8513a1f486337bcd87f54feaecd204e2e1c0712d85"
+  },
+  "chapter6/equipment-11-item-5-ack-024.png": {
+    "bytes": 375380,
+    "sha256": "b12af5e573587d21bfff5f45fc783e294d2af152ec5e03a02741e4d877a7a273"
+  },
+  "chapter6/equipment-03-selected-inspect-1-0.png": {
+    "bytes": 640905,
+    "sha256": "b9746363a764eb51eca6790918e8dd1cc27f54f08bba2dd894768f812a2c484e"
+  },
+  "chapter6/equipment-11-close-001.png": {
+    "bytes": 384911,
+    "sha256": "85a041d941b04f3f219b297ab9dc1c2249673d51c5a9021e43e782319e852836"
+  },
+  "chapter6/run-116.png": {
+    "bytes": 837591,
+    "sha256": "6e333756278e891c65f18e60ca3bdfe1c9a2b300c9a76d307be340ce81bca88e"
+  },
+  "chapter6/equipment-12-item-2-ack-009.png": {
+    "bytes": 393919,
+    "sha256": "c5683bcdbda9dc6fbee749b0ae63ffacf635f1ab704653159fe2e2063101f9b1"
+  },
+  "chapter6/run-102.png": {
+    "bytes": 790829,
+    "sha256": "ecf0b84dd019d4bea019499a038e16420911aa9bc91a41065de3d2dfcfcfff6f"
+  },
+  "chapter6/equipment-09-item-2-ack-010.png": {
+    "bytes": 369331,
+    "sha256": "2370dc99411bc8b0f086a36a498ecf90c11fbe7adfb569dc06d29394078409b6"
+  },
+  "chapter6/run-122.png": {
+    "bytes": 807609,
+    "sha256": "14444797495ff229c4c28aef4f326e907ba3aab5e467d2538bd02713f44c6e40"
+  },
+  "chapter6/equipment-05-inspect-0-0.png": {
+    "bytes": 630725,
+    "sha256": "c8f706b068e830d175d75a9cd38b92d402def2b9e6cd13a0f06f2a3174a416de"
+  },
+  "chapter6/run-134.png": {
+    "bytes": 781907,
+    "sha256": "43e397585c3420170b101b29f9a0c7b506e54185f13cda8ab9b00d6ebf8f096f"
+  },
+  "chapter6/equipment-10-inventory-icon-0.png": {
+    "bytes": 374701,
+    "sha256": "62707086faba8ef777ab384149ce505f5896d688bc1f25f3f78f43e8864ffcc3"
+  },
+  "chapter6/equipment-09-item-0-ack-001.png": {
+    "bytes": 359855,
+    "sha256": "752b2135f85cbadfb173dfae242c29f1f3e721117dd5f9a947de290e18a3d37c"
+  },
+  "chapter6/equipment-12-item-6-ack-026.png": {
+    "bytes": 393210,
+    "sha256": "49641baedb63191685f9b077f2dd6306e49a3fffa38723f9ad85f9be5875377c"
+  },
+  "chapter6/run-082.png": {
+    "bytes": 781531,
+    "sha256": "aea366bd50304dff07b8ebc695f71530f3794e118436ad9152bc2f838dfdbf78"
+  },
+  "chapter6/equipment-07-item-3-ack-014.png": {
+    "bytes": 335333,
+    "sha256": "28376b14bdc7f998e48542a944de388e974c8196ce92d9c7240e817b9e542a65"
+  },
+  "chapter6/equipment-11-item-8-ack-036.png": {
+    "bytes": 384911,
+    "sha256": "85a041d941b04f3f219b297ab9dc1c2249673d51c5a9021e43e782319e852836"
+  },
+  "chapter6/equipment-07-item-2-ack-009.png": {
+    "bytes": 322693,
+    "sha256": "3d192dd5b8e130e9feec89ee90172b9471f334c46d2da499709d95178c325db8"
+  },
+  "chapter6/equipment-05-resume-before.png": {
+    "bytes": 751114,
+    "sha256": "6ec5c88aa12442d8bcf4f21d4b37ff969b4cd6c58ba68a0acc1b4b89bc083977"
+  },
+  "chapter6/equipment-09-resume-after.png": {
+    "bytes": 777924,
+    "sha256": "2538f5d7b56e05850c0bc4a8cd8a93cde66bdbf94e7eb925c6cb32c56ebf26b6"
+  },
+  "chapter6/equipment-06-inspect-1-1.png": {
+    "bytes": 638585,
+    "sha256": "b1b29620258a8ed39160dad1147c5c82ba1aadc92d814607a069f9b367374350"
+  },
+  "chapter6/run-040.png": {
+    "bytes": 752385,
+    "sha256": "316e0c5610dae1db520ff266340a2424c4bc636c5675166e7d1feac0c993d83f"
+  },
+  "chapter6/equipment-08-item-1-ack-005.png": {
+    "bytes": 344214,
+    "sha256": "77504079656ac8ef1d018a840b4846e085f0394d06b8c642be1b692e0acc1809"
+  },
+  "chapter6/equipment-03-inspect-1-1.png": {
+    "bytes": 640695,
+    "sha256": "7551c401f6192851d932d941cc82565122b2a11101b9b23a3754a465fdc25d08"
+  },
+  "chapter6/equipment-12-purchase-00.png": {
+    "bytes": 659327,
+    "sha256": "13a915c70d6facf9dbdafd226fbc0a6b918ab003d5fdc0701c267ce01b365edb"
+  },
+  "chapter6/equipment-10-inspect-4-0.png": {
+    "bytes": 648005,
+    "sha256": "613cb47d9e185ce4b614d0334de04d85196565742649ee47576798df2492cc04"
+  },
+  "chapter6/run-057.png": {
+    "bytes": 767942,
+    "sha256": "023f1104430c090146cd5f29bf0cb3fddfa5f11069c6391be3e1361f38104181"
+  },
+  "chapter6/equipment-07-close-004.png": {
+    "bytes": 341198,
+    "sha256": "7c11092153bd325f04eae314a17e2612f24db10af97f03ee3d4ec165c5aac1d1"
+  },
+  "chapter6/run-064.png": {
+    "bytes": 822563,
+    "sha256": "ae0dbc5fe74f849d8d76d7936b6c499015959e8721ce6f8d33ba670c20e64fc4"
+  },
+  "chapter6/equipment-11-after.png": {
+    "bytes": 660001,
+    "sha256": "cbde36535a3e0530227f42769fcb7358a033aee3225dde5729fcade8a4c60c39"
+  },
+  "chapter6/run-013.png": {
+    "bytes": 762173,
+    "sha256": "401b2ddac66c6fa087e4b8bc90046a5ee21746b7352f8da74a85c64f8d552f1e"
+  },
+  "chapter6/equipment-03-close-004.png": {
+    "bytes": 297194,
+    "sha256": "362576b2869fe748aa66de29de2f2b9118bbee4b01f98034a489f9a483ad1285"
+  },
+  "chapter6/equipment-07-inspect-3-0.png": {
+    "bytes": 643122,
+    "sha256": "1b8302fc52cd54d83e116152df501b390ad26f7c8351a2f44247a828a6e58867"
+  },
+  "chapter6/equipment-11-item-0-ack-001.png": {
+    "bytes": 384911,
+    "sha256": "85a041d941b04f3f219b297ab9dc1c2249673d51c5a9021e43e782319e852836"
+  },
+  "chapter6/run-110.png": {
+    "bytes": 793176,
+    "sha256": "601bce7ff6b821114e4fd30ac04bfb05832db8eba07f9d504a9d2f3a232ff0f1"
+  },
+  "chapter6/run-118.png": {
+    "bytes": 818849,
+    "sha256": "ba79af95e6622a036c5fdb069fbd784135e9472a203217692b2fa16c0de358fc"
+  },
+  "chapter6/equipment-08-item-0-ack-002.png": {
+    "bytes": 344214,
+    "sha256": "77504079656ac8ef1d018a840b4846e085f0394d06b8c642be1b692e0acc1809"
+  },
+  "chapter6/equipment-03-unlock-clock.png": {
+    "bytes": 773040,
+    "sha256": "30180b253b4f274bb60041e32f93dc8f5ee946bc5a20675d0fbbfcc73ba12079"
+  },
+  "chapter6/run-063.png": {
+    "bytes": 750223,
+    "sha256": "b503997d9cd34108e82a76525f2122b213922f3f9015d1a311a3b5ed513582b6"
+  },
+  "chapter6/equipment-03-item-1-before.png": {
+    "bytes": 293007,
+    "sha256": "174542658591ce2cecdf72877e62db2e12f6bd24d82f53f277efeb7cf7c37305"
+  },
+  "chapter6/run-135.png": {
+    "bytes": 771344,
+    "sha256": "b96c73b0ea0dce8fb2129144092ab8597c859ecaf8eee6d8ab4154e809aa4a95"
+  },
+  "chapter6/equipment-09-item-1-ack-006.png": {
+    "bytes": 355094,
+    "sha256": "11d2d2aca5b144fa5b831701927f374fb91a8713a4f0b8075823ad19949cdc35"
+  },
+  "chapter6/equipment-08-market.png": {
+    "bytes": 638840,
+    "sha256": "d4ab2a8fb3b345f8caed3e0112a06fc113e89fe771c0b02dff0e041bcd381965"
+  },
+  "chapter6/equipment-04-inspect-2-1.png": {
+    "bytes": 653472,
+    "sha256": "170e59def247eb75d17fbe6331e94777592b3acd55fb0cebb4f6d595bd343fbc"
+  },
+  "chapter6/equipment-07-item-1-ack-006.png": {
+    "bytes": 322693,
+    "sha256": "3d192dd5b8e130e9feec89ee90172b9471f334c46d2da499709d95178c325db8"
+  },
+  "chapter6/equipment-05-market-open-12.png": {
+    "bytes": 760664,
+    "sha256": "ce6bbc68c8a6e30eaac29dde2c677a6bf7a8b3edf1f6af6ae5db9c525d6e7e68"
+  },
+  "chapter6/equipment-06-inventory.png": {
+    "bytes": 325133,
+    "sha256": "9ee35711973df02e0b10078c085f76ee69847d4db31f162c74521b8be2b39f65"
+  },
+  "chapter6/equipment-03-inspect-3-1.png": {
+    "bytes": 641074,
+    "sha256": "bd8c1ad41e32c6e6e6ac687f08dfcbdd95242cd2e1c853c66d7fde1c2a5df81a"
+  },
+  "chapter6/equipment-12-inventory-open-43.png": {
+    "bytes": 399366,
+    "sha256": "f5e1c7239007c2b293ca4656d85d1279e9b279201230da0d147d1fa1cba9eaba"
+  },
+  "chapter6/equipment-05-inspect-2-1.png": {
+    "bytes": 626631,
+    "sha256": "62a21200ea228ece8a06d71f57e56a6accc7458ebc17fa85e18cd05a56c2ed80"
+  },
+  "chapter6/run-011.png": {
+    "bytes": 752230,
+    "sha256": "01554d8626dc6fe4c323d36eb5d264629590aab0f43f85652d17d320f49ddde0"
+  },
+  "chapter6/equipment-09-item-3-ack-014.png": {
+    "bytes": 367683,
+    "sha256": "e06097950d293cef99ec53fe19fdaa33df0b823a4d8382a3090323835839e133"
+  },
+  "chapter6/equipment-11-inventory-open-39.png": {
+    "bytes": 384911,
+    "sha256": "85a041d941b04f3f219b297ab9dc1c2249673d51c5a9021e43e782319e852836"
+  },
+  "chapter6/equipment-05-inventory-open-14.png": {
+    "bytes": 745580,
+    "sha256": "3cced269fff9953a5056c3f2aeb8a6be247d1c85c4c333bc65d3b63df5d3c742"
+  },
+  "chapter6/equipment-08-item-3-ack-013.png": {
+    "bytes": 352820,
+    "sha256": "536f7a5b6813c5d4ed736fd8a4322f024a3ed6e240407e359636b617004ce48f"
+  },
+  "chapter6/equipment-08-item-4-ack-018.png": {
+    "bytes": 357304,
+    "sha256": "761126b7c3e63a372f5f342c9f487592caa1a6f7d36ec9fdef9ad6db1f913350"
+  },
+  "chapter6/equipment-11-inspect-4-1.png": {
+    "bytes": 663303,
+    "sha256": "7645cf16fbe0f8fb817634af7a80442f88bc216a286d81b88469482260f86179"
+  },
+  "chapter6/equipment-10-resume-after.png": {
+    "bytes": 794758,
+    "sha256": "60033da80117c897c8b52fe9c1e4f88bbc41a75458748f672e7bafa4c6346d1a"
+  },
+  "chapter6/equipment-07-item-0-ack-001.png": {
+    "bytes": 341198,
+    "sha256": "7c11092153bd325f04eae314a17e2612f24db10af97f03ee3d4ec165c5aac1d1"
+  },
+  "chapter6/run-047.png": {
+    "bytes": 765412,
+    "sha256": "ed6e340f3f62b1b95c12f61ca963a51906ffaaaf9eaeabc1615f51f95ac6cb63"
+  },
+  "chapter6/equipment-04-inspect-3-0.png": {
+    "bytes": 653472,
+    "sha256": "170e59def247eb75d17fbe6331e94777592b3acd55fb0cebb4f6d595bd343fbc"
+  },
+  "chapter6/run-007.png": {
+    "bytes": 756259,
+    "sha256": "f61198cb79654647334cf035ce217c073e93e26f5079480495fdf35f14fb1fc3"
+  },
+  "chapter6/equipment-03-inventory.png": {
+    "bytes": 297194,
+    "sha256": "362576b2869fe748aa66de29de2f2b9118bbee4b01f98034a489f9a483ad1285"
+  },
+  "chapter6/equipment-07-selected-inspect-0-0.png": {
+    "bytes": 643682,
+    "sha256": "6e3cd216d68ba2394920aeb897575b65e5061f76ff99fb63744894ca5c2e491a"
+  },
+  "chapter6/equipment-12-inventory-icon-3.png": {
+    "bytes": 406576,
+    "sha256": "29d4331345daa4a854d6a07aa67f550aa549b4b7b448469c9f6d1be40b9279fe"
+  },
+  "chapter6/equipment-03-inspect-2-1.png": {
+    "bytes": 638950,
+    "sha256": "4ce602123ffe0fb92cb753b9de8f0b02aa23c09e48f36e1b8308dfc8c0439674"
+  },
+  "chapter6/run-132.png": {
+    "bytes": 767245,
+    "sha256": "fe0ef03927c93ebcf867ff44d7efa83cb77d9726c5160577783aacb6677a0164"
+  },
+  "chapter6/equipment-07-inventory-open-23.png": {
+    "bytes": 341198,
+    "sha256": "7c11092153bd325f04eae314a17e2612f24db10af97f03ee3d4ec165c5aac1d1"
+  },
+  "chapter6/startup-observation-00.png": {
+    "bytes": 100808,
+    "sha256": "bab55f064f8be9b38c556b7d113e18e0ae71a671c1c71e805d6d8535c5ebf716"
+  },
+  "chapter6/equipment-05-inspect-1-0.png": {
+    "bytes": 632949,
+    "sha256": "2cad12df9bf67ff1145f114eb65c8d6394d344753f9e3e3923fdd52887b6913f"
+  },
+  "chapter6/equipment-11-market-open-36.png": {
+    "bytes": 792683,
+    "sha256": "0355e432f14d35b0a2b7e5b90f5969395416c6b26e6ec4372ee17db0aef154b4"
+  },
+  "chapter6/equipment-12-item-4-before.png": {
+    "bytes": 406576,
+    "sha256": "29d4331345daa4a854d6a07aa67f550aa549b4b7b448469c9f6d1be40b9279fe"
+  },
+  "chapter6/equipment-10-item-3-ack-013.png": {
+    "bytes": 383026,
+    "sha256": "a49ebdf2623548f4c4cd107648229a8fe361e91694b151dca7b6dbf8ce8b3d92"
+  },
+  "chapter6/equipment-12-inspect-3-0.png": {
+    "bytes": 658359,
+    "sha256": "b7c99f59f100575cf9cd200bcd7f4e5407383f6ea9af9be9210908a3a847c0b8"
+  },
+  "chapter6/equipment-01-resume-before.png": {
+    "bytes": 749150,
+    "sha256": "80b12805abb720c0ef27936bf0ff7cdebe25e4ff584d3d3ed85831dff63e48fe"
+  },
+  "chapter6/run-088.png": {
+    "bytes": 789762,
+    "sha256": "5e8d5e4c944b457cccb406ef1fb96adfc9904fede32ae4cb87644473bc32e63d"
+  },
+  "chapter6/equipment-11-resume-before.png": {
+    "bytes": 794023,
+    "sha256": "71d19343553a15179ff24b91b95a7849bd2cc7aaebaa6ff8411120b62623a03e"
+  },
+  "chapter6/equipment-02-inspect-3-1.png": {
+    "bytes": 626465,
+    "sha256": "ccfbeb6ae6c55cf8865a928cd5356fa7c2f1a251cd88e75299253a932d943b40"
+  },
+  "chapter6/equipment-10-selected-inspect-0-0.png": {
+    "bytes": 650013,
+    "sha256": "1eba98382982b7a3e4ba8cc4b2c537ac184ba8fae24e76859ef7a480c4036391"
+  },
+  "chapter6/equipment-09-inspect-1-0.png": {
+    "bytes": 648176,
+    "sha256": "0395af0046cf765260325bff7f15be20a13938492f5ad4b593e080c370f87fa3"
+  },
+  "chapter6/equipment-11-market.png": {
+    "bytes": 662960,
+    "sha256": "628c7d8c4d218bc23758e128a890b8563e9f1e501a40836093d32793b19ecf87"
+  },
+  "chapter6/equipment-11-item-2-before.png": {
+    "bytes": 379861,
+    "sha256": "2936072a94ebf748397b47e27ead187eda8f12d47eb1c1a7d09fae6f52bbec7d"
+  },
+  "chapter6/equipment-07-item-0-ack-002.png": {
+    "bytes": 327364,
+    "sha256": "f543094e8664e1c3532cccdc465d5714147b18a9e04fcbd55e30daa0d2a41237"
+  },
+  "chapter6/equipment-06-market-open-17.png": {
+    "bytes": 636508,
+    "sha256": "8d5d614d40fadee352a01bd5f742ff4bcf852e68dc1f88b9f9dde12f4904cc1c"
+  },
+  "chapter6/equipment-11-selected-inspect-0-1.png": {
+    "bytes": 662960,
+    "sha256": "628c7d8c4d218bc23758e128a890b8563e9f1e501a40836093d32793b19ecf87"
+  },
+  "chapter6/equipment-08-selected-inspect-0-1.png": {
+    "bytes": 638840,
+    "sha256": "d4ab2a8fb3b345f8caed3e0112a06fc113e89fe771c0b02dff0e041bcd381965"
+  },
+  "chapter6/equipment-02-selected-inspect-0-0.png": {
+    "bytes": 631915,
+    "sha256": "001d281fd23dd49e7990bdd8e51b3e9f8bd5801c1da5706750d09e1ce3b73831"
+  },
+  "chapter6/equipment-01-inspect-2-1.png": {
+    "bytes": 629469,
+    "sha256": "c33ad7f1350d3ef30dd7256e876af933b1fc05323ca5d2b5c216e611a9c01dce"
+  },
+  "chapter6/equipment-11-item-6-ack-027.png": {
+    "bytes": 375380,
+    "sha256": "b12af5e573587d21bfff5f45fc783e294d2af152ec5e03a02741e4d877a7a273"
+  },
+  "chapter6/equipment-11-inventory-open-38.png": {
+    "bytes": 763474,
+    "sha256": "aafdaf2f8b048737c54a4441cd76f4e4303fe9bb93003572b8e28bbfe6c4b653"
+  },
+  "chapter6/equipment-02-resume-before.png": {
+    "bytes": 760304,
+    "sha256": "5b92b64085662e12e60c9f9bc6c6e55201ebead970ff4d0fcc647362ac4b9578"
+  },
+  "chapter6/run-138.png": {
+    "bytes": 780255,
+    "sha256": "2b7cef3bae29b2bdc63ab5ca7ecdfab7dd887ec62df818b88fcd54643c5dd3b7"
+  },
+  "chapter6/equipment-03-inspect-2-0.png": {
+    "bytes": 640695,
+    "sha256": "7551c401f6192851d932d941cc82565122b2a11101b9b23a3754a465fdc25d08"
+  },
+  "chapter6/run-094.png": {
+    "bytes": 787966,
+    "sha256": "f899cab58fa4097e99e718685acfe0d7d48a5cb24b0fd36218cbbf7f7863c934"
+  },
+  "chapter6/run-109.png": {
+    "bytes": 790733,
+    "sha256": "18b1d5ab7aa3e232248b54655266544597828d38fe56f6a23369039dcf14371e"
+  },
+  "chapter6/equipment-06-selected-inspect-1-1.png": {
+    "bytes": 638585,
+    "sha256": "b1b29620258a8ed39160dad1147c5c82ba1aadc92d814607a069f9b367374350"
+  },
+  "chapter6/equipment-09-item-6-ack-025.png": {
+    "bytes": 363273,
+    "sha256": "8e25e8ae3baada3be783e5ee4b3e545c218ee0ffc8b667d8cb0934ba031f1cc5"
+  },
+  "chapter6/equipment-04-inspect-1-1.png": {
+    "bytes": 653927,
+    "sha256": "b4db368261a97b8a50fe6d3183cd907ee7770910f80888c1bc8948e685804e88"
+  },
+  "chapter6/equipment-11-inspect-1-1.png": {
+    "bytes": 664742,
+    "sha256": "8ccd93ab90c7e616dd5da7ce0f4bcc7a2ee1ea90e3649b299582d1880605d442"
+  },
+  "chapter6/equipment-11-item-7-ack-032.png": {
+    "bytes": 387785,
+    "sha256": "23faac781437f9337f9b85ffb12c62f5b9e31c8147897b01402c8c67e61f5bcb"
+  },
+  "chapter6/equipment-05-item-2-ack-010.png": {
+    "bytes": 310783,
+    "sha256": "155847ef16b18df5a5c0451128d38ac756b6d4935fc9b8ea19ac967e707cbd22"
+  },
+  "chapter6/run-001.png": {
+    "bytes": 731425,
+    "sha256": "603f4ef115128f73eb2c19efc19f70e2a16d6811626fe560148337290aeadf77"
+  },
+  "chapter6/equipment-07-after.png": {
+    "bytes": 638606,
+    "sha256": "b96654d0ed4c4b474c4df0e4cc2ac0ef3df4a48dd5449a80a06d5df42f512638"
+  },
+  "chapter6/equipment-10-item-0-before.png": {
+    "bytes": 374606,
+    "sha256": "6105a916827dec2da60a87bef04e14ef74c4d359441fadc37119bd022b103046"
+  },
+  "chapter6/equipment-05-inspect-4-1.png": {
+    "bytes": 630725,
+    "sha256": "c8f706b068e830d175d75a9cd38b92d402def2b9e6cd13a0f06f2a3174a416de"
+  },
+  "chapter6/run-066.png": {
+    "bytes": 778473,
+    "sha256": "b97ad765514013e81c6f7e119ab18ed1edb54bc2458904417ae889cd4b814c72"
+  },
+  "chapter6/equipment-06-selected-inspect-1-0.png": {
+    "bytes": 635964,
+    "sha256": "70d355c363a2ce903e786b3e1c8105f2e0ab305e867ac1b330b1d5bed7b36e92"
+  },
+  "chapter6/run-117.png": {
+    "bytes": 805447,
+    "sha256": "28c8a7ad4de8dbfdc8caac1ce8ccf6f5735164937c5950873c2b563dbb258685"
+  },
+  "chapter6/equipment-12-item-9-before.png": {
+    "bytes": 399359,
+    "sha256": "574127bbced18b7b9b08979b272007a939d77e2c961a4368d68b31a9de1db3d0"
+  },
+  "chapter6/run-035.png": {
+    "bytes": 763918,
+    "sha256": "3482dcb174cdbdb02b9deed42c379cd3e949c9bfc3926bd17935b47e1b81aa4e"
+  },
+  "chapter6/equipment-10-resume-before.png": {
+    "bytes": 788188,
+    "sha256": "aebfaa20a5948285f040c4969f50ade66bb50625d75e82b2309c11bb7c3284a7"
+  },
+  "chapter6/equipment-08-item-0-ack-001.png": {
+    "bytes": 357304,
+    "sha256": "761126b7c3e63a372f5f342c9f487592caa1a6f7d36ec9fdef9ad6db1f913350"
+  },
+  "chapter6/equipment-05-close-004.png": {
+    "bytes": 310783,
+    "sha256": "155847ef16b18df5a5c0451128d38ac756b6d4935fc9b8ea19ac967e707cbd22"
+  },
+  "chapter6/equipment-10-purchase-00.png": {
+    "bytes": 649676,
+    "sha256": "fc20ca6272563a06167fc2ad8e1a28880ba76d0b6a26c093eb66241878a96a61"
+  },
+  "chapter6/equipment-09-inspect-2-1.png": {
+    "bytes": 648692,
+    "sha256": "89f194ef42297db4b0f4545664f16626ae50150f6831bb4805c945cc8d25c35d"
+  },
+  "chapter6/equipment-12-inspect-4-0.png": {
+    "bytes": 659349,
+    "sha256": "e1caa799883703d5cee57c9b7819d65717656460bb2925432818573146087237"
+  },
+  "chapter6/equipment-06-close-006.png": {
+    "bytes": 780210,
+    "sha256": "64f0b14a5d2caba742e417360233d244870571d785e823edf4bdde7dde7bff6b"
+  },
+  "chapter6/equipment-10-inspect-0-0.png": {
+    "bytes": 649406,
+    "sha256": "7683a35454bb99a2fdd37506dd241148fadb7e16bc51c68d9414db0e0366f629"
+  },
+  "chapter6/equipment-07-close-001.png": {
+    "bytes": 341198,
+    "sha256": "7c11092153bd325f04eae314a17e2612f24db10af97f03ee3d4ec165c5aac1d1"
+  },
+  "chapter6/equipment-10-inspect-3-0.png": {
+    "bytes": 647279,
+    "sha256": "7c32710dbd8423d85339f2847e96b2478e3ea8b246c88cc2d95cce7c06a3fc79"
+  },
+  "chapter6/run-005.png": {
+    "bytes": 754644,
+    "sha256": "1eeede460bfd91987234efed1c16483e3567716fc6cd30bdb98c586fb509bf43"
+  },
+  "chapter6/equipment-08-item-2-ack-009.png": {
+    "bytes": 339379,
+    "sha256": "9b765d2e69c68df4eae8dbaf2909ccea9fb1a4a3fda7a169af243bf9c90d7260"
+  },
+  "chapter6/equipment-03-inspect-4-1.png": {
+    "bytes": 640905,
+    "sha256": "b9746363a764eb51eca6790918e8dd1cc27f54f08bba2dd894768f812a2c484e"
+  },
+  "chapter6/equipment-12-selected-inspect-0-1.png": {
+    "bytes": 658125,
+    "sha256": "459e935a917a2af9084d06392d21b846e7a4f9c9445890820e4d8cc01e8b795a"
+  },
+  "chapter6/equipment-09-inventory-open-31.png": {
+    "bytes": 359855,
+    "sha256": "752b2135f85cbadfb173dfae242c29f1f3e721117dd5f9a947de290e18a3d37c"
+  },
+  "chapter6/equipment-07-item-0-before.png": {
+    "bytes": 341198,
+    "sha256": "7c11092153bd325f04eae314a17e2612f24db10af97f03ee3d4ec165c5aac1d1"
+  },
+  "chapter6/equipment-12-inventory-icon-9.png": {
+    "bytes": 399482,
+    "sha256": "e0bbf99cbf42727d26a90ed7e9746f321bba1f6d0523c5223877dd6c945c4070"
+  },
+  "chapter6/equipment-02-close-006.png": {
+    "bytes": 760856,
+    "sha256": "2c8a27189308ed5ac2f5dc9f9f7ae6bc25c8755fc9388958552587d78ee80c65"
+  },
+  "chapter6/run-017.png": {
+    "bytes": 753227,
+    "sha256": "9e5bb0e3f38f24ec559fb7203c178d313d655d908247534d9413f84298f97a5b"
+  },
+  "chapter6/equipment-12-item-3-ack-014.png": {
+    "bytes": 406576,
+    "sha256": "29d4331345daa4a854d6a07aa67f550aa549b4b7b448469c9f6d1be40b9279fe"
+  },
+  "chapter6/restart.png": {
+    "bytes": 99188,
+    "sha256": "91526441f3043a548093c0f1971ee5f0c14b103c463846bd84fc462a6e9f5e86"
+  },
+  "chapter6/equipment-07-inventory-icon-2.png": {
+    "bytes": 337071,
+    "sha256": "c192b0a63579a021ee4853a1e66fdd54b85278ff59b429f490a2f2e2afe80fc7"
+  },
+  "chapter6/current-ui.png": {
+    "bytes": 62579,
+    "sha256": "87246343325b09ab98b13df5bc3eb23a80aeff77e7a510be6cd0a5c253fe4bf9"
+  },
+  "chapter6/equipment-02-resume-after.png": {
+    "bytes": 756429,
+    "sha256": "99ba3837cf6f81f7db58921e4348d22100f2aef3bd37671fa68012d5b65116f7"
+  },
+  "chapter6/equipment-12-inspect-1-1.png": {
+    "bytes": 661891,
+    "sha256": "311440c54d016cb3ff2595666f1640270da6f003c3b42c71776941310be6e0c8"
+  },
+  "chapter6/equipment-02-inventory-open-05.png": {
+    "bytes": 280624,
+    "sha256": "94a60372f204c486611630026a5a413859294ae46a409d207f31a4836d5d3a12"
+  },
+  "chapter6/equipment-10-after.png": {
+    "bytes": 649676,
+    "sha256": "fc20ca6272563a06167fc2ad8e1a28880ba76d0b6a26c093eb66241878a96a61"
+  },
+  "chapter6/equipment-11-item-8-ack-035.png": {
+    "bytes": 387785,
+    "sha256": "23faac781437f9337f9b85ffb12c62f5b9e31c8147897b01402c8c67e61f5bcb"
+  },
+  "chapter6/equipment-09-resume-before.png": {
+    "bytes": 796366,
+    "sha256": "bbe7fac7c08bce86738c3b5d7864f60cf6b4dc654848e4315d32a093f434de21"
+  },
+  "chapter6/run-046.png": {
+    "bytes": 769545,
+    "sha256": "77b2a42021e11359fc2f3573fff785e89ce72169bf5fc85441d5a7e608fa496a"
+  },
+  "chapter6/equipment-05-item-0-ack-002.png": {
+    "bytes": 291596,
+    "sha256": "c84fe1b7e2f842e4bd5cb38e343b357e228215187ce1cb358c35ffe5e1532218"
+  },
+  "chapter6/equipment-06-inspect-3-0.png": {
+    "bytes": 631887,
+    "sha256": "8b5bcd91b05fa0c58c92ee9c1bbb8e83bebf6e3bfd9356185439411b3dab8ccc"
+  },
+  "chapter6/equipment-09-purchase-00.png": {
+    "bytes": 646868,
+    "sha256": "84e6df9effa509950645fd9ea626fedba6d8c3eac29cec92ad85c6c2edbc5f3a"
+  },
+  "chapter6/equipment-09-inspect-4-0.png": {
+    "bytes": 649324,
+    "sha256": "ca59c4b706d407b0c9988f8513a1f486337bcd87f54feaecd204e2e1c0712d85"
+  },
+  "chapter6/equipment-11-inventory.png": {
+    "bytes": 384911,
+    "sha256": "85a041d941b04f3f219b297ab9dc1c2249673d51c5a9021e43e782319e852836"
+  },
+  "chapter6/equipment-08-inspect-2-0.png": {
+    "bytes": 637639,
+    "sha256": "b94b3a407a6c145d65d95b147c327dfb62e89856bd8e788a2b65b63195de821b"
+  },
+  "chapter6/equipment-05-unlock-clock.png": {
+    "bytes": 766931,
+    "sha256": "bb7cc0f2bc54aed80cd65e53019cfd8562c3f50cc7667aa28a106e1b46c1e88e"
+  },
+  "chapter6/run-096.png": {
+    "bytes": 785163,
+    "sha256": "678f065110720dc43c9889b997cbdbe96a709a8fecc06426fd51bf0798103d20"
+  },
+  "chapter6/equipment-02-inventory-open-04.png": {
+    "bytes": 753252,
+    "sha256": "f5c1c9bf8b0af9d63479009a069c82685290373519f748e82f8b25c9e113ed7c"
+  },
+  "chapter6/run-031.png": {
+    "bytes": 774885,
+    "sha256": "9c4a48f503f463c44b792cb46b75a8bc2c2042aa3c9a3f857f2457508df31d24"
+  },
+  "chapter6/equipment-09-item-5-ack-022.png": {
+    "bytes": 363273,
+    "sha256": "8e25e8ae3baada3be783e5ee4b3e545c218ee0ffc8b667d8cb0934ba031f1cc5"
+  },
+  "chapter6/run-073.png": {
+    "bytes": 750140,
+    "sha256": "e7c957f4c817c673f3ebb5d55d7a62e612f69d95911e4714c5349d860c3dc181"
+  },
+  "chapter6/equipment-06-inventory-icon-0.png": {
+    "bytes": 312298,
+    "sha256": "1cd97ca748665d46280bf3b89f865ac8b3423154d5b47b26f318a80dbdd26081"
+  },
+  "chapter6/equipment-09-inventory-icon-6.png": {
+    "bytes": 359855,
+    "sha256": "752b2135f85cbadfb173dfae242c29f1f3e721117dd5f9a947de290e18a3d37c"
+  },
+  "chapter6/equipment-07-item-2-before.png": {
+    "bytes": 322693,
+    "sha256": "3d192dd5b8e130e9feec89ee90172b9471f334c46d2da499709d95178c325db8"
+  },
+  "chapter6/equipment-08-item-3-before.png": {
+    "bytes": 352820,
+    "sha256": "536f7a5b6813c5d4ed736fd8a4322f024a3ed6e240407e359636b617004ce48f"
+  },
+  "chapter6/equipment-09-inspect-3-0.png": {
+    "bytes": 648692,
+    "sha256": "89f194ef42297db4b0f4545664f16626ae50150f6831bb4805c945cc8d25c35d"
+  },
+  "chapter6/result.png": {
+    "bytes": 60452,
+    "sha256": "3bc1f0c7ecb145e2a2bac197a01bc1de144d62cb6868f296e121924d9cbc1a29"
+  },
+  "chapter6/equipment-12-item-7-ack-029.png": {
+    "bytes": 393210,
+    "sha256": "49641baedb63191685f9b077f2dd6306e49a3fffa38723f9ad85f9be5875377c"
+  },
+  "chapter6/equipment-01-inspect-1-1.png": {
+    "bytes": 631818,
+    "sha256": "ba18e563faecd6ea6a10262eaeddd53bfb46d72570658b691e193fe0a13c6b2d"
+  },
+  "chapter6/run-024.png": {
+    "bytes": 760634,
+    "sha256": "1996ef083490f8da1f4bec369702876eccab86b5948cec5d2e8a0dbf7303e72e"
+  },
+  "chapter6/equipment-10-inventory-icon-2.png": {
+    "bytes": 383026,
+    "sha256": "a49ebdf2623548f4c4cd107648229a8fe361e91694b151dca7b6dbf8ce8b3d92"
+  },
+  "chapter6/equipment-03-selected-inspect-1-1.png": {
+    "bytes": 640695,
+    "sha256": "7551c401f6192851d932d941cc82565122b2a11101b9b23a3754a465fdc25d08"
+  },
+  "chapter6/equipment-11-item-1-ack-006.png": {
+    "bytes": 379861,
+    "sha256": "2936072a94ebf748397b47e27ead187eda8f12d47eb1c1a7d09fae6f52bbec7d"
+  },
+  "chapter6/equipment-08-close-004.png": {
+    "bytes": 344150,
+    "sha256": "1783803560b94584b47e1f36049452051642b6df479ad5c8c5877a8506400652"
+  },
+  "chapter6/equipment-11-item-5-ack-023.png": {
+    "bytes": 398074,
+    "sha256": "372ed87aa6540806115ab244c1852d21f888b7bdb92925004a19e85c5668dd80"
+  },
+  "chapter6/equipment-10-item-7-ack-030.png": {
+    "bytes": 374606,
+    "sha256": "6105a916827dec2da60a87bef04e14ef74c4d359441fadc37119bd022b103046"
+  },
+  "chapter6/equipment-07-item-4-before.png": {
+    "bytes": 335333,
+    "sha256": "28376b14bdc7f998e48542a944de388e974c8196ce92d9c7240e817b9e542a65"
+  },
+  "chapter6/equipment-06-item-2-before.png": {
+    "bytes": 307484,
+    "sha256": "adfdd0973b0311309946d5d3acf8d1a321630c136295436a0146adac299eac11"
+  },
+  "chapter6/equipment-11-inventory-icon-3.png": {
+    "bytes": 392516,
+    "sha256": "a2787f382ad1a883c85685435d0cc4bc6c0af0579e4d1cda157915260aa824c3"
+  },
+  "chapter6/run-020.png": {
+    "bytes": 753497,
+    "sha256": "21ad0f31d7067850900dab2b6333b829b9877c76b8c5c8b0b038e02dbd16512e"
+  },
+  "chapter6/run-036.png": {
+    "bytes": 749107,
+    "sha256": "076df25bf97f55b04bd142d838db50305a49c605079f4c815fc1206bb67173a9"
+  },
+  "chapter6/equipment-02-item-0-ack-001.png": {
+    "bytes": 280624,
+    "sha256": "94a60372f204c486611630026a5a413859294ae46a409d207f31a4836d5d3a12"
+  },
+  "chapter6/equipment-09-item-3-before.png": {
+    "bytes": 369331,
+    "sha256": "2370dc99411bc8b0f086a36a498ecf90c11fbe7adfb569dc06d29394078409b6"
+  },
+  "chapter6/run-074.png": {
+    "bytes": 817199,
+    "sha256": "fb8807633af61ffa51239e4234a7b504ea0a7301c07dd672a07d1eae98f82926"
+  },
+  "chapter6/equipment-11-inventory-icon-2.png": {
+    "bytes": 394197,
+    "sha256": "786a095bd74b4224cda0b710b5183785e0e3ea00e1be71d24cb8812b938549e4"
+  },
+  "chapter6/equipment-11-inspect-3-1.png": {
+    "bytes": 662714,
+    "sha256": "600bddd7f6326b53b281bc3af12fc773396e801b26d812a4377f963248567896"
+  },
+  "chapter6/equipment-09-close-001.png": {
+    "bytes": 359855,
+    "sha256": "752b2135f85cbadfb173dfae242c29f1f3e721117dd5f9a947de290e18a3d37c"
+  },
+  "chapter6/equipment-05-item-1-ack-005.png": {
+    "bytes": 291596,
+    "sha256": "c84fe1b7e2f842e4bd5cb38e343b357e228215187ce1cb358c35ffe5e1532218"
+  },
+  "chapter6/equipment-04-market-open-11.png": {
+    "bytes": 654055,
+    "sha256": "0efc9b891d47a417fb21540b93409b4c9a9f6ac381e48b524b19206c938b635a"
+  },
+  "chapter6/equipment-10-item-0-ack-001.png": {
+    "bytes": 374606,
+    "sha256": "6105a916827dec2da60a87bef04e14ef74c4d359441fadc37119bd022b103046"
+  },
+  "chapter6/equipment-01-unlock-clock.png": {
+    "bytes": 764182,
+    "sha256": "e535be07e18824399704aa041d724e4e7f200dc856bf33902477e839db116457"
+  },
+  "chapter6/run-067.png": {
+    "bytes": 795638,
+    "sha256": "8d2659f981b159257c23dcf60e15c8d055e8cf2ce989fd3be5fe7c578bea1ea8"
+  },
+  "chapter6/run-136.png": {
+    "bytes": 779408,
+    "sha256": "954e1cd53a9d787a421737d1b2666593e68f2aa18c422275fcd2a73f47db2178"
+  },
+  "chapter6/run-032.png": {
+    "bytes": 735466,
+    "sha256": "07546bdfe4c349b79dd024ffa64c11ad5f730f64dc61f66d733479a1634c8560"
+  },
+  "chapter6/equipment-10-inspect-2-0.png": {
+    "bytes": 649406,
+    "sha256": "7683a35454bb99a2fdd37506dd241148fadb7e16bc51c68d9414db0e0366f629"
+  },
+  "chapter6/equipment-11-item-7-before.png": {
+    "bytes": 378897,
+    "sha256": "ea6c282e01100c225357ed340b695402b9248bca49d806c0fd8a0537a57f2eaa"
+  },
+  "chapter6/equipment-09-inspect-2-0.png": {
+    "bytes": 649511,
+    "sha256": "0558e2c73487926d4fc34eaffb581ec3d00075b8f4b18cb2c8825be63693294e"
+  },
+  "chapter6/equipment-02-inspect-2-1.png": {
+    "bytes": 630646,
+    "sha256": "5e303ce31810bca942e20e8b5c0bf28ff7e1bd56ce5a44cd3d531ebd946f0fdb"
+  },
+  "chapter6/equipment-01-resume-after.png": {
+    "bytes": 756572,
+    "sha256": "0865f41be79a43a6e0635f31876808dcffa63ba901d7cb2587e742f95e40f72d"
+  },
+  "chapter6/equipment-09-selected-inspect-1-1.png": {
+    "bytes": 649511,
+    "sha256": "0558e2c73487926d4fc34eaffb581ec3d00075b8f4b18cb2c8825be63693294e"
+  },
+  "chapter6/run-112.png": {
+    "bytes": 793750,
+    "sha256": "25553090d6ff0a48983e5a6ab4e46b7994890434443e71f2aaefc7d61395a3ee"
+  },
+  "chapter6/run-093.png": {
+    "bytes": 793155,
+    "sha256": "cb19d02d069c154b95000953210075bd7d91eebe492333700f12d83641ed18da"
+  },
+  "chapter6/equipment-04-market.png": {
+    "bytes": 654055,
+    "sha256": "0efc9b891d47a417fb21540b93409b4c9a9f6ac381e48b524b19206c938b635a"
+  },
+  "chapter6/run-113.png": {
+    "bytes": 815998,
+    "sha256": "07b9aa590db3fe2f179954416c95e9129995dced9643abcd4ba661773e6572a8"
+  },
+  "chapter6/equipment-03-before.png": {
+    "bytes": 640905,
+    "sha256": "b9746363a764eb51eca6790918e8dd1cc27f54f08bba2dd894768f812a2c484e"
+  },
+  "chapter6/earned-strength-restart-speed.png": {
+    "bytes": 740389,
+    "sha256": "ef4f690ad88626a217ebbae42426b1e67da04a21e048471e28f372d49bfac6e6"
+  },
+  "chapter6/equipment-08-inventory-icon-0.png": {
+    "bytes": 344214,
+    "sha256": "77504079656ac8ef1d018a840b4846e085f0394d06b8c642be1b692e0acc1809"
+  },
+  "chapter6/run-054.png": {
+    "bytes": 765073,
+    "sha256": "eba0f83e1975bc3a5b92b29a57c7f5ff740bd5975120ce9fa37eaf10b61f45ae"
+  },
+  "chapter6/seed-row.png": {
+    "bytes": 27831,
+    "sha256": "ab8559e3cc4f2be82522bba1558ab43a3d766cafc8318bbf9755cf862b0f3a39"
+  },
+  "chapter6/equipment-03-purchase-00.png": {
+    "bytes": 633692,
+    "sha256": "7ac15206db57edf66c864a10ab318876764be493a12b389579325c986d02564c"
+  },
+  "chapter6/equipment-05-item-0-before.png": {
+    "bytes": 310783,
+    "sha256": "155847ef16b18df5a5c0451128d38ac756b6d4935fc9b8ea19ac967e707cbd22"
+  },
+  "chapter6/equipment-07-item-2-ack-010.png": {
+    "bytes": 337071,
+    "sha256": "c192b0a63579a021ee4853a1e66fdd54b85278ff59b429f490a2f2e2afe80fc7"
+  },
+  "chapter6/run-072.png": {
+    "bytes": 792177,
+    "sha256": "0bc6b42ef5e25192d2f1b651a394cf15383d449ff35fe1f8e0360a1bbd0278fc"
+  },
+  "chapter6/equipment-02-inspect-0-0.png": {
+    "bytes": 631915,
+    "sha256": "001d281fd23dd49e7990bdd8e51b3e9f8bd5801c1da5706750d09e1ce3b73831"
+  },
+  "chapter6/equipment-04-resume-after.png": {
+    "bytes": 761668,
+    "sha256": "d45552eb4ec15b739fc0054b67ce331f4f6a4a6f2af1c3001b1ddceb34b71d5a"
+  },
+  "chapter6/equipment-07-inspect-0-0.png": {
+    "bytes": 642480,
+    "sha256": "22962baf8c5e3fcad74ab377aeccb7b5c3b4f4f517349479ecd1beff42b8aab5"
+  },
+  "chapter6/equipment-08-inventory-icon-4.png": {
+    "bytes": 357304,
+    "sha256": "761126b7c3e63a372f5f342c9f487592caa1a6f7d36ec9fdef9ad6db1f913350"
+  },
+  "chapter6/equipment-10-market.png": {
+    "bytes": 649377,
+    "sha256": "5bc412e4d005f00d1197e59cf55c79b5c90cb3f67b4aae04859879afc7f0c068"
+  },
+  "chapter6/startup-observation-01.png": {
+    "bytes": 355251,
+    "sha256": "7733671744b30b527ff0119fca8ed1211e008509b360d62f236f69edaa886979"
+  },
+  "chapter6/equipment-07-inspect-2-1.png": {
+    "bytes": 643122,
+    "sha256": "1b8302fc52cd54d83e116152df501b390ad26f7c8351a2f44247a828a6e58867"
+  },
+  "chapter6/equipment-09-item-1-before.png": {
+    "bytes": 360294,
+    "sha256": "7626a8adc3254f919fe98f1375c76486aefe1bd5adb46d4db2047078ce6e77f4"
+  },
+  "chapter6/equipment-08-close-001.png": {
+    "bytes": 344150,
+    "sha256": "1783803560b94584b47e1f36049452051642b6df479ad5c8c5877a8506400652"
+  },
+  "chapter6/equipment-09-item-4-before.png": {
+    "bytes": 367683,
+    "sha256": "e06097950d293cef99ec53fe19fdaa33df0b823a4d8382a3090323835839e133"
+  },
+  "chapter6/equipment-08-inspect-0-0.png": {
+    "bytes": 638840,
+    "sha256": "d4ab2a8fb3b345f8caed3e0112a06fc113e89fe771c0b02dff0e041bcd381965"
+  },
+  "chapter6/run-044.png": {
+    "bytes": 755202,
+    "sha256": "da5a2d70c55bdf998d46d284ea4f11d6d6a8ba0e7450862172d26f6a29347fd6"
+  },
+  "chapter6/run-009.png": {
+    "bytes": 755649,
+    "sha256": "b7db871e1ef2281991737d3c35e7b9a04577ae78c8c95b78aee93ae5e5f92fdc"
+  },
+  "chapter6/equipment-07-close-006.png": {
+    "bytes": 754242,
+    "sha256": "096bfd1f0b9954042e31eb41360f5a17dc99996359dbf4b3f011f95570b67cc3"
+  },
+  "chapter6/run-042.png": {
+    "bytes": 754112,
+    "sha256": "1467aebb7a1a22ac7e20dd3032f9b604b86e1c9e6319f8f893aa32ec04cdd9d1"
+  },
+  "chapter6/equipment-11-item-4-ack-018.png": {
+    "bytes": 392516,
+    "sha256": "a2787f382ad1a883c85685435d0cc4bc6c0af0579e4d1cda157915260aa824c3"
+  },
+  "chapter6/speed1.png": {
+    "bytes": 746851,
+    "sha256": "f93e081280f28c0b182258a9361aba32652f84f0f361191f0ff6962ac500f849"
+  },
+  "chapter6/run-065.png": {
+    "bytes": 779278,
+    "sha256": "574b18fe9cdf785528d956bcc7266f4ace61c91938e8930a88c96ac6e70b6db7"
+  },
+  "chapter6/equipment-11-item-3-ack-013.png": {
+    "bytes": 394197,
+    "sha256": "786a095bd74b4224cda0b710b5183785e0e3ea00e1be71d24cb8812b938549e4"
+  },
+  "chapter6/equipment-01-inspect-3-1.png": {
+    "bytes": 625152,
+    "sha256": "2eab2278c5bee7abe45e4e5dc5b074de726e04ec903b17564e434451cb92f872"
+  },
+  "chapter6/equipment-11-item-1-before.png": {
+    "bytes": 384878,
+    "sha256": "90a9ff2375f81247900c50af20e7c254dd490c47ccf6eb7a9de968f11a3e4e84"
+  },
+  "chapter6/equipment-02-inspect-0-1.png": {
+    "bytes": 635766,
+    "sha256": "b303053750d96453bb8f0ed31e869a1fa553015966a287feb0d8e8a2224f8b06"
+  },
+  "chapter6/run-034.png": {
+    "bytes": 750838,
+    "sha256": "98d1fd725b31ea49aa27ffefa44af892313d6f5b8ec5b658df4935978bde6cbe"
+  },
+  "chapter6/equipment-06-after.png": {
+    "bytes": 630230,
+    "sha256": "0dd1f36e825508a61c3b6013125daf7ffa5e26431e45487a5492f5fc0aaf89e5"
+  },
+  "chapter6/equipment-10-close-004.png": {
+    "bytes": 374606,
+    "sha256": "6105a916827dec2da60a87bef04e14ef74c4d359441fadc37119bd022b103046"
+  },
+  "chapter6/equipment-12-inventory-icon-2.png": {
+    "bytes": 408245,
+    "sha256": "3a267194b511c1ecf002bdaf6a55500dc481814ea1791521612889b03ea48ded"
+  },
+  "chapter6/run-029.png": {
+    "bytes": 750549,
+    "sha256": "695fc91834c2a0dd9699d16f1fb0e9b48b3d426eb1884d50f76d3ca88db18427"
+  },
+  "chapter6/run-069.png": {
+    "bytes": 781771,
+    "sha256": "35a37db54f8600d911d501438d03a29f695515c2a71a2a30621f0f460a38e146"
+  },
+  "chapter6/equipment-10-item-4-ack-018.png": {
+    "bytes": 387164,
+    "sha256": "f81ef7a4e47720bb424279bd0d290a439377cf67012e5c675ee5bd554f786c2c"
+  },
+  "chapter6/equipment-12-inspect-2-0.png": {
+    "bytes": 661891,
+    "sha256": "311440c54d016cb3ff2595666f1640270da6f003c3b42c71776941310be6e0c8"
+  },
+  "chapter6/equipment-02-inspect-3-0.png": {
+    "bytes": 630646,
+    "sha256": "5e303ce31810bca942e20e8b5c0bf28ff7e1bd56ce5a44cd3d531ebd946f0fdb"
+  },
+  "chapter6/equipment-08-item-0-before.png": {
+    "bytes": 357304,
+    "sha256": "761126b7c3e63a372f5f342c9f487592caa1a6f7d36ec9fdef9ad6db1f913350"
+  },
+  "chapter6/run-098.png": {
+    "bytes": 782899,
+    "sha256": "ca896aef28918d06bc6fb4885e0c056cdb1528f371b29a6613c5ab35f33b4bad"
+  },
+  "chapter6/equipment-12-item-9-ack-038.png": {
+    "bytes": 399482,
+    "sha256": "e0bbf99cbf42727d26a90ed7e9746f321bba1f6d0523c5223877dd6c945c4070"
+  },
+  "chapter6/run-015.png": {
+    "bytes": 757488,
+    "sha256": "409f8b2be5e11d100bba6546952ead4152877a71eeb97325b4376400e7d4d85d"
+  },
+  "chapter6/equipment-07-purchase-00.png": {
+    "bytes": 638606,
+    "sha256": "b96654d0ed4c4b474c4df0e4cc2ac0ef3df4a48dd5449a80a06d5df42f512638"
+  },
+  "chapter6/equipment-10-unlock-clock.png": {
+    "bytes": 784161,
+    "sha256": "2a47f9e6b5de4ac92f359aef8cdc2fbe2bd84f83e843f5d0512dd5838757a4ae"
+  },
+  "chapter6/run-133.png": {
+    "bytes": 762477,
+    "sha256": "fd7ba03df5e895254a144b846e4f350d70e0e8a77c1239e01b78f6de47fa159f"
+  },
+  "chapter6/equipment-12-inventory-icon-1.png": {
+    "bytes": 393919,
+    "sha256": "c5683bcdbda9dc6fbee749b0ae63ffacf635f1ab704653159fe2e2063101f9b1"
+  },
+  "chapter6/equipment-05-market-open-13.png": {
+    "bytes": 630924,
+    "sha256": "b42600d05cea3345673d1918e9b7fe4e2dd855d17457d44d248111201bf05bfc"
+  },
+  "chapter6/run-129.png": {
+    "bytes": 789656,
+    "sha256": "f9709f009bc2954dee9ba4e06fe69276ee443f6373d428797c80d8025421b1d5"
+  },
+  "chapter6/equipment-12-item-6-ack-025.png": {
+    "bytes": 389282,
+    "sha256": "982fcb125e7b4523ca1d5819121b3bcfccb9c7e39fff405a442a84841316b6cc"
+  },
+  "chapter6/run-004.png": {
+    "bytes": 753463,
+    "sha256": "f0e754c666c8832644907117e10086acd030d0361a5fbf6edb64f6d280646a29"
+  },
+  "chapter6/equipment-09-item-6-ack-026.png": {
+    "bytes": 359855,
+    "sha256": "752b2135f85cbadfb173dfae242c29f1f3e721117dd5f9a947de290e18a3d37c"
+  },
+  "chapter6/run-023.png": {
+    "bytes": 750762,
+    "sha256": "ccff49cc6fc9a3a39dac21f5e305bf568ec6852e8384d386c5dbb59e0ada01da"
+  },
+  "chapter6/run-125.png": {
+    "bytes": 813129,
+    "sha256": "6b48be10ad2b34b722779c783fbf660aff453ec67c5ca934b3e4395368f1278b"
+  },
+  "chapter6/equipment-12-item-3-ack-013.png": {
+    "bytes": 408245,
+    "sha256": "3a267194b511c1ecf002bdaf6a55500dc481814ea1791521612889b03ea48ded"
+  },
+  "chapter6/run-070.png": {
+    "bytes": 757394,
+    "sha256": "a38e86fb8ca3ad1534d44499da3994d04cf234d211b690af7422885b53cf2d96"
+  },
+  "chapter6/run-108.png": {
+    "bytes": 826036,
+    "sha256": "e0f6a4db3c24c3c938f6be7d9bcaead8ec3e5bc18318e9b5f81b15822e0d5433"
+  },
+  "chapter6/equipment-04-unlock-clock.png": {
+    "bytes": 768162,
+    "sha256": "8361fbbc047a4c62cd98da10cf78a551e40daf8b648dcbf34589157cc4241f49"
+  },
+  "chapter6/equipment-10-market-open-33.png": {
+    "bytes": 649377,
+    "sha256": "5bc412e4d005f00d1197e59cf55c79b5c90cb3f67b4aae04859879afc7f0c068"
+  },
+  "chapter6/equipment-10-inventory-icon-1.png": {
+    "bytes": 369541,
+    "sha256": "9e3ceca5f5868c9ec09bc191c3182c0c2034690cde20f5b3edb9ab3026b8bf05"
+  },
+  "chapter6/equipment-09-after.png": {
+    "bytes": 646868,
+    "sha256": "84e6df9effa509950645fd9ea626fedba6d8c3eac29cec92ad85c6c2edbc5f3a"
+  },
+  "chapter6/equipment-09-inventory.png": {
+    "bytes": 359855,
+    "sha256": "752b2135f85cbadfb173dfae242c29f1f3e721117dd5f9a947de290e18a3d37c"
+  },
+  "chapter6/run-128.png": {
+    "bytes": 808822,
+    "sha256": "9e0f2b26003327f4c9a1f7afc7a61a241275e42fb1f977480ce02c195d237668"
+  },
+  "chapter6/equipment-02-item-0-before.png": {
+    "bytes": 280624,
+    "sha256": "94a60372f204c486611630026a5a413859294ae46a409d207f31a4836d5d3a12"
+  },
+  "chapter6/equipment-06-close-004.png": {
+    "bytes": 325133,
+    "sha256": "9ee35711973df02e0b10078c085f76ee69847d4db31f162c74521b8be2b39f65"
+  },
+  "chapter6/equipment-03-close-001.png": {
+    "bytes": 297194,
+    "sha256": "362576b2869fe748aa66de29de2f2b9118bbee4b01f98034a489f9a483ad1285"
+  },
+  "chapter6/speed-source.png": {
+    "bytes": 748974,
+    "sha256": "730a9eea4b7e4a294dd9f0145844649ac6d88dd3996d490768447d82f63a7b45"
+  },
+  "chapter6/equipment-11-inventory-icon-1.png": {
+    "bytes": 379861,
+    "sha256": "2936072a94ebf748397b47e27ead187eda8f12d47eb1c1a7d09fae6f52bbec7d"
+  },
+  "chapter6/equipment-07-inspect-3-1.png": {
+    "bytes": 644194,
+    "sha256": "edac8288f6796a0189091b53e2b2b9a994de1ddd92dd6e5bd458ada38bc63794"
+  },
+  "chapter6/equipment-02-market-open-03.png": {
+    "bytes": 631915,
+    "sha256": "001d281fd23dd49e7990bdd8e51b3e9f8bd5801c1da5706750d09e1ce3b73831"
+  },
+  "chapter6/equipment-10-item-1-ack-006.png": {
+    "bytes": 369541,
+    "sha256": "9e3ceca5f5868c9ec09bc191c3182c0c2034690cde20f5b3edb9ab3026b8bf05"
+  },
+  "chapter6/equipment-06-inspect-4-0.png": {
+    "bytes": 636262,
+    "sha256": "1d8915de84b61e6a4eb24c49169452919721c967a88aa13093a8422b58e46c79"
+  },
+  "chapter6/equipment-11-item-2-ack-010.png": {
+    "bytes": 394197,
+    "sha256": "786a095bd74b4224cda0b710b5183785e0e3ea00e1be71d24cb8812b938549e4"
+  },
+  "chapter6/run-027.png": {
+    "bytes": 748212,
+    "sha256": "1fc6e75d0f8996e1d21889dac50c29ade9376b0872149faf1993cc4876558ae8"
+  },
+  "chapter6/equipment-02-unlock-clock.png": {
+    "bytes": 755840,
+    "sha256": "d3b39002ff0ba8c40cc274f883d88e45730e77bbe667be05c9f64b3911523aad"
+  },
+  "chapter6/equipment-07-inventory.png": {
+    "bytes": 341198,
+    "sha256": "7c11092153bd325f04eae314a17e2612f24db10af97f03ee3d4ec165c5aac1d1"
+  },
+  "chapter6/equipment-01-market-open-01.png": {
+    "bytes": 634539,
+    "sha256": "4177a483e4143b42434761a33844588424939cb6c4a72644500630e6a0edc47e"
+  },
+  "chapter6/equipment-07-inventory-icon-3.png": {
+    "bytes": 335333,
+    "sha256": "28376b14bdc7f998e48542a944de388e974c8196ce92d9c7240e817b9e542a65"
+  },
+  "chapter6/run-121.png": {
+    "bytes": 802793,
+    "sha256": "f091edf3a9a003e7bca03aa88a2ffdc473807e921cb3d31c41ded989a41321f9"
+  },
+  "chapter6/equipment-03-inventory-open-09.png": {
+    "bytes": 297194,
+    "sha256": "362576b2869fe748aa66de29de2f2b9118bbee4b01f98034a489f9a483ad1285"
+  },
+  "chapter6/run-038.png": {
+    "bytes": 773516,
+    "sha256": "475793a6262d679dde36a2c9a628abc2b43f392ddbe4a032e762fbc9d7e906b4"
+  },
+  "chapter6/equipment-06-item-3-before.png": {
+    "bytes": 320859,
+    "sha256": "99af04e733e419647fd702ac391311dd422badd60850ff04ea3fd432c69838ed"
+  },
+  "chapter6/equipment-12-inventory-icon-4.png": {
+    "bytes": 411665,
+    "sha256": "b6f15b4be370c833f668999ff5d1f46f589afed19c2751c4dcbf14bfffcab463"
+  },
+  "chapter6/equipment-12-inventory-icon-7.png": {
+    "bytes": 402296,
+    "sha256": "a60b232e9d8164fa1fe40f35ca44ba20a30bd537c8b7fb08d5f068f7fd362216"
+  },
+  "chapter6/equipment-03-resume-before.png": {
+    "bytes": 758838,
+    "sha256": "596c56f9ccd385c207b8383a1d318650b639310b93e7fd7f8092737c1521f8a2"
+  },
+  "chapter6/equipment-11-item-4-ack-019.png": {
+    "bytes": 398074,
+    "sha256": "372ed87aa6540806115ab244c1852d21f888b7bdb92925004a19e85c5668dd80"
+  },
+  "chapter6/equipment-12-resume-before.png": {
+    "bytes": 792213,
+    "sha256": "eff4329b36994ae4beb5573990fb9dd4cc776ae5597047e8891b62a22050966d"
+  },
+  "chapter6/equipment-06-item-3-ack-014.png": {
+    "bytes": 325133,
+    "sha256": "9ee35711973df02e0b10078c085f76ee69847d4db31f162c74521b8be2b39f65"
+  },
+  "chapter6/run-010.png": {
+    "bytes": 754228,
+    "sha256": "f966d5614c6c156f01c4687440b5e04a682dc121e6c62e6a359746e8bb490342"
+  },
+  "chapter6/equipment-08-purchase-00.png": {
+    "bytes": 639863,
+    "sha256": "cc09cffae5b64725daa5ff7d3621a9fcf3d194cad7785997d4764ffaab80d29f"
+  },
+  "chapter6/run-048.png": {
+    "bytes": 776386,
+    "sha256": "36933c56c637513ac103045cc9b5804e2b3e2d07f29fa1fccb1a66c19f07ef9d"
+  },
+  "chapter6/equipment-11-inventory-icon-8.png": {
+    "bytes": 384911,
+    "sha256": "85a041d941b04f3f219b297ab9dc1c2249673d51c5a9021e43e782319e852836"
+  },
+  "chapter6/run-016.png": {
+    "bytes": 759404,
+    "sha256": "2ed6ff654d0f75004264f7078114d20aec01f4501acb966002690de34863a1ff"
+  },
+  "chapter6/run-041.png": {
+    "bytes": 751403,
+    "sha256": "1fcd51bf5eaff774743bda87342498f7c1a5667b64f28c5b31837be08562b373"
+  },
+  "chapter6/equipment-06-item-0-before.png": {
+    "bytes": 325133,
+    "sha256": "9ee35711973df02e0b10078c085f76ee69847d4db31f162c74521b8be2b39f65"
+  },
+  "chapter6/equipment-11-item-0-ack-002.png": {
+    "bytes": 384878,
+    "sha256": "90a9ff2375f81247900c50af20e7c254dd490c47ccf6eb7a9de968f11a3e4e84"
+  },
+  "chapter6/equipment-10-inspect-4-1.png": {
+    "bytes": 650013,
+    "sha256": "1eba98382982b7a3e4ba8cc4b2c537ac184ba8fae24e76859ef7a480c4036391"
+  },
+  "chapter6/equipment-08-inspect-4-1.png": {
+    "bytes": 638926,
+    "sha256": "3f6ac4aeff69064ed3b20218fc88f2b523a436e5fdd588e0d08aceed24ce0ebb"
+  },
+  "chapter6/equipment-10-item-1-before.png": {
+    "bytes": 374701,
+    "sha256": "62707086faba8ef777ab384149ce505f5896d688bc1f25f3f78f43e8864ffcc3"
+  },
+  "chapter6/startup-clock-crop.png": {
+    "bytes": 37722,
+    "sha256": "636374ae5251e023d2b5fb96370427af332ff4a299a9d89d381fe4e01c9f4e84"
+  },
+  "chapter6/run-028.png": {
+    "bytes": 750096,
+    "sha256": "885811bf4f261d98ee3e01e2214fc6479f61b3bdc62750dd774cf148cd507362"
+  },
+  "chapter6/equipment-03-item-1-ack-008.png": {
+    "bytes": 297194,
+    "sha256": "362576b2869fe748aa66de29de2f2b9118bbee4b01f98034a489f9a483ad1285"
+  },
+  "chapter6/equipment-08-item-4-ack-017.png": {
+    "bytes": 351151,
+    "sha256": "734206bb964482c8839b70b2360c88fb95a69c2fe5b2bb702c71a86cc7715cd6"
+  },
+  "chapter6/equipment-08-item-5-before.png": {
+    "bytes": 357304,
+    "sha256": "761126b7c3e63a372f5f342c9f487592caa1a6f7d36ec9fdef9ad6db1f913350"
+  },
+  "chapter6/equipment-05-selected-inspect-0-1.png": {
+    "bytes": 632949,
+    "sha256": "2cad12df9bf67ff1145f114eb65c8d6394d344753f9e3e3923fdd52887b6913f"
+  },
+  "chapter6/equipment-08-inventory-icon-5.png": {
+    "bytes": 344150,
+    "sha256": "1783803560b94584b47e1f36049452051642b6df479ad5c8c5877a8506400652"
+  },
+  "chapter6/run-030.png": {
+    "bytes": 750776,
+    "sha256": "f1edcfa24f7d35ba24d93f28baae719c7ecc4329e26499679e4ce790e8bd11fa"
+  },
+  "chapter6/equipment-12-close-004.png": {
+    "bytes": 399482,
+    "sha256": "e0bbf99cbf42727d26a90ed7e9746f321bba1f6d0523c5223877dd6c945c4070"
+  },
+  "chapter6/equipment-03-item-0-before.png": {
+    "bytes": 297194,
+    "sha256": "362576b2869fe748aa66de29de2f2b9118bbee4b01f98034a489f9a483ad1285"
+  },
+  "chapter6/run-061.png": {
+    "bytes": 756790,
+    "sha256": "8da70178e37ff76c091a7026222326e569193d3f758206c44af18ab1bf34e0fa"
+  },
+  "chapter6/equipment-11-item-0-before.png": {
+    "bytes": 384911,
+    "sha256": "85a041d941b04f3f219b297ab9dc1c2249673d51c5a9021e43e782319e852836"
+  },
+  "chapter6/equipment-05-item-0-ack-001.png": {
+    "bytes": 310783,
+    "sha256": "155847ef16b18df5a5c0451128d38ac756b6d4935fc9b8ea19ac967e707cbd22"
+  },
+  "chapter6/earned-strength-restart.png": {
+    "bytes": 303226,
+    "sha256": "b1bb9d083b9ec8a2c1ab27e27014e55a1ccd85a04dad35b5a058b74b9d0ad777"
+  },
+  "chapter6/equipment-08-inventory-open-27.png": {
+    "bytes": 357304,
+    "sha256": "761126b7c3e63a372f5f342c9f487592caa1a6f7d36ec9fdef9ad6db1f913350"
+  },
+  "chapter6/run-051.png": {
+    "bytes": 766678,
+    "sha256": "c92f161eceb4c53159843b634a6b652ca333fba0b6735de98dda43b6524f1062"
+  },
+  "chapter6/equipment-04-market-open-10.png": {
+    "bytes": 767725,
+    "sha256": "f91db32eb38918f791e2e8bc79d546aa4775049c0c30aeb69b2af4934aa01df3"
+  },
+  "chapter6/run-091.png": {
+    "bytes": 787720,
+    "sha256": "0c9e076045d95115c01469a72577744301c88533180f77125248ab75656e134b"
+  },
+  "chapter6/equipment-03-inspect-3-0.png": {
+    "bytes": 638950,
+    "sha256": "4ce602123ffe0fb92cb753b9de8f0b02aa23c09e48f36e1b8308dfc8c0439674"
+  },
+  "chapter6/equipment-03-inventory-open-08.png": {
+    "bytes": 749018,
+    "sha256": "358fde1eccc9caa00a8e7e1bebdb485c8600c74e791fef0a18c3aedfe3fdd932"
+  },
+  "chapter6/equipment-11-close-006.png": {
+    "bytes": 808842,
+    "sha256": "7522aa868cd55bb391c95f05e8c899b0458d86259dc1a54ee57f15211dd80050"
+  },
+  "chapter6/run-037.png": {
+    "bytes": 751286,
+    "sha256": "67487cda5983373817121d3eb864568e7e0859bdfe39acc73d6c0c0f02bc999c"
+  },
+  "chapter6/equipment-06-close-001.png": {
+    "bytes": 325133,
+    "sha256": "9ee35711973df02e0b10078c085f76ee69847d4db31f162c74521b8be2b39f65"
+  },
+  "chapter6/equipment-03-item-1-ack-007.png": {
+    "bytes": 293007,
+    "sha256": "174542658591ce2cecdf72877e62db2e12f6bd24d82f53f277efeb7cf7c37305"
+  },
+  "chapter6/run-059.png": {
+    "bytes": 764998,
+    "sha256": "ecfe5de9f350840beafaa7fee2898db64bfa969d4e7852272d4cfb06c06a3cc3"
+  },
+  "chapter6/equipment-12-item-1-ack-006.png": {
+    "bytes": 393919,
+    "sha256": "c5683bcdbda9dc6fbee749b0ae63ffacf635f1ab704653159fe2e2063101f9b1"
+  },
+  "chapter6/equipment-03-inspect-4-0.png": {
+    "bytes": 641074,
+    "sha256": "bd8c1ad41e32c6e6e6ac687f08dfcbdd95242cd2e1c853c66d7fde1c2a5df81a"
+  },
+  "chapter6/equipment-12-item-8-before.png": {
+    "bytes": 402296,
+    "sha256": "a60b232e9d8164fa1fe40f35ca44ba20a30bd537c8b7fb08d5f068f7fd362216"
+  },
+  "chapter6/startup-clock-source.png": {
+    "bytes": 739753,
+    "sha256": "1a26f3118fb694bfce05934c9ec789af6825a1595dcf566461c39dce15b57966"
+  },
+  "chapter6/equipment-12-item-5-before.png": {
+    "bytes": 411665,
+    "sha256": "b6f15b4be370c833f668999ff5d1f46f589afed19c2751c4dcbf14bfffcab463"
+  },
+  "chapter6/equipment-03-item-0-ack-002.png": {
+    "bytes": 297194,
+    "sha256": "362576b2869fe748aa66de29de2f2b9118bbee4b01f98034a489f9a483ad1285"
+  },
+  "chapter6/equipment-11-item-4-before.png": {
+    "bytes": 392516,
+    "sha256": "a2787f382ad1a883c85685435d0cc4bc6c0af0579e4d1cda157915260aa824c3"
+  },
+  "chapter6/equipment-11-item-2-ack-009.png": {
+    "bytes": 379861,
+    "sha256": "2936072a94ebf748397b47e27ead187eda8f12d47eb1c1a7d09fae6f52bbec7d"
+  },
+  "chapter6/equipment-05-item-1-ack-006.png": {
+    "bytes": 306385,
+    "sha256": "ca8d419a59dcea9f24fb4318184c139415d4f7730149b6483dc1c1391417c577"
+  },
+  "chapter6/equipment-06-inspect-1-0.png": {
+    "bytes": 636508,
+    "sha256": "8d5d614d40fadee352a01bd5f742ff4bcf852e68dc1f88b9f9dde12f4904cc1c"
+  },
+  "chapter6/equipment-01-market-open-00.png": {
+    "bytes": 766307,
+    "sha256": "43d2da86535b8c5a63b5bbf112f75eb72a11d528e1ef73a0af648b184ab34692"
+  },
+  "chapter6/equipment-10-item-3-ack-014.png": {
+    "bytes": 381268,
+    "sha256": "ee11db6e0b92a509d39338f91773bbc560f56963fd10561bd35addfae1f44805"
+  },
+  "chapter6/run-086.png": {
+    "bytes": 789000,
+    "sha256": "e65d6fe62da12b741caaa0a42d5369e7e6787037cdf9a399f1091aad00bb03cf"
+  },
+  "chapter6/equipment-09-item-2-before.png": {
+    "bytes": 355094,
+    "sha256": "11d2d2aca5b144fa5b831701927f374fb91a8713a4f0b8075823ad19949cdc35"
+  },
+  "chapter6/equipment-10-inspect-0-1.png": {
+    "bytes": 646644,
+    "sha256": "71dccbbf84a16c83650e86ba947ad24aaf456807d7fe72d46e881d46b3ec7e3d"
+  },
+  "chapter6/run-097.png": {
+    "bytes": 836642,
+    "sha256": "712640a7473170677fe684f898007ecc331c355fc015fd6201cabb78bc342516"
+  },
+  "chapter6/run-095.png": {
+    "bytes": 797867,
+    "sha256": "655e77c291ed369756b2e2dc79bd3153d11b25f2e2c96b5f429d05a743e93f04"
+  },
+  "chapter6/equipment-06-market-open-16.png": {
+    "bytes": 764415,
+    "sha256": "b4c844ccd3ef24fd901855668e078578f6a0bfd8562a9feed23095b2608211e3"
+  },
+  "chapter6/equipment-11-item-3-ack-015.png": {
+    "bytes": 392516,
+    "sha256": "a2787f382ad1a883c85685435d0cc4bc6c0af0579e4d1cda157915260aa824c3"
+  },
+  "chapter6/equipment-08-before.png": {
+    "bytes": 638926,
+    "sha256": "3f6ac4aeff69064ed3b20218fc88f2b523a436e5fdd588e0d08aceed24ce0ebb"
+  },
+  "chapter6/run-056.png": {
+    "bytes": 767649,
+    "sha256": "d05e27e915d2200b0313c319ac4a531ccf1fe1478cf201b7d449a973af084109"
+  },
+  "chapter6/run-079.png": {
+    "bytes": 751980,
+    "sha256": "f4f14fb7dd4bd14ea09e971fa1de4c89c4a1891f3180a0052112e0fc42e97b67"
+  },
+  "chapter6/equipment-11-inventory-icon-0.png": {
+    "bytes": 384878,
+    "sha256": "90a9ff2375f81247900c50af20e7c254dd490c47ccf6eb7a9de968f11a3e4e84"
+  },
+  "chapter6/run-003.png": {
+    "bytes": 753263,
+    "sha256": "1ce1eb7327337b24398c41b3c1eb418774332cc57060fb0be3403b5c71a05e55"
+  },
+  "chapter6/equipment-09-inventory-icon-2.png": {
+    "bytes": 369331,
+    "sha256": "2370dc99411bc8b0f086a36a498ecf90c11fbe7adfb569dc06d29394078409b6"
+  },
+  "chapter6/equipment-05-resume-after.png": {
+    "bytes": 768944,
+    "sha256": "b542c7b0ec3e9d81496629300d4899dbd3b5c2a4d72fb47bb66e5c2a73356639"
+  },
+  "chapter6/equipment-07-inspect-2-0.png": {
+    "bytes": 642480,
+    "sha256": "22962baf8c5e3fcad74ab377aeccb7b5c3b4f4f517349479ecd1beff42b8aab5"
+  },
+  "chapter6/equipment-07-before.png": {
+    "bytes": 643682,
+    "sha256": "6e3cd216d68ba2394920aeb897575b65e5061f76ff99fb63744894ca5c2e491a"
+  },
+  "chapter6/run-100.png": {
+    "bytes": 811873,
+    "sha256": "b6c093d48bf613e483fbc42cef000e59a34fb8e0f411e02559d23bb634ba8b38"
+  },
+  "chapter6/equipment-09-inspect-1-1.png": {
+    "bytes": 649511,
+    "sha256": "0558e2c73487926d4fc34eaffb581ec3d00075b8f4b18cb2c8825be63693294e"
+  },
+  "chapter6/run-099.png": {
+    "bytes": 778984,
+    "sha256": "2881dde0e1b2c3b2569c15113e35a1b4f585b776ffa27b6971efacce82ba47dc"
+  },
+  "chapter6/equipment-06-inventory-icon-2.png": {
+    "bytes": 320859,
+    "sha256": "99af04e733e419647fd702ac391311dd422badd60850ff04ea3fd432c69838ed"
+  },
+  "chapter6/equipment-01-market.png": {
+    "bytes": 634539,
+    "sha256": "4177a483e4143b42434761a33844588424939cb6c4a72644500630e6a0edc47e"
+  },
+  "chapter6/equipment-06-inspect-2-0.png": {
+    "bytes": 638585,
+    "sha256": "b1b29620258a8ed39160dad1147c5c82ba1aadc92d814607a069f9b367374350"
+  },
+  "chapter6/run-006.png": {
+    "bytes": 758948,
+    "sha256": "0bd13910e64ba2b39ec3d10edca82f0387e2f759b1252b96dd217c910b29a759"
+  },
+  "chapter6/equipment-12-item-0-before.png": {
+    "bytes": 399359,
+    "sha256": "574127bbced18b7b9b08979b272007a939d77e2c961a4368d68b31a9de1db3d0"
+  },
+  "chapter6/equipment-07-inspect-1-0.png": {
+    "bytes": 643824,
+    "sha256": "4c639708548c82ca301e165a20bd4b8265c970dd5718b39e18f72725c499e58b"
+  },
+  "chapter6/equipment-06-resume-before.png": {
+    "bytes": 749696,
+    "sha256": "87c5e3c1e6be62585150f810f434e75b4fdc5d36abcb0c21123daf5bda8321e0"
+  },
+  "chapter6/run-078.png": {
+    "bytes": 758638,
+    "sha256": "589943eb11aa054cee2f7c4a0a1e5da73061112894b77334086d5a1fd5840a85"
+  },
+  "chapter6/run-014.png": {
+    "bytes": 754210,
+    "sha256": "63b145dfefd34a77b101beedd6867e20aca56d06b166cf8ab36ec7096cdcc3d6"
+  },
+  "chapter6/equipment-02-after.png": {
+    "bytes": 628755,
+    "sha256": "64e3856bcfa4f7d48776ac4caf3dac8a23905b6021448b10ee1ed60c7b66dcdd"
+  },
+  "chapter6/equipment-10-inventory-open-34.png": {
+    "bytes": 781698,
+    "sha256": "5a4f9e0eb2f71345218bb5fd13da1f4bff55fdf8849c7a90cc244d3214418a4b"
+  },
+  "chapter6/equipment-06-inspect-0-0.png": {
+    "bytes": 636508,
+    "sha256": "8d5d614d40fadee352a01bd5f742ff4bcf852e68dc1f88b9f9dde12f4904cc1c"
+  },
+  "chapter6/equipment-09-inventory-icon-5.png": {
+    "bytes": 363273,
+    "sha256": "8e25e8ae3baada3be783e5ee4b3e545c218ee0ffc8b667d8cb0934ba031f1cc5"
+  },
+  "chapter6/equipment-01-inspect-0-0.png": {
+    "bytes": 634539,
+    "sha256": "4177a483e4143b42434761a33844588424939cb6c4a72644500630e6a0edc47e"
+  },
+  "chapter6/run-075.png": {
+    "bytes": 782842,
+    "sha256": "d54379781d47f3e1621a318db64092d3ba0765f1adb632ffda6e4a9608a3d6c0"
+  },
+  "chapter6/equipment-07-inspect-4-0.png": {
+    "bytes": 644194,
+    "sha256": "edac8288f6796a0189091b53e2b2b9a994de1ddd92dd6e5bd458ada38bc63794"
+  },
+  "chapter6/equipment-06-item-2-ack-009.png": {
+    "bytes": 307484,
+    "sha256": "adfdd0973b0311309946d5d3acf8d1a321630c136295436a0146adac299eac11"
+  },
+  "chapter6/equipment-11-inspect-1-0.png": {
+    "bytes": 662960,
+    "sha256": "628c7d8c4d218bc23758e128a890b8563e9f1e501a40836093d32793b19ecf87"
+  },
+  "chapter6/equipment-11-unlock-clock.png": {
+    "bytes": 785238,
+    "sha256": "ace9dede96401a6d9c25ee38fe6f51ba87904c1de1945356522f4f10ff4f021b"
+  },
+  "chapter6/equipment-12-item-0-ack-002.png": {
+    "bytes": 399352,
+    "sha256": "7fd96b66b326ae20a4ca79ffc56e1accf08e6b4ce97faaeab62a9c9d70321069"
+  },
+  "chapter6/equipment-03-resume-after.png": {
+    "bytes": 752340,
+    "sha256": "393027bff610081614aed43719d80384e1605656796572fc4fea671e3acca9f9"
+  },
+  "chapter6/equipment-02-purchase-00.png": {
+    "bytes": 628755,
+    "sha256": "64e3856bcfa4f7d48776ac4caf3dac8a23905b6021448b10ee1ed60c7b66dcdd"
+  },
+  "chapter6/equipment-08-inventory-icon-3.png": {
+    "bytes": 351151,
+    "sha256": "734206bb964482c8839b70b2360c88fb95a69c2fe5b2bb702c71a86cc7715cd6"
+  },
+  "chapter6/equipment-04-inspect-3-1.png": {
+    "bytes": 655964,
+    "sha256": "2799d3e5369ebf98a56dda8fd21383cc953d6ba948cc5829fbfc7dbeb76c7def"
+  },
+  "chapter6/equipment-05-close-006.png": {
+    "bytes": 782442,
+    "sha256": "e537e49bf17926b17924f8fd0e383e4410cd338898bfaf8d3662b9ebb17f570e"
+  },
+  "chapter6/equipment-09-inventory-open-30.png": {
+    "bytes": 784165,
+    "sha256": "eb11f810d6229e1846ee608a7ed7b9120d89ce284c262021daaf8a933aee1f21"
+  },
+  "chapter6/equipment-10-item-6-before.png": {
+    "bytes": 365122,
+    "sha256": "fe2800d664b0accdd5a81c827c0429edac50a6ef81e833da573b23e31b9c388b"
+  },
+  "chapter6/equipment-08-inspect-1-1.png": {
+    "bytes": 637639,
+    "sha256": "b94b3a407a6c145d65d95b147c327dfb62e89856bd8e788a2b65b63195de821b"
+  },
+  "chapter6/run-025.png": {
+    "bytes": 734894,
+    "sha256": "926970b839f078d77c2f50cb5db0fbb06c4472fba8b272d6ea40db25b8208f91"
+  },
+  "chapter6/run-130.png": {
+    "bytes": 766657,
+    "sha256": "8b83f03f67a7d620d1222421f0ef2ff19bf8400955af728c1bfa277613e098df"
+  },
+  "chapter6/training-before.png": {
+    "bytes": 57759,
+    "sha256": "69d608b44b11238a2875f1bcd16a2f0d6d20e050433399cbeb49fd661b1b379c"
+  },
+  "chapter6/equipment-08-item-2-ack-010.png": {
+    "bytes": 352820,
+    "sha256": "536f7a5b6813c5d4ed736fd8a4322f024a3ed6e240407e359636b617004ce48f"
+  },
+  "chapter6/equipment-09-item-6-before.png": {
+    "bytes": 363273,
+    "sha256": "8e25e8ae3baada3be783e5ee4b3e545c218ee0ffc8b667d8cb0934ba031f1cc5"
+  },
+  "chapter6/equipment-03-item-0-ack-001.png": {
+    "bytes": 297194,
+    "sha256": "362576b2869fe748aa66de29de2f2b9118bbee4b01f98034a489f9a483ad1285"
+  },
+  "chapter6/equipment-02-inspect-4-0.png": {
+    "bytes": 626465,
+    "sha256": "ccfbeb6ae6c55cf8865a928cd5356fa7c2f1a251cd88e75299253a932d943b40"
+  },
+  "chapter6/equipment-08-inventory-icon-2.png": {
+    "bytes": 352820,
+    "sha256": "536f7a5b6813c5d4ed736fd8a4322f024a3ed6e240407e359636b617004ce48f"
+  },
+  "chapter6/run-080.png": {
+    "bytes": 759457,
+    "sha256": "11d6aeb1e0fa9c92436ee88dd441d93b1a9b5af7d498334adf72857ffd3e3fa6"
+  },
+  "chapter6/equipment-12-inventory-icon-8.png": {
+    "bytes": 399359,
+    "sha256": "574127bbced18b7b9b08979b272007a939d77e2c961a4368d68b31a9de1db3d0"
+  },
+  "chapter6/equipment-07-resume-after.png": {
+    "bytes": 780096,
+    "sha256": "d137cf8b421af57e3fafb36f5272395afbdb07fdfc785237b9082e4ecfa648fe"
+  },
+  "chapter6/equipment-08-after.png": {
+    "bytes": 639863,
+    "sha256": "cc09cffae5b64725daa5ff7d3621a9fcf3d194cad7785997d4764ffaab80d29f"
+  },
+  "chapter6/equipment-11-item-5-before.png": {
+    "bytes": 398074,
+    "sha256": "372ed87aa6540806115ab244c1852d21f888b7bdb92925004a19e85c5668dd80"
+  },
+  "chapter6/run-039.png": {
+    "bytes": 754002,
+    "sha256": "57d67eec7ff9704eb823504a77f4d40d178d67fa0a473807ab1033a59c2bbb4f"
+  },
+  "chapter6/equipment-09-item-5-before.png": {
+    "bytes": 373309,
+    "sha256": "7c9951785756e291e50c539177be85ff4f23d945b091651baee4e62584bfb706"
+  },
+  "chapter6/equipment-06-purchase-00.png": {
+    "bytes": 630230,
+    "sha256": "0dd1f36e825508a61c3b6013125daf7ffa5e26431e45487a5492f5fc0aaf89e5"
+  },
+  "chapter6/equipment-12-inventory-icon-0.png": {
+    "bytes": 399352,
+    "sha256": "7fd96b66b326ae20a4ca79ffc56e1accf08e6b4ce97faaeab62a9c9d70321069"
+  },
+  "chapter6/equipment-07-inventory-icon-0.png": {
+    "bytes": 327364,
+    "sha256": "f543094e8664e1c3532cccdc465d5714147b18a9e04fcbd55e30daa0d2a41237"
+  },
+  "chapter6/equipment-02-market.png": {
+    "bytes": 631915,
+    "sha256": "001d281fd23dd49e7990bdd8e51b3e9f8bd5801c1da5706750d09e1ce3b73831"
+  },
+  "chapter6/equipment-06-inventory-icon-3.png": {
+    "bytes": 325133,
+    "sha256": "9ee35711973df02e0b10078c085f76ee69847d4db31f162c74521b8be2b39f65"
+  },
+  "chapter6/equipment-12-inspect-0-0.png": {
+    "bytes": 658125,
+    "sha256": "459e935a917a2af9084d06392d21b846e7a4f9c9445890820e4d8cc01e8b795a"
+  },
+  "chapter6/equipment-05-inventory-icon-0.png": {
+    "bytes": 291596,
+    "sha256": "c84fe1b7e2f842e4bd5cb38e343b357e228215187ce1cb358c35ffe5e1532218"
+  },
+  "chapter6/equipment-11-before.png": {
+    "bytes": 663303,
+    "sha256": "7645cf16fbe0f8fb817634af7a80442f88bc216a286d81b88469482260f86179"
+  },
+  "chapter6/equipment-12-item-6-before.png": {
+    "bytes": 389282,
+    "sha256": "982fcb125e7b4523ca1d5819121b3bcfccb9c7e39fff405a442a84841316b6cc"
+  },
+  "chapter6/run-055.png": {
+    "bytes": 764273,
+    "sha256": "3898ebf74418ea68fc6b25802dc7d28f0bc13944783ea171934a2ce278053b8f"
+  },
+  "chapter6/equipment-12-market.png": {
+    "bytes": 658113,
+    "sha256": "9af11f7c5397e4311f303ba6f40380f0dc59d66a9a56b85c01721181fe5a7ac0"
+  },
+  "chapter6/equipment-05-item-2-before.png": {
+    "bytes": 306385,
+    "sha256": "ca8d419a59dcea9f24fb4318184c139415d4f7730149b6483dc1c1391417c577"
+  },
+  "chapter6/equipment-10-market-open-32.png": {
+    "bytes": 792947,
+    "sha256": "9b2610e75dd17efa8b11ef7933799fa8b5b7267783d1d52f26d6226f79af8ef4"
+  },
+  "chapter6/run-111.png": {
+    "bytes": 812470,
+    "sha256": "57f9a9d2eaa35dc7eb4417739c89bc014026fde2f4022495aa264a9b21246821"
+  },
+  "chapter6/equipment-10-item-5-before.png": {
+    "bytes": 387164,
+    "sha256": "f81ef7a4e47720bb424279bd0d290a439377cf67012e5c675ee5bd554f786c2c"
+  },
+  "chapter6/run-142.png": {
+    "bytes": 60452,
+    "sha256": "3bc1f0c7ecb145e2a2bac197a01bc1de144d62cb6868f296e121924d9cbc1a29"
+  },
+  "chapter6/equipment-08-item-4-before.png": {
+    "bytes": 351151,
+    "sha256": "734206bb964482c8839b70b2360c88fb95a69c2fe5b2bb702c71a86cc7715cd6"
+  },
+  "chapter6/equipment-02-selected-inspect-0-1.png": {
+    "bytes": 635766,
+    "sha256": "b303053750d96453bb8f0ed31e869a1fa553015966a287feb0d8e8a2224f8b06"
+  },
+  "chapter6/equipment-02-close-004.png": {
+    "bytes": 280624,
+    "sha256": "94a60372f204c486611630026a5a413859294ae46a409d207f31a4836d5d3a12"
+  },
+  "chapter6/equipment-04-inspect-0-0.png": {
+    "bytes": 653927,
+    "sha256": "b4db368261a97b8a50fe6d3183cd907ee7770910f80888c1bc8948e685804e88"
+  },
+  "chapter6/equipment-04-inspect-2-0.png": {
+    "bytes": 653927,
+    "sha256": "b4db368261a97b8a50fe6d3183cd907ee7770910f80888c1bc8948e685804e88"
+  },
+  "chapter6/equipment-03-market-open-07.png": {
+    "bytes": 641141,
+    "sha256": "60462213cb511757475499f91912ee1dcf40e46ae11a9478996249bd4378b9aa"
+  },
+  "chapter6/equipment-07-inspect-4-1.png": {
+    "bytes": 643682,
+    "sha256": "6e3cd216d68ba2394920aeb897575b65e5061f76ff99fb63744894ca5c2e491a"
+  },
+  "chapter6/equipment-08-resume-after.png": {
+    "bytes": 768425,
+    "sha256": "a7c20db1a6d16db6dd804df7140a49641d0f67550dab2f9c90984dea20a6774c"
+  },
+  "chapter6/run-021.png": {
+    "bytes": 752565,
+    "sha256": "c9c0d86bcad7dc7d8d4145e5702404a10dcf3e3e2de50c7861cd7ae0abc0509b"
+  },
+  "chapter6/equipment-08-item-5-ack-022.png": {
+    "bytes": 344150,
+    "sha256": "1783803560b94584b47e1f36049452051642b6df479ad5c8c5877a8506400652"
+  },
+  "chapter6/equipment-02-inspect-1-1.png": {
+    "bytes": 633136,
+    "sha256": "49f65a0919c01814f02205d592c06524be883c13861d3ca51a959beda16ffbab"
+  },
+  "chapter6/equipment-12-item-3-before.png": {
+    "bytes": 408245,
+    "sha256": "3a267194b511c1ecf002bdaf6a55500dc481814ea1791521612889b03ea48ded"
+  },
+  "chapter6/equipment-11-close-004.png": {
+    "bytes": 384911,
+    "sha256": "85a041d941b04f3f219b297ab9dc1c2249673d51c5a9021e43e782319e852836"
+  },
+  "chapter6/run-103.png": {
+    "bytes": 846138,
+    "sha256": "880529399466ed53fb9ea64537d931b51bb44f4f5b46db6601585e043787b8d2"
+  },
+  "chapter6/equipment-08-inspect-2-1.png": {
+    "bytes": 637668,
+    "sha256": "e1fb9af1cf6a90b90e1d8afa426bcfa959f06f6ad38f623f38e713769f3d2421"
+  },
+  "chapter6/equipment-09-selected-inspect-1-0.png": {
+    "bytes": 651561,
+    "sha256": "0f669ec49c3585794bf4e3bc0cf45e2a7e890cc06816150073e41025f2453390"
+  },
+  "chapter6/equipment-03-close-006.png": {
+    "bytes": 764032,
+    "sha256": "fe849cf6de008deb3cc726ed4c3a7c15b49239c25e4d52a9caaf677a8db13274"
+  },
+  "chapter6/equipment-12-inventory-open-42.png": {
+    "bytes": 810208,
+    "sha256": "8c8646300c93c1d3218620d517a74876e4f9279df671686ce18b670e05318c37"
+  },
+  "chapter6/run-045.png": {
+    "bytes": 796525,
+    "sha256": "565d98af8ba8da6fe2c6b59dd7d2846f1937e9562026af4be86800560c550ff1"
+  },
+  "chapter6/equipment-11-inventory-icon-4.png": {
+    "bytes": 398074,
+    "sha256": "372ed87aa6540806115ab244c1852d21f888b7bdb92925004a19e85c5668dd80"
+  },
+  "chapter6/equipment-07-item-1-ack-005.png": {
+    "bytes": 327364,
+    "sha256": "f543094e8664e1c3532cccdc465d5714147b18a9e04fcbd55e30daa0d2a41237"
+  },
+  "chapter6/equipment-12-unlock-clock.png": {
+    "bytes": 788427,
+    "sha256": "8ccf445bd02729c7b7d4737aac78807658150dd77ccba4ff135e62741bd9aa63"
+  },
+  "chapter6/run-089.png": {
+    "bytes": 787835,
+    "sha256": "d661b8d9f942d48be866954b49deb0ff61c839cdc4a82e8b1a6ab46f6659a7b9"
+  },
+  "chapter6/run-107.png": {
+    "bytes": 784819,
+    "sha256": "acaf873a9ef269ed1498419cd8e97c3e2d12047497971f5c25cec74ab9b80aa7"
+  },
+  "chapter6/run-120.png": {
+    "bytes": 814362,
+    "sha256": "c4d2623eabb6d1a2724cb2532bf0f517fc60c0ff91cbb6862d884ef3d9dc291f"
+  },
+  "chapter6/equipment-03-after.png": {
+    "bytes": 633692,
+    "sha256": "7ac15206db57edf66c864a10ab318876764be493a12b389579325c986d02564c"
+  },
+  "chapter6/equipment-09-unlock-clock.png": {
+    "bytes": 749805,
+    "sha256": "8e82e784573d787c4afefa16da525e4fb3a5936cc3ac7ab0955ef30245758e2c"
+  },
+  "chapter6/equipment-09-item-3-ack-013.png": {
+    "bytes": 369331,
+    "sha256": "2370dc99411bc8b0f086a36a498ecf90c11fbe7adfb569dc06d29394078409b6"
+  },
+  "chapter6/equipment-10-inspect-2-1.png": {
+    "bytes": 647279,
+    "sha256": "7c32710dbd8423d85339f2847e96b2478e3ea8b246c88cc2d95cce7c06a3fc79"
+  },
+  "chapter6/equipment-12-item-5-ack-021.png": {
+    "bytes": 411665,
+    "sha256": "b6f15b4be370c833f668999ff5d1f46f589afed19c2751c4dcbf14bfffcab463"
+  },
+  "chapter6/equipment-05-purchase-00.png": {
+    "bytes": 633539,
+    "sha256": "285d4818442cd825c1f3b926277e38f746e831f56a0730c29b1bfafd8520eed7"
+  },
+  "chapter6/equipment-10-item-5-ack-021.png": {
+    "bytes": 387164,
+    "sha256": "f81ef7a4e47720bb424279bd0d290a439377cf67012e5c675ee5bd554f786c2c"
+  },
+  "chapter6/run-002.png": {
+    "bytes": 755541,
+    "sha256": "6e6464e5f7cb407fdeab73e7c255a078fe166419043c8b645a0ec99cb75cb324"
+  },
+  "chapter6/equipment-11-inventory-icon-5.png": {
+    "bytes": 375380,
+    "sha256": "b12af5e573587d21bfff5f45fc783e294d2af152ec5e03a02741e4d877a7a273"
+  },
+  "chapter6/equipment-07-inventory-open-22.png": {
+    "bytes": 779907,
+    "sha256": "63333576720d1e722806c8232a4b97f329ce1641bb0623fbe366926ad0d60506"
+  },
+  "chapter6/equipment-05-before.png": {
+    "bytes": 630725,
+    "sha256": "c8f706b068e830d175d75a9cd38b92d402def2b9e6cd13a0f06f2a3174a416de"
+  },
+  "chapter6/equipment-10-item-0-ack-002.png": {
+    "bytes": 374701,
+    "sha256": "62707086faba8ef777ab384149ce505f5896d688bc1f25f3f78f43e8864ffcc3"
+  },
+  "chapter6/equipment-08-resume-before.png": {
+    "bytes": 806833,
+    "sha256": "de3374cb1fd15607bb9fc297bd793e5704adb385fafc8ffda20d3cc8dc1c6b4a"
+  },
+  "chapter6/equipment-05-inventory-open-15.png": {
+    "bytes": 310783,
+    "sha256": "155847ef16b18df5a5c0451128d38ac756b6d4935fc9b8ea19ac967e707cbd22"
+  },
+  "chapter6/equipment-01-inspect-4-0.png": {
+    "bytes": 625152,
+    "sha256": "2eab2278c5bee7abe45e4e5dc5b074de726e04ec903b17564e434451cb92f872"
+  },
+  "chapter6/training.png": {
+    "bytes": 54403,
+    "sha256": "c70c7f743aef9a8c3d35ba4ea8cdc30c024e9cdb1a72e2d24ed079f45e5d09da"
+  },
+  "chapter6/equipment-04-inspect-1-0.png": {
+    "bytes": 655622,
+    "sha256": "e73d4e20d400f1c55880b596718d7b8b89b66ba5ad11105e9a64482181c99a43"
+  },
+  "chapter6/equipment-06-unlock-clock.png": {
+    "bytes": 764215,
+    "sha256": "484a8e833f8385f61ecf86d3a28a212e6a7e885878419ba8791b2213e5ab1b05"
+  },
+  "chapter6/run-114.png": {
+    "bytes": 795520,
+    "sha256": "7c5c1f1b3546eb5e71abb01704d7db8ddaf631e1f0bb5d9adc4e9dd714a3963e"
+  },
+  "chapter6/equipment-03-inventory-icon-1.png": {
+    "bytes": 297194,
+    "sha256": "362576b2869fe748aa66de29de2f2b9118bbee4b01f98034a489f9a483ad1285"
+  },
+  "chapter6/run-012.png": {
+    "bytes": 756048,
+    "sha256": "9220009d18cad4644b944e5688d7be180f8e5b6ee15ec036dc88a8b5c3777787"
+  },
+  "chapter6/base-strength-speed.png": {
+    "bytes": 739705,
+    "sha256": "b257f09ea3995dc92ef9a721bc662e0ece68e10b568ab0027778a113bd6f9d8a"
+  },
+  "chapter6/run-019.png": {
+    "bytes": 755157,
+    "sha256": "c24fa1e6ab8371f47ea1422de6b79658fb272096d17c89b3fabd4fc9097620cf"
+  },
+  "chapter6/equipment-11-inspect-0-0.png": {
+    "bytes": 662960,
+    "sha256": "628c7d8c4d218bc23758e128a890b8563e9f1e501a40836093d32793b19ecf87"
+  },
+  "chapter6/equipment-01-inspect-1-0.png": {
+    "bytes": 634539,
+    "sha256": "4177a483e4143b42434761a33844588424939cb6c4a72644500630e6a0edc47e"
+  },
+  "chapter6/equipment-07-item-1-before.png": {
+    "bytes": 327364,
+    "sha256": "f543094e8664e1c3532cccdc465d5714147b18a9e04fcbd55e30daa0d2a41237"
+  },
+  "chapter6/equipment-08-market-open-24.png": {
+    "bytes": 787782,
+    "sha256": "632cc08c5140cd7347c57ff54ac28621eaacfeee3d3ed275435b8ace79d20ed1"
+  },
+  "chapter6/equipment-10-inventory-icon-5.png": {
+    "bytes": 365122,
+    "sha256": "fe2800d664b0accdd5a81c827c0429edac50a6ef81e833da573b23e31b9c388b"
+  },
+  "chapter6/run-124.png": {
+    "bytes": 817424,
+    "sha256": "68624485e33e76f87482c74358cd2f13ab0e898902f0daac8b73acb931f67789"
+  },
+  "chapter6/run-071.png": {
+    "bytes": 788785,
+    "sha256": "7ff3f7e3990e98e15b1bbd350719b0ef6f497bbd2ef902be8871eb3f69fcf53c"
+  },
+  "chapter6/equipment-07-inventory-icon-4.png": {
+    "bytes": 341198,
+    "sha256": "7c11092153bd325f04eae314a17e2612f24db10af97f03ee3d4ec165c5aac1d1"
+  },
+  "chapter6/equipment-03-item-0-ack-003.png": {
+    "bytes": 293007,
+    "sha256": "174542658591ce2cecdf72877e62db2e12f6bd24d82f53f277efeb7cf7c37305"
+  },
+  "chapter6/equipment-08-item-1-before.png": {
+    "bytes": 344214,
+    "sha256": "77504079656ac8ef1d018a840b4846e085f0394d06b8c642be1b692e0acc1809"
+  },
+  "chapter6/equipment-07-item-3-ack-013.png": {
+    "bytes": 337071,
+    "sha256": "c192b0a63579a021ee4853a1e66fdd54b85278ff59b429f490a2f2e2afe80fc7"
+  },
+  "chapter6/equipment-10-item-1-ack-005.png": {
+    "bytes": 374701,
+    "sha256": "62707086faba8ef777ab384149ce505f5896d688bc1f25f3f78f43e8864ffcc3"
+  },
+  "chapter6/equipment-12-before.png": {
+    "bytes": 659825,
+    "sha256": "f67e11ab15852fae27c24ee846c1e7ccff7d516f2466ac6d78a9e1e1e23de2a0"
+  },
+  "chapter6/equipment-05-selected-inspect-0-0.png": {
+    "bytes": 630725,
+    "sha256": "c8f706b068e830d175d75a9cd38b92d402def2b9e6cd13a0f06f2a3174a416de"
+  },
+  "chapter6/equipment-08-inventory-icon-1.png": {
+    "bytes": 339379,
+    "sha256": "9b765d2e69c68df4eae8dbaf2909ccea9fb1a4a3fda7a169af243bf9c90d7260"
+  },
+  "chapter6/run-053.png": {
+    "bytes": 768561,
+    "sha256": "1fc13c47f97a7b422c45ee0744c721a84f9fef5f295f76bbd8824eb5d6e4b3bc"
+  },
+  "chapter6/run-141.png": {
+    "bytes": 770249,
+    "sha256": "08244e07b9b549ef7b6718e909735ac5970b572b6eea35275a5ac4fbb33de176"
+  },
+  "chapter6/equipment-08-inspect-3-1.png": {
+    "bytes": 639061,
+    "sha256": "0bca4d4b02ee30a61977a288c6d5c976793f1a3e4a855a5ed1061d04e9bf4b6f"
+  },
+  "chapter6/equipment-08-inspect-4-0.png": {
+    "bytes": 639061,
+    "sha256": "0bca4d4b02ee30a61977a288c6d5c976793f1a3e4a855a5ed1061d04e9bf4b6f"
+  },
+  "chapter6/equipment-06-item-0-ack-002.png": {
+    "bytes": 312298,
+    "sha256": "1cd97ca748665d46280bf3b89f865ac8b3423154d5b47b26f318a80dbdd26081"
+  },
+  "chapter6/equipment-12-item-1-before.png": {
+    "bytes": 399352,
+    "sha256": "7fd96b66b326ae20a4ca79ffc56e1accf08e6b4ce97faaeab62a9c9d70321069"
+  },
+  "chapter6/run-139.png": {
+    "bytes": 774467,
+    "sha256": "1271af8ab474644bcd966048472465f54413316ddc5fac7adae10ab5a1e81edb"
+  },
+  "chapter6/equipment-09-item-5-ack-021.png": {
+    "bytes": 373309,
+    "sha256": "7c9951785756e291e50c539177be85ff4f23d945b091651baee4e62584bfb706"
+  },
+  "chapter6/equipment-04-inspect-4-1.png": {
+    "bytes": 655881,
+    "sha256": "0ac4ebb3774e6eccb601e273309ad6997d1d70f77276f3f4d7ac39ed3b3aa2a2"
+  },
+  "chapter6/equipment-02-inspect-4-1.png": {
+    "bytes": 631915,
+    "sha256": "001d281fd23dd49e7990bdd8e51b3e9f8bd5801c1da5706750d09e1ce3b73831"
+  },
+  "chapter6/equipment-11-item-1-ack-005.png": {
+    "bytes": 384878,
+    "sha256": "90a9ff2375f81247900c50af20e7c254dd490c47ccf6eb7a9de968f11a3e4e84"
+  },
+  "chapter6/equipment-05-inventory-icon-1.png": {
+    "bytes": 306385,
+    "sha256": "ca8d419a59dcea9f24fb4318184c139415d4f7730149b6483dc1c1391417c577"
+  },
+  "chapter6/equipment-05-close-001.png": {
+    "bytes": 310783,
+    "sha256": "155847ef16b18df5a5c0451128d38ac756b6d4935fc9b8ea19ac967e707cbd22"
+  },
+  "chapter6/run-076.png": {
+    "bytes": 778227,
+    "sha256": "0798330cc4f00734d5d5d05a76e08fac6a6b678ac088efe1ad488ee1cd9caea1"
+  },
+  "chapter6/equipment-12-item-0-ack-001.png": {
+    "bytes": 399359,
+    "sha256": "574127bbced18b7b9b08979b272007a939d77e2c961a4368d68b31a9de1db3d0"
+  },
+  "chapter6/run-119.png": {
+    "bytes": 839575,
+    "sha256": "128f3512900fb7aa4da34e32d980b6b9c7c7004956bff0035562355f09945914"
+  },
+  "chapter6/equipment-06-market.png": {
+    "bytes": 636508,
+    "sha256": "8d5d614d40fadee352a01bd5f742ff4bcf852e68dc1f88b9f9dde12f4904cc1c"
+  },
+  "chapter6/run-049.png": {
+    "bytes": 750959,
+    "sha256": "cc1aa45c0f737a0a6326405d4076cd88860b31615f157f242b8a58c842888976"
+  },
+  "chapter6/equipment-07-market.png": {
+    "bytes": 642480,
+    "sha256": "22962baf8c5e3fcad74ab377aeccb7b5c3b4f4f517349479ecd1beff42b8aab5"
+  },
+  "chapter6/equipment-06-item-2-ack-010.png": {
+    "bytes": 320859,
+    "sha256": "99af04e733e419647fd702ac391311dd422badd60850ff04ea3fd432c69838ed"
+  },
+  "chapter6/equipment-12-inspect-2-1.png": {
+    "bytes": 658359,
+    "sha256": "b7c99f59f100575cf9cd200bcd7f4e5407383f6ea9af9be9210908a3a847c0b8"
+  },
+  "chapter6/equipment-12-item-7-before.png": {
+    "bytes": 393210,
+    "sha256": "49641baedb63191685f9b077f2dd6306e49a3fffa38723f9ad85f9be5875377c"
+  },
+  "chapter6/run-018.png": {
+    "bytes": 761652,
+    "sha256": "2ce53537a104763f87e571003bb2bc9a7c86c4fc816c1300833ba2ddc6242afb"
+  },
+  "chapter6/equipment-12-item-9-ack-037.png": {
+    "bytes": 399359,
+    "sha256": "574127bbced18b7b9b08979b272007a939d77e2c961a4368d68b31a9de1db3d0"
+  },
+  "chapter6/equipment-09-market-open-28.png": {
+    "bytes": 777957,
+    "sha256": "ed3396cf4c1b9235c3e57a22c6029db320bfff25a7015c362bca3047fc02aedb"
+  },
+  "chapter6/equipment-05-inspect-2-0.png": {
+    "bytes": 633510,
+    "sha256": "c88a6a9c01d1f4bf0aee9bed38ecfaf01839ccb54023841f57ee7d6358280e0b"
+  },
+  "chapter6/equipment-10-item-2-ack-010.png": {
+    "bytes": 383026,
+    "sha256": "a49ebdf2623548f4c4cd107648229a8fe361e91694b151dca7b6dbf8ce8b3d92"
+  },
+  "chapter6/equipment-02-close-001.png": {
+    "bytes": 280624,
+    "sha256": "94a60372f204c486611630026a5a413859294ae46a409d207f31a4836d5d3a12"
+  },
+  "chapter6/equipment-09-item-4-ack-018.png": {
+    "bytes": 373309,
+    "sha256": "7c9951785756e291e50c539177be85ff4f23d945b091651baee4e62584bfb706"
+  },
+  "chapter6/equipment-12-item-1-ack-005.png": {
+    "bytes": 399352,
+    "sha256": "7fd96b66b326ae20a4ca79ffc56e1accf08e6b4ce97faaeab62a9c9d70321069"
+  },
+  "chapter6/equipment-10-before.png": {
+    "bytes": 650013,
+    "sha256": "1eba98382982b7a3e4ba8cc4b2c537ac184ba8fae24e76859ef7a480c4036391"
+  },
+  "chapter6/run-101.png": {
+    "bytes": 792521,
+    "sha256": "1a4d6ba416fb195d5bc49f1109194f6d487591bf7f22b067843748f99b7dabcb"
+  },
+  "chapter6/equipment-10-inspect-3-1.png": {
+    "bytes": 648005,
+    "sha256": "613cb47d9e185ce4b614d0334de04d85196565742649ee47576798df2492cc04"
+  },
+  "chapter6/startup-observation-02.png": {
+    "bytes": 315211,
+    "sha256": "9c766698abb0c4cfe30ec54ef02f517613e247686a63060c3433108066fdfea8"
+  },
+  "chapter6/equipment-07-item-4-ack-017.png": {
+    "bytes": 335333,
+    "sha256": "28376b14bdc7f998e48542a944de388e974c8196ce92d9c7240e817b9e542a65"
+  },
+  "chapter6/equipment-02-before.png": {
+    "bytes": 631915,
+    "sha256": "001d281fd23dd49e7990bdd8e51b3e9f8bd5801c1da5706750d09e1ce3b73831"
+  },
+  "chapter6/equipment-06-before.png": {
+    "bytes": 635964,
+    "sha256": "70d355c363a2ce903e786b3e1c8105f2e0ab305e867ac1b330b1d5bed7b36e92"
+  },
+  "chapter6/run-058.png": {
+    "bytes": 751304,
+    "sha256": "43aba84644b887e3c3e7125ead9c9994f3d5f0c4dd38c8f8f4d3a3e3172d2800"
+  },
+  "chapter6/equipment-09-inventory-icon-1.png": {
+    "bytes": 355094,
+    "sha256": "11d2d2aca5b144fa5b831701927f374fb91a8713a4f0b8075823ad19949cdc35"
+  },
+  "chapter6/equipment-05-item-2-ack-009.png": {
+    "bytes": 306385,
+    "sha256": "ca8d419a59dcea9f24fb4318184c139415d4f7730149b6483dc1c1391417c577"
+  },
+  "chapter6/equipment-08-inventory.png": {
+    "bytes": 344150,
+    "sha256": "1783803560b94584b47e1f36049452051642b6df479ad5c8c5877a8506400652"
+  },
+  "chapter6/equipment-11-inspect-4-0.png": {
+    "bytes": 662714,
+    "sha256": "600bddd7f6326b53b281bc3af12fc773396e801b26d812a4377f963248567896"
+  },
+  "chapter6/equipment-12-item-4-ack-017.png": {
+    "bytes": 406576,
+    "sha256": "29d4331345daa4a854d6a07aa67f550aa549b4b7b448469c9f6d1be40b9279fe"
+  },
+  "chapter6/equipment-10-item-3-before.png": {
+    "bytes": 383026,
+    "sha256": "a49ebdf2623548f4c4cd107648229a8fe361e91694b151dca7b6dbf8ce8b3d92"
+  },
+  "chapter6/equipment-10-item-2-before.png": {
+    "bytes": 369541,
+    "sha256": "9e3ceca5f5868c9ec09bc191c3182c0c2034690cde20f5b3edb9ab3026b8bf05"
+  },
+  "chapter6/equipment-09-close-006.png": {
+    "bytes": 753808,
+    "sha256": "d7e01ff755462b4ad025c7631a7aed5f08635cd0396214152e84de591054ad93"
+  },
+  "chapter6/run-062.png": {
+    "bytes": 753389,
+    "sha256": "fa6204e53496e770c05e4e24dec4df382bb8da0a7bba2566a0a882f93870278f"
+  },
+  "chapter6/equipment-10-inspect-1-0.png": {
+    "bytes": 646644,
+    "sha256": "71dccbbf84a16c83650e86ba947ad24aaf456807d7fe72d46e881d46b3ec7e3d"
+  },
+  "chapter6/run-052.png": {
+    "bytes": 775269,
+    "sha256": "fa44e0235bc3e99a7badf59dbfaf4b246afd486c82e3f65aca63c421251b09c6"
+  },
+  "chapter6/equipment-09-market.png": {
+    "bytes": 648176,
+    "sha256": "0395af0046cf765260325bff7f15be20a13938492f5ad4b593e080c370f87fa3"
+  },
+  "chapter6/equipment-10-item-4-ack-017.png": {
+    "bytes": 381268,
+    "sha256": "ee11db6e0b92a509d39338f91773bbc560f56963fd10561bd35addfae1f44805"
+  },
+  "chapter6/run-068.png": {
+    "bytes": 766441,
+    "sha256": "ef5dac951c680fa04c5563f00cc69dd29153a1c8a9bdc7b0c231efbac013245f"
+  },
+  "chapter6/run-104.png": {
+    "bytes": 824358,
+    "sha256": "4fe6c10f62abf7064662bf76ece9f40f5c97d21ed46c5969a6b74c95af71c284"
+  },
+  "chapter6/equipment-10-inventory-icon-4.png": {
+    "bytes": 387164,
+    "sha256": "f81ef7a4e47720bb424279bd0d290a439377cf67012e5c675ee5bd554f786c2c"
+  },
+  "chapter6/equipment-11-inventory-icon-6.png": {
+    "bytes": 378897,
+    "sha256": "ea6c282e01100c225357ed340b695402b9248bca49d806c0fd8a0537a57f2eaa"
+  },
+  "chapter6/equipment-08-market-open-25.png": {
+    "bytes": 638840,
+    "sha256": "d4ab2a8fb3b345f8caed3e0112a06fc113e89fe771c0b02dff0e041bcd381965"
+  },
+  "chapter6/run-131.png": {
+    "bytes": 779744,
+    "sha256": "922884a22c0a50658dbe1b6e6099336a80f860cc277c86bb8c6ff163b5e1096b"
+  },
+  "chapter6/equipment-03-inventory-icon-0.png": {
+    "bytes": 293007,
+    "sha256": "174542658591ce2cecdf72877e62db2e12f6bd24d82f53f277efeb7cf7c37305"
+  },
+  "chapter6/run-077.png": {
+    "bytes": 820682,
+    "sha256": "04450816a71bebcf3540800aad1a9d7ae0e3406634e74d57fc2b424a82caa307"
+  },
+  "chapter6/equipment-07-market-open-20.png": {
+    "bytes": 781886,
+    "sha256": "62fd5d731210bdd003ecebb21a2c8eb58b1fafe82a79bd12474649b1dff9692c"
+  },
+  "chapter6/equipment-10-item-2-ack-009.png": {
+    "bytes": 369541,
+    "sha256": "9e3ceca5f5868c9ec09bc191c3182c0c2034690cde20f5b3edb9ab3026b8bf05"
+  },
+  "chapter6/equipment-10-close-006.png": {
+    "bytes": 780472,
+    "sha256": "2808a12db6a89c5972ae261d26e2ccf1f593c3144a230e1c465c476d1b7aa862"
+  },
+  "chapter6/equipment-03-inspect-1-0.png": {
+    "bytes": 641141,
+    "sha256": "60462213cb511757475499f91912ee1dcf40e46ae11a9478996249bd4378b9aa"
+  },
+  "chapter6/run-084.png": {
+    "bytes": 821266,
+    "sha256": "c8388bd048c8ebe0957eee6a466e001343993d6267fc5e2aa334b8df2785b30e"
+  },
+  "chapter6/equipment-11-inspect-3-0.png": {
+    "bytes": 661866,
+    "sha256": "2e3719f6ffc6c354be5bd24de250b2cc69e1fc33ee735b53613354764b0345ff"
+  },
+  "chapter6/equipment-04-resume-before.png": {
+    "bytes": 759744,
+    "sha256": "474a950f6ed25f85c81659f14b6507b606400e7251a54e19265658ba5caa6163"
+  },
+  "chapter6/equipment-02-inventory-icon-0.png": {
+    "bytes": 280624,
+    "sha256": "94a60372f204c486611630026a5a413859294ae46a409d207f31a4836d5d3a12"
+  },
+  "chapter6/equipment-03-item-1-ack-006.png": {
+    "bytes": 293007,
+    "sha256": "174542658591ce2cecdf72877e62db2e12f6bd24d82f53f277efeb7cf7c37305"
+  },
+  "chapter6/equipment-08-item-3-ack-014.png": {
+    "bytes": 351151,
+    "sha256": "734206bb964482c8839b70b2360c88fb95a69c2fe5b2bb702c71a86cc7715cd6"
+  },
+  "chapter6/equipment-11-inventory-icon-7.png": {
+    "bytes": 387785,
+    "sha256": "23faac781437f9337f9b85ffb12c62f5b9e31c8147897b01402c8c67e61f5bcb"
+  },
+  "chapter6/equipment-10-item-5-ack-022.png": {
+    "bytes": 365122,
+    "sha256": "fe2800d664b0accdd5a81c827c0429edac50a6ef81e833da573b23e31b9c388b"
+  },
+  "chapter6/equipment-09-close-004.png": {
+    "bytes": 359855,
+    "sha256": "752b2135f85cbadfb173dfae242c29f1f3e721117dd5f9a947de290e18a3d37c"
+  },
+  "chapter6/equipment-06-item-1-ack-006.png": {
+    "bytes": 307484,
+    "sha256": "adfdd0973b0311309946d5d3acf8d1a321630c136295436a0146adac299eac11"
+  },
+  "chapter6/equipment-06-item-1-before.png": {
+    "bytes": 312298,
+    "sha256": "1cd97ca748665d46280bf3b89f865ac8b3423154d5b47b26f318a80dbdd26081"
+  },
+  "chapter6/equipment-04-inspect-4-0.png": {
+    "bytes": 655964,
+    "sha256": "2799d3e5369ebf98a56dda8fd21383cc953d6ba948cc5829fbfc7dbeb76c7def"
+  },
+  "chapter6/equipment-02-inspect-2-0.png": {
+    "bytes": 633136,
+    "sha256": "49f65a0919c01814f02205d592c06524be883c13861d3ca51a959beda16ffbab"
+  },
+  "chapter6/equipment-12-item-8-ack-033.png": {
+    "bytes": 402296,
+    "sha256": "a60b232e9d8164fa1fe40f35ca44ba20a30bd537c8b7fb08d5f068f7fd362216"
+  },
+  "chapter6/equipment-11-item-3-before.png": {
+    "bytes": 394197,
+    "sha256": "786a095bd74b4224cda0b710b5183785e0e3ea00e1be71d24cb8812b938549e4"
+  },
+  "chapter6/equipment-07-unlock-clock.png": {
+    "bytes": 779773,
+    "sha256": "d7a13a3d9ccb02b2ff1fa1f07ca37102ef683b86f2905a181394e7def0d7ab12"
+  },
+  "chapter6/run-123.png": {
+    "bytes": 808571,
+    "sha256": "ea5d1e16013df654fb02b2908610b73a3b219e60cd788f6f9e607df443dc4659"
+  },
+  "chapter6/equipment-05-inventory.png": {
+    "bytes": 310783,
+    "sha256": "155847ef16b18df5a5c0451128d38ac756b6d4935fc9b8ea19ac967e707cbd22"
+  },
+  "chapter6/equipment-12-close-006.png": {
+    "bytes": 770543,
+    "sha256": "762a1bc0e5ff9e7dac67fbf32ab8736717834cf2760ebfac4e2ce828d692ca2f"
+  },
+  "chapter6/equipment-10-inventory-icon-3.png": {
+    "bytes": 381268,
+    "sha256": "ee11db6e0b92a509d39338f91773bbc560f56963fd10561bd35addfae1f44805"
+  },
+  "chapter6/equipment-01-inspect-3-0.png": {
+    "bytes": 629469,
+    "sha256": "c33ad7f1350d3ef30dd7256e876af933b1fc05323ca5d2b5c216e611a9c01dce"
+  },
+  "chapter6/run-026.png": {
+    "bytes": 754811,
+    "sha256": "abca6714e01cf2d1a7ae3757947660d7915d07af574cde9f80d4838e846c9b0c"
+  },
+  "chapter6/equipment-10-inspect-1-1.png": {
+    "bytes": 649406,
+    "sha256": "7683a35454bb99a2fdd37506dd241148fadb7e16bc51c68d9414db0e0366f629"
+  },
+  "chapter6/equipment-11-purchase-00.png": {
+    "bytes": 660001,
+    "sha256": "cbde36535a3e0530227f42769fcb7358a033aee3225dde5729fcade8a4c60c39"
+  },
+  "chapter6/equipment-08-item-2-before.png": {
+    "bytes": 339379,
+    "sha256": "9b765d2e69c68df4eae8dbaf2909ccea9fb1a4a3fda7a169af243bf9c90d7260"
+  },
+  "chapter6/run-083.png": {
+    "bytes": 778751,
+    "sha256": "b65d0630897e78ebb4155f6a9d464722d2a60ea5da00767c3d6fe33ede564a94"
+  },
+  "chapter6/base-strength.png": {
+    "bytes": 303432,
+    "sha256": "e1f9666cbbd2d6c4ea59637f2e60016cb6e13833016ce25879f2f4e9ac1a4e4c"
+  },
+  "chapter6/equipment-01-inspect-4-1.png": {
+    "bytes": 630199,
+    "sha256": "80fb51b91c022f3f711b87ecd520500e4717c9178c67d950299677ec9b5c8745"
+  },
+  "chapter6/equipment-05-inspect-3-0.png": {
+    "bytes": 626631,
+    "sha256": "62a21200ea228ece8a06d71f57e56a6accc7458ebc17fa85e18cd05a56c2ed80"
+  },
+  "chapter6/run-115.png": {
+    "bytes": 809982,
+    "sha256": "182c5b34f72745f2c84e1ab1e0316d96f5d18d5eceeb6c7b44134f7f97cfd3c4"
+  },
+  "chapter6/equipment-02-inventory.png": {
+    "bytes": 280624,
+    "sha256": "94a60372f204c486611630026a5a413859294ae46a409d207f31a4836d5d3a12"
+  },
+  "chapter6/equipment-08-item-5-ack-021.png": {
+    "bytes": 357304,
+    "sha256": "761126b7c3e63a372f5f342c9f487592caa1a6f7d36ec9fdef9ad6db1f913350"
+  },
+  "chapter6/equipment-07-resume-before.png": {
+    "bytes": 782669,
+    "sha256": "8678c1e6ab8332e269fd386bbcbe2a670e076da762992093c31ad68b77216894"
+  },
+  "chapter6/equipment-12-inventory-icon-5.png": {
+    "bytes": 389282,
+    "sha256": "982fcb125e7b4523ca1d5819121b3bcfccb9c7e39fff405a442a84841316b6cc"
+  },
+  "chapter6/equipment-12-resume-after.png": {
+    "bytes": 788400,
+    "sha256": "481e030269b495825e8cc37c80824a0d12cb172719f847d147b7d0a6a677d1a1"
+  },
+  "chapter6/equipment-05-item-1-before.png": {
+    "bytes": 291596,
+    "sha256": "c84fe1b7e2f842e4bd5cb38e343b357e228215187ce1cb358c35ffe5e1532218"
+  },
+  "chapter6/equipment-10-item-6-ack-026.png": {
+    "bytes": 377287,
+    "sha256": "466dd266f56f8a8cd0db7dc843a0f52f518054aa4a4fa51adebfd2b77fa94acc"
+  },
+  "chapter6/run-140.png": {
+    "bytes": 777452,
+    "sha256": "48260f85c8b46fe616ae5a02ba8b6b345a132c03645e2f02b1a9ca8c1bbbd6c7"
+  },
+  "chapter6/equipment-12-market-open-41.png": {
+    "bytes": 658113,
+    "sha256": "9af11f7c5397e4311f303ba6f40380f0dc59d66a9a56b85c01721181fe5a7ac0"
+  },
+  "chapter6/equipment-12-item-4-ack-018.png": {
+    "bytes": 411665,
+    "sha256": "b6f15b4be370c833f668999ff5d1f46f589afed19c2751c4dcbf14bfffcab463"
+  },
+  "chapter6/equipment-07-market-open-21.png": {
+    "bytes": 642480,
+    "sha256": "22962baf8c5e3fcad74ab377aeccb7b5c3b4f4f517349479ecd1beff42b8aab5"
+  },
+  "chapter6/equipment-10-item-6-ack-025.png": {
+    "bytes": 365122,
+    "sha256": "fe2800d664b0accdd5a81c827c0429edac50a6ef81e833da573b23e31b9c388b"
+  },
+  "chapter6/run-090.png": {
+    "bytes": 793988,
+    "sha256": "0af01e4b082b3f755a11c6c612aeda4f787fbf3a4f4d994c5dccf58c0e8add15"
+  },
+  "chapter6/equipment-07-selected-inspect-0-1.png": {
+    "bytes": 643824,
+    "sha256": "4c639708548c82ca301e165a20bd4b8265c970dd5718b39e18f72725c499e58b"
+  },
+  "chapter6/equipment-12-inventory.png": {
+    "bytes": 399482,
+    "sha256": "e0bbf99cbf42727d26a90ed7e9746f321bba1f6d0523c5223877dd6c945c4070"
+  },
+  "chapter6/run-060.png": {
+    "bytes": 780456,
+    "sha256": "383724c8096ef35db11d899c3aa3e565f5de27ac8efa2f82b0cbda39de3366ba"
+  },
+  "chapter6/run-022.png": {
+    "bytes": 764052,
+    "sha256": "c080dd7028e2255c3dd57e2e24f197273af45337eeb6b743a0e08c7b8405de9b"
+  },
+  "chapter6/equipment-12-market-open-40.png": {
+    "bytes": 777873,
+    "sha256": "8e8518a87d31020fe00245dab5d31a00c8a07da6df26a822ca51aa8d91cb9bd7"
+  },
+  "chapter6/equipment-09-market-open-29.png": {
+    "bytes": 648176,
+    "sha256": "0395af0046cf765260325bff7f15be20a13938492f5ad4b593e080c370f87fa3"
+  },
+  "chapter6/equipment-09-inventory-icon-0.png": {
+    "bytes": 360294,
+    "sha256": "7626a8adc3254f919fe98f1375c76486aefe1bd5adb46d4db2047078ce6e77f4"
+  },
+  "chapter6/equipment-08-unlock-clock.png": {
+    "bytes": 786184,
+    "sha256": "89268994910fddcf36e44e3dc90cce8690859e511831677d70fac3635172a593"
+  },
+  "chapter6/equipment-05-inspect-0-1.png": {
+    "bytes": 632949,
+    "sha256": "2cad12df9bf67ff1145f114eb65c8d6394d344753f9e3e3923fdd52887b6913f"
+  },
+  "chapter6/equipment-10-item-7-ack-029.png": {
+    "bytes": 377287,
+    "sha256": "466dd266f56f8a8cd0db7dc843a0f52f518054aa4a4fa51adebfd2b77fa94acc"
+  },
+  "chapter6/equipment-12-inspect-3-1.png": {
+    "bytes": 659349,
+    "sha256": "e1caa799883703d5cee57c9b7819d65717656460bb2925432818573146087237"
+  },
+  "chapter6/equipment-09-inventory-icon-4.png": {
+    "bytes": 373309,
+    "sha256": "7c9951785756e291e50c539177be85ff4f23d945b091651baee4e62584bfb706"
+  },
+  "chapter6/equipment-12-item-8-ack-034.png": {
+    "bytes": 399359,
+    "sha256": "574127bbced18b7b9b08979b272007a939d77e2c961a4368d68b31a9de1db3d0"
+  }
+}

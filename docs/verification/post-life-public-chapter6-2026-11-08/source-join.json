@@ -1,0 +1,11 @@
+{
+  "package_commit": "df51a6cddc908e5358f2cac9fa07068f46a6a5cc",
+  "harness_commit": "c05e89694367609000bba8e74532eca382b181c9",
+  "harness_files": {
+    "campaign_runtime.py": "053f88bac9b2e5ce35cde501481da8fce7680637fefea4d756c73cdcc84d2f13",
+    "campaign_equipment_runtime.py": "f877832b70c1beeff178e602bb3b17cd978f056be79bfb68bd95500db883d85d",
+    "smoke_runtime.py": "2d21bedab46f22d421c9d3a18f0368e76436012841a11bd6d3ad0c9cc0bd67a7"
+  },
+  "launch_unit": "rogue-post-life-public-chapter6-nov8-r9",
+  "initial_save_origin": "docs/verification/packaged-chapter6-2026-10-09/initial-campaign.save"
+}

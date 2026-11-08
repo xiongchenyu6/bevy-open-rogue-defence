@@ -1,0 +1,2 @@
+2026-11-08T11:56:34+08:00 game systemd[1941]: Started [systemd-run] /etc/profiles/per-user/freeman.xiong/bin/python3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-life-public-chapter6-2026-11-08-r9/run.py.
+2026-11-08T12:38:58+08:00 game systemd[1941]: rogue-post-life-public-chapter6-nov8-r9.service: Consumed 3.806s CPU time over 42min 23.501s wall clock time, 194.8M memory peak.

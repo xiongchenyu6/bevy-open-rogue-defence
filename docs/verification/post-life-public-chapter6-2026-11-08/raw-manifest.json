@@ -1,0 +1,62 @@
+{
+  "raw/chapter6.log.gz": {
+    "bytes": 9370,
+    "sha256": "30414284767e592733f430bdc6d74252d533ed00017775322f6bf9deabcf9ff1"
+  },
+  "raw/run.py.gz": {
+    "bytes": 2603,
+    "sha256": "819065cdb28842c0427e0ef8b061717bea96a4e4610809e402cc0c966f90b568"
+  },
+  "raw/manager.log.gz": {
+    "bytes": 198,
+    "sha256": "f821407e33ac347d16c46bd024a0b76f58ee29aaf2e3c96b4da7dad4d3407998"
+  },
+  "raw/provenance.json.gz": {
+    "bytes": 2373,
+    "sha256": "e7de21214c9c7d93a9cf13c4b5e37a8849ca40d6ce9b324f5a5d1b192ca89015"
+  },
+  "raw/process.json.gz": {
+    "bytes": 210,
+    "sha256": "2d0a373b746fe7b8b510f027b6bc964eb10134edc275a941498875376bf97b40"
+  },
+  "raw/review/mapping.json.gz": {
+    "bytes": 2698,
+    "sha256": "994f6572fdc68174e612b21effb9a44407b8945eed594a25f2ba365668f67bdc"
+  },
+  "raw/chapter6/xvfb.log.gz": {
+    "bytes": 2348,
+    "sha256": "b987a262609a3720f450ab6815ed90b2069dd47b7b012959ca19c325aebf5d55"
+  },
+  "raw/chapter6/restart.log.gz": {
+    "bytes": 14744,
+    "sha256": "9208a86d367160fed75f81553696043f0c64ef7332c0c9182cdb612c2269557f"
+  },
+  "raw/chapter6/game.log.gz": {
+    "bytes": 421136,
+    "sha256": "1036b738819fd8466e3fdf6a5c95ae45be17e0e6c5c4d3d95250c57c0a80b620"
+  },
+  "raw/chapter6/result.json.gz": {
+    "bytes": 225356,
+    "sha256": "9d5fe62a813fc87e58dc066b862cc5eea6996ffa46fcf93039097ad8161cfee2"
+  },
+  "raw/chapter6/latest-report.json.gz": {
+    "bytes": 225356,
+    "sha256": "9d5fe62a813fc87e58dc066b862cc5eea6996ffa46fcf93039097ad8161cfee2"
+  },
+  "raw/chapter6/wm.log.gz": {
+    "bytes": 85,
+    "sha256": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c"
+  },
+  "raw/chapter6/harness-source/campaign_runtime.py.gz": {
+    "bytes": 19310,
+    "sha256": "053f88bac9b2e5ce35cde501481da8fce7680637fefea4d756c73cdcc84d2f13"
+  },
+  "raw/chapter6/harness-source/campaign_equipment_runtime.py.gz": {
+    "bytes": 43740,
+    "sha256": "f877832b70c1beeff178e602bb3b17cd978f056be79bfb68bd95500db883d85d"
+  },
+  "raw/chapter6/harness-source/smoke_runtime.py.gz": {
+    "bytes": 21095,
+    "sha256": "2d21bedab46f22d421c9d3a18f0368e76436012841a11bd6d3ad0c9cc0bd67a7"
+  }
+}
