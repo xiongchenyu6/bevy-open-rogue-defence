@@ -1,0 +1,2 @@
+2026-11-08T09:21:33+08:00 game systemd[1941]: Started [systemd-run] /usr/bin/env python3 -u /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/post-life-pressure-matrix-2026-11-08/run.py.
+2026-11-08T09:44:15+08:00 game systemd[1941]: rogue-post-life-pressure-matrix-nov8.service: Consumed 1h 10min 42.813s CPU time over 22min 42.440s wall clock time, 2.8G memory peak.

@@ -1,6 +1,6 @@
 # 最近完成的平衡重放范围
 
-截至 2026-11-08，源码 `064fe0a` 的两次独立第一章运行均在游戏时间 1508.875 秒获胜，终局为第 93642 次更新。两次运行使用同一冻结二进制、资源和策略。
+已完成的完整重放证据限定于源码 `064fe0a`，截至2026-11-08其两次独立第一章运行均在游戏时间 1508.875 秒获胜，终局为第 93642 次更新。两次运行使用同一冻结二进制、资源和策略。
 
 完整比较通过以下已记录内容。
 
@@ -20,6 +20,6 @@
 
 [漩涡局部回归](verification/vortex-allocation-2026-11-08/README.md) · [保留的中间重放差异](verification/vortex-allocation-replay-2026-11-08/README.md) · [弹射局部回归](verification/ricochet-geometry-2026-11-08/README.md) · [最终完整记录比较](verification/ricochet-geometry-replay-2026-11-08/README.md)
 
-弹射修正对应的局部回归、788 项库测试及严格 Clippy 已通过。后续[致命后普通回血修正](verification/fatal-regeneration-2026-11-08/README.md)的完整重放仍待运行。完整逐帧原始文件位于验证记录列出的本地路径，并保留精确哈希。归档包含原始普通记录、伤害接触摘录、比较程序、首差上下文与进程收据。
+弹射修正对应的局部回归、788 项库测试及严格 Clippy 已通过。包含[致命后普通回血修正](verification/fatal-regeneration-2026-11-08/README.md)及死亡相机修正的 `df51a6c` 已完成[新24局压力采样](verification/post-life-pressure-matrix-2026-11-08/README.md)，全部正常终局。其第一章主动6/6、第六章主动5/6，属于两种子固定策略的描述性结果。该矩阵没有构成新版本的同配置重复对，本页93642帧完全匹配结论继续限定于 `064fe0a`。完整逐帧原始文件位于验证记录列出的本地路径，并保留精确哈希。归档包含原始普通记录、伤害接触摘录、比较程序、首差上下文与进程收据。
 
 历史构建的负结果继续保存在各自验证目录。[决策阶段修正后的历史分歧](verification/decision-phase-2026-11-08/README.md)与[旧构建的完整匹配](verification/post-splash-repeat-2026-11-06/README.md)各自限定于当时的冻结构建。
