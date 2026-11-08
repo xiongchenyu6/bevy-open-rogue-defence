@@ -1,0 +1,2 @@
+2026-11-08T07:35:11+08:00 game systemd[1941]: Started [systemd-run] /usr/bin/env python3 -u /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/verification/current-pressure-matrix-2026-11-08/run.py.
+2026-11-08T07:58:47+08:00 game systemd[1941]: rogue-current-pressure-matrix-nov8.service: Consumed 1h 14min 35.489s CPU time over 23min 35.312s wall clock time, 833.6M memory peak.
