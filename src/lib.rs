@@ -4,6 +4,8 @@ use bevy::prelude::*;
 
 pub mod game;
 mod preferences;
+#[cfg(target_os = "linux")]
+mod window_background;
 
 pub fn build_app() -> App {
     let run_seed = initial_run_seed();
@@ -45,6 +47,9 @@ pub fn build_app() -> App {
         .add_plugins(game::GamePlugin)
         .add_plugins(game::AssetReadinessPlugin)
         .add_plugins(game::OnboardingPlugin);
+
+    #[cfg(target_os = "linux")]
+    app.add_systems(PreUpdate, window_background::match_clear_color);
 
     #[cfg(target_os = "android")]
     app.insert_resource(bevy::winit::WinitSettings::mobile());

@@ -4372,8 +4372,10 @@ version = "0.1.0"
 dependencies = [
  "bevy",
  "js-sys",
+ "raw-window-handle",
  "ttf-parser",
  "web-sys",
+ "x11rb",
 ]
 
 [[package]]
