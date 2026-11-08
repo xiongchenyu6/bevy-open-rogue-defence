@@ -1,0 +1,86 @@
+[
+  {
+    "attempt": "r1",
+    "source": "target/verification/post-life-public-adventure-2026-11-08",
+    "process": {
+      "returncode": 1,
+      "elapsed": 144.21762455801945,
+      "host_profile_after": "060649ac32b34ce2cda231a9cf1ebcdfd8e8c12f0b0b3f94e527714f6993d911",
+      "host_profile_unchanged": true,
+      "harness_unchanged": true
+    },
+    "has_controlled_stop": false
+  },
+  {
+    "attempt": "r2",
+    "source": "target/verification/post-life-public-adventure-2026-11-08-r2",
+    "process": {
+      "returncode": 1,
+      "elapsed": 372.56326876499224,
+      "host_profile_after": "060649ac32b34ce2cda231a9cf1ebcdfd8e8c12f0b0b3f94e527714f6993d911",
+      "host_profile_unchanged": true,
+      "harness_unchanged": true
+    },
+    "has_controlled_stop": false
+  },
+  {
+    "attempt": "r3",
+    "source": "target/verification/post-life-public-adventure-2026-11-08-r3",
+    "process": {
+      "returncode": 137,
+      "elapsed": 947.6588648640318,
+      "host_profile_after": "060649ac32b34ce2cda231a9cf1ebcdfd8e8c12f0b0b3f94e527714f6993d911",
+      "host_profile_unchanged": true,
+      "harness_unchanged": true
+    },
+    "has_controlled_stop": true
+  },
+  {
+    "attempt": "r4",
+    "source": "target/verification/post-life-public-adventure-2026-11-08-r4",
+    "process": {
+      "returncode": 1,
+      "elapsed": 992.4387085899943,
+      "host_profile_after": "060649ac32b34ce2cda231a9cf1ebcdfd8e8c12f0b0b3f94e527714f6993d911",
+      "host_profile_unchanged": true,
+      "harness_unchanged": true
+    },
+    "has_controlled_stop": false
+  },
+  {
+    "attempt": "r5",
+    "source": "target/verification/post-life-public-adventure-2026-11-08-r5",
+    "process": {
+      "returncode": 137,
+      "elapsed": 976.4967067929683,
+      "host_profile_after": "060649ac32b34ce2cda231a9cf1ebcdfd8e8c12f0b0b3f94e527714f6993d911",
+      "host_profile_unchanged": true,
+      "harness_unchanged": true
+    },
+    "has_controlled_stop": true
+  },
+  {
+    "attempt": "r6",
+    "source": "target/verification/post-life-public-adventure-2026-11-08-r6",
+    "process": {
+      "returncode": 1,
+      "elapsed": 963.8517705880222,
+      "host_profile_after": "060649ac32b34ce2cda231a9cf1ebcdfd8e8c12f0b0b3f94e527714f6993d911",
+      "host_profile_unchanged": true,
+      "harness_unchanged": true
+    },
+    "has_controlled_stop": false
+  },
+  {
+    "attempt": "r7",
+    "source": "target/verification/post-life-public-adventure-2026-11-08-r7",
+    "process": {
+      "returncode": 137,
+      "elapsed": 1295.4585291739786,
+      "host_profile_after": "060649ac32b34ce2cda231a9cf1ebcdfd8e8c12f0b0b3f94e527714f6993d911",
+      "host_profile_unchanged": true,
+      "harness_unchanged": true
+    },
+    "has_controlled_stop": true
+  }
+]

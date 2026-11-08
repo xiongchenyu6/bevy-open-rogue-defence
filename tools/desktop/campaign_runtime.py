@@ -28,7 +28,7 @@ def read_progress(path):
 def battle_clock_from_lines(text_lines):
     values = set()
     for text, left, top, right, bottom in text_lines:
-        match = re.fullmatch(r'(\d{1,2}):(\d{2})', text.replace(' ', ''))
+        match = re.fullmatch(r'(\d{2}):(\d{2})', text.replace(' ', ''))
         if match and left >= 1100 and 0 <= top < 70:
             minutes, seconds = map(int, match.groups())
             if seconds < 60 and 0 < minutes * 60 + seconds <= 1500:

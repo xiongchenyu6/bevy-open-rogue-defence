@@ -1,0 +1,374 @@
+{
+  "raw/r1/chapter6.log.gz": {
+    "bytes": 778,
+    "sha256": "4bcf350726064c0485d50dbbadf93c66105c80a891d39b31f5cc03fd9a0aeb77"
+  },
+  "raw/r1/run.py.gz": {
+    "bytes": 2596,
+    "sha256": "36ed512fa1ee774b03f615bf0018d8b5bbb4a0d13fb7e7a77fe945ad97aa1b6b"
+  },
+  "raw/r1/manager.log.gz": {
+    "bytes": 198,
+    "sha256": "a9e1be22fb62fa5a6f09b819fd19933b44412cc7cd077dc00651150d0a12d7ba"
+  },
+  "raw/r1/provenance.json.gz": {
+    "bytes": 2460,
+    "sha256": "e250d39710dee433930a357e51da49e149e100215460d3428cdeb5378d9b0534"
+  },
+  "raw/r1/process.json.gz": {
+    "bytes": 210,
+    "sha256": "9803e7f5874067596d3abe1500ecb9dac2883aaf25442f173d7aa99c77ae4f50"
+  },
+  "raw/r1/chapter6/xvfb.log.gz": {
+    "bytes": 2348,
+    "sha256": "b987a262609a3720f450ab6815ed90b2069dd47b7b012959ca19c325aebf5d55"
+  },
+  "raw/r1/chapter6/game.log.gz": {
+    "bytes": 25937,
+    "sha256": "270d2050e104939b03c7bb23d9300867c02c8cf0d1779f350f38eadef64be442"
+  },
+  "raw/r1/chapter6/latest-report.json.gz": {
+    "bytes": 1734,
+    "sha256": "09e32e44b78d8775a038de8f02fae5d65b61bcedd61e0122456f88a4c3b93fe4"
+  },
+  "raw/r1/chapter6/wm.log.gz": {
+    "bytes": 85,
+    "sha256": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c"
+  },
+  "raw/r1/chapter6/harness-source/campaign_runtime.py.gz": {
+    "bytes": 19310,
+    "sha256": "053f88bac9b2e5ce35cde501481da8fce7680637fefea4d756c73cdcc84d2f13"
+  },
+  "raw/r1/chapter6/harness-source/adventure_runtime.py.gz": {
+    "bytes": 2918,
+    "sha256": "6580705d1823c11d04bd2a6d33a1c37dcbcc3ac0f4d8b91b7dc2020cedd9ba1e"
+  },
+  "raw/r1/chapter6/harness-source/campaign_equipment_runtime.py.gz": {
+    "bytes": 43740,
+    "sha256": "f877832b70c1beeff178e602bb3b17cd978f056be79bfb68bd95500db883d85d"
+  },
+  "raw/r1/chapter6/harness-source/smoke_runtime.py.gz": {
+    "bytes": 21095,
+    "sha256": "2d21bedab46f22d421c9d3a18f0368e76436012841a11bd6d3ad0c9cc0bd67a7"
+  },
+  "raw/r2/chapter6.log.gz": {
+    "bytes": 2170,
+    "sha256": "9adb286ed75b7b2ec8de76e278682e09bac1ee495bfbd84b5d23a12499dca0c3"
+  },
+  "raw/r2/run.py.gz": {
+    "bytes": 2602,
+    "sha256": "c76dd409e541fd637efc0cf71ae151a616963c3b5476c36bb1a1e7f5d2aa8c73"
+  },
+  "raw/r2/manager.log.gz": {
+    "bytes": 198,
+    "sha256": "d91a1c8fb298a173e4dfb057d6e1d747a655efd01885b8c93c5078b879a40226"
+  },
+  "raw/r2/provenance.json.gz": {
+    "bytes": 2469,
+    "sha256": "424926534297f3f71116e0b945dc8fc837ba86ce81a6250e7c21f9dddc335d9d"
+  },
+  "raw/r2/process.json.gz": {
+    "bytes": 210,
+    "sha256": "cb3ea952fcc8101137d70e45c57124518e703c5c4fdb60b5dfe76fcd5368b4d4"
+  },
+  "raw/r2/chapter6/xvfb.log.gz": {
+    "bytes": 2348,
+    "sha256": "b987a262609a3720f450ab6815ed90b2069dd47b7b012959ca19c325aebf5d55"
+  },
+  "raw/r2/chapter6/game.log.gz": {
+    "bytes": 64682,
+    "sha256": "41efa7beff6c47abec971dacb5f457b909ef82cd742f77f94035cb40d1b92a57"
+  },
+  "raw/r2/chapter6/latest-report.json.gz": {
+    "bytes": 1734,
+    "sha256": "09e32e44b78d8775a038de8f02fae5d65b61bcedd61e0122456f88a4c3b93fe4"
+  },
+  "raw/r2/chapter6/wm.log.gz": {
+    "bytes": 85,
+    "sha256": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c"
+  },
+  "raw/r2/chapter6/harness-source/campaign_runtime.py.gz": {
+    "bytes": 19308,
+    "sha256": "3059e56fbb757d85ff1f9b890b9e3abc3e6347267022987e429df9a8a8e8c885"
+  },
+  "raw/r2/chapter6/harness-source/adventure_runtime.py.gz": {
+    "bytes": 3057,
+    "sha256": "f87a525da12a12f2829c92c0d8ddc424f38761c0e65b23031ab953ada2726216"
+  },
+  "raw/r2/chapter6/harness-source/campaign_equipment_runtime.py.gz": {
+    "bytes": 43740,
+    "sha256": "f877832b70c1beeff178e602bb3b17cd978f056be79bfb68bd95500db883d85d"
+  },
+  "raw/r2/chapter6/harness-source/smoke_runtime.py.gz": {
+    "bytes": 21095,
+    "sha256": "2d21bedab46f22d421c9d3a18f0368e76436012841a11bd6d3ad0c9cc0bd67a7"
+  },
+  "raw/r3/chapter6.log.gz": {
+    "bytes": 5523,
+    "sha256": "5ed0682702043eb4a27132b9056e1a8bb3388b95fbd6e3705c4aaf4cc3207207"
+  },
+  "raw/r3/run.py.gz": {
+    "bytes": 2602,
+    "sha256": "5bec8c9ae2217342236c2a7ccf8fd488206f322ae69f17d425f670efdf6f5bdc"
+  },
+  "raw/r3/manager.log.gz": {
+    "bytes": 199,
+    "sha256": "07419ccf5980b0983f971dda0203b68b7cb0fed5b4f3f93cf69d1576835bbd8d"
+  },
+  "raw/r3/controlled-stop.json.gz": {
+    "bytes": 211,
+    "sha256": "c45cf178668ea3c8e1a06ca0c140fd4d79f06e9d7b8e27507abafea88335c6b3"
+  },
+  "raw/r3/provenance.json.gz": {
+    "bytes": 2469,
+    "sha256": "ebde67f2545cc804c814d45aaf9b1176955b54dd03695d5b4cd572f79f13fe94"
+  },
+  "raw/r3/process.json.gz": {
+    "bytes": 211,
+    "sha256": "48a3b0ed7743d2d74e9c584bce372bbf199f8796f9442d7eb7dd768666210d84"
+  },
+  "raw/r3/chapter6/xvfb.log.gz": {
+    "bytes": 1174,
+    "sha256": "f172a1b0f5cf2a0d462c51dfc335af1a1dfc8e873cb66f61d018c8b1b35fe416"
+  },
+  "raw/r3/chapter6/game.log.gz": {
+    "bytes": 162836,
+    "sha256": "007ef8e8e2e25c1225b434cce9ac06b36b4c6deee6b66c8bc7d448b4922f7303"
+  },
+  "raw/r3/chapter6/wm.log.gz": {
+    "bytes": 85,
+    "sha256": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c"
+  },
+  "raw/r3/chapter6/harness-source/campaign_runtime.py.gz": {
+    "bytes": 19308,
+    "sha256": "3059e56fbb757d85ff1f9b890b9e3abc3e6347267022987e429df9a8a8e8c885"
+  },
+  "raw/r3/chapter6/harness-source/adventure_runtime.py.gz": {
+    "bytes": 3120,
+    "sha256": "83fa9d054fe135e217686627d54baf2d4cc8a9e357db4fc61eb898802eecdd33"
+  },
+  "raw/r3/chapter6/harness-source/campaign_equipment_runtime.py.gz": {
+    "bytes": 43740,
+    "sha256": "f877832b70c1beeff178e602bb3b17cd978f056be79bfb68bd95500db883d85d"
+  },
+  "raw/r3/chapter6/harness-source/smoke_runtime.py.gz": {
+    "bytes": 21095,
+    "sha256": "2d21bedab46f22d421c9d3a18f0368e76436012841a11bd6d3ad0c9cc0bd67a7"
+  },
+  "raw/r4/chapter6.log.gz": {
+    "bytes": 6035,
+    "sha256": "ab6bc67d9df9afc2410bcac94b174ec2e593f6016ff37336a6538084e196138a"
+  },
+  "raw/r4/run.py.gz": {
+    "bytes": 2602,
+    "sha256": "2d32dfafaf17327053d580a4f0a83a6b20ca163ad196a2ef6aeb14696b70b29e"
+  },
+  "raw/r4/manager.log.gz": {
+    "bytes": 197,
+    "sha256": "494eff782315d4a43c92d0932bb92f8cd9ae9531bc82114d928dba5cd11e6c19"
+  },
+  "raw/r4/provenance.json.gz": {
+    "bytes": 2469,
+    "sha256": "bfc3e336cac333adc3c8f8be66b4364689b5804e0989c3d135d284899b7e5c05"
+  },
+  "raw/r4/process.json.gz": {
+    "bytes": 209,
+    "sha256": "f75999c159bcb2a142c2ece4840675058aa8ec5754d30e1a71ab9a52393e727d"
+  },
+  "raw/r4/chapter6/xvfb.log.gz": {
+    "bytes": 2348,
+    "sha256": "b987a262609a3720f450ab6815ed90b2069dd47b7b012959ca19c325aebf5d55"
+  },
+  "raw/r4/chapter6/game.log.gz": {
+    "bytes": 169724,
+    "sha256": "c837287a1799f5b4f867fe6b4ede6a693e4d8918ade3cbdd48e023896d9b643c"
+  },
+  "raw/r4/chapter6/latest-report.json.gz": {
+    "bytes": 15072,
+    "sha256": "86e6cbc3a31f33024e2d3ed8ddd364a820eabdc8fe5e661c82a1562588930f96"
+  },
+  "raw/r4/chapter6/wm.log.gz": {
+    "bytes": 85,
+    "sha256": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c"
+  },
+  "raw/r4/chapter6/harness-source/campaign_runtime.py.gz": {
+    "bytes": 19308,
+    "sha256": "3059e56fbb757d85ff1f9b890b9e3abc3e6347267022987e429df9a8a8e8c885"
+  },
+  "raw/r4/chapter6/harness-source/adventure_runtime.py.gz": {
+    "bytes": 3183,
+    "sha256": "e0d64eb3fef4526c6b4595eed7d20cfb3c93f77e8d757b17268f26c9fbfdf1fa"
+  },
+  "raw/r4/chapter6/harness-source/campaign_equipment_runtime.py.gz": {
+    "bytes": 43740,
+    "sha256": "f877832b70c1beeff178e602bb3b17cd978f056be79bfb68bd95500db883d85d"
+  },
+  "raw/r4/chapter6/harness-source/smoke_runtime.py.gz": {
+    "bytes": 21095,
+    "sha256": "2d21bedab46f22d421c9d3a18f0368e76436012841a11bd6d3ad0c9cc0bd67a7"
+  },
+  "raw/r5/chapter6.log.gz": {
+    "bytes": 5186,
+    "sha256": "4eff42352a8baad6bf3ca894921699b8f86af91b1e108243da5043c2c10c6e77"
+  },
+  "raw/r5/run.py.gz": {
+    "bytes": 2602,
+    "sha256": "7e3e48b486439cdc74133cf8d5bf752353d66ee92f81b58342af9665fff36f81"
+  },
+  "raw/r5/manager.log.gz": {
+    "bytes": 199,
+    "sha256": "be9f3e73b56ed70c78a6294c330e065f66a33dcf21739bca21fa9ebc176cda01"
+  },
+  "raw/r5/controlled-stop.json.gz": {
+    "bytes": 132,
+    "sha256": "41af976de10eae387d9818b0a1ef80b1bd39fb79fad079a33c6f31d258e85585"
+  },
+  "raw/r5/provenance.json.gz": {
+    "bytes": 2469,
+    "sha256": "995b360def1c56d177d45ef4d17bb388d37bc4e5678ac50dbdae6b6e55cdae1e"
+  },
+  "raw/r5/process.json.gz": {
+    "bytes": 211,
+    "sha256": "714d5fa117bd6e450f68622d7543dad0539e305c3620c9358ae6ffe6fd173a17"
+  },
+  "raw/r5/chapter6/xvfb.log.gz": {
+    "bytes": 1174,
+    "sha256": "f172a1b0f5cf2a0d462c51dfc335af1a1dfc8e873cb66f61d018c8b1b35fe416"
+  },
+  "raw/r5/chapter6/game.log.gz": {
+    "bytes": 166280,
+    "sha256": "5aa85c24d0ea6c1d279209b46e2b8d2a97681c42c25045a267ed72e92cc6dfdc"
+  },
+  "raw/r5/chapter6/wm.log.gz": {
+    "bytes": 85,
+    "sha256": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c"
+  },
+  "raw/r5/chapter6/harness-source/campaign_runtime.py.gz": {
+    "bytes": 19308,
+    "sha256": "3059e56fbb757d85ff1f9b890b9e3abc3e6347267022987e429df9a8a8e8c885"
+  },
+  "raw/r5/chapter6/harness-source/adventure_runtime.py.gz": {
+    "bytes": 3550,
+    "sha256": "faa550543e1437cb18a2b664ba59e13781e2d8f0d981251f30c9f2b86c6fb0c9"
+  },
+  "raw/r5/chapter6/harness-source/campaign_equipment_runtime.py.gz": {
+    "bytes": 43740,
+    "sha256": "f877832b70c1beeff178e602bb3b17cd978f056be79bfb68bd95500db883d85d"
+  },
+  "raw/r5/chapter6/harness-source/smoke_runtime.py.gz": {
+    "bytes": 21095,
+    "sha256": "2d21bedab46f22d421c9d3a18f0368e76436012841a11bd6d3ad0c9cc0bd67a7"
+  },
+  "raw/r6/chapter6.log.gz": {
+    "bytes": 4301,
+    "sha256": "3b1d7ea5e62e603852b4d03df5ff720d89b56ee15d4f24196594c653701ddba7"
+  },
+  "raw/r6/run.py.gz": {
+    "bytes": 2602,
+    "sha256": "8c366fd6f71d55527c9eb4587adc3ba4656bdb253081258a99f0b91da8554033"
+  },
+  "raw/r6/manager.log.gz": {
+    "bytes": 197,
+    "sha256": "7630b1b5e8fb0a760fef23f3d385115fb70fc257129f6dfabe7319c84fa030b9"
+  },
+  "raw/r6/provenance.json.gz": {
+    "bytes": 2469,
+    "sha256": "23b356f578b8e18bb72a0050e20dae1b6d0466f901d4b72b59eb5c1accc71f72"
+  },
+  "raw/r6/process.json.gz": {
+    "bytes": 209,
+    "sha256": "70bc134fbc21a1eaa87d2bbf0088fd59bb78d39d25244f0a2d3f65cf8846b4b8"
+  },
+  "raw/r6/chapter6/xvfb.log.gz": {
+    "bytes": 2348,
+    "sha256": "b987a262609a3720f450ab6815ed90b2069dd47b7b012959ca19c325aebf5d55"
+  },
+  "raw/r6/chapter6/game.log.gz": {
+    "bytes": 162836,
+    "sha256": "504c2d366b6da936dfd56e59a73e4bc14d40a29df0f4bbb509042a9dee4acec6"
+  },
+  "raw/r6/chapter6/latest-report.json.gz": {
+    "bytes": 15651,
+    "sha256": "5052caf6b3c49872c6a094dc571686a96f1fee20db7afb8b855ab240fc1d47ed"
+  },
+  "raw/r6/chapter6/wm.log.gz": {
+    "bytes": 85,
+    "sha256": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c"
+  },
+  "raw/r6/chapter6/harness-source/campaign_runtime.py.gz": {
+    "bytes": 19308,
+    "sha256": "3059e56fbb757d85ff1f9b890b9e3abc3e6347267022987e429df9a8a8e8c885"
+  },
+  "raw/r6/chapter6/harness-source/adventure_runtime.py.gz": {
+    "bytes": 3662,
+    "sha256": "a4bbdbf1bee5a1506ed83c3c28ba2bea0e141b2f84c2ec2705ace52b62cf0eb4"
+  },
+  "raw/r6/chapter6/harness-source/campaign_equipment_runtime.py.gz": {
+    "bytes": 43740,
+    "sha256": "f877832b70c1beeff178e602bb3b17cd978f056be79bfb68bd95500db883d85d"
+  },
+  "raw/r6/chapter6/harness-source/smoke_runtime.py.gz": {
+    "bytes": 21095,
+    "sha256": "2d21bedab46f22d421c9d3a18f0368e76436012841a11bd6d3ad0c9cc0bd67a7"
+  },
+  "raw/r7/chapter6.log.gz": {
+    "bytes": 5484,
+    "sha256": "38d72e99b6818db07a49a0dda98ccb8bf5bd24db2406b2ed696269f7f5e30c92"
+  },
+  "raw/r7/clock-tests.log.gz": {
+    "bytes": 110,
+    "sha256": "48e87f547417eb56e3f54c6b081c7b69177e43fd153fc106d047ec950591a6dc"
+  },
+  "raw/r7/run.py.gz": {
+    "bytes": 2602,
+    "sha256": "555c67380ee4bbdde0540d654161723a67e36ca146d58278c36555018cfe8869"
+  },
+  "raw/r7/clock-tests-process.json.gz": {
+    "bytes": 171,
+    "sha256": "6c53a468fd78c5bb4775cb0ca4c485c6928983516c108d43bede95d0aedba4c7"
+  },
+  "raw/r7/manager.log.gz": {
+    "bytes": 200,
+    "sha256": "ba65f973d435c79bbfa102c408b4d9f413236bfec2aab30c9c4caea2bd00d598"
+  },
+  "raw/r7/controlled-stop.json.gz": {
+    "bytes": 469,
+    "sha256": "c7610fa62cf1e9d26faacefc79e1d1d3e48b93e5d4a07890cbc9e2c723a2d1b1"
+  },
+  "raw/r7/provenance.json.gz": {
+    "bytes": 2469,
+    "sha256": "4f0d7ad9d3a667ed60dff6a3d16c7a52eb80fb352a16fbe22d2190f0b4527725"
+  },
+  "raw/r7/process.json.gz": {
+    "bytes": 212,
+    "sha256": "1fb3032c7d0fd027498b84d18c2447219e8fcb5099e2416f268c35a7857ec98c"
+  },
+  "raw/r7/chapter6/xvfb.log.gz": {
+    "bytes": 1174,
+    "sha256": "f172a1b0f5cf2a0d462c51dfc335af1a1dfc8e873cb66f61d018c8b1b35fe416"
+  },
+  "raw/r7/chapter6/game.log.gz": {
+    "bytes": 220523,
+    "sha256": "64f4cd879d06ca3dce385e530eaa048994d4bbfa5dbdcb262c9d02bd316d58c4"
+  },
+  "raw/r7/chapter6/wm.log.gz": {
+    "bytes": 85,
+    "sha256": "6f748c3cd02a858c087697c3afac639205c62b7b206558bd40d1bcbd98165a5c"
+  },
+  "raw/r7/chapter6/harness-source/campaign_runtime.py.gz": {
+    "bytes": 19308,
+    "sha256": "3059e56fbb757d85ff1f9b890b9e3abc3e6347267022987e429df9a8a8e8c885"
+  },
+  "raw/r7/chapter6/harness-source/adventure_runtime.py.gz": {
+    "bytes": 3947,
+    "sha256": "e549c16a327ff0fb7110fb02359d4044abed25fd7c2b99433c5c263810d58b06"
+  },
+  "raw/r7/chapter6/harness-source/campaign_equipment_runtime.py.gz": {
+    "bytes": 43740,
+    "sha256": "f877832b70c1beeff178e602bb3b17cd978f056be79bfb68bd95500db883d85d"
+  },
+  "raw/r7/chapter6/harness-source/smoke_runtime.py.gz": {
+    "bytes": 21095,
+    "sha256": "2d21bedab46f22d421c9d3a18f0368e76436012841a11bd6d3ad0c9cc0bd67a7"
+  }
+}

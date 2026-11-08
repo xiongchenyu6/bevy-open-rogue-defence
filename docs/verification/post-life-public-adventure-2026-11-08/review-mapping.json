@@ -1,0 +1,47 @@
+[
+  {
+    "original": "frames/r7/camp-Embermaw-offer.png",
+    "jpeg": "review/adventure-safe-before.jpg",
+    "scope": "Root independent JPEG visual review"
+  },
+  {
+    "original": "frames/r7/camp-Embermaw-after-00.png",
+    "jpeg": "review/adventure-safe-after.jpg",
+    "scope": "Root independent JPEG visual review"
+  },
+  {
+    "original": "frames/r7/camp-Embermaw-after-07.png",
+    "jpeg": "review/adventure-safe-after7.jpg",
+    "scope": "Root independent JPEG visual review"
+  },
+  {
+    "original": "frames/r7/camp-Tidehorn-after-07.png",
+    "jpeg": "review/adventure-after.jpg",
+    "scope": "Root independent JPEG visual review"
+  },
+  {
+    "original": "frames/r7/run-094.png",
+    "jpeg": "review/adventure-live2.jpg",
+    "scope": "Root independent JPEG visual review"
+  },
+  {
+    "original": "frames/r5/run-089.png",
+    "jpeg": "review/adventure-live.jpg",
+    "scope": "Root independent JPEG visual review"
+  },
+  {
+    "original": "frames/r4/current-ui.png",
+    "jpeg": "review/rogue-adventure-r4.jpg",
+    "scope": "Root independent JPEG visual review"
+  },
+  {
+    "original": "frames/r2/current-ui.png",
+    "jpeg": "review/rogue-adventure-r2.jpg",
+    "scope": "Root independent JPEG visual review"
+  },
+  {
+    "original": "frames/r1/current-ui.png",
+    "jpeg": "review/rogue-adventure.jpg",
+    "scope": "Root independent JPEG visual review"
+  }
+]

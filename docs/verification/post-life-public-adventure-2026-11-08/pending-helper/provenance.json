@@ -1,0 +1,8 @@
+{
+  "base_commit": "c9a08112637ed44288dca988d440bbd58da8219c",
+  "status": "Working consumer change with actual unit tests, no new completed adventure route proof.",
+  "sources": {
+    "tools/desktop/campaign_runtime.py": "3059e56fbb757d85ff1f9b890b9e3abc3e6347267022987e429df9a8a8e8c885",
+    "tools/desktop/test_campaign_runtime.py": "67d8fedc3509a3a88aeeac9213af0fd89166a447fe4c8f277f5ba961ebff06e1"
+  }
+}
