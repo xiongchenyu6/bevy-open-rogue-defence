@@ -50,11 +50,15 @@ pub(super) fn flow_texture(foam: bool) -> Image {
             // filaments. Leave gaps so the curled sheet remains translucent.
             let filaments = ((ridge - 0.32) / 0.43).clamp(0.0, 1.0);
             let alpha = if foam {
-                filaments * 0.91
+                0.48 + filaments * 0.48
             } else {
                 0.22 + filaments * 0.65
             };
-            let light = (155.0 + filaments * 100.0) as u8;
+            let light = if foam {
+                (218.0 + filaments * 37.0) as u8
+            } else {
+                (155.0 + filaments * 100.0) as u8
+            };
             bytes.extend([light, light, 255, (alpha * 255.0) as u8]);
         }
     }
