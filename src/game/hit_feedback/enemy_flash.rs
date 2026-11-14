@@ -403,7 +403,7 @@ mod tests {
                     && light.intensity > 0.0
                     && **visibility == Visibility::Visible
             })
-            .map(|(light, transform, ..)| (light.clone(), transform.translation))
+            .map(|(light, transform, ..)| (*light, transform.translation))
             .collect()
     }
 
