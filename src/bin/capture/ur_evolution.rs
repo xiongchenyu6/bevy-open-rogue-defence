@@ -2,9 +2,9 @@
 use super::CaptureControls;
 use bevy::prelude::*;
 use rogue_commander::game::{
-    ActiveSkill, AttackClock, Autoplay, DraftAction, DraftActionButton, DraftChoice, DraftState,
-    Enemy, GameAssets, GameSession, Hero, HeroKind, HeroVitals, PlayerBuild, RecruitmentProgress,
-    SelectedHero, SkillDrawButton, SkillId, SpawnDirector, UrBranchCue,
+    ActiveSkill, AttackClock, Autoplay, DodgeButton, DraftAction, DraftActionButton, DraftChoice,
+    DraftState, Enemy, GameAssets, GameSession, Hero, HeroKind, HeroVitals, PlayerBuild,
+    RecruitmentProgress, SelectedHero, SkillDrawButton, SkillId, SpawnDirector, UrBranchCue,
     skill_evolution::SkillEvolution, ur_evolution::UrEvolutionPath,
 };
 #[derive(Component)]
@@ -173,9 +173,48 @@ fn controls(
         ),
         With<Button>,
     >,
+    layout: Query<(&Name, &ComputedNode, &UiGlobalTransform)>,
+    actions: Query<
+        (&ComputedNode, &UiGlobalTransform),
+        Or<(With<SkillDrawButton>, With<DodgeButton>)>,
+    >,
+    windows: Query<&Window>,
 ) {
     state.frame += 1;
     let frame = state.frame;
+    if frame == 71 {
+        let (_, notice, position) = layout
+            .iter()
+            .find(|(name, _, _)| name.as_str() == "Skill upgrade notice")
+            .expect("evolution notice actually rendered");
+        let window = windows.single().unwrap();
+        let viewport = Vec2::new(
+            window.physical_width() as f32,
+            window.physical_height() as f32,
+        );
+        let half = notice.size() * 0.5;
+        assert!(notice.size().min_element() > 0.0);
+        assert!((position.translation - half).cmpge(Vec2::ZERO).all());
+        assert!(
+            (position.translation + half).cmple(viewport).all(),
+            "evolution notification overflows viewport"
+        );
+        for (button, transform) in &actions {
+            if button.size().min_element() == 0.0 {
+                continue;
+            }
+            let separation = (position.translation - transform.translation).abs();
+            let combined = (notice.size() + button.size()) * 0.5;
+            assert!(
+                separation.x >= combined.x || separation.y >= combined.y,
+                "evolution notice overlaps bottom action"
+            );
+        }
+        println!(
+            "[capture] PASS evolution notice visible, inside viewport and clear of bottom actions: {:?}",
+            notice.size()
+        );
+    }
     let mut action = None;
     if frame == 35 {
         assert_eq!(

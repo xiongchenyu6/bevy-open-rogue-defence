@@ -123,12 +123,16 @@ fn observe_ranks(
 fn notice_copy(language: GameLanguage, change: Upgrade) -> String {
     let name = skill_name(language, SkillId(change.skill as u8));
     if let Some(path) = change.path {
+        // The card already explains permanence. The toast only confirms the route
+        // and its actual core effect, without repeating the route title.
+        let description =
+            super::ur_evolution::description(language, SkillId(change.skill as u8), path);
+        let effect = description.lines().nth(1).unwrap_or("");
         return format!(
-            "{} · {}\n{}\n{}",
-            name,
-            language.pick("EVOLVED", "进化完成"),
+            "{} · {}\n{}",
             super::ur_evolution::name(language, SkillId(change.skill as u8), path),
-            super::ur_evolution::description(language, SkillId(change.skill as u8), path)
+            language.pick("EVOLVED", "进化完成"),
+            effect
         );
     }
     let level = if change.ascension {
@@ -157,7 +161,7 @@ fn notice_color(change: Upgrade) -> Color {
 }
 fn notice_top(width: f32, height: f32) -> f32 {
     if height < 540.0 {
-        (height - 116.0).max(132.0)
+        (height - 140.0).max(100.0)
     } else if super::mobile_layout::hud_metrics(width, height).compact {
         (height - 175.0).max(120.0)
     } else {
@@ -239,7 +243,7 @@ fn show_next_notice(
         super::mobile_layout::hud_metrics(window.width(), window.height()).compact
     });
     let width = if change.path.is_some() {
-        if compact { 280.0 } else { 380.0 }
+        if compact { 340.0 } else { 380.0 }
     } else if compact {
         200.0
     } else {
@@ -265,6 +269,7 @@ fn show_next_notice(
                 margin: UiRect::left(px(-width * 0.5)),
                 width: px(width),
                 min_height: px(if compact { 48.0 } else { 58.0 }),
+                max_width: percent(90),
                 padding: UiRect::all(px(8)),
                 column_gap: px(10),
                 align_items: AlignItems::Center,
@@ -308,6 +313,12 @@ fn show_next_notice(
             }
             parent.spawn((
                 NoticeText,
+                Node {
+                    min_width: px(0),
+                    flex_grow: 1.0,
+                    flex_shrink: 1.0,
+                    ..default()
+                },
                 Text::new(notice_copy(*language, change)),
                 TextFont {
                     font: font.into(),
@@ -426,11 +437,9 @@ mod tests {
         assert_eq!(notice.path, Some(UrEvolutionPath::Control));
         let text = notice_copy(GameLanguage::English, notice);
         assert!(text.contains("Frozen Sovereign"));
-        assert!(text.contains(&super::super::ur_evolution::description(
-            GameLanguage::English,
-            SkillId(26),
-            UrEvolutionPath::Control
-        )));
+        assert_eq!(text.matches("Frozen Sovereign").count(), 1);
+        assert!(text.contains("Every 2 seconds, frost locks a priority target."));
+        assert!(!text.contains("Hero absorption"));
         assert!(notice_duration(notice) > 4.0);
     }
     #[test]
