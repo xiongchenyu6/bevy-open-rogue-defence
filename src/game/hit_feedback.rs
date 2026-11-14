@@ -111,7 +111,7 @@ pub(crate) struct HitFeedback {
     hero_hurt: bool,
     /// Horizontal direction the hero is knocked towards (away from the attacker).
     hero_push: Vec3,
-    previous_hero_health: Option<f32>,
+    previous_missing_health: Option<f32>,
 }
 
 impl HitFeedback {
@@ -264,10 +264,13 @@ fn detect_hero_hurt(
     let Some(vitals) = vitals else {
         return;
     };
-    let health = vitals.health;
-    if let Some(previous) = feedback.previous_hero_health {
+    // Hero selection, equipment and level changes preserve the missing-health
+    // amount while changing both health and its maximum. Observe actual new
+    // wounds, including damage taken in the same frame as a maximum change.
+    let missing_health = (vitals.max_health - vitals.health).max(0.0);
+    if let Some(previous) = feedback.previous_missing_health {
         let threshold = vitals.max_health.max(1.0) * HURT_THRESHOLD_FRACTION;
-        if vitals.alive && previous - health > threshold {
+        if vitals.alive && missing_health - previous > threshold {
             feedback.hero_hurt = true;
             if let Some(hero) = heroes.iter().next() {
                 let attackers = enemies.iter().map(GlobalTransform::translation);
@@ -275,7 +278,7 @@ fn detect_hero_hurt(
             }
         }
     }
-    feedback.previous_hero_health = Some(health);
+    feedback.previous_missing_health = Some(missing_health);
 }
 
 /// Away from the nearest enemy; invaders come from +X, so default to -X.
@@ -1165,9 +1168,54 @@ mod tests {
     }
 
     #[test]
+    fn hero_hurt_observes_wounds_not_hero_or_maximum_changes() {
+        let mut world = World::new();
+        world.init_resource::<HitFeedback>();
+        world.init_resource::<Time<Real>>();
+        world.insert_resource(HeroVitals::for_hero(super::super::HeroKind::StormSavant, 1));
+        world.run_system_cached(spawn_hurt_flash).unwrap();
+        world.run_system_cached(detect_hero_hurt).unwrap();
+
+        // Exercise the real 800 -> 752 initial selection that formerly hurt
+        // the full-health archer and flashed the entire screen red.
+        world.insert_resource(HeroVitals::for_hero(super::super::HeroKind::EmberRanger, 1));
+        world.run_system_cached(detect_hero_hurt).unwrap();
+        world.run_system_cached(animate_hurt_flash).unwrap();
+        assert!(!world.resource::<HitFeedback>().hero_hurt());
+        assert!(
+            world
+                .query::<&BorderColor>()
+                .iter(&world)
+                .all(|border| border.top.alpha() == 0.0)
+        );
+
+        for (maximum, health, expected) in [
+            (752.0, 652.0, true),  // An ordinary real wound.
+            (800.0, 700.0, false), // Max increases, same 100 missing.
+            (600.0, 500.0, false), // Max decreases, same 100 missing.
+            (900.0, 760.0, true),  // Max increases AND 40 damage is taken.
+            (700.0, 520.0, true),  // Max decreases AND 40 damage is taken.
+            (700.0, 620.0, false), // Healing does not flash.
+        ] {
+            world.run_system_cached(clear_frame_events).unwrap();
+            {
+                let mut vitals = world.resource_mut::<HeroVitals>();
+                vitals.max_health = maximum;
+                vitals.health = health;
+            }
+            world.run_system_cached(detect_hero_hurt).unwrap();
+            assert_eq!(
+                world.resource::<HitFeedback>().hero_hurt(),
+                expected,
+                "health={health}, maximum={maximum}"
+            );
+        }
+    }
+
+    #[test]
     fn hero_hurt_ignores_healing_and_chip_damage() {
         let mut feedback = HitFeedback {
-            previous_hero_health: Some(100.0),
+            previous_missing_health: Some(0.0),
             ..default()
         };
         let mut world = World::new();

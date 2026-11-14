@@ -18,6 +18,7 @@ struct ClassProbe {
     saw_bounce: bool,
     saw_cleave: bool,
     paused_at: Option<u32>,
+    pause_verified: bool,
     frozen: Vec<(Entity, Transform)>,
     frozen_hp: Vec<f32>,
 }
@@ -48,6 +49,7 @@ pub fn configure(world: &mut World, scenario: &str) {
         saw_bounce: false,
         saw_cleave: false,
         paused_at: None,
+        pause_verified: false,
         frozen: vec![],
         frozen_hp: vec![],
     });
@@ -248,25 +250,57 @@ fn observe(world: &mut World) {
         let p = world.resource::<ClassProbe>();
         (p.frame, p.kind, p.legacy, p.level)
     };
+    if world.resource::<ClassProbe>().scenario == "class-archer-1"
+        && (6..=19).contains(&frame)
+        && world.resource::<HeroVitals>().kind == HeroKind::EmberRanger
+    {
+        let vitals = world.resource::<HeroVitals>();
+        assert_eq!(
+            vitals.health, vitals.max_health,
+            "real draft leaves archer at full health"
+        );
+        let border = world
+            .query::<(&Name, &BorderColor)>()
+            .iter(world)
+            .find(|(name, _)| name.as_str() == "HERO HURT FLASH")
+            .map(|(_, border)| *border)
+            .expect("production hero hurt edge exists");
+        for color in [border.top, border.bottom, border.left, border.right] {
+            assert_eq!(
+                color.alpha(),
+                0.0,
+                "full-health draft must not present a hurt edge at frame {frame}"
+            );
+        }
+        if frame == 19 {
+            println!(
+                "[capture] PASS real archer draft: full health and transparent production hurt edge"
+            );
+        }
+    }
     let arrows: Vec<_> = world
-        .query::<(&Projectile, &Ricochet)>()
+        .query::<(&Projectile, Option<&Ricochet>)>()
         .iter(world)
-        .map(|(projectile, bounce)| (projectile.velocity, *bounce))
+        .map(|(projectile, bounce)| (projectile.velocity, bounce.copied()))
         .collect();
+    let stats = class_basic_stats(kind, level, world.resource::<PlayerBuild>());
     if !arrows.is_empty() && !world.resource::<ClassProbe>().saw_volley {
         if !legacy {
-            let stats = class_basic_stats(kind, level, world.resource::<PlayerBuild>());
             assert_eq!(arrows.len(), usize::from(stats.shots));
-            assert!(
-                arrows
-                    .iter()
-                    .all(|(_, bounce)| bounce.remaining == stats.bounces)
-            );
-            assert!(
-                arrows
-                    .windows(2)
-                    .any(|pair| pair[0].0.normalize().distance(pair[1].0.normalize()) > 0.03)
-            );
+            assert!(arrows.iter().all(|(_, bounce)| if stats.bounces == 0 {
+                bounce.is_none()
+            } else {
+                bounce.is_some_and(|bounce| bounce.remaining == stats.bounces)
+            }));
+            if stats.shots > 1 {
+                assert!(
+                    arrows.windows(2).any(|pair| pair[0]
+                        .0
+                        .normalize()
+                        .distance(pair[1].0.normalize())
+                        > 0.03)
+                );
+            }
             world.resource_mut::<AttackClock>().0.pause();
         }
         world.resource_mut::<ClassProbe>().saw_volley = true;
@@ -275,9 +309,9 @@ fn observe(world: &mut World) {
             arrows.len()
         );
     }
-    let bounced = arrows
-        .iter()
-        .any(|(_, bounce)| bounce.bounces_used > 0 && bounce.target.is_some());
+    let bounced = arrows.iter().any(|(_, bounce)| {
+        bounce.is_some_and(|bounce| bounce.bounces_used > 0 && bounce.target.is_some())
+    });
     let names: Vec<_> = world
         .query::<&Name>()
         .iter(world)
@@ -285,6 +319,13 @@ fn observe(world: &mut World) {
         .collect();
     let bounce_art = names.iter().any(|name| name == "Archer ricochet trail");
     let cleave_art = names.iter().any(|name| name == "Warrior cleave sweep");
+    if !legacy && kind == HeroKind::EmberRanger && stats.bounces == 0 {
+        assert!(arrows.iter().all(|(_, bounce)| bounce.is_none()));
+        assert!(
+            !bounced && !bounce_art,
+            "starter arrow has no ricochet mechanics or art"
+        );
+    }
     if bounced && bounce_art && !world.resource::<ClassProbe>().saw_bounce {
         world.resource_mut::<ClassProbe>().saw_bounce = true;
         println!("[capture] class-stage ricochet frame={frame} actual_target_lock=true");
@@ -296,18 +337,29 @@ fn observe(world: &mut World) {
             world.resource_mut::<AttackClock>().0.pause();
         }
     }
-    if (bounce_art || cleave_art) && world.resource::<ClassProbe>().paused_at.is_none() {
-        let frozen = world
-            .query::<(Entity, &Name, &Transform)>()
+    let ordinary_arrow =
+        !legacy && kind == HeroKind::EmberRanger && stats.bounces == 0 && !arrows.is_empty();
+    if (bounce_art || cleave_art || ordinary_arrow)
+        && world.resource::<ClassProbe>().paused_at.is_none()
+    {
+        let frozen: Vec<_> = world
+            .query::<(Entity, &Transform, Option<&Name>, Option<&Projectile>)>()
             .iter(world)
-            .filter(|(_, name, _)| {
-                matches!(
-                    name.as_str(),
-                    "Archer ricochet trail" | "Warrior cleave sweep"
-                )
+            .filter(|(_, _, name, projectile)| {
+                (ordinary_arrow && projectile.is_some())
+                    || name.is_some_and(|name| {
+                        matches!(
+                            name.as_str(),
+                            "Archer ricochet trail" | "Warrior cleave sweep"
+                        )
+                    })
             })
-            .map(|(entity, _, transform)| (entity, *transform))
+            .map(|(entity, transform, _, _)| (entity, *transform))
             .collect();
+        assert!(
+            !frozen.is_empty(),
+            "pause probe must observe actual projectile or cue entities"
+        );
         let hp = health(world);
         let mut p = world.resource_mut::<ClassProbe>();
         p.paused_at = Some(frame);
@@ -332,7 +384,11 @@ fn observe(world: &mut World) {
         }
         let hp = health(world);
         assert_eq!(hp, world.resource::<ClassProbe>().frozen_hp);
+        world.resource_mut::<ClassProbe>().pause_verified = true;
         world.resource_mut::<GameSession>().paused = false;
+        println!(
+            "[capture] PASS class attack pause: actual transforms and health frozen for 8 frames"
+        );
     }
     if frame == 470 {
         assert!(world.resource::<GameSession>().paused);
@@ -347,6 +403,10 @@ fn observe(world: &mut World) {
     if frame == 440 {
         let hp = health(world);
         let p = world.resource::<ClassProbe>();
+        assert!(
+            p.pause_verified,
+            "actual in-flight pause must be exercised before completion"
+        );
         assert!(hp.iter().any(|hp| *hp < 100000.));
         if legacy {
             let fusion = world.resource::<HeroFusion>();
@@ -360,12 +420,23 @@ fn observe(world: &mut World) {
                 fusion.attacks_emitted
             );
         } else if kind == HeroKind::EmberRanger {
-            assert!(p.saw_volley && p.saw_bounce);
+            assert!(p.saw_volley);
             println!("[capture] class-stage archer-damage frame={frame} actual_hp={hp:?}");
-            assert!(
-                hp.iter().filter(|hp| **hp < 100000.).count() >= 3,
-                "true ricochet damages beyond a two-arrow volley"
-            );
+            let damaged = hp.iter().filter(|hp| **hp < 100000.).count();
+            if stats.bounces == 0 {
+                assert!(!p.saw_bounce);
+                assert_eq!(
+                    stats.shots, 1,
+                    "starter fixture must remain a single-arrow attack"
+                );
+                assert_eq!(damaged, 1, "one ordinary arrow damages exactly one target");
+            } else {
+                assert!(p.saw_bounce);
+                assert!(
+                    damaged > usize::from(stats.shots),
+                    "true ricochet damages targets beyond the initial volley"
+                );
+            }
         } else {
             assert!(p.saw_cleave);
             assert!(hp[..3].iter().all(|hp| *hp < 100000.));
