@@ -132,6 +132,7 @@ fn feed(world: &mut World) {
         if active {
             for _ in 0..if volley && is_critical { 100 } else { 1 } {
                 feedback.push(HitEvent {
+                    direction: Vec3::X,
                     target,
                     position,
                     element: DamageElement::Physical,

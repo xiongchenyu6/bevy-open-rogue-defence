@@ -40,6 +40,7 @@ impl Plugin for HeroPlugin {
                     draft::refresh_language,
                     refresh_hero_language,
                     update_hero_selector_panel_visibility,
+                    place_hero_selector_panel,
                     synchronize_hero_growth,
                     trigger_recruitment,
                     update_hero_status,
@@ -100,6 +101,8 @@ struct HeroOffer {
 #[derive(Component)]
 struct HeroStatusText;
 
+const HERO_SELECTOR_PANEL_WIDTH: f32 = 168.0;
+
 fn setup_hero_ui(mut commands: Commands, language: Res<GameLanguage>) {
     let status = format!(
         "[R] {} · {} 0/3",
@@ -114,7 +117,7 @@ fn setup_hero_ui(mut commands: Commands, language: Res<GameLanguage>) {
                 position_type: PositionType::Absolute,
                 left: percent(43),
                 top: px(64),
-                width: px(168),
+                width: px(HERO_SELECTOR_PANEL_WIDTH),
                 padding: UiRect::all(px(8)),
                 flex_direction: FlexDirection::Column,
                 row_gap: px(6),
@@ -203,6 +206,35 @@ fn update_hero_selector_panel_visibility(
     };
     for mut panel_visibility in &mut panels {
         *panel_visibility = visibility;
+    }
+}
+
+/// Landscape keeps the panel beside the top toolbar. A portrait window has no
+/// free top row, so the panel sits below the left HUD column, clear of the
+/// toolbar and of the lane's far end where enemies emerge.
+fn hero_selector_panel_position(width: f32, height: f32) -> (Val, Val) {
+    if height > width {
+        (px(24), px(268))
+    } else {
+        (percent(43), px(64))
+    }
+}
+
+fn place_hero_selector_panel(
+    windows: Query<&Window, With<bevy::window::PrimaryWindow>>,
+    mut panels: Query<&mut Node, With<HeroSelectorStatusPanel>>,
+) {
+    let Ok(window) = windows.single() else {
+        return;
+    };
+    let (left, top) = hero_selector_panel_position(window.width(), window.height());
+    for mut node in &mut panels {
+        node.reborrow()
+            .map_unchanged(|node| &mut node.left)
+            .set_if_neq(left);
+        node.reborrow()
+            .map_unchanged(|node| &mut node.top)
+            .set_if_neq(top);
     }
 }
 
@@ -1030,6 +1062,20 @@ mod tests {
                 assert_eq!(vitals.deaths, 1);
                 assert_eq!(vitals.revive_remaining, 6.);
             }
+        }
+    }
+
+    #[test]
+    fn selector_status_panel_clears_the_portrait_hud_and_keeps_its_landscape_slot() {
+        assert_eq!(
+            hero_selector_panel_position(1280.0, 720.0),
+            (percent(43), px(64))
+        );
+        for (width, height) in [(390.0, 844.0), (720.0, 1280.0)] {
+            let (left, top) = hero_selector_panel_position(width, height);
+            // Below the left HUD column, left of the lane, fully on screen.
+            assert_eq!((left, top), (px(24), px(268)));
+            assert!(24.0 + HERO_SELECTOR_PANEL_WIDTH <= width * 0.5);
         }
     }
 

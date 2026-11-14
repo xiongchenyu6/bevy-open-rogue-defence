@@ -23,6 +23,71 @@ impl WeaponFlight {
     }
 }
 
+/// Projectile lane height above the hero origin; collision stays on this lane.
+pub(crate) const PROJECTILE_LANE_HEIGHT: f32 = 0.25;
+const MUZZLE_SETTLE_SECONDS: f32 = 0.12;
+
+/// Weapon muzzle at the authored release pose, in hero space: x right, y up,
+/// z forward. Measured from the cast models with `tools/measure_weapon_socket.py`
+/// (crossbow front at phase 0.25, staff head at phase 0.33).
+pub(crate) fn muzzle_socket(kind: HeroKind) -> Option<Vec3> {
+    match kind {
+        HeroKind::EmberRanger => Some(Vec3::new(0.346, 0.890, 0.951)),
+        HeroKind::StormSavant => Some(Vec3::new(0.305, 0.906, 1.575)),
+        _ => None,
+    }
+}
+
+/// Draws a released projectile from the weapon instead of the hero's feet.
+/// Only the rendered position moves: `Transform`, collision and damage keep the
+/// original lane. The sideways/forward part settles onto the lane shortly after
+/// release; the muzzle height is kept for the whole flight.
+#[derive(Component, Clone, Copy, Debug, PartialEq)]
+pub(crate) struct MuzzleOffset {
+    horizontal: Vec3,
+    lift: f32,
+    age: f32,
+}
+impl MuzzleOffset {
+    /// `hero` is the facing actor transform at the release frame.
+    pub(crate) fn at_release(kind: HeroKind, hero: &Transform) -> Option<Self> {
+        let socket = muzzle_socket(kind)?;
+        let forward = hero.forward().with_y(0.0).normalize_or(Vec3::NEG_Z);
+        let right = forward.cross(Vec3::Y);
+        Some(Self {
+            horizontal: right * socket.x + forward * socket.z,
+            lift: socket.y - PROJECTILE_LANE_HEIGHT,
+            age: 0.0,
+        })
+    }
+
+    pub(crate) fn current(&self) -> Vec3 {
+        let settle = (1.0 - self.age / MUZZLE_SETTLE_SECONDS).clamp(0.0, 1.0);
+        self.horizontal * settle + Vec3::Y * self.lift
+    }
+}
+
+/// Runs after transform propagation. Projectiles are root entities, so the
+/// rendered pose is rebuilt from `Transform` every frame and never accumulates.
+pub(crate) fn present_muzzle_offsets(
+    time: Res<Time>,
+    session: Res<GameSession>,
+    mut projectiles: Query<(&Transform, &mut GlobalTransform, &mut MuzzleOffset)>,
+) {
+    let dt = if session.paused {
+        0.0
+    } else {
+        time.delta_secs()
+    };
+    for (transform, mut global, mut offset) in &mut projectiles {
+        *global = GlobalTransform::from(
+            transform.with_translation(transform.translation + offset.current()),
+        );
+        // Age after presenting: the release frame shows the arrow at the muzzle.
+        offset.age += dt;
+    }
+}
+
 enum SpecialCue {
     Ricochet { target: Vec3, hop: u8 },
     Cleave { range: f32, half_angle: f32 },
@@ -66,6 +131,14 @@ impl WeaponCues {
                 special: Some(SpecialCue::Cleave { range, half_angle }),
             });
         }
+    }
+    #[cfg(test)]
+    pub(crate) fn len(&self) -> usize {
+        self.0.len()
+    }
+    /// Release flash anchored at the weapon muzzle on the actual release frame.
+    pub(crate) fn release(&mut self, kind: HeroKind, muzzle: Vec3, direction: Vec3) {
+        self.push(kind, muzzle - Vec3::Y * 0.45, direction, false);
     }
     pub fn push(&mut self, kind: HeroKind, position: Vec3, direction: Vec3, impact: bool) {
         if self.0.len() < MAX_CUES {
@@ -395,7 +468,15 @@ pub(crate) fn animate(
     art: Option<Res<TrailArt>>,
     weapons: Option<Res<BasicAttackArt>>,
     mut cues: ResMut<WeaponCues>,
-    mut flights: Query<(&Projectile, &mut WeaponFlight, &mut Transform), With<Mesh3d>>,
+    mut flights: Query<
+        (
+            &Projectile,
+            &mut WeaponFlight,
+            &mut Transform,
+            Option<&MuzzleOffset>,
+        ),
+        With<Mesh3d>,
+    >,
     mut motes: Query<(Entity, &mut WeaponMote, &mut Transform), Without<Projectile>>,
 ) {
     if session.finished {
@@ -655,7 +736,7 @@ pub(crate) fn animate(
         }
     }
     painter.label = None;
-    for (projectile, mut flight, mut transform) in &mut flights {
+    for (projectile, mut flight, mut transform, muzzle) in &mut flights {
         flight.age += dt;
         let direction = projectile.velocity.normalize_or_zero();
         if direction == Vec3::ZERO {
@@ -680,7 +761,10 @@ pub(crate) fn animate(
         if painter.available <= 64 {
             continue;
         }
-        let position = transform.translation + Vec3::Y * 0.13;
+        // Trails follow the rendered projectile, not its collision lane.
+        let position = transform.translation
+            + Vec3::Y * 0.13
+            + muzzle.map_or(Vec3::ZERO, MuzzleOffset::current);
         let side = direction.cross(Vec3::Y).normalize_or_zero();
         let (length, life) = match profile {
             BasicWeapon::Crossbow => (0.90, 0.14),
@@ -866,6 +950,43 @@ pub(crate) fn animate(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn muzzle_offset_only_moves_the_rendered_pose_and_settles_onto_the_lane() {
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<GameSession>()
+            .add_systems(Update, present_muzzle_offsets);
+        let offset =
+            MuzzleOffset::at_release(HeroKind::EmberRanger, &Transform::default()).unwrap();
+        let logic = Transform::from_xyz(3.0, PROJECTILE_LANE_HEIGHT, -2.0);
+        let projectile = app
+            .world_mut()
+            .spawn((logic, GlobalTransform::default(), offset))
+            .id();
+        let rendered = |app: &App| {
+            app.world()
+                .get::<GlobalTransform>(projectile)
+                .unwrap()
+                .translation()
+        };
+        app.update();
+        // Default facing is -Z: the muzzle is right (+X), up and forward (-Z).
+        assert!(rendered(&app).distance(Vec3::new(3.346, 0.890, -2.951)) < 0.0001);
+        // A paused frame neither ages nor accumulates the offset.
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        app.update();
+        assert!(rendered(&app).distance(Vec3::new(3.346, 0.890, -2.951)) < 0.0001);
+        app.world_mut().resource_mut::<GameSession>().paused = false;
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(MUZZLE_SETTLE_SECONDS));
+        app.update();
+        app.update();
+        // Sideways/forward offset is gone; the muzzle height stays.
+        assert!(rendered(&app).distance(Vec3::new(3.0, 0.890, -2.0)) < 0.0001);
+        assert_eq!(*app.world().get::<Transform>(projectile).unwrap(), logic);
+    }
     #[test]
     fn trails_freeze_on_pause_expire_and_clear_at_finish_without_asset_growth() {
         use bevy::ecs::system::RunSystemOnce;

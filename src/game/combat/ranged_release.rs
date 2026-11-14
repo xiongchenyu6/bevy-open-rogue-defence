@@ -14,8 +14,10 @@ pub(super) struct NativeShot {
 
 pub(super) fn release_phase(kind: HeroKind) -> Option<f32> {
     match kind {
+        // Authored clip phases (tools/measure_weapon_socket.py): the crossbow
+        // starts its recoil at 0.25 and the staff reaches full extension at 0.33.
         HeroKind::EmberRanger => Some(0.25),
-        HeroKind::StormSavant => Some(0.28),
+        HeroKind::StormSavant => Some(0.33),
         _ => None,
     }
 }
@@ -26,14 +28,17 @@ pub(super) struct PendingRangedShot {
     shot: NativeShot,
     remaining: f32,
     new: bool,
+    /// The volley's first shot owns its single release cue.
+    cue: bool,
 }
 impl PendingRangedShot {
-    pub(super) fn new(hero: Entity, shot: NativeShot, remaining: f32) -> Self {
+    pub(super) fn new(hero: Entity, shot: NativeShot, remaining: f32, cue: bool) -> Self {
         Self {
             hero,
             shot,
             remaining,
             new: true,
+            cue,
         }
     }
 }
@@ -48,6 +53,7 @@ pub(super) fn emit(
     origin: Vec3,
     shot: NativeShot,
     first_travel: Option<f32>,
+    muzzle: Option<attack_vfx::MuzzleOffset>,
 ) -> Option<Entity> {
     let (mesh, material) = art
         .map(|art| art.projectile_at_level(shot.kind, shot.level))
@@ -61,7 +67,7 @@ pub(super) fn emit(
         commands,
         mesh,
         material,
-        Transform::from_translation(origin + Vec3::Y * 0.25)
+        Transform::from_translation(origin + Vec3::Y * attack_vfx::PROJECTILE_LANE_HEIGHT)
             .looking_to(shot.direction, Vec3::Y)
             .with_scale(Vec3::splat(
                 basic_attacks::basic_attack_visual_tier(shot.level).projectile_scale,
@@ -92,6 +98,9 @@ pub(super) fn emit(
             .entity(entity)
             .insert(basic_attacks::Ricochet::new(shot.bounces));
     }
+    if let Some(muzzle) = muzzle {
+        commands.entity(entity).insert(muzzle);
+    }
     if let Some(seconds) = first_travel {
         commands
             .entity(entity)
@@ -109,6 +118,7 @@ pub(super) fn release_pending(
     assets: Option<Res<GameAssets>>,
     art: Option<Res<BasicAttackArt>>,
     mut pools: ResMut<CombatPools>,
+    mut cues: Option<ResMut<WeaponCues>>,
     heroes: Query<&Transform, With<Hero>>,
     mut shots: Query<(Entity, &mut PendingRangedShot)>,
 ) {
@@ -144,6 +154,19 @@ pub(super) fn release_pending(
         // Only the portion after release travels, including a catch-up launch
         // already due within this update.
         let travel = (-pending.remaining).clamp(0.0, time.delta_secs().max(0.0));
+        let muzzle = attack_vfx::MuzzleOffset::at_release(pending.shot.kind, hero);
+        if pending.cue
+            && let Some(cues) = cues.as_deref_mut()
+        {
+            // The release flash belongs to the frame and place the shot leaves the weapon.
+            cues.release(
+                pending.shot.kind,
+                hero.translation
+                    + Vec3::Y * attack_vfx::PROJECTILE_LANE_HEIGHT
+                    + muzzle.map_or(Vec3::ZERO, |muzzle| muzzle.current()),
+                pending.shot.direction,
+            );
+        }
         let _ = emit(
             &mut commands,
             &mut pools,
@@ -152,6 +175,7 @@ pub(super) fn release_pending(
             hero.translation,
             pending.shot,
             Some(travel),
+            muzzle,
         );
         // Current pool always leases either a visible or logic-only carrier.
         commands.entity(entity).despawn();

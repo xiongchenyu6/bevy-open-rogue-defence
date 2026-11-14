@@ -7,6 +7,7 @@ pub(super) struct DemonDenPlugin;
 impl Plugin for DemonDenPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, setup)
+            .add_systems(Update, tone_cavern_rock)
             .add_systems(Update, (emergence, animate).chain().after(CombatSet));
     }
 }
@@ -21,6 +22,34 @@ struct Emergence {
     initial: f32,
 }
 const MAX_EMERGENCE: usize = 32;
+const CAVERN_MODEL: &str = "models/environment_demon_cavern.glb";
+/// The baked stone is a warm tan that reads as a bright slab under the sun and
+/// washes out the HUD drawn over it. A cool, darker multiply keeps the texture
+/// but lets the cavern recede behind the lane.
+const CAVERN_ROCK_TINT: Color = Color::srgb(0.46, 0.45, 0.56);
+
+fn tone_cavern_rock(
+    server: Res<AssetServer>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
+    mut toned: Local<bool>,
+) {
+    if *toned {
+        return;
+    }
+    // The subasset path can register after the material itself; retry until seen.
+    let rock: Vec<_> = materials
+        .iter()
+        .filter_map(|(id, _)| {
+            (server.get_path(id)?.path().to_string_lossy() == CAVERN_MODEL).then_some(id)
+        })
+        .collect();
+    for id in rock {
+        if let Some(mut material) = materials.get_mut(id) {
+            material.base_color = CAVERN_ROCK_TINT;
+            *toned = true;
+        }
+    }
+}
 
 fn setup(
     mut commands: Commands,
@@ -42,6 +71,21 @@ fn setup(
         WorldAssetRoot(server.load("models/environment_demon_cavern.glb#Scene0")),
         Transform::from_xyz(15.65, 0.0, 0.0).with_rotation(Quat::from_rotation_y(-0.55)),
         Visibility::default(),
+        ArenaEntity,
+    ));
+    // A violet glow in the cavern mouth marks where the invasion emerges and
+    // separates the dark rock from the lane's far end.
+    commands.spawn((
+        Name::new("Demon den mouth glow"),
+        PointLight {
+            color: Color::srgb(0.62, 0.25, 1.0),
+            intensity: 900_000.0,
+            range: 11.0,
+            radius: 0.0,
+            shadow_maps_enabled: false,
+            ..default()
+        },
+        Transform::from_xyz(16.0, 2.2, 0.0),
         ArenaEntity,
     ));
 }
@@ -124,6 +168,29 @@ mod tests {
             elite: false,
         }
     }
+    #[test]
+    fn cavern_rock_is_toned_once_and_other_materials_are_left_alone() {
+        let mut app = App::new();
+        app.add_plugins((MinimalPlugins, bevy::asset::AssetPlugin::default()))
+            .init_asset::<StandardMaterial>()
+            .add_systems(Update, tone_cavern_rock);
+        let rock: Handle<StandardMaterial> = app
+            .world()
+            .resource::<AssetServer>()
+            .load(format!("{CAVERN_MODEL}#Material0"));
+        let other = {
+            let mut materials = app.world_mut().resource_mut::<Assets<StandardMaterial>>();
+            materials
+                .insert(rock.id(), StandardMaterial::default())
+                .unwrap();
+            materials.add(StandardMaterial::default())
+        };
+        app.update();
+        let materials = app.world().resource::<Assets<StandardMaterial>>();
+        assert_eq!(materials.get(&rock).unwrap().base_color, CAVERN_ROCK_TINT);
+        assert_eq!(materials.get(&other).unwrap().base_color, Color::WHITE);
+    }
+
     fn app() -> App {
         let mut app = App::new();
         app.init_resource::<GameSession>()

@@ -289,6 +289,11 @@ impl Plugin for CombatPlugin {
                     .in_set(CombatSet),
             )
             .add_systems(
+                PostUpdate,
+                attack_vfx::present_muzzle_offsets
+                    .after(bevy::transform::TransformSystems::Propagate),
+            )
+            .add_systems(
                 Update,
                 update_damage_numbers
                     .after(projectile_hits)
@@ -2155,6 +2160,7 @@ fn auto_attack(
                         hero_entity,
                         shot,
                         clock.0.duration().as_secs_f32().clamp(0.03, 0.45) * phase - age,
+                        i == 0,
                     ));
                 } else if ranged_release::emit(
                     &mut commands,
@@ -2164,6 +2170,7 @@ fn auto_attack(
                     hero.translation,
                     shot,
                     travel,
+                    None,
                 )
                 .is_none()
                 {
@@ -2238,7 +2245,9 @@ fn auto_attack(
                         speed: build.projectile_speed,
                     });
                 }
+                // Delayed native shots flash at the muzzle when they actually leave.
                 if !weapon.melee()
+                    && ranged_release::release_phase(vitals.kind).is_none()
                     && let Some(cues) = cues.as_deref_mut()
                 {
                     cues.push(vitals.kind, hero.translation, base_direction, false);
@@ -3024,6 +3033,16 @@ fn projectile_hits(
                     feedback.push(HitEvent {
                         target: enemy_entity,
                         position: enemy_transform.translation,
+                        direction: projectile
+                            .velocity
+                            .with_y(0.0)
+                            .try_normalize()
+                            .or_else(|| {
+                                (enemy_transform.translation - hero_position?)
+                                    .with_y(0.0)
+                                    .try_normalize()
+                            })
+                            .unwrap_or(Vec3::ZERO),
                         element: profile.element,
                         weight: if boss_enemy.is_some() || adventure_boss.is_some() {
                             HitWeight::Boss

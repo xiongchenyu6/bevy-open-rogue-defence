@@ -473,7 +473,7 @@ fn ranged_real_release_preserves_committed_metadata_and_starter_boundaries() {
 fn ranged_regular_action_age_is_independent_of_timer_completion_remainder() {
     for (kind, expected_release) in [
         (HeroKind::EmberRanger, 0.1125_f32),
-        (HeroKind::StormSavant, 0.126_f32),
+        (HeroKind::StormSavant, 0.1485_f32),
     ] {
         for precharge in [975, 980, 990] {
             let (mut app, _) = ranged_release_app(kind);
@@ -510,4 +510,56 @@ fn ranged_regular_action_age_is_independent_of_timer_completion_remainder() {
             );
         }
     }
+}
+
+#[test]
+fn released_shot_keeps_its_collision_lane_and_is_drawn_from_the_weapon_muzzle() {
+    for kind in [HeroKind::EmberRanger, HeroKind::StormSavant] {
+        let (mut app, hero) = ranged_release_app(kind);
+        app.init_resource::<WeaponCues>();
+        // Face the target along +X, as the authored attack pose does.
+        *app.world_mut().get_mut::<Transform>(hero).unwrap() =
+            Transform::default().looking_to(Vec3::X, Vec3::Y);
+        commit_ranged(&mut app);
+        assert_eq!(
+            app.world().resource::<WeaponCues>().len(),
+            0,
+            "release flash must wait for the real release frame: {kind:?}"
+        );
+        app.world_mut()
+            .run_system_once(ranged_release::release_pending)
+            .unwrap();
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs_f32(0.15));
+        app.world_mut()
+            .run_system_once(ranged_release::release_pending)
+            .unwrap();
+        assert_eq!(app.world().resource::<WeaponCues>().len(), 1);
+        let (transform, muzzle) = app
+            .world_mut()
+            .query_filtered::<(&Transform, &attack_vfx::MuzzleOffset), With<Projectile>>()
+            .single(app.world())
+            .unwrap();
+        // Gameplay still launches from the hero origin on the collision lane.
+        assert_eq!(
+            transform.translation,
+            Vec3::Y * attack_vfx::PROJECTILE_LANE_HEIGHT
+        );
+        let socket = attack_vfx::muzzle_socket(kind).unwrap();
+        let drawn = transform.translation + muzzle.current();
+        assert!(
+            drawn.distance(Vec3::new(socket.z, socket.y, socket.x)) < 0.0001,
+            "{kind:?} drawn at {drawn:?}"
+        );
+    }
+}
+
+#[test]
+fn immediate_native_shots_have_no_muzzle_offset() {
+    assert!(attack_vfx::muzzle_socket(HeroKind::FrostOracle).is_none());
+    assert!(
+        attack_vfx::MuzzleOffset::at_release(HeroKind::FrostOracle, &Transform::default())
+            .is_none()
+    );
 }

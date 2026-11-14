@@ -1,7 +1,10 @@
 use bevy::{
     camera::ScalingMode,
     core_pipeline::tonemapping::Tonemapping,
-    post_process::bloom::{Bloom, BloomPrefilter},
+    post_process::{
+        bloom::{Bloom, BloomPrefilter},
+        effect_stack::Vignette,
+    },
     prelude::*,
 };
 
@@ -404,6 +407,7 @@ fn setup_arena(
             Camera3d::default(),
             BattleCamera::default(),
             combat_bloom(),
+            battle_vignette(),
             Tonemapping::TonyMcMapface,
             bevy::camera::RenderTarget::Image(target.0.clone().into()),
             camera_projection,
@@ -415,11 +419,22 @@ fn setup_arena(
             Camera3d::default(),
             BattleCamera::default(),
             combat_bloom(),
+            battle_vignette(),
             Tonemapping::TonyMcMapface,
             camera_projection,
             camera_transform,
             Msaa::Off,
         ));
+    }
+}
+
+// Settle the dark surroundings and screen corners so the lit lane holds the eye.
+fn battle_vignette() -> Vignette {
+    Vignette {
+        intensity: 0.55,
+        radius: 0.95,
+        smoothness: 0.9,
+        ..default()
     }
 }
 

@@ -221,6 +221,7 @@ pub fn install(app: &mut bevy::app::SubApp, scenario: &str) {
 struct ReleaseTrace {
     frame: u32,
     seen: std::collections::HashSet<(Entity, u32)>,
+    voices: std::collections::HashSet<Entity>,
 }
 
 fn trace_projectile_release(world: &mut World) {
@@ -252,27 +253,77 @@ fn trace_projectile_release(world: &mut World) {
         })
         .collect();
     let projectiles: Vec<_> = world
-        .query::<(Entity, &Projectile, &Transform)>()
+        .query::<(Entity, &Projectile, &Transform, &GlobalTransform)>()
         .iter(world)
-        .map(|(entity, projectile, transform)| {
+        .map(|(entity, projectile, transform, rendered)| {
             let epoch = world
                 .entity(entity)
                 .get_change_ticks::<Projectile>()
                 .expect("queried projectile has component ticks")
                 .added
                 .get();
-            (entity, epoch, transform.translation, projectile.velocity)
+            (
+                entity,
+                epoch,
+                transform.translation,
+                projectile.velocity,
+                rendered.translation(),
+            )
         })
         .collect();
+    // Live weapon node and hero pose: the rendered release point is checked
+    // against the model actually on screen, not only the offline measurement.
+    let hero_pose = world
+        .query_filtered::<&GlobalTransform, With<Hero>>()
+        .iter(world)
+        .next()
+        .map(GlobalTransform::translation);
+    let weapon_node = world
+        .query::<(&Name, &GlobalTransform)>()
+        .iter(world)
+        .find(|(name, _)| matches!(name.as_str(), "2H_Crossbow" | "2H_Staff"))
+        .map(|(_, transform)| transform.translation());
+    let contact_lights: Vec<_> = world
+        .query::<(&Name, &PointLight, &GlobalTransform, &Visibility)>()
+        .iter(world)
+        .filter(|(name, light, _, visibility)| {
+            name.as_str() == "Hit contact light"
+                && light.intensity > 0.0
+                && **visibility != Visibility::Hidden
+        })
+        .map(|(_, light, transform, _)| (transform.translation(), light.intensity, light.color))
+        .collect();
+    let voices: Vec<_> = world
+        .query::<(Entity, &AudioPlayer)>()
+        .iter(world)
+        .map(|(entity, player)| (entity, player.0.id()))
+        .collect();
+    let voices: Vec<_> = {
+        let assets = world.resource::<AssetServer>();
+        voices
+            .into_iter()
+            .map(|(entity, source)| (entity, assets.get_path(source).map(|path| path.to_string())))
+            .collect()
+    };
     let kind = world.resource::<HeroVitals>().kind;
     let mut trace = world.resource_mut::<ReleaseTrace>();
     println!("RELEASE_PHASE frame={frame} hero={kind:?} clips={animations:?}");
-    for (entity, epoch, position, velocity) in projectiles {
+    for (entity, epoch, position, velocity, rendered) in projectiles {
         if trace.seen.insert((entity, epoch)) {
             // DamageProfile is gameplay-private; no new API is exposed for this probe.
             println!(
-                "PROJECTILE_RELEASE frame={frame} entity={entity:?} added_tick={epoch} hero={kind:?} position={position:?} velocity={velocity:?} clips={animations:?}"
+                "PROJECTILE_RELEASE frame={frame} entity={entity:?} added_tick={epoch} hero={kind:?} position={position:?} velocity={velocity:?} clips={animations:?} rendered={rendered:?} hero_pose={hero_pose:?} weapon_node={weapon_node:?}"
             );
+        }
+    }
+    for (position, intensity, color) in contact_lights {
+        println!(
+            "CONTACT_LIGHT frame={frame} position={position:?} intensity={intensity:.1} color={color:?}"
+        );
+    }
+    for (entity, source) in voices {
+        if trace.voices.insert(entity) {
+            println!("AUDIO_START frame={frame} entity={entity:?} source={source:?}");
         }
     }
 }

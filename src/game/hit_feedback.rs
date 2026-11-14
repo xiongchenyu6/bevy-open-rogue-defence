@@ -53,7 +53,10 @@ impl Plugin for HitFeedbackPlugin {
             .init_resource::<ScreenShake>()
             .init_resource::<HitStop>()
             .configure_sets(Update, HitFeedbackSet.after(CombatSet).after(SurvivalSet))
-            .add_systems(Startup, (setup_burst_art, spawn_hurt_flash))
+            .add_systems(
+                Startup,
+                (setup_burst_art, spawn_hurt_flash, enemy_flash::setup),
+            )
             .add_systems(
                 Update,
                 (
@@ -86,6 +89,8 @@ pub(crate) enum HitWeight {
 pub(crate) struct HitEvent {
     pub(crate) target: Entity,
     pub(crate) position: Vec3,
+    /// Horizontal travel direction of the blow; zero when unknown.
+    pub(crate) direction: Vec3,
     pub(crate) element: DamageElement,
     pub(crate) weight: HitWeight,
     pub(crate) critical: bool,
@@ -662,6 +667,7 @@ mod tests {
 
     fn event(weight: HitWeight, critical: bool, killed: bool) -> HitEvent {
         HitEvent {
+            direction: Vec3::X,
             target: Entity::from_bits(1),
             position: Vec3::ZERO,
             element: DamageElement::Physical,
@@ -721,6 +727,7 @@ mod tests {
         for count in [1, 100] {
             let (mut app, target) = critical_feedback_app(1.);
             let hit = HitEvent {
+                direction: Vec3::X,
                 target,
                 ..event(HitWeight::Normal, true, false)
             };
@@ -751,6 +758,7 @@ mod tests {
     fn continuous_criticals_leave_recovery_time_between_stops() {
         let (mut app, target) = critical_feedback_app(1.);
         let hit = HitEvent {
+            direction: Vec3::X,
             target,
             ..event(HitWeight::Normal, true, false)
         };
@@ -787,6 +795,7 @@ mod tests {
                 session.finished = finished;
             }
             let hit = HitEvent {
+                direction: Vec3::X,
                 target,
                 ..event(HitWeight::Normal, true, false)
             };
@@ -799,6 +808,7 @@ mod tests {
         }
         let (mut app, target) = critical_feedback_app(1.);
         let hit = HitEvent {
+            direction: Vec3::X,
             target,
             ..event(HitWeight::Normal, true, false)
         };
@@ -818,6 +828,7 @@ mod tests {
         for (critical, killed) in [(false, false), (false, true), (true, true)] {
             let (mut app, target) = critical_feedback_app(1.);
             let hit = HitEvent {
+                direction: Vec3::X,
                 target,
                 ..event(HitWeight::Normal, critical, killed)
             };
@@ -888,6 +899,7 @@ mod tests {
         {
             let mut feedback = app.world_mut().resource_mut::<HitFeedback>();
             feedback.push(HitEvent {
+                direction: Vec3::X,
                 critical: true,
                 ..event(HitWeight::Normal, false, false)
             });
@@ -933,6 +945,7 @@ mod tests {
         let mut feedback = app.world_mut().resource_mut::<HitFeedback>();
         feedback.events.clear();
         feedback.push(HitEvent {
+            direction: Vec3::X,
             target,
             ..event(HitWeight::Normal, critical, false)
         });
@@ -1030,6 +1043,7 @@ mod tests {
             app.world_mut()
                 .resource_mut::<HitFeedback>()
                 .push(HitEvent {
+                    direction: Vec3::X,
                     target,
                     ..event(HitWeight::Normal, true, false)
                 });
@@ -1039,6 +1053,7 @@ mod tests {
         app.world_mut()
             .resource_mut::<HitFeedback>()
             .push(HitEvent {
+                direction: Vec3::X,
                 target,
                 ..event(HitWeight::Boss, false, true)
             });
@@ -1054,6 +1069,7 @@ mod tests {
             app.world_mut()
                 .resource_mut::<HitFeedback>()
                 .push(HitEvent {
+                    direction: Vec3::X,
                     target,
                     ..event(HitWeight::Normal, !critical_first, false)
                 });
