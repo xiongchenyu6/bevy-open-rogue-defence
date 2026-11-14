@@ -34,4 +34,3 @@ Published browser verification
 - Actual compact card selection immediately applied Meteor Seed and continued to Flame Ray / Archery / Raise Dead without confirmation; before/after screenshots included.
 - Browser errors output was empty. Real battle progressed to level 3 with actual kills, damage and resources.
 - Boss captures use controlled high-health fixtures to exercise phases; fixture health/countdowns are not normal gameplay balance.
-
