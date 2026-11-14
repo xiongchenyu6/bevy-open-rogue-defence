@@ -210,13 +210,18 @@ fn update_hero_selector_panel_visibility(
 }
 
 /// Landscape keeps the panel beside the top toolbar. A portrait window has no
-/// free top row, so the panel sits below the left HUD column, clear of the
-/// toolbar and of the lane's far end where enemies emerge.
-fn hero_selector_panel_position(width: f32, height: f32) -> (Val, Val) {
+/// free top row and its upper half holds the HUD, camp labels and the lane's
+/// far end, so the panel becomes a centred call to action above the bottom bar.
+/// Returns `(left, top, bottom)`.
+fn hero_selector_panel_position(width: f32, height: f32) -> (Val, Val, Val) {
     if height > width {
-        (px(24), px(268))
+        (
+            px((width - HERO_SELECTOR_PANEL_WIDTH) * 0.5),
+            Val::Auto,
+            px(64),
+        )
     } else {
-        (percent(43), px(64))
+        (percent(43), px(64), Val::Auto)
     }
 }
 
@@ -227,7 +232,7 @@ fn place_hero_selector_panel(
     let Ok(window) = windows.single() else {
         return;
     };
-    let (left, top) = hero_selector_panel_position(window.width(), window.height());
+    let (left, top, bottom) = hero_selector_panel_position(window.width(), window.height());
     for mut node in &mut panels {
         node.reborrow()
             .map_unchanged(|node| &mut node.left)
@@ -235,6 +240,9 @@ fn place_hero_selector_panel(
         node.reborrow()
             .map_unchanged(|node| &mut node.top)
             .set_if_neq(top);
+        node.reborrow()
+            .map_unchanged(|node| &mut node.bottom)
+            .set_if_neq(bottom);
     }
 }
 
@@ -1069,13 +1077,17 @@ mod tests {
     fn selector_status_panel_clears_the_portrait_hud_and_keeps_its_landscape_slot() {
         assert_eq!(
             hero_selector_panel_position(1280.0, 720.0),
-            (percent(43), px(64))
+            (percent(43), px(64), Val::Auto)
         );
         for (width, height) in [(390.0, 844.0), (720.0, 1280.0)] {
-            let (left, top) = hero_selector_panel_position(width, height);
-            // Below the left HUD column, left of the lane, fully on screen.
-            assert_eq!((left, top), (px(24), px(268)));
-            assert!(24.0 + HERO_SELECTOR_PANEL_WIDTH <= width * 0.5);
+            let (left, top, bottom) = hero_selector_panel_position(width, height);
+            // Anchored above the bottom bar, never in the HUD's top band.
+            assert_eq!((top, bottom), (Val::Auto, px(64)));
+            let Val::Px(left) = left else {
+                panic!("portrait panel uses pixel placement");
+            };
+            assert!(left >= 0.0 && left + HERO_SELECTOR_PANEL_WIDTH <= width);
+            assert!((left + HERO_SELECTOR_PANEL_WIDTH * 0.5 - width * 0.5).abs() < 0.01);
         }
     }
 

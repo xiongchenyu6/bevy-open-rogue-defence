@@ -123,12 +123,12 @@ fn contact_point(body: &Transform, direction: Vec3) -> Vec3 {
 fn contact_light(body: &Transform, critical: bool) -> (Color, f32, f32) {
     let size = body.scale.max_element().max(0.5);
     let (color, peak) = if critical {
-        (Color::srgb(1.0, 0.78, 0.35), 120_000.0)
+        (Color::srgb(1.0, 0.78, 0.35), 150_000.0)
     } else {
-        (Color::srgb(1.0, 0.96, 0.88), 45_000.0)
+        (Color::srgb(1.0, 0.96, 0.88), 70_000.0)
     };
     // Short reach keeps the highlight on the struck region, off the floor.
-    (color, peak * size * size, 1.5 * size)
+    (color, peak * size * size, 1.7 * size)
 }
 
 /// PostUpdate sees the matte imported finishes. New feedback is applied after
