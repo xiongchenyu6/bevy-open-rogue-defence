@@ -6,6 +6,9 @@ use bevy::{
     mesh::{Indices, PrimitiveTopology},
     prelude::*,
 };
+#[path = "water_surface.rs"]
+mod water_surface;
+
 const MAX_DECORATED_WAVES: usize = 8;
 const SEGMENTS: usize = 64;
 #[derive(Resource)]
@@ -131,17 +134,21 @@ fn surface(kind: u8) -> Mesh {
     .with_inserted_attribute(Mesh::ATTRIBUTE_COLOR, colors)
     .with_inserted_attribute(Mesh::ATTRIBUTE_UV_0, uv)
     .with_inserted_indices(Indices::U32(indices))
+    .with_computed_smooth_normals()
 }
 fn material(
     materials: &mut Assets<StandardMaterial>,
     emission: LinearRgba,
+    texture: Handle<Image>,
 ) -> Handle<StandardMaterial> {
     materials.add(StandardMaterial {
         base_color: Color::WHITE,
         emissive: emission,
+        base_color_texture: Some(texture.clone()),
+        emissive_texture: Some(texture),
         alpha_mode: AlphaMode::Blend,
         cull_mode: None,
-        perceptual_roughness: 0.18,
+        perceptual_roughness: 0.32,
         metallic: 0.05,
         ..default()
     })
@@ -150,20 +157,40 @@ fn setup(
     mut commands: Commands,
     meshes: Option<ResMut<Assets<Mesh>>>,
     materials: Option<ResMut<Assets<StandardMaterial>>>,
+    images: Option<ResMut<Assets<Image>>>,
 ) {
-    let (Some(mut meshes), Some(mut materials)) = (meshes, materials) else {
+    let (Some(mut meshes), Some(mut materials), Some(mut images)) = (meshes, materials, images)
+    else {
         return;
     };
+    let water_texture = images.add(water_surface::flow_texture(false));
+    let foam_texture = images.add(water_surface::flow_texture(true));
     commands.insert_resource(WaveArt {
         wall: meshes.add(surface(0)),
         lip: meshes.add(surface(1)),
         foam: meshes.add(surface(2)),
         wake: meshes.add(surface(3)),
         splash: meshes.add(Cone::new(0.06, 0.65)),
-        water: material(&mut materials, LinearRgba::rgb(0.005, 0.12, 0.30)),
-        glass: material(&mut materials, LinearRgba::rgb(0.015, 0.28, 0.48)),
-        white: material(&mut materials, LinearRgba::rgb(0.18, 0.65, 0.85)),
-        wash: material(&mut materials, LinearRgba::rgb(0.005, 0.15, 0.36)),
+        water: material(
+            &mut materials,
+            LinearRgba::rgb(0.005, 0.12, 0.30),
+            water_texture.clone(),
+        ),
+        glass: material(
+            &mut materials,
+            LinearRgba::rgb(0.015, 0.28, 0.48),
+            water_texture.clone(),
+        ),
+        white: material(
+            &mut materials,
+            LinearRgba::rgb(0.18, 0.65, 0.85),
+            foam_texture,
+        ),
+        wash: material(
+            &mut materials,
+            LinearRgba::rgb(0.005, 0.15, 0.36),
+            water_texture,
+        ),
     });
 }
 #[allow(clippy::too_many_arguments)]
@@ -208,7 +235,8 @@ fn attach(
             .entity(owner)
             .insert(Decorated)
             .with_children(|parent| {
-                let height = 1.0 + f32::from(wave.evolution) * 0.15;
+                let height =
+                    0.78 + f32::from(wave.rank - 1) * 0.12 + f32::from(wave.evolution) * 0.15;
                 let broad = Transform::from_scale(Vec3::new(width, height, 1.0));
                 child(
                     parent,
@@ -293,17 +321,37 @@ fn animate(
     session: Res<GameSession>,
     waves: Query<&TidalWave>,
     mut parts: Query<(&WavePart, &mut Transform)>,
+    art: Option<Res<WaveArt>>,
+    materials: Option<ResMut<Assets<StandardMaterial>>>,
+    time: Option<Res<Time>>,
+    mut flow_age: Local<f32>,
 ) {
     if session.paused || session.finished {
         return;
+    }
+    if let (Some(art), Some(mut materials), Some(time)) = (art, materials, time) {
+        *flow_age = (*flow_age + time.delta_secs()) % 1000.0;
+        for (handle, scale, speed) in [
+            (&art.water, Vec2::new(5.0, 1.5), 0.24),
+            (&art.glass, Vec2::new(5.0, 0.8), 0.42),
+            (&art.white, Vec2::new(9.0, 1.0), 0.58),
+            (&art.wash, Vec2::new(4.0, 3.0), 0.18),
+        ] {
+            if let Some(mut material) = materials.get_mut(handle) {
+                material.uv_transform = bevy::math::Affine2::from_scale_angle_translation(
+                    scale,
+                    0.0,
+                    Vec2::new(0.0, -*flow_age * speed),
+                );
+            }
+        }
     }
     for (part, mut transform) in &mut parts {
         let Ok(wave) = waves.get(part.owner) else {
             continue;
         };
         let age = wave.travelled / 14.0;
-        let envelope =
-            (wave.travelled / 1.2).clamp(0.1, 1.0) * (wave.remaining / 0.16).clamp(0.1, 1.0);
+        let envelope = water_surface::emergence(age) * (wave.remaining / 0.20).clamp(0.0, 1.0);
         *transform = part.base;
         match part.kind {
             PartKind::Wall | PartKind::Lip => transform.scale.y *= envelope,
@@ -338,7 +386,8 @@ mod tests {
         let mut app = App::new();
         app.init_resource::<GameSession>()
             .init_resource::<Assets<Mesh>>()
-            .init_resource::<Assets<StandardMaterial>>();
+            .init_resource::<Assets<StandardMaterial>>()
+            .init_resource::<Assets<Image>>();
         app.world_mut().run_system_once(setup).unwrap();
         let mesh_count = app.world().resource::<Assets<Mesh>>().len();
         let material_count = app.world().resource::<Assets<StandardMaterial>>().len();

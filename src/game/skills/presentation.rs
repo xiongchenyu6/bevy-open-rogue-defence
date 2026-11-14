@@ -2,11 +2,16 @@
 use super::super::bonds::DamageElement;
 use super::infection::Infection;
 use super::*;
+use bevy::mesh::MeshTag;
+
+#[path = "procedural_material.rs"]
+mod procedural_material;
+use procedural_material::SkillMaterial;
 
 #[path = "frost_control_art.rs"]
 mod frost_control_art;
 #[path = "spectacle.rs"]
-mod spectacle;
+pub(super) mod spectacle;
 #[path = "vortex_art.rs"]
 mod vortex_art;
 
@@ -14,6 +19,7 @@ const MAX_PARTICLES: usize = 600;
 const EMIT_INTERVAL: f32 = 0.085;
 
 pub(super) fn install(app: &mut App) {
+    app.add_plugins(MaterialPlugin::<SkillMaterial>::default());
     frost_control_art::install(app);
     app.init_resource::<EmissionClock>()
         .add_systems(Startup, setup)
@@ -21,6 +27,7 @@ pub(super) fn install(app: &mut App) {
             PostUpdate,
             (
                 animate,
+                animate_materials,
                 authored_bodies,
                 finish_vortex_ground,
                 branch_feedback,
@@ -43,13 +50,17 @@ struct Art {
     sphere: Handle<Mesh>,
     bar: Handle<Mesh>,
     ring: Handle<Mesh>,
-    helix: Handle<Mesh>,
     vortex: Handle<Mesh>,
     vortex_material: Handle<StandardMaterial>,
     vortex_ground: Handle<StandardMaterial>,
     blade: Handle<Mesh>,
     crescent: Handle<Mesh>,
     colors: Vec<Handle<StandardMaterial>>,
+    energy: Vec<Handle<SkillMaterial>>,
+    crystal: Handle<Mesh>,
+    fissure: Handle<Mesh>,
+    coil: Handle<Mesh>,
+    lightning: Handle<Mesh>,
 }
 #[derive(Component)]
 struct Particle {
@@ -103,8 +114,9 @@ fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
+    mut energy_materials: ResMut<Assets<SkillMaterial>>,
 ) {
-    let colors = [
+    let colors: Vec<Handle<StandardMaterial>> = [
         (1.0, 0.16, 0.015),
         (0.18, 0.8, 1.0),
         (0.65, 0.45, 1.0),
@@ -129,18 +141,33 @@ fn setup(
         })
     })
     .collect();
+    let energy = colors
+        .iter()
+        .enumerate()
+        .map(|(index, handle)| {
+            let color = materials.get(handle).unwrap().base_color.to_linear();
+            energy_materials.add(SkillMaterial {
+                color,
+                parameters: Vec4::new(index as f32, 0.0, 0.0, 0.0),
+            })
+        })
+        .collect();
     commands.insert_resource(Art {
         shard: meshes.add(crate::game::energy_art::wisp_mesh()),
         sphere: meshes.add(Sphere::new(1.0).mesh().ico(1).unwrap()),
         bar: meshes.add(Cuboid::new(1.0, 1.0, 1.0)),
         ring: meshes.add(crate::game::energy_art::halo_mesh()),
-        helix: meshes.add(spectacle::helix_mesh()),
         vortex: meshes.add(vortex_art::mesh()),
         vortex_material: materials.add(vortex_art::material()),
         vortex_ground: materials.add(vortex_art::ground_material()),
         blade: meshes.add(spectacle::blade_mesh()),
         crescent: meshes.add(spectacle::crescent_mesh()),
         colors,
+        energy,
+        crystal: meshes.add(spectacle::reference_geometry::crystal_mesh()),
+        fissure: meshes.add(spectacle::reference_geometry::fissure_mesh()),
+        coil: meshes.add(spectacle::reference_geometry::coil_mesh()),
+        lightning: meshes.add(spectacle::reference_geometry::lightning_mesh()),
     });
 }
 fn finish_vortex_ground(
@@ -177,19 +204,13 @@ impl Painter<'_, '_, '_> {
             return;
         }
         self.budget -= 1;
-        self.commands.spawn((
+        let mut entity = self.commands.spawn((
             Name::new(self.identity.map_or_else(
                 || "Skill spectacle effect".into(),
                 |index| format!("Skill identity {index}"),
             )),
             Mesh3d(mesh),
-            MeshMaterial3d(
-                if self.identity == Some(15) && matches!(motif, Motif::Water) {
-                    self.art.vortex_material.clone()
-                } else {
-                    self.art.colors[motif.color()].clone()
-                },
-            ),
+            MeshTag(65535),
             Transform::from_translation(position)
                 .with_scale(scale)
                 .with_rotation(rotation),
@@ -202,6 +223,11 @@ impl Painter<'_, '_, '_> {
                 growth,
             },
         ));
+        if self.identity == Some(15) && matches!(motif, Motif::Water) {
+            entity.insert(MeshMaterial3d(self.art.vortex_material.clone()));
+        } else {
+            entity.insert(MeshMaterial3d(self.art.energy[motif.color()].clone()));
+        }
     }
     fn beam(&mut self, motif: Motif, a: Vec3, b: Vec3, width: f32, duration: f32) {
         let direction = b - a;
@@ -391,21 +417,34 @@ fn animate(
     mut commands: Commands,
     time: Res<Time>,
     session: Res<GameSession>,
-    mut particles: Query<(Entity, &mut Particle, &mut Transform)>,
+    mut particles: Query<(Entity, &mut Particle, &mut Transform, &mut MeshTag)>,
 ) {
     if session.paused && !session.finished {
         return;
     }
-    for (entity, mut particle, mut transform) in &mut particles {
+    for (entity, mut particle, mut transform, mut tag) in &mut particles {
         particle.remaining -= time.delta_secs();
         if session.finished || particle.remaining <= 0.0 {
             commands.entity(entity).despawn();
             continue;
         }
         let t = 1.0 - particle.remaining / particle.duration;
+        tag.0 = ((1.0 - t).clamp(0.0, 1.0) * 65535.0) as u32;
         transform.translation += particle.velocity * time.delta_secs();
         transform.rotate_y(particle.spin * time.delta_secs());
         transform.scale = particle.scale * (1.0 + particle.growth * t) * ((1.0 - t) * 3.0).min(1.0);
+    }
+}
+fn animate_materials(
+    time: Res<Time>,
+    session: Res<GameSession>,
+    mut materials: ResMut<Assets<SkillMaterial>>,
+) {
+    if session.paused || session.finished {
+        return;
+    }
+    for (_, material) in materials.iter_mut() {
+        material.parameters.y += time.delta_secs();
     }
 }
 #[allow(clippy::type_complexity)]
@@ -771,7 +810,8 @@ mod tests {
         use bevy::ecs::system::RunSystemOnce;
         let mut app = App::new();
         app.init_resource::<Assets<Mesh>>()
-            .init_resource::<Assets<StandardMaterial>>();
+            .init_resource::<Assets<StandardMaterial>>()
+            .init_resource::<Assets<SkillMaterial>>();
         app.world_mut().run_system_once(setup).unwrap();
         let meshes = app.world().resource::<Assets<Mesh>>().len();
         let materials = app.world().resource::<Assets<StandardMaterial>>().len();
@@ -837,13 +877,17 @@ mod tests {
                 sphere: default(),
                 bar: default(),
                 ring: default(),
-                helix: default(),
                 vortex: default(),
                 vortex_material: default(),
                 vortex_ground: default(),
                 blade: default(),
                 crescent: default(),
                 colors: vec![Handle::default(); 8],
+                energy: vec![Handle::default(); 8],
+                crystal: default(),
+                fissure: default(),
+                coil: default(),
+                lightning: default(),
             })
             .add_systems(
                 Update,

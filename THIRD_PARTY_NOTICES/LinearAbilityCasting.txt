@@ -1,0 +1,37 @@
+MIT License
+
+Copyright (c) 2026 mohamedachrefelouafi
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Source: https://github.com/achrefelouafi/LinearAbiltyCastingThreeJS
+Revision: 97f1de19617e9a2e3af3c8021c8c21c8f58b40f3
+
+Ported and adapted for this Bevy game:
+- src/assets/ProceduralGeometry.js crystal ring and bent-axis geometry
+- src/materials/LightningMaterial.js octave linear-noise bolt filaments
+- src/materials/BeamMaterial.js helical coil geometry and core/sheath treatment
+- src/effects/GroundFissures.js tapered random-walk ground cracks and branches
+- src/shaders/lib/noise.glsl.js procedural noise
+- src/materials/FrostFieldMaterial.js boundary/finger/ridged flow treatment
+- src/abilities/GlacierAbility.js springy emergence
+
+The Rust/WGSL implementations use shared bounded game resources and authoritative
+skill positions, ranges and timers. No third-party character or HDR assets from
+the reference repository are included.

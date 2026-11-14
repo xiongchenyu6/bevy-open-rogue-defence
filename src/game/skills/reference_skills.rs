@@ -1,4 +1,5 @@
 //! Public-reference skill identities with explicitly adapted, bounded combat rules.
+use super::presentation::spectacle::reference_geometry;
 use super::*;
 
 const RAY: usize = 30;
@@ -6,10 +7,12 @@ const MINE: usize = 31;
 const MAX_MINES: usize = 6;
 
 pub(super) fn install(app: &mut App) {
-    app.add_systems(Startup, setup_art).add_systems(
-        Update,
-        (cast, tick, falling_ice).chain().after(cast_learned_skills),
-    );
+    app.add_systems(Startup, setup_art)
+        .add_systems(
+            Update,
+            (cast, tick, falling_ice).chain().after(cast_learned_skills),
+        )
+        .add_systems(PostUpdate, animate_art.before(TransformSystems::Propagate));
 }
 
 #[derive(Resource)]
@@ -17,6 +20,11 @@ struct Art {
     beam: Handle<Mesh>,
     mine: Handle<Mesh>,
     ice: Handle<Mesh>,
+    coil: Handle<Mesh>,
+    ring: Handle<Mesh>,
+    fin: Handle<Mesh>,
+    core: Handle<StandardMaterial>,
+    gold: Handle<StandardMaterial>,
     fire: Handle<StandardMaterial>,
     metal: Handle<StandardMaterial>,
     frost: Handle<StandardMaterial>,
@@ -32,10 +40,29 @@ fn setup_art(
     commands.insert_resource(Art {
         beam: meshes.add(Cylinder::new(1.0, 1.0)),
         mine: meshes.add(Cylinder::new(0.42, 0.20)),
-        ice: meshes.add(Cone::new(0.34, 1.9)),
+        ice: meshes.add(reference_geometry::crystal_mesh()),
+        coil: meshes.add(reference_geometry::coil_mesh()),
+        ring: meshes.add(Torus::new(0.82, 1.0)),
+        fin: meshes.add(Cuboid::new(0.30, 0.10, 0.12)),
+        core: materials.add(StandardMaterial {
+            base_color: Color::srgb(1.0, 0.96, 0.76),
+            emissive: LinearRgba::rgb(8.0, 7.2, 4.2),
+            unlit: true,
+            ..default()
+        }),
+        gold: materials.add(StandardMaterial {
+            base_color: Color::srgba(1.0, 0.64, 0.12, 0.7),
+            emissive: LinearRgba::rgb(4.0, 1.8, 0.08),
+            alpha_mode: AlphaMode::Add,
+            unlit: true,
+            cull_mode: None,
+            ..default()
+        }),
         fire: materials.add(StandardMaterial {
             base_color: Color::srgb(1.0, 0.35, 0.04),
-            emissive: LinearRgba::rgb(10.0, 2.0, 0.1),
+            emissive: LinearRgba::rgb(3.0, 0.5, 0.03),
+            alpha_mode: AlphaMode::Add,
+            unlit: true,
             ..default()
         }),
         metal: materials.add(StandardMaterial {
@@ -72,6 +99,75 @@ struct Ice {
     remaining: f32,
     destination: Vec3,
     damage: f32,
+}
+
+#[derive(Clone, Copy)]
+enum BeamLayer {
+    Core,
+    Shell,
+    Coil(f32),
+    Disc(u8),
+}
+#[derive(Component)]
+struct BeamArt {
+    owner: Entity,
+    kind: BeamLayer,
+}
+#[derive(Component)]
+struct MineLight(Entity);
+
+// BeamAbility's layered core/sheath, phase-separated coil and travelling rings.
+// Only visual children contract on release; the authoritative ray is untouched.
+fn animate_art(
+    session: Res<GameSession>,
+    rays: Query<&Ray>,
+    mines: Query<&Mine>,
+    mut beams: Query<(&BeamArt, &mut Transform), Without<MineLight>>,
+    mut lights: Query<(&MineLight, &mut Transform), Without<BeamArt>>,
+) {
+    if session.paused || session.finished {
+        return;
+    }
+    for (part, mut transform) in &mut beams {
+        let Ok(ray) = rays.get(part.owner) else {
+            continue;
+        };
+        let age = 2.0 - ray.remaining;
+        let fade = (ray.remaining / 0.22).clamp(0.0, 1.0);
+        // Damage starts immediately, so even the first frame shows a thin core.
+        let rise = 0.25 + 0.75 * (age / 0.10).clamp(0.0, 1.0);
+        let width = rise * fade;
+        *transform = Transform::default();
+        match part.kind {
+            BeamLayer::Core => {
+                transform.scale = Vec3::new(0.24 * width, 1.0, 0.24 * width);
+            }
+            BeamLayer::Shell => {
+                let pulse = 0.70 + 0.08 * (age * 28.0).sin();
+                transform.scale = Vec3::new(pulse * width, 1.0, pulse * width);
+            }
+            BeamLayer::Coil(phase) => {
+                transform.translation.y = -0.5;
+                transform.rotation = Quat::from_rotation_y(age * 9.0 + phase);
+                transform.scale = Vec3::new(2.0 * width, 1.0, 2.0 * width);
+            }
+            BeamLayer::Disc(index) => {
+                let travel = (age * 1.5 + f32::from(index) * 0.25).fract();
+                transform.translation.y = travel - 0.5;
+                let radius = width * (0.6 + travel * 0.55);
+                transform.scale = Vec3::new(radius, 0.009, radius);
+            }
+        }
+    }
+    for (light, mut transform) in &mut lights {
+        let Ok(mine) = mines.get(light.0) else {
+            continue;
+        };
+        let armed = if mine.armed > 0.0 { 0.45 } else { 1.0 };
+        let pulse = 0.82 + 0.18 * (mine.remaining * 9.0).sin();
+        transform.scale = Vec3::splat(0.24 * armed * pulse);
+        transform.rotation = Quat::from_rotation_y(mine.remaining * 1.5);
+    }
 }
 
 fn beam_transform(origin: Vec3, end: Vec3, width: f32) -> Transform {
@@ -151,7 +247,39 @@ fn cast(
                 super::super::skill_lighting::GroundBeam,
             ));
             if let Some(art) = &art {
-                entity.insert((Mesh3d(art.beam.clone()), MeshMaterial3d(art.fire.clone())));
+                let owner = entity.id();
+                entity
+                    .insert(Visibility::default())
+                    .with_children(|parent| {
+                        for (kind, mesh, material) in [
+                            (BeamLayer::Core, art.beam.clone(), art.core.clone()),
+                            (BeamLayer::Shell, art.beam.clone(), art.fire.clone()),
+                            (BeamLayer::Coil(0.0), art.coil.clone(), art.gold.clone()),
+                            (BeamLayer::Coil(1.7), art.coil.clone(), art.fire.clone()),
+                        ] {
+                            parent.spawn((
+                                Name::new("Flame ray layered stream"),
+                                bevy::light::NotShadowCaster,
+                                Mesh3d(mesh),
+                                MeshMaterial3d(material),
+                                Transform::default(),
+                                BeamArt { owner, kind },
+                            ));
+                        }
+                        for index in 0..4 {
+                            parent.spawn((
+                                Name::new("Flame ray travelling pressure disc"),
+                                bevy::light::NotShadowCaster,
+                                Mesh3d(art.ring.clone()),
+                                MeshMaterial3d(art.gold.clone()),
+                                Transform::default(),
+                                BeamArt {
+                                    owner,
+                                    kind: BeamLayer::Disc(index),
+                                },
+                            ));
+                        }
+                    });
             }
         } else {
             // Place in the approach lane; enemies must actually enter the trigger radius.
@@ -169,7 +297,28 @@ fn cast(
                     .with_scale(Vec3::splat(rank_size(rank))),
             ));
             if let Some(art) = &art {
-                entity.insert((Mesh3d(art.mine.clone()), MeshMaterial3d(art.metal.clone())));
+                let owner = entity.id();
+                entity
+                    .insert((Mesh3d(art.mine.clone()), MeshMaterial3d(art.metal.clone())))
+                    .with_children(|parent| {
+                        for index in 0..6 {
+                            let angle = index as f32 * std::f32::consts::TAU / 6.0;
+                            parent.spawn((
+                                Name::new("Mine pressure tooth"),
+                                Mesh3d(art.fin.clone()),
+                                MeshMaterial3d(art.metal.clone()),
+                                Transform::from_xyz(angle.cos() * 0.35, 0.12, angle.sin() * 0.35)
+                                    .with_rotation(Quat::from_rotation_y(-angle)),
+                            ));
+                        }
+                        parent.spawn((
+                            Name::new("Mine armed fuse"),
+                            Mesh3d(art.ice.clone()),
+                            MeshMaterial3d(art.gold.clone()),
+                            Transform::from_xyz(0.0, 0.12, 0.0).with_scale(Vec3::splat(0.24)),
+                            MineLight(owner),
+                        ));
+                    });
             }
         }
         if let Some(assets) = &assets {
@@ -351,7 +500,8 @@ fn falling_ice(
                     damage: zone.damage_per_pulse * 0.2,
                 },
                 Transform::from_translation(destination + Vec3::Y * (0.5 + delay * 9.0))
-                    .with_rotation(Quat::from_rotation_z(std::f32::consts::PI)),
+                    .with_rotation(Quat::from_rotation_z(std::f32::consts::PI))
+                    .with_scale(Vec3::new(0.68, 1.9, 0.68)),
             ));
             if let Some(art) = &art {
                 entity.insert((Mesh3d(art.ice.clone()), MeshMaterial3d(art.frost.clone())));
