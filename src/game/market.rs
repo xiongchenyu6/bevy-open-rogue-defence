@@ -6,6 +6,8 @@ use super::mobile_layout::hud_metrics;
 use super::rarity::rarity_color;
 use super::{Autoplay, GameLanguage, GameSession, HeroVitals, PlayerBuild, RunRng};
 
+#[path = "market/comparison.rs"]
+mod comparison;
 #[path = "market/presentation.rs"]
 mod presentation;
 
@@ -633,7 +635,7 @@ fn market_level(bosses_defeated: u8) -> u8 {
         .clamp(1, MARKET_LEVEL_COUNT)
 }
 
-#[derive(Resource)]
+#[derive(Resource, Clone)]
 pub(crate) struct MarketEffects {
     owned_equipment: u32,
     consumed_equipment: u32,

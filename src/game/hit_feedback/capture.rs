@@ -19,6 +19,7 @@ struct Probe {
     max_hit_elapsed: f32,
     authored_samples: u32,
     volley: bool,
+    aftermath: bool,
 }
 
 /// Debug/native capture only; no shipped gameplay entry point.
@@ -96,6 +97,7 @@ pub fn install(app: &mut bevy::app::SubApp, speed: f32) {
         max_hit_elapsed: 0.0,
         authored_samples: 0,
         volley: std::env::var_os("ROGUE_CAPTURE_SHAKE_VOLLEY").is_some(),
+        aftermath: std::env::var_os("ROGUE_CAPTURE_DEATH_AFTERMATH").is_some(),
     });
     app.add_systems(
         Update,
@@ -113,7 +115,8 @@ fn feed(world: &mut World) {
     }
     world.resource_mut::<Probe>().frame += 1;
     let p = world.resource::<Probe>();
-    let (frame, target, authored_hits, volley) = (p.frame, p.target, p.authored_hits, p.volley);
+    let (frame, target, authored_hits, volley, aftermath) =
+        (p.frame, p.target, p.authored_hits, p.volley, p.aftermath);
     if authored_hits && (10..=45).contains(&frame) {
         world.get_mut::<Enemy>(target).unwrap().hp -= 1.0;
     }
@@ -128,6 +131,7 @@ fn feed(world: &mut World) {
         (critical, true, false, HitWeight::Normal),
         (ordinary, false, false, HitWeight::Normal),
         (heavy_kill, false, true, HitWeight::Elite),
+        (aftermath && frame == 70, false, true, HitWeight::Normal),
     ] {
         if active {
             for _ in 0..if volley && is_critical { 100 } else { 1 } {
@@ -212,6 +216,22 @@ fn observe_authored_hit(world: &mut World) {
 fn observe(world: &mut World) {
     if world.resource::<GameSession>().paused {
         return;
+    }
+    let p = world.resource::<Probe>();
+    if p.aftermath && matches!(p.frame, 71 | 88 | 151) {
+        let frame = p.frame;
+        let debris = world
+            .query::<&super::aftermath::Debris>()
+            .iter(world)
+            .count();
+        if frame == 71 {
+            assert_eq!(debris, 4, "ordinary kill presents four quiet debris pieces");
+        } else if frame == 88 {
+            assert_eq!(debris, 0, "ordinary death debris dissipates");
+        } else {
+            assert_eq!(debris, 8, "elite kill has heavier debris");
+        }
+        println!("[capture] PASS synthetic death aftermath frame={frame} debris={debris}");
     }
     let p = world.resource::<Probe>();
     let (frame, target, base, previous_elapsed) = (p.frame, p.target, p.base, p.last_elapsed);

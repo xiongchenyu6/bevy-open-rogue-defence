@@ -147,6 +147,21 @@ def gate_hit():
     return soft_clip(mix((knock, 1.0), (timber, 0.45), (grit, 0.5), (click, 0.4)), 2.0)
 
 
+def raid_steps():
+    # An approaching pack: staggered stone footfalls swell before the entrance opens.
+    out = [0.0] * int(RATE * 1.65)
+    for index, onset in enumerate((0.0, 0.25, 0.47, 0.70, 0.88, 1.07, 1.22, 1.36)):
+        body = sweep(0.24, 100 + index * 4, 45, 22, 16)
+        grit = envelope(one_pole_lowpass(noise(0.21, 80 + index), 2100), 0.002, 26)
+        step = mix((body, 0.75), (grit, 0.6))
+        start = int(onset * RATE)
+        gain = 0.30 + index * 0.085
+        for n, value in enumerate(step):
+            if start + n < len(out):
+                out[start + n] += value * gain
+    return soft_clip(out, 1.5)
+
+
 if __name__ == "__main__":
     AUDIO_DIR.mkdir(parents=True, exist_ok=True)
     write("hit_physical.wav", hit_physical())
@@ -156,3 +171,4 @@ if __name__ == "__main__":
     write("kill_heavy.wav", kill_heavy())
     write("hero_hurt.wav", hero_hurt())
     write("gate_hit.wav", gate_hit())
+    write("raid_steps.wav", raid_steps(), peak_level=0.78)

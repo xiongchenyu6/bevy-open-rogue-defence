@@ -75,6 +75,9 @@ mod pooling;
 mod progression;
 mod rarity;
 mod resources;
+mod reward_feedback;
+#[cfg(any(debug_assertions, feature = "dev-tools"))]
+pub use reward_feedback::capture_targets as capture_reward_targets;
 mod run_reset;
 mod selection_detail;
 pub use selection_detail::SelectionDetail;
@@ -87,6 +90,7 @@ mod skills;
 pub(crate) mod summon_movement;
 mod trial;
 mod ui;
+mod ui_response;
 mod ultimate_vfx;
 pub mod ur_evolution;
 mod waves;
@@ -97,7 +101,7 @@ mod tests;
 pub use archive::{ArchiveOutcome, ArchiveState};
 pub use arena::BattleCamera;
 pub use audio_mix::{AudioChannel, AudioPreferences, AudioSaveStatus, AudioVoice};
-pub use bosses::{BossDangerShape, BossPhaseCue, BossTelegraph};
+pub use bosses::{BossAction, BossActionStage, BossDangerShape, BossPhaseCue, BossTelegraph};
 pub use campaign::{CHAPTER_COUNT, CampaignRun, RunRequest, chapter};
 pub use campaign_progress::{
     CampaignProgress, CampaignReward, MAX_UPGRADE_LEVEL, RunReward, UPGRADE_PER_LEVEL,
@@ -175,6 +179,8 @@ impl Plugin for GamePlugin {
             .add_plugins(cultivation::CultivationPlugin)
             .add_plugins(hero_fusion::HeroFusionPlugin)
             .add_plugins(hit_feedback::HitFeedbackPlugin)
+            .add_plugins(reward_feedback::RewardFeedbackPlugin)
+            .add_plugins(ui_response::UiResponsePlugin)
             .add_plugins(gate_feedback::GateFeedbackPlugin)
             .add_plugins(gate_cutaway::GateCutawayPlugin)
             .add_plugins((

@@ -1054,6 +1054,7 @@ fn move_enemies(
         Option<Res<EnemyPressureSettings>>,
         Option<Res<super::hero_fusion::HeroFusion>>,
         Res<SkillRuntime>,
+        Option<Res<super::bosses::BossRuntime>>,
     ),
     mut commands: Commands,
     mut attack_cues: MessageWriter<EnemyAttackCue>,
@@ -1066,7 +1067,10 @@ fn move_enemies(
     mut rng: ResMut<RunRng>,
     mut dodge: ResMut<DodgeState>,
     mut intent: ResMut<MoveIntent>,
-    adventure_bosses: Query<(), With<super::encounter_bosses::EncounterBoss>>,
+    adventure_bosses: Query<
+        Option<&super::bosses::BossAction>,
+        With<super::encounter_bosses::EncounterBoss>,
+    >,
     core_query: Query<&Transform, (With<Core>, Without<Enemy>)>,
     mut hero_query: Query<
         (&mut Transform, &mut Visibility),
@@ -1095,7 +1099,7 @@ fn move_enemies(
         >,
     )>,
 ) {
-    let (pressure_settings, fusion, controls) = pressure_and_fusion;
+    let (pressure_settings, fusion, controls, boss_runtime) = pressure_and_fusion;
     let HeroDamageGuards {
         mut market_effects,
         mut bond_runtime,
@@ -1169,6 +1173,19 @@ fn move_enemies(
             continue;
         };
         if affix.is_some_and(|affix| affix.is_volatile_pending()) {
+            continue;
+        }
+        // A committed boss windup and its short recovery cannot simultaneously
+        // move or deal ordinary contact attacks. Ability damage remains owned
+        // by the existing boss system and keeps its original coefficients.
+        if (boss.is_some()
+            && boss_runtime
+                .as_ref()
+                .is_some_and(|runtime| runtime.action_locked(entity)))
+            || adventure_bosses
+                .get(entity)
+                .is_ok_and(|action| action.is_some())
+        {
             continue;
         }
         let delta = controls.action_delta(entity, delta);
@@ -2534,6 +2551,7 @@ fn settle_enemy_defeat(
     archive_echo: Option<&ArchiveEcho>,
 ) {
     pools.retire_enemy(commands, enemy_entity);
+    let reward_before = (session.gold, session.xp);
     if archive_echo.is_some() {
         pools.retire_all_projectiles(commands);
         pools.retire_all_effects(commands);
@@ -2585,6 +2603,16 @@ fn settle_enemy_defeat(
         session.gold += enemy.gold;
         session.kills += encounters.kill_credit(enemy.kill_credit);
         session.total_kills += 1;
+    }
+    let gold = session.gold.saturating_sub(reward_before.0);
+    let xp = session.xp.saturating_sub(reward_before.1);
+    if gold > 0 || xp > 0 {
+        commands.spawn(super::reward_feedback::RewardReceipt {
+            position,
+            gold,
+            xp,
+            important: boss_enemy.is_some() || trial_enemy.is_some(),
+        });
     }
     if trial_enemy.is_none() && boss_enemy.is_none() && archetype.is_some_and(|kind| kind.0 == 9) {
         enqueue_or_spawn_splitlings(commands, pools, assets, position, 3);

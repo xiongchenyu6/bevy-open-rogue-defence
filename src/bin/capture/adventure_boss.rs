@@ -8,9 +8,9 @@ use bevy::{
 use rogue_commander::game::{
     ADVENTURE_BOSSES, ADVENTURE_LANDING_SITES, ADVENTURE_OFFER_TIMES, ActiveSkill,
     AdventureBossChoice, AdventureBossState, AdventureDanger, AdventureImpactCue,
-    AdventureSkillClock, AttackClock, Autoplay, BasicRelics, BossEnemy, CampArrival,
-    EncounterGuard, Enemy, GameAssets, GameSession, Hero, HeroVitals, PlayerBuild,
-    RecruitmentProgress, RelicCast, SelectedHero, SpawnDirector,
+    AdventureSkillClock, AttackClock, Autoplay, BasicRelics, BossAction, BossActionStage,
+    BossEnemy, CampArrival, EncounterGuard, Enemy, EnemyAttackCue, GameAssets, GameSession, Hero,
+    HeroVitals, PlayerBuild, RecruitmentProgress, RelicCast, SelectedHero, SpawnDirector,
 };
 
 #[derive(Component)]
@@ -58,6 +58,9 @@ struct Probe {
     relic_damage: bool,
     relic_frozen: bool,
     relic_hp: Vec<(Entity, f32)>,
+    previous_action: Option<(BossActionStage, Vec3)>,
+    windup_seen: bool,
+    quiet_recovery_frames: u32,
 }
 
 pub fn configure(world: &mut World, scenario: &str) {
@@ -99,6 +102,9 @@ pub fn configure(world: &mut World, scenario: &str) {
         relic_damage: false,
         relic_frozen: false,
         relic_hp: vec![],
+        previous_action: None,
+        windup_seen: false,
+        quiet_recovery_frames: 0,
     });
 }
 
@@ -148,7 +154,7 @@ pub fn install(app: &mut bevy::app::SubApp) {
         world.resource_mut::<Probe>().main_boss = Some(main);
     }
     app.add_systems(PreUpdate, exercise.after(bevy::ui::UiSystems::Focus));
-    app.add_systems(Last, (record_impacts, observe).chain());
+    app.add_systems(Last, (record_impacts, verify_action, observe).chain());
     app.init_resource::<Pointer>()
         .add_systems(First, pointer_input);
 }
@@ -783,6 +789,8 @@ fn observe(world: &mut World) {
             small
                 || (loss && p.reset_at.is_some())
                 || (!loss
+                    && p.windup_seen
+                    && p.quiet_recovery_frames >= 5
                     && p.hit
                     && p.phase
                     && p.secondary
@@ -797,5 +805,53 @@ fn observe(world: &mut World) {
             "[capture] PASS {}: real choice/combat/reward/cleanup across 1000 frames",
             p.scenario
         );
+    }
+}
+
+// Read the actual committed action after combat: entry may include the special
+// strike, but subsequent windup/recovery frames must be motionless and silent.
+fn verify_action(
+    session: Res<GameSession>,
+    time: Res<Time>,
+    actions: Query<(&BossAction, &Transform)>,
+    mut cues: MessageReader<EnemyAttackCue>,
+    mut probe: ResMut<Probe>,
+) {
+    let Some(boss) = probe.boss else {
+        cues.clear();
+        return;
+    };
+    let own_cues = cues.read().filter(|cue| cue.source == boss).count();
+    if session.paused {
+        return;
+    }
+    let Ok((action, transform)) = actions.get(boss) else {
+        probe.previous_action = None;
+        return;
+    };
+    if let Some((previous_stage, position)) = probe.previous_action {
+        if previous_stage == action.stage {
+            assert!(
+                position.distance(transform.translation) < 0.001,
+                "optional boss must stop moving during its committed action"
+            );
+        }
+    }
+    probe.previous_action = Some((action.stage, transform.translation));
+    if action.stage == BossActionStage::Windup && !probe.windup_seen {
+        probe.windup_seen = true;
+        stage("committed-windup", probe.frame);
+    }
+    if action.remaining < action.duration - time.delta_secs() * 0.5 {
+        assert_eq!(
+            own_cues, 0,
+            "optional boss must stop ordinary attacks during committed action"
+        );
+        if action.stage == BossActionStage::Recovery {
+            probe.quiet_recovery_frames += 1;
+            if probe.quiet_recovery_frames == 1 {
+                stage("counterattack-window", probe.frame);
+            }
+        }
     }
 }

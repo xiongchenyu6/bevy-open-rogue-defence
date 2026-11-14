@@ -87,11 +87,12 @@ pub(super) fn panel(
                         width: percent(100), flex_shrink: 0.0, align_items: AlignItems::Center,
                         column_gap: px(if compact { 8.0 } else { 14.0 }), ..default()
                     }).with_children(|showcase| {
-                        showcase.spawn(Node {
+                        showcase.spawn((forge_feedback::ForgeShowcase { size: preview_box },
+                            Name::new("Equipment forge showcase"), Node {
                             width: px(preview_box.x), height: px(preview_box.y), flex_shrink: 0.0,
                             align_items: AlignItems::Center, justify_content: JustifyContent::Center,
-                            ..default()
-                        }).with_children(|preview| {
+                            overflow: Overflow::clip(), ..default()
+                        })).with_children(|preview| {
                             if empty {
                                 preview.spawn((
                                     EmptyArmory, Name::new("Equipment empty armory"),

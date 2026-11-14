@@ -25,6 +25,7 @@ impl Plugin for BossesPlugin {
                     register_bosses,
                     remove_defeated_bosses,
                     run_boss_mechanics,
+                    sync_action_state,
                     dangers::tick_dangers,
                 )
                     .chain()
@@ -80,6 +81,68 @@ impl BossRuntime {
     pub(crate) fn is_enraged(&self, boss: Entity) -> bool {
         self.states.get(&boss).is_some_and(|state| state.enraged)
     }
+
+    pub(crate) fn action_locked(&self, boss: Entity) -> bool {
+        self.states
+            .get(&boss)
+            .is_some_and(|state| state.pending.is_some() || state.recovery_remaining > 0.0)
+    }
+}
+
+/// Presentation reads this snapshot of the real ability state; it owns no timer.
+#[derive(Component, Debug, Clone, Copy)]
+pub struct BossAction {
+    pub stage: BossActionStage,
+    pub remaining: f32,
+    pub duration: f32,
+    pub target: Vec3,
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum BossActionStage {
+    Windup,
+    Recovery,
+}
+fn recovery_seconds(index: usize) -> f32 {
+    [0.85, 0.65, 0.70, 0.95, 0.80][index.min(4)]
+}
+
+fn sync_action_state(
+    mut commands: Commands,
+    runtime: Res<BossRuntime>,
+    bosses: Query<Entity, With<BossEnemy>>,
+    existing: Query<
+        Entity,
+        (
+            With<BossAction>,
+            Without<super::encounter_bosses::EncounterBoss>,
+        ),
+    >,
+) {
+    for entity in &existing {
+        if !runtime.action_locked(entity) || !bosses.contains(entity) {
+            commands.entity(entity).remove::<BossAction>();
+        }
+    }
+    for entity in &bosses {
+        let Some(state) = runtime.states.get(&entity) else {
+            continue;
+        };
+        if let Some(pending) = state.pending {
+            commands.entity(entity).insert(BossAction {
+                stage: BossActionStage::Windup,
+                remaining: pending.remaining_secs.max(0.0),
+                duration: BOSS_PROFILES[usize::from(state.index)].warning_secs,
+                target: pending.target,
+            });
+        } else if state.recovery_remaining > 0.0 {
+            commands.entity(entity).insert(BossAction {
+                stage: BossActionStage::Recovery,
+                remaining: state.recovery_remaining,
+                duration: recovery_seconds(usize::from(state.index)),
+                target: state.recovery_target,
+            });
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -88,6 +151,8 @@ struct BossState {
     age_secs: f32,
     casts_started: u32,
     pending: Option<PendingAbility>,
+    recovery_remaining: f32,
+    recovery_target: Vec3,
     base_speed: f32,
     base_damage: f32,
     action_speed_multiplier: f32,
@@ -149,6 +214,8 @@ pub(crate) fn register_bosses(
                 age_secs: 0.0,
                 casts_started: 0,
                 pending: None,
+                recovery_remaining: 0.0,
+                recovery_target: Vec3::ZERO,
                 base_speed: enemy.speed,
                 base_damage: enemy.damage,
                 action_speed_multiplier: modifiers.attack_speed_multiplier,
@@ -245,6 +312,14 @@ fn run_boss_mechanics(
             .count();
         let profile = BOSS_PROFILES[index];
         state.age_secs += delta;
+        // Recovery consumes time inside the existing ability cycle. It never
+        // adds a new cooldown or advances damage/ordinary attacks in parallel.
+        if state.recovery_remaining > 0.0 {
+            state.recovery_remaining = (state.recovery_remaining - delta).max(0.0);
+            if state.recovery_remaining > 0.0 {
+                continue;
+            }
+        }
 
         if index == 4 {
             let desired_stacks = green_regent_enrage_stacks(state.age_secs);
@@ -285,6 +360,8 @@ fn run_boss_mechanics(
                     state.pending = Some(pending);
                 }
             } else {
+                state.recovery_remaining = recovery_seconds(index);
+                state.recovery_target = pending.target;
                 cues.write(EnemyAttackCue {
                     source: *entity,
                     origin: transform.translation,
@@ -641,6 +718,13 @@ pub(crate) fn reset_run(world: &mut World) {
     for entity in dangers {
         world.despawn(entity);
     }
+    let actions: Vec<_> = world
+        .query_filtered::<Entity, With<BossAction>>()
+        .iter(world)
+        .collect();
+    for entity in actions {
+        world.entity_mut(entity).remove::<BossAction>();
+    }
     world.insert_resource(BossRuntime::default());
 }
 
@@ -753,6 +837,94 @@ mod tests {
     }
 
     #[test]
+    fn real_ability_enters_recovery_and_keeps_the_original_cycle_clock() {
+        let mut app = App::new();
+        app.init_resource::<Time>()
+            .init_resource::<GameSession>()
+            .init_resource::<super::super::skills::SkillRuntime>()
+            .init_resource::<BossRuntime>()
+            .init_resource::<CombatPools>()
+            .insert_resource(test_game_assets())
+            .add_message::<EnemyAttackCue>()
+            .add_message::<BossPhaseCue>()
+            .add_systems(
+                Update,
+                (register_bosses, run_boss_mechanics, sync_action_state).chain(),
+            );
+        let boss = app
+            .world_mut()
+            .spawn((
+                BossEnemy { index: 0 },
+                Transform::default(),
+                Enemy {
+                    hp: 100.0,
+                    max_hp: 100.0,
+                    speed: 1.0,
+                    damage: 10.0,
+                    xp: 0,
+                    wood: 0,
+                    gold: 0,
+                    kill_credit: 0,
+                    elite: false,
+                },
+            ))
+            .id();
+        app.update();
+        let mut windup = false;
+        let mut recovery = false;
+        let mut committed_target = None;
+        for _ in 0..45 {
+            app.world_mut()
+                .resource_mut::<Time>()
+                .advance_by(std::time::Duration::from_millis(100));
+            app.update();
+            if let Some(action) = app.world().get::<BossAction>(boss) {
+                windup |= action.stage == BossActionStage::Windup;
+                recovery |= action.stage == BossActionStage::Recovery;
+                if action.stage == BossActionStage::Windup {
+                    committed_target = Some(action.target);
+                } else {
+                    assert_eq!(
+                        Some(action.target),
+                        committed_target,
+                        "recovery must keep the committed target, not the actor root facing"
+                    );
+                }
+                assert!(app.world().resource::<BossRuntime>().action_locked(boss));
+            }
+        }
+        assert!(windup && recovery);
+        let remaining = app.world().get::<BossAction>(boss).unwrap().remaining;
+        let age = app.world().resource::<BossRuntime>().states[&boss].age_secs;
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        app.update();
+        assert_eq!(
+            app.world().get::<BossAction>(boss).unwrap().remaining,
+            remaining
+        );
+        assert_eq!(
+            app.world().resource::<BossRuntime>().states[&boss].age_secs,
+            age
+        );
+        app.world_mut().resource_mut::<GameSession>().paused = false;
+        for _ in 0..65 {
+            app.update();
+        }
+        let state = &app.world().resource::<BossRuntime>().states[&boss];
+        assert!(
+            (state.age_secs - 11.0).abs() < 0.001,
+            "recovery is inside the original clock"
+        );
+        // Floating-point boundary may defer exactly 11.0 by one tick.
+        app.update();
+        assert_eq!(
+            app.world().resource::<BossRuntime>().states[&boss].casts_started,
+            2
+        );
+        assert_eq!(app.world().get::<Enemy>(boss).unwrap().damage, 10.0);
+    }
+
+    #[test]
     fn boss_pressure_wave_is_all_or_none_at_the_global_boundary() {
         let assets = test_game_assets();
         let mut world = World::new();
@@ -796,6 +968,8 @@ mod tests {
                 age_secs: 0.0,
                 casts_started: 0,
                 pending: None,
+                recovery_remaining: 0.0,
+                recovery_target: Vec3::ZERO,
                 base_speed: 1.0,
                 base_damage: 10.0,
                 action_speed_multiplier: 1.0,

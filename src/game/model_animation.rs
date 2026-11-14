@@ -211,6 +211,7 @@ fn animate_cast(
         Option<&AncestorColossus>,
     )>,
     previews: Query<(), With<super::environment::CampPreview>>,
+    boss_actions: Query<&super::bosses::BossAction>,
     mut players: Query<(&mut AnimationPlayer, &mut CastPlayer)>,
 ) {
     let targets: Vec<Vec3> = actors
@@ -274,6 +275,38 @@ fn animate_cast(
                 .or_else(|| wyrm.map(|value| value.attack_remaining))
                 .or_else(|| colossus.map(|value| value.slam_remaining))
         });
+        if let Ok(action) = boss_actions.get(state.actor) {
+            let duration = state
+                .source_clips
+                .get(Pose::Attack as usize)
+                .and_then(|handle| clips.get(handle))
+                .map_or(ATTACK_SECONDS, AnimationClip::duration);
+            let progress = (1.0 - action.remaining / action.duration.max(0.001)).clamp(0.0, 1.0);
+            let clip_progress = match action.stage {
+                super::bosses::BossActionStage::Windup => 0.28 * progress,
+                super::bosses::BossActionStage::Recovery => {
+                    0.28 + 0.72 * (progress / 0.55).min(1.0)
+                }
+            };
+            if state.pose != Some(Pose::Attack) {
+                player.stop_all();
+            }
+            player
+                .play(state.clips[Pose::Attack as usize])
+                .set_seek_time(duration * clip_progress)
+                .pause();
+            let direction = (action.target - position).with_y(0.0);
+            if direction.length_squared() > 0.000_001 {
+                transform.look_to(direction, Vec3::Y);
+            }
+            state.pose = Some(Pose::Attack);
+            state.reaction_remaining = 0.0;
+            state.enemy_attack_pending = false;
+            state.previous_position = Some(position);
+            state.previous_health = health;
+            state.previous_cooldown = cooldown;
+            continue;
+        }
         let attacked = if hero.is_some() {
             vitals.can_act()
                 && volleys

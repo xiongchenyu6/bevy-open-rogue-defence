@@ -10,6 +10,8 @@ use super::combat::{CombatSet, SurvivalSet};
 use super::hit_feedback::HitFeedbackSet;
 use super::{Autoplay, GameSession};
 
+mod transition;
+
 /// Damage since the last shudder that triggers a new one, as a max-HP fraction.
 const IMPULSE_DAMAGE_FRACTION: f32 = 0.004;
 const MIN_IMPULSE_SECONDS: f32 = 0.16;
@@ -29,10 +31,12 @@ impl Plugin for GateFeedbackPlugin {
             Update,
             (
                 attach_damage_art,
+                transition::gate_transition,
                 detect_gate_damage,
                 shudder_gate,
                 show_damage_stages,
                 animate_debris,
+                transition::animate_dust,
             )
                 .chain()
                 .after(CombatSet)
@@ -54,6 +58,8 @@ pub(crate) struct GateImpact {
     shudder: f32,
     shudder_clock: f32,
     variation: u32,
+    previous_down: Option<bool>,
+    rebuild_remaining: f32,
     /// Set for one frame when a shudder starts; audio and camera read it.
     struck: Option<f32>,
 }
@@ -91,6 +97,8 @@ struct GateDebris {
 struct GateDebrisArt {
     chip: Handle<Mesh>,
     stone: Handle<StandardMaterial>,
+    dust: Handle<Mesh>,
+    dust_fades: [Handle<StandardMaterial>; 8],
 }
 
 pub(crate) fn damage_stage(hp: f32, max_hp: f32) -> u8 {
@@ -133,6 +141,15 @@ fn attach_damage_art(
     commands.insert_resource(GateDebrisArt {
         chip: sliver.clone(),
         stone: rubble.clone(),
+        dust: meshes.add(Sphere::new(1.0).mesh().ico(2).unwrap()),
+        dust_fades: std::array::from_fn(|index| {
+            materials.add(StandardMaterial {
+                base_color: Color::srgba(0.38, 0.34, 0.28, 0.24 * (1.0 - index as f32 / 8.0)),
+                alpha_mode: AlphaMode::Blend,
+                perceptual_roughness: 1.0,
+                ..default()
+            })
+        }),
     });
     commands.entity(gate).insert(GateDamageArtAttached);
     commands.entity(gate).with_children(|parent| {
@@ -282,10 +299,15 @@ fn detect_gate_damage(
 /// Struck walls rock back away from the invaders, then ring down.
 fn shudder_gate(
     time: Res<Time<Real>>,
+    session: Res<GameSession>,
     mut impact: ResMut<GateImpact>,
     mut gates: Query<&mut Transform, With<GateArt>>,
 ) {
-    let delta = time.delta_secs();
+    if session.paused || session.save_active {
+        return;
+    }
+    let delta = time.delta_secs().min(0.05);
+    impact.rebuild_remaining = (impact.rebuild_remaining - delta).max(0.0);
     impact.shudder = (impact.shudder - SHUDDER_DECAY_PER_SECOND * delta).max(0.0);
     impact.shudder_clock += delta;
     let amount = impact.shudder * impact.shudder;
@@ -293,7 +315,7 @@ fn shudder_gate(
     for mut transform in &mut gates {
         transform.translation = Vec3::new(
             -SHUDDER_PUSH * amount * (0.6 + 0.4 * (clock * 48.0).sin()),
-            0.0,
+            transition::rebuild_offset(impact.rebuild_remaining),
             SHUDDER_PUSH * 0.35 * amount * (clock * 61.0).sin(),
         );
         transform.rotation = Quat::from_rotation_z(SHUDDER_TILT * amount * (clock * 39.0).sin());
@@ -317,9 +339,13 @@ fn show_damage_stages(
 fn animate_debris(
     mut commands: Commands,
     time: Res<Time<Real>>,
+    session: Res<GameSession>,
     mut debris: Query<(Entity, &mut GateDebris, &mut Transform)>,
 ) {
-    let delta = time.delta_secs();
+    if session.paused || session.save_active {
+        return;
+    }
+    let delta = time.delta_secs().min(0.05);
     for (entity, mut chip, mut transform) in &mut debris {
         chip.remaining -= delta;
         if chip.remaining <= 0.0 {
@@ -340,6 +366,7 @@ fn animate_debris(
 
 pub(crate) fn reset_run(world: &mut World) {
     world.insert_resource(GateImpact::default());
+    transition::reset_run(world);
     let debris: Vec<Entity> = world
         .query_filtered::<Entity, With<GateDebris>>()
         .iter(world)
@@ -363,7 +390,7 @@ mod tests {
         assert_eq!(damage_stage(0.0, 1_000.0), 0);
     }
 
-    fn gate_app(hp: f32) -> App {
+    pub(super) fn gate_app(hp: f32) -> App {
         let mut app = App::new();
         app.init_resource::<Time<Real>>()
             .insert_resource(GameSession {
@@ -377,7 +404,7 @@ mod tests {
         app
     }
 
-    fn advance(app: &mut App, millis: u64) {
+    pub(super) fn advance(app: &mut App, millis: u64) {
         app.world_mut()
             .resource_mut::<Time<Real>>()
             .advance_by(std::time::Duration::from_millis(millis));

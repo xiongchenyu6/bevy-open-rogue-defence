@@ -3,12 +3,19 @@ use super::combat::CombatSet;
 use super::{ArenaEntity, Enemy, GameSession};
 use bevy::prelude::*;
 
+mod mouth;
+
 pub(super) struct DemonDenPlugin;
 impl Plugin for DemonDenPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup)
+        app.add_systems(Startup, (setup, mouth::setup))
             .add_systems(Update, tone_cavern_rock)
-            .add_systems(Update, (emergence, animate).chain().after(CombatSet));
+            .add_systems(
+                Update,
+                (emergence, animate, mouth::animate)
+                    .chain()
+                    .after(CombatSet),
+            );
     }
 }
 #[derive(Resource)]
@@ -77,6 +84,7 @@ fn setup(
     // separates the dark rock from the lane's far end.
     commands.spawn((
         Name::new("Demon den mouth glow"),
+        mouth::MouthLight,
         PointLight {
             color: Color::srgb(0.62, 0.25, 1.0),
             intensity: 900_000.0,

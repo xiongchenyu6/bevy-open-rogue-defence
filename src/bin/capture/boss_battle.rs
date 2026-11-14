@@ -1,9 +1,9 @@
 //! Observe actual boss warnings and hazards with a vulnerable, unlocked front-line hero.
 use bevy::prelude::*;
 use rogue_commander::game::{
-    ActiveSkill, AttackClock, Autoplay, BossDangerShape, BossEnemy, BossTelegraph, Enemy,
-    GameAssets, GameSession, Hero, HeroVitals, PlayerBuild, SelectedHero, SpawnDirector,
-    content::BOSSES,
+    ActiveSkill, AttackClock, Autoplay, BossAction, BossActionStage, BossDangerShape, BossEnemy,
+    BossTelegraph, Enemy, EnemyAttackCue, GameAssets, GameSession, Hero, HeroVitals, PlayerBuild,
+    SelectedHero, SpawnDirector, content::BOSSES,
 };
 #[derive(Resource)]
 struct BossProbe {
@@ -23,6 +23,9 @@ struct BossProbe {
     saw_secondary: bool,
     dodge_locked: bool,
     maximum_summons: usize,
+    previous_action: Option<(BossActionStage, Vec3)>,
+    quiet_recovery_frames: u32,
+    saw_windup_pose: bool,
 }
 pub fn configure(world: &mut World, scenario: &str) {
     let index = scenario
@@ -55,6 +58,9 @@ pub fn configure(world: &mut World, scenario: &str) {
         saw_secondary: false,
         dodge_locked: false,
         maximum_summons: 0,
+        previous_action: None,
+        quiet_recovery_frames: 0,
+        saw_windup_pose: false,
     });
 }
 pub fn install(app: &mut bevy::app::SubApp) {
@@ -105,7 +111,8 @@ pub fn install(app: &mut bevy::app::SubApp) {
         ))
         .id();
     world.resource_mut::<BossProbe>().boss = Some(boss);
-    app.add_systems(PreUpdate, observe);
+    app.add_systems(PreUpdate, observe)
+        .add_systems(Last, verify_action_cues);
 }
 fn place_hero(world: &mut World, position: Vec3) {
     for mut transform in world
@@ -128,6 +135,26 @@ fn observe(world: &mut World) {
         .filter(|(_, hazard)| hazard.boss == boss)
         .map(|(entity, hazard)| (entity, *hazard))
         .collect();
+    let action = world.get::<BossAction>(boss).copied();
+    let position = world.get::<Transform>(boss).map(|t| t.translation);
+    if let (Some(action), Some(position)) = (action, position) {
+        if let Some((previous, old_position)) = world.resource::<BossProbe>().previous_action {
+            if previous == action.stage {
+                assert!(
+                    position.distance(old_position) < 0.001,
+                    "committed boss action cannot walk during windup/recovery"
+                );
+            }
+        }
+        let mut probe = world.resource_mut::<BossProbe>();
+        if action.stage == BossActionStage::Windup && !probe.saw_windup_pose {
+            probe.saw_windup_pose = true;
+            stage("committed-windup", frame);
+        }
+        probe.previous_action = Some((action.stage, position));
+    } else {
+        world.resource_mut::<BossProbe>().previous_action = None;
+    }
     if frame == 25 {
         assert!(
             world.get::<Enemy>(boss).unwrap().max_hp >= BOSSES[index].hp,
@@ -294,11 +321,43 @@ fn observe(world: &mut World) {
                 && state.hit
                 && state.phase
                 && state.dodged
-                && state.death_at.is_some(),
+                && state.death_at.is_some()
+                && state.saw_windup_pose
+                && state.quiet_recovery_frames >= 5,
             "all real boss stages reached for {index}"
         );
         println!(
             "[capture] PASS boss-battle-{index}: true registered boss, primary warning/hit, secondary target-lock dodge, half-health enrage, paused warning, death hazard/art cleanup"
         );
+    }
+}
+
+fn verify_action_cues(
+    session: Res<GameSession>,
+    time: Res<Time>,
+    actions: Query<&BossAction>,
+    mut cues: MessageReader<EnemyAttackCue>,
+    mut probe: ResMut<BossProbe>,
+) {
+    let boss = probe.boss.unwrap();
+    let own_cues = cues.read().filter(|cue| cue.source == boss).count();
+    if session.paused {
+        return;
+    }
+    if let Ok(action) = actions.get(boss) {
+        // Entry frame may contain the committed special strike itself. Every
+        // subsequent recovery frame must have no ordinary combat attack cue.
+        if action.remaining < action.duration - time.delta_secs() * 0.5 {
+            assert_eq!(
+                own_cues, 0,
+                "boss must stop ordinary attacks during a committed action"
+            );
+            if action.stage == BossActionStage::Recovery {
+                probe.quiet_recovery_frames += 1;
+                if probe.quiet_recovery_frames == 1 {
+                    stage("counterattack-window", probe.frame);
+                }
+            }
+        }
     }
 }

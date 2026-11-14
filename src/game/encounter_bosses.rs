@@ -1,4 +1,5 @@
 //! Optional wild leaders own distinct skills and never advance campaign checkpoints.
+use super::bosses::{BossAction, BossActionStage};
 use super::combat::{CombatSet, EnemyArmor, EnemyBreachDamage};
 use super::pooling::{CombatPools, EnemySceneKey};
 use super::{
@@ -152,12 +153,18 @@ pub(crate) struct CampCombatant {
 pub struct AdventureSkillClock {
     pub enraged: bool,
     cooldowns: [f32; 2],
+    winding_up: bool,
+    recovery_remaining: f32,
+    action_target: Vec3,
 }
 impl Default for AdventureSkillClock {
     fn default() -> Self {
         Self {
             enraged: false,
             cooldowns: [2.0, 4.0],
+            winding_up: false,
+            recovery_remaining: 0.0,
+            action_target: Vec3::ZERO,
         }
     }
 }
@@ -220,7 +227,6 @@ fn tick_adventure_skills(
         &mut AdventureSkillClock,
     )>,
     mut phase: MessageWriter<AdventurePhaseCue>,
-    mut attack_cues: MessageWriter<EnemyAttackCue>,
 ) {
     if session.paused || session.finished || session.save_active {
         return;
@@ -253,37 +259,50 @@ fn tick_adventure_skills(
         {
             target.x = gate.translation.x + 1.9;
         }
-        for (kind, interval) in ADVENTURE_COOLDOWNS[usize::from(boss.index)]
-            .iter()
-            .enumerate()
-        {
-            clock.cooldowns[kind] -= delta;
-            if clock.cooldowns[kind] > 0.0 {
+        // Both original clocks keep running through committed actions. A due
+        // skill waits for the current recovery instead of replacing it.
+        for cooldown in &mut clock.cooldowns {
+            *cooldown -= delta;
+        }
+        if clock.winding_up {
+            continue;
+        }
+        if clock.recovery_remaining > 0.0 {
+            clock.recovery_remaining = (clock.recovery_remaining - delta).max(0.0);
+            if clock.recovery_remaining > 0.0 {
+                commands.entity(owner).insert(BossAction {
+                    stage: BossActionStage::Recovery,
+                    remaining: clock.recovery_remaining,
+                    duration: adventure_recovery(boss.index),
+                    target: clock.action_target,
+                });
                 continue;
             }
-            // At most one cast of each type per frame, including 32× speed.
-            clock.cooldowns[kind] = *interval * if clock.enraged { 0.75 } else { 1.0 };
-            attack_cues.write(EnemyAttackCue {
-                source: owner,
-                origin: transform.translation,
-                target,
-                kind: if boss.index == 0 && kind == 0 {
-                    EnemyAttackKind::Slash
-                } else {
-                    EnemyAttackKind::Burst
-                },
-            });
-            spawn_adventure_dangers(
-                &mut commands,
-                owner,
-                boss.index,
-                kind as u8,
-                transform.translation,
-                target,
-                enemy.damage,
-                clock.enraged,
-            );
+            commands.entity(owner).remove::<BossAction>();
         }
+        let kind = if clock.cooldowns[0] <= clock.cooldowns[1] {
+            0
+        } else {
+            1
+        };
+        if clock.cooldowns[kind] > 0.0 {
+            continue;
+        }
+        // Preserve the nominal due schedule; do not restart from delayed release.
+        clock.cooldowns[kind] += ADVENTURE_COOLDOWNS[usize::from(boss.index)][kind]
+            * if clock.enraged { 0.75 } else { 1.0 };
+        clock.winding_up = true;
+        clock.action_target = target;
+        spawn_adventure_dangers(
+            &mut commands,
+            owner,
+            boss.index,
+            kind as u8,
+            transform.translation,
+            target,
+            enemy.damage,
+            clock.enraged,
+        );
     }
 }
 fn spawn_adventure_dangers(
@@ -361,6 +380,12 @@ fn spawn_adventure_dangers(
         ),
         _ => return,
     };
+    commands.entity(owner).insert(BossAction {
+        stage: BossActionStage::Windup,
+        remaining: warning,
+        duration: warning,
+        target,
+    });
     for n in 0..count {
         let offset = if count == 3 {
             Vec3::new((n as f32 - 1.0) * 2.0, 0.0, (n % 2) as f32 * 1.4)
@@ -422,6 +447,9 @@ fn adventure_contains(danger: &AdventureDanger, point: Vec3) -> bool {
         }
     }
 }
+fn adventure_recovery(index: u8) -> f32 {
+    [0.7, 0.85, 0.8][usize::from(index.min(2))]
+}
 fn tick_adventure_dangers(
     mut commands: Commands,
     time: Res<Time>,
@@ -429,14 +457,18 @@ fn tick_adventure_dangers(
     mut vitals: ResMut<HeroVitals>,
     hero: Query<&Transform, With<Hero>>,
     gate: Query<&Transform, With<Core>>,
-    leaders: Query<&Enemy, With<EncounterBoss>>,
+    mut leaders: Query<(&Enemy, Option<&mut AdventureSkillClock>), With<EncounterBoss>>,
+    controls: Res<super::skills::SkillRuntime>,
     mut dangers: Query<(Entity, &mut AdventureDanger)>,
     mut impacts: MessageWriter<AdventureImpactCue>,
+    mut attack_cues: MessageWriter<EnemyAttackCue>,
 ) {
     for (entity, mut danger) in &mut dangers {
         if session.finished
             || leaders.get(danger.owner).is_err()
-            || leaders.get(danger.owner).is_ok_and(|enemy| enemy.hp <= 0.0)
+            || leaders
+                .get(danger.owner)
+                .is_ok_and(|(enemy, _)| enemy.hp <= 0.0)
         {
             commands.entity(entity).try_despawn();
             continue;
@@ -444,11 +476,46 @@ fn tick_adventure_dangers(
         if session.paused || session.save_active {
             continue;
         }
-        let delta = time.delta_secs();
+        let delta = if danger.active {
+            time.delta_secs()
+        } else {
+            if controls.actions_blocked(danger.owner) {
+                continue;
+            }
+            controls.action_delta(danger.owner, time.delta_secs())
+        };
         danger.remaining_secs -= delta;
         if !danger.active {
             if danger.remaining_secs > 0.0 {
+                commands.entity(danger.owner).insert(BossAction {
+                    stage: BossActionStage::Windup,
+                    remaining: danger.remaining_secs,
+                    duration: danger.warning_secs,
+                    target: danger.origin + danger.direction * 5.0,
+                });
                 continue;
+            }
+            if let Ok((_, Some(mut clock))) = leaders.get_mut(danger.owner) {
+                if clock.winding_up {
+                    clock.winding_up = false;
+                    clock.recovery_remaining = adventure_recovery(danger.index);
+                    commands.entity(danger.owner).insert(BossAction {
+                        stage: BossActionStage::Recovery,
+                        remaining: clock.recovery_remaining,
+                        duration: clock.recovery_remaining,
+                        target: clock.action_target,
+                    });
+                    attack_cues.write(EnemyAttackCue {
+                        source: danger.owner,
+                        origin: danger.origin,
+                        target: clock.action_target,
+                        kind: if danger.index == 0 && danger.kind == 0 {
+                            EnemyAttackKind::Slash
+                        } else {
+                            EnemyAttackKind::Burst
+                        },
+                    });
+                }
             }
             danger.active = true;
             danger.remaining_secs = danger.active_secs;
@@ -902,6 +969,18 @@ pub(crate) fn award_victory(world: &mut World, entity: Entity) {
     session.gold = session.gold.saturating_add(def.reward_gold);
     session.wood = session.wood.saturating_add(def.reward_wood);
     session.total_kills += 1;
+    let rewarded_xp = (def.reward_xp as f32 * session.xp_multiplier) as u32;
+    let position = world
+        .get::<Transform>(entity)
+        .map_or(ADVENTURE_LANDING_SITES[usize::from(index)], |t| {
+            t.translation
+        });
+    world.spawn(super::reward_feedback::RewardReceipt {
+        position,
+        gold: def.reward_gold,
+        xp: rewarded_xp,
+        important: true,
+    });
     if let Some(mut relics) = world.get_resource_mut::<super::BasicRelics>() {
         relics.grant(index);
     }
@@ -914,6 +993,13 @@ pub(crate) fn reset_run(world: &mut World) {
     let hazards: Vec<_> = query.iter(world).collect();
     for entity in hazards {
         world.despawn(entity);
+    }
+    let leaders: Vec<_> = world
+        .query_filtered::<Entity, With<EncounterBoss>>()
+        .iter(world)
+        .collect();
+    for entity in leaders {
+        world.entity_mut(entity).remove::<BossAction>();
     }
     world.insert_resource(AdventureBossState::default());
     if let Some(mut messages) = world.get_resource_mut::<Messages<AdventureBossChoice>>() {
@@ -1229,7 +1315,26 @@ mod tests {
                 1
             );
             let mut query = app.world_mut().query::<&AdventureDanger>();
-            assert!(query.iter(app.world()).any(|hazard| hazard.kind == 1));
+            assert!(
+                !query.iter(app.world()).any(|hazard| hazard.kind == 1),
+                "secondary cannot overwrite committed windup"
+            );
+            app.init_resource::<HeroVitals>();
+            app.world_mut()
+                .run_system_once(tick_adventure_dangers)
+                .unwrap();
+            assert_eq!(
+                app.world().get::<BossAction>(leader).unwrap().stage,
+                BossActionStage::Recovery
+            );
+            app.world_mut()
+                .run_system_once(tick_adventure_skills)
+                .unwrap();
+            let mut query = app.world_mut().query::<&AdventureDanger>();
+            assert!(
+                query.iter(app.world()).any(|hazard| hazard.kind == 1),
+                "overdue secondary follows recovery without resetting its schedule"
+            );
         }
     }
     #[test]

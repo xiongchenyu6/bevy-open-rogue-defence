@@ -327,10 +327,6 @@ fn setup_arena(
                     .with_rotation(Quat::from_rotation_x(-std::f32::consts::FRAC_PI_2))
                     .with_scale(Vec3::new(0.65, 1.45, 1.0)),
             ));
-            parent.spawn((
-                WorldAssetRoot(paving.clone()),
-                Transform::from_xyz(0.0, -0.98, 0.0).with_scale(Vec3::splat(0.18)),
-            ));
             parent
                 .spawn((
                     Name::new("Gate art"),

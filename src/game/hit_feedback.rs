@@ -9,6 +9,7 @@ use std::collections::HashMap;
 
 use bevy::prelude::*;
 
+mod aftermath;
 mod enemy_flash;
 
 #[cfg(any(debug_assertions, feature = "dev-tools"))]
@@ -55,13 +56,19 @@ impl Plugin for HitFeedbackPlugin {
             .configure_sets(Update, HitFeedbackSet.after(CombatSet).after(SurvivalSet))
             .add_systems(
                 Startup,
-                (setup_burst_art, spawn_hurt_flash, enemy_flash::setup),
+                (
+                    setup_burst_art,
+                    spawn_hurt_flash,
+                    enemy_flash::setup,
+                    aftermath::setup,
+                ),
             )
             .add_systems(
                 Update,
                 (
                     detect_hero_hurt,
                     react_to_hits,
+                    aftermath::present,
                     enemy_flash::collect,
                     start_hero_flinch,
                     animate_hero_flinch,
@@ -395,7 +402,9 @@ fn spawn_burst(commands: &mut Commands, pools: &mut CombatPools, art: &BurstArt,
             },
         );
     }
-    if !event.killed {
+    // Ordinary deaths get directional, grounded debris instead of another
+    // luminous ability ring. Reserve the shockwave for heavy enemies.
+    if !event.killed || event.weight == HitWeight::Normal {
         return;
     }
     let material = art.element[element_index(event.element)].clone();
@@ -879,6 +888,32 @@ mod tests {
             app.world().resource::<Time<Virtual>>().relative_speed(),
             8.0
         );
+    }
+
+    #[test]
+    fn ordinary_kills_leave_skill_effect_pool_and_camera_quiet() {
+        let mut app = App::new();
+        app.init_resource::<Assets<Mesh>>()
+            .init_resource::<Assets<StandardMaterial>>()
+            .init_resource::<GameSession>()
+            .init_resource::<CombatPools>()
+            .init_resource::<ScreenShake>()
+            .init_resource::<HitStop>()
+            .init_resource::<HitFeedback>();
+        app.world_mut().run_system_cached(setup_burst_art).unwrap();
+        app.world_mut()
+            .resource_mut::<HitFeedback>()
+            .push(event(HitWeight::Normal, false, true));
+        app.world_mut().run_system_cached(react_to_hits).unwrap();
+        assert_eq!(
+            app.world()
+                .resource::<CombatPools>()
+                .impact_fx_metrics()
+                .active(),
+            0
+        );
+        assert_eq!(app.world().resource::<ScreenShake>().trauma, 0.0);
+        assert_eq!(app.world().resource::<HitStop>().requested, 0.0);
     }
 
     #[test]

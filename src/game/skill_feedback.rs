@@ -124,10 +124,11 @@ fn notice_copy(language: GameLanguage, change: Upgrade) -> String {
     let name = skill_name(language, SkillId(change.skill as u8));
     if let Some(path) = change.path {
         return format!(
-            "{} · {}\n{}",
+            "{} · {}\n{}\n{}",
             name,
             language.pick("EVOLVED", "进化完成"),
-            super::ur_evolution::name(language, SkillId(change.skill as u8), path)
+            super::ur_evolution::name(language, SkillId(change.skill as u8), path),
+            super::ur_evolution::description(language, SkillId(change.skill as u8), path)
         );
     }
     let level = if change.ascension {
@@ -142,6 +143,18 @@ fn notice_copy(language: GameLanguage, change: Upgrade) -> String {
     }
 }
 
+fn notice_duration(change: Upgrade) -> f32 {
+    if change.path.is_some() { 4.2 } else { 2.2 }
+}
+fn notice_color(change: Upgrade) -> Color {
+    use super::skill_evolution::UrEvolutionPath::*;
+    match change.path {
+        Some(Surge) => Color::srgb(1.0, 0.48, 0.22),
+        Some(Control) => Color::srgb(0.38, 0.78, 1.0),
+        Some(Sustain) => Color::srgb(0.40, 0.94, 0.66),
+        None => Color::srgb(0.95, 0.75, 0.36),
+    }
+}
 fn notice_top(width: f32, height: f32) -> f32 {
     if height < 540.0 {
         (height - 116.0).max(132.0)
@@ -181,7 +194,7 @@ fn tick_notice(
             commands.entity(entity).despawn();
             continue;
         }
-        let intro = ((2.2 - notice.remaining) / 0.22).clamp(0.0, 1.0);
+        let intro = ((notice_duration(notice.upgrade) - notice.remaining) / 0.22).clamp(0.0, 1.0);
         let top = windows
             .iter()
             .next()
@@ -225,7 +238,13 @@ fn show_next_notice(
     let compact = windows.iter().next().is_some_and(|window| {
         super::mobile_layout::hud_metrics(window.width(), window.height()).compact
     });
-    let width = if compact { 200.0 } else { 220.0 };
+    let width = if change.path.is_some() {
+        if compact { 280.0 } else { 380.0 }
+    } else if compact {
+        200.0
+    } else {
+        220.0
+    };
     let icon = if compact { 32.0 } else { 40.0 };
     let font: Handle<Font> = server.load(UI_FONT_PATH);
     commands
@@ -233,7 +252,7 @@ fn show_next_notice(
             Name::new("Skill upgrade notice"),
             SkillNotice {
                 upgrade: change,
-                remaining: 2.2,
+                remaining: notice_duration(change),
             },
             Node {
                 position_type: PositionType::Absolute,
@@ -253,7 +272,7 @@ fn show_next_notice(
                 ..default()
             },
             BackgroundColor(Color::srgba(0.025, 0.055, 0.065, 0.94)),
-            BorderColor::all(Color::srgb(0.95, 0.75, 0.36)),
+            BorderColor::all(notice_color(change)),
             GlobalZIndex(90),
             Pickable::IGNORE,
         ))
@@ -268,6 +287,25 @@ fn show_next_notice(
                 },
                 Pickable::IGNORE,
             ));
+            if let Some(path) = change.path {
+                use super::skill_evolution::UrEvolutionPath::*;
+                let icon = match path {
+                    Surge => "ember_arrow",
+                    Control => "static_seal",
+                    Sustain => "revival_wind",
+                };
+                parent.spawn((
+                    Name::new("Evolution direction emblem"),
+                    ImageNode::new(server.load(format!("ui/icons/{icon}.png"))),
+                    Node {
+                        width: px(22),
+                        height: px(22),
+                        flex_shrink: 0.,
+                        ..default()
+                    },
+                    Pickable::IGNORE,
+                ));
+            }
             parent.spawn((
                 NoticeText,
                 Text::new(notice_copy(*language, change)),
@@ -276,7 +314,11 @@ fn show_next_notice(
                     font_size: FontSize::Px(if compact { 12.0 } else { 14.0 }),
                     ..default()
                 },
-                TextColor(Color::srgb(1.0, 0.89, 0.62)),
+                TextColor(if change.path.is_some() {
+                    Color::srgb(0.91, 0.96, 0.94)
+                } else {
+                    Color::srgb(1.0, 0.89, 0.62)
+                }),
                 Pickable::IGNORE,
             ));
         });
@@ -285,7 +327,11 @@ fn show_next_notice(
     }
     if autoplay.is_none() && output.as_ref().is_none_or(|status| status.is_available()) {
         commands.spawn((
-            AudioPlayer::new(server.load("audio/draft.wav")),
+            AudioPlayer::new(server.load(if change.path.is_some() {
+                "audio/bond_complete.wav"
+            } else {
+                "audio/draft.wav"
+            })),
             AudioVoice::new(AudioChannel::Effects, 0.45),
             PlaybackSettings::DESPAWN.with_volume(Volume::Linear(0.45)),
         ));
@@ -358,6 +404,34 @@ mod tests {
         assert_eq!(state.pending.len(), 2);
         assert!(state.pending[1].ascension);
         assert!(notice_copy(GameLanguage::SimplifiedChinese, state.pending[1]).contains("升华"));
+    }
+    #[test]
+    fn evolution_notice_follows_committed_branch_and_includes_actual_effect() {
+        use super::super::skill_evolution::{SkillEvolution, UrEvolutionPath};
+        let mut app = App::new();
+        let mut build = PlayerBuild::default();
+        build.skills[26] = 5;
+        app.insert_resource(build)
+            .init_resource::<GameSession>()
+            .init_resource::<RankFeedback>()
+            .init_resource::<SkillEvolution>()
+            .add_systems(Update, observe_ranks);
+        app.update();
+        app.world_mut().resource_mut::<SkillEvolution>().paths[26] = Some(UrEvolutionPath::Control);
+        app.update();
+        app.update();
+        let state = app.world().resource::<RankFeedback>();
+        assert_eq!(state.pending.len(), 1);
+        let notice = state.pending[0];
+        assert_eq!(notice.path, Some(UrEvolutionPath::Control));
+        let text = notice_copy(GameLanguage::English, notice);
+        assert!(text.contains("Frozen Sovereign"));
+        assert!(text.contains(&super::super::ur_evolution::description(
+            GameLanguage::English,
+            SkillId(26),
+            UrEvolutionPath::Control
+        )));
+        assert!(notice_duration(notice) > 4.0);
     }
     #[test]
     fn projectile_rank_size_is_applied_once_and_pool_reuse_starts_fresh() {

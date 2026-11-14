@@ -102,6 +102,52 @@ fn material_status(world: &mut World) -> String {
         .collect::<Vec<_>>()
         .join(" ")
 }
+fn audit_forge_feedback(world: &mut World) {
+    let (entity, node, transform) = world
+        .query::<(Entity, &Name, &ComputedNode, &UiGlobalTransform)>()
+        .iter(world)
+        .find(|(_, name, _, _)| name.as_str() == "Forging convergence feedback")
+        .map(|(e, _, n, t)| (e, n.size(), t.translation))
+        .expect("real visible forge feedback");
+    assert!(node.x > 0. && node.y > 0.);
+    assert!(
+        world.get::<GlobalZIndex>(entity).is_none(),
+        "forge inherits equipment layer, never hides behind its modal"
+    );
+    assert_eq!(world.get::<ZIndex>(entity).unwrap().0, 1);
+    let host = world.get::<ChildOf>(entity).unwrap().parent();
+    assert_eq!(
+        world.get::<Name>(host).unwrap().as_str(),
+        "Equipment forge showcase"
+    );
+    let size = world.get::<ComputedNode>(host).unwrap().size();
+    let center = world.get::<UiGlobalTransform>(host).unwrap().translation;
+    assert!(
+        (transform - center).length() < 1.,
+        "forge remains inside the authored preview box"
+    );
+    assert!(node.x <= size.x + 1. && node.y <= size.y + 1.);
+    let mut parent = Some(host);
+    let mut in_panel = false;
+    while let Some(e) = parent {
+        if world
+            .get::<Name>(e)
+            .is_some_and(|n| n.as_str() == "Equipment panel")
+        {
+            assert_eq!(world.get::<GlobalZIndex>(e).unwrap().0, 280);
+            in_panel = true;
+            break;
+        }
+        parent = world.get::<ChildOf>(e).map(ChildOf::parent);
+    }
+    assert!(
+        in_panel,
+        "forge animation is a descendant of the currently open equipment panel"
+    );
+    println!(
+        "[capture] PASS visible forging animation embedded at equipment z280, preview size={size:?}"
+    );
+}
 fn audit_material_art(world: &mut World, expected: usize) {
     let detail_height = world
         .query::<(&Name, &ComputedNode)>()
@@ -245,6 +291,7 @@ fn exercise(world: &mut World) {
         }
         220 | 240 | 260 => press(world, "Crafting confirm"),
         230 | 250 | 270 => {
+            audit_forge_feedback(world);
             let recipe = match frame {
                 230 => first,
                 250 => second,

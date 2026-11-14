@@ -9,6 +9,9 @@ use rogue_commander::game::{
 struct CompletionCapture {
     frame: u32,
     target: BondId,
+    completed_at: Option<(f64, f64)>,
+    badge_expired: bool,
+    celebration_expired: bool,
 }
 
 pub fn configure(world: &mut World, scenario: &str) {
@@ -50,7 +53,13 @@ pub fn configure(world: &mut World, scenario: &str) {
     assert_eq!(available_bond_cards(&build), vec![*members.last().unwrap()]);
     assert_eq!(build.active_bond_count(), 1);
     world.resource_mut::<RecruitmentProgress>().fruit_count = 0;
-    world.insert_resource(CompletionCapture { frame: 0, target });
+    world.insert_resource(CompletionCapture {
+        frame: 0,
+        target,
+        completed_at: None,
+        badge_expired: false,
+        celebration_expired: false,
+    });
     println!(
         "[capture] {scenario}: explicit pre-owned prerequisites; real final-card draw and confirm"
     );
@@ -64,6 +73,7 @@ pub fn install(app: &mut bevy::app::SubApp) {
 fn exercise(
     mut state: ResMut<CompletionCapture>,
     mut buttons: Query<(Option<&Name>, &mut Interaction, Has<BondDrawButton>), With<Button>>,
+    clocks: (Res<Time<Real>>, Res<Time<Virtual>>),
     draft: Res<DraftState>,
     build: Res<PlayerBuild>,
     recruitment: Res<RecruitmentProgress>,
@@ -91,11 +101,58 @@ fn exercise(
         window.physical_height() as f32,
     );
     let badge_name = format!("Bond badge {}", state.target.definition().id);
+    let collection_choice = format!("Bond collection family {}", state.target.definition().id);
     let target = match state.frame {
         60 => Some("Build card 0"),
-        240 | 260 => Some(badge_name.as_str()),
+        100 | 120 => Some(badge_name.as_str()),
+        280 => Some("Bond collection open"),
+        290 => Some(collection_choice.as_str()),
+        330 => Some("Bond collection close"),
         _ => None,
     };
+    if matches!(state.frame, 100 | 120) {
+        let (_, node, computed, _) = layout
+            .iter()
+            .find(|(name, _, _, _)| name.as_str() == badge_name)
+            .expect("live completion badge");
+        assert_ne!(
+            node.display,
+            Display::None,
+            "only interact with visible badge"
+        );
+        assert!(computed.size().min_element() > 0.0);
+    }
+    if build.bond_complete(state.target) {
+        let start = *state
+            .completed_at
+            .get_or_insert((clocks.0.elapsed_secs_f64(), clocks.1.elapsed_secs_f64()));
+        let real_age = clocks.0.elapsed_secs_f64() - start.0;
+        let game_age = clocks.1.elapsed_secs_f64() - start.1;
+        if !state.badge_expired && game_age > 0.5 {
+            let (_, node, _, _) = layout
+                .iter()
+                .find(|(name, _, _, _)| name.as_str() == badge_name)
+                .unwrap();
+            if node.display == Display::None {
+                assert!((2.85..3.2).contains(&game_age), "badge lifetime {game_age}");
+                state.badge_expired = true;
+                println!("[capture] completed HUD badge expires normally after {game_age:.2}s");
+            }
+        }
+        if !state.celebration_expired
+            && real_age > 0.5
+            && !names
+                .iter()
+                .any(|(_, name)| name.as_str() == "Bond completion celebration")
+        {
+            assert!(
+                (4.65..5.0).contains(&real_age),
+                "celebration lifetime {real_age}"
+            );
+            state.celebration_expired = true;
+            println!("[capture] celebration expires normally after {real_age:.2}s");
+        }
+    }
     let mut pressed = false;
     for (name, mut interaction, bond_draw) in &mut buttons {
         if (state.frame == 5 && bond_draw)
@@ -103,7 +160,7 @@ fn exercise(
         {
             *interaction = Interaction::Pressed;
             pressed = true;
-        } else if matches!(state.frame, 6 | 31 | 61 | 241 | 261) {
+        } else if matches!(state.frame, 6 | 31 | 61 | 101 | 121 | 281 | 291 | 331) {
             *interaction = Interaction::None;
         }
     }
@@ -126,12 +183,12 @@ fn exercise(
         );
         println!("[capture] final-card preview does not complete family or trigger celebration");
     }
-    if matches!(state.frame, 250 | 265) {
+    if matches!(state.frame, 110 | 125) {
         let (_, node, computed, transform) = layout
             .iter()
             .find(|(name, _, _, _)| name.as_str() == "Bond detail tooltip")
             .expect("bond detail tooltip root");
-        if state.frame == 250 {
+        if state.frame == 110 {
             assert_ne!(
                 node.display,
                 Display::None,
@@ -259,13 +316,41 @@ fn exercise(
             let (_, node, computed, _) = layout
                 .iter()
                 .find(|(name, _, _, _)| name.as_str() == badge_name)
-                .expect("persistent completed-family badge");
-            assert_ne!(node.display, Display::None);
-            assert!(computed.size().min_element() > 0.0);
+                .expect("completed-family badge entity");
+            assert_eq!(node.display, Display::None);
+            let _ = computed;
+            assert!(state.badge_expired && state.celebration_expired);
             println!(
-                "[capture] celebration expired; completed badge retained; fruit reward remains exactly once"
+                "[capture] celebration and temporary HUD badge expired; collected family and fruit reward remain exactly once"
             );
         }
+    }
+    if state.frame == 305 {
+        assert!(session.paused && build.bond_complete(state.target));
+        let (root, _) = names
+            .iter()
+            .find(|(_, name)| name.as_str() == "Bond collection details")
+            .expect("completed collection can be reopened");
+        let (computed, transform) = nodes.get(root).unwrap();
+        assert_fits("reopened collection details", computed, transform, viewport);
+        for card in state.target.definition().members {
+            let label = format!("Bond collection card {}", card.definition().id);
+            assert!(
+                names.iter().any(|(_, name)| name.as_str() == label),
+                "completed family member remains reviewable: {label}"
+            );
+        }
+        println!(
+            "[capture] expired completion remains reviewable through actual collection open and family selection"
+        );
+    }
+    if state.frame == 340 {
+        assert!(!session.paused);
+        assert!(
+            !names
+                .iter()
+                .any(|(_, name)| name.as_str() == "Bond collection overlay")
+        );
     }
 }
 

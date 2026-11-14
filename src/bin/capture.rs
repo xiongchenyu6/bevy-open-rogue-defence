@@ -49,6 +49,12 @@ mod selection_detail_capture;
 mod gate_countdown_labels_capture;
 #[path = "capture/gate_revival.rs"]
 mod gate_revival_capture;
+#[path = "capture/world_feedback.rs"]
+mod world_feedback_capture;
+#[path = "capture/reward_feedback.rs"]
+mod reward_feedback_capture;
+#[path = "capture/equipment_growth.rs"]
+mod equipment_growth_capture;
 
 #[path = "capture/skill_identity.rs"]
 mod skill_identity_capture;
@@ -703,6 +709,15 @@ fn main() {
     if scenario.starts_with("passive-storm-") || scenario.starts_with("passive-frost-") {
         rogue_commander::game::passive_batch_capture::install(&mut apps.main, scenario);
     }
+    if scenario == "world-feedback" {
+        world_feedback_capture::install(&mut apps.main);
+    }
+    if scenario == "reward-feedback" {
+        reward_feedback_capture::install(&mut apps.main);
+    }
+    if scenario.starts_with("equipment-growth-") {
+        equipment_growth_capture::install(&mut apps.main);
+    }
     if scenario == "market-art" {
         market_art_capture::install(&mut apps.main);
     }
@@ -1237,6 +1252,18 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     if scenario.starts_with("passive-storm-") || scenario.starts_with("passive-frost-") {
         rogue_commander::game::passive_batch_capture::configure(world, scenario);
         world.resource_mut::<CaptureControls>().suppress_drafts = true;
+        return;
+    }
+    if scenario == "world-feedback" {
+        world_feedback_capture::configure(world);
+        return;
+    }
+    if scenario == "reward-feedback" {
+        reward_feedback_capture::configure(world);
+        return;
+    }
+    if scenario.starts_with("equipment-growth-") {
+        equipment_growth_capture::configure(world, scenario);
         return;
     }
     if scenario == "market-art" {

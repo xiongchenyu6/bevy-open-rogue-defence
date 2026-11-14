@@ -7,6 +7,8 @@ use bevy::{
     prelude::*,
 };
 
+mod equipment_visual;
+mod forge_feedback;
 mod materials;
 #[path = "equipment_ui/panel.rs"]
 mod panel;
@@ -88,6 +90,8 @@ struct Grid;
 struct DetailScroll;
 
 pub(crate) fn install(app: &mut App) {
+    forge_feedback::install(app);
+    equipment_visual::install(app);
     app.init_resource::<EquipmentPanelState>()
         .init_resource::<CraftingState>()
         .add_systems(

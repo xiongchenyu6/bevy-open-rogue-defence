@@ -26,6 +26,7 @@ struct Art {
     shard: Handle<Mesh>,
     cloud: Handle<Mesh>,
     warning: Handle<StandardMaterial>,
+    charge: [Handle<StandardMaterial>; 3],
     colors: [Handle<StandardMaterial>; 3],
 }
 #[derive(Component)]
@@ -36,6 +37,8 @@ struct Visual {
 }
 #[derive(Component)]
 struct Burst;
+#[derive(Component)]
+struct Charge;
 #[derive(Component)]
 struct Flash {
     owner: Entity,
@@ -65,16 +68,33 @@ fn setup(
             ..default()
         })
     });
+    let mut positions = vec![[0.0, 0.0, 0.0]];
+    for segment in 0..=32 {
+        let angle = -0.8 + segment as f32 * 1.6 / 32.0;
+        positions.push([angle.sin() / 0.8_f32.tan(), 0.0, -angle.cos()]);
+    }
+    let count = positions.len();
+    let mut indices = Vec::new();
+    for i in 1..=32 {
+        indices.extend([0, i + 1, i]);
+    }
     let fan = Mesh::new(
         bevy::mesh::PrimitiveTopology::TriangleList,
         RenderAssetUsages::default(),
     )
-    .with_inserted_attribute(
-        Mesh::ATTRIBUTE_POSITION,
-        vec![[0.0, 0.0, 0.0], [-1.0, 0.0, -1.0], [1.0, 0.0, -1.0]],
-    )
-    .with_inserted_attribute(Mesh::ATTRIBUTE_NORMAL, vec![[0.0, 1.0, 0.0]; 3])
-    .with_inserted_indices(Indices::U32(vec![0, 2, 1]));
+    .with_inserted_attribute(Mesh::ATTRIBUTE_POSITION, positions)
+    .with_inserted_attribute(Mesh::ATTRIBUTE_NORMAL, vec![[0.0, 1.0, 0.0]; count])
+    .with_inserted_indices(Indices::U32(indices));
+    let charge = [(1.0, 0.24, 0.025), (0.07, 0.68, 1.0), (0.30, 0.95, 0.09)].map(|(r, g, b)| {
+        materials.add(StandardMaterial {
+            base_color: Color::srgba(r, g, b, 0.22),
+            emissive: LinearRgba::rgb(r, g, b),
+            alpha_mode: AlphaMode::Blend,
+            unlit: true,
+            cull_mode: None,
+            ..default()
+        })
+    });
     commands.insert_resource(Art {
         circle: meshes.add(Cylinder::new(1.0, 0.025)),
         fan: meshes.add(fan),
@@ -82,6 +102,7 @@ fn setup(
         shard: meshes.add(Cone::new(0.12, 1.0)),
         cloud: meshes.add(Sphere::new(0.18)),
         warning,
+        charge,
         colors,
     });
     commands.spawn((
@@ -128,11 +149,21 @@ fn spawn(
                     owner: danger.owner,
                     linger: 0.35,
                 },
-                Mesh3d(mesh),
+                Mesh3d(mesh.clone()),
                 MeshMaterial3d(art.warning.clone()),
                 Transform::default(),
             ))
             .with_children(|root| {
+                root.spawn((
+                    Name::new("Wild attack charge sweep"),
+                    Charge,
+                    Mesh3d(mesh.clone()),
+                    MeshMaterial3d(art.charge[danger.index as usize].clone()),
+                    Transform::from_xyz(0.0, 0.015, 0.0),
+                    Visibility::Inherited,
+                    NotShadowCaster,
+                    NotShadowReceiver,
+                ));
                 for n in 0..9 {
                     let x = (n % 3) as f32 - 1.0;
                     let z = (n / 3) as f32 - 1.0;
@@ -166,14 +197,18 @@ fn update(
     art: Res<Art>,
     dangers: Query<&AdventureDanger>,
     bosses: Query<(), With<EncounterBoss>>,
-    mut visuals: Query<(
-        Entity,
-        &mut Visual,
-        &mut Transform,
-        &mut MeshMaterial3d<StandardMaterial>,
-        &Children,
-    )>,
-    mut bursts: Query<&mut Visibility, With<Burst>>,
+    mut visuals: Query<
+        (
+            Entity,
+            &mut Visual,
+            &mut Transform,
+            &mut MeshMaterial3d<StandardMaterial>,
+            &Children,
+        ),
+        Without<Charge>,
+    >,
+    mut charges: Query<(&mut Transform, &mut Visibility), (With<Charge>, Without<Burst>)>,
+    mut bursts: Query<&mut Visibility, (With<Burst>, Without<Charge>)>,
     mut flashes: Query<(Entity, &mut Flash)>,
 ) {
     for (entity, mut flash) in &mut flashes {
@@ -231,6 +266,21 @@ fn update(
             art.warning.clone()
         };
         for child in children.iter() {
+            if let Ok((mut charge, mut visible)) = charges.get_mut(child) {
+                let progress = (1.0 - danger.remaining_secs / danger.warning_secs.max(0.001))
+                    .clamp(0.001, 1.0);
+                *visible = if danger.active {
+                    Visibility::Hidden
+                } else {
+                    Visibility::Inherited
+                };
+                if matches!(danger.shape, AdventureDangerShape::Wave { .. }) {
+                    charge.scale = Vec3::new(1.0, 1.0, progress);
+                    charge.translation.z = (1.0 - progress) * 0.5;
+                } else {
+                    charge.scale = Vec3::new(progress, 1.0, progress);
+                }
+            }
             if let Ok(mut visibility) = bursts.get_mut(child) {
                 *visibility = if danger.active {
                     Visibility::Inherited

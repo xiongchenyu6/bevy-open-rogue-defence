@@ -107,36 +107,44 @@ fn copy(language: GameLanguage, family: BondId, kind: &CelebrationCopy) -> Strin
             .collect::<Vec<_>>()
             .join(" "),
         CelebrationCopy::Reward => {
+            let mut rewards = Vec::new();
             let fruit = fruit_reward(family);
             if fruit > 0 {
-                format!(
-                    "+{fruit} {}  ·  {}",
-                    language.pick("JOB FRUIT", "转职果实"),
-                    language.pick("READY TO RECRUIT", "可用于转职")
-                )
-            } else {
-                let children = BondId::ALL
-                    .into_iter()
-                    .filter(|id| id.definition().prerequisite == Some(family))
-                    .map(|id| bond_name(language, id))
-                    .collect::<Vec<_>>();
-                if children.is_empty() {
+                rewards.push(format!(
+                    "+{fruit} {}",
+                    language.pick("JOB FRUIT", "转职果实")
+                ));
+            }
+            let children = unlocked_families(family)
+                .into_iter()
+                .map(|id| bond_name(language, id))
+                .collect::<Vec<_>>();
+            if !children.is_empty() {
+                rewards.push(format!(
+                    "{} {}",
+                    language.pick("POOL UNLOCKED", "解锁羁绊池"),
+                    children.join(" / ")
+                ));
+            }
+            if rewards.is_empty() {
+                rewards.push(
                     language
                         .pick(
                             "POWER RETAINED · FAMILY SLOT FREED",
                             "保留能力 · 释放羁绊槽",
                         )
-                        .to_string()
-                } else {
-                    format!(
-                        "{}  {}",
-                        language.pick("POOL UNLOCKED", "解锁羁绊池"),
-                        children.join(" / ")
-                    )
-                }
+                        .to_string(),
+                );
             }
+            rewards.join("  ·  ")
         }
     }
+}
+fn unlocked_families(family: BondId) -> Vec<BondId> {
+    BondId::ALL
+        .into_iter()
+        .filter(|id| id.definition().prerequisite == Some(family))
+        .collect()
 }
 fn layout(windows: &Query<&Window>) -> (bool, f32, f32) {
     let compact = windows.iter().next().is_some_and(|window| {
@@ -392,6 +400,38 @@ fn show_next(
                     Pickable::IGNORE,
                 ));
             }
+            // Show exactly which future collections became available, not merely a text toast.
+            let children = unlocked_families(family);
+            if !children.is_empty() {
+                panel
+                    .spawn((
+                        Name::new("Bond unlocked rewards"),
+                        Node {
+                            column_gap: px(10),
+                            align_items: AlignItems::Center,
+                            justify_content: JustifyContent::Center,
+                            ..default()
+                        },
+                        Pickable::IGNORE,
+                    ))
+                    .with_children(|row| {
+                        for child in children {
+                            row.spawn((
+                                Name::new(format!("Unlocked collection {:?}", child)),
+                                ImageNode::new(
+                                    server
+                                        .load(format!("ui/icons/{}.png", child.definition().icon)),
+                                ),
+                                Node {
+                                    width: px(26),
+                                    height: px(26),
+                                    ..default()
+                                },
+                                Pickable::IGNORE,
+                            ));
+                        }
+                    });
+            }
         });
     if let (Some(cues), Ok(hero)) = (cues.as_deref_mut(), hero.single()) {
         for direction in [Vec3::X, Vec3::Z, Vec3::NEG_X, Vec3::NEG_Z] {
@@ -528,6 +568,14 @@ mod tests {
         assert_eq!(fruit_reward(BondId::Journey), 0);
         assert_eq!(fruit_reward(BondId::Warpath), 1);
         assert!(copy(zh, BondId::Warpath, &CelebrationCopy::Reward).contains("+1 转职果实"));
+        let warpath_reward = copy(en, BondId::Warpath, &CelebrationCopy::Reward);
+        assert!(warpath_reward.contains("JOB FRUIT"));
+        let unlocked = unlocked_families(BondId::Warpath);
+        assert!(!unlocked.is_empty());
+        for family in unlocked {
+            assert!(warpath_reward.contains(&bond_name(en, family)));
+        }
+
         assert_eq!(
             copy(en, BondId::Warpath, &CelebrationCopy::Effect),
             BondId::Warpath.definition().bonuses[0].description_en

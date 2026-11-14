@@ -19,6 +19,8 @@ pub(super) struct PreviewArt;
 #[derive(Component)]
 pub(super) struct PreviewText;
 #[derive(Component)]
+pub(super) struct ComparisonText;
+#[derive(Component)]
 pub(super) struct PreviewBuy;
 #[derive(Component)]
 pub(super) struct BuyText;
@@ -340,21 +342,37 @@ pub(super) fn spawn_shop(
                                 Pickable::IGNORE,
                             ));
                     }
-                    preview.spawn((
-                        PreviewText,
-                        Text::new(""),
-                        TextFont {
-                            font_size: FontSize::Px(13.),
-                            ..default()
-                        },
-                        TextColor(Color::srgb(0.86, 0.89, 0.85)),
-                        Node {
+                    preview
+                        .spawn(Node {
+                            flex_direction: FlexDirection::Column,
                             flex_grow: 1.,
                             flex_basis: px(0),
+                            row_gap: px(5),
                             ..default()
-                        },
-                        Pickable::IGNORE,
-                    ));
+                        })
+                        .with_children(|column| {
+                            column.spawn((
+                                PreviewText,
+                                Text::new(""),
+                                TextFont {
+                                    font_size: FontSize::Px(13.),
+                                    ..default()
+                                },
+                                TextColor(Color::srgb(0.86, 0.89, 0.85)),
+                                Pickable::IGNORE,
+                            ));
+                            column.spawn((
+                                ComparisonText,
+                                Name::new("Market equipment comparison"),
+                                Text::new(""),
+                                TextFont {
+                                    font_size: FontSize::Px(12.),
+                                    ..default()
+                                },
+                                TextColor(Color::srgb(0.43, 0.94, 0.72)),
+                                Pickable::IGNORE,
+                            ));
+                        });
                     preview
                         .spawn((
                             Button,
@@ -591,7 +609,11 @@ pub(super) fn update_visuals(
     windows: Query<&Window, With<PrimaryWindow>>,
     language: Res<GameLanguage>,
     state: Res<MarketState>,
-    effects: Res<MarketEffects>,
+    (effects, build, vitals): (
+        Res<MarketEffects>,
+        Option<Res<PlayerBuild>>,
+        Option<Res<HeroVitals>>,
+    ),
     session: Res<GameSession>,
     preview: Res<ShopPreview>,
     mut icons: Query<
@@ -610,6 +632,7 @@ pub(super) fn update_visuals(
             Has<PreviewText>,
             Has<BuyText>,
             Has<HelpText>,
+            Has<ComparisonText>,
         ),
         (Without<MarketOfferLabel>, Without<MarketMarkLabel>),
     >,
@@ -679,7 +702,7 @@ pub(super) fn update_visuals(
         .iter()
         .find(|(_, i, f)| *f || **i != Interaction::None)
         .map(|(b, _, _)| b.0);
-    for (mut text, price, rarity, detail, buy, help) in &mut copy {
+    for (mut text, price, rarity, detail, buy, help, comparison) in &mut copy {
         let value = if let Some(p) = price {
             let item = state.offers[p.0].item;
             format!("{}", discounted_cost(item.price(), &effects))
@@ -691,6 +714,13 @@ pub(super) fn update_visuals(
                 } else {
                     item.tag().to_owned()
                 }
+            }
+        } else if comparison {
+            match (build.as_deref(), vitals.as_deref()) {
+                (Some(build), Some(vitals)) => {
+                    super::comparison::preview(selected, *language, build, vitals, &effects)
+                }
+                _ => String::new(),
             }
         } else if detail {
             format!(

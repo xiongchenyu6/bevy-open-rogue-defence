@@ -9,6 +9,8 @@ use super::{Autoplay, BossEnemy, DraftRoot, Projectile};
 
 #[path = "audio_output_health.rs"]
 mod output_health;
+#[path = "audio_world.rs"]
+mod world;
 
 #[path = "audio_melee.rs"]
 mod melee;
@@ -19,6 +21,7 @@ pub struct GameAudioPlugin;
 impl Plugin for GameAudioPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<GameAudio>()
+            .init_resource::<world::WorldAudioState>()
             .init_resource::<AudioThrottle>()
             .init_resource::<HitAudioThrottle>()
             .add_systems(First, output_health::discard_unavailable_effects)
@@ -28,6 +31,7 @@ impl Plugin for GameAudioPlugin {
                 (
                     play_feedback.after(super::combat::CombatSet),
                     play_hit_feedback.after(HitFeedbackSet),
+                    world::play_world_feedback.after(super::combat::CombatSet),
                 ),
             );
     }
@@ -48,6 +52,7 @@ struct GameAudio {
     kill_heavy: Handle<AudioSource>,
     hero_hurt: Handle<AudioSource>,
     gate_hit: Handle<AudioSource>,
+    raid_steps: Handle<AudioSource>,
     melee_whoosh: [Handle<AudioSource>; 3],
 }
 
@@ -68,6 +73,7 @@ impl FromWorld for GameAudio {
             kill_heavy: assets.load("audio/kill_heavy.wav"),
             hero_hurt: assets.load("audio/hero_hurt.wav"),
             gate_hit: assets.load("audio/gate_hit.wav"),
+            raid_steps: assets.load("audio/raid_steps.wav"),
             melee_whoosh: [
                 assets.load("audio/swing_sword.wav"),
                 assets.load("audio/swing_axe.wav"),
@@ -299,6 +305,7 @@ fn play_pitched(commands: &mut Commands, source: &Handle<AudioSource>, volume: f
 }
 
 pub(crate) fn reset_run(world: &mut World) {
+    world.insert_resource(world::WorldAudioState::default());
     world.insert_resource(AudioThrottle::default());
     world.insert_resource(HitAudioThrottle::default());
 }
@@ -330,6 +337,7 @@ pub(crate) mod tests {
             kill_heavy: source(),
             hero_hurt: source(),
             gate_hit: source(),
+            raid_steps: source(),
             melee_whoosh: [source(), source(), source()],
         };
         app.insert_resource(sources)
@@ -495,6 +503,7 @@ pub(crate) mod tests {
         assert_audio_decodes(include_bytes!("../../assets/audio/kill_heavy.wav"));
         assert_audio_decodes(include_bytes!("../../assets/audio/hero_hurt.wav"));
         assert_audio_decodes(include_bytes!("../../assets/audio/gate_hit.wav"));
+        assert_audio_decodes(include_bytes!("../../assets/audio/raid_steps.wav"));
     }
 
     #[test]

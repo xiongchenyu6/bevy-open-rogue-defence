@@ -272,13 +272,19 @@ fn attach(
                                 &art.identities[index][usize::from(lane)],
                                 "Boss danger identity",
                             ),
+                            (
+                                3,
+                                if lane { &art.rectangle } else { &art.disc },
+                                "Boss danger charge sweep",
+                            ),
                         ] {
                             parent.spawn((
                                 Name::new(name),
                                 DangerLayer(layer),
                                 Mesh3d(mesh.clone()),
                                 MeshMaterial3d(
-                                    art.colors[index][if layer == 1 { 0 } else { 2 }].clone(),
+                                    art.colors[index][if layer == 1 || layer == 3 { 0 } else { 2 }]
+                                        .clone(),
                                 ),
                                 Transform::from_xyz(0.0, layer as f32 * 0.005, 0.0),
                                 NotShadowCaster,
@@ -337,7 +343,14 @@ fn sync(
     art: Option<Res<Art>>,
     dangers: Query<(&BossTelegraph, &Children)>,
     mut roots: Query<(&mut Transform, &Children), With<DangerArt>>,
-    mut layers: Query<(&DangerLayer, &mut MeshMaterial3d<StandardMaterial>)>,
+    mut layers: Query<
+        (
+            &DangerLayer,
+            &mut MeshMaterial3d<StandardMaterial>,
+            &mut Transform,
+        ),
+        Without<DangerArt>,
+    >,
 ) {
     if session.paused || session.save_active {
         return;
@@ -352,8 +365,24 @@ fn sync(
                 danger_transform(danger.origin, danger.target, danger.shape, danger.radius);
             let index = usize::from(danger.index.min(4));
             for child in layers_children {
-                if let Ok((layer, mut material)) = layers.get_mut(*child) {
-                    let color = if layer.0 == 1 {
+                if let Ok((layer, mut material, mut layer_transform)) = layers.get_mut(*child) {
+                    let color = if layer.0 == 3 {
+                        let progress = if danger.active {
+                            1.0
+                        } else {
+                            (1.0 - danger.remaining / danger.duration.max(0.001)).clamp(0.0, 1.0)
+                        };
+                        // Only the interior fills. The outer border always marks
+                        // the complete real damage area from the first frame.
+                        if matches!(danger.shape, BossDangerShape::Lane { .. }) {
+                            layer_transform.scale = Vec3::new(1.0, 1.0, progress.max(0.001));
+                            layer_transform.translation.z = -(1.0 - progress) * 0.96;
+                        } else {
+                            layer_transform.scale =
+                                Vec3::new(progress.max(0.001), 1.0, progress.max(0.001));
+                        }
+                        usize::from(danger.active || progress > 0.75)
+                    } else if layer.0 == 1 {
                         usize::from(danger.active)
                     } else if danger.active || danger.enraged {
                         3

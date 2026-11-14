@@ -2,10 +2,13 @@ use bevy::prelude::*;
 
 use super::{ArenaEntity, GameSession};
 
+mod atmosphere;
+
 pub struct EnvironmentArtPlugin;
 
 impl Plugin for EnvironmentArtPlugin {
     fn build(&self, app: &mut App) {
+        atmosphere::install(app);
         app.init_resource::<ArtClock>()
             .add_systems(Startup, setup_environment_art)
             .add_systems(Update, (animate_environment_art, update_camp_previews));
