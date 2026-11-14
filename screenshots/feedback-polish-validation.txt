@@ -1,0 +1,37 @@
+Game feedback polish — 2026-11-14
+Runtime source: 39addfa3a9614b242e180212cbde07ed21218f7d
+
+Native verification
+- cargo test --locked --lib -- --test-threads=2: 827 passed, 0 failed, 1 ignored.
+  The ignored test is the opt-in report_bond_completion_pace report.
+- Model verifier: 53 self-contained GLBs; 35 cast and 3 original adventure models with Idle/Walk/Attack/Hit.
+- UI verifier: 32 skill icons, 26 bond icons, 16 action icons, 12 portraits; 101 cards mapped to 26 families.
+- User campaign save SHA256 unchanged: 060649ac32b34ce2cda231a9cf1ebcdfd8e8c12f0b0b3f94e527714f6993d911.
+
+Requirement evidence
+1. Combat: Final class-archer-1 and class-archer-40 runs passed 500 frames each. Starter fires one arrow at one target without ricochet; grown attacks retain multishot and real bounces. Actual hero selection at full health produces no hurt border; genuine missing-health increases still trigger it.  real class-archer-40 and class-sword runs (500 frames each) validate authoritative damage, distinct targets, ricochet trails, cleave geometry, and pause behavior. Screenshots show actual hit moments. Reward video shows clean starter arrows and real ordinary deaths. Hit-feedback fixtures and library tests cover death weight tiers and bounded cleanup.
+2. Threat: boss-battle-0..4 each passed 1400 frames; adventure-boss-0..2 each passed 1000 frames. Assertions cover real windup, stationary/ordinary-attack-free recovery windows, phase change, damage, dodge and cleanup. All eight have rendered windup/recovery/phase states. Checked mainline target continuity and separate optional-boss loadouts.
+3. World: world-feedback passed at 1280x720 and 667x375; desktop repeated after road tiling and duplicate gate-paving corrections. Real raid warning, falling cavern stones, gate collapse, countdown, rebuilding rise, camp motion and road materials verified. Gate screenshot pair uses the corrected road version.
+4. Equipment: market-art at desktop and 667x375; crafting-0/1 real purchases and recipes; equipment-growth-archer/mage/sword. Wallet debit, ingredients consumed, inherited effects, duplicate prevention, visible forging inside its preview, weapon change with unchanged body all verified. Compact comparison and forging screenshots inspected.
+5. Growth: bond-completion-fruit at desktop and 667x375. One fruit plus newly unlocked pool appear together; badge expires at 3.03s, celebration at 4.83s; completed family remains reviewable through the actual collection screen. UR surge/control/sustain actual branch effects passed; compact frost and gravity notices repeated after overflow repair, with screen-boundary and skill/dodge overlap assertions. Corrected compact notices measure 340x50 and 340x62.
+6. Rewards/UI: reward-feedback uses production pooled enemies and actual settlement. Six kills award at least 18 gold and 12 XP, tokens travel to the hero, dead models and tokens clean up. Capacity/pause/non-award tests passed. The 6s video is 180 consecutive production render frames at 30fps, matching the harness fixed 1/30s update. The complete scenario ran 400 frames. UI button response and resource pulses run with real UI interactions; desktop and compact captures cover modal controls and notification boundaries.
+
+Reproduction
+Build capture with cargo build --locked --bin capture.
+Run: capture frames OUTPUT_DIR 400 SCENARIO 0xA11CE 1280x720
+Use 667x375 for compact scenes; class scenes require 500 frames.
+Run full boss assertions with: capture simulate OUTPUT.png 1400 boss-battle-N 0xA11CE 1280x720
+Optional bosses use 1000 frames and adventure-boss-N.
+ROGUE_CAPTURE_SAVE_FRAMES selects screenshots without skipping updates.
+Capture profiles were isolated under target/feedback-polish-nov14/profile.
+Raw logs and complete frame sets are under target/feedback-polish-nov14 (not committed).
+
+Published browser verification
+- Pages run 43574231168 completed successfully; live build.json matches runtime commit 39addfa3a9614b242e180212cbde07ed21218f7d.
+- Live WASM SHA256: 9ed1f59fb4c230af11bf90b3fb7c921ba1b678007da1120bdc52927cc38dec12.
+- Fresh WebGPU browser session: chapter selection, onboarding skip, basic archer selection at 752/752 HP with no false hurt border; desktop 1280x720 and compact 667x375.
+- Switched settings English to Chinese and back. Compact controls remained in bounds.
+- Actual compact card selection immediately applied Meteor Seed and continued to Flame Ray / Archery / Raise Dead without confirmation; before/after screenshots included.
+- Browser errors output was empty. Real battle progressed to level 3 with actual kills, damage and resources.
+- Boss captures use controlled high-health fixtures to exercise phases; fixture health/countdowns are not normal gameplay balance.
+
