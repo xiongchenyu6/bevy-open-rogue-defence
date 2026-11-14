@@ -127,7 +127,7 @@ pub fn install(app: &mut bevy::app::SubApp) {
     if matches!(index, 10 | 20) {
         world
             .resource_mut::<Time<Virtual>>()
-            .set_relative_speed(2.0);
+            .set_relative_speed(4.0);
     }
     if index == 29 {
         let mut vitals = world.resource_mut::<HeroVitals>();
@@ -205,7 +205,7 @@ pub fn install(app: &mut bevy::app::SubApp) {
         "[capture] skill-identity-{index}: {} rank {rank}; {}",
         SKILLS[index].id,
         if matches!(index, 10 | 20) {
-            "declared dependency arc_chain rank 1; 2x real simulation to trigger four marks/fifth spell"
+            "declared dependency arc_chain rank 1; 4x real simulation to trigger four marks/fifth spell"
         } else {
             "no other learned skills"
         }
@@ -370,13 +370,29 @@ fn observe(
             color.alpha
         );
     }
-    if frame == 295 {
+    // Rank-1 source spells now have a 9.35s cooldown. Observe five natural
+    // casts before judging passive seals/echoes; do not bypass their charge.
+    let verification_frame = if matches!(index, 10 | 20) { 395 } else { 295 };
+    if frame == verification_frame {
+        if matches!(index, 10 | 20) {
+            let required = if index == 10 { 4 } else { 5 };
+            assert!(
+                telemetry.casts[0] >= required,
+                "passive fixture must observe enough real source casts"
+            );
+            println!(
+                "[capture] passive {index}: source casts={}",
+                telemetry.casts[0]
+            );
+        }
         if let Some(card) = state.arrow_card {
             assert_eq!(build.owns_bond_card(BondCardId::ArcheryPiercing), card);
             assert!(state.saw_signature && state.saw_damage);
             println!(
                 "ARROW_CARD_OBSERVATION frame={frame} card={card} attacks={} base_attack={} learned_rank={} caster_every=4",
-                attacks.count(), build.attack_damage, build.skills[7]
+                attacks.count(),
+                build.attack_damage,
+                build.skills[7]
             );
         }
         assert_eq!(build.skills[index], state.rank);
