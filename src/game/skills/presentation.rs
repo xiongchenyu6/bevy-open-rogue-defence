@@ -422,16 +422,17 @@ fn animate(
     if session.paused && !session.finished {
         return;
     }
+    let dt = time.delta_secs().min(0.05);
     for (entity, mut particle, mut transform, mut tag) in &mut particles {
-        particle.remaining -= time.delta_secs();
+        particle.remaining -= dt;
         if session.finished || particle.remaining <= 0.0 {
             commands.entity(entity).despawn();
             continue;
         }
         let t = 1.0 - particle.remaining / particle.duration;
         tag.0 = ((1.0 - t).clamp(0.0, 1.0) * 65535.0) as u32;
-        transform.translation += particle.velocity * time.delta_secs();
-        transform.rotate_y(particle.spin * time.delta_secs());
+        transform.translation += particle.velocity * dt;
+        transform.rotate_y(particle.spin * dt);
         transform.scale = particle.scale * (1.0 + particle.growth * t) * ((1.0 - t) * 3.0).min(1.0);
     }
 }
@@ -459,7 +460,14 @@ fn present(
     particles: Query<(), With<Particle>>,
     enemies: Query<(Entity, &Transform, Option<&Infection>), With<Enemy>>,
     heroes: Query<&Transform, With<Hero>>,
-    strikes: Query<&SkillStrike, Added<SkillStrike>>,
+    impacts: Query<
+        (
+            &Transform,
+            &ImpactFx,
+            &crate::game::skill_lighting::GroundLightProfile,
+        ),
+        Added<crate::game::skill_lighting::GroundLightProfile>,
+    >,
     projectiles: Query<(&Transform, &DamageProfile, &Projectile)>,
     zones: Query<(&Transform, &SkillZone)>,
     banners: Query<&Transform, With<OathBanner>>,
@@ -514,41 +522,36 @@ fn present(
         }
         clock.cast_cooldowns[index] = runtime.cooldowns[index];
     }
-    // New impact/cast requests are always shown, even between sampled status frames.
-    for strike in strikes.iter().take(24) {
-        let Some(index) = strike.profile.skill_index else {
+    // Resolved impact records survive instant strikes being consumed in Update.
+    // Delayed strikes now show their explosion when they land, not when queued.
+    for (transform, effect, ground) in impacts.iter().take(24) {
+        let Some(index) = ground.0.skill_index else {
             continue;
         };
-        let position = strike.fixed_position.or_else(|| {
-            enemies
-                .get(strike.target)
-                .ok()
-                .map(|(_, t, _)| t.translation)
-        });
-        if let Some(position) = position {
-            let index = usize::from(index);
-            let origin = heroes
-                .iter()
-                .next()
-                .map_or(position, |hero| hero.translation);
-            spectacle::impact(
-                &mut painter,
-                index,
-                origin,
-                position,
-                strike.radius,
-                build.skills[index],
-                clock.phase,
-                None,
-            );
-            painter.burst(
-                Motif::for_profile(strike.profile),
-                position.with_y(0.4),
-                build.skills[index],
-                clock.phase,
-                true,
-            );
-        }
+        let index = usize::from(index);
+        let position = transform.translation.with_y(0.0);
+        let origin = heroes
+            .iter()
+            .next()
+            .map_or(position, |hero| hero.translation);
+        let radius = skill_effect_radius(index, build.skills[index]).unwrap_or(effect.end_scale);
+        spectacle::impact(
+            &mut painter,
+            index,
+            origin,
+            position,
+            radius,
+            build.skills[index],
+            clock.phase,
+            None,
+        );
+        painter.burst(
+            Motif::for_profile(ground.0),
+            position.with_y(0.4),
+            build.skills[index],
+            clock.phase,
+            true,
+        );
     }
     for (transform, bone, hound, tide, turret, banner, wyrm, colossus) in &new_summons {
         let index = if bone.is_some() {
@@ -861,6 +864,115 @@ mod tests {
                 .iter(app.world())
                 .count(),
             0
+        );
+    }
+    #[test]
+    fn resolved_impact_is_presented_once_without_a_pending_strike() {
+        use crate::game::skill_lighting::GroundLightProfile;
+        use bevy::ecs::system::RunSystemOnce;
+
+        let mut app = App::new();
+        app.init_resource::<Assets<Mesh>>()
+            .init_resource::<Assets<StandardMaterial>>()
+            .init_resource::<Assets<SkillMaterial>>()
+            .init_resource::<Time>()
+            .init_resource::<GameSession>()
+            .init_resource::<PlayerBuild>()
+            .init_resource::<SkillRuntime>()
+            .init_resource::<EmissionClock>()
+            .add_systems(PostUpdate, present);
+        app.world_mut().run_system_once(setup).unwrap();
+        app.world_mut().resource_mut::<PlayerBuild>().skills.fill(0);
+        app.world_mut().resource_mut::<PlayerBuild>().skills[2] = 3;
+        // This is the durable result left by Update after an instant strike has
+        // already been consumed. PostUpdate must not depend on that old entity.
+        let impact = app
+            .world_mut()
+            .spawn((
+                Transform::from_xyz(4.0, 0.16, 1.0),
+                ImpactFx {
+                    lifetime: 0.18,
+                    start_scale: 0.18,
+                    end_scale: 0.75,
+                },
+                GroundLightProfile(DamageProfile::for_skill(2)),
+            ))
+            .id();
+        assert_eq!(
+            app.world_mut()
+                .query::<&SkillStrike>()
+                .iter(app.world())
+                .count(),
+            0
+        );
+        app.update();
+        let first = app
+            .world_mut()
+            .query::<&Particle>()
+            .iter(app.world())
+            .count();
+        assert!(
+            first > 6,
+            "resolved frost hit must create the crystal and impact burst"
+        );
+        assert!(
+            app.world_mut()
+                .query::<(&Particle, &Name)>()
+                .iter(app.world())
+                .any(|(_, name)| name.as_str() == "Skill identity 2")
+        );
+        app.update();
+        assert_eq!(
+            app.world_mut()
+                .query::<&Particle>()
+                .iter(app.world())
+                .count(),
+            first,
+            "a still-living impact must not replay on the next frame"
+        );
+        // Pool reuse removes the old profile before returning the shell. The
+        // next resolved hit on that same entity must produce one new animation.
+        app.world_mut()
+            .entity_mut(impact)
+            .remove::<GroundLightProfile>();
+        app.update();
+        app.world_mut()
+            .entity_mut(impact)
+            .insert(GroundLightProfile(DamageProfile::for_skill(2)));
+        app.update();
+        assert_eq!(
+            app.world_mut()
+                .query::<&Particle>()
+                .iter(app.world())
+                .count(),
+            first * 2
+        );
+        app.update();
+        assert_eq!(
+            app.world_mut()
+                .query::<&Particle>()
+                .iter(app.world())
+                .count(),
+            first * 2
+        );
+        // A high-speed game frame must leave freshly generated cosmetics
+        // visible. Damage uses the full delta elsewhere; this is art lifetime.
+        app.world_mut()
+            .resource_mut::<Time>()
+            .advance_by(std::time::Duration::from_secs(1));
+        app.world_mut().run_system_once(animate).unwrap();
+        assert_eq!(
+            app.world_mut()
+                .query::<&Particle>()
+                .iter(app.world())
+                .count(),
+            first * 2
+        );
+        assert!(
+            app.world_mut()
+                .query::<&Particle>()
+                .iter(app.world())
+                .all(|particle| (particle.duration - particle.remaining - 0.05).abs() < 0.0001)
         );
     }
     #[test]

@@ -3026,6 +3026,7 @@ fn projectile_hits(
                     &assets,
                     enemy_transform.translation,
                     enemy.elite,
+                    (projectile.velocity.length_squared() > 0.01).then_some(profile),
                 );
                 if let Some(feedback) = hit_feedback.as_deref_mut()
                     && resolution.outcome != DamageOutcome::Pending
@@ -3388,8 +3389,9 @@ fn spawn_hit_fx(
     assets: &GameAssets,
     position: Vec3,
     elite: bool,
+    profile: Option<DamageProfile>,
 ) {
-    pools.rent_impact_fx(
+    let impact = pools.rent_impact_fx(
         commands,
         assets.fx_mesh.clone(),
         assets.storm_material.clone(),
@@ -3400,6 +3402,11 @@ fn spawn_hit_fx(
             end_scale: if elite { 1.6 } else { 0.75 },
         },
     );
+    if let (Some(entity), Some(profile)) = (impact, profile.filter(|p| p.skill_index.is_some())) {
+        commands
+            .entity(entity)
+            .insert(super::skill_lighting::GroundLightProfile(profile));
+    }
 }
 
 fn animate_effects(
@@ -3408,9 +3415,12 @@ fn animate_effects(
     mut pools: ResMut<CombatPools>,
     mut effects: Query<(Entity, &mut ImpactFx, &mut Transform)>,
 ) {
+    // Keep a landed visual observable even at 32x game speed. This pool is
+    // cosmetic only; projectile and damage clocks retain their full delta.
+    let dt = time.delta_secs().min(0.05);
     for (entity, mut effect, mut transform) in &mut effects {
-        effect.lifetime -= time.delta_secs();
-        let total = 0.42_f32.max(effect.lifetime + time.delta_secs());
+        effect.lifetime -= dt;
+        let total = 0.42_f32.max(effect.lifetime + dt);
         let t = (1.0 - effect.lifetime / total).clamp(0.0, 1.0);
         let scale = effect.start_scale + (effect.end_scale - effect.start_scale) * t;
         transform.scale = Vec3::splat(scale);
