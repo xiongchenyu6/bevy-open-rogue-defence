@@ -7,3 +7,5 @@ The cavern uses a dark recessed mouth, fifteen rock arch sections, six fangs, vi
 Newly spawned enemies trigger a short emergence pulse in their lane. Pool reactivation also adds the Enemy component and triggers this feedback. The pulse lasts 0.75 seconds, is limited to 32 concurrent effects, freezes while paused and clears on a run reset. Persistent cavern geometry survives chapter transitions.
 
 Native capture scenario `demon-cave` checks the quiet cavern, real wave spawning and observed emergence feedback using the production camera at desktop and mobile viewport sizes.
+
+The baked stone texture is multiplied by a dark, cool tint so the roof recedes behind the lane and the HUD stays readable over it, and a violet point light in the mouth marks where enemies emerge. See [the 2026-11-14 capture record](verification/combat-visual-2026-11-14/README.md).

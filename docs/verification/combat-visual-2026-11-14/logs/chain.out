@@ -1,0 +1,7 @@
+build-head exit 0
+lib-tests exit 0
+sim-build exit 0
+clippy exit 0
+wasm-check exit 0
+fmt-check exit 1
+CHAIN DONE
