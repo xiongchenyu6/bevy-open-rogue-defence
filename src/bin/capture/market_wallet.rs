@@ -60,8 +60,14 @@ fn verify_first_purchase_frame(world: &mut World) {
     }
     assert_eq!(hud.as_deref(), Some(actual.to_string().as_str()));
     assert!(
-        header.as_ref().unwrap().contains(&format!("KILLS {actual:04}"))
-            || header.as_ref().unwrap().contains(&format!("击杀 {actual:04}"))
+        header
+            .as_ref()
+            .unwrap()
+            .contains(&format!("KILLS {actual:04}"))
+            || header
+                .as_ref()
+                .unwrap()
+                .contains(&format!("击杀 {actual:04}"))
     );
     assert!(
         feedback.as_ref().unwrap().contains("Bought")

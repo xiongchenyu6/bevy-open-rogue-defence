@@ -35,7 +35,10 @@ fn set_background(window: u32, color: Color) -> Result<(), Box<dyn std::error::E
         .reply()?
         .pixel;
     connection
-        .change_window_attributes(window, &ChangeWindowAttributesAux::new().background_pixel(pixel))?
+        .change_window_attributes(
+            window,
+            &ChangeWindowAttributesAux::new().background_pixel(pixel),
+        )?
         .check()?;
     connection.flush()?;
     Ok(())

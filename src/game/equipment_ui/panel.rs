@@ -19,10 +19,20 @@ pub(super) fn panel(
     } else {
         320.0
     };
-    let preview_size = if short { 48.0 } else if compact { 88.0 } else { 176.0 };
+    let preview_size = if short {
+        48.0
+    } else if compact {
+        88.0
+    } else {
+        176.0
+    };
     let empty = !crafting_tab && owned.is_empty() && crafted.is_empty();
     let preview_box = if empty {
-        if compact { Vec2::new(110.0, 73.0) } else { Vec2::new(220.0, 147.0) }
+        if compact {
+            Vec2::new(110.0, 73.0)
+        } else {
+            Vec2::new(220.0, 147.0)
+        }
     } else {
         Vec2::splat(preview_size)
     };

@@ -7,9 +7,9 @@ use bevy::{
     prelude::*,
 };
 
+mod materials;
 #[path = "equipment_ui/panel.rs"]
 mod panel;
-mod materials;
 use panel::panel;
 
 const EMPTY_ARMORY_IMAGE: &str = "ui/armory/empty-rack.png";
@@ -98,7 +98,14 @@ pub(crate) fn install(app: &mut App) {
         )
         .add_systems(
             Update,
-            (feedback, details, materials::update, scroll, reveal_empty_armory).chain(),
+            (
+                feedback,
+                details,
+                materials::update,
+                scroll,
+                reveal_empty_armory,
+            )
+                .chain(),
         );
 }
 
@@ -484,7 +491,9 @@ fn reveal_empty_armory(
     mut art: Query<(&ImageNode, &mut Node), With<EmptyArmory>>,
 ) {
     for (image, mut node) in &mut art {
-        let ready = images.as_ref().is_some_and(|images| images.contains(&image.image));
+        let ready = images
+            .as_ref()
+            .is_some_and(|images| images.contains(&image.image));
         node.reborrow()
             .map_unchanged(|node| &mut node.display)
             .set_if_neq(if ready { Display::Flex } else { Display::None });
