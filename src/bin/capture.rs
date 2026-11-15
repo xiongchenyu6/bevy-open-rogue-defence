@@ -45,16 +45,16 @@ mod adventure_boss_capture;
 #[path = "capture/selection_detail.rs"]
 mod selection_detail_capture;
 
+#[path = "capture/equipment_growth.rs"]
+mod equipment_growth_capture;
 #[path = "capture/gate_countdown_labels.rs"]
 mod gate_countdown_labels_capture;
 #[path = "capture/gate_revival.rs"]
 mod gate_revival_capture;
-#[path = "capture/world_feedback.rs"]
-mod world_feedback_capture;
 #[path = "capture/reward_feedback.rs"]
 mod reward_feedback_capture;
-#[path = "capture/equipment_growth.rs"]
-mod equipment_growth_capture;
+#[path = "capture/world_feedback.rs"]
+mod world_feedback_capture;
 
 #[path = "capture/skill_identity.rs"]
 mod skill_identity_capture;

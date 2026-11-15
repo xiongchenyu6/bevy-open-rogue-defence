@@ -295,7 +295,7 @@ fn render(
     {
         commands.entity(root).despawn();
     }
-    let compact = size.y < 540.0;
+    let compact = size.y < 640.0;
     let width = (size.x - 24.0).min(1080.0);
     let height = (size.y - 24.0).min(720.0);
     let root=commands.spawn((Name::new("Campaign overlay"),CampaignOverlay,Node {position_type:PositionType::Absolute,width:percent(100),height:percent(100),align_items:AlignItems::Center,justify_content:JustifyContent::Center,..default()},BackgroundColor(Color::srgb(0.012,0.026,0.031)),GlobalZIndex(400), crate::game::controller_input::ControllerScope(400))).with_children(|overlay| {
@@ -308,7 +308,7 @@ fn render(
             panel.spawn((label(format!("{}  {}",progress.currency,language.pick("LEGACY SHARDS","传承碎片")),14.0,GOLD),Node {flex_shrink:0.0,..default()}));
             panel.spawn((Name::new("Campaign scroll body"),ScrollBody,ScrollPosition::default(),Node {flex_grow:1.0,min_height:px(0),overflow:Overflow::scroll_y(),flex_direction:FlexDirection::Column,..default()})).with_children(|body| {
                 match page {
-                    Page::Chapters=>chapters(body,&assets,*language,&progress,width,compact),
+                    Page::Chapters=>chapters(body,&assets,*language,&progress,width,height,compact),
                     Page::Training=>training(body,&assets,*language,&progress,width,compact),
                     Page::Result=>result(body,&assets,*language,&session,&run,&reward,seed.0,compact),
                 }
@@ -326,19 +326,36 @@ fn render(
     view.language = Some(*language);
     view.dirty = false;
 }
+fn chapter_card_height(panel_height: f32, columns: f32, compact: bool) -> f32 {
+    let rows = (6.0 / columns).ceil();
+    let chrome = if compact { 132.0 } else { 180.0 };
+    ((panel_height - chrome - (rows - 1.0) * 10.0) / rows).clamp(94.0, 205.0)
+}
+
 fn chapters(
     parent: &mut ChildSpawnerCommands,
     assets: &AssetServer,
     language: GameLanguage,
     progress: &CampaignProgress,
     width: f32,
+    height: f32,
     compact: bool,
 ) {
     let columns = if width < 480.0 { 2.0 } else { 3.0 };
     let card_width =
         (width - if compact { 20.0 } else { 40.0 } - (columns - 1.0) * 10.0 - 2.0) / columns;
+    // Reserve header, currency, hint, gaps and padding before sizing the grid.
+    // Short landscape screens must show both rows without relying on hidden scrolling.
+    let narrow_card = card_width < 160.0;
+    // Narrow portrait cards can wrap English titles onto a second line. Preserve
+    // readable content at tiny sizes and let ScrollBody handle the extra rows.
+    let card_height =
+        chapter_card_height(height, columns, compact).max(if narrow_card { 112.0 } else { 94.0 });
+    let small_card = card_height < 145.0;
+    let icon_size = (card_height - if narrow_card { 112.0 } else { 88.0 }).clamp(32.0, 96.0);
     parent
         .spawn(Node {
+            flex_shrink: 0.0,
             flex_wrap: FlexWrap::Wrap,
             column_gap: px(10),
             row_gap: px(10),
@@ -355,13 +372,13 @@ fn chapters(
                     Hint(chapter_hint(language, stage, unlocked)),
                     Node {
                         width: px(card_width),
-                        height: px(if compact { 140 } else { 205 }),
-                        padding: UiRect::all(px(10)),
+                        height: px(card_height),
+                        padding: UiRect::all(px(if small_card { 5 } else { 10 })),
                         border: UiRect::all(px(1)),
                         flex_direction: FlexDirection::Column,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
-                        row_gap: px(5),
+                        row_gap: px(if small_card { 2 } else { 5 }),
                         flex_shrink: 0.0,
                         ..default()
                     },
@@ -385,8 +402,9 @@ fn chapters(
                             ..default()
                         },
                         Node {
-                            width: px(if compact { 55 } else { 96 }),
-                            height: px(if compact { 55 } else { 96 }),
+                            width: px(icon_size),
+                            height: px(icon_size),
+                            flex_shrink: 0.0,
                             ..default()
                         },
                         Pickable::IGNORE,

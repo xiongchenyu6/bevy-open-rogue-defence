@@ -125,6 +125,49 @@ fn exercise(world: &mut World) {
             *interaction = Interaction::None;
         }
     }
+    if frame == 20 {
+        let bounds: Vec<_> = world
+            .query::<(&Name, &ComputedNode, &UiGlobalTransform)>()
+            .iter(world)
+            .map(|(name, node, transform)| {
+                (
+                    name.as_str().to_owned(),
+                    Rect::from_center_size(transform.translation, node.size()),
+                )
+            })
+            .collect();
+        let body = bounds
+            .iter()
+            .find(|(name, _)| name == "Campaign scroll body")
+            .unwrap()
+            .1;
+        let cards: Vec<_> = bounds
+            .iter()
+            .filter(|(name, _)| name.starts_with("Campaign chapter "))
+            .collect();
+        assert_eq!(cards.len(), 6);
+        let tiny_height = world
+            .query::<&Window>()
+            .iter(world)
+            .next()
+            .is_some_and(|window| window.height() < 360.0);
+        for (name, rect) in cards {
+            assert!(
+                rect.min.x >= body.min.x - 1.
+                    && rect.max.x <= body.max.x + 1.
+                    && rect.min.y >= body.min.y - 1.
+                    && (tiny_height || rect.max.y <= body.max.y + 1.),
+                "chapter clipped: {name} {rect:?}, scroll body {body:?}"
+            );
+        }
+        if tiny_height {
+            println!(
+                "[capture] PASS chapter cards retain width within {body:?}; tiny-height vertical scroll fallback"
+            );
+        } else {
+            println!("[capture] PASS all six chapter cards fully visible inside {body:?}");
+        }
+    }
     if reload {
         if frame == 25 {
             let progress = world.resource::<CampaignProgress>();

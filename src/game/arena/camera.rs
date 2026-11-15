@@ -33,7 +33,15 @@ pub(super) fn initial_transform() -> Transform {
 }
 
 fn vertical_span(size: Vec2) -> f32 {
-    28.0_f32.max(22.0 * size.y / size.x)
+    // Wide phones need a battle view, not a miniature overview of the entire road.
+    // Keep desktop and portrait framing; edge-follow exposes offscreen enemies.
+    let landscape_phone =
+        size.x >= size.y && (hud_metrics(size.x, size.y).compact || size.x / size.y >= 1.95);
+    if landscape_phone {
+        19.0
+    } else {
+        28.0_f32.max(22.0 * size.y / size.x)
+    }
 }
 
 fn ground_up() -> Vec3 {
@@ -69,7 +77,7 @@ fn gameplay_rect(size: Vec2, touch: bool) -> Rect {
     let layout = hud_metrics(size.x, size.y);
     let (left, top, right, bottom) = if size.y > size.x {
         (28.0, 270.0, size.x - 28.0, size.y - 100.0)
-    } else if layout.compact {
+    } else if layout.compact || (touch && size.x / size.y >= 1.95) {
         (
             layout.safe_x + 220.0 + 20.0,
             125.0,
@@ -238,6 +246,23 @@ mod tests {
             ))
             .id();
         (app, window, hero, camera)
+    }
+
+    #[test]
+    fn landscape_phone_enlarges_combat_without_zooming_desktop_or_portrait() {
+        for size in [
+            Vec2::new(667., 375.),
+            Vec2::new(844., 390.),
+            Vec2::new(1280., 589.),
+        ] {
+            assert!(28. / vertical_span(size) > 1.4);
+            let point = Vec3::new(-8.2, BODY_CENTER_HEIGHT, 0.);
+            let pixel = bevy_projected(point, hero_base(point, size, true), size);
+            let safe = gameplay_rect(size, true);
+            assert!(pixel.distance(pixel.clamp(safe.min, safe.max)) < 0.001);
+        }
+        assert_eq!(vertical_span(Vec2::new(1280., 720.)), 28.);
+        assert!(vertical_span(Vec2::new(390., 844.)) > 47.);
     }
 
     #[test]
