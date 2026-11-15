@@ -40,14 +40,19 @@ pub(super) fn update_control_scheme(
     mut motion: MessageReader<bevy::input::mouse::MouseMotion>,
     mut scheme: ResMut<ControlScheme>,
 ) {
-    scheme.observe(
-        touches.iter_just_pressed().next().is_some(),
-        keyboard.get_just_pressed().next().is_some()
-            || mouse.get_just_pressed().next().is_some()
-            || motion
-                .read()
-                .any(|event| event.delta.length_squared() > 0.0),
-    );
+    // Drain motion every frame, including touch frames. Browser compatibility
+    // mouse events cannot be distinguished reliably from a physical mouse here.
+    // Keep Touch until explicit keyboard/controller input selects another mode:
+    // pointer taps must not resize the HUD and jump the camera's safe region.
+    let mouse_moved = motion.read().fold(false, |moved, event| {
+        moved || event.delta.length_squared() > 0.0
+    });
+    let pointer_pressed = mouse.get_just_pressed().next().is_some() || mouse_moved;
+    let touch_active =
+        touches.iter().next().is_some() || touches.iter_just_pressed().next().is_some();
+    let keyboard_pressed = keyboard.get_just_pressed().next().is_some();
+    let pointer_selects_keyboard = pointer_pressed && !scheme.touch();
+    scheme.observe(touch_active, keyboard_pressed || pointer_selects_keyboard);
 }
 
 /// Shared measurements for the compact landscape HUD and its touch controls.
@@ -141,6 +146,70 @@ mod tests {
         assert!(!scheme.touch());
         scheme.observe(true, true);
         assert!(scheme.touch());
+    }
+
+    #[test]
+    fn compatibility_mouse_events_do_not_leave_touch_mode() {
+        use bevy::input::{
+            mouse::MouseMotion,
+            touch::{TouchInput, TouchPhase},
+        };
+        let mut app = App::new();
+        app.init_resource::<Touches>()
+            .init_resource::<ButtonInput<KeyCode>>()
+            .init_resource::<ButtonInput<MouseButton>>()
+            .init_resource::<ControlScheme>()
+            .add_message::<MouseMotion>()
+            .add_message::<TouchInput>()
+            .add_systems(
+                Update,
+                (
+                    bevy::input::touch::touch_screen_input_system,
+                    update_control_scheme,
+                )
+                    .chain(),
+            );
+        let window = app.world_mut().spawn_empty().id();
+        app.world_mut().write_message(TouchInput {
+            phase: TouchPhase::Started,
+            position: Vec2::ZERO,
+            window,
+            force: None,
+            id: 7,
+        });
+        app.update();
+        assert!(app.world().resource::<ControlScheme>().touch());
+        for phase in [TouchPhase::Moved, TouchPhase::Ended] {
+            app.world_mut().write_message(TouchInput {
+                phase,
+                position: Vec2::X,
+                window,
+                force: None,
+                id: 7,
+            });
+            app.world_mut()
+                .write_message(MouseMotion { delta: Vec2::X });
+            app.world_mut()
+                .resource_mut::<ButtonInput<MouseButton>>()
+                .press(MouseButton::Left);
+            app.update();
+            assert!(app.world().resource::<ControlScheme>().touch());
+        }
+        // Delayed compatibility events after release must also be harmless.
+        for _ in 0..4 {
+            app.world_mut()
+                .write_message(MouseMotion { delta: Vec2::X });
+            app.update();
+            assert!(app.world().resource::<ControlScheme>().touch());
+        }
+        app.world_mut()
+            .resource_mut::<ButtonInput<KeyCode>>()
+            .press(KeyCode::ArrowRight);
+        app.update();
+        assert_eq!(
+            *app.world().resource::<ControlScheme>(),
+            ControlScheme::Keyboard
+        );
     }
 
     #[test]

@@ -12,6 +12,9 @@ use rogue_commander::game::{
 #[derive(Resource, Default)]
 struct Probe(u32);
 
+#[derive(Resource, Default)]
+struct StableCamera(Option<Vec3>);
+
 #[derive(Resource)]
 struct TouchProbe {
     window: Entity,
@@ -35,7 +38,8 @@ pub fn install(app: &mut bevy::app::SubApp, touch: bool) {
             position: size * 0.5,
         });
     }
-    app.init_resource::<Probe>()
+    app.init_resource::<StableCamera>()
+        .init_resource::<Probe>()
         .add_systems(PreUpdate, touch_input.before(bevy::input::InputSystems))
         .add_systems(PreUpdate, pose.after(bevy::input::InputSystems))
         .add_systems(Last, audit);
@@ -46,10 +50,15 @@ fn touch_input(
     touch: Option<ResMut<TouchProbe>>,
     pads: Query<(&Name, &UiGlobalTransform)>,
     mut messages: MessageWriter<TouchInput>,
+    mut mouse: MessageWriter<bevy::input::mouse::MouseMotion>,
 ) {
     let Some(mut touch) = touch else {
         return;
     };
+    // Browsers can emit compatibility mouse motion after a tap or during a drag.
+    if [2, 5, 9].contains(&probe.0) {
+        mouse.write(bevy::input::mouse::MouseMotion { delta: Vec2::X });
+    }
     if probe.0 == 4 {
         touch.position = pads
             .iter()
@@ -91,7 +100,27 @@ fn audit(
     cameras: Query<(&Camera, &GlobalTransform), With<Camera3d>>,
     touch: Option<Res<TouchProbe>>,
     scheme: Res<ControlScheme>,
+    mut stable: ResMut<StableCamera>,
 ) {
+    if touch.is_some() && (2..=12).contains(&probe.0) {
+        assert!(
+            scheme.touch(),
+            "compatibility mouse events must not disable touch mode"
+        );
+        let position = cameras.single().unwrap().1.translation();
+        if let Some(previous) = stable.0 {
+            assert!(
+                position.distance(previous) < 0.001,
+                "stationary tap/joystick changed camera: {previous:?} -> {position:?}"
+            );
+        }
+        stable.0 = Some(position);
+        if probe.0 == 12 {
+            println!(
+                "[capture] PASS touch stability: tap, joystick press/release and compatibility mouse events keep camera fixed"
+            );
+        }
+    }
     if ![59, 119, 179, 239].contains(&probe.0) {
         return;
     }
