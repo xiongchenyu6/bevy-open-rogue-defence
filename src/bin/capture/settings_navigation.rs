@@ -202,11 +202,11 @@ fn audit(world: &mut World) {
             window.physical_height() as f32,
         );
         let mut count = 0;
-        for (name, node, transform) in world
-            .query_filtered::<(&Name, &ComputedNode, &UiGlobalTransform), With<Button>>()
+        for (name, node, transform, style) in world
+            .query_filtered::<(&Name, &ComputedNode, &UiGlobalTransform, &Node), With<Button>>()
             .iter(world)
         {
-            if !name.as_str().starts_with("Settings ") {
+            if !name.as_str().starts_with("Settings ") || style.display == Display::None {
                 continue;
             }
             count += 1;
