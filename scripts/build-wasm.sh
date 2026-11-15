@@ -51,7 +51,7 @@ wasm-bindgen \
 # Pages cannot be configured with a custom Content-Encoding header. Ship a
 # gzip sidecar that the loading screen expands in browsers supporting the
 # standard DecompressionStream API, while retaining the raw WASM as fallback.
-gzip -9 -kf dist/rogue_commander_bg.wasm
+gzip -n -9 -kf dist/rogue_commander_bg.wasm
 
 cp -R web/. dist/
 cp -R assets dist/assets
@@ -84,5 +84,8 @@ for required_asset in "${required_web_assets[@]}"; do
 done
 
 touch dist/.nojekyll
+
+python3 tools/generate_web_manifest.py dist \
+  --revision "$(git rev-parse HEAD)" --template web/sw.js
 
 echo "WASM site built at ${project_root}/dist"

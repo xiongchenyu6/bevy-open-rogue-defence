@@ -56,7 +56,4 @@ button.addEventListener('click', async () => {
   finally { button.disabled = false; render(); }
 });
 document.querySelector('#install-close').addEventListener('click', () => dialog.close());
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js', { scope: './', updateViaCache: 'none' }).catch(console.warn);
-}
 render();

@@ -235,6 +235,7 @@
       }
     </style>
     <link rel="stylesheet" href="./pwa.css" />
+    <link rel="stylesheet" href="./game-cache.css" />
   </head>
   <body>
     <canvas id="bevy-canvas" tabindex="0"></canvas>
@@ -264,6 +265,11 @@
         <p id="hint" class="hint">
           Chrome or Edge recommended · Rotate phones to landscape.
         </p>
+        <section id="cache-card" aria-live="polite">
+          <p id="cache-status"></p>
+          <progress id="cache-progress" hidden max="1" value="0"></progress>
+          <div id="cache-actions"><button id="cache-update" type="button" hidden></button><button id="cache-later" type="button" hidden></button></div>
+        </section>
         <section id="install-card" hidden aria-label="Install">
           <p id="install-summary"></p>
           <button id="install-button" class="install-action" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11 12 3l9 8M5 10v11h14V10M12 8v9m-3-3 3 3 3-3"/></svg><span id="install-label"></span></button>
@@ -282,6 +288,7 @@
     </aside>
     <script type="module">
       import { setInstallLanguage } from "./pwa.js";
+      import { setCacheLanguage, prepareGameCache, markGameStarted, consumeCacheResume } from "./game-cache.js";
       const loading = document.querySelector("#loading");
       const progress = document.querySelector("#progress-fill");
       const start = document.querySelector("#start");
@@ -308,8 +315,8 @@
           loading: "LOADING",
           deploying: "Deploying heroes, enemies, and battlefield resources…",
           downloadKnown: (received, total) =>
-            `Downloading battlefield ${received} / ${total} MB`,
-          downloadUnknown: (received) => `Downloading battlefield ${received} MB`,
+            `Reading game resources ${received} / ${total} MB`,
+          downloadUnknown: (received) => `Reading game resources ${received} MB`,
           initializing: "Initializing Bevy…",
           ready: "DEFENSE ESTABLISHED",
           loadError: "Loading failed. Update your browser and try again.",
@@ -328,8 +335,8 @@
           loading: "加载中",
           deploying: "正在部署英雄、敌军与战场资源…",
           downloadKnown: (received, total) =>
-            `正在下载战场 ${received} / ${total} MB`,
-          downloadUnknown: (received) => `正在下载战场 ${received} MB`,
+            `正在读取游戏资源 ${received} / ${total} MB`,
+          downloadUnknown: (received) => `正在读取游戏资源 ${received} MB`,
           initializing: "正在初始化 Bevy…",
           ready: "防线已建立",
           loadError: "加载失败，请更新浏览器后重试。",
@@ -383,6 +390,7 @@
         currentLanguage = normalizeLanguage(value) ?? "en";
         document.documentElement.lang = currentLanguage === "zh-CN" ? "zh-Hans" : "en";
         setInstallLanguage(currentLanguage);
+        setCacheLanguage(currentLanguage);
         description.content = copy("description");
         languageSwitch.setAttribute("aria-label", copy("languageLabel"));
         subtitle.textContent = copy("subtitle");
@@ -541,9 +549,10 @@
         start.textContent = copy("loading");
         status.textContent = copy("deploying");
         progress.style.width = "8%";
-        await enterMobilePlayMode();
+        void enterMobilePlayMode();
 
         try {
+          await prepareGameCache();
           const { default: init } = await import("./rogue_commander.js");
           const wasm = await downloadCompressedWasm();
           status.textContent = copy("initializing");
@@ -554,6 +563,7 @@
           document.querySelector("#bevy-canvas")?.focus();
           void keepScreenAwake();
           window.setTimeout(() => {
+            markGameStarted();
             document.body.classList.add("playing");
             loading.classList.add("hidden");
             languageSwitch.classList.add("hidden");
@@ -562,6 +572,7 @@
           console.error(error);
           const message = String(error);
           if (message.includes("Using exceptions for control flow")) {
+            markGameStarted();
             document.body.classList.add("playing");
             loading.classList.add("hidden");
             languageSwitch.classList.add("hidden");
@@ -574,6 +585,8 @@
           }
         }
       });
+
+      if (consumeCacheResume()) start.click();
 
       document.addEventListener("visibilitychange", () => {
         if (

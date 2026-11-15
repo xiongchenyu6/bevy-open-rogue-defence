@@ -43,6 +43,9 @@ jobs:
         run: |
           python3 tools/verify_models.py
           python3 tools/verify_ui_assets.py
+          python3 -m unittest discover -s tools -p test_generate_web_manifest.py
+          node --check web/sw.js
+          node --check web/game-cache.js
 
       - name: Build web distribution
         run: bash scripts/build-wasm.sh

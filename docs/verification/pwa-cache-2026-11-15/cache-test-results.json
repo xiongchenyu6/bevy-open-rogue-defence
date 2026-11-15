@@ -1,0 +1,16 @@
+{
+  "passed": [
+    "first concurrent preparation verifies and persists assets, deduplicates identical hashes and downloads gzip only",
+    "re-entry performs zero shell, model, texture or engine network requests",
+    "browser process restart preserves cache and cold offline navigation works",
+    "detecting/deferring an update downloads no game assets and keeps old version playable",
+    "closing every tab after deferring does not silently commit the naturally activated update",
+    "accepted update downloads only changed hashes; old open tab remains pinned to old assets",
+    "same-size hash corruption prevents activation and leaves old cached version intact",
+    "retry after integrity failure recovers and activates complete version",
+    "interrupted update retains the old complete version for offline use",
+    "raw-WASM capability path saves only raw engine and works offline"
+  ],
+  "pageErrors": [],
+  "browser": "156.0.8078.73"
+}

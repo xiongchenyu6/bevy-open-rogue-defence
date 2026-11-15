@@ -1,0 +1,14 @@
+{
+  "passed": [
+    "actual Start button prepares resources before engine initialization",
+    "actual second Start initializes from saved resources with zero asset downloads",
+    "update offer and both actions fit desktop, landscape phone and portrait viewports",
+    "Later starts the old engine instead of silently upgrading",
+    "update offer survives a full browser restart and natural worker activation",
+    "Download & update commits, reloads and starts the new engine",
+    "failed update shows retry while keeping Start available for previous engine",
+    "legacy network-only worker migrates through waiting worker and resumes Start after one reload"
+  ],
+  "pageErrors": [],
+  "engine": "stub only; production HTML/CSS/PWA/SW and real CacheStorage"
+}
