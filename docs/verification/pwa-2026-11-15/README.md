@@ -22,3 +22,8 @@ require device verification; mocks do not prove OS installation.
 
 [Short landscape](short-landscape.png) · [Portrait](portrait.png) ·
 [iPhone guide](ios-guide.png) · [Android guide](android-guide.png)
+
+Public release verified: `a7f326a76d736e145b97835841a56a0db9b979fa`,
+Pages run `43678442014` completed successfully. Actual public button click opened
+[iPhone instructions](public-guide.png); manifest standalone display and service
+worker scope `/bevy-open-rogue-defence/` verified. Browser reported no page errors.
