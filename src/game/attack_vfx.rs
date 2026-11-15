@@ -775,6 +775,21 @@ pub(crate) fn animate(
             _ => continue,
         };
         let length = length * tier.intensity;
+        if tier.index == 1 {
+            painter.emit(
+                art.streak.clone(),
+                color.clone(),
+                Transform::from_translation(position - direction * length * 0.5)
+                    .looking_to(direction, Vec3::Y)
+                    .with_scale(Vec3::new(0.65, 0.65, length)),
+                Vec3::ZERO,
+                0.10,
+                false,
+                0.0,
+            );
+            continue;
+        }
+
         // Layer a bright seed over the colored body, with a moving orbital shell.
         // These travel at projectile velocity and expire quickly, so pooled reuse
         // never leaves attached children or a glow on the next rented projectile.

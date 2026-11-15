@@ -452,7 +452,7 @@ fn ranged_real_release_preserves_committed_metadata_and_starter_boundaries() {
                 app.world()
                     .get::<super::super::skill_lighting::NoGroundProjection>(entity)
                     .is_some(),
-                kind == HeroKind::EmberRanger && level == 1
+                basic_attacks::basic_attack_visual_tier(level).index < 2
             );
             let bounce = app.world().get::<basic_attacks::Ricochet>(entity);
             if kind == HeroKind::EmberRanger {

@@ -545,13 +545,15 @@ fn present(
             clock.phase,
             None,
         );
-        painter.burst(
-            Motif::for_profile(ground.0),
-            position.with_y(0.4),
-            build.skills[index],
-            clock.phase,
-            true,
-        );
+        if index != 1 || build.skills[index] >= 3 {
+            painter.burst(
+                Motif::for_profile(ground.0),
+                position.with_y(0.4),
+                build.skills[index],
+                clock.phase,
+                true,
+            );
+        }
     }
     for (transform, bone, hound, tide, turret, banner, wyrm, colossus) in &new_summons {
         let index = if bone.is_some() {
@@ -593,13 +595,22 @@ fn present(
             .get(&entity)
             .filter(|burn| burn.remaining > 0.0)
         {
-            painter.burst(
-                Motif::Fire,
-                position,
-                burn.layers.clamp(1, 5),
-                clock.phase,
-                false,
-            );
+            // A sustained status is a compact tell, not a fresh explosion every tick.
+            // Spell casts and impacts above retain their full rank-dependent spectacle.
+            if clock.frame.is_multiple_of(3) {
+                let size = 1.0 + f32::from(burn.layers.saturating_sub(1)) * 0.10;
+                painter.emit(
+                    Motif::Fire,
+                    painter.art.shard.clone(),
+                    position,
+                    Vec3::new(0.09, 0.24, 0.09) * size,
+                    Quat::IDENTITY,
+                    Vec3::Y * 0.45,
+                    0.20,
+                    0.0,
+                    0.0,
+                );
+            }
         }
         if let Some(control) = runtime.controls.get(&entity) {
             if control.stunned_remaining > 0.0 {
@@ -651,13 +662,15 @@ fn present(
             rank,
             clock.phase,
         );
-        painter.burst(
-            Motif::for_profile(*profile),
-            transform.translation,
-            rank,
-            clock.phase,
-            false,
-        );
+        if profile.skill_index != Some(1) || rank >= 3 {
+            painter.burst(
+                Motif::for_profile(*profile),
+                transform.translation,
+                rank,
+                clock.phase,
+                false,
+            );
+        }
     }
     if clock.frame.is_multiple_of(3) {
         for (transform, zone) in zones.iter().take(8) {

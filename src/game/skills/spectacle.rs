@@ -178,6 +178,20 @@ pub(super) fn impact(
             Motif::Shock,
             0.10 * scale,
         ),
+        1 if rank <= 2 => {
+            // The first learned fire proc gets a brief contact spark, not a fire pillar.
+            p.emit(
+                Motif::Fire,
+                p.art.shard.clone(),
+                at + Vec3::Y * 0.2,
+                Vec3::new(0.08, 0.22, 0.08) * scale,
+                Quat::from_rotation_z(phase),
+                Vec3::Y * 0.3,
+                0.12,
+                0.0,
+                0.0,
+            );
+        }
         1 => {
             shards(p, Motif::Fire, at, 0.35, 0.8 * scale, 4, phase);
             fissure(p, Motif::Fire, at, 0.55 * scale, phase);
@@ -656,18 +670,28 @@ pub(super) fn projectile(
     let scale = rank_size(rank);
     match index {
         1 => {
+            let fire_scale =
+                scale * [0.30, 0.45, 0.65, 0.82, 1.0][usize::from(rank.clamp(1, 5) - 1)];
             p.emit(
                 Motif::Fire,
                 p.art.shard.clone(),
                 at,
-                Vec3::new(0.18, 0.7, 0.18) * scale,
+                Vec3::new(0.18, 0.7, 0.18) * fire_scale,
                 rotation,
                 Vec3::ZERO,
                 0.16,
                 0.0,
                 0.0,
             );
-            p.beam(Motif::Buff, at - forward * 1.1, at, 0.06, 0.16);
+            if rank >= 3 {
+                p.beam(
+                    Motif::Buff,
+                    at - forward * (0.6 + f32::from(rank) * 0.1),
+                    at,
+                    0.06,
+                    0.16,
+                );
+            }
         }
         2 => p.emit(
             Motif::Ice,

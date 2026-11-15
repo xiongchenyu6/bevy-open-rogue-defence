@@ -301,7 +301,7 @@ fn emit(
                     WeaponFlight::new(request.kind),
                     profile(request.kind),
                 ));
-                if basic_attacks::is_starter_ember_arrow(request.kind, vitals.level) {
+                if basic_attacks::basic_attack_visual_tier(vitals.level).index < 2 {
                     commands
                         .entity(projectile)
                         .insert(super::skill_lighting::NoGroundProjection);

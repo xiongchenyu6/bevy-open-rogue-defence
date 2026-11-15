@@ -371,6 +371,10 @@ fn tick_wet_marks(
     }
 }
 
+fn ember_stack_feedback(level: u32, previous: u8, current: u8) -> bool {
+    level >= 10 && previous < 12 && current == 12
+}
+
 #[allow(clippy::too_many_arguments)]
 fn observe_basic_attack_passives(
     mut commands: Commands,
@@ -394,11 +398,14 @@ fn observe_basic_attack_passives(
     for kind in runtime.kinds(selected.kind) {
         match kind {
             HeroKind::EmberRanger => {
+                let previous_stacks = runtime.ember_stacks;
                 let gained = basic_attacks.min(u8::MAX as u64) as u8;
                 runtime.ember_stacks = runtime.ember_stacks.saturating_add(gained).min(12);
                 runtime.ember_decay_timer = 0.0;
                 attack_speed.0 = ember_attack_speed_multiplier(runtime.ember_stacks);
-                if let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single()) {
+                if ember_stack_feedback(vitals.level, previous_stacks, runtime.ember_stacks)
+                    && let (Some(assets), Ok(hero)) = (assets.as_deref(), hero.single())
+                {
                     spawn_ability_fx(
                         &mut commands,
                         &mut pools,
@@ -1211,6 +1218,15 @@ pub(crate) fn reset_run(world: &mut World) {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn ember_feedback_requires_earned_tier_and_new_full_stack() {
+        assert!(!super::ember_stack_feedback(1, 11, 12));
+        assert!(!super::ember_stack_feedback(10, 0, 1));
+        assert!(super::ember_stack_feedback(10, 11, 12));
+        assert!(super::ember_stack_feedback(40, 0, 12));
+        assert!(!super::ember_stack_feedback(40, 12, 12));
+    }
+
     use std::collections::HashSet;
 
     use super::*;

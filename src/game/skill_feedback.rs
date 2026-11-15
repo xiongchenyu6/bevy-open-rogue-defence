@@ -353,16 +353,31 @@ fn projectile_rank_scale(rank: u8) -> f32 {
     1.0 + f32::from(rank.clamp(1, 5) - 1) * 0.13
 }
 fn size_skill_projectiles(
+    mut commands: Commands,
     build: Res<PlayerBuild>,
-    mut projectiles: Query<(&DamageProfile, &mut Transform), (Added<Projectile>, With<Mesh3d>)>,
+    mut projectiles: Query<
+        (Entity, &DamageProfile, &mut Transform),
+        (Added<Projectile>, With<Mesh3d>),
+    >,
 ) {
-    for (profile, mut transform) in &mut projectiles {
+    for (entity, profile, mut transform) in &mut projectiles {
         if let Some(index) = profile
             .skill_index
             .and_then(|index| build.skills.get(index as usize))
         {
             // Presentation only; never enlarge collision radius or change damage.
             transform.scale *= projectile_rank_scale(*index);
+            // A learned low-rank fire proc is a small ember, not an endgame fireball.
+            // Collision, burning damage and cadence remain independent of its art.
+            if profile.skill_index == Some(1) {
+                transform.scale *=
+                    [0.35, 0.50, 0.70, 0.85, 1.0][usize::from((*index).clamp(1, 5) - 1)];
+                if *index <= 2 {
+                    commands
+                        .entity(entity)
+                        .insert(super::skill_lighting::NoGroundProjection);
+                }
+            }
         }
     }
 }
@@ -442,6 +457,45 @@ mod tests {
         assert!(!text.contains("Hero absorption"));
         assert!(notice_duration(notice) > 4.0);
     }
+    #[test]
+    fn low_rank_ember_art_is_small_without_changing_combat() {
+        for rank in [1, 2, 5] {
+            let mut app = App::new();
+            app.init_resource::<PlayerBuild>()
+                .add_systems(Update, size_skill_projectiles);
+            app.world_mut().resource_mut::<PlayerBuild>().skills[1] = rank;
+            let entity = app
+                .world_mut()
+                .spawn((
+                    Projectile {
+                        velocity: Vec3::X * 12.0,
+                        damage: 31.0,
+                        radius: 0.46,
+                        remaining_hits: 0,
+                        lifetime: 1.5,
+                    },
+                    Mesh3d::default(),
+                    DamageProfile::for_skill(1).with_burn(),
+                    Transform::IDENTITY,
+                ))
+                .id();
+            app.update();
+            let scale = app.world().get::<Transform>(entity).unwrap().scale.x;
+            assert_eq!(
+                app.world()
+                    .get::<super::super::skill_lighting::NoGroundProjection>(entity)
+                    .is_some(),
+                rank <= 2
+            );
+            assert!(if rank <= 2 { scale < 0.6 } else { scale > 1.5 });
+            let shot = app.world().get::<Projectile>(entity).unwrap();
+            assert_eq!((shot.damage, shot.radius, shot.lifetime), (31.0, 0.46, 1.5));
+            assert_eq!(shot.velocity, Vec3::X * 12.0);
+            app.update();
+            assert_eq!(app.world().get::<Transform>(entity).unwrap().scale.x, scale);
+        }
+    }
+
     #[test]
     fn projectile_rank_size_is_applied_once_and_pool_reuse_starts_fresh() {
         let mut app = App::new();

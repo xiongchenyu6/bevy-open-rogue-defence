@@ -39,10 +39,10 @@ mod balance_cadence;
 #[path = "capture/class_attacks.rs"]
 mod class_attacks_capture;
 
-#[path = "capture/camp_interaction.rs"]
-mod camp_interaction_capture;
 #[path = "capture/adventure_boss.rs"]
 mod adventure_boss_capture;
+#[path = "capture/camp_interaction.rs"]
+mod camp_interaction_capture;
 
 #[path = "capture/selection_detail.rs"]
 mod selection_detail_capture;

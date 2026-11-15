@@ -88,7 +88,7 @@ pub(super) fn emit(
     commands
         .entity(entity)
         .insert((profile, WeaponFlight::new(shot.kind)));
-    if basic_attacks::is_starter_ember_arrow(shot.kind, shot.level) {
+    if basic_attacks::basic_attack_visual_tier(shot.level).index < 2 {
         commands
             .entity(entity)
             .insert(super::super::skill_lighting::NoGroundProjection);

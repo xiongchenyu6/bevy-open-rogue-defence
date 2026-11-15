@@ -83,9 +83,9 @@ pub(crate) const fn basic_attack_visual_tier(level: u32) -> BasicAttackVisualTie
     };
     BasicAttackVisualTier {
         index,
-        emissive: [0.15, 1.2, 3.5, 7.0][index],
-        projectile_scale: [0.65, 0.8, 0.95, 1.1][index],
-        intensity: [0.2, 0.45, 0.7, 1.0][index],
+        emissive: [0.0, 0.45, 3.5, 7.0][index],
+        projectile_scale: [0.65, 0.72, 0.95, 1.1][index],
+        intensity: [0.14, 0.28, 0.7, 1.0][index],
     }
 }
 
@@ -97,13 +97,14 @@ pub(crate) struct BasicAttackArt {
     arrow: Handle<Mesh>,
     starter_arrow: Handle<Mesh>,
     starter_arrow_material: Handle<StandardMaterial>,
+    plain_projectiles: [Handle<Mesh>; 5],
     mechanical_bolt: Handle<Mesh>,
     storm: Handle<Mesh>,
     spirit: Handle<Mesh>,
     star: Handle<Mesh>,
     frost: Handle<Mesh>,
     melee_shapes: [Handle<Mesh>; 6],
-    starter_stone_swing: Handle<Mesh>,
+    plain_melee_swing: Handle<Mesh>,
     melee_fades: [[[Handle<StandardMaterial>; 6]; 4]; 6],
     pub(crate) materials: [Handle<StandardMaterial>; HeroKind::COUNT],
     tier_materials: [[Handle<StandardMaterial>; HeroKind::COUNT]; 4],
@@ -112,7 +113,7 @@ pub(crate) struct BasicAttackArt {
 const MELEE_TRAIL_ALPHA: [f32; 6] = [0.68, 0.50, 0.34, 0.20, 0.09, 0.02];
 
 pub(crate) fn is_starter_ember_arrow(kind: HeroKind, level: u32) -> bool {
-    kind == HeroKind::EmberRanger && basic_attack_visual_tier(level).index == 0
+    kind == HeroKind::EmberRanger && basic_attack_visual_tier(level).index < 2
 }
 
 impl BasicAttackArt {
@@ -149,6 +150,20 @@ impl BasicAttackArt {
             return (
                 self.starter_arrow.clone(),
                 self.starter_arrow_material.clone(),
+            );
+        }
+        if basic_attack_visual_tier(level).index < 2 {
+            let index = match weapon(kind) {
+                BasicWeapon::Crossbow => 0,
+                BasicWeapon::Storm => 1,
+                BasicWeapon::Spirit => 2,
+                BasicWeapon::Star => 3,
+                BasicWeapon::Frost => 4,
+                _ => unreachable!("melee weapons do not emit projectiles"),
+            };
+            return (
+                self.plain_projectiles[index].clone(),
+                self.material_at_level(kind, level),
             );
         }
         let (mesh, _) = self.projectile(kind);
@@ -319,13 +334,22 @@ pub(crate) fn setup_attack_art(
         arrow: meshes.add(arrow),
         starter_arrow: meshes.add(starter_arrow_mesh()),
         starter_arrow_material,
+        // Small, solid silhouettes before the level-20 weapon awakening.
+        plain_projectiles: [
+            Mesh::from(Cuboid::new(0.075, 0.075, 0.95)),
+            crystal(Vec3::new(0.11, 0.10, 0.48)),
+            Mesh::from(Sphere::new(0.20)).scaled_by(Vec3::new(0.75, 0.75, 1.5)),
+            star_mesh().scaled_by(Vec3::splat(0.55)),
+            crystal(Vec3::new(0.12, 0.12, 0.56)),
+        ]
+        .map(|mesh| meshes.add(mesh)),
         mechanical_bolt: meshes.add(mechanical_bolt),
         storm: meshes.add(storm.scaled_by(Vec3::splat(1.55))),
         spirit: meshes.add(spirit.scaled_by(Vec3::splat(1.50))),
         star: meshes.add(star.scaled_by(Vec3::splat(1.45))),
         frost: meshes.add(frost.scaled_by(Vec3::splat(1.65))),
         melee_shapes: melee_meshes().map(|mesh| meshes.add(mesh)),
-        starter_stone_swing: meshes.add(slash_mesh(1.16, 0.22, 0.0, 1.0)),
+        plain_melee_swing: meshes.add(slash_mesh(1.16, 0.22, 0.0, 1.0)),
         melee_fades,
         materials: palette,
         tier_materials,
@@ -695,17 +719,14 @@ pub(crate) fn resolve_swings(
         if let Some(art) = art.as_deref() {
             let style = swing_style(swing.kind);
             let tier = basic_attack_visual_tier(vitals.level).index;
-            let mesh = if swing.kind == HeroKind::StoneWarden && tier == 0 {
-                &art.starter_stone_swing
+            let mesh = if tier < 2 {
+                &art.plain_melee_swing
             } else {
                 &art.melee_shapes[melee_shape_index(swing.kind)]
             };
             let material = art.melee_fades[melee_shape_index(swing.kind)][tier][0].clone();
             let duration = style.duration;
-            for layer in 0..style
-                .layers
-                .min(basic_attack_visual_tier(vitals.level).index as u8 + 1)
-            {
+            for layer in 0..style.layers.min(if tier < 2 { 1 } else { tier as u8 + 1 }) {
                 let delay = layer as f32 * 0.045;
                 let transform =
                     Transform::from_translation(origin + Vec3::Y * (0.65 + layer as f32 * 0.16))
@@ -825,6 +846,27 @@ pub(crate) fn animate_swings(
 #[cfg(test)]
 mod tests {
     #[test]
+    fn all_ranged_weapons_awaken_geometry_at_twenty() {
+        let app = slash_test_app(HeroKind::StormSavant, 1);
+        let art = app.world().resource::<BasicAttackArt>();
+        let materials = app.world().resource::<Assets<StandardMaterial>>();
+        for kind in [
+            HeroKind::EmberRanger,
+            HeroKind::GroveArtificer,
+            HeroKind::StormSavant,
+            HeroKind::SpiritKeeper,
+            HeroKind::StarWagerer,
+            HeroKind::FrostOracle,
+        ] {
+            let plain = art.projectile_at_level(kind, 1);
+            assert_eq!(plain.0, art.projectile_at_level(kind, 19).0);
+            assert_ne!(plain.0, art.projectile_at_level(kind, 20).0);
+            assert_eq!(materials.get(&plain.1).unwrap().emissive, LinearRgba::BLACK);
+            assert_eq!(art.projectile_at_level(kind, 20).0, art.projectile(kind).0);
+        }
+    }
+
+    #[test]
     fn visual_tiers_grow_at_class_milestones_and_materials_are_not_shared() {
         for (level, expected) in [(1, 0), (9, 0), (10, 1), (19, 1), (20, 2), (39, 2), (40, 3)] {
             assert_eq!(super::basic_attack_visual_tier(level).index, expected);
@@ -838,7 +880,7 @@ mod tests {
         let materials = app
             .world()
             .resource::<bevy::prelude::Assets<bevy::prelude::StandardMaterial>>();
-        let mut previous = 0.0;
+        let mut previous = -1.0;
         for level in [1, 10, 20, 40] {
             let (_, handle) = art.projectile_at_level(super::HeroKind::StormSavant, level);
             let emission = materials.get(&handle).unwrap().emissive.blue;
@@ -930,7 +972,7 @@ mod tests {
             mesh_assets.get(&ember).unwrap().count_vertices(),
             mesh_assets.get(&grove).unwrap().count_vertices()
         );
-        assert_eq!(mesh_assets.len(), 14);
+        assert_eq!(mesh_assets.len(), 19);
         assert_eq!(
             app.world().resource::<Assets<StandardMaterial>>().len(),
             HeroKind::COUNT * 4 + 1 + 6 * 4 * 6
@@ -938,7 +980,7 @@ mod tests {
     }
 
     #[test]
-    fn starter_ember_arrow_is_plain_colored_geometry_and_upgrades_at_level_ten() {
+    fn starter_ember_arrow_is_plain_colored_geometry_and_upgrades_at_level_twenty() {
         let app = slash_test_app(HeroKind::EmberRanger, 1);
         let art = app.world().resource::<BasicAttackArt>();
         let meshes = app.world().resource::<Assets<Mesh>>();
@@ -982,7 +1024,7 @@ mod tests {
         assert_eq!(material.emissive, LinearRgba::BLACK);
         assert_eq!(material.alpha_mode, AlphaMode::Opaque);
         assert!(!material.unlit);
-        for level in [10, 20, 40] {
+        for level in [20, 40] {
             assert_eq!(
                 art.projectile_at_level(HeroKind::EmberRanger, level),
                 (
@@ -996,7 +1038,11 @@ mod tests {
         for level in [1, 9, 10, 40] {
             assert_eq!(
                 art.projectile_at_level(HeroKind::GroveArtificer, level).0,
-                art.mechanical_bolt
+                if level < 20 {
+                    art.plain_projectiles[0].clone()
+                } else {
+                    art.mechanical_bolt.clone()
+                }
             );
         }
         assert_eq!(
@@ -1212,8 +1258,8 @@ mod tests {
                 let tier = basic_attack_visual_tier(level).index;
                 assert_eq!(
                     mesh,
-                    if kind == HeroKind::StoneWarden && tier == 0 {
-                        &art.starter_stone_swing
+                    if tier < 2 {
+                        &art.plain_melee_swing
                     } else {
                         &art.melee_shapes[melee_shape_index(kind)]
                     }

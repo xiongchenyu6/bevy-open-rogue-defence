@@ -1,0 +1,74 @@
+
+## weapon-archer-starter-1280x720
+[capture] PASS archer-first-volley arrows=1
+[capture] weapon-growth-stage actual-flight frame=13
+[capture] weapon-growth-stage actual-impact frame=20
+[capture] PASS: real basic attack damage and weapon visuals; learned skills/ultimate/Autoplay suppressed
+[capture] PASS weapon-growth-archer-starter: production attack flight+damage, actual material peak_emissive=0, no learnedskills/ultimate
+[capture] wrote 240 simulation frames to target/attack-restraint/weapon-archer-starter-1280x720
+
+## weapon-archer-starter-844x390
+[capture] PASS archer-first-volley arrows=1
+[capture] weapon-growth-stage actual-flight frame=13
+[capture] weapon-growth-stage actual-impact frame=20
+[capture] PASS: real basic attack damage and weapon visuals; learned skills/ultimate/Autoplay suppressed
+[capture] PASS weapon-growth-archer-starter: production attack flight+damage, actual material peak_emissive=0, no learnedskills/ultimate
+[capture] wrote 240 simulation frames to target/attack-restraint/weapon-archer-starter-844x390
+
+## weapon-archer-upgraded-1280x720
+[capture] PASS archer-first-volley arrows=3
+[capture] weapon-growth-stage actual-flight frame=13
+[capture] weapon-growth-stage actual-impact frame=20
+[capture] PASS: real basic attack damage and weapon visuals; learned skills/ultimate/Autoplay suppressed
+[capture] PASS weapon-growth-archer-upgraded: production attack flight+damage, actual material peak_emissive=16, no learnedskills/ultimate
+[capture] wrote 240 simulation frames to target/attack-restraint/weapon-archer-upgraded-1280x720
+
+## weapon-archer-upgraded-844x390
+[capture] PASS archer-first-volley arrows=3
+[capture] weapon-growth-stage actual-flight frame=13
+[capture] weapon-growth-stage actual-impact frame=20
+[capture] PASS: real basic attack damage and weapon visuals; learned skills/ultimate/Autoplay suppressed
+[capture] PASS weapon-growth-archer-upgraded: production attack flight+damage, actual material peak_emissive=16, no learnedskills/ultimate
+[capture] wrote 240 simulation frames to target/attack-restraint/weapon-archer-upgraded-844x390
+
+## weapon-mage-starter-1280x720
+[capture] weapon-growth-stage actual-flight frame=20
+[capture] weapon-growth-stage actual-impact frame=26
+[capture] PASS: real basic attack damage and weapon visuals; learned skills/ultimate/Autoplay suppressed
+[capture] PASS weapon-growth-mage-starter: production attack flight+damage, actual material peak_emissive=0, no learnedskills/ultimate
+[capture] wrote 240 simulation frames to target/attack-restraint/weapon-mage-starter-1280x720
+
+## weapon-mage-starter-844x390
+[capture] weapon-growth-stage actual-flight frame=20
+[capture] weapon-growth-stage actual-impact frame=26
+[capture] PASS: real basic attack damage and weapon visuals; learned skills/ultimate/Autoplay suppressed
+[capture] PASS weapon-growth-mage-starter: production attack flight+damage, actual material peak_emissive=0, no learnedskills/ultimate
+[capture] wrote 240 simulation frames to target/attack-restraint/weapon-mage-starter-844x390
+
+## weapon-mage-upgraded-1280x720
+[capture] weapon-growth-stage actual-flight frame=20
+[capture] weapon-growth-stage actual-impact frame=26
+[capture] PASS: real basic attack damage and weapon visuals; learned skills/ultimate/Autoplay suppressed
+[capture] PASS weapon-growth-mage-upgraded: production attack flight+damage, actual material peak_emissive=16, no learnedskills/ultimate
+[capture] wrote 240 simulation frames to target/attack-restraint/weapon-mage-upgraded-1280x720
+
+## weapon-mage-upgraded-844x390
+[capture] weapon-growth-stage actual-flight frame=20
+[capture] weapon-growth-stage actual-impact frame=26
+[capture] PASS: real basic attack damage and weapon visuals; learned skills/ultimate/Autoplay suppressed
+[capture] PASS weapon-growth-mage-upgraded: production attack flight+damage, actual material peak_emissive=16, no learnedskills/ultimate
+[capture] wrote 240 simulation frames to target/attack-restraint/weapon-mage-upgraded-844x390
+
+## weapon-sword-starter-1280x720
+[capture] weapon-growth-stage actual-flight frame=19
+[capture] weapon-growth-stage actual-impact frame=19
+[capture] PASS: real basic attack damage and weapon visuals; learned skills/ultimate/Autoplay suppressed
+[capture] PASS weapon-growth-sword-starter: production attack flight+damage, actual material peak_emissive=0, no learnedskills/ultimate
+[capture] wrote 240 simulation frames to target/attack-restraint/weapon-sword-starter-1280x720
+
+## weapon-sword-upgraded-1280x720
+[capture] weapon-growth-stage actual-flight frame=19
+[capture] weapon-growth-stage actual-impact frame=19
+[capture] PASS: real basic attack damage and weapon visuals; learned skills/ultimate/Autoplay suppressed
+[capture] PASS weapon-growth-sword-upgraded: production attack flight+damage, actual material peak_emissive=16, no learnedskills/ultimate
+[capture] wrote 240 simulation frames to target/attack-restraint/weapon-sword-upgraded-1280x720

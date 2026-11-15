@@ -4606,8 +4606,8 @@ mod tests {
             assert_eq!(arrows[0].1.is_some(), level >= 10);
             assert_eq!(
                 arrows[0].2,
-                level < 10,
-                "only starter native arrows suppress ground glow"
+                level < 20,
+                "plain native arrows suppress ground glow before elemental awakening"
             );
             assert_eq!(arrows[0].0.radius, 0.48);
             assert_eq!(

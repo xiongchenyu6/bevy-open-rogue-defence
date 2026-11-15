@@ -55,7 +55,7 @@ pub fn configure(world: &mut World, scenario: &str) {
             _ => panic!("ROGUE_CAPTURE_ARROW_CARD requires explicit 0 or 1"),
         }
     });
-    let hero_kind = if arrow_card.is_some() {
+    let hero_kind = if arrow_card.is_some() || index == 1 {
         HeroKind::EmberRanger
     } else {
         HeroKind::StoneWarden
