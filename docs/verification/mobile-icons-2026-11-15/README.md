@@ -1,6 +1,6 @@
 # Mobile icon controls
 
-Runtime: `9814bc5`.
+Release: `6d54f98` (UI code from `9814bc5`, corrected WebGL-compatible glyph textures).
 
 - Authored 16 reusable control glyphs with editable SVG sources and reproducible PNG generation.
 - Chapter tools use 48px icon targets; chapter states use play/lock/clear corner badges; portrait headings and tools no longer overlap.
@@ -37,3 +37,14 @@ Validation notes: the optional selection fixture's later tidal-area hover assert
 ## Web texture compatibility
 
 The initial live WebGL check caught 16-bit glyph PNGs, which native rendering supported but WebGL rejected (`Rgba16Unorm`, missing `TEXTURE_FORMAT_16BIT_NORM`). All 16 controls were regenerated as explicit PNG32 / 8-bit RGBA. The generator now enforces this format, and `verify_ui_assets.py` validates every control glyph's size, bit depth, color type, checksum and decompressed payload. A negative check rejected the original files; the corrected files pass. Browser verification must use the corrected asset release, not the initial runtime revision alone.
+
+## Public browser verification
+
+Pages run `43671770843` succeeded. Live `build.json` matches `6d54f98eea143571c9a3bd56ef0c34ad3a9deacd`; the served settings icon is 8-bit RGBA. A fresh browser at 844×390 rendered the chapter toolbar, clicked the gear to open settings, then returned to chapters. Page errors were empty and console output contained no render validation errors. This is actual browser mouse interaction at a mobile viewport; touch held/released evidence above comes from real TouchInput messages in the native harness, not a physical phone test.
+
+![Public chapter toolbar](public-chapters.png)
+![Public settings](public-settings.png)
+
+A second actual browser check scrolled down 300px with the pointer inside the settings content area. The book icon and full tutorial action became visible, the fixed back button remained accessible, and clicking it returned to chapters. No browser or render errors occurred.
+
+![Public settings scrolled to guide](public-settings-scrolled.png)

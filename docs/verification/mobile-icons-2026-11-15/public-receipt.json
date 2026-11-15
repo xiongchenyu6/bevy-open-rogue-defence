@@ -1,0 +1,10 @@
+{
+  "revision": "6d54f98eea143571c9a3bd56ef0c34ad3a9deacd",
+  "pages_run": 43671770843,
+  "viewport": [844, 390],
+  "language": "zh-CN",
+  "public_url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/",
+  "checks": ["live revision matched", "served settings PNG is RGBA8", "six chapter cards and game icon toolbar visible", "clicked gear to open settings", "clicked back to return to chapters", "no page errors", "no render validation errors in console"],
+  "screenshots": ["chapters.png", "settings-ready.png", "chapters-return.png"],
+  "scope": "real mouse interaction at mobile viewport; not physical touchscreen verification"
+}
