@@ -1,7 +1,7 @@
 //! Optional camp battles always offer a safe exit; all previews come from the battle catalog.
 use super::encounter_bosses::{
-    ADVENTURE_BATTLE_SECONDS, ADVENTURE_BOSSES, ADVENTURE_OFFER_TIMES, ADVENTURE_SITES,
-    AdventureBossChoice, AdventureBossState, AdventureCampRequest,
+    ADVENTURE_BATTLE_SECONDS, ADVENTURE_BOSSES, AdventureBossChoice, AdventureBossState,
+    AdventureCampRequest,
 };
 use super::{GameLanguage, GameSession, HeroVitals};
 use bevy::{
@@ -9,6 +9,9 @@ use bevy::{
     prelude::*,
     ui::UiSystems,
 };
+
+mod camp_interaction;
+pub(crate) use camp_interaction::SceneInputBlocker;
 
 pub(crate) struct EncounterBossUiPlugin;
 impl Plugin for EncounterBossUiPlugin {
@@ -23,14 +26,15 @@ impl Plugin for EncounterBossUiPlugin {
             .add_message::<MouseWheel>()
             .add_message::<AdventureBossChoice>()
             .add_message::<AdventureCampRequest>()
-            .add_systems(Startup, camp_entries)
-            .add_systems(PostUpdate, position_entries)
+            .init_resource::<camp_interaction::CampInteraction>()
+            .add_systems(Startup, camp_interaction::spawn)
+            .add_systems(PostUpdate, camp_interaction::position)
             .add_systems(PreUpdate, camp_inputs())
             .add_systems(Update, (view, scroll, relic_feedback));
     }
 }
 fn camp_inputs() -> bevy::ecs::schedule::ScheduleConfigs<bevy::ecs::system::ScheduleSystem> {
-    (input, enter_camp)
+    (input, camp_interaction::input)
         .chain()
         .after(super::SettingsInputSet)
         .after(UiSystems::Focus)
@@ -44,7 +48,7 @@ pub(crate) struct EncounterBossPanelState {
     size: Vec2,
 }
 #[derive(Component)]
-struct Choice(bool);
+struct Choice(AdventureBossChoice);
 #[derive(Component)]
 struct PreviewScroll;
 fn input(
@@ -60,11 +64,7 @@ fn input(
         .iter()
         .find(|(_, interaction)| **interaction == Interaction::Pressed)
     {
-        choices.write(if button.0 {
-            AdventureBossChoice::Fight
-        } else {
-            AdventureBossChoice::TakeReward
-        });
+        choices.write(button.0);
     }
 }
 fn risk(language: GameLanguage, lives: u32) -> String {
@@ -324,16 +324,18 @@ fn view(
                         ..default()
                     })
                     .with_children(|footer| {
-                        for (fight, label, color) in [
+                        for (choice, name, label, color) in [
                             (
-                                true,
+                                AdventureBossChoice::Fight,
+                                "Encounter boss fight",
                                 language
                                     .pick("Fight for the full reward", "挑战 · 赢取完整奖励")
                                     .to_string(),
                                 Color::srgb(0.7, 0.39, 0.13),
                             ),
                             (
-                                false,
+                                AdventureBossChoice::TakeReward,
+                                "Encounter boss safe reward",
                                 format!(
                                     "{} · {} {} / {} {}",
                                     language.pick("Take & leave", "领取并离开"),
@@ -344,19 +346,21 @@ fn view(
                                 ),
                                 Color::srgb(0.09, 0.27, 0.24),
                             ),
+                            (
+                                AdventureBossChoice::Later,
+                                "Encounter boss close",
+                                language.pick("Later", "稍后").to_string(),
+                                Color::srgb(0.08, 0.12, 0.14),
+                            ),
                         ] {
                             footer
                                 .spawn((
                                     Button,
-                                    Choice(fight),
-                                    Name::new(if fight {
-                                        "Encounter boss fight"
-                                    } else {
-                                        "Encounter boss safe reward"
-                                    }),
+                                    Choice(choice),
+                                    Name::new(name),
                                     Node {
-                                        width: if narrow { percent(100) } else { percent(49) },
-                                        min_height: px(42),
+                                        width: if narrow { percent(100) } else { percent(32) },
+                                        min_height: px(44),
                                         padding: UiRect::all(px(8)),
                                         align_items: AlignItems::Center,
                                         justify_content: JustifyContent::Center,
@@ -416,6 +420,7 @@ pub(crate) fn reset_run(world: &mut World) {
         entity.despawn();
     }
     world.insert_resource(EncounterBossPanelState::default());
+    world.insert_resource(camp_interaction::CampInteraction::default());
 }
 #[cfg(test)]
 mod tests {
@@ -446,185 +451,6 @@ mod tests {
         assert!(world.resource::<EncounterBossPanelState>().root.is_none());
         assert!(world.resource::<GameSession>().paused);
         assert!(world.get_entity(root).is_err());
-    }
-}
-
-#[derive(Component)]
-struct CampEntry(u8);
-#[derive(Component)]
-struct CampEntryCaption(u8);
-fn camp_entries(mut commands: Commands, assets: Option<Res<AssetServer>>) {
-    let Some(assets) = assets else {
-        return;
-    };
-    for (index, def) in ADVENTURE_BOSSES.iter().enumerate() {
-        commands
-            .spawn((
-                Name::new(format!("Adventure camp entry {index}")),
-                CampEntry(index as u8),
-                Button,
-                Node {
-                    position_type: PositionType::Absolute,
-                    display: Display::None,
-                    width: px(128),
-                    min_height: px(40),
-                    padding: UiRect::all(px(5)),
-                    column_gap: px(5),
-                    align_items: AlignItems::Center,
-                    border: UiRect::all(px(1)),
-                    ..default()
-                },
-                BackgroundColor(Color::srgba(0.025, 0.04, 0.04, 0.9)),
-                BorderColor::all(Color::srgb(0.7, 0.48, 0.2)),
-                GlobalZIndex(80),
-            ))
-            .with_children(|parent| {
-                parent.spawn((
-                    ImageNode::new(assets.load(format!("ui/{}", def.icon_path))),
-                    Node {
-                        width: px(28),
-                        height: px(28),
-                        ..default()
-                    },
-                ));
-                parent.spawn((
-                    CampEntryCaption(index as u8),
-                    Text::new(""),
-                    Node::default(),
-                    BackgroundColor(Color::NONE),
-                    TextFont {
-                        font_size: FontSize::Px(11.0),
-                        ..default()
-                    },
-                    TextColor(Color::srgb(0.94, 0.86, 0.67)),
-                ));
-            });
-    }
-}
-fn enter_camp(
-    state: Res<AdventureBossState>,
-    session: Res<GameSession>,
-    buttons: Query<(&CampEntry, &Interaction), Changed<Interaction>>,
-    mut requests: MessageWriter<AdventureCampRequest>,
-) {
-    if session.paused || session.finished || state.pending.is_some() || state.active.is_some() {
-        return;
-    }
-    if let Some((entry, _)) = buttons.iter().find(|(entry, i)| {
-        **i == Interaction::Pressed
-            && state.unlocked & (1 << entry.0) != 0
-            && state.resolved & (1 << entry.0) == 0
-    }) {
-        requests.write(AdventureCampRequest(entry.0));
-    }
-}
-fn position_entries(
-    mut commands: Commands,
-    state: Res<AdventureBossState>,
-    session: Res<GameSession>,
-    language: Res<GameLanguage>,
-    cameras: Query<(&Camera, &GlobalTransform), With<Camera3d>>,
-    windows: Query<&Window>,
-    mut entries: Query<(
-        Entity,
-        &CampEntry,
-        &Interaction,
-        Has<super::controller_input::ControllerFocused>,
-        Has<super::controller_input::ControllerDisabled>,
-        &mut Node,
-    )>,
-    mut captions: Query<
-        (
-            &CampEntryCaption,
-            &mut Text,
-            &mut Node,
-            &mut BackgroundColor,
-        ),
-        Without<CampEntry>,
-    >,
-) {
-    let size = windows
-        .iter()
-        .next()
-        .map_or(Vec2::new(1280.0, 720.0), |window| {
-            Vec2::new(window.width(), window.height())
-        });
-    let docked = size.y < 540.0;
-    let mut preview = [false; 3];
-    for (entity, entry, interaction, focused, disabled, mut node) in &mut entries {
-        let enabled = state.unlocked & (1 << entry.0) != 0;
-        if !enabled && !disabled {
-            commands
-                .entity(entity)
-                .insert(super::controller_input::ControllerDisabled);
-        }
-        if enabled && disabled {
-            commands
-                .entity(entity)
-                .remove::<super::controller_input::ControllerDisabled>();
-        }
-        preview[usize::from(entry.0)] = focused || *interaction != Interaction::None;
-        node.width = px(if docked { 40.0 } else { 128.0 });
-        node.min_height = px(40.0);
-        let position = cameras.single().ok().and_then(|(camera, t)| {
-            camera
-                .world_to_viewport(t, ADVENTURE_SITES[usize::from(entry.0)] + Vec3::Y * 1.7)
-                .ok()
-        });
-        node.display = if !session.finished
-            && state.pending.is_none()
-            && state.active.is_none()
-            && state.resolved & (1 << entry.0) == 0
-            && position.is_some()
-        {
-            Display::Flex
-        } else {
-            Display::None
-        };
-        if let Some(p) = position {
-            let position = camp_screen_position(p, size, usize::from(entry.0));
-            node.left = px(position.x);
-            node.top = px(position.y);
-        }
-    }
-    for (entry, mut text, mut node, mut background) in &mut captions {
-        let index = usize::from(entry.0);
-        node.display = if docked && !preview[index] {
-            Display::None
-        } else {
-            Display::Flex
-        };
-        node.position_type = if docked {
-            PositionType::Absolute
-        } else {
-            PositionType::Relative
-        };
-        node.right = if docked { px(46.0) } else { Val::Auto };
-        node.top = if docked { px(0.0) } else { Val::Auto };
-        node.width = if docked { px(148.0) } else { Val::Auto };
-        node.padding = UiRect::all(px(if docked { 6.0 } else { 0.0 }));
-        background.0 = if docked {
-            Color::srgba(0.025, 0.04, 0.04, 0.96)
-        } else {
-            Color::NONE
-        };
-        let def = &ADVENTURE_BOSSES[index];
-        let suffix = if state.unlocked & (1 << entry.0) != 0 {
-            language.pick("Explore", "探索").to_string()
-        } else {
-            format!(
-                "{} {}:{:02}",
-                language.pick("Unlock", "解锁"),
-                (ADVENTURE_OFFER_TIMES[index] / 60.0) as u32,
-                (ADVENTURE_OFFER_TIMES[index] % 60.0) as u32
-            )
-        };
-        text.reborrow()
-            .map_unchanged(|value| &mut value.0)
-            .set_if_neq(format!(
-                "{}\n{suffix}",
-                language.pick(def.name_en, def.name_zh)
-            ));
     }
 }
 
@@ -683,70 +509,5 @@ fn relic_feedback(
                 ))
                 .id(),
         );
-    }
-}
-
-fn camp_screen_position(projected: Vec2, size: Vec2, index: usize) -> Vec2 {
-    if size.y < 540.0 {
-        return Vec2::new((size.x - 52.0).max(0.0), 132.0 + index as f32 * 48.0);
-    }
-    let top = 145.0;
-    Vec2::new(
-        (projected.x - 64.0).clamp(0.0, (size.x - 128.0).max(0.0)),
-        projected.y.clamp(top, (size.y - 100.0).max(top)),
-    )
-}
-#[cfg(test)]
-mod camp_position_tests {
-    use super::*;
-    #[test]
-    fn desktop_entry_clears_main_boss_health_title() {
-        assert_eq!(
-            camp_screen_position(Vec2::new(640.0, 70.0), Vec2::new(1280.0, 720.0), 0).y,
-            145.0
-        );
-    }
-    #[test]
-    fn mobile_camp_pointer_target_clears_top_hud_and_stays_on_screen() {
-        let p = camp_screen_position(Vec2::new(340.0, 31.0), Vec2::new(667.0, 375.0), 0);
-        assert_eq!(p, Vec2::new(615.0, 132.0));
-        assert!(p.y + 40.0 <= 275.0);
-        let edge = camp_screen_position(Vec2::new(700.0, 600.0), Vec2::new(667.0, 375.0), 0);
-        assert_eq!(edge, Vec2::new(615.0, 132.0));
-    }
-}
-
-#[cfg(test)]
-mod controller_order_tests {
-    use super::*;
-    #[test]
-    fn controller_camp_press_reaches_public_handler_in_same_preupdate() {
-        let mut app = App::new();
-        app.init_resource::<GameSession>()
-            .init_resource::<AdventureBossState>()
-            .add_message::<AdventureCampRequest>()
-            .add_message::<AdventureBossChoice>()
-            .add_systems(PreUpdate, camp_inputs())
-            .add_systems(
-                PreUpdate,
-                (|mut buttons: Query<&mut Interaction>| {
-                    for mut interaction in &mut buttons {
-                        *interaction = Interaction::Pressed;
-                    }
-                })
-                .in_set(crate::game::ControllerInputSet),
-            );
-        app.world_mut()
-            .resource_mut::<AdventureBossState>()
-            .unlocked = 1;
-        app.world_mut().spawn((CampEntry(0), Interaction::None));
-        app.update();
-        let requests: Vec<_> = app
-            .world_mut()
-            .resource_mut::<Messages<AdventureCampRequest>>()
-            .drain()
-            .collect();
-        assert_eq!(requests.len(), 1);
-        assert_eq!(requests[0].0, 0);
     }
 }

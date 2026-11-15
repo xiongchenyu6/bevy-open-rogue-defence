@@ -39,6 +39,8 @@ mod balance_cadence;
 #[path = "capture/class_attacks.rs"]
 mod class_attacks_capture;
 
+#[path = "capture/camp_interaction.rs"]
+mod camp_interaction_capture;
 #[path = "capture/adventure_boss.rs"]
 mod adventure_boss_capture;
 
@@ -814,6 +816,9 @@ fn main() {
         class_attacks_capture::install(&mut apps.main);
     }
 
+    if scenario == "camp-interaction" {
+        camp_interaction_capture::install(&mut apps.main);
+    }
     if scenario.starts_with("adventure-") {
         adventure_boss_capture::install(&mut apps.main);
     }
@@ -1125,6 +1130,10 @@ fn configure_scenario(world: &mut World, scenario: &str) {
     }
     if scenario.starts_with("class-") {
         class_attacks_capture::configure(world, scenario);
+        return;
+    }
+    if scenario == "camp-interaction" {
+        camp_interaction_capture::configure(world);
         return;
     }
     if scenario.starts_with("adventure-") {

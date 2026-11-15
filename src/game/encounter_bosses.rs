@@ -701,6 +701,7 @@ pub struct AdventureBossState {
 pub enum AdventureBossChoice {
     Fight,
     TakeReward,
+    Later,
 }
 pub struct EncounterBossesPlugin;
 impl Plugin for EncounterBossesPlugin {
@@ -819,6 +820,12 @@ fn choose_adventure(
         }
         let def = &ADVENTURE_BOSSES[usize::from(index)];
         match choice {
+            AdventureBossChoice::Later => {
+                state.pending = None;
+                state.revision += 1;
+                session.paused = false;
+                continue;
+            }
             AdventureBossChoice::TakeReward => {
                 session.gold = session.gold.saturating_add(def.small_gold);
                 session.wood = session.wood.saturating_add(def.small_wood);
@@ -1030,6 +1037,34 @@ mod tests {
             .add_message::<EnemyAttackCue>();
         app
     }
+    #[test]
+    fn later_keeps_camp_available_without_rewards_and_can_reopen() {
+        let mut app = test_app();
+        app.add_systems(Update, (tick_adventure, choose_adventure).chain());
+        app.world_mut().resource_mut::<GameSession>().elapsed = 180.0;
+        app.world_mut().write_message(AdventureCampRequest(0));
+        app.update();
+        assert_eq!(
+            app.world().resource::<AdventureBossState>().pending,
+            Some(0)
+        );
+        let gold = app.world().resource::<GameSession>().gold;
+        app.world_mut().write_message(AdventureBossChoice::Later);
+        app.update();
+        let state = app.world().resource::<AdventureBossState>();
+        assert_eq!(state.pending, None);
+        assert_eq!(state.resolved, 0);
+        assert_eq!(state.completed, 0);
+        assert!(!app.world().resource::<GameSession>().paused);
+        assert_eq!(app.world().resource::<GameSession>().gold, gold);
+        app.world_mut().write_message(AdventureCampRequest(0));
+        app.update();
+        assert_eq!(
+            app.world().resource::<AdventureBossState>().pending,
+            Some(0)
+        );
+    }
+
     #[test]
     fn camp_offer_requires_unlocked_request_and_allows_existing_campaign_boss() {
         let mut app = test_app();

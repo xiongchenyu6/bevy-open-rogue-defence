@@ -205,6 +205,7 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
                 top.spawn((
                     HudLeft,
                     Name::new("Battle status"),
+                    super::encounter_boss_ui::SceneInputBlocker,
                     Node {
                         width: px(240),
                         flex_direction: FlexDirection::Column,
@@ -390,6 +391,7 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
                 top.spawn((
                     Text::new(language.pick("25:00\nWAVE 1", "25:00\n第 1 波")),
                     TimerText,
+                    super::encounter_boss_ui::SceneInputBlocker,
                     TextFont {
                         font_size: FontSize::Px(20.0),
                         ..default()
@@ -402,6 +404,7 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
             root.spawn((
                 ArchiveHudText,
                 Name::new("Archive battle progress"),
+                super::encounter_boss_ui::SceneInputBlocker,
                 Text::new(""),
                 TextFont {
                     font_size: FontSize::Px(16.0),
@@ -486,6 +489,7 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
                         xp.spawn((
                             XpReadout,
                             Name::new("XP readout"),
+                            super::encounter_boss_ui::SceneInputBlocker,
                             Node {
                                 width: percent(100),
                                 flex_direction: FlexDirection::Column,
@@ -694,6 +698,7 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
             Button,
             TrialToggleButton,
             Name::new("Trial drawer"),
+            super::encounter_boss_ui::SceneInputBlocker,
             HudHint::Trials,
             Node {
                 position_type: PositionType::Absolute,
@@ -745,6 +750,7 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
         .spawn((
             SpeedControl,
             Name::new("Battle speed"),
+            super::encounter_boss_ui::SceneInputBlocker,
             Node {
                 position_type: PositionType::Absolute,
                 right: px(208),
