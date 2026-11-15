@@ -12,7 +12,12 @@
       content="Rogue Commander — an original mobile-first survival defense game built with Bevy."
     />
     <title>Rogue Commander</title>
-    <link rel="icon" href="data:," />
+    <link rel="icon" href="./icons/icon-192.png" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./icons/icon-180.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
     <link
       rel="preload"
       href="./assets/fonts/rogue_commander_ui.ttf"
@@ -229,6 +234,7 @@
         }
       }
     </style>
+    <link rel="stylesheet" href="./pwa.css" />
   </head>
   <body>
     <canvas id="bevy-canvas" tabindex="0"></canvas>
@@ -258,8 +264,16 @@
         <p id="hint" class="hint">
           Chrome or Edge recommended · Rotate phones to landscape.
         </p>
+        <section id="install-card" hidden aria-label="Install">
+          <p id="install-summary"></p>
+          <button id="install-button" class="install-action" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11 12 3l9 8M5 10v11h14V10M12 8v9m-3-3 3 3 3-3"/></svg><span id="install-label"></span></button>
+        </section>
       </div>
     </main>
+    <dialog id="install-dialog" aria-labelledby="install-title">
+      <h2 id="install-title"></h2><ol id="install-steps"></ol><p id="install-note"></p>
+      <button id="install-close" class="install-action" type="button"></button>
+    </dialog>
     <aside id="rotate">
       <p>
         <strong id="rotate-title">ROTATE YOUR DEVICE</strong>
@@ -267,6 +281,7 @@
       </p>
     </aside>
     <script type="module">
+      import { setInstallLanguage } from "./pwa.js";
       const loading = document.querySelector("#loading");
       const progress = document.querySelector("#progress-fill");
       const start = document.querySelector("#start");
@@ -367,6 +382,7 @@
       function setLanguage(value, { persist = false, updateUrl = true } = {}) {
         currentLanguage = normalizeLanguage(value) ?? "en";
         document.documentElement.lang = currentLanguage === "zh-CN" ? "zh-Hans" : "en";
+        setInstallLanguage(currentLanguage);
         description.content = copy("description");
         languageSwitch.setAttribute("aria-label", copy("languageLabel"));
         subtitle.textContent = copy("subtitle");
@@ -538,6 +554,7 @@
           document.querySelector("#bevy-canvas")?.focus();
           void keepScreenAwake();
           window.setTimeout(() => {
+            document.body.classList.add("playing");
             loading.classList.add("hidden");
             languageSwitch.classList.add("hidden");
           }, 250);
@@ -545,6 +562,7 @@
           console.error(error);
           const message = String(error);
           if (message.includes("Using exceptions for control flow")) {
+            document.body.classList.add("playing");
             loading.classList.add("hidden");
             languageSwitch.classList.add("hidden");
           } else {

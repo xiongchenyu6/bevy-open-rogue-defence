@@ -53,7 +53,7 @@ wasm-bindgen \
 # standard DecompressionStream API, while retaining the raw WASM as fallback.
 gzip -9 -kf dist/rogue_commander_bg.wasm
 
-cp web/index.html dist/index.html
+cp -R web/. dist/
 cp -R assets dist/assets
 cp -R THIRD_PARTY_NOTICES dist/THIRD_PARTY_NOTICES
 

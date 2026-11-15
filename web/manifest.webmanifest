@@ -1,0 +1,17 @@
+{
+  "id": "./",
+  "name": "Rogue Commander",
+  "short_name": "Rogue Commander",
+  "description": "Hold the rift. Build your army. Defeat five lords.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#07111c",
+  "theme_color": "#07111c",
+  "icons": [
+    {"src":"./icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"./icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"./icons/maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+  ]
+}
