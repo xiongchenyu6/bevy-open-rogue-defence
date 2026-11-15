@@ -32,6 +32,8 @@ async function main() {
     fixtures[revision] = directory;
   }
   let current = 'v1', failResource = false, legacyMode = false;
+  let releaseDownload;
+  const downloadGate = new Promise(resolve => { releaseDownload = resolve; });
   const requests = [];
   const server = http.createServer(async (request, response) => {
     const url = new URL(request.url, 'http://fixture');
@@ -49,6 +51,7 @@ async function main() {
       response.setHeader('Content-Type', 'text/html');
       response.end('<!doctype html><h1>Legacy network-only game</h1>'); return;
     }
+    if (relative === 'assets/changed.txt' && current === 'v1') await downloadGate;
     try {
       const body = await fs.readFile(path.join(fixtures[current], relative));
       const type = relative.endsWith('.js') ? 'text/javascript' : relative.endsWith('.html') ? 'text/html' : relative.endsWith('.css') ? 'text/css' : relative.endsWith('.png') ? 'image/png' : relative.endsWith('.ttf') ? 'font/ttf' : relative.endsWith('.webmanifest') ? 'application/manifest+json' : 'application/octet-stream';
@@ -70,7 +73,25 @@ async function main() {
     let page = await context.newPage(); observe(page);
     await page.goto(base);
     await page.locator('#cache-status').filter({hasText: 'Resources are saved on first play'}).waitFor();
+    await page.locator('[data-language="zh-CN"]').click();
+    assert.equal(await page.locator('#start').innerText(), '开始游戏');
+    await page.locator('[data-language="en"]').click();
     await page.locator('#start').click();
+    await page.locator('[data-language="zh-CN"]').click();
+    assert.equal(await page.locator('[data-language="zh-CN"]').getAttribute('aria-pressed'), 'true');
+    assert.match(await page.locator('#status').innerText(), /[\u4e00-\u9fff]/);
+    assert.notEqual(await page.locator('#start').innerText(), '开始游戏');
+    await page.screenshot({path: path.join(OUTPUT, 'language-during-loading.png')});
+    await page.locator('[data-language="en"]').click();
+    assert.equal(await page.evaluate(() => localStorage.getItem('rogue-commander-language')), 'en');
+    await page.setViewportSize({width: 844, height: 390});
+    await page.locator('[data-language="zh-CN"]').click();
+    assert.match(await page.locator('#cache-status').innerText(), /正在/);
+    await page.screenshot({path: path.join(OUTPUT, 'language-during-loading-mobile.png')});
+    await page.locator('[data-language="en"]').click();
+    await page.setViewportSize({width: 1280, height: 720});
+    releaseDownload();
+    pass('language switches before Start and during resource preparation without resetting loading state');
     await page.waitForFunction(() => document.body.classList.contains('playing'));
     assert.equal(await page.evaluate(() => window.fixtureEngineVersion), 'v1');
     assert.equal(requests.filter(r => r.path === 'rogue_commander_bg.wasm.gz').length, 1);

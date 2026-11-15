@@ -1,0 +1,11 @@
+PASS language switches before Start and during resource preparation without resetting loading state
+PASS actual Start button prepares resources before engine initialization
+PASS actual second Start initializes from saved resources with zero asset downloads
+PASS update offer and both actions fit desktop, landscape phone and portrait viewports
+PASS Later starts the old engine instead of silently upgrading
+PASS update offer survives a full browser restart and natural worker activation
+PASS Download & update commits, reloads and starts the new engine
+PASS failed update shows retry while keeping Start available for previous engine
+PASS legacy network-only worker migrates through waiting worker and resumes Start after one reload
+
+9 real startup-UI scenarios passed; evidence: /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/target/pwa-update-ui-tests

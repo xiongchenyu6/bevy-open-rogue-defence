@@ -386,6 +386,19 @@
         return typeof value === "function" ? value(...args) : value;
       }
 
+      let statusKey = "idle";
+      let statusArgs = [];
+      let startKey = "start";
+      function setStatus(key, ...args) {
+        statusKey = key;
+        statusArgs = args;
+        status.textContent = copy(key, ...args);
+      }
+      function setStartLabel(key) {
+        startKey = key;
+        start.textContent = copy(key);
+      }
+
       function setLanguage(value, { persist = false, updateUrl = true } = {}) {
         currentLanguage = normalizeLanguage(value) ?? "en";
         document.documentElement.lang = currentLanguage === "zh-CN" ? "zh-Hans" : "en";
@@ -394,8 +407,8 @@
         description.content = copy("description");
         languageSwitch.setAttribute("aria-label", copy("languageLabel"));
         subtitle.textContent = copy("subtitle");
-        if (!start.disabled) status.textContent = copy("idle");
-        start.textContent = copy("start");
+        setStatus(statusKey, ...statusArgs);
+        setStartLabel(startKey);
         hint.textContent = copy("hint");
         rotateTitle.textContent = copy("rotateTitle");
         rotateCopy.textContent = copy("rotateCopy");
@@ -523,13 +536,13 @@
             if (total) {
               const percent = Math.min(92, 8 + (received / total) * 84);
               progress.style.width = `${percent}%`;
-              status.textContent = copy(
+              setStatus(
                 "downloadKnown",
                 (received / 1048576).toFixed(1),
                 (total / 1048576).toFixed(1),
               );
             } else {
-              status.textContent = copy(
+              setStatus(
                 "downloadUnknown",
                 (received / 1048576).toFixed(1),
               );
@@ -545,9 +558,8 @@
 
       start.addEventListener("click", async () => {
         start.disabled = true;
-        for (const button of languageButtons) button.disabled = true;
-        start.textContent = copy("loading");
-        status.textContent = copy("deploying");
+        setStartLabel("loading");
+        setStatus("deploying");
         progress.style.width = "8%";
         void enterMobilePlayMode();
 
@@ -555,10 +567,10 @@
           await prepareGameCache();
           const { default: init } = await import("./rogue_commander.js");
           const wasm = await downloadCompressedWasm();
-          status.textContent = copy("initializing");
+          setStatus("initializing");
           progress.style.width = "96%";
           await init(wasm ? { module_or_path: wasm } : undefined);
-          status.textContent = copy("ready");
+          setStatus("ready");
           progress.style.width = "100%";
           document.querySelector("#bevy-canvas")?.focus();
           void keepScreenAwake();
@@ -577,11 +589,10 @@
             loading.classList.add("hidden");
             languageSwitch.classList.add("hidden");
           } else {
-            status.textContent = copy("loadError");
+            setStatus("loadError");
             progress.style.width = "0";
             start.disabled = false;
-            start.textContent = copy("retry");
-            for (const button of languageButtons) button.disabled = false;
+            setStartLabel("retry");
           }
         }
       });
