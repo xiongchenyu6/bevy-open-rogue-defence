@@ -59,7 +59,10 @@ The first probe immediately after publication entered the game but did not repor
 a complete resource cache; it was not accepted as a cache pass. A new-browser
 rerun against the public release saved **42,112,843 bytes**, reported zero missing
 bytes, then restarted the entire browser with networking disabled before navigation.
-The actual game rendered chapter selection with no page or console errors.
+The final run used a 30-second software-renderer warm-up and its screenshot was
+visually inspected: chapter selection text and icons are fully rendered. The earlier
+12-second screenshot was incomplete and has been replaced. No page errors or
+console messages of type error were captured.
 [Published cache status](public-cache-status.json), [result](public-game-results.json),
 [offline screenshot](public-cold-offline.png). The initial miss is consistent with
 stale startup content during propagation, but its exact cause was not proven.

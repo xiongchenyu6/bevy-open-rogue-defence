@@ -24,7 +24,7 @@ const assert = require('node:assert/strict');
   const ready = async page => {
     await page.locator('#start').click();
     await page.waitForFunction(()=>document.body.classList.contains('playing'),null,{timeout:180000});
-    await page.waitForTimeout(12000); // Actual renderer/asset warm-up, not a substitute for cache assertions.
+    await page.waitForTimeout(30000); // Software WebGL shader/font warm-up; screenshots must still be inspected.
   };
   try {
     context=await launch(); let page=await context.newPage(); attach(page);
