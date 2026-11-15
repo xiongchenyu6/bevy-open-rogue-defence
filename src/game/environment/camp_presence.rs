@@ -70,19 +70,59 @@ pub(super) fn install(app: &mut App) {
 pub(super) fn spawn_victory_flag(
     commands: &mut Commands,
     assets: &AssetServer,
+    meshes: &mut Assets<Mesh>,
+    materials: &mut Assets<StandardMaterial>,
     index: u8,
     center: Vec3,
 ) {
-    commands.spawn((
-        Name::new(format!("Conquered wild camp {index}")),
-        WorldAssetRoot(assets.load("models/environment_banner_blue.glb#Scene0")),
-        Transform::from_translation(center + Vec3::new(0.0, 0.1, 0.0))
-            .with_scale(Vec3::splat(2.0))
-            .with_rotation(Quat::from_rotation_y(1.0)),
-        Visibility::Hidden,
-        CampVictoryFlag(index),
-        ArenaEntity,
-    ));
+    let bronze = materials.add(StandardMaterial {
+        base_color: Color::srgb(0.54, 0.36, 0.13),
+        metallic: 0.35,
+        perceptual_roughness: 0.72,
+        ..default()
+    });
+    let stone = materials.add(StandardMaterial {
+        base_color: Color::srgb(0.31, 0.34, 0.32),
+        perceptual_roughness: 0.95,
+        ..default()
+    });
+    commands
+        .spawn((
+            Name::new(format!("Conquered wild camp {index}")),
+            // The imported banner is a hanging cloth, not a planted flag. Its front
+            // faces +Z; turn it toward the battle camera and suspend it from a pole.
+            Transform::from_translation(center).with_rotation(Quat::from_rotation_y(-1.2)),
+            Visibility::Hidden,
+            CampVictoryFlag(index),
+            ArenaEntity,
+        ))
+        .with_children(|flag| {
+            flag.spawn((
+                WorldAssetRoot(assets.load("models/environment_banner_blue.glb#Scene0")),
+                Transform::from_xyz(0.57, 0.86, 0.02).with_scale(Vec3::splat(2.0)),
+            ));
+            flag.spawn((
+                Mesh3d(meshes.add(Cylinder::new(0.055, 3.1))),
+                MeshMaterial3d(bronze.clone()),
+                Transform::from_xyz(0.0, 1.55, 0.0),
+            ));
+            flag.spawn((
+                Mesh3d(meshes.add(Cylinder::new(0.04, 1.25))),
+                MeshMaterial3d(bronze.clone()),
+                Transform::from_xyz(0.56, 2.9, 0.0)
+                    .with_rotation(Quat::from_rotation_z(std::f32::consts::FRAC_PI_2)),
+            ));
+            flag.spawn((
+                Mesh3d(meshes.add(Cone::new(0.11, 0.32))),
+                MeshMaterial3d(bronze),
+                Transform::from_xyz(0.0, 3.24, 0.0),
+            ));
+            flag.spawn((
+                Mesh3d(meshes.add(Cylinder::new(0.26, 0.18))),
+                MeshMaterial3d(stone),
+                Transform::from_xyz(0.0, 0.09, 0.0),
+            ));
+        });
 }
 
 fn advance(

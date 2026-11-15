@@ -274,7 +274,7 @@ fn spawn_side_camps(
             CampPreview(index as u8),
             ArenaEntity,
         ));
-        camp_presence::spawn_victory_flag(commands, assets, index as u8, center);
+        camp_presence::spawn_victory_flag(commands, assets, meshes, materials, index as u8, center);
         for n in 0..3 {
             let guard = assets.load(
                 [
