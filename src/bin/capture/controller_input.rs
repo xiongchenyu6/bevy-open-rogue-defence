@@ -68,6 +68,7 @@ const ROUTE: &[Action] = &[
     Action::Shot("07b-camp-choice"),
     Action::Button(GamepadButton::East),
     Action::Check("camp-back"),
+    Action::Target("Adventure camp entry 0"),
     Action::Target("Encounter boss safe reward"),
     Action::Check("camp-reward"),
     Action::Target("Skill draw control"),
@@ -574,8 +575,10 @@ fn drive(world: &mut World) {
                     );
                 }
                 "camp-back" => {
-                    assert_eq!(world.resource::<AdventureBossState>().pending, Some(0));
-                    assert!(world.resource::<GameSession>().paused);
+                    let camp = world.resource::<AdventureBossState>();
+                    assert!(camp.pending.is_none(), "Back leaves the camp preview");
+                    assert_eq!(camp.resolved & 1, 0, "Later preserves the encounter");
+                    assert!(!world.resource::<GameSession>().paused);
                 }
                 "camp-reward" => {
                     assert!(world.resource::<AdventureBossState>().pending.is_none());
