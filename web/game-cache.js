@@ -148,7 +148,10 @@ async function installedWorker() {
   const worker = reg.active;
   if (await inspect(worker)) return worker;
   // Migrate the former network-only worker before loading the game engine.
-  if (await inspect(reg.waiting)) return reg.waiting;
+  // First installation may activate while STATUS is in flight. Keep the object
+  // we inspected: registration.waiting becomes null after activation.
+  const waiting = reg.waiting;
+  if (await inspect(waiting)) return waiting;
   throw new Error('Resource worker is not ready');
 }
 function progress(data) {

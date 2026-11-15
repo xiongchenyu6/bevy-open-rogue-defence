@@ -32,6 +32,13 @@ const assert = require('node:assert/strict');
     return new Promise(resolve=>{const channel=new MessageChannel();channel.port1.onmessage=e=>{channel.port1.close();resolve(e.data);};reg.active.postMessage({type:'STATUS',target:'client',groups:['all'],wasmEncoding:'gzip'},[channel.port2]);});
   });
   async function menu() {
+    await page.addInitScript(() => {
+      const original = ServiceWorker.prototype.postMessage;
+      ServiceWorker.prototype.postMessage = function (message, ...args) {
+        console.debug('Cache request', JSON.stringify(message));
+        return original.call(this, message, ...args);
+      };
+    });
     await page.goto(base+'?lang=en');
     await page.locator('#start').click();
     await page.waitForFunction(()=>document.body.classList.contains('playing'),null,{timeout:180000});
@@ -50,12 +57,18 @@ const assert = require('node:assert/strict');
         const canvas = new OffscreenCanvas(305, 130);
         const ctx = canvas.getContext('2d');
         ctx.drawImage(bitmap, 15, 60, 305, 130, 0, 0, 305, 130);
-        bitmap.close();
         const pixels = ctx.getImageData(0, 0, 305, 130).data;
         let green = 0;
         for (let i = 0; i < pixels.length; i += 4)
           if (pixels[i + 1] > 110 && pixels[i] < 100 && pixels[i + 2] < 190) green++;
-        return green > 250;
+        ctx.clearRect(0, 0, 305, 130);
+        ctx.drawImage(bitmap, 650, 640, 200, 70, 0, 0, 200, 70);
+        bitmap.close();
+        const bottom = ctx.getImageData(0, 0, 200, 70).data;
+        let gold = 0;
+        for (let i = 0; i < bottom.length; i += 4)
+          if (bottom[i] > 170 && bottom[i + 1] > 110 && bottom[i + 2] < 150) gold++;
+        return green > 250 && gold > 50;
       }, 'data:image/png;base64,' + bytes.toString('base64'));
       if (visible) return;
     }
@@ -66,6 +79,18 @@ const assert = require('node:assert/strict');
     await menu();
     await page.screenshot({path:path.join(output,'menu-before-download.png')});
     const first=await status();
+    await fs.writeFile(path.join(output,'first-status.json'),JSON.stringify(first,null,2));
+    if (!first.groups.find(g=>g.id==='core').ready) {
+      const inventory = await page.evaluate(async () => {
+        const result = {};
+        for (const name of await caches.keys()) {
+          const cache = await caches.open(name);
+          result[name] = (await cache.keys()).map(request=>request.url);
+        }
+        return result;
+      });
+      await fs.writeFile(path.join(output,'cache-inventory.json'),JSON.stringify(inventory,null,2));
+    }
     assert.equal(first.groups.find(g=>g.id==='core').ready,true);
     assert.ok(first.groups.find(g=>g.id==='combat').downloadBytes>0);
     assert.equal(requests.filter(r=>r.group==='combat').length,0,'menu must not request battle assets');
@@ -84,6 +109,16 @@ const assert = require('node:assert/strict');
     await page.mouse.click(200,300);
     await battleScreenshot('battle-online.png');
     console.log('PASS chapter prepares complete shared battle pack before recruitment');
+    await page.mouse.click(640,32);
+    await page.waitForTimeout(3000);
+    await page.screenshot({path:path.join(output,'settings-entry.png')});
+    await page.mouse.click(640,514);
+    await page.locator('#downloads-dialog').waitFor({state:'visible',timeout:15000});
+    await page.waitForTimeout(1000);
+    await page.screenshot({path:path.join(output,'settings-downloads.png')});
+    await page.locator('#downloads-close').click();
+    await page.keyboard.press('Escape');
+    console.log('PASS actual game settings opens and closes the downloads manager');
     await context.close();
     context=await launch();await context.setOffline(true);attach();page=await context.newPage();
     await menu();

@@ -314,6 +314,37 @@ async function main() {
     assert.equal(migrations, 1, `Unexpected migration reload count: ${migrations}`);
     assert.equal(await page.evaluate(() => sessionStorage.getItem('rogue-cache-resume-start')), null);
     pass('legacy network-only worker migrates through waiting worker and resumes Start after one reload');
+    await context.close();
+    context = await launch('activation-race-profile');
+    page = await context.newPage(); observe(page);
+    await page.addInitScript(() => {
+      const register = navigator.serviceWorker.register.bind(navigator.serviceWorker);
+      navigator.serviceWorker.register = async (...args) => {
+        const actual = await register(...args);
+        let activeRead = false, waitingRead = false;
+        return new Proxy(actual, {get(target, property) {
+          if (window.forceActivationRace && property === 'active' && !activeRead) {
+            activeRead = true; return null;
+          }
+          if (window.forceActivationRace && property === 'waiting') {
+            if (!waitingRead) { waitingRead = true; return target.active; }
+            return null;
+          }
+          const value = Reflect.get(target, property, target);
+          return typeof value === 'function' ? value.bind(target) : value;
+        }});
+      };
+    });
+    await page.goto(base);
+    await page.locator('#cache-status').filter({hasText:'Save the launcher first'}).waitFor();
+    requests.length = 0;
+    await page.evaluate(async () => { await navigator.serviceWorker.ready; });
+    await page.waitForTimeout(100);
+    await page.evaluate(() => { window.forceActivationRace = true; });
+    await page.locator('#start').click();
+    await page.waitForFunction(() => document.body.classList.contains('playing'));
+    assert.ok(requests.some(r => r.path === 'changed.txt'), 'Activation must not skip core preparation');
+    pass('worker activating during its STATUS reply retains the inspected reference and prepares core');
     assert.deepEqual(errors, []);
     await fs.writeFile(path.join(OUTPUT, 'results.json'), JSON.stringify({passed: results, pageErrors: errors, engine: 'stub only; production HTML/CSS/PWA/SW and real CacheStorage'}, null, 2));
     console.log(`\n${results.length} real startup-UI scenarios passed; evidence: ${OUTPUT}`);
