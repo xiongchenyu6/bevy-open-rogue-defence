@@ -42,3 +42,12 @@ Victory artwork was corrected after screenshot review: the existing hanging clot
 now faces the battle camera and is suspended on a planted pole. A second actual
 1000-frame adventure run passed and [the resulting victory marker](victory.png)
 was visually inspected. This is a combat-earned completed camp, not a forced mask.
+
+Follow-up: the complete compiled logic suite was rerun serially without concurrent
+render probes: **831 passed, 0 failed, 1 ignored** in 52.36s
+(`target/camp-interaction/tests-serial.log`). The final victory-pole artwork was
+separately built and verified by the second 1000-frame rendered combat probe above.
+
+Deployment verified: GitHub Actions run `43681921263` succeeded; the public
+`build.json` reports revision `88431a40af261cd4187ce2b170a6908882fa571e`.
+The startup page, manifest, installation script and service worker all returned HTTP 200.
