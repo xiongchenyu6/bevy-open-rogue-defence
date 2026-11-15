@@ -112,7 +112,7 @@ fn verge_mesh(center: f32, width: f32) -> Mesh {
 pub(super) fn install(app: &mut App) {
     app.init_resource::<AtmosphereClock>()
         .add_systems(Startup, setup)
-        .add_systems(Update, animate);
+        .add_systems(Update, animate.after(camp_presence::CampPresenceSet));
 }
 fn setup(
     mut commands: Commands,
@@ -257,6 +257,7 @@ fn animate(
     session: Res<GameSession>,
     state: Option<Res<super::super::AdventureBossState>>,
     mut clock: ResMut<AtmosphereClock>,
+    presence: Res<camp_presence::CampPresence>,
     cameras: Query<&GlobalTransform, With<Camera3d>>,
     mut motes: Query<(&CampAtmosphere, &mut Transform)>,
     mut lamps: Query<(&CampLamp, &mut PointLight)>,
@@ -271,24 +272,19 @@ fn animate(
         if let Some(camera) = camera {
             transform.look_at(camera, Vec3::Y);
         }
-        if state
+        let intensity = state
             .as_ref()
-            .is_some_and(|state| state.resolved & (1 << mote.camp) != 0)
-        {
-            transform.scale *= 0.25;
-        }
+            .map_or(0.2, |state| presence.intensity(mote.camp, state));
+        // Sleep leaves only a trace of the camp's elemental atmosphere. A brief
+        // awakening swells existing motes rather than adding a flashing UI ring.
+        transform.scale *= intensity.sqrt();
     }
     for (lamp, mut light) in &mut lamps {
         let flicker =
             (clock.0 * 7.3 + lamp.camp as f32).sin() * 0.05 + (clock.0 * 13.9).cos() * 0.025;
-        let quiet = if state
+        let quiet = state
             .as_ref()
-            .is_some_and(|state| state.resolved & (1 << lamp.camp) != 0)
-        {
-            0.35
-        } else {
-            1.0
-        };
+            .map_or(0.2, |state| presence.intensity(lamp.camp, state));
         light.intensity = lamp.base * (1.0 + flicker) * quiet;
     }
 }

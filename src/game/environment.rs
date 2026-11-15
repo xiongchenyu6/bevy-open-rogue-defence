@@ -3,12 +3,14 @@ use bevy::prelude::*;
 use super::{ArenaEntity, GameSession};
 
 mod atmosphere;
+mod camp_presence;
 
 pub struct EnvironmentArtPlugin;
 
 impl Plugin for EnvironmentArtPlugin {
     fn build(&self, app: &mut App) {
         atmosphere::install(app);
+        camp_presence::install(app);
         app.init_resource::<ArtClock>()
             .add_systems(Startup, setup_environment_art)
             .add_systems(Update, (animate_environment_art, update_camp_previews));
@@ -264,6 +266,7 @@ fn spawn_side_camps(
         );
         commands.spawn((
             Name::new(format!("Resting side camp leader {index}")),
+            camp_presence::CampLeaderPose(index as u8),
             WorldAssetRoot(boss),
             Transform::from_translation(center)
                 .with_scale(Vec3::splat(2.7))
@@ -271,6 +274,7 @@ fn spawn_side_camps(
             CampPreview(index as u8),
             ArenaEntity,
         ));
+        camp_presence::spawn_victory_flag(commands, assets, index as u8, center);
         for n in 0..3 {
             let guard = assets.load(
                 [
