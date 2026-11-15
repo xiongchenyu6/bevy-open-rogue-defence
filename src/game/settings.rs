@@ -1,6 +1,7 @@
 //! Settings restores the prior pause and edits persisted player preferences.
 mod audio_controls;
 mod entry_layout;
+mod icon_controls;
 mod run_actions;
 pub use run_actions::SettingsDepartureInputSet;
 #[cfg(not(target_arch = "wasm32"))]
@@ -25,6 +26,7 @@ impl Plugin for SettingsPlugin {
         audio_controls::install(app);
         run_actions::install(app);
         entry_layout::install(app);
+        icon_controls::install(app);
         #[cfg(not(target_arch = "wasm32"))]
         app.add_plugins(display_controls::DisplayControlsPlugin);
         app.init_resource::<SettingsState>()
@@ -124,9 +126,10 @@ fn setup_entry(mut commands: Commands) {
                 position_type: PositionType::Absolute,
                 left: percent(50),
                 top: px(8),
-                margin: UiRect::left(px(-40)),
-                width: px(80),
-                height: px(44),
+                margin: UiRect::left(px(-24)),
+                width: px(48),
+                height: px(48),
+                border_radius: BorderRadius::all(px(10)),
                 align_items: AlignItems::Center,
                 justify_content: JustifyContent::Center,
                 border: UiRect::all(px(1)),
@@ -137,7 +140,20 @@ fn setup_entry(mut commands: Commands) {
             BorderColor::all(GOLD),
         ))
         .with_children(|button| {
-            button.spawn((SettingsLauncherLabel, label("", 13.0, IVORY)));
+            icon_controls::icon(button, "settings", 28.);
+            button.spawn((
+                SettingsLauncherLabel,
+                label("", 12.0, IVORY),
+                Node {
+                    position_type: PositionType::Absolute,
+                    top: px(51),
+                    padding: UiRect::all(px(6)),
+                    display: Display::None,
+                    ..default()
+                },
+                BackgroundColor(PANEL),
+                Pickable::IGNORE,
+            ));
         });
 }
 
@@ -188,81 +204,105 @@ fn spawn_settings(commands: &mut Commands) -> Entity {
                         ));
                         header.spawn((SettingsCopy(CopyKind::Intro), label("", 13.0, MUTED)));
                     });
-                panel.spawn((SettingsCopy(CopyKind::Section), label("", 14.0, GOLD)));
                 panel
                     .spawn((
-                        SettingsLanguageRow,
+                        icon_controls::SettingsScroll,
+                        Name::new("Settings scroll body"),
+                        ScrollPosition::default(),
                         Node {
                             width: percent(100),
-                            column_gap: px(14),
-                            flex_shrink: 0.0,
+                            flex_grow: 1.,
+                            min_height: px(0),
+                            flex_direction: FlexDirection::Column,
+                            row_gap: px(8),
+                            overflow: Overflow::scroll_y(),
                             ..default()
                         },
                     ))
-                    .with_children(|row| {
-                        for (language, native, hint, hook) in [
-                            (GameLanguage::English, "English", "EN", "Settings English"),
-                            (
-                                GameLanguage::SimplifiedChinese,
-                                "简体中文",
-                                "中",
-                                "Settings Chinese",
-                            ),
-                        ] {
-                            row.spawn((
-                                Button,
-                                SettingsLanguageButton(language),
-                                Name::new(hook),
+                    .with_children(|panel| {
+                        panel.spawn((SettingsCopy(CopyKind::Section), label("", 14.0, GOLD)));
+                        panel
+                            .spawn((
+                                SettingsLanguageRow,
                                 Node {
-                                    flex_basis: px(0),
-                                    flex_grow: 1.0,
-                                    min_width: px(0),
-                                    min_height: px(72),
-                                    padding: UiRect::all(px(10)),
-                                    flex_direction: FlexDirection::Column,
-                                    justify_content: JustifyContent::Center,
-                                    row_gap: px(5),
-                                    border: UiRect::all(px(2)),
+                                    width: percent(100),
+                                    column_gap: px(14),
+                                    flex_shrink: 0.0,
                                     ..default()
                                 },
-                                BackgroundColor(Color::srgb(0.06, 0.095, 0.105)),
-                                BorderColor::all(EDGE),
+                            ))
+                            .with_children(|row| {
+                                for (language, native, _hint, hook) in [
+                                    (GameLanguage::English, "English", "EN", "Settings English"),
+                                    (
+                                        GameLanguage::SimplifiedChinese,
+                                        "简体中文",
+                                        "中",
+                                        "Settings Chinese",
+                                    ),
+                                ] {
+                                    row.spawn((
+                                        Button,
+                                        SettingsLanguageButton(language),
+                                        Name::new(hook),
+                                        Node {
+                                            flex_basis: px(0),
+                                            flex_grow: 1.0,
+                                            min_width: px(0),
+                                            min_height: px(72),
+                                            padding: UiRect::all(px(10)),
+                                            flex_direction: FlexDirection::Column,
+                                            justify_content: JustifyContent::Center,
+                                            row_gap: px(5),
+                                            border: UiRect::all(px(2)),
+                                            ..default()
+                                        },
+                                        BackgroundColor(Color::srgb(0.06, 0.095, 0.105)),
+                                        BorderColor::all(EDGE),
+                                    ))
+                                    .with_children(|button| {
+                                        icon_controls::icon(button, "language", 16.);
+                                        button.spawn(label(native, 18.0, IVORY));
+                                        button.spawn((
+                                            SettingsSelected(language),
+                                            SettingsCopy(CopyKind::Selected),
+                                            label("", 11.0, GOLD),
+                                        ));
+                                    });
+                                }
+                            });
+                        super::selection_detail::spawn_toggle(panel);
+                        audio_controls::spawn(panel);
+                        panel.spawn((
+                            SettingsCopy(CopyKind::SaveNotice),
+                            label("", 12.0, MUTED),
+                            Node {
+                                flex_grow: 1.0,
+                                ..default()
+                            },
+                        ));
+                        panel
+                            .spawn((
+                                Button,
+                                SettingsTutorial,
+                                Name::new("Settings tutorial"),
+                                Node {
+                                    min_height: px(44),
+                                    flex_shrink: 0.,
+                                    align_items: AlignItems::Center,
+                                    justify_content: JustifyContent::Center,
+                                    ..default()
+                                },
+                                BackgroundColor(PANEL),
                             ))
                             .with_children(|button| {
-                                button.spawn(label(hint, 11.0, MUTED));
-                                button.spawn(label(native, 20.0, IVORY));
+                                icon_controls::icon(button, "book", 24.);
                                 button.spawn((
-                                    SettingsSelected(language),
-                                    SettingsCopy(CopyKind::Selected),
-                                    label("", 11.0, GOLD),
+                                    SettingsCopy(CopyKind::Tutorial),
+                                    label("", 14.0, IVORY),
                                 ));
                             });
-                        }
                     });
-                super::selection_detail::spawn_toggle(panel);
-                audio_controls::spawn(panel);
-                panel.spawn((
-                    SettingsCopy(CopyKind::SaveNotice),
-                    label("", 12.0, MUTED),
-                    Node {
-                        flex_grow: 1.0,
-                        ..default()
-                    },
-                ));
-                panel
-                    .spawn((
-                        Button,
-                        SettingsTutorial,
-                        Name::new("Settings tutorial"),
-                        Node {
-                            min_height: px(42),
-                            align_items: AlignItems::Center,
-                            justify_content: JustifyContent::Center,
-                            ..default()
-                        },
-                        BackgroundColor(PANEL),
-                    ))
-                    .with_child((SettingsCopy(CopyKind::Tutorial), label("", 14.0, IVORY)));
                 panel
                     .spawn(Node {
                         width: percent(100),
@@ -279,8 +319,11 @@ fn spawn_settings(commands: &mut Commands) -> Entity {
                                 flex_basis: px(0),
                                 flex_grow: 1.0,
                                 min_width: px(0),
-                                height: px(48),
-                                min_height: px(48),
+                                height: px(56),
+                                min_height: px(56),
+                                flex_direction: FlexDirection::Column,
+                                row_gap: px(2),
+                                border_radius: BorderRadius::all(px(8)),
                                 flex_shrink: 0.0,
                                 align_items: AlignItems::Center,
                                 justify_content: JustifyContent::Center,
@@ -289,6 +332,7 @@ fn spawn_settings(commands: &mut Commands) -> Entity {
                             BackgroundColor(GOLD),
                         ))
                         .with_children(|button| {
+                            icon_controls::icon(button, "back", 24.);
                             button.spawn((
                                 SettingsCopy(CopyKind::Back),
                                 label("", 13.0, Color::srgb(0.035, 0.055, 0.055)),
@@ -534,7 +578,7 @@ struct Layout {
     compact: bool,
 }
 fn layout(width: f32, height: f32) -> Layout {
-    let compact = height < 540.0;
+    let compact = height < 540.0 || width < 480.0;
     Layout {
         width: (width - 40.0).min(720.0),
         height: (height - 24.0).min(640.0),
@@ -588,7 +632,7 @@ fn update_settings_layout(
                 .set_if_neq(px(m.width));
             node.reborrow()
                 .map_unchanged(|node| &mut node.height)
-                .set_if_neq(Val::Auto);
+                .set_if_neq(px(m.height));
             node.reborrow()
                 .map_unchanged(|node| &mut node.max_height)
                 .set_if_neq(px(m.height));
@@ -775,18 +819,16 @@ mod tests {
             (1280.0, 720.0),
             (844.0, 390.0),
             (667.0, 375.0),
+            (390.0, 844.0),
+            (320.0, 240.0),
         ] {
             let m = layout(width, height);
             assert!(m.width < width && m.height < height);
             let content = m.height - m.padding * 2.0;
-            let required = if m.compact {
-                28.0 + 18.0 + 72.0 + 36.0 + 76.0 + 28.0 + 48.0 + m.gap * 6.0
-            } else {
-                60.0 + 18.0 + 90.0 + 36.0 + 76.0 + 28.0 + 48.0 + m.gap * 6.0
-            };
+            let fixed_chrome = (if m.compact { 28.0 } else { 60.0 }) + 56.0 + m.gap * 2.0;
             assert!(
-                required <= content,
-                "settings content at {width}x{height}: {required}>{content}"
+                content - fixed_chrome >= 94.0,
+                "settings must reserve a usable scroll viewport and fixed back action at {width}x{height}"
             );
         }
     }

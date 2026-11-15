@@ -136,6 +136,23 @@ fn exercise(world: &mut World) {
                 )
             })
             .collect();
+        let heading = bounds
+            .iter()
+            .find(|(name, _)| name == "Campaign heading")
+            .unwrap()
+            .1;
+        for name in ["Campaign language", "Campaign training"] {
+            let rect = bounds.iter().find(|(label, _)| label == name).unwrap().1;
+            assert!(
+                rect.width() >= 47.9 && rect.height() >= 47.9,
+                "campaign toolbar must retain 48px touch targets: {name} {rect:?}"
+            );
+            assert!(
+                heading.intersect(rect).is_empty(),
+                "campaign heading overlaps toolbar: {name} {heading:?} {rect:?}"
+            );
+        }
+        println!("[capture] PASS campaign icon toolbar: 48px targets, heading unobstructed");
         let body = bounds
             .iter()
             .find(|(name, _)| name == "Campaign scroll body")

@@ -43,15 +43,24 @@ pub fn install(app: &mut bevy::app::SubApp, touch: bool) {
 
 fn touch_input(
     probe: Res<Probe>,
-    touch: Option<Res<TouchProbe>>,
+    touch: Option<ResMut<TouchProbe>>,
+    pads: Query<(&Name, &UiGlobalTransform)>,
     mut messages: MessageWriter<TouchInput>,
 ) {
-    let Some(touch) = touch else {
+    let Some(mut touch) = touch else {
         return;
     };
+    if probe.0 == 4 {
+        touch.position = pads
+            .iter()
+            .find(|(name, _)| name.as_str() == "Movement pad")
+            .expect("touch HUD movement pad")
+            .1
+            .translation;
+    }
     let phase = match probe.0 {
-        0 => TouchPhase::Started,
-        1 => TouchPhase::Ended,
+        0 | 4 => TouchPhase::Started,
+        1 | 8 => TouchPhase::Ended,
         _ => return,
     };
     messages.write(TouchInput {

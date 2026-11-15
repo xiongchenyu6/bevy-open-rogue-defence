@@ -62,9 +62,9 @@ fn entry_layout(
         margin: if anchored_right {
             UiRect::ZERO
         } else {
-            UiRect::left(px(-40))
+            UiRect::left(px(-24))
         },
-        width: if portrait_battle { px(44) } else { px(80) },
+        width: px(48),
         short_label: portrait_battle,
     }
 }
@@ -79,17 +79,28 @@ fn position_picker_settings(
     session: Res<GameSession>,
     language: Res<GameLanguage>,
     equipment: Option<Res<crate::game::equipment_ui::EquipmentPanelState>>,
-    mut labels: Query<&mut Text, With<SettingsLauncherLabel>>,
+    mut labels: Query<
+        (&mut Text, &mut Node),
+        (
+            With<SettingsLauncherLabel>,
+            Without<SettingsOpen>,
+            Without<crate::game::hero::draft::DraftHeader>,
+        ),
+    >,
+    hover: Query<&Interaction, With<SettingsOpen>>,
     mut nodes: Query<
         (
             &mut Node,
             Has<SettingsOpen>,
             Has<crate::game::hero::draft::DraftHeader>,
         ),
-        Or<(
-            With<SettingsOpen>,
-            With<crate::game::hero::draft::DraftHeader>,
-        )>,
+        (
+            Without<SettingsLauncherLabel>,
+            Or<(
+                With<SettingsOpen>,
+                With<crate::game::hero::draft::DraftHeader>,
+            )>,
+        ),
     >,
 ) {
     let Ok(window) = windows.single() else {
@@ -104,7 +115,13 @@ fn position_picker_settings(
         picker,
         draft.is_some_and(|d| d.root.is_some()),
     );
-    for mut label in &mut labels {
+    for (mut label, mut tip) in &mut labels {
+        let shown = hover
+            .iter()
+            .any(|interaction| *interaction == Interaction::Hovered);
+        tip.reborrow()
+            .map_unchanged(|n| &mut n.display)
+            .set_if_neq(if shown { Display::Flex } else { Display::None });
         label.set_if_neq(Text::new(if layout.short_label {
             language.pick("Menu", "菜单")
         } else {
@@ -140,7 +157,7 @@ fn position_picker_settings(
                 .set_if_neq(layout.width);
             node.reborrow()
                 .map_unchanged(|n| &mut n.height)
-                .set_if_neq(px(44));
+                .set_if_neq(px(48));
         }
         if header {
             node.reborrow()
@@ -163,13 +180,13 @@ mod tests {
         };
         let left = match layout.right {
             Val::Px(right) => window_width - right - width,
-            Val::Auto => window_width * 0.5 - 40.0,
+            Val::Auto => window_width * 0.5 - 24.0,
             _ => panic!("unexpected horizontal anchor"),
         };
         let Val::Px(top) = layout.top else {
             panic!("top anchored context required")
         };
-        Rect::from_corners(Vec2::new(left, top), Vec2::new(left + width, top + 44.0))
+        Rect::from_corners(Vec2::new(left, top), Vec2::new(left + width, top + 48.0))
     }
 
     #[test]
@@ -210,13 +227,13 @@ mod tests {
                 "overlap at {width}: {entry:?} / {pause:?}"
             );
             if width < 560.0 {
-                assert_eq!(entry.min, Vec2::new(width - hud.safe_x - 96.0, 72.0));
-                assert_eq!(entry.size(), Vec2::splat(44.0));
+                assert_eq!(entry.min, Vec2::new(width - hud.safe_x - 100.0, 72.0));
+                assert_eq!(entry.size(), Vec2::splat(48.0));
                 assert_eq!(pause.min.x - entry.max.x, 8.0);
                 assert!(entry.max.y < 124.0, "must remain above the speed toolbar");
                 assert!(layout.short_label);
             } else {
-                assert_eq!(entry.size(), Vec2::new(80.0, 44.0));
+                assert_eq!(entry.size(), Vec2::splat(48.0));
                 assert!(!layout.short_label);
             }
         }
@@ -232,7 +249,7 @@ mod tests {
         ] {
             let layout = entry_layout(390.0, 844.0, menu, finished, picker, draft);
             assert_eq!(layout.left, percent(50));
-            assert_eq!(layout.width, px(80));
+            assert_eq!(layout.width, px(48));
             assert_eq!(layout.top, px(8));
             assert!(!layout.short_label);
         }
@@ -246,7 +263,7 @@ mod tests {
             (draft.right, draft.top, draft.bottom),
             (px(32), Val::Auto, px(24))
         );
-        assert_eq!((picker.width, draft.width), (px(80), px(80)));
+        assert_eq!((picker.width, draft.width), (px(48), px(48)));
     }
 
     #[derive(Resource, Default)]
@@ -322,7 +339,7 @@ mod tests {
                 SettingsOpen,
                 Node {
                     left: percent(50),
-                    margin: UiRect::left(px(-40)),
+                    margin: UiRect::left(px(-24)),
                     ..default()
                 },
             ))

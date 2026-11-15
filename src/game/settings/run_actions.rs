@@ -47,8 +47,8 @@ fn button(parent: &mut ChildSpawnerCommands, action: Action, name: &str) {
                 flex_basis: px(0),
                 flex_grow: 1.0,
                 min_width: px(0),
-                height: px(48),
-                min_height: px(48),
+                height: px(56),
+                min_height: px(56),
                 align_items: AlignItems::Center,
                 justify_content: JustifyContent::Center,
                 border: UiRect::all(px(1)),
@@ -58,7 +58,16 @@ fn button(parent: &mut ChildSpawnerCommands, action: Action, name: &str) {
             BorderColor::all(GOLD),
         ))
         .with_children(|b| {
-            b.spawn((ActionCopy(action), label("", 13.0, IVORY)));
+            super::icon_controls::icon(
+                b,
+                match action {
+                    Action::Chapters => "chapters",
+                    Action::Quit | Action::Confirm => "exit",
+                    Action::Cancel => "resume",
+                },
+                24.,
+            );
+            b.spawn((ActionCopy(action), label("", 12.0, IVORY)));
         });
 }
 pub(super) fn spawn(parent: &mut ChildSpawnerCommands) {

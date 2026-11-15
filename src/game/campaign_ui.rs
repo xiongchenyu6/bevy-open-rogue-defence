@@ -62,7 +62,10 @@ impl Plugin for CampaignUiPlugin {
 fn install(app: &mut App) {
     app.init_resource::<CampaignMenu>()
         .init_resource::<MenuView>()
-        .add_systems(Update, (input, render, scroll, tooltips).chain());
+        .add_systems(
+            Update,
+            (input, render, scroll, tooltips, controls::feedback).chain(),
+        );
 }
 fn label(text: impl Into<String>, size: f32, color: Color) -> impl Bundle {
     (
@@ -74,53 +77,9 @@ fn label(text: impl Into<String>, size: f32, color: Color) -> impl Bundle {
         TextColor(color),
     )
 }
-fn button(
-    parent: &mut ChildSpawnerCommands,
-    name: impl Into<String>,
-    copy: &str,
-    action: Action,
-    primary: bool,
-) {
-    parent
-        .spawn((
-            Name::new(name.into()),
-            Button,
-            action,
-            Node {
-                min_height: px(42),
-                padding: UiRect::axes(px(16), px(10)),
-                border: UiRect::all(px(1)),
-                align_items: AlignItems::Center,
-                justify_content: JustifyContent::Center,
-                flex_shrink: 0.0,
-                ..default()
-            },
-            BackgroundColor(if primary {
-                GOLD
-            } else {
-                Color::srgb(0.05, 0.09, 0.10)
-            }),
-            BorderColor::all(if primary {
-                GOLD
-            } else {
-                Color::srgb(0.23, 0.36, 0.38)
-            }),
-        ))
-        .with_children(|button| {
-            button.spawn((
-                label(
-                    copy,
-                    14.0,
-                    if primary {
-                        Color::srgb(0.04, 0.06, 0.06)
-                    } else {
-                        IVORY
-                    },
-                ),
-                Pickable::IGNORE,
-            ));
-        });
-}
+mod controls;
+use controls::{button, toolbar_button};
+
 #[allow(clippy::too_many_arguments)]
 fn input(
     mut menu: ResMut<CampaignMenu>,
@@ -295,17 +254,20 @@ fn render(
     {
         commands.entity(root).despawn();
     }
-    let compact = size.y < 640.0;
+    let compact = size.y < 640.0 || size.x < 480.0;
     let width = (size.x - 24.0).min(1080.0);
     let height = (size.y - 24.0).min(720.0);
     let root=commands.spawn((Name::new("Campaign overlay"),CampaignOverlay,Node {position_type:PositionType::Absolute,width:percent(100),height:percent(100),align_items:AlignItems::Center,justify_content:JustifyContent::Center,..default()},BackgroundColor(Color::srgb(0.012,0.026,0.031)),GlobalZIndex(400), crate::game::controller_input::ControllerScope(400))).with_children(|overlay| {
         overlay.spawn((Name::new("Campaign panel"),Node {width:px(width),height:px(height),padding:UiRect::all(px(if compact {10}else{20})),flex_direction:FlexDirection::Column,row_gap:px(if compact {8}else{14}),..default()},BackgroundColor(Color::srgb(0.025,0.05,0.058)))).with_children(|panel| {
             panel.spawn(Node {align_items:AlignItems::Center,column_gap:px(8),flex_shrink:0.0,..default()}).with_children(|header| {
-                header.spawn((label(match page {Page::Chapters=>language.pick("EXPEDITIONS","章节远征"),Page::Training=>language.pick("LEGACY TRAINING","永久强化"),Page::Result=>language.pick("EXPEDITION REPORT","远征战报")},if compact {21.0}else{30.0},IVORY),Node {flex_grow:1.0,min_width:px(0),..default()}));
-                button(header,"Campaign language",if language.is_chinese() {"English"}else{"中文"},Action::Language,false);
-                if page==Page::Chapters {button(header,"Campaign training",language.pick("Training","强化"),Action::Training,false);}else if page==Page::Training {button(header,"Campaign chapters",language.pick("Chapters","章节"),Action::Chapters,false);}
+                header.spawn((Name::new("Campaign heading"),label(match page {Page::Chapters=>language.pick("EXPEDITIONS","章节远征"),Page::Training=>language.pick("LEGACY TRAINING","永久强化"),Page::Result=>language.pick("EXPEDITION REPORT","远征战报")},if compact {21.0}else{30.0},IVORY),Node {flex_grow:1.0,min_width:px(0),..default()}));
+                toolbar_button(header,&assets,"Campaign language",language.pick("Change language", "切换语言"),Action::Language,Some(language.pick("EN", "中")));
+                if page==Page::Chapters {toolbar_button(header,&assets,"Campaign training",language.pick("Permanent training","永久强化"),Action::Training,None);}else if page==Page::Training {toolbar_button(header,&assets,"Campaign chapters",language.pick("Choose chapter","章节选择"),Action::Chapters,None);}
             });
-            panel.spawn((label(format!("{}  {}",progress.currency,language.pick("LEGACY SHARDS","传承碎片")),14.0,GOLD),Node {flex_shrink:0.0,..default()}));
+            panel.spawn(Node { column_gap:px(6), align_items:AlignItems::Center, flex_shrink:0.0, ..default() }).with_children(|currency| {
+                currency.spawn((ImageNode::new(assets.load("ui/icons/fate_cube.png")),Node {width:px(20),height:px(20),..default()},Pickable::IGNORE));
+                currency.spawn(label(format!("{}",progress.currency),14.0,GOLD));
+            });
             panel.spawn((Name::new("Campaign scroll body"),ScrollBody,ScrollPosition::default(),Node {flex_grow:1.0,min_height:px(0),overflow:Overflow::scroll_y(),flex_direction:FlexDirection::Column,..default()})).with_children(|body| {
                 match page {
                     Page::Chapters=>chapters(body,&assets,*language,&progress,width,height,compact),
@@ -313,9 +275,9 @@ fn render(
                     Page::Result=>result(body,&assets,*language,&session,&run,&reward,seed.0,compact),
                 }
             });
-            if page==Page::Result {result_actions(panel,*language,&session,&run,&progress);}
-            if page==Page::Training&&session.finished {panel.spawn(Node {column_gap:px(8),flex_wrap:FlexWrap::Wrap,..default()}).with_children(|footer| {button(footer,"Campaign retry",language.pick("Retry chapter","重试本关"),Action::Start(run.stage),true);});}
-            if progress.can_retry_save() { button(panel,"Campaign retry save",language.pick("Retry save","重试保存"),Action::RetrySave,true); }
+            if page==Page::Result {result_actions(panel,&assets,*language,&session,&run,&progress);}
+            if page==Page::Training&&session.finished {panel.spawn(Node {column_gap:px(8),flex_wrap:FlexWrap::Wrap,..default()}).with_children(|footer| {button(footer,&assets,"Campaign retry",language.pick("Retry chapter","重试本关"),Action::Start(run.stage),true);});}
+            if progress.can_retry_save() { button(panel,&assets,"Campaign retry save",language.pick("Retry save","重试保存"),Action::RetrySave,true); }
             let footer_copy = if progress.can_retry_save() { language.pick("Saving failed. Your rewards and upgrades are kept while the game stays open. Retry saving.","保存失败。保持游戏开启可保留奖励和强化，请重试保存。") } else if progress.last_error.is_some() { language.pick("Progress could not be loaded. This session is temporary and cannot be saved. Existing save data was preserved.","进度读取失败。本局为临时模式，无法保存。原存档已保留。") } else if view.notice.is_empty() {match page {Page::Chapters=>language.pick("Select a chapter. Every expedition starts with a new commander.","选择章节，每次远征从新的基础指挥官开始。"),Page::Training=>language.pick("Permanent bonuses apply to every new expedition. Scroll for more upgrades.","永久加成应用于每次新远征，可滚动查看全部强化。"),Page::Result=>language.pick("Your shards and unlocked chapters are saved between expeditions.","碎片与已解锁章节将在远征之间保留。")}}else{&view.notice}.to_string();
             panel.spawn((Name::new("Campaign hint"),HintText(footer_copy.clone()),label(footer_copy,if compact {10.0}else{12.0},MUTED),Node {min_height:px(if compact {25}else{32}),flex_shrink:0.0,..default()}));
         });
@@ -328,7 +290,7 @@ fn render(
 }
 fn chapter_card_height(panel_height: f32, columns: f32, compact: bool) -> f32 {
     let rows = (6.0 / columns).ceil();
-    let chrome = if compact { 132.0 } else { 180.0 };
+    let chrome = if compact { 142.0 } else { 190.0 };
     ((panel_height - chrome - (rows - 1.0) * 10.0) / rows).clamp(94.0, 205.0)
 }
 
@@ -373,6 +335,7 @@ fn chapters(
                     Node {
                         width: px(card_width),
                         height: px(card_height),
+                        border_radius: BorderRadius::all(px(10)),
                         padding: UiRect::all(px(if small_card { 5 } else { 10 })),
                         border: UiRect::all(px(1)),
                         flex_direction: FlexDirection::Column,
@@ -387,7 +350,7 @@ fn chapters(
                     } else {
                         Color::srgb(0.035, 0.047, 0.052)
                     }),
-                    BorderColor::all(if progress.cleared[stage] {
+                    BorderColor::all(if unlocked {
                         GOLD
                     } else {
                         Color::srgb(0.19, 0.30, 0.32)
@@ -433,17 +396,21 @@ fn chapters(
                         Pickable::IGNORE,
                     ));
                     card.spawn((
-                        label(
-                            if progress.cleared[stage] {
-                                language.pick("CLEARED", "已通关")
-                            } else if unlocked {
-                                language.pick("BEGIN EXPEDITION", "开始远征")
-                            } else {
-                                language.pick("LOCKED", "未解锁")
-                            },
-                            11.0,
-                            if unlocked { GOLD } else { MUTED },
-                        ),
+                        ImageNode::new(assets.load(if progress.cleared[stage] {
+                            "ui/icons/confirm.png"
+                        } else if unlocked {
+                            "ui/controls/play.png"
+                        } else {
+                            "ui/controls/lock.png"
+                        })),
+                        Node {
+                            position_type: PositionType::Absolute,
+                            top: px(7),
+                            right: px(7),
+                            width: px(18),
+                            height: px(18),
+                            ..default()
+                        },
                         Pickable::IGNORE,
                     ));
                 });
@@ -539,6 +506,7 @@ fn training(
                         .unwrap_or_else(|| language.pick("MAXIMUM", "已满级").into());
                     button(
                         card,
+                        assets,
                         format!("Campaign buy {index}"),
                         &copy,
                         Action::Buy(index),
@@ -719,6 +687,7 @@ fn seed_text(language: GameLanguage, seed: u64) -> String {
 
 fn result_actions(
     parent: &mut ChildSpawnerCommands,
+    assets: &AssetServer,
     language: GameLanguage,
     session: &GameSession,
     run: &CampaignRun,
@@ -740,6 +709,7 @@ fn result_actions(
             if session.victory && run.stage + 1 < 6 && progress.can_play(run.stage + 1) {
                 button(
                     actions,
+                    assets,
                     "Campaign next",
                     language.pick("Next chapter", "下一章节"),
                     Action::Start(run.stage + 1),
@@ -748,6 +718,7 @@ fn result_actions(
             }
             button(
                 actions,
+                assets,
                 "Campaign retry",
                 language.pick("Retry chapter", "重试本关"),
                 Action::Start(run.stage),
@@ -755,6 +726,7 @@ fn result_actions(
             );
             button(
                 actions,
+                assets,
                 "Campaign training",
                 language.pick("Train & return", "强化再战"),
                 Action::Training,
@@ -762,6 +734,7 @@ fn result_actions(
             );
             button(
                 actions,
+                assets,
                 "Campaign chapters",
                 language.pick("Chapters", "章节选择"),
                 Action::Chapters,

@@ -77,7 +77,11 @@ pub(super) fn spawn(parent: &mut ChildSpawnerCommands) {
                 flex_basis: px(0),
                 flex_grow: 1.0,
                 min_width: px(0),
-                height: px(48),
+                height: px(56),
+                min_height: px(56),
+                flex_direction: FlexDirection::Column,
+                row_gap: px(2),
+                border_radius: BorderRadius::all(px(8)),
                 border: UiRect::all(px(1)),
                 justify_content: JustifyContent::Center,
                 align_items: AlignItems::Center,
@@ -87,9 +91,10 @@ pub(super) fn spawn(parent: &mut ChildSpawnerCommands) {
             BorderColor::all(EDGE),
         ))
         .with_children(|button| {
+            super::icon_controls::icon(button, "fullscreen", 24.);
             button.spawn((
                 DisplayCopy,
-                label("", 13.0, IVORY),
+                label("", 12.0, IVORY),
                 TextLayout::justify(Justify::Center),
             ));
         });

@@ -37,12 +37,16 @@ impl Plugin for MobileInputPlugin {
 }
 
 #[derive(Resource, Debug, Default)]
-struct TouchJoystickState {
+pub(super) struct TouchJoystickState {
     touch_id: Option<u64>,
     origin: Vec2,
 }
 
 impl TouchJoystickState {
+    pub(super) fn active(&self) -> bool {
+        self.touch_id.is_some()
+    }
+
     fn begin(&mut self, id: u64, origin: Vec2) -> bool {
         if self.touch_id.is_some() {
             return false;
@@ -594,11 +598,14 @@ mod tests {
     #[test]
     fn joystick_keeps_the_first_touch_until_it_is_cleared() {
         let mut joystick = TouchJoystickState::default();
+        assert!(!joystick.active());
         assert!(joystick.begin(7, Vec2::new(80.0, 320.0)));
         assert!(!joystick.begin(11, Vec2::new(90.0, 315.0)));
         assert_eq!(joystick.touch_id, Some(7));
+        assert!(joystick.active());
 
         joystick.clear();
+        assert!(!joystick.active());
         assert!(joystick.begin(11, Vec2::new(90.0, 315.0)));
         assert_eq!(joystick.touch_id, Some(11));
     }

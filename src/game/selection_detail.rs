@@ -13,6 +13,10 @@ impl Default for SelectionDetail {
 pub(crate) struct SelectionDetailToggle;
 #[derive(Component)]
 pub(crate) struct SelectionDetailLabel;
+#[derive(Component)]
+pub(crate) struct DetailIcon;
+#[derive(Component)]
+pub(crate) struct DetailHint;
 
 pub(crate) fn spawn_toggle(parent: &mut ChildSpawnerCommands) {
     parent
@@ -21,7 +25,8 @@ pub(crate) fn spawn_toggle(parent: &mut ChildSpawnerCommands) {
             SelectionDetailToggle,
             Name::new("Selection detail toggle"),
             Node {
-                min_height: px(36),
+                min_height: px(44),
+                column_gap: px(6),
                 padding: UiRect::axes(px(10), px(6)),
                 align_items: AlignItems::Center,
                 justify_content: JustifyContent::Center,
@@ -33,6 +38,38 @@ pub(crate) fn spawn_toggle(parent: &mut ChildSpawnerCommands) {
             BorderColor::all(Color::srgb(0.90, 0.72, 0.42)),
         ))
         .with_children(|button| {
+            button.spawn((
+                DetailIcon,
+                ImageNode::default(),
+                Node {
+                    width: px(24),
+                    height: px(24),
+                    flex_shrink: 0.0,
+                    ..default()
+                },
+                Pickable::IGNORE,
+            ));
+            button.spawn((
+                DetailHint,
+                Text::default(),
+                TextFont {
+                    font_size: FontSize::Px(12.),
+                    ..default()
+                },
+                TextColor(Color::srgb(0.96, 0.93, 0.85)),
+                BackgroundColor(Color::srgb(0.03, 0.05, 0.06)),
+                GlobalZIndex(900),
+                Pickable::IGNORE,
+                Node {
+                    position_type: PositionType::Absolute,
+                    top: percent(100),
+                    right: px(0),
+                    width: px(190),
+                    padding: UiRect::all(px(8)),
+                    display: Display::None,
+                    ..default()
+                },
+            ));
             button.spawn((
                 SelectionDetailLabel,
                 Text::default(),
@@ -61,14 +98,41 @@ pub(crate) fn toggle(
 pub(crate) fn update_labels(
     preference: Res<SelectionDetail>,
     language: Res<GameLanguage>,
-    mut labels: Query<&mut Text, With<SelectionDetailLabel>>,
+    mut labels: Query<&mut Text, (With<SelectionDetailLabel>, Without<DetailHint>)>,
+    assets: Option<Res<AssetServer>>,
+    mut icons: Query<&mut ImageNode, With<DetailIcon>>,
+    buttons: Query<&Interaction, With<SelectionDetailToggle>>,
+    mut hints: Query<(&mut Node, &mut Text), (With<DetailHint>, Without<SelectionDetailLabel>)>,
 ) {
+    if let Some(assets) = assets {
+        for mut image in &mut icons {
+            let handle = assets.load("ui/controls/book.png");
+            if image.image != handle {
+                image.image = handle;
+            }
+        }
+    }
+    for (mut node, mut text) in &mut hints {
+        node.display = if buttons.iter().any(|i| *i != Interaction::None) {
+            Display::Flex
+        } else {
+            Display::None
+        };
+        text.set_if_neq(Text(
+            language
+                .pick(
+                    "Toggle detailed descriptions: damage, scaling and cooldown.",
+                    "切换详细说明：查看伤害、属性加成与冷却时间。",
+                )
+                .into(),
+        ));
+    }
     for mut text in &mut labels {
         text.set_if_neq(Text(
             if preference.0 {
-                language.pick("Detailed · switch to simple", "详细 · 切换简洁")
+                language.pick("Details", "详细")
             } else {
-                language.pick("Simple · switch to detailed", "简洁 · 切换详细")
+                language.pick("Simple", "简洁")
             }
             .into(),
         ));
@@ -97,15 +161,12 @@ mod tests {
         app.world_mut().resource_mut::<SelectionDetail>().0 = false;
         app.update();
         assert_eq!(app.world().resource::<TextRefreshProbe>().0, 1);
-        assert_eq!(
-            app.world().get::<Text>(label).unwrap().0,
-            "Simple · switch to detailed"
-        );
+        assert_eq!(app.world().get::<Text>(label).unwrap().0, "Simple");
         app.world_mut()
             .insert_resource(GameLanguage::SimplifiedChinese);
         app.update();
         assert_eq!(app.world().resource::<TextRefreshProbe>().0, 1);
-        assert_eq!(app.world().get::<Text>(label).unwrap().0, "简洁 · 切换详细");
+        assert_eq!(app.world().get::<Text>(label).unwrap().0, "简洁");
         app.update();
         assert_eq!(app.world().resource::<TextRefreshProbe>().0, 0);
     }

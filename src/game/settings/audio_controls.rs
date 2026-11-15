@@ -128,6 +128,7 @@ pub(super) fn spawn(parent: &mut ChildSpawnerCommands) {
                     BorderColor::all(EDGE),
                 ))
                 .with_children(|button| {
+                    super::icon_controls::icon(button, "sound", 22.);
                     button.spawn((Copy::Mute, label("", 13.0, IVORY)));
                 });
             });
@@ -166,7 +167,7 @@ fn button(parent: &mut ChildSpawnerCommands, control: Control, name: &'static st
             BorderColor::all(EDGE),
         ))
         .with_children(|button| {
-            button.spawn(label(text, 19.0, IVORY));
+            super::icon_controls::icon(button, if text == "−" { "minus" } else { "plus" }, 22.);
         });
 }
 

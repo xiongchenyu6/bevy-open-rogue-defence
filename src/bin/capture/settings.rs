@@ -49,7 +49,8 @@ fn exercise(
     build: Res<PlayerBuild>,
     seed: Res<RunSeed>,
     language: Res<GameLanguage>,
-    layout: Query<(&Name, &ComputedNode, &UiGlobalTransform), With<Button>>,
+    layout: Query<(&Name, &ComputedNode, &UiGlobalTransform)>,
+    mut scroll: Query<(&Name, &mut ScrollPosition)>,
     windows: Query<&Window>,
     texts: Query<&Text>,
 ) {
@@ -116,7 +117,16 @@ fn exercise(
         );
         let mut count = 0;
         for (name, node, transform) in &layout {
-            if !name.as_str().starts_with("Settings ") || node.size().min_element() == 0.0 {
+            if !matches!(
+                name.as_str(),
+                "Settings English"
+                    | "Settings Chinese"
+                    | "Settings close"
+                    | "Settings chapters"
+                    | "Settings quit"
+                    | "Settings display toggle"
+            ) || node.size().min_element() == 0.0
+            {
                 continue;
             }
             let half = node.size() * 0.5;
@@ -133,9 +143,108 @@ fn exercise(
                 node.size().min_element() >= 44.0,
                 "{name} touch target too small"
             );
+            if matches!(name.as_str(), "Settings English" | "Settings Chinese") {
+                let (_, body, pose) = layout
+                    .iter()
+                    .find(|(name, _, _)| name.as_str() == "Settings scroll body")
+                    .unwrap();
+                let body_rect = Rect::from_center_size(pose.translation, body.size());
+                let rect = Rect::from_center_size(transform.translation, node.size());
+                assert!(
+                    rect.min.y >= body_rect.min.y - 1. && rect.max.y <= body_rect.max.y + 1.,
+                    "language selectors visible before scrolling"
+                );
+            }
+
             count += 1;
         }
         assert!(count >= 3, "language selectors and back button visible");
+    }
+    // Exercise the real scroll container, rather than accepting clipped controls.
+    if capture.frame == 45 {
+        for (name, mut position) in &mut scroll {
+            if name.as_str() == "Settings scroll body" {
+                position.0.y = 10000.;
+            }
+        }
+    }
+    if capture.frame == 55 {
+        let (_, body, body_transform) = layout
+            .iter()
+            .find(|(name, _, _)| name.as_str() == "Settings scroll body")
+            .expect("settings scroll body");
+        let bounds = Rect::from_center_size(body_transform.translation, body.size());
+        let max_scroll = (body.content_size().y - body.size().y + body.scrollbar_size.y).max(0.)
+            * body.inverse_scale_factor();
+        let (_, position) = scroll
+            .iter()
+            .find(|(name, _)| name.as_str() == "Settings scroll body")
+            .unwrap();
+        assert!(
+            position.0.y <= max_scroll + 0.01 && position.0.y >= 0.,
+            "requested scroll must stay inside real content: {} / {max_scroll}",
+            position.0.y
+        );
+        println!(
+            "[settings capture] scroll requested={} rendered={} content={:?} viewport={:?} max={max_scroll}",
+            position.0.y,
+            body.scroll_position.y,
+            body.content_size(),
+            body.size()
+        );
+        let mut visible_controls = 0;
+        let mut audio_reached = false;
+        for (name, node, transform) in &layout {
+            if matches!(
+                name.as_str(),
+                "Settings English"
+                    | "Settings Chinese"
+                    | "Settings music down"
+                    | "Settings music up"
+                    | "Settings effects down"
+                    | "Settings effects up"
+                    | "Settings mute"
+            ) && node.size().min_element() > 0.
+            {
+                let rect = Rect::from_center_size(transform.translation, node.size());
+                if rect.intersect(bounds).height() >= 22. {
+                    visible_controls += 1;
+                }
+                if name.as_str() == "Settings mute" {
+                    audio_reached =
+                        rect.min.y >= bounds.min.y - 1. && rect.max.y <= bounds.max.y + 1.;
+                }
+            }
+            if name.as_str() == "Settings tutorial" && node.size().min_element() > 0. {
+                let rect = Rect::from_center_size(transform.translation, node.size());
+                assert!(
+                    rect.min.y >= bounds.min.y - 1. && rect.max.y <= bounds.max.y + 1.,
+                    "tutorial must be reachable after scrolling: {rect:?} / {bounds:?}"
+                );
+                assert!(node.size().min_element() >= 44., "tutorial touch target");
+            }
+        }
+        assert!(
+            visible_controls > 0,
+            "scrolling must never produce an empty settings body"
+        );
+        assert!(
+            audio_reached,
+            "bottom audio control must be reachable after scrolling"
+        );
+        let (_, node, transform) = layout
+            .iter()
+            .find(|(name, _, _)| name.as_str() == "Settings close")
+            .expect("fixed back action");
+        let viewport = windows.single().unwrap().physical_size().as_vec2();
+        let rect = Rect::from_center_size(transform.translation, node.size());
+        assert!(
+            rect.min.cmpge(Vec2::ZERO).all() && rect.max.cmple(viewport + Vec2::ONE).all(),
+            "back remains reachable while scrolling"
+        );
+        println!(
+            "[settings capture] PASS bounded scroll reaches audio and optional tutorial; fixed back remains visible"
+        );
     }
     if capture.frame == 90 {
         let expected = if capture.scenario == "settings-english" {

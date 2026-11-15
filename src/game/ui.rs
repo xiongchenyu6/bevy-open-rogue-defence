@@ -84,9 +84,6 @@ struct MovementPad;
 struct MovementKnob;
 
 #[derive(Component)]
-struct MovementLabel;
-
-#[derive(Component)]
 struct XpPanel;
 
 #[derive(Component)]
@@ -109,9 +106,6 @@ struct TrialButtonRow;
 
 #[derive(Component)]
 struct TrialToggleButton;
-
-#[derive(Component)]
-struct TrialToggleLabel;
 
 #[derive(Component)]
 struct TrialActionLabel(TrialAction);
@@ -444,6 +438,7 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
                 bottom
                     .spawn((
                         MovementPad,
+                        Visibility::Hidden,
                         Name::new("Movement pad"),
                         Node {
                             width: px(112),
@@ -456,8 +451,8 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
                             ..default()
                         },
                     ))
-                    .insert(BackgroundColor(Color::srgba(0.05, 0.14, 0.18, 0.32)))
-                    .insert(BorderColor::all(Color::srgba(0.2, 0.8, 0.9, 0.22)))
+                    .insert(BackgroundColor(Color::srgba(0.045, 0.07, 0.08, 0.55)))
+                    .insert(BorderColor::all(Color::srgba(0.72, 0.56, 0.31, 0.48)))
                     .with_children(|joy| {
                         joy.spawn((
                             MovementKnob,
@@ -471,18 +466,8 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
                                 border: UiRect::all(px(2)),
                                 ..default()
                             },
-                            BackgroundColor(Color::srgba(0.22, 0.78, 0.88, 0.42)),
-                            BorderColor::all(Color::srgba(0.55, 0.95, 1.0, 0.72)),
-                        ));
-                        joy.spawn((
-                            MovementLabel,
-                            Text::new(language.pick("MOVE", "移动")),
-                            TextFont {
-                                font_size: FontSize::Px(11.0),
-                                ..default()
-                            },
-                            TextColor(Color::srgba(0.72, 0.9, 0.94, 0.82)),
-                            TextLayout::justify(Justify::Center),
+                            BackgroundColor(Color::srgba(0.36, 0.27, 0.13, 0.85)),
+                            BorderColor::all(Color::srgba(0.96, 0.80, 0.49, 0.9)),
                         ));
                     });
 
@@ -675,8 +660,8 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
                     },
                 ))
                 .with_children(|row| {
-                    spawn_trial_button(row, TrialAction::StartTower, language, 102.0);
-                    spawn_trial_button(row, TrialAction::ToggleTowerAuto, language, 82.0);
+                    spawn_trial_button(row, &assets, TrialAction::StartTower, language, 102.0);
+                    spawn_trial_button(row, &assets, TrialAction::ToggleTowerAuto, language, 82.0);
                 });
             panel.spawn((
                 GoldChallengeStatusText,
@@ -698,10 +683,10 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
                     },
                 ))
                 .with_children(|row| {
-                    spawn_trial_button(row, TrialAction::StartGold, language, 102.0);
-                    spawn_trial_button(row, TrialAction::ToggleGoldAuto, language, 82.0);
+                    spawn_trial_button(row, &assets, TrialAction::StartGold, language, 102.0);
+                    spawn_trial_button(row, &assets, TrialAction::ToggleGoldAuto, language, 82.0);
                 });
-            spawn_trial_button(panel, TrialAction::CancelAll, language, 196.0);
+            spawn_trial_button(panel, &assets, TrialAction::CancelAll, language, 196.0);
         });
 
     commands
@@ -714,7 +699,7 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
                 position_type: PositionType::Absolute,
                 right: px(12),
                 top: px(64),
-                width: px(154),
+                width: px(48),
                 height: px(48),
                 display: Display::None,
                 align_items: AlignItems::Center,
@@ -729,15 +714,6 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
         ))
         .with_children(|button| {
             hud_icon(button, &assets, "tower", 26.0);
-            button.spawn((
-                TrialToggleLabel,
-                Text::new(language.pick("CHALLENGES", "挑战")),
-                TextFont {
-                    font_size: FontSize::Px(12.0),
-                    ..default()
-                },
-                TextColor(Color::srgb(0.94, 0.85, 0.63)),
-            ));
         });
 
     commands
@@ -762,14 +738,7 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
             GlobalZIndex(22),
         ))
         .with_children(|button| {
-            button.spawn((
-                Text::new("II"),
-                TextFont {
-                    font_size: FontSize::Px(17.0),
-                    ..default()
-                },
-                TextColor(Color::WHITE),
-            ));
+            control_icon(button, &assets, "pause", 28.0);
         });
 
     commands
@@ -795,7 +764,7 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
                 (SpeedAction::Increase, "+"),
                 (SpeedAction::Reset, "1×"),
             ] {
-                spawn_speed_button(control, action, label);
+                spawn_speed_button(control, &assets, action, label);
             }
         });
     commands
@@ -832,7 +801,26 @@ fn setup_hud(mut commands: Commands, assets: Res<AssetServer>, language: Res<Gam
         });
 }
 
-fn spawn_speed_button(parent: &mut ChildSpawnerCommands, action: SpeedAction, label: &'static str) {
+fn control_icon(parent: &mut ChildSpawnerCommands, assets: &AssetServer, name: &str, size: f32) {
+    parent.spawn((
+        ImageNode::new(assets.load(format!("ui/controls/{name}.png"))),
+        Node {
+            width: px(size),
+            height: px(size),
+            flex_shrink: 0.0,
+            margin: UiRect::bottom(px(if name == "reset" { 12 } else { 0 })),
+            ..default()
+        },
+        Pickable::IGNORE,
+    ));
+}
+
+fn spawn_speed_button(
+    parent: &mut ChildSpawnerCommands,
+    assets: &AssetServer,
+    action: SpeedAction,
+    label: &'static str,
+) {
     parent
         .spawn((
             Button,
@@ -864,7 +852,26 @@ fn spawn_speed_button(parent: &mut ChildSpawnerCommands, action: SpeedAction, la
             }),
         ))
         .with_children(|button| {
+            control_icon(
+                button,
+                assets,
+                match action {
+                    SpeedAction::Decrease => "minus",
+                    SpeedAction::Increase => "plus",
+                    SpeedAction::Reset => "reset",
+                },
+                if action == SpeedAction::Reset {
+                    22.0
+                } else {
+                    28.0
+                },
+            );
             button.spawn((
+                Node {
+                    position_type: PositionType::Absolute,
+                    bottom: px(1),
+                    ..default()
+                },
                 SpeedLabel(action),
                 Text::new(label),
                 TextFont {
@@ -878,6 +885,7 @@ fn spawn_speed_button(parent: &mut ChildSpawnerCommands, action: SpeedAction, la
 
 fn spawn_trial_button(
     parent: &mut ChildSpawnerCommands,
+    assets: &AssetServer,
     action: TrialAction,
     language: GameLanguage,
     width: f32,
@@ -893,11 +901,25 @@ fn spawn_trial_button(
                 align_items: AlignItems::Center,
                 justify_content: JustifyContent::Center,
                 border_radius: BorderRadius::all(px(8)),
+                column_gap: px(5),
+                border: UiRect::all(px(1)),
                 ..default()
             },
-            BackgroundColor(Color::srgb(0.07, 0.2, 0.28)),
+            BorderColor::all(Color::srgb(0.45, 0.36, 0.22)),
+            BackgroundColor(Color::srgb(0.045, 0.075, 0.085)),
         ))
         .with_children(|button| {
+            hud_icon(
+                button,
+                assets,
+                match action {
+                    TrialAction::StartTower => "tower",
+                    TrialAction::StartGold => "gold",
+                    TrialAction::ToggleTowerAuto | TrialAction::ToggleGoldAuto => "refresh",
+                    TrialAction::CancelAll => "abandon",
+                },
+                25.0,
+            );
             button.spawn((
                 TrialActionLabel(action),
                 Text::new(trial_action_label(language, action)),
@@ -1324,7 +1346,7 @@ fn apply_hud_layout(
                 .set_if_neq(px(if portrait.is_some() { 124.0 } else { 64.0 }));
             node.reborrow()
                 .map_unchanged(|n| &mut n.width)
-                .set_if_neq(px(if portrait.is_some() { 44.0 } else { 154.0 }));
+                .set_if_neq(px(if portrait.is_some() { 44.0 } else { 48.0 }));
             node.reborrow()
                 .map_unchanged(|n| &mut n.height)
                 .set_if_neq(px(if portrait.is_some() { 44.0 } else { 48.0 }));
@@ -1508,7 +1530,7 @@ fn action_panel_margin_right(compact: bool) -> f32 {
 }
 
 fn speed_control_right(safe_x: f32, compact: bool) -> f32 {
-    if compact { safe_x + 162.0 } else { 208.0 }
+    if compact { safe_x + 56.0 } else { 208.0 }
 }
 
 fn speed_control_top(safe_y: f32, compact: bool) -> f32 {
@@ -1516,34 +1538,14 @@ fn speed_control_top(safe_y: f32, compact: bool) -> f32 {
 }
 
 fn handle_trial_drawer(
-    windows: Query<&Window, With<PrimaryWindow>>,
     interactions: Query<&Interaction, (With<TrialToggleButton>, Changed<Interaction>)>,
-    mut labels: Query<&mut Text, With<TrialToggleLabel>>,
     mut drawer: ResMut<TrialDrawerState>,
-    language: Res<GameLanguage>,
 ) {
     if interactions
         .iter()
         .any(|interaction| *interaction == Interaction::Pressed)
     {
         drawer.open = !drawer.open;
-    }
-    for mut label in &mut labels {
-        label
-            .reborrow()
-            .map_unchanged(|value| &mut value.0)
-            .set_if_neq(
-                if windows
-                    .single()
-                    .is_ok_and(|w| portrait_toolbar(w.width(), w.height()).is_some())
-                {
-                    String::new()
-                } else if drawer.open {
-                    language.pick("CLOSE", "关闭").to_string()
-                } else {
-                    language.pick("CHALLENGES", "挑战").to_string()
-                },
-            );
     }
 }
 
@@ -1587,8 +1589,8 @@ fn update_battle_speed_ui(
         text.reborrow()
             .map_unchanged(|value| &mut value.0)
             .set_if_neq(match label.0 {
-                SpeedAction::Decrease => "−".into(),
-                SpeedAction::Increase => "+".into(),
+                SpeedAction::Decrease => String::new(),
+                SpeedAction::Increase => String::new(),
                 SpeedAction::Reset => format!("{}×", battle_speed.multiplier() as u8),
             });
     }
@@ -1613,35 +1615,17 @@ fn update_static_ui_language(
         &mut Text,
         (
             With<CoreIntegrityLabel>,
-            Without<MovementLabel>,
-            Without<TrialActionLabel>,
-            Without<PauseCopyLabel>,
-        ),
-    >,
-    mut movement_labels: Query<
-        &mut Text,
-        (
-            With<MovementLabel>,
-            Without<CoreIntegrityLabel>,
             Without<TrialActionLabel>,
             Without<PauseCopyLabel>,
         ),
     >,
     mut trial_labels: Query<
         (&TrialActionLabel, &mut Text),
-        (
-            Without<CoreIntegrityLabel>,
-            Without<MovementLabel>,
-            Without<PauseCopyLabel>,
-        ),
+        (Without<CoreIntegrityLabel>, Without<PauseCopyLabel>),
     >,
     mut pause_labels: Query<
         (&PauseCopyLabel, &mut Text),
-        (
-            Without<CoreIntegrityLabel>,
-            Without<MovementLabel>,
-            Without<TrialActionLabel>,
-        ),
+        (Without<CoreIntegrityLabel>, Without<TrialActionLabel>),
     >,
 ) {
     if !language.is_changed() {
@@ -1651,11 +1635,6 @@ fn update_static_ui_language(
         text.reborrow()
             .map_unchanged(|value| &mut value.0)
             .set_if_neq(language.pick("GATE · ∞", "城门 · ∞").to_string());
-    }
-    for mut text in &mut movement_labels {
-        text.reborrow()
-            .map_unchanged(|value| &mut value.0)
-            .set_if_neq(language.pick("MOVE", "移动").to_string());
     }
     for (label, mut text) in &mut trial_labels {
         text.reborrow()
@@ -1679,6 +1658,7 @@ fn update_static_ui_language(
 }
 
 fn handle_manual_pause(
+    assets: Option<Res<AssetServer>>,
     controller: Option<Res<super::ControllerInput>>,
     mut commands: Commands,
     settings: Option<Res<super::settings::SettingsState>>,
@@ -1794,10 +1774,13 @@ fn handle_manual_pause(
                         border: UiRect::all(px(2)),
                         ..default()
                     },
-                    BackgroundColor(Color::srgb(0.08, 0.32, 0.38)),
-                    BorderColor::all(Color::srgb(0.3, 0.88, 0.92)),
+                    BackgroundColor(Color::srgb(0.26, 0.18, 0.075)),
+                    BorderColor::all(Color::srgb(0.92, 0.72, 0.34)),
                 ))
                 .with_children(|button| {
+                    if let Some(assets) = assets.as_ref() {
+                        control_icon(button, assets, "resume", 28.0);
+                    }
                     button.spawn((
                         PauseCopyLabel::Resume,
                         Text::new(language.pick("RESUME", "继续战斗")),
@@ -1816,8 +1799,17 @@ fn handle_manual_pause(
 fn update_joystick_visual(
     windows: Query<&Window, With<PrimaryWindow>>,
     intent: Res<super::MoveIntent>,
+    joystick: Res<super::mobile_input::TouchJoystickState>,
+    mut pads: Query<&mut Visibility, With<MovementPad>>,
     mut knobs: Query<&mut Node, With<MovementKnob>>,
 ) {
+    for mut visibility in &mut pads {
+        *visibility = if joystick.active() {
+            Visibility::Inherited
+        } else {
+            Visibility::Hidden
+        };
+    }
     let Ok(window) = windows.single() else {
         return;
     };
@@ -2023,7 +2015,7 @@ fn update_hud(
                     if scheme.controller() {
                         "A".to_string()
                     } else if scheme.touch() {
-                        language.pick("DODGE", "闪避").to_string()
+                        String::new()
                     } else {
                         "Shift".to_string()
                     }
@@ -2178,9 +2170,9 @@ fn update_trial_auto_feedback(
                 .map_unchanged(|value| &mut value.0)
                 .set_if_neq(
                     if on {
-                        language.pick("AUTO ON", "自动开启")
+                        language.pick("ON", "开")
                     } else {
-                        language.pick("AUTO OFF", "自动关闭")
+                        language.pick("OFF", "关")
                     }
                     .to_string(),
                 );
@@ -2497,7 +2489,7 @@ mod tests {
             let speed_right = speed_control_right(layout.safe_x, true);
             let speed_left = width - speed_right - 152.0;
             let speed_right_edge = width - speed_right;
-            let challenge_left = width - layout.safe_x - 154.0;
+            let challenge_left = width - layout.safe_x - 48.0;
             let market_bottom = layout.safe_y + 52.0;
             let speed_top = speed_control_top(layout.safe_y, true);
 
