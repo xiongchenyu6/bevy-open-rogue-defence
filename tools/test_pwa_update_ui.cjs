@@ -22,27 +22,35 @@ async function main() {
     await fs.cp(path.join(ROOT, 'web'), directory, {recursive: true});
     await fs.mkdir(path.join(directory, 'assets/fonts'), {recursive: true});
     await fs.copyFile(path.join(ROOT, 'assets/fonts/rogue_commander_ui.ttf'), path.join(directory, 'assets/fonts/rogue_commander_ui.ttf'));
-    await fs.writeFile(path.join(directory, 'assets/changed.txt'), revision);
+    await fs.writeFile(path.join(directory, 'changed.txt'), revision);
+    await fs.mkdir(path.join(directory, 'assets/models'), {recursive: true});
+    await fs.writeFile(path.join(directory, 'assets/models/test.glb'), 'shared-combat-fixture');
+    await fs.mkdir(path.join(directory, 'THIRD_PARTY_NOTICES'), {recursive: true});
+    await fs.writeFile(path.join(directory, 'THIRD_PARTY_NOTICES/test.txt'), 'optional-notice');
     await fs.writeFile(path.join(directory, 'rogue_commander.js'), `export default async function init(options) { if (!options?.module_or_path) throw Error('Missing prepared WASM'); window.fixtureEngineVersion = '${revision}'; }`);
     const wasm = Buffer.from([0,97,115,109,1,0,0,0]);
     await fs.writeFile(path.join(directory, 'rogue_commander_bg.wasm'), wasm);
     await fs.writeFile(path.join(directory, 'rogue_commander_bg.wasm.gz'), gzipSync(wasm));
     const generated = spawnSync('python3', ['tools/generate_web_manifest.py', directory, '--revision', revision, '--template', 'web/sw.js'], {cwd: ROOT, encoding: 'utf8'});
     assert.equal(generated.status, 0, generated.stderr);
-    fixtures[revision] = directory;
+    fixtures[revision] = {directory, manifest: JSON.parse(await fs.readFile(path.join(directory, 'asset-manifest.json'), 'utf8'))};
   }
   let current = 'v1', failResource = false, legacyMode = false;
+  let holdCombat = false, combatHeld = false, releaseCombat;
+  let combatGate;
   let releaseDownload;
   const downloadGate = new Promise(resolve => { releaseDownload = resolve; });
   const requests = [];
   const server = http.createServer(async (request, response) => {
     const url = new URL(request.url, 'http://fixture');
-    const relative = url.pathname === '/game/' ? 'index.html' : decodeURIComponent(url.pathname.slice('/game/'.length));
+    const transport = url.pathname === '/game/' ? 'index.html' : decodeURIComponent(url.pathname.slice('/game/'.length));
+    const immutable = Object.values(fixtures).flatMap(f => f.manifest.files.map(file => ({file, directory: f.directory}))).find(item => item.file.url === transport);
+    const relative = immutable?.file.path || transport;
     requests.push({revision: current, path: relative});
     response.setHeader('Cache-Control', 'no-store');
     response.setHeader('Service-Worker-Allowed', '/game/');
     if (!url.pathname.startsWith('/game/') || relative.includes('..')) { response.writeHead(404).end(); return; }
-    if (failResource && relative === 'assets/changed.txt') { response.writeHead(503).end(); return; }
+    if (failResource && relative === 'changed.txt') { response.writeHead(503).end(); return; }
     if (legacyMode && relative === 'sw.js') {
       response.setHeader('Content-Type', 'text/javascript');
       response.end("self.addEventListener('install',()=>self.skipWaiting()); self.addEventListener('activate',event=>event.waitUntil(self.clients.claim())); self.addEventListener('fetch',event=>{if(event.request.mode==='navigate')event.respondWith(fetch(event.request));});"); return;
@@ -51,9 +59,10 @@ async function main() {
       response.setHeader('Content-Type', 'text/html');
       response.end('<!doctype html><h1>Legacy network-only game</h1>'); return;
     }
-    if (relative === 'assets/changed.txt' && current === 'v1') await downloadGate;
+    if (relative === 'changed.txt' && current === 'v1') await downloadGate;
+    if (relative === 'assets/models/test.glb' && holdCombat) { combatHeld = true; await combatGate; }
     try {
-      const body = await fs.readFile(path.join(fixtures[current], relative));
+      const body = await fs.readFile(path.join(immutable?.directory || fixtures[current].directory, relative));
       const type = relative.endsWith('.js') ? 'text/javascript' : relative.endsWith('.html') ? 'text/html' : relative.endsWith('.css') ? 'text/css' : relative.endsWith('.png') ? 'image/png' : relative.endsWith('.ttf') ? 'font/ttf' : relative.endsWith('.webmanifest') ? 'application/manifest+json' : 'application/octet-stream';
       response.setHeader('Content-Type', type);
       response.writeHead(200).end(body);
@@ -72,7 +81,7 @@ async function main() {
     context = await launch();
     let page = await context.newPage(); observe(page);
     await page.goto(base);
-    await page.locator('#cache-status').filter({hasText: 'Resources are saved on first play'}).waitFor();
+    await page.locator('#cache-status').filter({hasText: 'Save the launcher first'}).waitFor();
     await page.locator('[data-language="zh-CN"]').click();
     assert.equal(await page.locator('#start').innerText(), '开始游戏');
     await page.locator('[data-language="en"]').click();
@@ -100,12 +109,137 @@ async function main() {
 
     requests.length = 0;
     await page.reload();
-    await page.locator('#cache-status').filter({hasText: 'Ready to play offline'}).waitFor();
+    await page.locator('#cache-status').filter({hasText: 'Launcher saved'}).waitFor();
     await page.locator('#start').click();
     await page.waitForFunction(() => document.body.classList.contains('playing'));
     assert.equal(await page.evaluate(() => window.fixtureEngineVersion), 'v1');
     assert.equal(requests.filter(r => r.path !== 'sw.js').length, 0, JSON.stringify(requests));
     pass('actual second Start initializes from saved resources with zero asset downloads');
+
+    requests.length = 0;
+    await page.evaluate(() => window.roguePrepareChapter(0));
+    await page.locator('#downloads-confirm').waitFor({state: 'visible'});
+    await page.waitForFunction(() => !document.querySelector('#downloads-confirm').disabled);
+    assert.equal(await page.evaluate(() => window.rogueChapterDownload.status), 'downloading');
+    assert.equal(requests.filter(r => r.path.startsWith('assets/models/')).length, 0);
+    await page.locator('#downloads-close').click();
+    assert.equal(await page.evaluate(() => window.rogueChapterDownload.status), 'cancelled');
+    pass('chapter preview reports required download without fetching combat and Back cancels before starting');
+
+    await page.evaluate(() => window.roguePrepareChapter(0));
+    await page.waitForFunction(() => !document.querySelector('#downloads-confirm').disabled);
+    holdCombat = true;
+    combatGate = new Promise(resolve => { releaseCombat = resolve; });
+    await page.locator('#downloads-confirm').click();
+    for (let attempt = 0; !combatHeld && attempt < 100; attempt++) await new Promise(resolve => setTimeout(resolve, 50));
+    assert.ok(combatHeld);
+    await page.locator('#downloads-close').click();
+    await page.waitForFunction(() => window.rogueChapterDownload.status === 'cancelled');
+    assert.equal(await page.locator('#downloads-dialog').evaluate(node => node.open), false);
+    holdCombat = false; releaseCombat();
+    pass('Back during a blocked chapter transfer cancels the download without entering a run');
+
+    await page.evaluate(() => window.roguePrepareChapter(0));
+    await page.waitForFunction(() => document.querySelector('#downloads-dialog').open && !document.querySelector('#downloads-confirm').disabled);
+    await page.setViewportSize({width: 844, height: 390});
+    await page.evaluate(() => window.rogueCommanderLanguage('zh-CN'));
+    assert.equal(await page.locator('#downloads-title').innerText(), '准备远征');
+    const bounds = await page.locator('#downloads-dialog').boundingBox();
+    assert.ok(bounds && bounds.x >= 0 && bounds.y >= 0 && bounds.x + bounds.width <= 845 && bounds.y + bounds.height <= 391, JSON.stringify(bounds));
+    await page.screenshot({path: path.join(OUTPUT, 'chapter-download-mobile.png')});
+    await page.evaluate(() => window.rogueCommanderLanguage('en'));
+    await page.locator('#downloads-confirm').click();
+    await page.waitForFunction(() => window.rogueChapterDownload.status === 'ready');
+    assert.equal(await page.locator('#downloads-dialog').evaluate(node => node.open), false);
+    pass('chapter confirmation saves combat before signaling ready; mobile localized modal fits viewport');
+
+    requests.length = 0;
+    await page.evaluate(() => window.roguePrepareChapter(1));
+    await page.waitForFunction(() => window.rogueChapterDownload.stage === 1 && window.rogueChapterDownload.status === 'ready');
+    assert.equal(requests.filter(r => r.path !== 'sw.js').length, 0);
+    pass('another chapter starts from the saved shared pack without another download prompt');
+
+    // Delay only the release transport to reproduce an in-flight return-to-menu
+    // request crossing an immediate new chapter entry. The worker/RPC stay real.
+    await page.evaluate(() => {
+      const original = ServiceWorker.prototype.postMessage;
+      ServiceWorker.prototype.postMessage = function(data, ...args) {
+        if (data.type === 'PIN_GROUPS' && data.groups?.length === 0) {
+          setTimeout(() => original.call(this, data, ...args), 150);
+        } else original.call(this, data, ...args);
+      };
+      window.restoreFixturePostMessage = () => { ServiceWorker.prototype.postMessage = original; };
+      window.rogueReleaseChapter();
+      window.roguePrepareChapter(2);
+    });
+    await page.waitForFunction(() => window.rogueChapterDownload.stage === 2 && window.rogueChapterDownload.status === 'ready');
+    await page.evaluate(() => window.restoreFixturePostMessage());
+    await page.evaluate(() => window.rogueOpenDownloads());
+    await page.waitForFunction(() => !document.querySelector('#downloads-remove').disabled);
+    await page.locator('#downloads-remove').click();
+    await page.locator('#downloads-summary').filter({hasText: 'Resources in an open expedition cannot be removed'}).waitFor();
+    await page.locator('#downloads-close').click();
+    pass('delayed unawaited chapter release cannot clear the next chapter resource protection');
+
+
+    await page.evaluate(() => { localStorage.setItem('fixture-progress', 'preserve-me'); window.rogueOpenDownloads(); });
+    await page.waitForFunction(() => !document.querySelector('#downloads-confirm').disabled);
+    await page.locator('#downloads-confirm').click();
+    await page.waitForFunction(() => document.querySelector('#downloads-confirm').hidden);
+    assert.equal(requests.filter(r => r.path === 'THIRD_PARTY_NOTICES/test.txt').length, 1);
+    await page.screenshot({path: path.join(OUTPUT, 'offline-manager-mobile.png')});
+    await page.locator('#downloads-remove').click();
+    await page.locator('#downloads-summary').filter({hasText: 'Resources in an open expedition cannot be removed'}).waitFor();
+    await page.evaluate(() => window.rogueReleaseChapter());
+    await page.locator('#downloads-remove').click();
+    await page.locator('#downloads-summary').filter({hasText: 'Extra downloads removed'}).waitFor();
+    assert.equal(await page.evaluate(() => localStorage.getItem('fixture-progress')), 'preserve-me');
+    const storage = await page.evaluate(async () => {
+      const worker = navigator.serviceWorker.controller;
+      return new Promise(resolve => { const channel = new MessageChannel(); channel.port1.onmessage = event => resolve(event.data); worker.postMessage({type: 'STATUS', target: 'client', wasmEncoding: 'gzip', groups: ['all']}, [channel.port2]); });
+    });
+    assert.ok(storage.groups.find(group => group.id === 'core').ready);
+    assert.equal(storage.groups.find(group => group.id === 'combat').ready, false);
+    assert.equal(storage.groups.find(group => group.id === 'optional').ready, false);
+    await page.locator('#downloads-close').click();
+    await page.setViewportSize({width: 1280, height: 720});
+    pass('offline manager downloads extras, protects live battle assets and removes extras without clearing launcher or progress');
+
+    await page.evaluate(() => {
+      const original = ServiceWorker.prototype.postMessage;
+      window.fixtureCancelReleaseCount = 0;
+      ServiceWorker.prototype.postMessage = function(data, ...args) {
+        if (data.type === 'PIN_GROUPS' && data.groups?.length === 0) window.fixtureCancelReleaseCount++;
+        if (data.type === 'PIN_GROUPS' && data.groups?.includes('combat')) {
+          window.releaseFixtureCombatPin = () => new Promise(resolve => setTimeout(() => {
+            original.call(this, data, ...args); resolve();
+          }, 150));
+        } else original.call(this, data, ...args);
+      };
+      window.restoreFixturePostMessage = () => { ServiceWorker.prototype.postMessage = original; };
+      window.roguePrepareChapter(3);
+    });
+    await page.waitForFunction(() => document.querySelector('#downloads-dialog').open && !document.querySelector('#downloads-confirm').disabled);
+    await page.locator('#downloads-confirm').click();
+    await page.waitForFunction(() => typeof window.releaseFixtureCombatPin === 'function');
+    await page.locator('#downloads-close').click();
+    assert.equal(await page.evaluate(() => window.rogueChapterDownload.status), 'cancelled');
+    await page.evaluate(async () => {
+      await window.releaseFixtureCombatPin();
+      await window.rogueReleaseChapter(); // Drain pin + cancellation release queue.
+      window.restoreFixturePostMessage();
+    });
+    assert.equal(await page.evaluate(() => window.fixtureCancelReleaseCount), 2, 'Back itself must enqueue a release before the explicit drain release');
+    assert.equal(await page.evaluate(() => window.rogueChapterDownload.status), 'cancelled');
+    assert.equal(await page.locator('#downloads-dialog').evaluate(node => node.open), false);
+    await page.evaluate(() => window.rogueOpenDownloads());
+    await page.waitForFunction(() => !document.querySelector('#downloads-remove').disabled);
+    await page.locator('#downloads-remove').click();
+    await page.locator('#downloads-summary').filter({hasText: 'Extra downloads removed'}).waitFor();
+    await page.locator('#downloads-close').click();
+    pass('Back while final combat pin is in flight never signals ready afterward and releases the canceled expedition lease');
+
+
 
     current = 'v2';
     await page.reload();
@@ -135,7 +269,7 @@ async function main() {
     assert.match(await page.locator('#cache-status').textContent(), /new version/);
     pass('update offer survives a full browser restart and natural worker activation');
     await page.locator('#cache-update').click();
-    await page.waitForFunction(() => document.querySelector('#cache-status').textContent.includes('Ready to play offline'));
+    await page.waitForFunction(() => document.querySelector('#cache-status').textContent.includes('Launcher saved'));
     await page.locator('#start').click();
     await page.waitForFunction(() => document.body.classList.contains('playing'));
     assert.equal(await page.evaluate(() => window.fixtureEngineVersion), 'v2');
@@ -184,6 +318,7 @@ async function main() {
     await fs.writeFile(path.join(OUTPUT, 'results.json'), JSON.stringify({passed: results, pageErrors: errors, engine: 'stub only; production HTML/CSS/PWA/SW and real CacheStorage'}, null, 2));
     console.log(`\n${results.length} real startup-UI scenarios passed; evidence: ${OUTPUT}`);
   } finally {
+    releaseCombat?.(); releaseDownload();
     await context?.close();
     await new Promise(resolve => server.close(resolve));
     await fs.rm(temporary, {recursive: true, force: true});

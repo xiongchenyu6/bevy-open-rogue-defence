@@ -1,7 +1,9 @@
 //! Chapter selection, persistent training, and actionable run results.
+#[cfg(not(target_arch = "wasm32"))]
+use super::campaign::RunRequest;
 use super::{
     GameLanguage, GameSession, RunSeed,
-    campaign::{CampaignRun, RunRequest, chapter},
+    campaign::{CampaignRun, ChapterCatalog},
     campaign_progress::{CampaignProgress, CampaignReward, MAX_UPGRADE_LEVEL, UPGRADE_PER_LEVEL},
 };
 use bevy::{
@@ -84,7 +86,7 @@ use controls::{button, toolbar_button};
 fn input(
     mut menu: ResMut<CampaignMenu>,
     mut view: ResMut<MenuView>,
-    mut request: ResMut<RunRequest>,
+    #[cfg(not(target_arch = "wasm32"))] mut request: ResMut<RunRequest>,
     mut session: ResMut<GameSession>,
     mut progress: ResMut<CampaignProgress>,
     mut language: ResMut<GameLanguage>,
@@ -96,18 +98,38 @@ fn input(
         }
         match *action {
             Action::Start(stage) if progress.can_play(stage) => {
-                request.0 = Some(stage);
-                menu.0 = false;
-                view.notice.clear();
+                #[cfg(target_arch = "wasm32")]
+                {
+                    if !super::demand_assets::request_chapter(stage) {
+                        view.notice = language
+                            .pick(
+                                "Downloads are unavailable. Reload the game and retry.",
+                                "下载功能暂不可用，请重新打开游戏后重试。",
+                            )
+                            .into();
+                    } else {
+                        view.notice.clear();
+                    }
+                }
+                #[cfg(not(target_arch = "wasm32"))]
+                {
+                    request.0 = Some(stage);
+                    menu.0 = false;
+                    view.notice.clear();
+                }
             }
             Action::Start(_) => {}
             Action::Chapters => {
+                #[cfg(target_arch = "wasm32")]
+                super::demand_assets::release_chapter();
                 menu.0 = true;
                 view.page = Page::Chapters;
                 view.notice.clear();
                 session.paused = true;
             }
             Action::Training => {
+                #[cfg(target_arch = "wasm32")]
+                super::demand_assets::release_chapter();
                 menu.0 = true;
                 view.page = Page::Training;
                 view.notice.clear();
@@ -175,7 +197,12 @@ fn stage_icon(stage: usize) -> &'static str {
         "execution_brand",
     ][stage.min(5)]
 }
-fn chapter_hint(language: GameLanguage, stage: usize, unlocked: bool) -> String {
+fn chapter_hint(
+    catalog: &ChapterCatalog,
+    language: GameLanguage,
+    stage: usize,
+    unlocked: bool,
+) -> String {
     if !unlocked {
         return language
             .pick(
@@ -184,7 +211,7 @@ fn chapter_hint(language: GameLanguage, stage: usize, unlocked: bool) -> String 
             )
             .into();
     }
-    let rules = chapter(stage);
+    let rules = catalog.chapter(stage);
     if language.is_chinese() {
         format!(
             "守住25波敌人与5名首领 · 生命×{:.2} / 伤害×{:.2} · 首通额外{}碎片",
@@ -203,6 +230,7 @@ fn chapter_hint(language: GameLanguage, stage: usize, unlocked: bool) -> String 
 }
 #[allow(clippy::too_many_arguments)]
 fn render(
+    catalog: Option<Res<ChapterCatalog>>,
     mut commands: Commands,
     menu: Res<CampaignMenu>,
     mut view: ResMut<MenuView>,
@@ -216,6 +244,9 @@ fn render(
     windows: Query<&Window>,
     roots: Query<(), With<CampaignOverlay>>,
 ) {
+    let Some(catalog) = catalog else {
+        return;
+    };
     let page = if menu.0 {
         Some(view.page)
     } else if session.finished {
@@ -270,7 +301,7 @@ fn render(
             });
             panel.spawn((Name::new("Campaign scroll body"),ScrollBody,ScrollPosition::default(),Node {flex_grow:1.0,min_height:px(0),overflow:Overflow::scroll_y(),flex_direction:FlexDirection::Column,..default()})).with_children(|body| {
                 match page {
-                    Page::Chapters=>chapters(body,&assets,*language,&progress,width,height,compact),
+                    Page::Chapters=>chapters(body,&catalog,&assets,*language,&progress,width,height,compact),
                     Page::Training=>training(body,&assets,*language,&progress,width,compact),
                     Page::Result=>result(body,&assets,*language,&session,&run,&reward,seed.0,compact),
                 }
@@ -296,6 +327,7 @@ fn chapter_card_height(panel_height: f32, columns: f32, compact: bool) -> f32 {
 
 fn chapters(
     parent: &mut ChildSpawnerCommands,
+    catalog: &ChapterCatalog,
     assets: &AssetServer,
     language: GameLanguage,
     progress: &CampaignProgress,
@@ -331,7 +363,7 @@ fn chapters(
                     Name::new(format!("Campaign chapter {stage}")),
                     Button,
                     Action::Start(stage),
-                    Hint(chapter_hint(language, stage, unlocked)),
+                    Hint(chapter_hint(catalog, language, stage, unlocked)),
                     Node {
                         width: px(card_width),
                         height: px(card_height),
@@ -385,10 +417,10 @@ fn chapters(
                         label(
                             format!(
                                 "{} {} · {} {:.1}×",
-                                (chapter(stage).duration / 60.0).ceil() as u32,
+                                (catalog.chapter(stage).duration / 60.0).ceil() as u32,
                                 language.pick("min", "分钟"),
                                 language.pick("Enemy HP", "敌人生命"),
-                                chapter(stage).health_scale
+                                catalog.chapter(stage).health_scale
                             ),
                             10.0,
                             MUTED,
@@ -745,6 +777,8 @@ fn result_actions(
 
 /// Discard the current run before presenting an unambiguous chapter page.
 pub(crate) fn open_chapters(world: &mut World) {
+    #[cfg(target_arch = "wasm32")]
+    super::demand_assets::release_chapter();
     let stage = world.resource::<CampaignRun>().stage;
     super::run_reset::reset_run(world, stage);
     let root = world.resource_mut::<MenuView>().root.take();

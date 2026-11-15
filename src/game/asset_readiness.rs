@@ -139,6 +139,7 @@ fn inspect(
     assets: Option<Res<GameAssets>>,
     art: Option<Res<super::hero::draft::DraftArt>>,
     market_art: Option<Res<super::market::MarketArt>>,
+    audio: Option<Res<super::audio::GameAudio>>,
     font: Option<Res<super::localization::UiFont>>,
     seed: Res<RunSeed>,
     selected: Res<SelectedHero>,
@@ -148,21 +149,38 @@ fn inspect(
 ) {
     let mut heroes: Vec<_> = buttons.iter().map(|button| button.kind()).collect();
     if heroes.is_empty() {
-        if selected.locked {
-            // The completed recruitment no longer owns an overlay.
-            gate.ready = true;
+        if selected.locked && gate.ready {
+            // Recruitment can finish only after the complete battle set is ready.
             return;
         }
-        heroes = super::hero::initial_offer_kinds(seed.0);
+        heroes = if selected.locked {
+            vec![selected.kind]
+        } else {
+            super::hero::initial_offer_kinds(seed.0)
+        };
     }
     let (Some(assets), Some(art), Some(font)) = (assets, art, font) else {
         gate.ready = false;
         return;
     };
     let mut ids = HashSet::new();
-    for kind in &heroes {
-        ids.insert(assets.hero_scenes[kind.index()].id().untyped());
-        ids.insert(art.portraits[kind.index()].id().untyped());
+    // Any hero, summon or boss may appear during this expedition. Preparing only
+    // recruitment cards would allow later encounters to start with missing art.
+    for scene in assets
+        .hero_scenes
+        .iter()
+        .chain(&assets.enemy_scenes)
+        .chain(&assets.boss_scenes)
+        .chain(&assets.adventure_scenes)
+        .chain(&assets.summon_scenes)
+    {
+        ids.insert(scene.id().untyped());
+    }
+    for portrait in &art.portraits {
+        ids.insert(portrait.id().untyped());
+    }
+    if let Some(audio) = audio {
+        ids.extend(audio.required_ids());
     }
     ids.insert(art.backdrop.id().untyped());
     if let Some(market_art) = market_art {

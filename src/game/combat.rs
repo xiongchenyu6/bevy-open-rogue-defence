@@ -473,7 +473,10 @@ fn advance_run(time: Res<Time>, mut session: ResMut<GameSession>) {
         session.gold += income;
         session.gold_income_accum -= income as f32;
     }
-    session.wave = ((session.elapsed / 60.0).floor() as u32 + 1).min(25);
+    session.wave = ((super::campaign::timeline_seconds(session.elapsed, session.duration) / 60.0)
+        .floor() as u32
+        + 1)
+    .min(25);
 }
 
 fn tick_damage_meter(
@@ -571,7 +574,10 @@ fn spawn_wave(
     };
 
     for (index, boss) in BOSSES.iter().enumerate() {
-        if session.elapsed + encounters.boss_lead_seconds() >= boss.spawn_seconds
+        if super::campaign::timeline_seconds(
+            session.elapsed + encounters.boss_lead_seconds(),
+            session.duration,
+        ) >= boss.spawn_seconds
             && !director.boss_spawned[index]
             && spawn_boss(&mut commands, &mut pools, &assets, index).is_some()
         {
@@ -589,11 +595,12 @@ fn spawn_wave(
     let wave_index = session.wave.saturating_sub(1).min(24) as usize;
     let wave = pressure_wave(WAVES[wave_index], session.wave, pressure.as_deref());
     let interval = wave_spawn_interval(wave);
-    let minute = session.elapsed.rem_euclid(60.0);
+    let minute =
+        super::campaign::timeline_seconds(session.elapsed, session.duration).rem_euclid(60.0);
     if let Some(raid) = raid.as_deref_mut() {
         let warning = rush_warning(session.wave, wave, minute);
         raid.wave = session.wave;
-        raid.remaining_secs = warning.map_or(0.0, |value| value.0);
+        raid.remaining_secs = warning.map_or(0.0, |value| value.0 * session.duration / 1500.0);
         raid.count = warning.map_or(0, |value| value.1);
         raid.origin = Vec3::new(16.0, 0.0, 0.0);
     }
@@ -5674,6 +5681,26 @@ mod tests {
         app.world_mut().run_system_once(spawn_wave).unwrap();
         assert_eq!(living.iter(app.world()).count(), count);
         assert_eq!(app.world().resource::<RaidWarning>().remaining_secs, 3.0);
+    }
+
+    #[test]
+    fn shortened_chapter_spawns_each_real_boss_on_its_scaled_checkpoint() {
+        for index in 0..5 {
+            let checkpoint = 600. * (index + 1) as f32 / 5.;
+            let mut app = wave_test_app(checkpoint - 0.01, ((index + 1) * 5) as u32);
+            app.world_mut().resource_mut::<GameSession>().duration = 600.;
+            app.world_mut().run_system_once(spawn_wave).unwrap();
+            assert!(!app.world().resource::<SpawnDirector>().boss_spawned[index]);
+            app.world_mut().resource_mut::<GameSession>().elapsed = checkpoint;
+            app.world_mut().run_system_once(spawn_wave).unwrap();
+            assert!(app.world().resource::<SpawnDirector>().boss_spawned[index]);
+            let count = app
+                .world_mut()
+                .query::<&BossEnemy>()
+                .iter(app.world())
+                .count();
+            assert_eq!(count, index + 1);
+        }
     }
 
     #[test]

@@ -9,6 +9,7 @@ use bevy::prelude::*;
 mod onboarding;
 pub use onboarding::{OnboardingInputSet, OnboardingPlugin, OnboardingState};
 mod asset_readiness;
+pub(crate) mod demand_assets;
 pub use asset_readiness::{AssetReadiness, AssetReadinessInputSet, AssetReadinessPlugin};
 mod adventure_vfx;
 mod archive;
@@ -102,7 +103,7 @@ pub use archive::{ArchiveOutcome, ArchiveState};
 pub use arena::BattleCamera;
 pub use audio_mix::{AudioChannel, AudioPreferences, AudioSaveStatus, AudioVoice};
 pub use bosses::{BossAction, BossActionStage, BossDangerShape, BossPhaseCue, BossTelegraph};
-pub use campaign::{CHAPTER_COUNT, CampaignRun, RunRequest, chapter};
+pub use campaign::{CHAPTER_COUNT, CampaignRun, ChapterCatalog, RunRequest};
 pub use campaign_progress::{
     CampaignProgress, CampaignReward, MAX_UPGRADE_LEVEL, RunReward, UPGRADE_PER_LEVEL,
 };

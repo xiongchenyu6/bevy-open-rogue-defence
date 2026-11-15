@@ -1,0 +1,40 @@
+{
+  "chapters": [
+    {
+      "duration": 1500.0,
+      "health_scale": 1.0,
+      "damage_scale": 1.0,
+      "gold_scale": 1.0
+    },
+    {
+      "duration": 1500.0,
+      "health_scale": 1.83,
+      "damage_scale": 1.25,
+      "gold_scale": 1.2
+    },
+    {
+      "duration": 1500.0,
+      "health_scale": 3.02,
+      "damage_scale": 1.5,
+      "gold_scale": 1.4
+    },
+    {
+      "duration": 1500.0,
+      "health_scale": 4.57,
+      "damage_scale": 1.75,
+      "gold_scale": 1.6
+    },
+    {
+      "duration": 1500.0,
+      "health_scale": 6.48,
+      "damage_scale": 2.0,
+      "gold_scale": 1.8
+    },
+    {
+      "duration": 1500.0,
+      "health_scale": 8.75,
+      "damage_scale": 2.25,
+      "gold_scale": 2.0
+    }
+  ]
+}

@@ -1066,9 +1066,11 @@ mod tests {
 
     #[test]
     fn chapter_six_scales_regular_enemies_but_not_tower_or_gold_challengers() {
-        use super::super::campaign::{CampaignRun, chapter, scale_enemies};
+        use super::super::campaign::{CampaignRun, ChapterCatalog, scale_enemies};
 
         let mut app = auto_app(GOLD_UNLOCK_AT);
+        let catalog = ChapterCatalog::read_native().unwrap();
+        app.insert_resource(catalog.clone());
         app.insert_resource(CampaignRun {
             stage: 5,
             run_id: 0,
@@ -1094,8 +1096,8 @@ mod tests {
         app.update();
 
         let scaled = app.world().get::<Enemy>(regular).unwrap();
-        assert_eq!(scaled.max_hp, 100.0 * chapter(5).health_scale);
-        assert_eq!(scaled.damage, 10.0 * chapter(5).damage_scale);
+        assert_eq!(scaled.max_hp, 100.0 * catalog.chapter(5).health_scale);
+        assert_eq!(scaled.damage, 10.0 * catalog.chapter(5).damage_scale);
         let challengers: Vec<_> = app
             .world_mut()
             .query::<(&Enemy, &TrialEnemy)>()

@@ -1,0 +1,122 @@
+{
+  "passed": [
+    "first Start saves shell/config/engine without combat or optional resources",
+    "updating a core-only installation does not acquire changed combat or optional packs",
+    "old open version lazily fetches its original immutable model after a new release",
+    "canceling a queued download in another tab never starts its optional transfer",
+    "canceling chapter download leaves launcher usable and retry reuses already verified files",
+    "first chapter fetches combat once; another chapter reuses shared combat with zero downloads",
+    "installed group ledger survives worker activation before navigation or status can reconstruct it",
+    "chapter balance-only update downloads one JSON file and no engine, model or unused optional files",
+    "installed combat updates must pass integrity before activation; failed update retains offline old chapter",
+    "explicit full offline download survives complete browser process restart with networking disabled",
+    "storage cleanup can remove optional bytes but refuses core and active battle resources"
+  ],
+  "requests": [
+    {
+      "label": "first-core-only",
+      "requests": [
+        {
+          "revision": "v1",
+          "path": "assets/data/campaign.json",
+          "transport": "_resources/ea2ab1e032c44f999ef6bdf17207bdd2c6737b02bb2f0a5f88afba17ac5787f7/campaign.json"
+        },
+        {
+          "revision": "v1",
+          "path": "index.html",
+          "transport": "_resources/fb457f58ca7a290a332ff6d9cd0f1992a003f5100593b099f5957b624b5ef390/index.html"
+        },
+        {
+          "revision": "v1",
+          "path": "rogue_commander_bg.wasm.gz",
+          "transport": "_resources/eb8c2e88497780216dc75b1de668ceab97cfee82cb60bd5e0611df244276c419/rogue_commander_bg.wasm.gz"
+        }
+      ]
+    },
+    {
+      "label": "core-only-upgrade",
+      "requests": [
+        {
+          "revision": "v2",
+          "path": "index.html",
+          "transport": "_resources/d0cd49a7f8c51b7cddf33598aee94a957072390bd7801c303e042d2561f5c457/index.html"
+        }
+      ]
+    },
+    {
+      "label": "old-version-first-lazy-fetch",
+      "requests": [
+        {
+          "revision": "v2",
+          "path": "assets/models/enemy.glb",
+          "transport": "_resources/96bd01810ec33f9447f4813e780f79eb6c8a2fe4f3ec860e85d527a5f98a5e4d/enemy.glb"
+        }
+      ]
+    },
+    {
+      "label": "first-chapter-combat",
+      "requests": [
+        {
+          "revision": "v2",
+          "path": "assets/models/enemy.glb",
+          "transport": "_resources/bcc4d18a5f045f82990343759cfabf561d687e4cbd1e0fbd7fae2c554caa71cc/enemy.glb"
+        },
+        {
+          "revision": "v2",
+          "path": "assets/models/shared.glb",
+          "transport": "_resources/639ae0ac18f54f554415c99a7f07325a021d9cc98d34886f5acb0cb78faf4ddf/shared.glb"
+        },
+        {
+          "revision": "v2",
+          "path": "assets/models/shared.glb",
+          "transport": "_resources/639ae0ac18f54f554415c99a7f07325a021d9cc98d34886f5acb0cb78faf4ddf/shared.glb"
+        }
+      ]
+    },
+    {
+      "label": "second-chapter-shared",
+      "requests": []
+    },
+    {
+      "label": "data-only-upgrade",
+      "requests": [
+        {
+          "revision": "v3",
+          "path": "assets/data/campaign.json",
+          "transport": "_resources/188481c9c24a421689abe04903f73aa34398faa4b6c61d4d9660a9ecc35a03d6/campaign.json"
+        }
+      ]
+    },
+    {
+      "label": "installed-pack-corruption",
+      "requests": [
+        {
+          "revision": "v4",
+          "path": "assets/models/enemy.glb",
+          "transport": "_resources/c6c9e966642f79219ed7df2508952dd551d4dfa622fc9035a22ad48a9ad1b7cc/enemy.glb"
+        }
+      ]
+    },
+    {
+      "label": "installed-pack-retry",
+      "requests": [
+        {
+          "revision": "v4",
+          "path": "assets/models/enemy.glb",
+          "transport": "_resources/c6c9e966642f79219ed7df2508952dd551d4dfa622fc9035a22ad48a9ad1b7cc/enemy.glb"
+        }
+      ]
+    },
+    {
+      "label": "full-offline-opt-in",
+      "requests": [
+        {
+          "revision": "v4",
+          "path": "THIRD_PARTY_NOTICES/license.txt",
+          "transport": "_resources/050fe263cfc9132e1513acba3ffdb8514c2913f61ee681ab7510994de87760ad/license.txt"
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

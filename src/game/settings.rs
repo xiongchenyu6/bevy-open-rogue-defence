@@ -26,6 +26,8 @@ impl Plugin for SettingsPlugin {
         audio_controls::install(app);
         run_actions::install(app);
         entry_layout::install(app);
+        #[cfg(target_arch = "wasm32")]
+        app.add_systems(PreUpdate, handle_downloads.after(UiSystems::Focus));
         icon_controls::install(app);
         #[cfg(not(target_arch = "wasm32"))]
         app.add_plugins(display_controls::DisplayControlsPlugin);
@@ -79,6 +81,9 @@ struct SettingsLauncherLabel;
 struct SettingsClose;
 #[derive(Component)]
 struct SettingsTutorial;
+#[cfg(target_arch = "wasm32")]
+#[derive(Component)]
+struct SettingsDownloads;
 #[derive(Component)]
 struct SettingsPanel;
 #[derive(Component)]
@@ -103,6 +108,8 @@ enum CopyKind {
     SaveNotice,
     Back,
     Tutorial,
+    #[cfg(target_arch = "wasm32")]
+    Downloads,
 }
 
 fn label(value: impl Into<String>, size: f32, color: Color) -> impl Bundle {
@@ -281,6 +288,29 @@ fn spawn_settings(commands: &mut Commands) -> Entity {
                                 ..default()
                             },
                         ));
+                        #[cfg(target_arch = "wasm32")]
+                        panel
+                            .spawn((
+                                Button,
+                                SettingsDownloads,
+                                Name::new("Settings downloads"),
+                                Node {
+                                    min_height: px(44),
+                                    flex_shrink: 0.,
+                                    align_items: AlignItems::Center,
+                                    justify_content: JustifyContent::Center,
+                                    column_gap: px(8),
+                                    ..default()
+                                },
+                                BackgroundColor(PANEL),
+                            ))
+                            .with_children(|button| {
+                                icon_controls::icon(button, "book", 24.);
+                                button.spawn((
+                                    SettingsCopy(CopyKind::Downloads),
+                                    label("", 14., IVORY),
+                                ));
+                            });
                         panel
                             .spawn((
                                 Button,
@@ -347,6 +377,16 @@ fn spawn_settings(commands: &mut Commands) -> Entity {
         .id()
 }
 
+#[cfg(target_arch = "wasm32")]
+fn handle_downloads(buttons: Query<&Interaction, (With<SettingsDownloads>, Changed<Interaction>)>) {
+    if buttons
+        .iter()
+        .any(|interaction| *interaction == Interaction::Pressed)
+    {
+        super::demand_assets::open_downloads();
+    }
+}
+
 fn handle_settings_input(
     mut commands: Commands,
     mut keyboard: ResMut<ButtonInput<KeyCode>>,
@@ -360,6 +400,14 @@ fn handle_settings_input(
     mut session: ResMut<GameSession>,
     mut language: ResMut<GameLanguage>,
 ) {
+    #[cfg(target_arch = "wasm32")]
+    if super::demand_assets::downloads_open() {
+        keyboard.clear();
+        if state.open {
+            session.paused = true;
+        }
+        return;
+    }
     if !state.open {
         if tutorial.as_ref().is_some_and(|guide| guide.input_blocked) {
             return;
@@ -457,6 +505,8 @@ fn copy(kind: CopyKind, language: GameLanguage, failed: bool) -> &'static str {
         }
         CopyKind::Back => language.pick("Back", "返回"),
         CopyKind::Tutorial => language.pick("How to play", "玩法指引"),
+        #[cfg(target_arch = "wasm32")]
+        CopyKind::Downloads => language.pick("Downloads & offline play", "下载与离线游玩"),
     }
 }
 

@@ -9,3 +9,15 @@
   #cache-card { margin: 8px auto; padding: 6px 12px; }
   #cache-status { font-size: 12px; }
 }
+#downloads-dialog { box-sizing: border-box; width: min(560px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow-y: auto; border: 1px solid #c8a05b; border-radius: 12px; padding: 24px; background: #0d202c; color: #e9e4d4; font-family: inherit; }
+#downloads-dialog::backdrop { background: rgb(0 0 0 / .75); }
+#downloads-dialog h2 { margin: 0 0 16px; font-size: 24px; }
+#downloads-dialog p { font-size: 14px; line-height: 1.5; }
+#downloads-note { color: #9fb5bd; }
+#downloads-meter { width: 100%; accent-color: #2cb0c0; }
+.downloads-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.downloads-actions button { min-height: 44px; border: 1px solid #c8a05b; border-radius: 6px; padding: 10px 14px; background: transparent; color: #e9e4d4; font: inherit; cursor: pointer; }
+.downloads-actions button:disabled { opacity: .45; cursor: default; }
+.downloads-actions #downloads-confirm { background: #e7b85e; color: #162126; font-weight: bold; }
+.downloads-actions button:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+@media (max-height: 540px) { #downloads-dialog { padding: 16px; } #downloads-dialog h2 { font-size: 20px; margin-bottom: 8px; } .downloads-actions { margin-top: 10px; } }

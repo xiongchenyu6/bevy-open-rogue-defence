@@ -12,6 +12,7 @@ struct PersistentRoots(HashSet<Entity>);
 pub(crate) struct RunResetPlugin;
 impl Plugin for RunResetPlugin {
     fn build(&self, app: &mut App) {
+        campaign::install_config(app);
         app.init_resource::<PersistentRoots>()
             .add_systems(PostStartup, remember_scene)
             .add_systems(First, process_request);
@@ -26,6 +27,9 @@ fn remember_scene(world: &mut World) {
     world.resource_mut::<PersistentRoots>().0 = roots;
 }
 fn process_request(world: &mut World) {
+    if !world.contains_resource::<ChapterCatalog>() {
+        return;
+    }
     let Some(stage) = world.resource_mut::<RunRequest>().0.take() else {
         return;
     };
@@ -38,6 +42,10 @@ pub fn reset_run(world: &mut World, stage: usize) {
     if stage >= campaign::CHAPTER_COUNT || !world.resource::<CampaignProgress>().can_play(stage) {
         return;
     }
+    let Some(catalog) = world.get_resource::<ChapterCatalog>() else {
+        return;
+    };
+    let rules = catalog.chapter(stage);
     world.flush();
     let roots: Vec<_> = world
         .query_filtered::<Entity, (Without<ChildOf>, Without<IsResource>)>()
@@ -63,7 +71,7 @@ pub fn reset_run(world: &mut World, stage: usize) {
     // All transient pool roots have gone; their leases must never outlive a run.
     onboarding::reset_run(world);
     world.insert_resource(CombatPools::default());
-    world.insert_resource(campaign::fresh_session(stage));
+    world.insert_resource(campaign::fresh_session(rules));
     world.insert_resource(PlayerBuild::default());
     world.insert_resource(HeroVitals::default());
     world.insert_resource(SelectedHero::default());
@@ -182,6 +190,7 @@ mod tests {
     #[test]
     fn two_in_app_restarts_preserve_scene_and_progress_but_remove_run_entities_and_bonuses() {
         let mut world = World::new();
+        world.insert_resource(ChapterCatalog::read_native().unwrap());
         world.insert_resource(PersistentRoots::default());
         world.insert_resource(CampaignProgress::default());
         world.insert_resource(CampaignRun::default());
@@ -310,8 +319,17 @@ mod tests {
         assert_eq!(world.resource::<CampaignProgress>().currency, 90);
     }
     #[test]
+    fn chapter_request_stays_pending_until_external_configuration_is_ready() {
+        let mut world = World::new();
+        world.insert_resource(RunRequest(Some(0)));
+        process_request(&mut world);
+        assert_eq!(world.resource::<RunRequest>().0, Some(0));
+        assert!(!world.contains_resource::<GameSession>());
+    }
+    #[test]
     fn locked_chapter_request_cannot_dispose_current_run() {
         let mut world = World::new();
+        world.insert_resource(ChapterCatalog::read_native().unwrap());
         world.insert_resource(CampaignProgress::default());
         let entity = world.spawn_empty().id();
         reset_run(&mut world, 5);

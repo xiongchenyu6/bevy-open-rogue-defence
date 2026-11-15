@@ -2,8 +2,8 @@
 use bevy::prelude::*;
 use rogue_commander::game::{
     ActiveSkill, ArchiveState, Autoplay, CampaignMenu, CampaignProgress, CampaignReward,
-    CampaignRun, Enemy, GameAssets, GameSession, Hero, HeroFusion, HeroKind, HeroVitals,
-    PlayerBuild, SelectedHero, SpawnDirector, chapter, skill_evolution::SkillEvolution,
+    CampaignRun, ChapterCatalog, Enemy, GameAssets, GameSession, Hero, HeroFusion, HeroKind,
+    HeroVitals, PlayerBuild, SelectedHero, SpawnDirector, skill_evolution::SkillEvolution,
 };
 #[derive(Resource, Default)]
 struct CampaignCapture {
@@ -374,8 +374,16 @@ fn exercise(world: &mut World) {
                 .difficulty_target
                 .unwrap();
             let enemy = world.get::<Enemy>(target).unwrap();
-            assert!((enemy.max_hp - 100. * chapter(1).health_scale).abs() < 0.01);
-            assert!((enemy.damage - 10. * chapter(1).damage_scale).abs() < 0.01);
+            assert!(
+                (enemy.max_hp - 100. * world.resource::<ChapterCatalog>().chapter(1).health_scale)
+                    .abs()
+                    < 0.01
+            );
+            assert!(
+                (enemy.damage - 10. * world.resource::<ChapterCatalog>().chapter(1).damage_scale)
+                    .abs()
+                    < 0.01
+            );
             println!(
                 "[capture] campaign second chapter stronger; permanent bonuses applied exactly once; old fusion/skills cleared PASS"
             );

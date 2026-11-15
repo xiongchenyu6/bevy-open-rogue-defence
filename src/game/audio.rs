@@ -38,7 +38,7 @@ impl Plugin for GameAudioPlugin {
 }
 
 #[derive(Resource)]
-struct GameAudio {
+pub(crate) struct GameAudio {
     ambient: Handle<AudioSource>,
     shot: Handle<AudioSource>,
     impact: Handle<AudioSource>,
@@ -54,6 +54,30 @@ struct GameAudio {
     gate_hit: Handle<AudioSource>,
     raid_steps: Handle<AudioSource>,
     melee_whoosh: [Handle<AudioSource>; 3],
+}
+
+impl GameAudio {
+    pub(crate) fn required_ids(&self) -> impl Iterator<Item = bevy::asset::UntypedAssetId> + '_ {
+        [
+            &self.ambient,
+            &self.shot,
+            &self.impact,
+            &self.draft,
+            &self.ultimate,
+            &self.boss_spawn,
+            &self.hit_physical,
+            &self.hit_magic,
+            &self.crit,
+            &self.kill,
+            &self.kill_heavy,
+            &self.hero_hurt,
+            &self.gate_hit,
+            &self.raid_steps,
+        ]
+        .into_iter()
+        .chain(self.melee_whoosh.iter())
+        .map(|handle| handle.id().untyped())
+    }
 }
 
 impl FromWorld for GameAudio {

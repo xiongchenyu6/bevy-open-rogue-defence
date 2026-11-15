@@ -1,0 +1,21 @@
+{
+  "baseline_raw_sha256": "e01786d326c4a0861b3b91d01f2a9c8946a9c5d030091f28b87b1abee3d58856",
+  "candidate_raw_sha256": "1696f3be442bf2c4333e96f3217f5a43dc762f836d05cbdde44d991ab3b9e49b",
+  "whole_gzip_bytes": 14544538,
+  "candidates": [
+    {
+      "chunk_bytes": 262144,
+      "total_chunks": 276,
+      "changed_chunks": 276,
+      "first_download_bytes": 14727951,
+      "update_bytes": 14727951
+    },
+    {
+      "chunk_bytes": 1048576,
+      "total_chunks": 69,
+      "changed_chunks": 69,
+      "first_download_bytes": 14563723,
+      "update_bytes": 14563723
+    }
+  ]
+}

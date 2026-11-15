@@ -1,3 +1,4 @@
+import { createDownloadUI } from './downloads.js';
 // Startup-only resource preparation and explicit updates. Never reload a live run.
 const card = document.querySelector('#cache-card');
 const label = document.querySelector('#cache-status');
@@ -19,8 +20,8 @@ let total = 0;
 const copy = {
   en: {
     checking: 'Checking saved game resources…',
-    first: 'Resources are saved on first play, then reused on your next visit.',
-    ready: 'Game resources saved · Ready to play offline',
+    first: 'Save the launcher first. Expedition resources download when you choose a chapter.',
+    ready: 'Launcher saved · Chapters download only when needed',
     available: () => total === 0 ? 'Update saved · Ready to switch versions' : `A new version is available · ${total < 104858 ? "< 0.1" : mb(total)} MB to download`,
     progress: () => `Saving game resources · ${mb(amount)} / ${mb(total)} MB`,
     switching: 'Update ready. Restarting…',
@@ -31,8 +32,8 @@ const copy = {
   },
   'zh-CN': {
     checking: '正在检查已保存的游戏资源…',
-    first: '首次游玩会保存资源，下次进入直接复用。',
-    ready: '游戏资源已保存 · 可离线启动',
+    first: '先保存启动资源，选择章节时再下载战斗内容。',
+    ready: '启动资源已保存 · 章节内容按需下载',
     available: () => total === 0 ? '新版本已保存 · 可直接更新' : `发现新版本 · 需下载 ${total < 104858 ? "小于 0.1" : mb(total)} MB`,
     progress: () => `正在保存游戏资源 · ${mb(amount)} / ${mb(total)} MB`,
     switching: '更新已就绪，正在重新启动…',
@@ -58,8 +59,8 @@ function render() {
   meter.value = amount;
   meter.setAttribute('aria-label', label.textContent);
 }
-export function setCacheLanguage(value) { language = value === 'zh-CN' ? value : 'en'; render(); }
-function request(worker, type, onProgress, timeout = 15000, target = 'latest') {
+export function setCacheLanguage(value) { language = value === 'zh-CN' ? value : 'en'; render(); downloads.render(); }
+function request(worker, type, onProgress, timeout = 15000, target = 'latest', groups) {
   return new Promise((resolve, reject) => {
     const channel = new MessageChannel();
     let timer;
@@ -77,7 +78,7 @@ function request(worker, type, onProgress, timeout = 15000, target = 'latest') {
       else finish(null, data);
     };
     arm();
-    try { worker.postMessage({ type, target, wasmEncoding: encoding }, [channel.port2]); }
+    try { worker.postMessage({ type, target, groups, wasmEncoding: encoding }, [channel.port2]); }
     catch (error) { finish(error); }
   });
 }
@@ -153,11 +154,11 @@ async function installedWorker() {
 function progress(data) {
   state = 'progress'; amount = data.received; total = data.total; render();
 }
-async function prepare(worker, target = 'current') {
-  const status = await request(worker, 'STATUS', null, 15000, target);
+async function prepare(worker, target = 'current', groups) {
+  const status = await request(worker, 'STATUS', null, 15000, target, groups);
   if (!status.ready) {
     amount = 0; total = status.downloadBytes; state = 'progress'; render();
-    await request(worker, 'PREPARE', progress, 120000, target);
+    await request(worker, 'PREPARE', progress, 120000, target, groups);
   }
   // Best effort: the browser ultimately decides whether persistent storage is granted.
   try { await navigator.storage?.persist?.(); } catch { /* cache still works */ }
@@ -186,7 +187,7 @@ export async function prepareGameCache() {
   try {
     const worker = await installedWorker();
     if (!worker) return false;
-    await prepare(worker);
+    await prepare(worker, 'current', ['core']);
     if (worker === registration.waiting) await switchVersion(worker, true);
     active = worker; state = 'ready'; return true;
   } catch (error) {
@@ -213,4 +214,5 @@ later.addEventListener('click', async () => {
 window.addEventListener('online', () => {
   if (!started && !busy) registration?.update().then(discover).catch(() => {});
 });
+const downloads = createDownloadUI({worker: installedWorker, request, language: () => language});
 render();

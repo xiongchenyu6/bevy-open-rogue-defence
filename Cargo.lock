@@ -4373,6 +4373,8 @@ dependencies = [
  "bevy",
  "js-sys",
  "raw-window-handle",
+ "serde",
+ "serde_json",
  "ttf-parser",
  "web-sys",
  "x11rb",

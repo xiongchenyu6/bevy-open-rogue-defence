@@ -1,22 +1,18 @@
 //! Six full expeditions sharing the complete wave/boss ruleset.
 use super::{Enemy, GameSession, TrialEnemy};
 use bevy::prelude::*;
+mod config;
+pub use config::ChapterCatalog;
+pub(crate) use config::install as install_config;
+
 pub const CHAPTER_COUNT: usize = 6;
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, serde::Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Chapter {
     pub duration: f32,
     pub health_scale: f32,
     pub damage_scale: f32,
     pub gold_scale: f32,
-}
-pub fn chapter(stage: usize) -> Chapter {
-    let n = stage.min(CHAPTER_COUNT - 1) as f32;
-    Chapter {
-        duration: 1500.0,
-        health_scale: 1.0 + n * 0.65 + n * n * 0.18,
-        damage_scale: 1.0 + n * 0.25,
-        gold_scale: 1.0 + n * 0.2,
-    }
 }
 #[derive(Resource, Default, Debug)]
 pub struct CampaignRun {
@@ -44,12 +40,16 @@ impl Plugin for CampaignPlugin {
 /// they are the DPS exam. Waves, bosses and the archive imprint scale.
 pub(super) fn scale_enemies(
     run: Res<CampaignRun>,
+    catalog: Option<Res<ChapterCatalog>>,
     mut enemies: Query<
         (&mut Enemy, Option<&mut super::combat::EnemyBreachDamage>),
         (Added<Enemy>, Without<TrialEnemy>),
     >,
 ) {
-    let difficulty = chapter(run.stage);
+    let Some(catalog) = catalog else {
+        return;
+    };
+    let difficulty = catalog.chapter(run.stage);
     for (mut enemy, breach) in &mut enemies {
         if let Some(mut breach) = breach {
             breach.0 *= difficulty.damage_scale;
@@ -60,13 +60,14 @@ pub(super) fn scale_enemies(
         enemy.gold = (enemy.gold as f32 * difficulty.gold_scale).round() as u32;
     }
 }
-#[cfg(test)]
-fn checkpoint_seconds(stage: usize, index: usize) -> f32 {
-    chapter(stage).duration * (index.min(4) + 1) as f32 / 5.0
+/// Wave schedules retain their 25-minute authoring scale; only expedition
+/// progression is rescaled. Attacks, abilities and cooldowns use real run time.
+pub(crate) fn timeline_seconds(elapsed: f32, duration: f32) -> f32 {
+    elapsed * (1500.0 / duration.max(0.001))
 }
-pub(crate) fn fresh_session(stage: usize) -> GameSession {
+pub(crate) fn fresh_session(rules: Chapter) -> GameSession {
     GameSession {
-        duration: chapter(stage).duration,
+        duration: rules.duration,
         ..default()
     }
 }
@@ -74,19 +75,37 @@ pub(crate) fn fresh_session(stage: usize) -> GameSession {
 mod tests {
     use super::*;
     #[test]
-    fn six_chapters_keep_all_five_bosses_and_increase_difficulty_and_rewards() {
+    fn shipped_chapters_keep_duration_and_increase_difficulty_and_rewards() {
+        let catalog = ChapterCatalog::read_native().unwrap();
         for stage in 0..CHAPTER_COUNT {
-            assert_eq!(checkpoint_seconds(stage, 4), chapter(stage).duration);
+            assert_eq!(catalog.chapter(stage).duration, 1500.0);
             if stage > 0 {
-                assert!(chapter(stage).health_scale > chapter(stage - 1).health_scale);
-                assert!(chapter(stage).damage_scale > chapter(stage - 1).damage_scale);
-                assert!(chapter(stage).gold_scale > chapter(stage - 1).gold_scale);
+                assert!(
+                    catalog.chapter(stage).health_scale > catalog.chapter(stage - 1).health_scale
+                );
+                assert!(
+                    catalog.chapter(stage).damage_scale > catalog.chapter(stage - 1).damage_scale
+                );
+                assert!(catalog.chapter(stage).gold_scale > catalog.chapter(stage - 1).gold_scale);
             }
         }
     }
     #[test]
+    fn short_chapter_keeps_all_five_boss_checkpoints_within_duration() {
+        let duration = 600.;
+        for (index, boss) in super::super::content::BOSSES.iter().enumerate() {
+            let checkpoint = duration * (index + 1) as f32 / 5.;
+            assert!(timeline_seconds(checkpoint - 0.01, duration) < boss.spawn_seconds);
+            assert!(timeline_seconds(checkpoint, duration) >= boss.spawn_seconds);
+            assert!(checkpoint <= duration);
+        }
+        assert_eq!(timeline_seconds(duration, duration), 1500.);
+        assert_eq!(timeline_seconds(60., 1500.), 60.);
+    }
+    #[test]
     fn chapter_scaling_changes_real_enemy_health_damage_breach_and_rewards_once() {
         let mut app = App::new();
+        app.insert_resource(ChapterCatalog::read_native().unwrap());
         app.insert_resource(CampaignRun {
             stage: 2,
             run_id: 0,

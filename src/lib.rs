@@ -39,6 +39,8 @@ pub fn build_app() -> App {
     });
 
     let mut app = App::new();
+    #[cfg(target_arch = "wasm32")]
+    game::demand_assets::install(&mut app);
     app.insert_resource(ClearColor(Color::srgb(0.015, 0.025, 0.045)))
         .insert_resource(game::RunSeed::new(run_seed))
         .insert_resource(game::RunRng::from_seed(run_seed))

@@ -41,14 +41,29 @@ jobs:
 
       - name: Verify game artwork
         run: |
+          python3 tools/verify_campaign_data.py
           python3 tools/verify_models.py
           python3 tools/verify_ui_assets.py
           python3 -m unittest discover -s tools -p test_generate_web_manifest.py
+          python3 -m unittest discover -s tools -p test_retain_web_releases.py
+          python3 -m unittest discover -s tools -p test_web_engine_reuse.py
+          node --check web/downloads.js
           node --check web/sw.js
           node --check web/game-cache.js
 
       - name: Build web distribution
+        env:
+          WASM_REUSE_BASE_URL: https://xiongchenyu6.github.io/bevy-open-rogue-defence/
         run: bash scripts/build-wasm.sh
+
+      - name: Retain immutable resources for supported releases
+        run: python3 tools/retain_web_releases.py dist --base-url https://xiongchenyu6.github.io/bevy-open-rogue-defence/ | tee update-size-report.json
+
+      - name: Upload update size audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: update-size-report
+          path: update-size-report.json
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

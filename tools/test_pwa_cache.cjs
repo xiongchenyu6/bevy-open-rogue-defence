@@ -32,7 +32,7 @@ async function rpc(page, target, type, extra = {}) {
         channel.port1.close();
         resolve({...event.data, progress});
       };
-      worker.postMessage({type, wasmEncoding: 'gzip', ...extra}, [channel.port2]);
+      worker.postMessage({type, wasmEncoding: 'gzip', groups: ['all'], ...extra}, [channel.port2]);
     });
   }, {target, type, extra, timeout});
 }
@@ -73,13 +73,15 @@ async function main() {
   const requests = [];
   const server = http.createServer(async (request, response) => {
     const pathname = decodeURIComponent(new URL(request.url, 'http://fixture').pathname);
-    const relative = pathname === '/game/' ? 'index.html' : pathname.slice('/game/'.length);
-    requests.push({revision: current, path: relative});
+    const transport = pathname === '/game/' ? 'index.html' : pathname.slice('/game/'.length);
+    const immutable = Object.values(fixtures).flatMap(f => f.manifest.files.map(file => ({file, directory: f.directory}))).find(item => item.file.url === transport);
+    const relative = immutable?.file.path || transport;
+    requests.push({revision: current, path: relative, transport});
     response.setHeader('Cache-Control', 'no-store');
     response.setHeader('Service-Worker-Allowed', '/game/');
     if (!pathname.startsWith('/game/') || relative.includes('..')) { response.writeHead(404).end(); return; }
     try {
-      let data = await fs.readFile(path.join(fixtures[current].directory, relative));
+      let data = await fs.readFile(path.join(immutable?.directory || fixtures[current].directory, relative));
       if (failure?.path === relative) {
         if (failure.kind === 'network') { response.writeHead(503).end('Unavailable'); return; }
         data = Buffer.alloc(data.length, 'X'); // Same length: tests SHA-256, not only size.
@@ -248,4 +250,5 @@ async function main() {
     await fs.rm(temporary, {recursive: true, force: true});
   }
 }
-main().catch(error => { console.error(error); process.exitCode = 1; });
+module.exports = {rpc, waiting, install};
+if (require.main === module) main().catch(error => { console.error(error); process.exitCode = 1; });
