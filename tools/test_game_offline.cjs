@@ -38,6 +38,7 @@ const assert = require('node:assert/strict');
         reg.active.postMessage({type:'STATUS',target:'current',wasmEncoding:'gzip'},[ch.port2]);
       });
     });
+    await fs.writeFile(path.join(output,'first-status.json'),JSON.stringify(status,null,2));
     assert.equal(status.ready,true); assert.equal(status.downloadBytes,0);
     console.log('PASS real game first launch cached all selected resources', status.totalBytes);
     await context.close();
