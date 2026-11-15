@@ -34,14 +34,59 @@ binary patches. See wasm-chunk-evaluation.json.
 
 - Native library: 843 passed, 0 failed, 1 existing statistical report ignored.
 - WASM library check and Rust formatting passed.
-- Browser regressions: 10 cache, 11 demand and 16 dialog scenarios passed.
+- Browser regressions: 10 cache, 11 demand and 17 dialog scenarios passed.
 - Python: 2 manifest, 3 retained-release and 9 engine-reuse tests passed.
 - Engine tests include the real build wrapper in an isolated fixture, checking
   content-only reuse and rebuilding changed compiled inputs.
 - Dialog screenshots: chapter-download-mobile.png and offline-manager-mobile.png.
-- Actual built game online/cold-offline verification is recorded separately after
-  completing the real renderer run. UI tests alone are not proof of combat rendering.
+- Actual built Bevy game: fresh menu made zero combat-resource requests; chapter
+  preparation completed before recruitment. Closed the browser process and opened
+  the same profile offline before navigation: recruitment and battle rendered with
+  no failed resource requests or engine errors. Screenshots require both upper
+  health bars and lower action controls; online and offline images were inspected.
+  See local-game-results.json, battle-online.png and battle-offline.png.
+- The real settings screen displays the downloads entry (settings-entry.png).
+  The published build also opens and closes the real settings downloads dialog
+  (published-settings-downloads.png).
+- The local engine predates the final configuration-loading label marker fix;
+  the final public-build test below verifies the deployed engine separately.
 
 The browser may evict website storage or the player may clear it. Missing files
 then need downloading again. Physical Android installed-PWA testing remains outside
 these Chromium tests.
+
+## First-install activation race
+
+The first public probe reached the real menu but had 1,642,646 startup bytes
+missing. It was rejected as a cache pass. Instrumentation showed that preparation
+returned false: the first worker activated while its STATUS reply was pending,
+and reading `registration.waiting` again returned null. The fix keeps the inspected
+worker reference across the await. A deterministic browser regression simulates
+that transition and checks that a non-rendered core file is prepared before Start.
+All 17 startup UI scenarios pass after the fix. This is a web-only change; the
+published engine can be reused byte-for-byte.
+
+## Published incremental release
+
+[Pages run 43700375306](https://github.com/xiongchenyu6/bevy-open-rogue-defence/actions/runs/43700375306)
+completed successfully for `a7d867d5b67f1b8fecf42ce971cc21aba643436c`.
+The prior engine was reused with verified hashes. Comparing the two published
+resource manifests shows exactly one changed game file: `game-cache.js`, **9,807
+bytes**. No engine, configuration, icon, model or audio file changed. This excludes
+service-worker/version-check metadata overhead. See published-small-update.json,
+published-engine-reuse.json and published-build.json. The release index retains
+both releases (a third will be retained once a third release exists).
+
+The final fresh-profile test against the public URL identifies the exact release
+above. Startup core is complete before the menu (18,684,040 bytes with gzip); no
+combat requests occur before chapter selection. Preparing the shared 23,360,980-byte
+battle pack leads to actual recruitment and combat. The real settings button opens
+and closes Downloads & offline play. After closing the entire browser, restarting
+the same profile with networking disabled still reaches recruitment and combat.
+Core and combat report zero missing bytes; there are **zero failed resource
+requests and zero engine/page errors**. Optional supporting files remain unrequested.
+
+See published-game-results.json and the published battle screenshots. The offline
+HUD detail is a crop of that same screenshot; upper health bars and lower action
+controls are visible. This is Chromium/SwiftShader testing, not a physical Android
+installation test.

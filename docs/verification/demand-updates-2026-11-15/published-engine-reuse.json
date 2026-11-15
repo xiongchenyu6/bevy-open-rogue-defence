@@ -1,0 +1,17 @@
+{
+  "rogue_commander.js": {
+    "bytes": 119518,
+    "sha256": "00af7357e839984de9f7c149c082bda4ea81fa85b89a604c9b53811f8712f638",
+    "matches_published": true
+  },
+  "rogue_commander_bg.wasm": {
+    "bytes": 70984972,
+    "sha256": "8f8a8d72220968bd09f53442d876e23507d7d38783d43dc275d60d52af3b2956",
+    "matches_published": true
+  },
+  "rogue_commander_bg.wasm.gz": {
+    "bytes": 14377220,
+    "sha256": "e6dc63689bdc797fc475e45f05ab83521aa57a64b483fbb61f78d27d8a2bdc1e",
+    "matches_published": true
+  }
+}

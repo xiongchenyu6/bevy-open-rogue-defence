@@ -1,0 +1,32 @@
+demand-full-lib-tests.log
+test game::combat::tests::production_fatal_boss_damage_consumes_life_despite_ordinary_regeneration ... ok
+test game::progression::draft_tests::audit_seeded_skill_purchase_budgets_through_real_card_clicks ... ok
+
+test result: ok. 843 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 3.98s
+
+
+demand-wasm-final.log
+    Checking rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 8.48s
+
+web-engine-reuse-final.log
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 4.463s
+
+OK
+
+demand-manifest-final.log
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.023s
+
+OK
+
+demand-retention-final.log
+      "total_bytes": 8,
+      "changed_bytes": 8
+    }
+  }
+}
+

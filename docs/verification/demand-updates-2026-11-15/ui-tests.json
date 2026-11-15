@@ -15,7 +15,8 @@
     "update offer survives a full browser restart and natural worker activation",
     "Download & update commits, reloads and starts the new engine",
     "failed update shows retry while keeping Start available for previous engine",
-    "legacy network-only worker migrates through waiting worker and resumes Start after one reload"
+    "legacy network-only worker migrates through waiting worker and resumes Start after one reload",
+    "worker activating during its STATUS reply retains the inspected reference and prepares core"
   ],
   "pageErrors": [],
   "engine": "stub only; production HTML/CSS/PWA/SW and real CacheStorage"

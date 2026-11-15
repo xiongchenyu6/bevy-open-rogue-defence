@@ -1,0 +1,2966 @@
+{
+  "first": {
+    "type": "STATUS",
+    "version": "16280966c3197424e5976f7be681e41abf5c5a49251e5f7d9470bc4ae06ae472",
+    "revision": "a7d867d5b67f1b8fecf42ce971cc21aba643436c",
+    "wasmEncoding": "gzip",
+    "currentVersion": "16280966c3197424e5976f7be681e41abf5c5a49251e5f7d9470bc4ae06ae472",
+    "groups": [
+      {
+        "id": "optional",
+        "totalBytes": 115160,
+        "downloadBytes": 115160,
+        "ready": false,
+        "installed": false
+      },
+      {
+        "id": "combat",
+        "totalBytes": 23360980,
+        "downloadBytes": 23360980,
+        "ready": false,
+        "installed": false
+      },
+      {
+        "id": "core",
+        "totalBytes": 18684040,
+        "downloadBytes": 0,
+        "ready": true,
+        "installed": true
+      }
+    ],
+    "installedGroups": [
+      "core"
+    ],
+    "ready": false,
+    "downloadBytes": 23476140,
+    "totalBytes": 42160180
+  },
+  "prepared": {
+    "type": "STATUS",
+    "version": "16280966c3197424e5976f7be681e41abf5c5a49251e5f7d9470bc4ae06ae472",
+    "revision": "a7d867d5b67f1b8fecf42ce971cc21aba643436c",
+    "wasmEncoding": "gzip",
+    "currentVersion": "16280966c3197424e5976f7be681e41abf5c5a49251e5f7d9470bc4ae06ae472",
+    "groups": [
+      {
+        "id": "optional",
+        "totalBytes": 115160,
+        "downloadBytes": 115160,
+        "ready": false,
+        "installed": false
+      },
+      {
+        "id": "combat",
+        "totalBytes": 23360980,
+        "downloadBytes": 0,
+        "ready": true,
+        "installed": true
+      },
+      {
+        "id": "core",
+        "totalBytes": 18684040,
+        "downloadBytes": 0,
+        "ready": true,
+        "installed": true
+      }
+    ],
+    "installedGroups": [
+      "core",
+      "combat"
+    ],
+    "ready": false,
+    "downloadBytes": 115160,
+    "totalBytes": 42160180
+  },
+  "offline": {
+    "type": "STATUS",
+    "version": "16280966c3197424e5976f7be681e41abf5c5a49251e5f7d9470bc4ae06ae472",
+    "revision": "a7d867d5b67f1b8fecf42ce971cc21aba643436c",
+    "wasmEncoding": "gzip",
+    "currentVersion": "16280966c3197424e5976f7be681e41abf5c5a49251e5f7d9470bc4ae06ae472",
+    "groups": [
+      {
+        "id": "optional",
+        "totalBytes": 115160,
+        "downloadBytes": 115160,
+        "ready": false,
+        "installed": false
+      },
+      {
+        "id": "combat",
+        "totalBytes": 23360980,
+        "downloadBytes": 0,
+        "ready": true,
+        "installed": true
+      },
+      {
+        "id": "core",
+        "totalBytes": 18684040,
+        "downloadBytes": 0,
+        "ready": true,
+        "installed": true
+      }
+    ],
+    "installedGroups": [
+      "core",
+      "combat"
+    ],
+    "ready": false,
+    "downloadBytes": 115160,
+    "totalBytes": 42160180
+  },
+  "requests": [
+    {
+      "path": "assets/fonts/rogue_commander_ui.ttf",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/fonts/rogue_commander_ui.ttf"
+    },
+    {
+      "path": "pwa.css",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/pwa.css"
+    },
+    {
+      "path": "game-cache.css",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/game-cache.css"
+    },
+    {
+      "path": "pwa.js",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/pwa.js"
+    },
+    {
+      "path": "game-cache.js",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/game-cache.js"
+    },
+    {
+      "path": "manifest.webmanifest",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/manifest.webmanifest"
+    },
+    {
+      "path": "downloads.js",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/downloads.js"
+    },
+    {
+      "path": "icons/icon-192.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/icons/icon-192.png"
+    },
+    {
+      "path": "icons/icon-192.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/icons/icon-192.png"
+    },
+    {
+      "path": "assets/data/campaign.json",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/cfe39ca9a88d5edcd086d7411d320ab7c236bc5942d397c662694f72dde05cdc/campaign.json"
+    },
+    {
+      "path": "assets/fonts/rogue_commander_ui.ttf",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/b069c53af20e3937118139f7c39ef7bfd30977bfcc2872b68ee4e28ff6f3c2f1/rogue_commander_ui.ttf"
+    },
+    {
+      "path": "assets/ui/controls/back.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/a8929fa8867f31ac60402578e94415378498eadd31ce4b558080e4242bfa39fb/back.png"
+    },
+    {
+      "path": "assets/ui/controls/back.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/8ae836958eabba88d4df2bd01f8fa02850f1abde2c6805e12c52de27091d0929/back.svg"
+    },
+    {
+      "path": "assets/ui/controls/book.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/9c5b200859df119075a1e258d5af50bb9a6fc064d5f7ba5dcda9fb8fe48004e6/book.png"
+    },
+    {
+      "path": "assets/ui/controls/book.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/fdb1917dad3df4913856efc4b164d06d530962049fecd810d94b090c417b212e/book.svg"
+    },
+    {
+      "path": "assets/ui/controls/chapters.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/261d89dd9ae2cd1bf43984b4da1ae11f25cf58bb2c3aa859d60a0ba677cf485b/chapters.png"
+    },
+    {
+      "path": "assets/ui/controls/chapters.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/7977e8f7b069c72512e317c297029a5da4a3d177a46e91d5483537184406d9a9/chapters.svg"
+    },
+    {
+      "path": "assets/ui/controls/exit.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/65c875630e3318cd2a7213fc61279c52d34dc26f7c6601745d73d040e958d074/exit.png"
+    },
+    {
+      "path": "assets/ui/controls/exit.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/a3fbc088fdc7e311bc047174758a960c9ab07381a3cfa7920d41503e996540d9/exit.svg"
+    },
+    {
+      "path": "assets/ui/controls/fullscreen.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/53eee1fc1b0b919f6fd25683705c19a7d0b23425473dfc2eb001f890814ee9a9/fullscreen.png"
+    },
+    {
+      "path": "assets/ui/controls/fullscreen.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/2a7975a7dbe4cd3dc24b4fe0cfd72a91ff4d94d7dc27a7769c9b9f1370b10547/fullscreen.svg"
+    },
+    {
+      "path": "assets/ui/controls/language.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/d3e51a05d660f628b31bcea18837093491c88adaa75e39316766934fc59b9b9b/language.png"
+    },
+    {
+      "path": "assets/ui/controls/language.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/d262ba59a9ef630942a28b0f475ba314332ead4ef80655ce6db14229987132ec/language.svg"
+    },
+    {
+      "path": "assets/ui/controls/lock.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/4c3f6acc75949b8b167c93fbe25677fe1c20f0f72e57949b498fd80c5e8f04a5/lock.png"
+    },
+    {
+      "path": "assets/ui/controls/lock.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/d8d8ab757e56c06b17d3bb95c80c3c88257cb51067b1204c368a6709a079d0f5/lock.svg"
+    },
+    {
+      "path": "assets/ui/controls/minus.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/6aee3538c143e5045bb7c0b8ff6a0828a24f191010e2acc89c54743e81447100/minus.png"
+    },
+    {
+      "path": "assets/ui/controls/minus.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/1830a8a00d4e1854031a9b786191c8f8e8437cfe50c70cd8bc05e373e66430aa/minus.svg"
+    },
+    {
+      "path": "assets/ui/controls/pause.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/6318cf6ba8d0b6b5d29a888525b2f63923224e1b92e886bc2e168d75f92849d9/pause.png"
+    },
+    {
+      "path": "assets/ui/controls/pause.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/acd54ef1ff8d733d8ae814208ddc2a3252ace97291b816786496f948d54c8f5b/pause.svg"
+    },
+    {
+      "path": "assets/ui/controls/play.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/66bf7a75f13b6d185f4ae6f19c0786fb6e33bc435da9761bd3f28a85ef0c185d/play.png"
+    },
+    {
+      "path": "assets/ui/controls/play.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/7fcc3eca91064e6c992c90287804d127c84fe0315bab91a0437d0cb5806589db/play.svg"
+    },
+    {
+      "path": "assets/ui/controls/plus.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/ca0bc16a7e3bbe07b508186f56e33ac05ca0e84aca42736087b1647b140b1581/plus.png"
+    },
+    {
+      "path": "assets/ui/controls/plus.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/2cb7f2d1ef16d008710568b75e721dddf93b1533a68b64071ff719c36450a20d/plus.svg"
+    },
+    {
+      "path": "assets/ui/controls/reset.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/33f097a47714150860055dba840cd2149f5a0e915d80de5803b436cd84a81157/reset.png"
+    },
+    {
+      "path": "assets/ui/controls/reset.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/a63fe43499aa767f7aa25678d16ae07d82bc6449acd75fe1616f2790d01311d1/reset.svg"
+    },
+    {
+      "path": "assets/ui/controls/settings.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/2111f80f0ccec8ec252b5d99a61b72819e47c72924ca3610625408a9726dbc49/settings.png"
+    },
+    {
+      "path": "assets/ui/controls/settings.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/65075ce3d61e8fec8d17fa40ac9ffa5960d02627d2bde993cf39ff8ac12737e2/settings.svg"
+    },
+    {
+      "path": "assets/ui/controls/sound.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/1e08df3749936c05880d9decd981b3f5a1858b287909d5f3554ff59b8c59abf4/sound.png"
+    },
+    {
+      "path": "assets/ui/controls/sound.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/b9fedcb8ec3e95149670ea6b2dc6ca12bdcc6c5ba1814a5b5d47d54366ed9dc7/sound.svg"
+    },
+    {
+      "path": "assets/ui/controls/training.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/2dace545cc7e12def4bb8b29a5032082e95f2469c4f839ea7332364eaa68cf3a/training.png"
+    },
+    {
+      "path": "assets/ui/controls/training.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/3ce0117727fb911c90bc5efe6aeb08889985e2608c47774545413940f6b9fd47/training.svg"
+    },
+    {
+      "path": "assets/ui/icons/abandon.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/95260323cb69e6366e3e57402d77f17481e48621ddff49527c0a3c7bbb18ab7b/abandon.png"
+    },
+    {
+      "path": "assets/ui/icons/ancestor_colossus.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/b43efce4ca7dcdb0ddc5246f9f4c59de037e335a2d9ccebea46804e6dedd8792/ancestor_colossus.png"
+    },
+    {
+      "path": "assets/ui/icons/arc_chain.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/a0671d852d8602bf8daf83779cc01e48aa832edee7676528fa4738d565a83f4d/arc_chain.png"
+    },
+    {
+      "path": "assets/ui/icons/arcane_loop.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/ea0a9fb2dd2bac7ec2c378b8096749858a1aeed70d0f0eb9190a9d8c42255802/arcane_loop.png"
+    },
+    {
+      "path": "assets/ui/icons/arcane_star.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/bade0e663f2b1e6eceb8be4d87674486f23c62c23c98659b63923b959c5062eb/arcane_star.png"
+    },
+    {
+      "path": "assets/ui/icons/barbarian.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/0a28b5c5cf3e477ccb9395b2fcd27653423ee6ee3bb1e0c3fef520341f1407dc/barbarian.png"
+    },
+    {
+      "path": "assets/ui/icons/blood_array.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/8cd79afdcdf1905635c63379c04a738c226fb16c96fd2eacc74cfcc4b6486333/blood_array.png"
+    },
+    {
+      "path": "assets/ui/icons/blood_wheel.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/73b1e30fd9e6fd46cfbe7f82667017dc9cd9512fc09a575c9503c4e2d1c2ef88/blood_wheel.png"
+    },
+    {
+      "path": "assets/ui/icons/bolt_turret.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/199e56bb81254569543f7cbdd6cb744c4565c2b1dc33545fce5a4fdbdc98925e/bolt_turret.png"
+    },
+    {
+      "path": "assets/ui/icons/bond.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/d4c055a9154cdd652fed70e279ba298259a154decd3dafde133458a93f590a50/bond.png"
+    },
+    {
+      "path": "assets/ui/icons/bone_sentry.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/26d8ae492ee8d44604dea63068b0b70ee6395c0d2428a68b0a8b7a69f08bb1fa/bone_sentry.png"
+    },
+    {
+      "path": "assets/ui/icons/cinder_aura.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/6cf344d940612c813d37072f4edc89ba8d33b4e769c60efc517fc05705689037/cinder_aura.png"
+    },
+    {
+      "path": "assets/ui/icons/confirm.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/a3b16a0d8d28abdf0ac66376d9d459ee3c77c72b6bdeb163ea909490b2e6e307/confirm.png"
+    },
+    {
+      "path": "assets/ui/icons/cultivation.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/b4ea08cb9dcd3d81e4c30338b80511879b761aaaa793acfaf4f185e7638803dd/cultivation.png"
+    },
+    {
+      "path": "assets/ui/icons/demon_hunter.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/857cf1f45b340cd20cf6096e29427b2fd0691b21957fe0def300099113b0a10a/demon_hunter.png"
+    },
+    {
+      "path": "assets/ui/icons/destruction.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/ebd4ea771052c8e249edbd4f8690d33ba0ebd99f3f7e70496789b57b3082914e/destruction.png"
+    },
+    {
+      "path": "assets/ui/icons/dodge.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/0a24987233d36432ef2eb151a8228f47876cbb8c6129af7cfcae07ef575502d7/dodge.png"
+    },
+    {
+      "path": "assets/ui/icons/element_archmage.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/404b3b88bc1db168bbeea0c5b2de4a656e4e4c31535d2365cb1927935cebc52a/element_archmage.png"
+    },
+    {
+      "path": "assets/ui/icons/element_cycle.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/4600d88090282e20e2a771e3f0a64e0e56b5070a8cc6a4909c6e79bbeb605933/element_cycle.png"
+    },
+    {
+      "path": "assets/ui/icons/element_master.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/367fff88dc50ddcec4833ff6b4aa4e2089b471cb8a4288c1b1604bdd50f8e3ca/element_master.png"
+    },
+    {
+      "path": "assets/ui/icons/ember_arrow.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/f8345a449725128c4ce7f4d56329debed463b32e012ac83dabbaaf00de302b01/ember_arrow.png"
+    },
+    {
+      "path": "assets/ui/icons/ember_oath.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/9ffe2d0155915b7fb54b7d41922da081b4cd8329b71775b5afcf0e7fb6eeae59/ember_oath.png"
+    },
+    {
+      "path": "assets/ui/icons/ember_rebirth.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/98ecf332d17b7f8a8677f942492fd6b84620b1e17954bab993a602819d1d080c/ember_rebirth.png"
+    },
+    {
+      "path": "assets/ui/icons/energy.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/499a447aee69a5ebd340919dfbe0ef5252d4b36c35b271ab4b8c1545879eacba/energy.png"
+    },
+    {
+      "path": "assets/ui/icons/execution_brand.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/a1e31b8cf07a73e82e0ddb4d450cc7e7844d1e8f6d1e1ce304a26f52f7851bd0/execution_brand.png"
+    },
+    {
+      "path": "assets/ui/icons/fate_cube.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/e461e07e095ee954a5159ed9e9dfd7347ee58d6802c59ca8ff3f06afc8916f22/fate_cube.png"
+    },
+    {
+      "path": "assets/ui/icons/flame_ray.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/166423c78bf7238e74b02e431f75cf750bb8a32f78635fb845160b5aa386c690/flame_ray.png"
+    },
+    {
+      "path": "assets/ui/icons/flying_swords.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/5eff1c0bfb076575a520aab519180ce491900b298b3be1255d8d21e987fbe050/flying_swords.png"
+    },
+    {
+      "path": "assets/ui/icons/forbidden_arts.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/1aad0aefaa191a7d37a3396eb7ca0084f578f81c7564ff12e78719b353ed504e/forbidden_arts.png"
+    },
+    {
+      "path": "assets/ui/icons/frost_lance.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/0befbd9176d7ffeceae9be4b7578c91d51d6d813b039c211d47a84c4b7f0969b/frost_lance.png"
+    },
+    {
+      "path": "assets/ui/icons/frost_wyrm.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/6e1c242dc0325d01821ed6f99fb94a27f1da6e2ce037898ba53b20fa3af6d190/frost_wyrm.png"
+    },
+    {
+      "path": "assets/ui/icons/glacier_core.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/97fcc145923455346ea2af86c9a740687d5ded784f28221f43555ce7f9aadb70/glacier_core.png"
+    },
+    {
+      "path": "assets/ui/icons/goblin_mine.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/e1d8a87240ac45a3fb74ffe83def582ce082fe3e4b9cabf6afa0346ebf4e422d/goblin_mine.png"
+    },
+    {
+      "path": "assets/ui/icons/gold.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/2769db7fd02a759c64cafdad6dcdeebe915e65027c4bac31ea149f43030674da/gold.png"
+    },
+    {
+      "path": "assets/ui/icons/ground_pulse.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/bee6142760b3c88c4ee812185c421f8a502bdc0f567d7d0f70c17039b0f2a314/ground_pulse.png"
+    },
+    {
+      "path": "assets/ui/icons/guardian_oath.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/d46ce61d9c1020ddd93fe17ea2b82df6fe5a46fafcf53a17ae9a7ea6b5e70427/guardian_oath.png"
+    },
+    {
+      "path": "assets/ui/icons/hunter.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/48e9cc8822b2efb28bacc7a3e6387560b5901cef4395745f4782437f6bd4b743/hunter.png"
+    },
+    {
+      "path": "assets/ui/icons/killing_intent.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/70c526a2437c4e30814847125cb7571374c3c544b74dd5d652f6b3ae9f685edf/killing_intent.png"
+    },
+    {
+      "path": "assets/ui/icons/later.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/eb41ff27d147df6a549419fa6eef0eaa5d90b3c52debb5daf6170642864c91e6/later.png"
+    },
+    {
+      "path": "assets/ui/icons/mad_scientist.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/7ca5cea0945af5fbde1612048a6e1210356233162f9aa5ca61251cf8c31de6d3/mad_scientist.png"
+    },
+    {
+      "path": "assets/ui/icons/market.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/0f5ca1191d5dee6a56c841a5d1e14bc3a6b22142798812bac1003d4536b85873/market.png"
+    },
+    {
+      "path": "assets/ui/icons/meteor_seed.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/6f9449ae6b2d03fd0f2f65c237b5dd484a9b8ab2213a57d4af4fe5b6fb52f95f/meteor_seed.png"
+    },
+    {
+      "path": "assets/ui/icons/mountain.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/37403fe4b5a37b546f18fc886703f89fce0e6a1b8159eed6fae36f34c87819d1/mountain.png"
+    },
+    {
+      "path": "assets/ui/icons/oath_banner.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/e5c2ef345a3fc490ef298e2b094c3bf6a2e49fdf7dfad31034a9f5302ae19a16/oath_banner.png"
+    },
+    {
+      "path": "assets/ui/icons/orbit_blade.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/9c59b762e0ff02314b51416565ea15a34424b49a8c47d5f69e41f115d55720c4/orbit_blade.png"
+    },
+    {
+      "path": "assets/ui/icons/piercing_volley.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/b8214d899837d73ab76c65ae25ec1712a8ba21492d31f372685575a316e22921/piercing_volley.png"
+    },
+    {
+      "path": "assets/ui/icons/prism_echo.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/72db06ecaa5823510961548fa4cf1231169bcda4a0e092388e0bb83fc040a44b/prism_echo.png"
+    },
+    {
+      "path": "assets/ui/icons/qi_ascension.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/bfe16fdcdddcccd8a0048fa4c8c4af45a9be14243a30567542612594ddcc3ee0/qi_ascension.png"
+    },
+    {
+      "path": "assets/ui/icons/raider_fortune.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/96190b31b0082e2bf69c92ae36dd1854be41abd6f35604793929e682b3a16424/raider_fortune.png"
+    },
+    {
+      "path": "assets/ui/icons/refresh.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/ff521ec52c1f47c643ba2407d7856f81ca1d1242c7c8deae865cf9127360ebb7/refresh.png"
+    },
+    {
+      "path": "assets/ui/icons/requiem.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/e64b14993529e31d00d4bcb3f2e23afdfa707e17d3db507fb4fda433c652e41b/requiem.png"
+    },
+    {
+      "path": "assets/ui/icons/revival_wind.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/74c5dc3a747c6f9120806f0ffdc9711dc31a30c4a28650a6503ee61a500f5eb3/revival_wind.png"
+    },
+    {
+      "path": "assets/ui/icons/sharpshooter.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/3f26ec50fc1c8171917bdd1bc48f32f65b9f2303e3bc9faaa804a716b2f2922e/sharpshooter.png"
+    },
+    {
+      "path": "assets/ui/icons/shield.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/77ffc66ef60977014e3c823c3d8b6433dc94e2344d2365ad80906696f212f574/shield.png"
+    },
+    {
+      "path": "assets/ui/icons/skill.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/3fa6a9a632dd14ee5479f2ca9eeaedfbcaf7dc45fba19f6eb3ae1080b39effad/skill.png"
+    },
+    {
+      "path": "assets/ui/icons/skip.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/13884f61f64fc83564224bedb06b65de5a2d0c28363b4ee9df826a44b009254c/skip.png"
+    },
+    {
+      "path": "assets/ui/icons/skull.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/59dc73a682c5281d62640839b9b2e58f67a5d7282175d0ec75dafae333f938a5/skull.png"
+    },
+    {
+      "path": "assets/ui/icons/sky_judgment.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/77ed28a85467f5028d2af16e6a80825f54996e286e9c01f4dd69bc4dbca76e0b/sky_judgment.png"
+    },
+    {
+      "path": "assets/ui/icons/spirit_energy.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/6e91acfa34f478e8ac7c8d21f616e64e1b4b7d670c992ea6aaef4b5cfa0b9bb5/spirit_energy.png"
+    },
+    {
+      "path": "assets/ui/icons/spirit_hound.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/1a4f9c47ade2888715d530988b492cc30f3b216da848c249bbbfaaa2a17a0d38/spirit_hound.png"
+    },
+    {
+      "path": "assets/ui/icons/spirit_pact.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/402ae0f963805f704beb112f9493296ed364a52c0b49d7ca88223e7a732166cc/spirit_pact.png"
+    },
+    {
+      "path": "assets/ui/icons/static_seal.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/02ef9391afc21f53d851d12f8d4916709078074890869fbcf7d205c58e7e3886/static_seal.png"
+    },
+    {
+      "path": "assets/ui/icons/storm_conduit.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/60e9a48ce15491465483e1fd9a7f4e86d97483c1bc450df48ecf9f4be5fdf9dc/storm_conduit.png"
+    },
+    {
+      "path": "assets/ui/icons/storm_matrix.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/a20384e238b011aece1a4df2a11c619a0ab5b8bb31a04912ebd4d82b39d3ef60/storm_matrix.png"
+    },
+    {
+      "path": "assets/ui/icons/tidal_fan.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/975183f9bdf95eb1ef6a24533e6a3f028275cf10fb6d35cbe0ce62a06cf7c440/tidal_fan.png"
+    },
+    {
+      "path": "assets/ui/icons/tide_elemental.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/205dca394bf0b76e223ea025b3ed4be90f6e35f46864ddec72959383649100a4/tide_elemental.png"
+    },
+    {
+      "path": "assets/ui/icons/tower.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/ce3dabe6ae0d56e4f36919df58e4510bb62bc6915718add39cfa7aaf43fe0e69/tower.png"
+    },
+    {
+      "path": "assets/ui/icons/transmute_spark.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/7ec4bf5c4171b8c480c52add33b491ebd4b42a39d5cb9ca18b5136e7fd5e17ce/transmute_spark.png"
+    },
+    {
+      "path": "assets/ui/icons/triune_engine.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/605be3af1368d5da2546355eb7fdcc6d28e4e40bc705bee2ff2d0ff128317338/triune_engine.png"
+    },
+    {
+      "path": "assets/ui/icons/triune_union.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/d7684eb5e26e26ea4b19cbe297cd6c19905532bca7dbc34500d07a80a7374406/triune_union.png"
+    },
+    {
+      "path": "assets/ui/icons/ultimate.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/dbf68b97e1d97d4585c942afc6bdfc47cfdc5d11c2830e02fc8bc9fa8061c686/ultimate.png"
+    },
+    {
+      "path": "assets/ui/icons/vortex_column.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/0c70d30c1d74d7ff4cee8cfcf99bbad0260e1b70749ffa205fcf931207359c5a/vortex_column.png"
+    },
+    {
+      "path": "assets/ui/icons/windrunner.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/ccace81b78200fa43b74ef50f729eb7c645044a42638a0f2887c2418fbd89e26/windrunner.png"
+    },
+    {
+      "path": "assets/ui/icons/wood.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/739034929a505f9c5e78a390b37b08de523cec051035f34866716fd79522a51a/wood.png"
+    },
+    {
+      "path": "downloads.js",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/f68cadb72edce88ca437ecd0f3f17809d6c40819e2b0ea8ff7be779552c4316a/downloads.js"
+    },
+    {
+      "path": "game-cache.css",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/26b0734dad77e80f09e1138e159e1256083b191551648f0099dff49c7cf0e8b0/game-cache.css"
+    },
+    {
+      "path": "game-cache.js",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/9df7b2c099ddf9cd22356e73a0542104ec95a1caf28a7b8b98034f588c56ea04/game-cache.js"
+    },
+    {
+      "path": "icons/icon-180.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/4d7bcb389e9a2ec9e52a45b589d4bee2213acc28109253cdd40c1f01a0eb0c61/icon-180.png"
+    },
+    {
+      "path": "icons/icon-192.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/c2500ba5faa722996a5210b066b32035af82a7ea72bc433377c3bd953ec9805c/icon-192.png"
+    },
+    {
+      "path": "icons/icon-512.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/73929f763720d5042521a7b4c9c1cc5602a44cbd494e63e9d7e87240bdd9e556/icon-512.png"
+    },
+    {
+      "path": "icons/source.svg",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/dcd598f065c18903b4b9295b7f1788204061a612bdc84d47addc40aa584e0ab1/source.svg"
+    },
+    {
+      "path": "index.html",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/68f93fdf7db2983f8623568b38ee29a08b17e42d08ff0e51a4905148ef60776b/index.html"
+    },
+    {
+      "path": "manifest.webmanifest",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/f8fe4f68003043bb116f43841b8d944ae1cc9253435fbdca1a6e0df1f1d59eb9/manifest.webmanifest"
+    },
+    {
+      "path": "pwa.css",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/81db9aea5388d985969b8ea1b3923316fd7dc0947f7ecbed9ba1be48184f6849/pwa.css"
+    },
+    {
+      "path": "pwa.js",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/e159e242b038a019b0664d5ca0473311df865c230784fe13fe7e1509c06b3055/pwa.js"
+    },
+    {
+      "path": "rogue_commander.js",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/00af7357e839984de9f7c149c082bda4ea81fa85b89a604c9b53811f8712f638/rogue_commander.js"
+    },
+    {
+      "path": "rogue_commander_bg.wasm.gz",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/e6dc63689bdc797fc475e45f05ab83521aa57a64b483fbb61f78d27d8a2bdc1e/rogue_commander_bg.wasm.gz"
+    },
+    {
+      "path": "rogue_commander.js",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/rogue_commander.js"
+    },
+    {
+      "path": "rogue_commander_bg.wasm.gz",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/rogue_commander_bg.wasm.gz"
+    },
+    {
+      "path": "assets/fonts/rogue_commander_ui.ttf",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/fonts/rogue_commander_ui.ttf"
+    },
+    {
+      "path": "assets/ui/icons/tower.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/tower.png"
+    },
+    {
+      "path": "assets/ui/icons/shield.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/shield.png"
+    },
+    {
+      "path": "assets/ui/icons/energy.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/energy.png"
+    },
+    {
+      "path": "assets/ui/icons/gold.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/gold.png"
+    },
+    {
+      "path": "assets/ui/icons/wood.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/wood.png"
+    },
+    {
+      "path": "assets/ui/icons/skull.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/skull.png"
+    },
+    {
+      "path": "assets/ui/icons/triune_union.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/triune_union.png"
+    },
+    {
+      "path": "assets/ui/icons/piercing_volley.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/piercing_volley.png"
+    },
+    {
+      "path": "assets/ui/icons/ember_arrow.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/ember_arrow.png"
+    },
+    {
+      "path": "assets/ui/icons/blood_array.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/blood_array.png"
+    },
+    {
+      "path": "assets/ui/icons/qi_ascension.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/qi_ascension.png"
+    },
+    {
+      "path": "assets/ui/icons/ground_pulse.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/ground_pulse.png"
+    },
+    {
+      "path": "assets/ui/icons/arcane_star.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/arcane_star.png"
+    },
+    {
+      "path": "assets/ui/icons/cultivation.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/cultivation.png"
+    },
+    {
+      "path": "assets/ui/icons/spirit_energy.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/spirit_energy.png"
+    },
+    {
+      "path": "assets/ui/icons/element_master.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/element_master.png"
+    },
+    {
+      "path": "assets/ui/icons/element_archmage.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/element_archmage.png"
+    },
+    {
+      "path": "assets/ui/icons/demon_hunter.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/demon_hunter.png"
+    },
+    {
+      "path": "assets/ui/icons/barbarian.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/barbarian.png"
+    },
+    {
+      "path": "assets/ui/icons/mad_scientist.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/mad_scientist.png"
+    },
+    {
+      "path": "assets/ui/icons/windrunner.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/windrunner.png"
+    },
+    {
+      "path": "assets/ui/icons/forbidden_arts.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/forbidden_arts.png"
+    },
+    {
+      "path": "assets/ui/icons/revival_wind.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/revival_wind.png"
+    },
+    {
+      "path": "assets/ui/icons/mountain.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/mountain.png"
+    },
+    {
+      "path": "assets/ui/icons/killing_intent.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/killing_intent.png"
+    },
+    {
+      "path": "assets/ui/icons/destruction.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/destruction.png"
+    },
+    {
+      "path": "assets/ui/icons/requiem.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/requiem.png"
+    },
+    {
+      "path": "assets/ui/icons/hunter.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/hunter.png"
+    },
+    {
+      "path": "assets/ui/icons/sharpshooter.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/sharpshooter.png"
+    },
+    {
+      "path": "assets/ui/icons/transmute_spark.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/transmute_spark.png"
+    },
+    {
+      "path": "assets/ui/icons/skill.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/skill.png"
+    },
+    {
+      "path": "assets/ui/icons/market.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/market.png"
+    },
+    {
+      "path": "assets/ui/icons/bond.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/bond.png"
+    },
+    {
+      "path": "assets/ui/icons/fate_cube.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/fate_cube.png"
+    },
+    {
+      "path": "assets/ui/icons/dodge.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/dodge.png"
+    },
+    {
+      "path": "assets/ui/icons/refresh.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/refresh.png"
+    },
+    {
+      "path": "assets/ui/icons/abandon.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/abandon.png"
+    },
+    {
+      "path": "assets/ui/controls/pause.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/pause.png"
+    },
+    {
+      "path": "assets/ui/controls/minus.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/minus.png"
+    },
+    {
+      "path": "assets/ui/controls/plus.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/plus.png"
+    },
+    {
+      "path": "assets/ui/controls/reset.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/reset.png"
+    },
+    {
+      "path": "assets/ui/icons/execution_brand.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/execution_brand.png"
+    },
+    {
+      "path": "assets/data/campaign.json",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/data/campaign.json"
+    },
+    {
+      "path": "assets/ui/controls/settings.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/settings.png"
+    },
+    {
+      "path": "assets/ui/controls/language.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/language.png"
+    },
+    {
+      "path": "assets/ui/controls/training.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/training.png"
+    },
+    {
+      "path": "assets/ui/controls/play.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/play.png"
+    },
+    {
+      "path": "assets/ui/icons/ember_rebirth.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/ember_rebirth.png"
+    },
+    {
+      "path": "assets/ui/controls/lock.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/lock.png"
+    },
+    {
+      "path": "assets/ui/icons/glacier_core.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/glacier_core.png"
+    },
+    {
+      "path": "assets/ui/icons/spirit_pact.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/spirit_pact.png"
+    },
+    {
+      "path": "assets/ui/icons/guardian_oath.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/guardian_oath.png"
+    },
+    {
+      "path": "assets/audio/arena_loop.ogg",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/c6a269ae4b73aa96bc8bee690f760921389a2ef48d9dcaddb943e8c2effd3624/arena_loop.ogg"
+    },
+    {
+      "path": "assets/audio/bond_complete.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/ed3da5a746467bbd874a2bea2318383d075eaa9e20fe2125be6310fd0d54637f/bond_complete.wav"
+    },
+    {
+      "path": "assets/audio/boss_spawn.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/799ea0bb9382071e21fd75c49a4173edde63ab8cc2278e10f33207ce74d27cf5/boss_spawn.wav"
+    },
+    {
+      "path": "assets/audio/crit.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/da1a342b7dc3ff64733826a461a7c490edd00d6edfb7eb692cda6a9423df535b/crit.wav"
+    },
+    {
+      "path": "assets/audio/draft.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/714416a9922817cc44fdb9a71b2163d34a5af4cd14a1c4214e945d6127f658ca/draft.wav"
+    },
+    {
+      "path": "assets/audio/gate_hit.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/3ca2ee5b462115ae95938ab6164f0769349757e7365241d53d0bd9b0d49115c9/gate_hit.wav"
+    },
+    {
+      "path": "assets/audio/hero_hurt.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/9aae78c346eb496b9e8be6bcb58eca254d16595bdb40630358df4c611e2f0158/hero_hurt.wav"
+    },
+    {
+      "path": "assets/audio/hit_magic.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/604608cf0dffe8bf412a7dab1250d25a051ec9cb1ff8d90c432960990c58ebb8/hit_magic.wav"
+    },
+    {
+      "path": "assets/audio/hit_physical.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/cdbb5e513505a1930c4e2fb1112bb25ea5d988a8926b2a9b3a219b9db95656b3/hit_physical.wav"
+    },
+    {
+      "path": "assets/audio/impact.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/306b9393339ff15ad19f5a6861b6f801c48a19c9ee9f3580fdb3fb9539319d36/impact.wav"
+    },
+    {
+      "path": "assets/audio/kill.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/33590c86f42b207ee959082afea324e78ace57723f646f6dbb9071ab582498c8/kill.wav"
+    },
+    {
+      "path": "assets/audio/kill_heavy.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/07b83c8535b837bcf249627265a7d0fad43c2188dd32c4bd8f167eeb054acc10/kill_heavy.wav"
+    },
+    {
+      "path": "assets/audio/raid_steps.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/a459a4e788191d4788dec93923179b7cb351aeffe87ff657db214e28ff6580a3/raid_steps.wav"
+    },
+    {
+      "path": "assets/audio/shot.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/fae9b8ef16e59b99478b6b9d3ccdd7f81955b8c4240da532d7666653602374e3/shot.wav"
+    },
+    {
+      "path": "assets/audio/swing_axe.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/c81a4657056917f0c092e364069c4ebd176f75456f5ad9a5e928b533a9212c1f/swing_axe.wav"
+    },
+    {
+      "path": "assets/audio/swing_daggers.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/ac9c63d8d170cf32ec4c4e70b7ec9d9b96addbb704769bb1454072cdfe39d615/swing_daggers.wav"
+    },
+    {
+      "path": "assets/audio/swing_sword.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/79501b7ab0fb6cad7ece61a4572239ba36793e6e9103005d1f42f6d6da205c25/swing_sword.wav"
+    },
+    {
+      "path": "assets/audio/ultimate.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/82c386aa805e1006f3ce2c45f6d10f5b296a4082ce7f9ded94665c0341272e02/ultimate.wav"
+    },
+    {
+      "path": "assets/models/adventure_embermaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/45148b9561c43126c37ae0e056bdd02f672bbadb336ae79223069abd450891e9/adventure_embermaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_plaguejaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/603d8ce299fc237fcec52ed9b0ba55ef825e8a6a4949d6f3601d38a980b35c14/adventure_plaguejaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_tidehorn.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/226d0a31f8de4f0c8c6d088c2c2b474179f998be2da896342c422ff3694a5b30/adventure_tidehorn.glb"
+    },
+    {
+      "path": "assets/models/boss_abyssal_leviathan.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/31b62a11605f08ee28962108709ce5da446544298a1be9fb856a29c96d5a057f/boss_abyssal_leviathan.glb"
+    },
+    {
+      "path": "assets/models/boss_cinder_colossus.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/1e114f80de62ac2b51aba32256f2294ba79d2677753f2398a4e31bc968688629/boss_cinder_colossus.glb"
+    },
+    {
+      "path": "assets/models/boss_dread_veil.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/cb8f89cf35a420322df167a95ab76305ebba1b72bcd715afb369161726df861c/boss_dread_veil.glb"
+    },
+    {
+      "path": "assets/models/boss_green_regent.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/e83434294e0c774a074b71dbc8ec04a1e6893bcd04d4ef1169c09b92e812386d/boss_green_regent.glb"
+    },
+    {
+      "path": "assets/models/boss_sun_crown_magus.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/e5e9ac666e5112381d39a6e1d25da92512a863d538b9e74be3ff9ed87bcf1a3c/boss_sun_crown_magus.glb"
+    },
+    {
+      "path": "assets/models/enemy_burrow_stalker.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/7d67b117990ccfe73f307218f6cdd23fc4b167f4864c2c56f4a7aa089058bdf8/enemy_burrow_stalker.glb"
+    },
+    {
+      "path": "assets/models/enemy_chanting_acolyte.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/535871ee942f0b32ec1d501085fa1c6681a85d1680b6321fc8b81e60505e9a57/enemy_chanting_acolyte.glb"
+    },
+    {
+      "path": "assets/models/enemy_core_rusher.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/97470fa8e184de9bed36b6d8c7bde9ecf78ff6aea7b889d58deb78a0c36c2651/enemy_core_rusher.glb"
+    },
+    {
+      "path": "assets/models/enemy_field_mender.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/f3be8c013e42a57069bce36226299d7766c877caa08f6b5e5ce6a3e2ef3dd13b/enemy_field_mender.glb"
+    },
+    {
+      "path": "assets/models/enemy_gnawling.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/7f332313dc041f5e5e774ea93a29e2c1d4a1e7a701ce1c97c3b4de476db3c8cb/enemy_gnawling.glb"
+    },
+    {
+      "path": "assets/models/enemy_iron_colossus.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/aa22df802df4c5856dfe07c21378609934783f7db7c984fedd2db73c03c629ab/enemy_iron_colossus.glb"
+    },
+    {
+      "path": "assets/models/enemy_null_eye.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/f445886b85a52f4051736dfd4605a63e8ec248ed8ce791dba66b213774d9e898/enemy_null_eye.glb"
+    },
+    {
+      "path": "assets/models/enemy_rift_sapper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/c313125215eb1095322f7f6445dc16a1ebcc31e1120f1dee9386066f6aa02c15/enemy_rift_sapper.glb"
+    },
+    {
+      "path": "assets/models/enemy_shell_guard.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/91a41d1932c63f98244c0f5b2207d85d6686d9ff876d34f51f44323d4500df2a/enemy_shell_guard.glb"
+    },
+    {
+      "path": "assets/models/enemy_siege_lobber.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/09fbaac5fe445f8d49e50085cb1bd41cb9982a83fb4f8088ebdf7bfd84ddd3b6/enemy_siege_lobber.glb"
+    },
+    {
+      "path": "assets/models/enemy_split_spore.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/a936cdd48c3091d8561072a5d38fbb357a91325d170620d5c4f0c270ee8101b6/enemy_split_spore.glb"
+    },
+    {
+      "path": "assets/models/enemy_void_caster.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/b76198b185285de8751e4fe329d0eb751bb3eecf0cc2d31a0f88af9a110d0d97/enemy_void_caster.glb"
+    },
+    {
+      "path": "assets/models/environment_banner_blue.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/1c930ace50132d497fc0b19b0ac4f32607cddeb213d922f56f040dea24150bf1/environment_banner_blue.glb"
+    },
+    {
+      "path": "assets/models/environment_border.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/61df555ce972c94564e258e80c44564b89dac3759a70ae0bd0cf1c43a18c8799/environment_border.glb"
+    },
+    {
+      "path": "assets/models/environment_catapult.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/6c999ef0ccae6e0464ca040cf2c823c486d6dabad3c5c6700cad019aab64bbde/environment_catapult.glb"
+    },
+    {
+      "path": "assets/models/environment_core.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/7926b81aa3f8e14e81a957a06bdc6546f168dab45bec693fe0c8a0838331c969/environment_core.glb"
+    },
+    {
+      "path": "assets/models/environment_demon_cavern.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/7cc6fe0dfbda094226f5f051492f8aee8c4a449fc90844c574cedf36995b7176/environment_demon_cavern.glb"
+    },
+    {
+      "path": "assets/models/environment_floor.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/194e1737202a2dd37246bb18fb58a765ef9754a385fc25c2c601f261a8228690/environment_floor.glb"
+    },
+    {
+      "path": "assets/models/environment_pillar.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/4449a9bd696d0d69fbd8d917cb16e18a789906d0252cf9b354166c8f196d5d9b/environment_pillar.glb"
+    },
+    {
+      "path": "assets/models/environment_pillar_decorated.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/6843bffca04b689fe6bb25fec15bf848bf58c8b16a4e690276dc56c8a8fd0364/environment_pillar_decorated.glb"
+    },
+    {
+      "path": "assets/models/environment_rubble_half.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/5f72dd19c24145bded66929f4e15ce38c4d30bafec43a556440aeec1382f9cd7/environment_rubble_half.glb"
+    },
+    {
+      "path": "assets/models/environment_rubble_large.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/d9175a7d34efe6e139d6d4e29566ca522733f3c5a8d4de2809d5d90bfbfe842a/environment_rubble_large.glb"
+    },
+    {
+      "path": "assets/models/environment_torch_lit.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/8fcb5a9966698958d1bc819643e8748c1bf96fd83782c5e06ec07dcf6948b060/environment_torch_lit.glb"
+    },
+    {
+      "path": "assets/models/environment_wall.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/587e702791a5bd9a372421ab4101900c5871f0086c73b01c0996cea82a81d213/environment_wall.glb"
+    },
+    {
+      "path": "assets/models/environment_wall_broken.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/c23061dfe5050c4a44bbf14a6ea0100d5b5dcd3be3b3433fcbe6d0bbc19c4d4e/environment_wall_broken.glb"
+    },
+    {
+      "path": "assets/models/environment_wall_gated.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/f8c31a3decfc713af5f479e3e3d8c824d1d8fd5d4752c2dba99eb8a4f86aed86/environment_wall_gated.glb"
+    },
+    {
+      "path": "assets/models/environment_wall_window_closed.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/f7b04902a3f75749b65a5a02d88fcde034758e2ea379f0f63431e27b2e442352/environment_wall_window_closed.glb"
+    },
+    {
+      "path": "assets/models/hero_ember_ranger.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/72b57aca948ca319fc4cd1ec7e73d03b876961d541bae4fbc9ea276cd1ae2811/hero_ember_ranger.glb"
+    },
+    {
+      "path": "assets/models/hero_frost_oracle.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/2e1c8163f1bf438de93b62ddc4207137304f15238c3090ac9f96d1a0a698a17a/hero_frost_oracle.glb"
+    },
+    {
+      "path": "assets/models/hero_grove_artificer.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/6f2050ec3e71fedec7bc978c78c2adf6e00f413b465daaaf04871240574366e7/hero_grove_artificer.glb"
+    },
+    {
+      "path": "assets/models/hero_iron_berserker.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/229f22f40cffe51a879cfc8ea374702ff456e1ca2fee34697ad8e2739d3a20f4/hero_iron_berserker.glb"
+    },
+    {
+      "path": "assets/models/hero_rift_dancer.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/e48c26c814b88c29b50142c569b6a9db7d5d81f5d7001458671822ed541d0588/hero_rift_dancer.glb"
+    },
+    {
+      "path": "assets/models/hero_solar_vanguard.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/196312426fea75a7197d5102f0957bb578311c76fd466682f302a51881cb7dcd/hero_solar_vanguard.glb"
+    },
+    {
+      "path": "assets/models/hero_spirit_keeper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/eaf361258db5e6bee518b4592e7affa433e0c876e707e0ef0bd9b3fbe6bd3d09/hero_spirit_keeper.glb"
+    },
+    {
+      "path": "assets/models/hero_star_wagerer.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/2f61e9301d537ed573f7ea3dce7379ace67c768dc2e13be4fb7e7baa1f5ceb1e/hero_star_wagerer.glb"
+    },
+    {
+      "path": "assets/models/hero_stone_warden.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/5f68ad845b610a708fdb0b2b495c83c94413c59f327cf3bb36177b49ca93214a/hero_stone_warden.glb"
+    },
+    {
+      "path": "assets/models/hero_storm_savant.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/e69441a01346b6cf0cb358c8470927db2635f976c9d6d53f58ac17440fe09474/hero_storm_savant.glb"
+    },
+    {
+      "path": "assets/models/hero_tide_walker.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/45cd0aeccf23307e01b0d0679d76d001d97630f89443faed5b916e76ca7b7311/hero_tide_walker.glb"
+    },
+    {
+      "path": "assets/models/hero_void_reaper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/f157cbebdb669cfbc72146292d078f8392f3a20b8309ea8000dfecfdb534db7a/hero_void_reaper.glb"
+    },
+    {
+      "path": "assets/models/summon_ancestor_colossus.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/1260533773a0ea4ad8fd822aa91309ec2c649e6aef1b4552d65d480c42810965/summon_ancestor_colossus.glb"
+    },
+    {
+      "path": "assets/models/summon_bolt_turret.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/134c9493f00f34f76abade04e99d496476ead7ee56854abd8e2379e210d7f18e/summon_bolt_turret.glb"
+    },
+    {
+      "path": "assets/models/summon_bone_sentry.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/9288659ae6e75a8f2d1cd4dc914f3ecfece98ef38e8bb573cf326f6175e13ba1/summon_bone_sentry.glb"
+    },
+    {
+      "path": "assets/models/summon_frost_wyrm.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/dceb2af2ea22633a1f07e07972392041ba3a92a3c61b41144438257ee7fed873/summon_frost_wyrm.glb"
+    },
+    {
+      "path": "assets/models/summon_spirit_hound.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/87358a51514203da8021cef4d4bd6f11bdbd394c788d6944f27ad09007e438ff/summon_spirit_hound.glb"
+    },
+    {
+      "path": "assets/models/summon_tide_elemental.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/9de8b7e548995aeaf9e70043127f1392b4309654d53e5d7a16ab6ac27dc14b55/summon_tide_elemental.glb"
+    },
+    {
+      "path": "assets/shaders/skill_energy.wgsl",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/b693b884b08abc80dc8896a4b5529267d4aecb339b1fcb60e7ab8e36e4cab1be/skill_energy.wgsl"
+    },
+    {
+      "path": "assets/ui/armory/empty-rack.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/f2194a2247f41d8931748b6aa7af50090f65080dabfbd5e505aa2027e3b40d35/empty-rack.png"
+    },
+    {
+      "path": "assets/ui/draft_backdrop.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/670d3699a362dc1a5e76d2b0d76a59a06723e4404b9e466e1259fdef7fcf9daa/draft_backdrop.png"
+    },
+    {
+      "path": "assets/ui/market/equipment-atlas.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/ea9c22a92ce0d3c251e928e04464d76b3a422fa8a677d02dcd80f933774e2160/equipment-atlas.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_ember_ranger.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/4199e48fe88f0bf40497e027c18e5ec620eb280ddb54adaf8bc818ba5423215e/hero_ember_ranger.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_frost_oracle.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/88cf7afa62c70999000bba0cb959b3f88b382881b4b5808c1539acfc1cfaea79/hero_frost_oracle.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_grove_artificer.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/015f3ef30759b3dc195a98747f34b1138045aeb514fdf1fb99667dc95f851b11/hero_grove_artificer.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_iron_berserker.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/d9f3b8b1b153867669a4994ee63bb4c129cc2803a49debeae7a327218255aceb/hero_iron_berserker.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_rift_dancer.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/3e355516156881f570665c021b68c802217935de78fd741e1cba60540bc2d655/hero_rift_dancer.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_solar_vanguard.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/494c291d35772d5b4d5b3addc4d90867322af50a459dbd6397407b6fb100c841/hero_solar_vanguard.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_spirit_keeper.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/e60572537d2b032b74a7fa168f3db0a0a87bf7ec5c0c0c2c223d0a24dfde1900/hero_spirit_keeper.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_star_wagerer.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/affe9c94ae1c8ba0899c7c2dd4a35c5aedf894e3b07975477e0de4c03490b457/hero_star_wagerer.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_stone_warden.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/a2dc5b7362d87dd8d9350ba69d92eb801f4bc6f9ce518be89a7d2c908903f002/hero_stone_warden.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_storm_savant.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/f02970edc8705b53a4032d649f7370005140198d0e712a9c2aa30c656097f8e9/hero_storm_savant.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_tide_walker.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/3edf66c747e9e4206ffcb5f0f09c9c3851557d14dfa5097a0a4d7fc58b46e4de/hero_tide_walker.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_void_reaper.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/cbf5a9cd20ef08c1059bf3a658d13db405196dc28c7c6646b670134ba33cb9a4/hero_void_reaper.png"
+    },
+    {
+      "path": "assets/ui/recipes/recipe-atlas.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/_resources/37346eb5ee66513da7b055fea351b74da27e7ab20a44c9d0081b3c4858882e82/recipe-atlas.png"
+    },
+    {
+      "path": "assets/audio/arena_loop.ogg",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/arena_loop.ogg"
+    },
+    {
+      "path": "assets/audio/shot.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/shot.wav"
+    },
+    {
+      "path": "assets/audio/impact.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/impact.wav"
+    },
+    {
+      "path": "assets/audio/draft.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/draft.wav"
+    },
+    {
+      "path": "assets/audio/ultimate.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/ultimate.wav"
+    },
+    {
+      "path": "assets/audio/boss_spawn.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/boss_spawn.wav"
+    },
+    {
+      "path": "assets/audio/hit_physical.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/hit_physical.wav"
+    },
+    {
+      "path": "assets/audio/hit_magic.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/hit_magic.wav"
+    },
+    {
+      "path": "assets/audio/crit.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/crit.wav"
+    },
+    {
+      "path": "assets/audio/kill.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/kill.wav"
+    },
+    {
+      "path": "assets/audio/kill_heavy.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/kill_heavy.wav"
+    },
+    {
+      "path": "assets/audio/hero_hurt.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/hero_hurt.wav"
+    },
+    {
+      "path": "assets/audio/gate_hit.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/gate_hit.wav"
+    },
+    {
+      "path": "assets/audio/raid_steps.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/raid_steps.wav"
+    },
+    {
+      "path": "assets/audio/swing_sword.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/swing_sword.wav"
+    },
+    {
+      "path": "assets/audio/swing_axe.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/swing_axe.wav"
+    },
+    {
+      "path": "assets/audio/swing_daggers.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/swing_daggers.wav"
+    },
+    {
+      "path": "assets/ui/portraits/hero_storm_savant.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_storm_savant.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_ember_ranger.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_ember_ranger.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_stone_warden.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_stone_warden.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_spirit_keeper.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_spirit_keeper.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_tide_walker.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_tide_walker.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_star_wagerer.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_star_wagerer.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_frost_oracle.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_frost_oracle.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_iron_berserker.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_iron_berserker.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_rift_dancer.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_rift_dancer.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_grove_artificer.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_grove_artificer.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_solar_vanguard.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_solar_vanguard.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_void_reaper.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_void_reaper.png"
+    },
+    {
+      "path": "assets/ui/draft_backdrop.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/draft_backdrop.png"
+    },
+    {
+      "path": "assets/models/hero_storm_savant.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_storm_savant.glb"
+    },
+    {
+      "path": "assets/models/hero_ember_ranger.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_ember_ranger.glb"
+    },
+    {
+      "path": "assets/models/hero_stone_warden.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_stone_warden.glb"
+    },
+    {
+      "path": "assets/models/hero_spirit_keeper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_spirit_keeper.glb"
+    },
+    {
+      "path": "assets/models/hero_tide_walker.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_tide_walker.glb"
+    },
+    {
+      "path": "assets/models/hero_star_wagerer.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_star_wagerer.glb"
+    },
+    {
+      "path": "assets/models/hero_frost_oracle.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_frost_oracle.glb"
+    },
+    {
+      "path": "assets/models/hero_iron_berserker.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_iron_berserker.glb"
+    },
+    {
+      "path": "assets/models/hero_rift_dancer.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_rift_dancer.glb"
+    },
+    {
+      "path": "assets/models/hero_grove_artificer.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_grove_artificer.glb"
+    },
+    {
+      "path": "assets/models/hero_solar_vanguard.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_solar_vanguard.glb"
+    },
+    {
+      "path": "assets/models/hero_void_reaper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_void_reaper.glb"
+    },
+    {
+      "path": "assets/models/enemy_rift_sapper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_rift_sapper.glb"
+    },
+    {
+      "path": "assets/models/enemy_gnawling.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_gnawling.glb"
+    },
+    {
+      "path": "assets/models/enemy_shell_guard.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_shell_guard.glb"
+    },
+    {
+      "path": "assets/models/enemy_void_caster.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_void_caster.glb"
+    },
+    {
+      "path": "assets/models/enemy_core_rusher.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_core_rusher.glb"
+    },
+    {
+      "path": "assets/models/enemy_chanting_acolyte.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_chanting_acolyte.glb"
+    },
+    {
+      "path": "assets/models/enemy_iron_colossus.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_iron_colossus.glb"
+    },
+    {
+      "path": "assets/models/enemy_burrow_stalker.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_burrow_stalker.glb"
+    },
+    {
+      "path": "assets/models/enemy_field_mender.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_field_mender.glb"
+    },
+    {
+      "path": "assets/models/enemy_split_spore.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_split_spore.glb"
+    },
+    {
+      "path": "assets/models/enemy_null_eye.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_null_eye.glb"
+    },
+    {
+      "path": "assets/models/enemy_siege_lobber.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_siege_lobber.glb"
+    },
+    {
+      "path": "assets/models/boss_cinder_colossus.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/boss_cinder_colossus.glb"
+    },
+    {
+      "path": "assets/models/boss_abyssal_leviathan.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/boss_abyssal_leviathan.glb"
+    },
+    {
+      "path": "assets/models/boss_dread_veil.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/boss_dread_veil.glb"
+    },
+    {
+      "path": "assets/models/boss_sun_crown_magus.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/boss_sun_crown_magus.glb"
+    },
+    {
+      "path": "assets/models/boss_green_regent.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/boss_green_regent.glb"
+    },
+    {
+      "path": "assets/models/summon_bone_sentry.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/summon_bone_sentry.glb"
+    },
+    {
+      "path": "assets/models/summon_spirit_hound.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/summon_spirit_hound.glb"
+    },
+    {
+      "path": "assets/models/summon_tide_elemental.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/summon_tide_elemental.glb"
+    },
+    {
+      "path": "assets/models/summon_bolt_turret.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/summon_bolt_turret.glb"
+    },
+    {
+      "path": "assets/models/summon_frost_wyrm.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/summon_frost_wyrm.glb"
+    },
+    {
+      "path": "assets/models/summon_ancestor_colossus.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/summon_ancestor_colossus.glb"
+    },
+    {
+      "path": "assets/models/adventure_embermaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_embermaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_tidehorn.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_tidehorn.glb"
+    },
+    {
+      "path": "assets/models/adventure_plaguejaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_plaguejaw.glb"
+    },
+    {
+      "path": "assets/models/environment_floor.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_floor.glb"
+    },
+    {
+      "path": "assets/models/environment_border.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_border.glb"
+    },
+    {
+      "path": "assets/models/environment_wall_gated.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_wall_gated.glb"
+    },
+    {
+      "path": "assets/models/environment_wall.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_wall.glb"
+    },
+    {
+      "path": "assets/models/environment_pillar_decorated.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_pillar_decorated.glb"
+    },
+    {
+      "path": "assets/models/environment_banner_blue.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_banner_blue.glb"
+    },
+    {
+      "path": "assets/models/environment_demon_cavern.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_demon_cavern.glb"
+    },
+    {
+      "path": "assets/models/environment_pillar.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_pillar.glb"
+    },
+    {
+      "path": "assets/models/environment_torch_lit.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_torch_lit.glb"
+    },
+    {
+      "path": "assets/models/environment_rubble_large.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_rubble_large.glb"
+    },
+    {
+      "path": "assets/models/environment_rubble_half.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_rubble_half.glb"
+    },
+    {
+      "path": "assets/ui/market/equipment-atlas.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/market/equipment-atlas.png"
+    },
+    {
+      "path": "assets/ui/recipes/recipe-atlas.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/recipes/recipe-atlas.png"
+    },
+    {
+      "path": "assets/shaders/skill_energy.wgsl",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/shaders/skill_energy.wgsl"
+    },
+    {
+      "path": "assets/models/hero_storm_savant.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_storm_savant.glb"
+    },
+    {
+      "path": "assets/models/hero_storm_savant.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_storm_savant.glb"
+    },
+    {
+      "path": "assets/models/hero_storm_savant.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_storm_savant.glb"
+    },
+    {
+      "path": "assets/models/hero_storm_savant.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_storm_savant.glb"
+    },
+    {
+      "path": "icons/icon-192.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/icons/icon-192.png"
+    },
+    {
+      "path": "assets/models/adventure_embermaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_embermaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_embermaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_embermaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_embermaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_embermaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_embermaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_embermaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_tidehorn.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_tidehorn.glb"
+    },
+    {
+      "path": "assets/models/adventure_tidehorn.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_tidehorn.glb"
+    },
+    {
+      "path": "assets/models/adventure_tidehorn.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_tidehorn.glb"
+    },
+    {
+      "path": "assets/models/adventure_tidehorn.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_tidehorn.glb"
+    },
+    {
+      "path": "assets/models/adventure_plaguejaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_plaguejaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_plaguejaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_plaguejaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_plaguejaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_plaguejaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_plaguejaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_plaguejaw.glb"
+    },
+    {
+      "path": "assets/models/enemy_rift_sapper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_rift_sapper.glb"
+    },
+    {
+      "path": "assets/models/enemy_rift_sapper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_rift_sapper.glb"
+    },
+    {
+      "path": "assets/models/enemy_rift_sapper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_rift_sapper.glb"
+    },
+    {
+      "path": "assets/models/enemy_rift_sapper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_rift_sapper.glb"
+    },
+    {
+      "path": "assets/models/enemy_void_caster.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_void_caster.glb"
+    },
+    {
+      "path": "assets/models/enemy_void_caster.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_void_caster.glb"
+    },
+    {
+      "path": "assets/models/enemy_void_caster.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_void_caster.glb"
+    },
+    {
+      "path": "assets/models/enemy_void_caster.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_void_caster.glb"
+    },
+    {
+      "path": "assets/models/enemy_split_spore.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_split_spore.glb"
+    },
+    {
+      "path": "assets/models/enemy_split_spore.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_split_spore.glb"
+    },
+    {
+      "path": "assets/models/enemy_split_spore.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_split_spore.glb"
+    },
+    {
+      "path": "assets/models/enemy_split_spore.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_split_spore.glb"
+    },
+    {
+      "path": "assets/models/hero_stone_warden.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_stone_warden.glb"
+    },
+    {
+      "path": "assets/models/hero_stone_warden.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_stone_warden.glb"
+    },
+    {
+      "path": "assets/models/hero_stone_warden.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_stone_warden.glb"
+    },
+    {
+      "path": "assets/models/hero_stone_warden.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_stone_warden.glb"
+    },
+    {
+      "path": "assets/ui/controls/book.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/book.png"
+    },
+    {
+      "path": "assets/ui/controls/language.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/language.png"
+    },
+    {
+      "path": "assets/ui/controls/sound.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/sound.png"
+    },
+    {
+      "path": "assets/ui/controls/back.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/back.png"
+    },
+    {
+      "path": "assets/ui/controls/chapters.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/chapters.png"
+    },
+    {
+      "path": "assets/fonts/rogue_commander_ui.ttf",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/fonts/rogue_commander_ui.ttf"
+    },
+    {
+      "path": "pwa.css",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/pwa.css"
+    },
+    {
+      "path": "game-cache.css",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/game-cache.css"
+    },
+    {
+      "path": "pwa.js",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/pwa.js"
+    },
+    {
+      "path": "game-cache.js",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/game-cache.js"
+    },
+    {
+      "path": "manifest.webmanifest",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/manifest.webmanifest"
+    },
+    {
+      "path": "downloads.js",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/downloads.js"
+    },
+    {
+      "path": "icons/icon-192.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/icons/icon-192.png"
+    },
+    {
+      "path": "rogue_commander.js",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/rogue_commander.js"
+    },
+    {
+      "path": "rogue_commander_bg.wasm.gz",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/rogue_commander_bg.wasm.gz"
+    },
+    {
+      "path": "assets/fonts/rogue_commander_ui.ttf",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/fonts/rogue_commander_ui.ttf"
+    },
+    {
+      "path": "assets/ui/icons/tower.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/tower.png"
+    },
+    {
+      "path": "assets/ui/icons/shield.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/shield.png"
+    },
+    {
+      "path": "assets/ui/icons/energy.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/energy.png"
+    },
+    {
+      "path": "assets/ui/icons/gold.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/gold.png"
+    },
+    {
+      "path": "assets/ui/icons/wood.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/wood.png"
+    },
+    {
+      "path": "assets/ui/icons/skull.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/skull.png"
+    },
+    {
+      "path": "assets/ui/icons/triune_union.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/triune_union.png"
+    },
+    {
+      "path": "assets/ui/icons/piercing_volley.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/piercing_volley.png"
+    },
+    {
+      "path": "assets/ui/icons/ember_arrow.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/ember_arrow.png"
+    },
+    {
+      "path": "assets/ui/icons/blood_array.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/blood_array.png"
+    },
+    {
+      "path": "assets/ui/icons/qi_ascension.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/qi_ascension.png"
+    },
+    {
+      "path": "assets/ui/icons/ground_pulse.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/ground_pulse.png"
+    },
+    {
+      "path": "assets/ui/icons/arcane_star.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/arcane_star.png"
+    },
+    {
+      "path": "assets/ui/icons/cultivation.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/cultivation.png"
+    },
+    {
+      "path": "assets/ui/icons/spirit_energy.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/spirit_energy.png"
+    },
+    {
+      "path": "assets/ui/icons/element_master.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/element_master.png"
+    },
+    {
+      "path": "assets/ui/icons/element_archmage.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/element_archmage.png"
+    },
+    {
+      "path": "assets/ui/icons/demon_hunter.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/demon_hunter.png"
+    },
+    {
+      "path": "assets/ui/icons/barbarian.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/barbarian.png"
+    },
+    {
+      "path": "assets/ui/icons/mad_scientist.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/mad_scientist.png"
+    },
+    {
+      "path": "assets/ui/icons/windrunner.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/windrunner.png"
+    },
+    {
+      "path": "assets/ui/icons/forbidden_arts.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/forbidden_arts.png"
+    },
+    {
+      "path": "assets/ui/icons/revival_wind.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/revival_wind.png"
+    },
+    {
+      "path": "assets/ui/icons/mountain.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/mountain.png"
+    },
+    {
+      "path": "assets/ui/icons/killing_intent.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/killing_intent.png"
+    },
+    {
+      "path": "assets/ui/icons/destruction.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/destruction.png"
+    },
+    {
+      "path": "assets/ui/icons/requiem.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/requiem.png"
+    },
+    {
+      "path": "assets/ui/icons/hunter.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/hunter.png"
+    },
+    {
+      "path": "assets/ui/icons/sharpshooter.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/sharpshooter.png"
+    },
+    {
+      "path": "assets/ui/icons/transmute_spark.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/transmute_spark.png"
+    },
+    {
+      "path": "assets/ui/icons/skill.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/skill.png"
+    },
+    {
+      "path": "assets/ui/icons/market.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/market.png"
+    },
+    {
+      "path": "assets/ui/icons/bond.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/bond.png"
+    },
+    {
+      "path": "assets/ui/icons/fate_cube.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/fate_cube.png"
+    },
+    {
+      "path": "assets/ui/icons/dodge.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/dodge.png"
+    },
+    {
+      "path": "assets/ui/icons/refresh.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/refresh.png"
+    },
+    {
+      "path": "assets/ui/icons/abandon.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/abandon.png"
+    },
+    {
+      "path": "assets/ui/controls/pause.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/pause.png"
+    },
+    {
+      "path": "assets/ui/controls/minus.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/minus.png"
+    },
+    {
+      "path": "assets/ui/controls/plus.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/plus.png"
+    },
+    {
+      "path": "assets/ui/controls/reset.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/reset.png"
+    },
+    {
+      "path": "assets/ui/icons/execution_brand.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/execution_brand.png"
+    },
+    {
+      "path": "assets/data/campaign.json",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/data/campaign.json"
+    },
+    {
+      "path": "assets/ui/controls/settings.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/settings.png"
+    },
+    {
+      "path": "assets/ui/controls/language.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/language.png"
+    },
+    {
+      "path": "assets/ui/controls/training.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/training.png"
+    },
+    {
+      "path": "assets/ui/controls/play.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/play.png"
+    },
+    {
+      "path": "assets/ui/icons/ember_rebirth.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/ember_rebirth.png"
+    },
+    {
+      "path": "assets/ui/controls/lock.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/controls/lock.png"
+    },
+    {
+      "path": "assets/ui/icons/glacier_core.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/glacier_core.png"
+    },
+    {
+      "path": "assets/ui/icons/spirit_pact.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/spirit_pact.png"
+    },
+    {
+      "path": "assets/ui/icons/guardian_oath.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/guardian_oath.png"
+    },
+    {
+      "path": "assets/audio/arena_loop.ogg",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/arena_loop.ogg"
+    },
+    {
+      "path": "assets/audio/shot.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/shot.wav"
+    },
+    {
+      "path": "assets/audio/impact.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/impact.wav"
+    },
+    {
+      "path": "assets/audio/draft.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/draft.wav"
+    },
+    {
+      "path": "assets/audio/ultimate.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/ultimate.wav"
+    },
+    {
+      "path": "assets/audio/boss_spawn.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/boss_spawn.wav"
+    },
+    {
+      "path": "assets/audio/hit_physical.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/hit_physical.wav"
+    },
+    {
+      "path": "assets/audio/hit_magic.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/hit_magic.wav"
+    },
+    {
+      "path": "assets/audio/crit.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/crit.wav"
+    },
+    {
+      "path": "assets/audio/kill.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/kill.wav"
+    },
+    {
+      "path": "assets/audio/kill_heavy.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/kill_heavy.wav"
+    },
+    {
+      "path": "assets/audio/hero_hurt.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/hero_hurt.wav"
+    },
+    {
+      "path": "assets/audio/gate_hit.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/gate_hit.wav"
+    },
+    {
+      "path": "assets/audio/raid_steps.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/raid_steps.wav"
+    },
+    {
+      "path": "assets/audio/swing_sword.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/swing_sword.wav"
+    },
+    {
+      "path": "assets/audio/swing_axe.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/swing_axe.wav"
+    },
+    {
+      "path": "assets/audio/swing_daggers.wav",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/audio/swing_daggers.wav"
+    },
+    {
+      "path": "assets/ui/portraits/hero_storm_savant.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_storm_savant.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_ember_ranger.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_ember_ranger.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_stone_warden.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_stone_warden.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_spirit_keeper.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_spirit_keeper.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_tide_walker.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_tide_walker.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_star_wagerer.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_star_wagerer.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_frost_oracle.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_frost_oracle.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_iron_berserker.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_iron_berserker.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_rift_dancer.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_rift_dancer.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_grove_artificer.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_grove_artificer.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_solar_vanguard.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_solar_vanguard.png"
+    },
+    {
+      "path": "assets/ui/portraits/hero_void_reaper.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/portraits/hero_void_reaper.png"
+    },
+    {
+      "path": "assets/ui/draft_backdrop.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/draft_backdrop.png"
+    },
+    {
+      "path": "assets/models/hero_storm_savant.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_storm_savant.glb"
+    },
+    {
+      "path": "assets/models/hero_ember_ranger.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_ember_ranger.glb"
+    },
+    {
+      "path": "assets/models/hero_stone_warden.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_stone_warden.glb"
+    },
+    {
+      "path": "assets/models/hero_spirit_keeper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_spirit_keeper.glb"
+    },
+    {
+      "path": "assets/models/hero_tide_walker.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_tide_walker.glb"
+    },
+    {
+      "path": "assets/models/hero_star_wagerer.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_star_wagerer.glb"
+    },
+    {
+      "path": "assets/models/hero_frost_oracle.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_frost_oracle.glb"
+    },
+    {
+      "path": "assets/models/hero_iron_berserker.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_iron_berserker.glb"
+    },
+    {
+      "path": "assets/models/hero_rift_dancer.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_rift_dancer.glb"
+    },
+    {
+      "path": "assets/models/hero_grove_artificer.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_grove_artificer.glb"
+    },
+    {
+      "path": "assets/models/hero_solar_vanguard.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_solar_vanguard.glb"
+    },
+    {
+      "path": "assets/models/hero_void_reaper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_void_reaper.glb"
+    },
+    {
+      "path": "assets/models/enemy_rift_sapper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_rift_sapper.glb"
+    },
+    {
+      "path": "assets/models/enemy_gnawling.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_gnawling.glb"
+    },
+    {
+      "path": "assets/models/enemy_shell_guard.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_shell_guard.glb"
+    },
+    {
+      "path": "assets/models/enemy_void_caster.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_void_caster.glb"
+    },
+    {
+      "path": "assets/models/enemy_core_rusher.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_core_rusher.glb"
+    },
+    {
+      "path": "assets/models/enemy_chanting_acolyte.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_chanting_acolyte.glb"
+    },
+    {
+      "path": "assets/models/enemy_iron_colossus.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_iron_colossus.glb"
+    },
+    {
+      "path": "assets/models/enemy_burrow_stalker.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_burrow_stalker.glb"
+    },
+    {
+      "path": "assets/models/enemy_field_mender.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_field_mender.glb"
+    },
+    {
+      "path": "assets/models/enemy_split_spore.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_split_spore.glb"
+    },
+    {
+      "path": "assets/models/enemy_null_eye.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_null_eye.glb"
+    },
+    {
+      "path": "assets/models/enemy_siege_lobber.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_siege_lobber.glb"
+    },
+    {
+      "path": "assets/models/boss_cinder_colossus.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/boss_cinder_colossus.glb"
+    },
+    {
+      "path": "assets/models/boss_abyssal_leviathan.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/boss_abyssal_leviathan.glb"
+    },
+    {
+      "path": "assets/models/boss_dread_veil.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/boss_dread_veil.glb"
+    },
+    {
+      "path": "assets/models/boss_sun_crown_magus.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/boss_sun_crown_magus.glb"
+    },
+    {
+      "path": "assets/models/boss_green_regent.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/boss_green_regent.glb"
+    },
+    {
+      "path": "assets/models/summon_bone_sentry.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/summon_bone_sentry.glb"
+    },
+    {
+      "path": "assets/models/summon_spirit_hound.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/summon_spirit_hound.glb"
+    },
+    {
+      "path": "assets/models/summon_tide_elemental.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/summon_tide_elemental.glb"
+    },
+    {
+      "path": "assets/models/summon_bolt_turret.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/summon_bolt_turret.glb"
+    },
+    {
+      "path": "assets/models/summon_frost_wyrm.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/summon_frost_wyrm.glb"
+    },
+    {
+      "path": "assets/models/summon_ancestor_colossus.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/summon_ancestor_colossus.glb"
+    },
+    {
+      "path": "assets/models/adventure_embermaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_embermaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_tidehorn.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_tidehorn.glb"
+    },
+    {
+      "path": "assets/models/adventure_plaguejaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_plaguejaw.glb"
+    },
+    {
+      "path": "assets/models/environment_floor.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_floor.glb"
+    },
+    {
+      "path": "assets/models/environment_border.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_border.glb"
+    },
+    {
+      "path": "assets/models/environment_wall_gated.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_wall_gated.glb"
+    },
+    {
+      "path": "assets/models/environment_wall.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_wall.glb"
+    },
+    {
+      "path": "assets/models/environment_pillar_decorated.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_pillar_decorated.glb"
+    },
+    {
+      "path": "assets/models/environment_banner_blue.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_banner_blue.glb"
+    },
+    {
+      "path": "assets/models/environment_demon_cavern.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_demon_cavern.glb"
+    },
+    {
+      "path": "assets/models/environment_pillar.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_pillar.glb"
+    },
+    {
+      "path": "assets/models/environment_torch_lit.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_torch_lit.glb"
+    },
+    {
+      "path": "assets/models/environment_rubble_large.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_rubble_large.glb"
+    },
+    {
+      "path": "assets/models/environment_rubble_half.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/environment_rubble_half.glb"
+    },
+    {
+      "path": "assets/ui/market/equipment-atlas.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/market/equipment-atlas.png"
+    },
+    {
+      "path": "assets/ui/recipes/recipe-atlas.png",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/recipes/recipe-atlas.png"
+    },
+    {
+      "path": "assets/shaders/skill_energy.wgsl",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/shaders/skill_energy.wgsl"
+    },
+    {
+      "path": "assets/models/hero_storm_savant.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_storm_savant.glb"
+    },
+    {
+      "path": "assets/models/hero_storm_savant.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_storm_savant.glb"
+    },
+    {
+      "path": "assets/models/hero_storm_savant.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_storm_savant.glb"
+    },
+    {
+      "path": "assets/models/hero_storm_savant.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_storm_savant.glb"
+    },
+    {
+      "path": "icons/icon-192.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/icons/icon-192.png"
+    },
+    {
+      "path": "assets/models/enemy_rift_sapper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_rift_sapper.glb"
+    },
+    {
+      "path": "assets/models/enemy_rift_sapper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_rift_sapper.glb"
+    },
+    {
+      "path": "assets/models/enemy_rift_sapper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_rift_sapper.glb"
+    },
+    {
+      "path": "assets/models/enemy_rift_sapper.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_rift_sapper.glb"
+    },
+    {
+      "path": "assets/models/enemy_void_caster.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_void_caster.glb"
+    },
+    {
+      "path": "assets/models/enemy_void_caster.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_void_caster.glb"
+    },
+    {
+      "path": "assets/models/enemy_void_caster.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_void_caster.glb"
+    },
+    {
+      "path": "assets/models/enemy_void_caster.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_void_caster.glb"
+    },
+    {
+      "path": "assets/models/enemy_split_spore.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_split_spore.glb"
+    },
+    {
+      "path": "assets/models/enemy_split_spore.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_split_spore.glb"
+    },
+    {
+      "path": "assets/models/enemy_split_spore.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_split_spore.glb"
+    },
+    {
+      "path": "assets/models/enemy_split_spore.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/enemy_split_spore.glb"
+    },
+    {
+      "path": "assets/models/adventure_embermaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_embermaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_embermaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_embermaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_embermaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_embermaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_embermaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_embermaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_tidehorn.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_tidehorn.glb"
+    },
+    {
+      "path": "assets/models/adventure_tidehorn.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_tidehorn.glb"
+    },
+    {
+      "path": "assets/models/adventure_tidehorn.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_tidehorn.glb"
+    },
+    {
+      "path": "assets/models/adventure_tidehorn.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_tidehorn.glb"
+    },
+    {
+      "path": "assets/models/adventure_plaguejaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_plaguejaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_plaguejaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_plaguejaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_plaguejaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_plaguejaw.glb"
+    },
+    {
+      "path": "assets/models/adventure_plaguejaw.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/adventure_plaguejaw.glb"
+    },
+    {
+      "path": "assets/models/hero_ember_ranger.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_ember_ranger.glb"
+    },
+    {
+      "path": "assets/models/hero_ember_ranger.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_ember_ranger.glb"
+    },
+    {
+      "path": "assets/models/hero_ember_ranger.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_ember_ranger.glb"
+    },
+    {
+      "path": "assets/models/hero_ember_ranger.glb",
+      "group": "combat",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/models/hero_ember_ranger.glb"
+    },
+    {
+      "path": "assets/ui/icons/meteor_seed.png",
+      "group": "core",
+      "url": "https://xiongchenyu6.github.io/bevy-open-rogue-defence/assets/ui/icons/meteor_seed.png"
+    }
+  ],
+  "failedRequests": [],
+  "errors": []
+}
