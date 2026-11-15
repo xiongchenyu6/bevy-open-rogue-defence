@@ -61,3 +61,15 @@ including the new low-rank Ember combat-invariance check.
 
 The final cosmetic status revision was rebuilt and rendered with real rank-1 and
 rank-5 skill gameplay. Raw logs are in `target/attack-restraint/`.
+
+Final release-source library regression rerun: **834 passed, 0 failed, 1 ignored**
+in 51.46 seconds (`target/attack-restraint/tests-release.log`).
+
+## Published build
+
+[Pages run 43684077576](https://github.com/xiongchenyu6/bevy-open-rogue-defence/actions/runs/43684077576)
+succeeded. Public `build.json` reports `4cebe43ccde6f5ebfb7f4d5d2f0933cdb2fc60e6`.
+The live page was reloaded in Chromium, Start Game clicked, and the actual WebGL2
+renderer reached [chapter selection](public-web-start.png) and then the in-game
+tutorial. No browser page errors were reported. Console warnings identify software
+rendering and unsupported optional GPU effects; this is not Android-device testing.
