@@ -53,6 +53,12 @@ icons = skills + bonds + manifest['hud']
 assert len(icons) == len(set(icons)), 'duplicate icon IDs'
 for name in set(icons + list(cards.values()) + list(families.values())):
     check_png(ICONS / f'{name}.png', (256, 256))
+controls = ROOT / 'assets/ui/controls'
+control_names = {path.stem for path in controls.glob('*.svg')}
+assert control_names and control_names == {path.stem for path in controls.glob('*.png')}, 'missing control glyph source or PNG'
+for name in sorted(control_names):
+    check_png(controls / f'{name}.png', (128, 128))
+print(f'PASS: {len(control_names)} control glyphs use WebGL-compatible 8-bit RGBA')
 heroes = catalog('pub const HEROES:', 'pub const SKILLS:')
 for name in heroes:
     check_png(ROOT / f'assets/ui/portraits/hero_{name}.png', (384, 480))

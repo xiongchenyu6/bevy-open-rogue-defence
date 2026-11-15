@@ -33,3 +33,7 @@ Raw logs/scripts: `target/mobile-icons-nov15/`. These are controlled production-
 ![Trial controls](trial-icons.png)
 
 Validation notes: the optional selection fixture's later tidal-area hover assertion fails on the pre-change capture binary as well; it is not used as evidence for this UI change. The settings navigation audit now excludes explicitly `Display::None` controls (the fixture omits the onboarding plugin), while continuing to require at least five real, visible navigation controls and their bounds.
+
+## Web texture compatibility
+
+The initial live WebGL check caught 16-bit glyph PNGs, which native rendering supported but WebGL rejected (`Rgba16Unorm`, missing `TEXTURE_FORMAT_16BIT_NORM`). All 16 controls were regenerated as explicit PNG32 / 8-bit RGBA. The generator now enforces this format, and `verify_ui_assets.py` validates every control glyph's size, bit depth, color type, checksum and decompressed payload. A negative check rejected the original files; the corrected files pass. Browser verification must use the corrected asset release, not the initial runtime revision alone.

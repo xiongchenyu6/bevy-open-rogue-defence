@@ -27,5 +27,5 @@ for name, shape in shapes.items():
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><g transform="translate(0 3)" fill="{fill}" stroke="#091519" stroke-width="12" stroke-linejoin="round" stroke-linecap="round">{shape}</g><g fill="{fill}" stroke="#f5e5bc" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">{shape}</g></svg>'''
     path = root / f'{name}.svg'
     path.write_text(svg)
-    subprocess.run(['magick', '-background', 'none', str(path), str(path.with_suffix('.png'))], check=True)
+    subprocess.run(['magick', '-background', 'none', str(path), '-depth', '8', f'PNG32:{path.with_suffix(".png")}'], check=True)
 print(f'Wrote {len(shapes)} original glyphs')
