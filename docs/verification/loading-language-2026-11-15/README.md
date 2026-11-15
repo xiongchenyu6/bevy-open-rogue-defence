@@ -16,3 +16,8 @@ Physical phone testing was not performed.
 - [Desktop](language-during-loading.png)
 - [Phone landscape](language-during-loading-mobile.png)
 - [Test output](results.txt)
+
+The same regression harness was also run against the parent revision's index.html.
+It failed at the Chinese language click during loading: Playwright reported
+`<button disabled ... data-language="zh-CN">` and `element is not enabled`.
+See [old-version reproduction](old-version-reproduction.txt).
