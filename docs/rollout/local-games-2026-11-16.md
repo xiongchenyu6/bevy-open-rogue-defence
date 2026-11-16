@@ -7,11 +7,11 @@
 | 游戏 | 工作目录 | 当前证据 / 下一步 |
 |---|---|---|
 | Rogue Commander | `Documents/github/xiongchenyu6/bevy-open-rogue-defence` | 基线已发布并验证；保留作为参考实现 |
-| Protect the Carrot | `Desktop/protect-carrot` | 无 SW；大量特效/音频启动加载；有移动侧栏。正在改按需加载、PWA 与移动验收 |
-| 御剑行 RPG | `Documents/github/xiongchenyu6/bevy-open-rpg` | 自动启动、混合语言、20 秒隐藏加载页；正在改真实加载门槛、缓存与手机体验 |
-| Open RTS | `Documents/github/xiongchenyu6/bevy-open-rts` | 已有 Web 发布和联机门禁，但未发现触控路径；正在实现更新、离线单机及手机指令操作 |
-| Open ARPG | `Documents/github/stars-labs/bevy-open-arpg` | 已改显式启动和真实状态就绪桥接、菜单/战斗读取门槛；首轮 WASM check 通过。构建接入和实际手机验收未完成 |
-| Autolife: Emergency Protocol | `Documents/github/autolife/AutolifeGame` | README 确认是已发布的机器人救援游戏；纳入后续同等升级与验收 |
+| Protect the Carrot | `Desktop/protect-carrot` | 65b419a 已发布；公共地址桌面/手机设置/冷离线进入章节均无 JS 错误；已独立核对线上版本及引擎/音频/图标 SHA-256 |
+| 御剑行 RPG | `Documents/github/xiongchenyu6/bevy-open-rpg` | 原生276项及真实首章/手机背包/冷离线通过；cd6a3dd 已推送，Pages 构建及线上验收进行中 |
+| Open RTS | `Documents/github/xiongchenyu6/bevy-open-rts` | 原生338项、实际手机/冷离线及双浏览器联机通过；e2dc12c 已推送，发布检查进行中 |
+| Open ARPG | `Documents/github/stars-labs/bevy-open-arpg` | 原生923项、21项真实SW、6项加载页fixture、8项复用测试通过；正式构建成功；实际桌面与手机进入战斗通过，手机尺寸/摇杆取消通过；补充手机对局设置暂停后重新构建中 |
+| Autolife: Emergency Protocol | `Documents/github/autolife/AutolifeGame` | 资源分组读取与真实就绪门槛接入；12项工具+23项页面+21项真实SW测试通过，正式桌面构建与真实按需下载→救援场景通过；触控补丁构建和冷离线验收中 |
 
 同仓库的 `bevy-open-rogue-defence-round2` 是已有冲突的工作副本，不作为另一款游戏修改。
 Spirit Forge 是素材生成工具；VRGD 是机器人控制客户端；下载的 Godot 示例/模板不是这些游戏的独立发布版本，不擅自修改。
