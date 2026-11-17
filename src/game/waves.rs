@@ -235,34 +235,33 @@ mod tests {
     }
 }
 
-/// Keep the original total budget while concentrating sixty percent into two
-/// attack groups. The first two tutorial minutes retain their steady cadence.
-pub fn scheduled_spawn_count(wave_number: u32, wave: WaveDef, seconds: f32) -> u16 {
-    let seconds = seconds.clamp(0.0, 59.999);
-    if wave_number < 3 {
-        return ((seconds / (60.0 / f32::from(wave.count))).floor() as u16 + 1).min(wave.count);
-    }
-    let patrol = (wave.count * 2).div_ceil(5);
-    let first_rush = (wave.count - patrol) / 2;
-    let second_rush = wave.count - patrol - first_rush;
-    let patrol_due = ((seconds * f32::from(patrol) / 60.0).floor() as u16 + 1).min(patrol);
-    patrol_due
-        + if seconds >= 20.0 { first_rush } else { 0 }
-        + if seconds >= 44.0 { second_rush } else { 0 }
+/// Three distinct assaults with quiet gaps, including the opening minute.
+/// Preserve each minute's health/reward budget instead of adding free pressure.
+fn assault_groups(wave: WaveDef) -> [(f32, u16); 3] {
+    let scouts = wave.count / 4;
+    let main = wave.count * 9 / 20;
+    [
+        (4.0, scouts),
+        (20.0, main),
+        (44.0, wave.count - scouts - main),
+    ]
 }
 
-pub fn rush_warning(wave_number: u32, wave: WaveDef, seconds: f32) -> Option<(f32, u16)> {
-    if wave_number < 3 {
-        return None;
-    }
-    let patrol = (wave.count * 2).div_ceil(5);
-    let remaining = wave.count - patrol;
-    for (arrival, count) in [(20.0, remaining / 2), (44.0, remaining - remaining / 2)] {
-        if (arrival - 3.0..arrival).contains(&seconds) {
-            return Some((arrival - seconds, count));
-        }
-    }
-    None
+pub fn scheduled_spawn_count(_wave_number: u32, wave: WaveDef, seconds: f32) -> u16 {
+    assault_groups(wave)
+        .into_iter()
+        .filter(|(arrival, _)| seconds >= *arrival)
+        .map(|(_, count)| count)
+        .sum()
+}
+
+pub fn rush_warning(_wave_number: u32, wave: WaveDef, seconds: f32) -> Option<(f32, u16)> {
+    assault_groups(wave)
+        .into_iter()
+        .find_map(|(arrival, count)| {
+            (count > 0 && (arrival - 3.0..arrival).contains(&seconds))
+                .then_some((arrival - seconds, count))
+        })
 }
 
 /// Positions in the original per-minute budget promoted to leading elites.
@@ -281,7 +280,7 @@ mod rush_tests {
         for (index, wave) in WAVES.iter().copied().enumerate() {
             let number = index as u32 + 1;
             assert_eq!(scheduled_spawn_count(number, wave, 59.999), wave.count);
-            if number >= 3 {
+            {
                 assert!(
                     scheduled_spawn_count(number, wave, 20.0)
                         > scheduled_spawn_count(number, wave, 19.999) + 1
@@ -296,6 +295,24 @@ mod rush_tests {
             }
         }
     }
+    #[test]
+    fn opening_minute_has_groups_and_quiet_gaps_without_trickle() {
+        assert_eq!(scheduled_spawn_count(1, WAVES[0], 0.0), 0);
+        assert_eq!(scheduled_spawn_count(1, WAVES[0], 4.0), 4);
+        assert_eq!(scheduled_spawn_count(1, WAVES[0], 20.0), 12);
+        assert_eq!(scheduled_spawn_count(1, WAVES[0], 44.0), 18);
+        for (index, wave) in WAVES.iter().copied().enumerate() {
+            let number = index as u32 + 1;
+            for (start, end) in [(4.0, 19.999), (20.0, 43.999), (44.0, 59.999)] {
+                assert_eq!(
+                    scheduled_spawn_count(number, wave, start),
+                    scheduled_spawn_count(number, wave, end)
+                );
+            }
+            assert_eq!(rush_warning(number, wave, 1.0), Some((3.0, wave.count / 4)));
+        }
+    }
+
     #[test]
     fn promotion_adds_exactly_two_elites_without_extra_spawn_budget() {
         for (index, wave) in WAVES.iter().copied().enumerate() {

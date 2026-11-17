@@ -1,0 +1,10 @@
+
+running 5 tests
+test rush_tests::opening_minute_has_groups_and_quiet_gaps_without_trickle ... ok
+test rush_tests::rushes_keep_all_original_budgets_and_have_three_second_warnings ... ok
+test tests::schedule_has_exact_duration_and_valid_mixes ... ok
+test rush_tests::promotion_adds_exactly_two_elites_without_extra_spawn_budget ... ok
+test tests::weighted_choice_is_deterministic_and_in_range ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

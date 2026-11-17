@@ -1,0 +1,37 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+[capture] selective PNG frames: {90, 150, 630, 1350}; all 1795 simulation/render updates retained
+CAPTURE_ASSET_ROOT /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/assets
+[2m2026-11-17T10:06:25.526298Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-17T10:06:25.616169Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-17T10:06:25.891419Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-17T10:06:25.891471Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-17T10:06:26.049236Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] raid-stage warning1 frame=31 count=8
+[2m2026-11-17T10:06:27.295258Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to docs/verification/wave-rhythm-2026-11-17/wave-4-desktop/frames/frame00090.png
+[capture] saved 1/1 docs/verification/wave-rhythm-2026-11-17/wave-4-desktop/frames/frame00090.png (1017358 bytes)
+[capture] raid-stage burst1 frame=143 live_enemies=8
+[2m2026-11-17T10:06:27.818703Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to docs/verification/wave-rhythm-2026-11-17/wave-4-desktop/frames/frame00150.png
+[capture] saved 2/2 docs/verification/wave-rhythm-2026-11-17/wave-4-desktop/frames/frame00150.png (1019403 bytes)
+[capture] raid-stage warning2 frame=523 count=14
+[capture] raid-stage burst2 frame=623 live_enemies=22
+[2m2026-11-17T10:06:32.022146Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to docs/verification/wave-rhythm-2026-11-17/wave-4-desktop/frames/frame00630.png
+[capture] saved 3/3 docs/verification/wave-rhythm-2026-11-17/wave-4-desktop/frames/frame00630.png (1021714 bytes)
+[capture] raid-stage warning3 frame=1243 count=10
+[capture] raid-stage burst3 frame=1343 live_enemies=32
+[2m2026-11-17T10:06:41.492215Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to docs/verification/wave-rhythm-2026-11-17/wave-4-desktop/frames/frame01350.png
+[capture] saved 4/4 docs/verification/wave-rhythm-2026-11-17/wave-4-desktop/frames/frame01350.png (1020538 bytes)
+[capture] PASS raid-pressure-4: three real portal warnings, paused countdown, three announced arrival counts, bounded live actors
+[capture] all 4 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 69 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 1795 simulation frames to docs/verification/wave-rhythm-2026-11-17/wave-4-desktop/frames

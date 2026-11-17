@@ -1,0 +1,35 @@
+[capture] selective PNG frames: {90, 150, 510, 630, 1230, 1350, 1789}; all 1795 simulation/render updates retained
+CAPTURE_ASSET_ROOT /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/assets
+[2m2026-11-17T10:05:33.315078Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-17T10:05:33.399972Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-17T10:05:33.705455Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-17T10:05:33.705527Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-17T10:05:33.891150Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[capture] raid-stage warning1 frame=31 count=8
+[2m2026-11-17T10:05:35.311624Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/frames/frame00090.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/frames/frame00090.png (398843 bytes)
+[capture] raid-stage burst1 frame=143 live_enemies=8
+[2m2026-11-17T10:05:35.863682Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/frames/frame00150.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/frames/frame00150.png (400132 bytes)
+[2m2026-11-17T10:05:39.440525Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/frames/frame00510.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/frames/frame00510.png (398222 bytes)
+[capture] raid-stage warning2 frame=523 count=14
+[capture] raid-stage burst2 frame=623 live_enemies=22
+[2m2026-11-17T10:05:40.601472Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/frames/frame00630.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/frames/frame00630.png (402027 bytes)
+[2m2026-11-17T10:05:47.409665Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/frames/frame01230.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/frames/frame01230.png (397937 bytes)
+[capture] raid-stage warning3 frame=1243 count=10
+[capture] raid-stage burst3 frame=1343 live_enemies=32
+[2m2026-11-17T10:05:48.744514Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/frames/frame01350.png
+[capture] saved 6/6 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/frames/frame01350.png (401648 bytes)
+[capture] PASS raid-pressure-4: three real portal warnings, paused countdown, three announced arrival counts, bounded live actors
+[2m2026-11-17T10:05:53.559852Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/frames/frame01789.png
+[capture] saved 7/7 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/frames/frame01789.png (398308 bytes)
+[capture] serialized update + GPU wait timings: /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/timings.csv (not windowed FPS)
+[capture] all 7 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 69 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 1795 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/wave-rhythm-2026-11-17/wave-4/frames

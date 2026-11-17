@@ -1,4 +1,4 @@
-//! Portal warnings and both concentrated arrivals through the real wave director.
+//! Three portal warnings and concentrated arrivals through the real wave director.
 use bevy::prelude::*;
 use rogue_commander::game::{
     ActiveSkill, AttackClock, Autoplay, Enemy, GameSession, HeroVitals, PlayerBuild, RaidWarning,
@@ -23,7 +23,7 @@ pub fn configure(world: &mut World, scenario: &str) {
         .unwrap()
         .parse::<u32>()
         .unwrap();
-    assert!((3..=25).contains(&wave));
+    assert!((1..=25).contains(&wave));
     world.remove_resource::<Autoplay>();
     world.resource_mut::<SelectedHero>().locked = true;
     world.resource_mut::<SpawnDirector>().enabled = false;
@@ -52,7 +52,7 @@ pub fn install(app: &mut bevy::app::SubApp) {
     world.resource_mut::<AttackClock>().0.pause();
     world.resource_mut::<ActiveSkill>().remaining = 10000.;
     let mut session = world.resource_mut::<GameSession>();
-    session.elapsed = (wave - 1) as f32 * 60. + 16.4;
+    session.elapsed = (wave - 1) as f32 * 60.;
     session.core_max_hp = 100000.;
     session.core_hp = 100000.;
     let mut vitals = world.resource_mut::<HeroVitals>();
@@ -110,7 +110,7 @@ fn observe(world: &mut World) {
             state.enemies_before,
             state.count
         );
-        if state.wave == 4 {
+        if state.wave == 4 && state.bursts >= 1 {
             assert!(
                 world.query::<&Enemy>().iter(world).any(|enemy| enemy.elite),
                 "fourth-wave raid promotes a real elite"
@@ -126,10 +126,10 @@ fn observe(world: &mut World) {
     world.resource_mut::<RaidProbe>().prior_remaining = remaining;
     if frame == 1790 {
         let state = world.resource::<RaidProbe>();
-        assert_eq!(state.warnings, 2);
-        assert_eq!(state.bursts, 2);
+        assert_eq!(state.warnings, 3);
+        assert_eq!(state.bursts, 3);
         println!(
-            "[capture] PASS raid-pressure-{}: two real portal warnings, paused countdown, two announced arrival counts, bounded live actors",
+            "[capture] PASS raid-pressure-{}: three real portal warnings, paused countdown, three announced arrival counts, bounded live actors",
             state.wave
         );
     }

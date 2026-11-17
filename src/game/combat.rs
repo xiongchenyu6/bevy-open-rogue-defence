@@ -594,7 +594,6 @@ fn spawn_wave(
     let delta = time.delta_secs();
     let wave_index = session.wave.saturating_sub(1).min(24) as usize;
     let wave = pressure_wave(WAVES[wave_index], session.wave, pressure.as_deref());
-    let interval = wave_spawn_interval(wave);
     let minute =
         super::campaign::timeline_seconds(session.elapsed, session.duration).rem_euclid(60.0);
     if let Some(raid) = raid.as_deref_mut() {
@@ -649,9 +648,6 @@ fn spawn_wave(
         }
         wave_runtime.wave = session.wave;
         wave_runtime.spawned = 0;
-        // The first unit enters at the start of each minute, followed by an
-        // even count/60 cadence. This keeps all N entries inside that minute.
-        wave_runtime.accumulator = interval;
     }
     wave_runtime.accumulator = minute;
     let due = scheduled_spawn_count(session.wave, wave, wave_runtime.accumulator);
@@ -952,10 +948,6 @@ const fn elite_affix_from_roll(roll: u32) -> EliteAffixKind {
         6 => EliteAffixKind::Brood,
         _ => EliteAffixKind::Siege,
     }
-}
-
-fn wave_spawn_interval(wave: WaveDef) -> f32 {
-    60.0 / f32::from(wave.count.max(1))
 }
 
 const fn visual_for_archetype(archetype: usize) -> usize {
@@ -3583,8 +3575,8 @@ mod tests {
 
     #[test]
     fn pressure_scales_actual_wave_spawns_once_but_not_campaign_bosses() {
-        let mut baseline = wave_test_app(540.0, 10);
-        let mut tuned = wave_test_app(540.0, 10);
+        let mut baseline = wave_test_app(544.0, 10);
+        let mut tuned = wave_test_app(544.0, 10);
         tuned.init_resource::<EnemyPressureSettings>();
         baseline
             .world_mut()
@@ -5657,6 +5649,35 @@ mod tests {
     }
 
     #[test]
+    fn opening_assaults_spawn_real_groups_at_every_supported_speed() {
+        for speed in [1.0_f32, 2.0, 4.0, 8.0, 16.0, 32.0] {
+            let mut app = wave_test_app(0.0, 1);
+            app.init_resource::<RaidWarning>();
+            app.world_mut().insert_resource(RunRng::from_seed(42));
+            let mut elapsed = 0.0_f32;
+            let mut previous = 0;
+            let mut groups = Vec::new();
+            while elapsed < 60.0 {
+                app.world_mut().resource_mut::<GameSession>().elapsed = elapsed;
+                app.world_mut().run_system_once(spawn_wave).unwrap();
+                let count = app.world_mut().query::<&Enemy>().iter(app.world()).count();
+                if count > previous {
+                    groups.push(count - previous);
+                }
+                previous = count;
+                elapsed += speed / 60.0;
+            }
+            assert_eq!(groups, vec![4, 8, 6], "speed {speed}");
+            assert!(
+                app.world()
+                    .resource::<WaveSpawnRuntime>()
+                    .backlog
+                    .is_empty()
+            );
+        }
+    }
+
+    #[test]
     fn announced_rush_enters_as_one_real_group_and_never_repeats_on_the_same_frame() {
         let mut app = wave_test_app(199.999, 4);
         app.init_resource::<RaidWarning>();
@@ -5664,15 +5685,15 @@ mod tests {
         let mut living = app
             .world_mut()
             .query_filtered::<Entity, (With<Enemy>, Without<BossEnemy>)>();
-        assert_eq!(living.iter(app.world()).count(), 5);
+        assert_eq!(living.iter(app.world()).count(), 8);
         assert!(app.world().resource::<RaidWarning>().remaining_secs > 0.0);
-        assert_eq!(app.world().resource::<RaidWarning>().count, 9);
+        assert_eq!(app.world().resource::<RaidWarning>().count, 14);
         app.world_mut().resource_mut::<GameSession>().elapsed = 200.0;
         app.world_mut().run_system_once(spawn_wave).unwrap();
-        assert_eq!(living.iter(app.world()).count(), 14);
+        assert_eq!(living.iter(app.world()).count(), 22);
         assert_eq!(app.world().resource::<RaidWarning>().remaining_secs, 0.0);
         app.world_mut().run_system_once(spawn_wave).unwrap();
-        assert_eq!(living.iter(app.world()).count(), 14);
+        assert_eq!(living.iter(app.world()).count(), 22);
         app.world_mut().resource_mut::<GameSession>().elapsed = 221.0;
         app.world_mut().run_system_once(spawn_wave).unwrap();
         assert_eq!(app.world().resource::<RaidWarning>().remaining_secs, 3.0);
@@ -6810,15 +6831,6 @@ mod tests {
         );
         assert_eq!(total.wood, 16);
         assert_eq!(enemy_base_scale(second.hp, true, 0.1), 1.25);
-    }
-
-    #[test]
-    fn wave_pacing_uses_exact_count_over_sixty_seconds() {
-        assert!((wave_spawn_interval(WAVES[0]) - 60.0 / 18.0).abs() < 0.0001);
-        assert!((wave_spawn_interval(WAVES[24]) - 60.0 / 96.0).abs() < 0.0001);
-        for wave in WAVES {
-            assert!((wave_spawn_interval(wave) * f32::from(wave.count) - 60.0).abs() < 0.001);
-        }
     }
 
     #[test]
