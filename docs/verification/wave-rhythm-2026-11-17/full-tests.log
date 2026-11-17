@@ -859,4 +859,3 @@ test game::combat::tests::production_fatal_boss_damage_consumes_life_despite_ord
 test game::progression::draft_tests::audit_seeded_skill_purchase_budgets_through_real_card_clicks ... ok
 
 test result: ok. 844 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 4.27s
-

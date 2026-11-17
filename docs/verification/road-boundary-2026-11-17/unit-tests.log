@@ -1,0 +1,28 @@
+warning: Git tree '/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence' is dirty
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libX11' has been renamed to 'libx11'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXcursor' has been renamed to 'libxcursor'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXi' has been renamed to 'libxi'
+evaluation warning: The xorg package set has been deprecated, 'xorg.libXrandr' has been renamed to 'libxrandr'
+   Compiling rogue_commander v0.1.0 (/home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2m 46s
+     Running unittests src/lib.rs (target/debug/deps/rogue_commander-b21edefaad3c53d5)
+
+running 12 tests
+test game::mobile_input::tests::arena_bounds_keep_the_hero_footprint_on_the_paving ... ok
+test game::mobile_input::tests::autoplay_direction_keeps_changing_when_run_elapsed_is_frozen ... ok
+test game::mobile_input::tests::dodge_moves_exact_distance_until_it_reaches_the_arena_edge ... ok
+test game::mobile_input::tests::ground_axes_project_right_up_and_keep_analog_diagonals_bounded ... ok
+test game::mobile_input::tests::joystick_keeps_the_first_touch_until_it_is_cleared ... ok
+test game::mobile_input::tests::joystick_deadzone_scales_then_clamps_drag_strength ... ok
+test game::mobile_input::tests::release_cancel_or_missing_touch_ends_joystick_tracking ... ok
+test game::mobile_input::tests::wind_boots_reduce_dodge_cooldown_by_fifteen_percent ... ok
+test game::mobile_input::tests::phone_joystick_only_starts_inside_the_visible_lower_left_pad ... ok
+test game::mobile_input::tests::idle_and_upward_dodge_use_the_same_screen_ground_basis ... ok
+test game::mobile_input::tests::camera_less_manual_and_camera_present_autoplay_keep_world_routes ... ok
+test game::mobile_input::tests::arrows_controller_and_actual_touch_share_camera_relative_movement ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 833 filtered out; finished in 0.01s

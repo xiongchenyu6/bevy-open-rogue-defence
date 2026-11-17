@@ -112,6 +112,8 @@ mod controller_input_capture;
 
 #[path = "capture/hud_input.rs"]
 mod hud_input_capture;
+#[path = "capture/road_boundary.rs"]
+mod road_boundary_capture;
 
 #[path = "capture/enemy_attacks.rs"]
 mod enemy_attacks_capture;
@@ -673,6 +675,9 @@ fn main() {
     if matches!(scenario, "controller-input" | "controller-scroll") {
         controller_input_capture::install(&mut apps.main);
     }
+    if scenario == "road-boundary" {
+        road_boundary_capture::install(&mut apps.main);
+    }
     if scenario == "hud-input" {
         hud_input_capture::install(&mut apps.main);
     }
@@ -1224,6 +1229,11 @@ fn configure_scenario(world: &mut World, scenario: &str) {
         raid_pressure_capture::configure(world, scenario);
         return;
     }
+    if scenario == "road-boundary" {
+        road_boundary_capture::configure(world);
+        return;
+    }
+
     if scenario.starts_with("elite-pressure-") {
         elite_pressure_capture::configure(world, scenario);
         return;

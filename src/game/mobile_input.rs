@@ -13,8 +13,9 @@ use super::{
 
 pub const HERO_MIN_X: f32 = -10.0;
 pub const HERO_MAX_X: f32 = 10.0;
-pub const HERO_MIN_Z: f32 = -12.0;
-pub const HERO_MAX_Z: f32 = 12.0;
+// Paving extends to z = ±5. Keep the hero footprint inside the road.
+pub const HERO_MIN_Z: f32 = -4.4;
+pub const HERO_MAX_Z: f32 = 4.4;
 
 pub struct MobileInputPlugin;
 
@@ -624,15 +625,22 @@ mod tests {
         assert!((open.x - 3.2).abs() < 0.0001);
         assert_eq!(open.z, 0.0);
 
-        let clamped = dodge_destination(Vec3::new(9.0, 0.0, 11.5), Vec2::ONE);
+        let clamped = dodge_destination(Vec3::new(9.0, 0.0, 4.0), Vec2::ONE);
         assert_eq!(clamped.x, HERO_MAX_X);
         assert_eq!(clamped.z, HERO_MAX_Z);
     }
 
     #[test]
-    fn arena_bounds_match_the_gameplay_spec() {
+    fn arena_bounds_keep_the_hero_footprint_on_the_paving() {
         assert_eq!((HERO_MIN_X, HERO_MAX_X), (-10.0, 10.0));
-        assert_eq!((HERO_MIN_Z, HERO_MAX_Z), (-12.0, 12.0));
+        assert_eq!((HERO_MIN_Z, HERO_MAX_Z), (-4.4, 4.4));
+        for z in [-12.0, -5.0, 5.0, 12.0] {
+            let mut position = Vec3::new(0.0, 0.0, z);
+            clamp_hero_position(&mut position);
+            assert!(position.z.abs() + 0.6 <= 5.0001);
+            let landed = dodge_destination(position, Vec2::new(0.0, z.signum()));
+            assert!(landed.z.abs() + 0.6 <= 5.0001);
+        }
     }
 
     #[test]

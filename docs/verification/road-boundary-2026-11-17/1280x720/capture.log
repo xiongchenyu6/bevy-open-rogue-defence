@@ -1,0 +1,32 @@
+[capture] selective PNG frames: {100, 180, 380, 650, 890}; all 920 simulation/render updates retained
+CAPTURE_ASSET_ROOT /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/assets
+[2m2026-11-17T10:27:28.666530Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (NixOS 26.11)", kernel: "7.3.0", cpu: "AMD Ryzen 7 5800H with Radeon Graphics", core_count: "8", memory: "27.3 GiB" }
+[2m2026-11-17T10:27:29.071953Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "NVIDIA GeForce RTX 3070 Laptop GPU", vendor: 4318, device: 9437, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "615.78.08", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: false }
+[2m2026-11-17T10:27:29.407553Z[0m [32m INFO[0m [2mbevy_pbr::cluster[0m[2m:[0m GPU clustering is supported on this device.
+[2m2026-11-17T10:27:29.407610Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-11-17T10:27:29.695671Z[0m [33m WARN[0m [2mbevy_light[0m[2m:[0m Point lights and/or spot lights are present, but no entity has `ShadowLodOrigin`, and no camera that renders to the window has been found. Consider using the `ShadowLodOrigin` component to set a LOD origin.
+[capture] authored scene dependencies loaded and renderer settled
+[capture] warm-up elapsed unchanged at 0.000s (paused restored to false)
+[capture] render target warmed
+[2m2026-11-17T10:27:31.062430Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/road-boundary-2026-11-17/1280x720/frames/frame00100.png
+[capture] saved 1/1 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/road-boundary-2026-11-17/1280x720/frames/frame00100.png (1012943 bytes)
+[capture] PASS real edge dodge frame=171 position=Vec3(10.0, 0.0, -4.4)
+[capture] PASS held road edge frame=180 position=Vec3(10.0, 0.0, -4.4)
+[2m2026-11-17T10:27:31.656614Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/road-boundary-2026-11-17/1280x720/frames/frame00180.png
+[capture] saved 2/2 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/road-boundary-2026-11-17/1280x720/frames/frame00180.png (1012655 bytes)
+[capture] PASS real edge dodge frame=371 position=Vec3(-10.0, 0.0, 4.4)
+[capture] PASS held road edge frame=380 position=Vec3(-10.0, 0.0, 4.4)
+[2m2026-11-17T10:27:33.179268Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/road-boundary-2026-11-17/1280x720/frames/frame00380.png
+[capture] saved 3/3 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/road-boundary-2026-11-17/1280x720/frames/frame00380.png (1012453 bytes)
+[capture] PASS real edge dodge frame=631 position=Vec3(10.0, 0.0, -4.4)
+[capture] PASS held road edge frame=650 position=Vec3(10.0, 0.0, -4.4)
+[2m2026-11-17T10:27:35.479242Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/road-boundary-2026-11-17/1280x720/frames/frame00650.png
+[capture] saved 4/4 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/road-boundary-2026-11-17/1280x720/frames/frame00650.png (1011813 bytes)
+[capture] PASS real edge dodge frame=871 position=Vec3(-10.0, 0.0, 4.4)
+[capture] PASS held road edge frame=890 position=Vec3(-10.0, 0.0, 4.4)
+[2m2026-11-17T10:27:37.434604Z[0m [32m INFO[0m [2mbevy_render::view::window::screenshot[0m[2m:[0m Screenshot saved to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/road-boundary-2026-11-17/1280x720/frames/frame00890.png
+[capture] saved 5/5 /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/road-boundary-2026-11-17/1280x720/frames/frame00890.png (1011645 bytes)
+[capture] PASS road-boundary: keyboard/touch holds and four real dodges stay on paving; cancellation clears movement
+[capture] all 5 screenshot(s) saved after 1 wait frame(s)
+[capture] PASS material finish: 69 live imported materials, matte roughness and reduced reflectance
+[capture] wrote 920 simulation frames to /home/freeman.xiong/Documents/github/xiongchenyu6/bevy-open-rogue-defence/docs/verification/road-boundary-2026-11-17/1280x720/frames

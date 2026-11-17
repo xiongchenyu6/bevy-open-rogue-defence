@@ -7,4 +7,3 @@ test rush_tests::promotion_adds_exactly_two_elites_without_extra_spawn_budget ..
 test tests::weighted_choice_is_deterministic_and_in_range ... ok
 
 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
-

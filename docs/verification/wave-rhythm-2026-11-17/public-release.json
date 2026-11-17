@@ -1,0 +1,18 @@
+{
+  "run": "https://github.com/xiongchenyu6/bevy-open-rogue-defence/actions/runs/44061917790",
+  "conclusion": "success",
+  "build": {
+    "revision": "5abbfa07f53f7cc66520f412ead184833c34d6e7",
+    "engine_inputs_sha256": "2c7e513f42af3111949f4df83f3c559fb673041e32d8e052b8f36618ad52b79b",
+    "wasm_sha256": "2015ab4a5bd3d4fa0df1b17241d874dc3617297485563db09cd6e3cca983d77d",
+    "wasm_bytes": 70984866
+  },
+  "manifestVersion": "76bdb7dd75ed4be3bd93c224793a096d6867af9d1e4d96e54cf64d69bad9e2d6",
+  "verifiedFiles": [
+    {
+      "path": "rogue_commander_bg.wasm.gz",
+      "sha256": "2db555e69442bcfe3108d28db509678a057ad79a1fd13ee20469cad6a269914d",
+      "bytes": 14376734
+    }
+  ]
+}

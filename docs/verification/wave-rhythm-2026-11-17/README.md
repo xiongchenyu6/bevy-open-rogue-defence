@@ -41,3 +41,12 @@ Use `raid-pressure-4` and `844x390` for the second probe. The 1795 updates cover
 one minute including the deliberate pause; PNG selection only reduces disk output,
 not simulation work. `timings.csv` is serialized simulation/render-wait telemetry,
 not a mobile FPS benchmark. The logs identify the actual NVIDIA Vulkan adapter.
+
+## Tests and publication
+
+- Actual schedule tests: 5 passed (`schedule-tests.txt`).
+- Full native library suite: 844 passed, 0 failed, 1 ignored (`full-tests.log`),
+  including real ECS group delivery at 1/2/4/8/16/32x speed.
+- Pages run 44061917790 succeeded for `5abbfa07f53f7cc66520f412ead184833c34d6e7`.
+  Public build and manifest revisions match; downloaded compressed WASM passed
+  SHA-256 verification (`public-release.json`).
