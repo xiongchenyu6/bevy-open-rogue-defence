@@ -1,0 +1,26 @@
+{
+  "passed": [
+    "language switches before Start and during resource preparation without resetting loading state",
+    "actual Start button prepares resources before engine initialization",
+    "actual second Start initializes from saved resources with zero asset downloads",
+    "chapter preview reports required download without fetching combat and Back cancels before starting",
+    "Back during a blocked chapter transfer cancels the download without entering a run",
+    "chapter confirmation saves combat before signaling ready; mobile localized modal fits viewport",
+    "another chapter starts from the saved shared pack without another download prompt",
+    "delayed unawaited chapter release cannot clear the next chapter resource protection",
+    "offline manager downloads extras, protects live battle assets and removes extras without clearing launcher or progress",
+    "Back while final combat pin is in flight never signals ready afterward and releases the canceled expedition lease",
+    "update offer and both actions fit desktop, landscape phone and portrait viewports",
+    "Later starts the old engine instead of silently upgrading",
+    "update offer survives a full browser restart and natural worker activation",
+    "Download & update commits, reloads and starts the new engine",
+    "failed update shows retry while keeping Start available for previous engine",
+    "legacy network-only worker migrates through waiting worker and resumes Start after one reload",
+    "worker activating during its STATUS reply retains the inspected reference and prepares core",
+    "running client discovers new release without downloads or reload, and update activation is blocked during an expedition",
+    "settings update after returning to chapters activates new engine and reuses unchanged WASM",
+    "quick Start racing delayed initial STATUS offers waiting update before loading engine; explicit Later starts installed version"
+  ],
+  "pageErrors": [],
+  "engine": "stub only; production HTML/CSS/PWA/SW and real CacheStorage"
+}

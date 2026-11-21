@@ -21,3 +21,8 @@
 .downloads-actions #downloads-confirm { background: #e7b85e; color: #162126; font-weight: bold; }
 .downloads-actions button:focus-visible { outline: 2px solid white; outline-offset: 3px; }
 @media (max-height: 540px) { #downloads-dialog { padding: 16px; } #downloads-dialog h2 { font-size: 20px; margin-bottom: 8px; } .downloads-actions { margin-top: 10px; } }
+#update-notice { position: fixed; z-index: 100; left: 50%; bottom: max(16px, env(safe-area-inset-bottom)); transform: translateX(-50%); box-sizing: border-box; max-width: min(520px, calc(100vw - 32px)); padding: 12px 16px; border: 1px solid #c8a05b; border-radius: 8px; background: #0d202cee; color: #e9e4d4; font: 14px/1.5 sans-serif; pointer-events: none; }
+#downloads-update { border-top: 1px solid #40616c; margin-top: 16px; padding-top: 8px; }
+#downloads-update button { min-height: 44px; margin: 4px 8px 0 0; padding: 8px 12px; border: 1px solid #c8a05b; border-radius: 6px; background: transparent; color: #e9e4d4; font: inherit; cursor: pointer; }
+#downloads-update button:disabled { opacity: .45; cursor: default; }
+#downloads-update-apply { background: #e7b85e !important; color: #162126 !important; }

@@ -564,7 +564,11 @@
         void enterMobilePlayMode();
 
         try {
-          await prepareGameCache();
+          if (await prepareGameCache() === 'update-available') {
+            setStatus("idle"); progress.style.width = "0";
+            start.disabled = false; setStartLabel("start");
+            return;
+          }
           const { default: init } = await import("./rogue_commander.js");
           const wasm = await downloadCompressedWasm();
           setStatus("initializing");

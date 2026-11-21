@@ -17,8 +17,16 @@ let dismissed = false;
 let state = 'checking';
 let amount = 0;
 let total = 0;
+let checkingUpdate = false;
+let notifiedVersion;
+let currentRevision;
+let availableRevision;
+const notice = document.createElement('p');
+notice.id = 'update-notice'; notice.hidden = true; notice.setAttribute('role', 'status');
+document.body.append(notice);
 const copy = {
   en: {
+    notice: 'New version available. Open Settings → Downloads & offline play to update after your expedition.',
     checking: 'Checking saved game resources…',
     first: 'Save the launcher first. Expedition resources download when you choose a chapter.',
     ready: 'Launcher saved · Chapters download only when needed',
@@ -31,6 +39,7 @@ const copy = {
     update: 'Download & update', cachedUpdate: 'Use new version', later: 'Later', retry: 'Retry update',
   },
   'zh-CN': {
+    notice: '发现新版本。远征结束后，可在设置 → 下载与离线游玩中更新。',
     checking: '正在检查已保存的游戏资源…',
     first: '先保存启动资源，选择章节时再下载战斗内容。',
     ready: '启动资源已保存 · 章节内容按需下载',
@@ -58,6 +67,8 @@ function render() {
   meter.max = Math.max(1, total);
   meter.value = amount;
   meter.setAttribute('aria-label', label.textContent);
+  notice.textContent = text.notice;
+  downloads?.render();
 }
 export function setCacheLanguage(value) { language = value === 'zh-CN' ? value : 'en'; render(); downloads.render(); }
 function request(worker, type, onProgress, timeout = 15000, target = 'latest', groups) {
@@ -90,18 +101,22 @@ async function inspect(worker, target = 'latest') {
   } catch { return null; }
 }
 async function discover() {
-  if (started || busy || !registration) return;
+  if (busy || !registration) return;
   const current = registration.active;
-  const currentStatus = await inspect(current, 'current');
-  if (currentStatus) active = current;
+  const currentStatus = await inspect(current, started ? 'client' : 'current');
+  if (currentStatus) { active = current; currentRevision = currentStatus.revision; }
   const waiting = registration.waiting || current;
   const next = await inspect(waiting);
-  if (started || busy) return;
+  if (busy) return;
   if (next && currentStatus && next.version !== currentStatus.version) {
-    candidate = waiting;
-    if (!dismissed) { total = next.downloadBytes; state = 'available'; }
+    candidate = waiting; availableRevision = next.revision;
+    if (started && notifiedVersion !== next.version) {
+      notifiedVersion = next.version; notice.hidden = false;
+      setTimeout(() => { notice.hidden = true; }, 10000);
+    }
+    if (!dismissed || started) { total = next.downloadBytes; state = 'available'; }
   } else {
-    candidate = null;
+    candidate = null; availableRevision = null;
     state = currentStatus?.ready ? 'ready' : 'first';
   }
   render();
@@ -109,6 +124,7 @@ async function discover() {
 function watch(worker) {
   worker?.addEventListener('statechange', () => { void discover(); });
 }
+let downloads;
 const connected = (async () => {
   if (!('serviceWorker' in navigator) || !window.isSecureContext) {
     state = 'unsupported'; render(); return null;
@@ -190,6 +206,15 @@ export async function prepareGameCache() {
   try {
     const worker = await installedWorker();
     if (!worker) return false;
+    // A quick Start click can race updatefound. Offer an already-installed new
+    // release before initializing the old engine; Later remains an explicit opt-out.
+    const nextWorker = registration.waiting || worker;
+    const [current, next] = await Promise.all([inspect(worker, 'current'), inspect(nextWorker)]);
+    if (!dismissed && state !== 'updateError' && next && current && next.version !== current.version) {
+      candidate = nextWorker; currentRevision = current.revision; availableRevision = next.revision;
+      total = next.downloadBytes; state = 'available';
+      return 'update-available';
+    }
     await prepare(worker, 'current', ['core']);
     if (worker === registration.waiting) await switchVersion(worker, true);
     active = worker; state = 'ready'; return true;
@@ -214,8 +239,34 @@ update.addEventListener('click', async () => {
 later.addEventListener('click', async () => {
   dismissed = true; state = (await inspect(active, 'current'))?.ready ? 'ready' : 'first'; render();
 });
-window.addEventListener('online', () => {
-  if (!started && !busy) registration?.update().then(discover).catch(() => {});
+async function checkForUpdates() {
+  if (checkingUpdate || busy) return;
+  checkingUpdate = true;
+  try {
+    const reg = await connected;
+    await reg?.update();
+    await discover();
+  } catch { /* Offline sessions retain their current version. */ }
+  finally { checkingUpdate = false; }
+}
+async function applyUpdate() {
+  if (!candidate || busy || window.rogueExpeditionActive) return;
+  busy = true; render();
+  try { await prepare(candidate, 'latest'); await switchVersion(candidate, false); }
+  catch (error) { console.warn('Game update not activated', error); state = 'updateError'; }
+  finally { busy = false; render(); }
+}
+window.addEventListener('online', () => { void checkForUpdates(); });
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') void checkForUpdates();
 });
-const downloads = createDownloadUI({worker: installedWorker, request, language: () => language});
+setInterval(() => {
+  if (document.visibilityState === 'visible') void checkForUpdates();
+}, 5 * 60 * 1000);
+downloads = createDownloadUI({worker: installedWorker, request, language: () => language,
+  updates: {
+    status: () => ({available: Boolean(candidate), currentRevision, availableRevision, busy, text: label.textContent}),
+    check: checkForUpdates, apply: applyUpdate,
+  },
+});
 render();

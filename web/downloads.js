@@ -1,9 +1,9 @@
 // Contextual chapter preparation and offline management, reached through settings.
-export function createDownloadUI({worker, request, language}) {
+export function createDownloadUI({worker, request, language, updates}) {
   const dialog = document.createElement('dialog');
   dialog.id = 'downloads-dialog';
   dialog.setAttribute('aria-labelledby', 'downloads-title');
-  dialog.innerHTML = `<h2 id="downloads-title"></h2><p id="downloads-summary" aria-live="polite"></p><progress id="downloads-meter" hidden></progress><div id="downloads-groups"></div><p id="downloads-note"></p><div class="downloads-actions"><button id="downloads-confirm" type="button"></button><button id="downloads-remove" type="button"></button><button id="downloads-close" type="button"></button></div>`;
+  dialog.innerHTML = `<h2 id="downloads-title"></h2><p id="downloads-summary" aria-live="polite"></p><progress id="downloads-meter" hidden></progress><div id="downloads-groups"></div><p id="downloads-note"></p><section id="downloads-update"><p id="downloads-update-status" role="status"></p><small id="downloads-version"></small><button id="downloads-update-check" type="button"></button><button id="downloads-update-apply" type="button" hidden></button></section><div class="downloads-actions"><button id="downloads-confirm" type="button"></button><button id="downloads-remove" type="button"></button><button id="downloads-close" type="button"></button></div>`;
   document.body.append(dialog);
   window.rogueDownloadsOpen = false;
   dialog.addEventListener('close', () => { window.rogueDownloadsOpen = false; });
@@ -11,8 +11,12 @@ export function createDownloadUI({worker, request, language}) {
   const meter = dialog.querySelector('progress'), groups = dialog.querySelector('#downloads-groups');
   const note = dialog.querySelector('#downloads-note'), confirm = dialog.querySelector('#downloads-confirm');
   const remove = dialog.querySelector('#downloads-remove'), close = dialog.querySelector('#downloads-close');
+  const updateSection = dialog.querySelector('#downloads-update'), updateStatus = dialog.querySelector('#downloads-update-status');
+  const version = dialog.querySelector('#downloads-version');
+  const checkUpdate = dialog.querySelector('#downloads-update-check'), applyUpdate = dialog.querySelector('#downloads-update-apply');
+  window.rogueExpeditionActive = false;
   const text = {
-    en: {chapter: 'Prepare expedition', manage: 'Downloads & offline play', checking: 'Checking saved resources…',
+    en: {version: 'Installed', availableVersion: 'Available', checkUpdate: 'Check for updates', applyUpdate: 'Update & restart', expeditionUpdate: 'New version available. Return to the chapter menu to update safely.', chapter: 'Prepare expedition', manage: 'Downloads & offline play', checking: 'Checking saved resources…',
       size: n => `${n} to download`, ready: 'These resources are saved and ready to play offline.',
       shared: 'All six chapters share this battle pack. Heroes, enemies and skills are prepared before combat.',
       optional: 'Download everything for offline play. Saved files are reused; only missing content is fetched.',
@@ -24,7 +28,7 @@ export function createDownloadUI({worker, request, language}) {
       removed: 'Extra downloads removed. Your progress and launcher are safe.',
       core: 'Launcher & shared interface', combat: 'Shared expedition pack', optionalGroup: 'Credits & supporting files',
       saved: 'Saved', missing: 'Not downloaded', used: n => `Saved content: ${n}`},
-    'zh-CN': {chapter: '准备远征', manage: '下载与离线游玩', checking: '正在检查已保存的资源…',
+    'zh-CN': {version: '当前版本', availableVersion: '可用版本', checkUpdate: '检查更新', applyUpdate: '更新并重启', expeditionUpdate: '发现新版本，请先返回章节菜单，再安全更新。', chapter: '准备远征', manage: '下载与离线游玩', checking: '正在检查已保存的资源…',
       size: n => `需要下载 ${n}`, ready: '资源已保存，可以离线游玩。',
       shared: '六个章节共用战斗资源包。进入战斗前会准备好英雄、敌人和技能。',
       optional: '可下载全部内容供离线游玩。已有文件会复用，只下载缺少的内容。',
@@ -40,6 +44,14 @@ export function createDownloadUI({worker, request, language}) {
   let received = 0, total = 0, generation = 0, currentWorker;
   function render() {
     const t = text[language()] || text.en;
+    const update = updates?.status();
+    updateSection.hidden = mode !== 'manage' || !updates;
+    updateStatus.textContent = update?.available && window.rogueExpeditionActive ? t.expeditionUpdate : update?.text || '';
+    version.textContent = update?.currentRevision ? `${t.version} ${update.currentRevision.slice(0, 7)}${update.availableRevision ? ` · ${t.availableVersion} ${update.availableRevision.slice(0, 7)}` : ''}` : '';
+    checkUpdate.textContent = t.checkUpdate; applyUpdate.textContent = t.applyUpdate;
+    checkUpdate.disabled = busy || update?.busy;
+    applyUpdate.hidden = !update?.available;
+    applyUpdate.disabled = busy || update?.busy || window.rogueExpeditionActive;
     title.textContent = t[mode === 'chapter' ? 'chapter' : 'manage'];
     summary.textContent = phase === 'progress' ? t.progress(bytes(received), bytes(total)) :
       ['error','protected','removed','unavailable'].includes(phase) ? t[phase] :
@@ -47,10 +59,10 @@ export function createDownloadUI({worker, request, language}) {
     note.textContent = t[mode === 'chapter' ? 'shared' : 'optional'];
     confirm.textContent = phase === 'unavailable' ? t.online : phase === 'error' ? t.retry : t[mode === 'chapter' ? 'download' : 'all'];
     confirm.hidden = mode === 'manage' && (status?.ready === true || phase === 'unavailable');
-    confirm.disabled = busy || phase === 'checking';
+    confirm.disabled = busy || update?.busy || phase === 'checking';
     close.textContent = t[busy ? 'cancel' : 'close'];
     remove.textContent = t.clear;
-    remove.hidden = mode !== 'manage'; remove.disabled = busy || !status;
+    remove.hidden = mode !== 'manage'; remove.disabled = busy || update?.busy || !status;
     meter.hidden = phase !== 'progress'; meter.max = Math.max(1,total); meter.value = received;
     groups.replaceChildren();
     if (mode === 'manage' && status) {
@@ -74,6 +86,7 @@ export function createDownloadUI({worker, request, language}) {
   async function finishChapter(id) {
     await pinGroups(['combat']);
     if (id !== generation) return;
+    window.rogueExpeditionActive = true;
     window.rogueChapterDownload = {stage, status: 'ready'};
     dialog.close();
   }
@@ -88,6 +101,7 @@ export function createDownloadUI({worker, request, language}) {
       if (id !== generation) return;
       status = result;
       phase = 'ready';
+      if (mode === 'manage') void updates?.check();
       if (mode === 'chapter' && status.ready) await finishChapter(id);
     } catch (error) {
       if (id !== generation) return;
@@ -98,6 +112,7 @@ export function createDownloadUI({worker, request, language}) {
   confirm.addEventListener('click', async () => {
     if (busy) return;
     if (phase === 'unavailable' && mode === 'chapter') {
+      window.rogueExpeditionActive = true;
       window.rogueChapterDownload = {stage, status: 'ready'}; dialog.close(); return;
     }
     const id = generation; busy = true; phase = 'progress'; received = 0; total = status?.downloadBytes || 0; render();
@@ -134,8 +149,13 @@ export function createDownloadUI({worker, request, language}) {
     } catch { phase = 'protected'; }
     finally { busy = false; render(); }
   });
+  checkUpdate.addEventListener('click', async () => { await updates?.check(); render(); });
+  applyUpdate.addEventListener('click', async () => { await updates?.apply(); render(); });
   window.roguePrepareChapter = stage => { void show('chapter', stage); };
   window.rogueOpenDownloads = () => { void show('manage'); };
-  window.rogueReleaseChapter = () => pinGroups([]).catch(() => {});
+  window.rogueReleaseChapter = () => {
+    window.rogueExpeditionActive = false; render();
+    return pinGroups([]).catch(() => {});
+  };
   return {render};
 }
