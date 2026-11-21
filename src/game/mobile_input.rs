@@ -11,16 +11,14 @@ use super::{
     DodgeState, GameSession, Hero, HeroVitals, MoveIntent, PlayerBuild,
 };
 
-pub const HERO_MIN_X: f32 = -10.0;
-pub const HERO_MAX_X: f32 = 10.0;
-// Paving extends to z = ±5. Keep the hero footprint inside the road.
-pub const HERO_MIN_Z: f32 = -4.4;
-pub const HERO_MAX_Z: f32 = 4.4;
+#[cfg(test)]
+use super::road_collision::{HERO_MAX_X, HERO_MAX_Z, HERO_MIN_X, HERO_MIN_Z};
 
 pub struct MobileInputPlugin;
 
 impl Plugin for MobileInputPlugin {
     fn build(&self, app: &mut App) {
+        super::road_collision::install(app);
         app.init_resource::<ControlScheme>()
             .add_systems(
                 PreUpdate,
@@ -316,8 +314,10 @@ fn move_and_dodge_hero(
     dodge.requested = false;
 
     let direction = Vec3::new(movement.x, 0.0, movement.y);
-    transform.translation += direction * build.move_speed * time.delta_secs();
-    clamp_hero_position(&mut transform.translation);
+    transform.translation = super::road_collision::sweep_and_slide(
+        transform.translation,
+        direction * build.move_speed * time.delta_secs(),
+    );
     if direction.length_squared() > 0.01 {
         let yaw = direction.x.atan2(direction.z);
         transform.rotation = Quat::from_rotation_y(yaw);
@@ -330,14 +330,15 @@ fn dodge_cooldown_duration(multiplier: f32) -> f32 {
 
 pub fn dodge_destination(origin: Vec3, direction: Vec2) -> Vec3 {
     let direction = direction.normalize_or_zero();
-    let mut destination = origin + Vec3::new(direction.x, 0.0, direction.y) * DODGE_DISTANCE;
-    clamp_hero_position(&mut destination);
-    destination
+    super::road_collision::sweep_and_slide(
+        origin,
+        Vec3::new(direction.x, 0.0, direction.y) * DODGE_DISTANCE,
+    )
 }
 
+#[cfg(test)]
 fn clamp_hero_position(position: &mut Vec3) {
-    position.x = position.x.clamp(HERO_MIN_X, HERO_MAX_X);
-    position.z = position.z.clamp(HERO_MIN_Z, HERO_MAX_Z);
+    *position = super::road_collision::constrain(*position);
 }
 
 pub(crate) fn reset_run(world: &mut World) {
@@ -406,6 +407,7 @@ mod tests {
                 )
                     .chain(),
             );
+        super::super::road_collision::install(&mut app);
         let window = app
             .world_mut()
             .spawn((
@@ -656,5 +658,42 @@ mod tests {
         assert_ne!(before, during_archive);
         assert!(before.length() <= 1.0);
         assert!(during_archive.length() <= 1.0);
+    }
+    #[test]
+    fn collision_regression_recovers_paused_and_dead_heroes() {
+        for dead in [false, true] {
+            let (mut app, hero, _) = manual_app(false);
+            app.world_mut().resource_mut::<GameSession>().paused = !dead;
+            app.world_mut().resource_mut::<HeroVitals>().alive = !dead;
+            app.world_mut()
+                .get_mut::<Transform>(hero)
+                .unwrap()
+                .translation = Vec3::new(50., if dead { -1000. } else { 0. }, 12.);
+            app.update();
+            let p = app.world().get::<Transform>(hero).unwrap().translation;
+            assert!(
+                p.x <= HERO_MAX_X && p.z <= HERO_MAX_Z,
+                "inactive hero escaped: {p:?}"
+            );
+            assert_eq!(p.y, if dead { -1000. } else { 0. });
+        }
+    }
+
+    #[test]
+    fn collision_regression_repairs_late_update_writer() {
+        let (mut app, hero, _) = manual_app(false);
+        app.add_systems(
+            Update,
+            (|mut heroes: Query<&mut Transform, With<Hero>>| {
+                heroes.single_mut().unwrap().translation = Vec3::new(-90., 0., -12.);
+            })
+            .after(move_and_dodge_hero),
+        );
+        app.update();
+        let p = app.world().get::<Transform>(hero).unwrap().translation;
+        assert!(
+            p.x >= HERO_MIN_X && p.z >= HERO_MIN_Z,
+            "late writer escaped: {p:?}"
+        );
     }
 }

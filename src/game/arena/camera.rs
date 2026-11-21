@@ -110,7 +110,21 @@ fn hero_base(point: Vec3, size: Vec2, touch: bool) -> Vec3 {
     let base = responsive_base(size);
     let pixel = projected(point, base, size);
     let safe = gameplay_rect(size, touch);
-    base + screen_shift(pixel.clamp(safe.min, safe.max) - pixel, size)
+    // Fit the complete standing body/footprint, not only a point at its center.
+    // Linear orthographic projection gives the exact screen bounds of this box.
+    let pose = initial_transform();
+    let half_body = Vec3::new(0.65, BODY_CENTER_HEIGHT, 0.65);
+    let extent = (Vec2::new(
+        pose.right().abs().dot(half_body),
+        pose.up().abs().dot(half_body),
+    ) + Vec2::splat(super::super::hit_feedback::MAX_SHAKE_OFFSET))
+        * (size.y / vertical_span(size))
+        + Vec2::splat(4.0);
+    let inset = extent.min(safe.size() * 0.5);
+    base + screen_shift(
+        pixel.clamp(safe.min + inset, safe.max - inset) - pixel,
+        size,
+    )
 }
 
 pub(super) fn update_battle_camera(
@@ -118,6 +132,7 @@ pub(super) fn update_battle_camera(
     session: Res<GameSession>,
     scheme: Res<ControlScheme>,
     vitals: Res<HeroVitals>,
+    recovery: Option<Res<super::super::road_collision::BoundaryRecovery>>,
     heroes: Query<&Transform, (With<Hero>, Without<BattleCamera>)>,
     mut cameras: Query<(&mut Transform, &mut Projection, &mut BattleCamera), Without<Hero>>,
 ) {
@@ -125,7 +140,8 @@ pub(super) fn update_battle_camera(
         return;
     };
     let size = Vec2::new(window.width().max(1.0), window.height().max(1.0));
-    let hold_pan = session.paused || session.finished || !vitals.alive;
+    let recovered_live_hero = vitals.alive && recovery.is_some_and(|recovery| recovery.0);
+    let hold_pan = (session.paused || session.finished || !vitals.alive) && !recovered_live_hero;
     for (mut transform, mut projection, mut camera) in &mut cameras {
         let span = vertical_span(size);
         let needs_projection_update = match projection.as_ref() {
@@ -146,8 +162,8 @@ pub(super) fn update_battle_camera(
         }
         let next_base = if hold_pan && camera.previous_size == size {
             camera.previous_base
-        } else if hold_pan {
-            // A resize reframes the held view while a paused or fallen hero stays off camera.
+        } else if hold_pan && !vitals.alive {
+            // A fallen hero remains hidden; resize the held battlefield instead.
             let previous_responsive = if camera.previous_size == Vec2::ZERO {
                 EYE
             } else {
@@ -222,7 +238,10 @@ mod tests {
         app.init_resource::<GameSession>()
             .init_resource::<HeroVitals>()
             .init_resource::<ControlScheme>()
-            .add_systems(Update, update_battle_camera);
+            .add_systems(
+                PostUpdate,
+                update_battle_camera.before(bevy::camera::CameraUpdateSystems),
+            );
         let window = app
             .world_mut()
             .spawn((
@@ -391,12 +410,12 @@ mod tests {
         }
         let point = Vec3::new(-10.0, BODY_CENTER_HEIGHT, 12.0);
         let old_pixel = bevy_projected(point, hero_base(point, size, false), size);
-        assert!((old_pixel.y - 310.0).abs() < 0.001);
+        assert!(old_pixel.y < 310.0);
         let old_body =
             Rect::from_corners(old_pixel - Vec2::splat(24.0), old_pixel + Vec2::splat(24.0));
         assert!(!old_body.intersect(controls[1]).is_empty());
         let new_pixel = bevy_projected(point, hero_base(point, size, true), size);
-        assert!((new_pixel.y - 219.0).abs() < 0.001);
+        assert!(new_pixel.y + 24.0 <= 219.0);
     }
 
     #[test]
@@ -419,7 +438,7 @@ mod tests {
         let touch = app.world().get::<Transform>(camera).unwrap().translation;
         assert!(touch.distance(keyboard) > 1.0);
         let point = Vec3::new(-10.0, BODY_CENTER_HEIGHT, 12.0);
-        assert!((bevy_projected(point, touch, Vec2::new(667.0, 375.0)).y - 219.0).abs() < 0.001);
+        assert!(bevy_projected(point, touch, Vec2::new(667.0, 375.0)).y + 24.0 <= 219.0);
     }
 
     #[derive(Resource, Default)]
@@ -501,7 +520,7 @@ mod tests {
             .add_message::<WindowResized>()
             .add_message::<WindowScaleFactorChanged>()
             .add_message::<AssetEvent<Image>>()
-            .add_systems(PostUpdate, camera_system);
+            .add_systems(PostUpdate, camera_system.after(update_battle_camera));
         app.world_mut()
             .entity_mut(camera)
             .insert((Camera::default(), RenderTarget::default()));
@@ -631,5 +650,124 @@ mod tests {
         let pixel = projected(point, pose.translation, Vec2::new(390., 844.));
         let safe = gameplay_rect(Vec2::new(390., 844.), false);
         assert!(pixel.distance(pixel.clamp(safe.min, safe.max)) < 0.001);
+    }
+    #[test]
+    fn collision_regression_frames_complete_body_in_narrow_views() {
+        for size in [
+            Vec2::new(320., 240.),
+            Vec2::new(844., 390.),
+            Vec2::new(1479., 1054.),
+            Vec2::new(390., 844.),
+        ] {
+            for touch in [false, true] {
+                let safe = gameplay_rect(size, touch);
+                for x in [-10., 10.] {
+                    for z in [-4.4, 4.4] {
+                        let center = Vec3::new(x, BODY_CENTER_HEIGHT, z);
+                        let base = hero_base(center, size, touch);
+                        for dx in [-0.65, 0.65] {
+                            for dz in [-0.65, 0.65] {
+                                for y in [0., 2.4] {
+                                    let pixel =
+                                        bevy_projected(Vec3::new(x + dx, y, z + dz), base, size);
+                                    assert!(
+                                        pixel.x >= safe.min.x - 0.001
+                                            && pixel.x <= safe.max.x + 0.001
+                                            && pixel.y >= safe.min.y - 0.001
+                                            && pixel.y <= safe.max.y + 0.001,
+                                        "body clipped: {size:?} touch={touch} world={center:?} pixel={pixel:?} safe={safe:?}"
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn paused_resize_and_boundary_recovery_keep_live_body_visible() {
+        let (mut app, window, hero, camera) = fixture((1479, 1054), Vec3::new(-10., 0., 4.4));
+        super::super::super::road_collision::install(&mut app);
+        app.configure_sets(
+            PostUpdate,
+            super::super::super::road_collision::HeroBoundarySet.before(update_battle_camera),
+        );
+        app.update();
+        app.world_mut().resource_mut::<GameSession>().paused = true;
+        for size in [
+            Vec2::new(844., 390.),
+            Vec2::new(320., 240.),
+            Vec2::new(390., 844.),
+        ] {
+            app.world_mut()
+                .get_mut::<Window>(window)
+                .unwrap()
+                .resolution
+                .set(size.x, size.y);
+            app.world_mut()
+                .get_mut::<Transform>(hero)
+                .unwrap()
+                .translation = Vec3::new(90., 0., 12.);
+            app.update();
+            let point = app.world().get::<Transform>(hero).unwrap().translation;
+            assert!(point.x <= 10. && point.z <= 4.4);
+            let base = app.world().get::<Transform>(camera).unwrap().translation;
+            let safe = gameplay_rect(size, false);
+            for y in [0., 2.4] {
+                let pixel = bevy_projected(point + Vec3::Y * y, base, size);
+                assert!(
+                    pixel.x >= safe.min.x
+                        && pixel.x <= safe.max.x
+                        && pixel.y >= safe.min.y
+                        && pixel.y <= safe.max.y
+                );
+            }
+        }
+    }
+    #[test]
+    fn maximum_screen_shake_keeps_complete_body_inside_safe_view() {
+        for size in [
+            Vec2::new(320., 240.),
+            Vec2::new(844., 390.),
+            Vec2::new(1479., 1054.),
+            Vec2::new(390., 844.),
+        ] {
+            for touch in [false, true] {
+                let safe = gameplay_rect(size, touch);
+                for x in [-10., 10.] {
+                    for z in [-4.4, 4.4] {
+                        let base = hero_base(Vec3::new(x, BODY_CENTER_HEIGHT, z), size, touch);
+                        for sx in [-1., 1.] {
+                            for sy in [-1., 1.] {
+                                let pose = initial_transform();
+                                let shaken = base
+                                    + (*pose.right() * sx + *pose.up() * sy)
+                                        * super::super::super::hit_feedback::MAX_SHAKE_OFFSET;
+                                for dx in [-0.65, 0.65] {
+                                    for dz in [-0.65, 0.65] {
+                                        for y in [0., 2.4] {
+                                            let p = bevy_projected(
+                                                Vec3::new(x + dx, y, z + dz),
+                                                shaken,
+                                                size,
+                                            );
+                                            assert!(
+                                                p.x >= safe.min.x - 0.001
+                                                    && p.x <= safe.max.x + 0.001
+                                                    && p.y >= safe.min.y - 0.001
+                                                    && p.y <= safe.max.y + 0.001,
+                                                "shake clipped body: {p:?} / {safe:?}"
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

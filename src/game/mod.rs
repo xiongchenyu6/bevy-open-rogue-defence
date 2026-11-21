@@ -70,6 +70,7 @@ mod localization;
 mod market;
 mod material_finish;
 mod mobile_input;
+mod road_collision;
 mod mobile_layout;
 mod model_animation;
 mod pooling;

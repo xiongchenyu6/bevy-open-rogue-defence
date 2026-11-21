@@ -24,7 +24,7 @@ use super::{Autoplay, Enemy, GameSession, Hero, HeroVisual, HeroVitals, ImpactFx
 
 const MAX_EVENTS_PER_FRAME: usize = 256;
 const PUNCH_SECONDS: f32 = 0.12;
-const MAX_SHAKE_OFFSET: f32 = 0.38;
+pub(crate) const MAX_SHAKE_OFFSET: f32 = 0.38;
 const SHAKE_DECAY_PER_SECOND: f32 = 2.4;
 /// Hit-stop is a 1x-2x feel tool; fast-forwarded battles skip it.
 const HIT_STOP_MAX_BATTLE_SPEED: f32 = 2.0;

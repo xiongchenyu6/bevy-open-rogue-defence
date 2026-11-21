@@ -8,8 +8,8 @@ use bevy::{
     prelude::*,
 };
 use rogue_commander::game::{
-    ActiveSkill, AttackClock, Autoplay, DodgeState, GameSession, Hero, HeroVisual, MoveIntent,
-    PlayerBuild, SelectedHero, SpawnDirector,
+    ActiveSkill, AttackClock, Autoplay, DodgeState, GameSession, Hero, HeroKind, HeroVisual,
+    MoveIntent, PlayerBuild, SelectedHero, SpawnDirector,
 };
 #[derive(Resource, Default)]
 struct Probe {
@@ -20,6 +20,7 @@ struct Probe {
 pub fn configure(world: &mut World) {
     world.remove_resource::<Autoplay>();
     world.resource_mut::<SelectedHero>().locked = true;
+    world.resource_mut::<SelectedHero>().kind = HeroKind::StoneWarden;
     world.resource_mut::<SpawnDirector>().enabled = false;
     world.resource_mut::<GameSession>().auto_bond_draws = false;
     world
@@ -136,7 +137,67 @@ fn input(world: &mut World) {
             });
         }
     }
+    // A second full perimeter pass uses only real touch messages, keeping the
+    // movement pad held while a second finger taps Dodge at every edge.
+    if (2550..4150).contains(&frame) {
+        let step = (frame - 2550) / 200;
+        let tick = (frame - 2550) % 200;
+        let directions = [
+            Vec2::X,
+            Vec2::NEG_X,
+            Vec2::Y,
+            Vec2::NEG_Y,
+            Vec2::new(1., 1.),
+            Vec2::new(-1., -1.),
+            Vec2::new(1., -1.),
+            Vec2::new(-1., 1.),
+        ];
+        match tick {
+            0 => {
+                let pad = point(world, "Movement pad");
+                world.resource_mut::<Probe>().pad = pad;
+                touch(world, window, 91, TouchPhase::Started, pad);
+            }
+            1 => {
+                let pad = world.resource::<Probe>().pad;
+                touch(
+                    world,
+                    window,
+                    91,
+                    TouchPhase::Moved,
+                    pad + directions[step as usize] * 60.,
+                );
+            }
+            170 | 171 => {
+                let p = point(world, "Dodge control");
+                touch(
+                    world,
+                    window,
+                    92,
+                    if tick == 170 {
+                        TouchPhase::Started
+                    } else {
+                        TouchPhase::Ended
+                    },
+                    p,
+                );
+            }
+            190 => {
+                let p = world.resource::<Probe>().pad;
+                touch(world, window, 91, TouchPhase::Canceled, p);
+            }
+            _ => {}
+        }
+    }
     match frame {
+        2540 => touch(
+            world,
+            window,
+            90,
+            TouchPhase::Started,
+            Vec2::new(400., 180.),
+        ),
+        2541 => touch(world, window, 90, TouchPhase::Ended, Vec2::new(400., 180.)),
         420 => touch(
             world,
             window,
@@ -205,16 +266,23 @@ fn verify(world: &mut World) {
             .single(world)
             .unwrap();
         let size = camera.logical_viewport_size().unwrap();
-        for height in [0.1, 1.2, 2.4] {
-            let body = visual + Vec3::Y * height;
-            let pixel = camera.world_to_viewport(transform, body).unwrap();
-            assert!(
-                pixel.x >= 0. && pixel.x <= size.x && pixel.y >= 0. && pixel.y <= size.y,
-                "hero clipped at frame {frame}: world={body:?} pixel={pixel:?} viewport={size:?}"
-            );
+        for x in [-0.65, 0.65] {
+            for z in [-0.65, 0.65] {
+                for height in [0., 2.4] {
+                    let body = visual + Vec3::new(x, height, z);
+                    let pixel = camera.world_to_viewport(transform, body).unwrap();
+                    assert!(
+                        pixel.x >= 0. && pixel.x <= size.x && pixel.y >= 0. && pixel.y <= size.y,
+                        "hero clipped at frame {frame}: world={body:?} pixel={pixel:?} viewport={size:?}"
+                    );
+                }
+            }
         }
     }
-    if [171, 371, 631, 871].contains(&frame) || (frame >= 930 && (frame - 930) % 200 == 170) {
+    if [171, 371, 631, 871].contains(&frame)
+        || ((930..2530).contains(&frame) && (frame - 930) % 200 == 170)
+        || ((2550..4150).contains(&frame) && (frame - 2550) % 200 == 170)
+    {
         assert!(
             world.resource::<DodgeState>().cooldown_remaining > 0.,
             "actual dodge must activate frame={frame} position={position:?} intent={:?} paused={} pressed={:?}",
@@ -248,10 +316,21 @@ fn verify(world: &mut World) {
         );
         println!("[capture] PASS held road edge frame={frame} position={position:?}");
     }
-    if frame >= 930 && (frame - 930) % 200 == 180 {
+    if (930..2530).contains(&frame) && (frame - 930) % 200 == 180 {
         println!(
             "[capture] PASS eight-direction edge step={} frame={frame} position={position:?}",
             (frame - 930) / 200
+        );
+    }
+    if (2550..4150).contains(&frame) && (frame - 2550) % 200 == 180 {
+        println!(
+            "[capture] PASS touch-direction edge step={} frame={frame} position={position:?}",
+            (frame - 2550) / 200
+        );
+    }
+    if frame == 4160 {
+        println!(
+            "[capture] PASS collision-perimeter: Stone Warden eight keyboard and eight touch directions, twenty actual dodges, full body in viewport"
         );
     }
     if frame == 2540 {

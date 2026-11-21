@@ -21,10 +21,11 @@ impl Plugin for ArenaPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, setup_arena)
             .add_systems(
-                Update,
+                PostUpdate,
                 camera::update_battle_camera
-                    .after(super::combat::CombatSet)
-                    .before(super::hit_feedback::HitFeedbackSet),
+                    .after(super::road_collision::HeroBoundarySet)
+                    .before(bevy::transform::TransformSystems::Propagate)
+                    .before(bevy::camera::CameraUpdateSystems),
             )
             .add_systems(
                 PostUpdate,
@@ -284,18 +285,21 @@ fn setup_arena(
     ));
 
     let paving = asset_server.load("models/environment_floor.glb#Scene0");
-    for column in 0..18 {
-        for row in 0..5 {
+    for column in 0..super::road_collision::COLUMNS {
+        for row in 0..super::road_collision::ROWS {
             commands.spawn((
                 WorldAssetRoot(paving.clone()),
-                Transform::from_xyz(-16.5 + column as f32 * 2.0, -0.15, -4.0 + row as f32 * 2.0)
+                Transform::from_translation(super::road_collision::tile_center(column, row))
                     .with_scale(Vec3::splat(0.15)),
                 ArenaEntity,
             ));
         }
     }
     let border = asset_server.load("models/environment_border.glb#Scene0");
-    for z in [-5.65_f32, 5.65] {
+    for z in [
+        -(super::road_collision::HALF_WIDTH + 0.65),
+        super::road_collision::HALF_WIDTH + 0.65,
+    ] {
         for i in 0..12 {
             let x: f32 = -12.5 + i as f32 * 2.55;
             if super::encounter_bosses::ADVENTURE_SITES
