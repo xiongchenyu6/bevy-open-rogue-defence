@@ -3,7 +3,7 @@ use bevy::{
     core_pipeline::tonemapping::Tonemapping,
     post_process::{
         bloom::{Bloom, BloomPrefilter},
-        effect_stack::Vignette,
+        effect_stack::{ChromaticAberration, Vignette},
     },
     prelude::*,
 };
@@ -408,6 +408,7 @@ fn setup_arena(
             BattleCamera::default(),
             combat_bloom(),
             battle_vignette(),
+            battle_chromatic_aberration(),
             Tonemapping::TonyMcMapface,
             bevy::camera::RenderTarget::Image(target.0.clone().into()),
             camera_projection,
@@ -420,6 +421,7 @@ fn setup_arena(
             BattleCamera::default(),
             combat_bloom(),
             battle_vignette(),
+            battle_chromatic_aberration(),
             Tonemapping::TonyMcMapface,
             camera_projection,
             camera_transform,
@@ -428,8 +430,16 @@ fn setup_arena(
     }
 }
 
+pub(crate) fn battle_chromatic_aberration() -> ChromaticAberration {
+    ChromaticAberration {
+        intensity: 0.003,
+        max_samples: 8,
+        ..default()
+    }
+}
+
 // Settle the dark surroundings and screen corners so the lit lane holds the eye.
-fn battle_vignette() -> Vignette {
+pub(crate) fn battle_vignette() -> Vignette {
     Vignette {
         intensity: 0.55,
         radius: 0.95,

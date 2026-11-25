@@ -62,6 +62,7 @@ struct CastPlayer {
     reaction_remaining: f32,
     enemy_attack_target: Option<Vec3>,
     enemy_attack_pending: bool,
+    last_cast_serial: u64,
 }
 
 impl CastPlayer {
@@ -73,6 +74,7 @@ impl CastPlayer {
         self.reaction_remaining = 0.0;
         self.enemy_attack_target = None;
         self.enemy_attack_pending = false;
+        self.last_cast_serial = 0;
     }
 }
 
@@ -137,6 +139,7 @@ fn attach_cast_players(
                             reaction_remaining: 0.0,
                             enemy_attack_target: None,
                             enemy_attack_pending: false,
+                            last_cast_serial: 0,
                         },
                     ));
                 }
@@ -183,6 +186,7 @@ fn animate_cast(
     volleys: Option<Res<AttackVolleyRuntime>>,
     aim: Option<Res<BasicAttackAim>>,
     attack_clock: Option<Res<AttackClock>>,
+    cast_lock: Option<Res<super::motion::HeroCastLock>>,
     mut actors: Query<
         (
             &mut Transform,
@@ -307,11 +311,24 @@ fn animate_cast(
             state.previous_cooldown = cooldown;
             continue;
         }
+        let cast_triggered = hero.is_some()
+            && vitals.can_act()
+            && cast_lock.as_deref().is_some_and(|lock| {
+                lock.is_active()
+                    && lock.cast_serial != state.last_cast_serial
+                    && lock.triggers_cast_pose()
+            });
+        if hero.is_some()
+            && let Some(lock) = cast_lock.as_deref()
+        {
+            state.last_cast_serial = lock.cast_serial;
+        }
         let attacked = if hero.is_some() {
-            vitals.can_act()
-                && volleys
-                    .as_ref()
-                    .is_some_and(|volleys| volleys.resolved_this_frame > 0)
+            cast_triggered
+                || (vitals.can_act()
+                    && volleys
+                        .as_ref()
+                        .is_some_and(|volleys| volleys.resolved_this_frame > 0))
         } else if enemy.is_some() {
             std::mem::take(&mut state.enemy_attack_pending)
         } else {
@@ -343,9 +360,16 @@ fn animate_cast(
             // Fast attack builds must finish their action before the next volley,
             // rather than continuously restarting the first half of the source clip.
             let next_attack = if hero.is_some() {
-                attack_clock
-                    .as_ref()
-                    .map(|clock| clock.0.duration().as_secs_f32())
+                if cast_triggered
+                    && let Some(lock) = cast_lock.as_deref()
+                    && lock.total > 0.0
+                {
+                    Some(lock.total)
+                } else {
+                    attack_clock
+                        .as_ref()
+                        .map(|clock| clock.0.duration().as_secs_f32())
+                }
             } else {
                 cooldown
             };
@@ -353,6 +377,13 @@ fn animate_cast(
                 .unwrap_or(ATTACK_SECONDS)
                 .clamp(0.03, ATTACK_SECONDS);
         }
+        let cast_speed_scale = if hero.is_some() && pose == Pose::Attack {
+            cast_lock
+                .as_deref()
+                .map_or(1.0, super::motion::HeroCastLock::animation_speed_scale)
+        } else {
+            1.0
+        };
         if pose != previous.unwrap_or(Pose::Idle) || previous.is_none() || attacked || react_to_hit
         {
             player.stop_all();
@@ -367,9 +398,19 @@ fn animate_cast(
                 let hold = state.reaction_remaining;
                 // Consume the entire authored action during its gameplay reaction window.
                 // Bevy advances this with virtual Time, so game speed applies only once.
-                animation.set_speed(clip.duration() / hold);
+                animation.set_speed((clip.duration() / hold) * cast_speed_scale);
             }
             state.pose = Some(pose);
+        } else if hero.is_some()
+            && pose == Pose::Attack
+            && let Some(clip) = state
+                .source_clips
+                .get(Pose::Attack as usize)
+                .and_then(|handle| clips.get(handle))
+            && let Some(active) = player.animation_mut(state.clips[Pose::Attack as usize])
+        {
+            let hold = state.reaction_remaining.max(0.08);
+            active.set_speed((clip.duration() / hold) * cast_speed_scale);
         }
         // Summon AI owns facing during pursuit. Formation movement must not
         // make an idle summon turn its back to the approach lane afterward.
@@ -379,6 +420,12 @@ fn animate_cast(
             state
                 .enemy_attack_target
                 .map(|target| (target - position).with_y(0.0))
+        } else if hero.is_some()
+            && let Some(lock_dir) = cast_lock
+                .as_deref()
+                .and_then(super::motion::HeroCastLock::locked_aim_dir)
+        {
+            Some(lock_dir)
         } else if attacked && hero.is_some() && aim.as_ref().is_some_and(|aim| aim.0.is_some()) {
             aim.as_ref()
                 .and_then(|aim| aim.0)
@@ -461,6 +508,7 @@ mod tests {
                     reaction_remaining: 0.25,
                     enemy_attack_target: Some(Vec3::X),
                     enemy_attack_pending: true,
+                    last_cast_serial: 0,
                 },
             ))
             .id();
@@ -565,6 +613,7 @@ mod tests {
                 reaction_remaining: 0.0,
                 enemy_attack_target: None,
                 enemy_attack_pending: false,
+                last_cast_serial: 0,
             },
         ));
         app.world_mut().run_system_once(animate_cast).unwrap();
@@ -627,6 +676,7 @@ mod tests {
                     reaction_remaining: 0.0,
                     enemy_attack_target: None,
                     enemy_attack_pending: false,
+                    last_cast_serial: 0,
                 },
             ))
             .id();
@@ -723,6 +773,7 @@ mod tests {
                     reaction_remaining: 0.0,
                     enemy_attack_target: None,
                     enemy_attack_pending: false,
+                    last_cast_serial: 0,
                 },
             ))
             .id();
@@ -833,6 +884,7 @@ mod tests {
                     reaction_remaining: 0.0,
                     enemy_attack_target: None,
                     enemy_attack_pending: false,
+                    last_cast_serial: 0,
                 },
             ))
             .id();

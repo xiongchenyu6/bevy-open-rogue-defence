@@ -20,6 +20,7 @@ struct Cue {
 pub(crate) struct UltimateCues {
     pending: Vec<Cue>,
     pub(crate) serial: u64,
+    pub(crate) last_cast: Option<(HeroKind, Vec3, Vec3)>,
 }
 impl UltimateCues {
     pub(crate) fn push(
@@ -31,6 +32,7 @@ impl UltimateCues {
     ) {
         if matches!(phase, UltimatePhase::Cast) {
             self.serial = self.serial.wrapping_add(1);
+            self.last_cast = Some((kind, origin, target));
         }
         if self.pending.len() < MAX_CUES {
             self.pending.push(Cue {

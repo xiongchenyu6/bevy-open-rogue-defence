@@ -268,6 +268,7 @@ fn move_and_dodge_hero(
     mut market_effects: ResMut<MarketEffects>,
     mut vitals: ResMut<HeroVitals>,
     mut dodge: ResMut<DodgeState>,
+    mut cast_lock: Option<ResMut<super::motion::HeroCastLock>>,
     mut hero_query: Query<&mut Transform, With<Hero>>,
     cameras: Query<(&Camera, &GlobalTransform), With<Camera3d>>,
     autoplay: Option<Res<Autoplay>>,
@@ -302,6 +303,10 @@ fn move_and_dodge_hero(
     }
     let movement = ground_movement(input, camera_rotation);
     if dodge.requested && dodge.ready() {
+        // Dodge roll immediately cancels cast recovery/stiffness (AAA action responsiveness).
+        if let Some(lock) = cast_lock.as_deref_mut() {
+            lock.cancel_by_dodge();
+        }
         transform.translation = dodge_destination(
             transform.translation,
             ground_movement(dodge.last_direction, camera_rotation),
@@ -313,12 +318,29 @@ fn move_and_dodge_hero(
     }
     dodge.requested = false;
 
+    let cast_move_scale = if autoplay.is_some() {
+        1.0
+    } else {
+        cast_lock
+            .as_deref()
+            .map_or(1.0, super::motion::HeroCastLock::move_speed_scale)
+    };
     let direction = Vec3::new(movement.x, 0.0, movement.y);
     transform.translation = super::road_collision::sweep_and_slide(
         transform.translation,
-        direction * build.move_speed * time.delta_secs(),
+        direction * build.move_speed * cast_move_scale * time.delta_secs(),
     );
-    if direction.length_squared() > 0.01 {
+    let locked_facing = if autoplay.is_none() {
+        cast_lock
+            .as_deref()
+            .and_then(super::motion::HeroCastLock::locked_aim_dir)
+    } else {
+        None
+    };
+    if let Some(aim) = locked_facing {
+        let yaw = aim.x.atan2(aim.z);
+        transform.rotation = Quat::from_rotation_y(yaw);
+    } else if direction.length_squared() > 0.01 {
         let yaw = direction.x.atan2(direction.z);
         transform.rotation = Quat::from_rotation_y(yaw);
     }

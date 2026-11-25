@@ -81,6 +81,7 @@ mod tests {
                     reaction_remaining: 0.,
                     enemy_attack_target: None,
                     enemy_attack_pending: false,
+                    last_cast_serial: 0,
                 },
             ))
             .id();

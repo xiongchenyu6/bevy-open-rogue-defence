@@ -3,7 +3,9 @@ use bevy::{audio::Volume, prelude::*};
 
 use super::bonds::DamageElement;
 use super::gate_feedback::GateImpact;
-use super::hit_feedback::{HitFeedback, HitFeedbackSet, HitWeight};
+use super::hit_feedback::{
+    HitFeedback, HitFeedbackSet, HitWeight, PostProcessImpactState, streak_pitch_multiplier,
+};
 use super::ultimate_vfx::UltimateCues;
 use super::{Autoplay, BossEnemy, DraftRoot, Projectile};
 
@@ -248,6 +250,7 @@ fn play_hit_feedback(
     time: Res<Time<Real>>,
     audio: Res<GameAudio>,
     feedback: Res<HitFeedback>,
+    impact_state: Option<Res<PostProcessImpactState>>,
     gate: Option<Res<GateImpact>>,
     autoplay: Option<Res<Autoplay>>,
     mut throttle: ResMut<HitAudioThrottle>,
@@ -257,6 +260,9 @@ fn play_hit_feedback(
         return;
     }
     throttle.tick(time.delta_secs());
+    let streak_mul = impact_state
+        .as_deref()
+        .map_or(1.0, |state| streak_pitch_multiplier(state.streak_hits));
     let events = feedback.events();
     let kills = events.iter().filter(|event| event.killed).count();
     let heavy_kill = events
@@ -268,19 +274,19 @@ fn play_hit_feedback(
         .any(|event| !event.killed && event.weight != HitWeight::Normal);
 
     if heavy_kill && ready(&mut throttle.kill_heavy, 0.22) {
-        let pitch = throttle.pitch(0.05);
+        let pitch = throttle.pitch(0.05) * (1.0 + (streak_mul - 1.0) * 0.45);
         play_pitched(&mut commands, &audio.kill_heavy, 0.85, pitch);
     }
     if kills > 0 && ready(&mut throttle.kill, 0.055) {
-        let pitch = throttle.pitch(0.12);
+        let pitch = throttle.pitch(0.12) * streak_mul;
         play_pitched(&mut commands, &audio.kill, crowd_volume(0.5, kills), pitch);
     }
     if crits > 0 && ready(&mut throttle.crit, 0.075) {
-        let pitch = throttle.pitch(0.06);
+        let pitch = throttle.pitch(0.06) * streak_mul;
         play_pitched(&mut commands, &audio.crit, crowd_volume(0.55, crits), pitch);
     }
     if heavy_hit && ready(&mut throttle.heavy_hit, 0.16) {
-        let pitch = throttle.pitch(0.08);
+        let pitch = throttle.pitch(0.08) * (1.0 + (streak_mul - 1.0) * 0.65);
         play_pitched(&mut commands, &audio.impact, 0.42, pitch);
     }
     if let Some(event) = events.iter().find(|event| !event.critical)
@@ -291,7 +297,7 @@ fn play_hit_feedback(
         } else {
             &audio.hit_magic
         };
-        let pitch = throttle.pitch(0.14);
+        let pitch = throttle.pitch(0.14) * streak_mul;
         play_pitched(
             &mut commands,
             source,

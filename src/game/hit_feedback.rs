@@ -7,6 +7,7 @@
 
 use std::collections::HashMap;
 
+use bevy::post_process::effect_stack::{ChromaticAberration, Vignette};
 use bevy::prelude::*;
 
 mod aftermath;
@@ -20,7 +21,8 @@ use super::bonds::DamageElement;
 use super::combat::{CombatSet, SurvivalSet};
 use super::gate_feedback::GateImpact;
 use super::pooling::{CombatPools, IMPACT_FX_POOL_CAPACITY, damage_element_color};
-use super::{Autoplay, Enemy, GameSession, Hero, HeroVisual, HeroVitals, ImpactFx};
+use super::ultimate_vfx::UltimateCues;
+use super::{Autoplay, Enemy, GameLanguage, GameSession, Hero, HeroVisual, HeroVitals, ImpactFx};
 
 const MAX_EVENTS_PER_FRAME: usize = 256;
 const PUNCH_SECONDS: f32 = 0.12;
@@ -53,6 +55,7 @@ impl Plugin for HitFeedbackPlugin {
             .init_resource::<enemy_flash::EnemyFlash>()
             .init_resource::<ScreenShake>()
             .init_resource::<CameraZoomPunch>()
+            .init_resource::<PostProcessImpactState>()
             .init_resource::<HitStop>()
             .configure_sets(Update, HitFeedbackSet.after(CombatSet).after(SurvivalSet))
             .add_systems(
@@ -60,6 +63,7 @@ impl Plugin for HitFeedbackPlugin {
                 (
                     setup_burst_art,
                     spawn_hurt_flash,
+                    spawn_hit_streak_hud,
                     enemy_flash::setup,
                     aftermath::setup,
                 ),
@@ -77,6 +81,8 @@ impl Plugin for HitFeedbackPlugin {
                     apply_hit_stop,
                     apply_screen_shake,
                     apply_camera_zoom_punch,
+                    update_post_process_impacts,
+                    update_hit_streak_hud,
                     animate_hurt_flash,
                 )
                     .chain()
@@ -165,6 +171,82 @@ impl CameraZoomPunch {
         self.velocity = self.velocity.max(clamped * 7.5);
     }
 }
+
+/// Tracks dynamic post-process impact pulses (chromatic aberration, crimson
+/// damage / low-HP heartbeat vignette) and live combat hit streaks.
+#[derive(Resource, Default, Debug)]
+pub(crate) struct PostProcessImpactState {
+    pub(crate) chroma_pulse: f32,
+    pub(crate) damage_vignette: f32,
+    pub(crate) streak_hits: u32,
+    pub(crate) streak_timer: f32,
+    pub(crate) streak_pop_secs: f32,
+    last_ultimate_serial: u64,
+}
+
+impl PostProcessImpactState {
+    pub(crate) fn register_hits(&mut self, count: u32) -> u32 {
+        if count == 0 {
+            return self.streak_hits;
+        }
+        self.streak_hits = self.streak_hits.saturating_add(count);
+        self.streak_timer = 2.6;
+        self.streak_pop_secs = 0.16;
+        self.streak_hits
+    }
+
+    pub(crate) fn spike_chroma(&mut self, amount: f32) {
+        if amount > 0.0 {
+            self.chroma_pulse = self.chroma_pulse.max(amount.clamp(0.0, 0.033));
+        }
+    }
+
+    pub(crate) fn spike_damage_vignette(&mut self) {
+        self.damage_vignette = 1.0;
+    }
+}
+
+/// Escalates contact audio pitch (+3% per consecutive hit up to +24%).
+pub(crate) fn streak_pitch_multiplier(streak_hits: u32) -> f32 {
+    1.0 + (streak_hits.saturating_sub(1).min(8) as f32) * 0.03
+}
+
+/// Chromatic aberration intensity driven by base value + decaying impact pulse.
+pub(crate) fn impact_chroma_intensity(chroma_pulse: f32) -> f32 {
+    (0.003 + chroma_pulse.max(0.0)).clamp(0.003, 0.036)
+}
+
+/// Computes dynamic `Vignette` intensity & crimson tint from damage flash and
+/// low-HP heartbeat ratio (`0.0` above 35% HP, `1.0` near death).
+pub(crate) fn damage_vignette_params(
+    damage_flash: f32,
+    low_hp_ratio: f32,
+    elapsed_secs: f32,
+) -> (f32, Color) {
+    let base_intensity = 0.55;
+    let base_r = 0.0_f32;
+    let base_g = 0.0_f32;
+    let base_b = 0.0_f32;
+    let low_hp_pulse = if low_hp_ratio > 0.0 {
+        low_hp_ratio * (0.42 + 0.58 * (elapsed_secs * 5.4).sin().abs())
+    } else {
+        0.0
+    };
+    let crimson = (damage_flash.clamp(0.0, 1.0) * 0.85 + low_hp_pulse * 0.68).clamp(0.0, 1.0);
+    let intensity = base_intensity + crimson * 0.32;
+    let color = Color::srgb(
+        base_r.lerp(0.56, crimson),
+        base_g.lerp(0.02, crimson),
+        base_b.lerp(0.03, crimson),
+    );
+    (intensity, color)
+}
+
+#[derive(Component)]
+struct HitStreakHudBadge;
+
+#[derive(Component)]
+struct HitStreakHudText;
 
 #[derive(Resource, Default, Debug)]
 pub(crate) struct HitStop {
@@ -285,6 +367,43 @@ fn spawn_hurt_flash(mut commands: Commands) {
     ));
 }
 
+fn spawn_hit_streak_hud(mut commands: Commands) {
+    commands
+        .spawn((
+            Name::new("HIT STREAK HUD BADGE"),
+            HitStreakHudBadge,
+            Node {
+                position_type: PositionType::Absolute,
+                right: px(22),
+                top: px(152),
+                min_width: px(124),
+                padding: UiRect::axes(px(12), px(6)),
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::Center,
+                border: UiRect::all(px(1.5)),
+                border_radius: BorderRadius::all(px(10)),
+                ..default()
+            },
+            BackgroundColor(Color::srgba(0.06, 0.04, 0.08, 0.78)),
+            BorderColor::all(Color::srgba(1.0, 0.72, 0.24, 0.8)),
+            GlobalZIndex(24),
+            Pickable::IGNORE,
+            Visibility::Hidden,
+        ))
+        .with_children(|parent| {
+            parent.spawn((
+                HitStreakHudText,
+                Text::new(""),
+                TextFont {
+                    font_size: FontSize::Px(15.0),
+                    ..default()
+                },
+                TextColor(Color::srgb(1.0, 0.88, 0.45)),
+                Pickable::IGNORE,
+            ));
+        });
+}
+
 fn detect_hero_hurt(
     vitals: Option<Res<HeroVitals>>,
     heroes: Query<&GlobalTransform, With<Hero>>,
@@ -331,6 +450,8 @@ fn react_to_hits(
     mut pools: ResMut<CombatPools>,
     mut shake: ResMut<ScreenShake>,
     mut zoom_punch: Option<ResMut<CameraZoomPunch>>,
+    mut impact_state: Option<ResMut<PostProcessImpactState>>,
+    ultimates: Option<Res<UltimateCues>>,
     mut hit_stop: ResMut<HitStop>,
     gate: Option<Res<GateImpact>>,
     mut enemies: Query<(&Transform, Option<&mut HitPunch>)>,
@@ -368,6 +489,8 @@ fn react_to_hits(
     }
     let mut frame_trauma = 0.0_f32;
     let mut frame_zoom = 0.0_f32;
+    let mut frame_chroma = 0.0_f32;
+    let hit_count = feedback.events().len().min(6) as u32;
     for event in feedback.events() {
         if let Some(art) = art.as_deref()
             && pools.impact_fx_metrics().active() < BURST_POOL_HEADROOM
@@ -377,12 +500,33 @@ fn react_to_hits(
         if autoplay.is_none() {
             frame_trauma = frame_trauma.max(shake_trauma(*event));
             frame_zoom = frame_zoom.max(zoom_punch_amount(*event));
+            frame_chroma = frame_chroma.max(impact_chroma_bonus(*event));
             hit_stop.requested = hit_stop.requested.max(hit_stop_seconds(*event));
         }
     }
     if autoplay.is_none() && feedback.hero_hurt() {
         frame_trauma = frame_trauma.max(0.32);
         frame_zoom = frame_zoom.max(0.024);
+        frame_chroma = frame_chroma.max(0.022);
+    }
+    if let Some(impact) = impact_state.as_deref_mut() {
+        if hit_count > 0 {
+            impact.register_hits(hit_count);
+        }
+        if let Some(ultimates) = ultimates.as_deref() {
+            if ultimates.serial > impact.last_ultimate_serial && autoplay.is_none() {
+                frame_trauma = frame_trauma.max(0.28);
+                frame_zoom = frame_zoom.max(0.028);
+                frame_chroma = frame_chroma.max(0.024);
+            }
+            impact.last_ultimate_serial = ultimates.serial;
+        }
+        if autoplay.is_none() {
+            impact.spike_chroma(frame_chroma);
+            if feedback.hero_hurt() {
+                impact.spike_damage_vignette();
+            }
+        }
     }
     if let Some(strength) = gate.as_deref().and_then(GateImpact::struck)
         && autoplay.is_none()
@@ -405,6 +549,16 @@ fn zoom_punch_amount(event: HitEvent) -> f32 {
         (true, HitWeight::Elite, _) => 0.032,
         (false, HitWeight::Boss, true) => 0.022,
         (_, _, true) => 0.014,
+        _ => 0.0,
+    }
+}
+
+fn impact_chroma_bonus(event: HitEvent) -> f32 {
+    match (event.killed, event.weight, event.critical) {
+        (true, HitWeight::Boss, _) => 0.032,
+        (true, HitWeight::Elite, _) => 0.022,
+        (false, HitWeight::Boss, true) => 0.018,
+        (_, _, true) => 0.012,
         _ => 0.0,
     }
 }
@@ -745,6 +899,136 @@ fn apply_camera_zoom_punch(
     }
 }
 
+fn update_post_process_impacts(
+    time: Res<Time<Real>>,
+    session: Res<GameSession>,
+    vitals: Option<Res<HeroVitals>>,
+    autoplay: Option<Res<Autoplay>>,
+    mut state: ResMut<PostProcessImpactState>,
+    mut cameras: Query<(Option<&mut ChromaticAberration>, Option<&mut Vignette>), With<Camera3d>>,
+) {
+    let dt = if session.paused {
+        0.0
+    } else {
+        time.delta_secs().min(0.05)
+    };
+    if session.finished || autoplay.is_some() {
+        state.chroma_pulse = 0.0;
+        state.damage_vignette = 0.0;
+        if session.finished {
+            state.streak_hits = 0;
+            state.streak_timer = 0.0;
+            state.streak_pop_secs = 0.0;
+        }
+    } else {
+        state.chroma_pulse = (state.chroma_pulse - dt * 0.14).max(0.0);
+        state.damage_vignette = (state.damage_vignette - dt * 2.6).max(0.0);
+        if state.streak_timer > 0.0 {
+            state.streak_timer = (state.streak_timer - dt).max(0.0);
+            if state.streak_timer <= 0.0 {
+                state.streak_hits = 0;
+            }
+        }
+        state.streak_pop_secs = (state.streak_pop_secs - dt).max(0.0);
+    }
+
+    let low_hp_ratio = if session.finished || autoplay.is_some() {
+        0.0
+    } else {
+        vitals.as_deref().map_or(0.0, |v| {
+            if v.alive && v.max_health > 0.0 {
+                let frac = (v.health / v.max_health).clamp(0.0, 1.0);
+                if frac < 0.35 {
+                    ((0.35 - frac) / 0.35).clamp(0.0, 1.0)
+                } else {
+                    0.0
+                }
+            } else {
+                0.0
+            }
+        })
+    };
+
+    let chroma_intensity = impact_chroma_intensity(state.chroma_pulse);
+    let (vignette_intensity, vignette_color) =
+        damage_vignette_params(state.damage_vignette, low_hp_ratio, time.elapsed_secs());
+
+    for (chroma, vignette) in &mut cameras {
+        if let Some(mut chroma) = chroma
+            && (chroma.intensity - chroma_intensity).abs() > 1e-4
+        {
+            chroma.intensity = chroma_intensity;
+        }
+        if let Some(mut vignette) = vignette {
+            if (vignette.intensity - vignette_intensity).abs() > 1e-4 {
+                vignette.intensity = vignette_intensity;
+            }
+            if vignette.color != vignette_color {
+                vignette.color = vignette_color;
+            }
+        }
+    }
+}
+
+fn update_hit_streak_hud(
+    session: Res<GameSession>,
+    language: Option<Res<GameLanguage>>,
+    state: Res<PostProcessImpactState>,
+    mut badge: Query<(&mut Visibility, &mut BorderColor), With<HitStreakHudBadge>>,
+    mut label: Query<(&mut Text, &mut TextFont, &mut TextColor), With<HitStreakHudText>>,
+) {
+    let Ok((mut vis, mut border)) = badge.single_mut() else {
+        return;
+    };
+    let Ok((mut text, mut font, mut color)) = label.single_mut() else {
+        return;
+    };
+    if session.finished || state.streak_hits < 3 {
+        vis.set_if_neq(Visibility::Hidden);
+        return;
+    }
+    let lang = language
+        .as_deref()
+        .copied()
+        .unwrap_or(GameLanguage::SimplifiedChinese);
+    let next = match lang {
+        GameLanguage::SimplifiedChinese => format!("连击 x{}", state.streak_hits),
+        GameLanguage::English => format!("STREAK x{}", state.streak_hits),
+    };
+    let pop = if state.streak_pop_secs > 0.0 {
+        let t = (state.streak_pop_secs / 0.16).clamp(0.0, 1.0);
+        1.0 + 0.32 * (t * std::f32::consts::PI).sin()
+    } else {
+        1.0
+    };
+    let (text_col, border_col) = if state.streak_hits >= 50 {
+        (
+            Color::srgb(1.0, 0.42, 0.32),
+            Color::srgba(1.0, 0.32, 0.24, 0.92),
+        )
+    } else if state.streak_hits >= 20 {
+        (
+            Color::srgb(1.0, 0.88, 0.28),
+            Color::srgba(1.0, 0.82, 0.22, 0.9),
+        )
+    } else if state.streak_hits >= 10 {
+        (
+            Color::srgb(1.0, 0.68, 0.26),
+            Color::srgba(1.0, 0.58, 0.20, 0.86),
+        )
+    } else {
+        (
+            Color::srgb(0.98, 0.86, 0.56),
+            Color::srgba(0.95, 0.72, 0.30, 0.78),
+        )
+    };
+    text.reborrow().map_unchanged(|t| &mut t.0).set_if_neq(next);
+    font.font_size = FontSize::Px(15.0 * pop);
+    color.0 = text_col;
+    *border = BorderColor::all(border_col);
+    vis.set_if_neq(Visibility::Visible);
+}
+
 fn animate_hurt_flash(
     time: Res<Time<Real>>,
     feedback: Res<HitFeedback>,
@@ -770,6 +1054,7 @@ pub(crate) fn reset_run(world: &mut World) {
     world.insert_resource(HitFeedback::default());
     world.insert_resource(ScreenShake::default());
     world.insert_resource(CameraZoomPunch::default());
+    world.insert_resource(PostProcessImpactState::default());
     world.insert_resource(HitStop::default());
 }
 
@@ -807,6 +1092,23 @@ mod tests {
         assert!(shake_trauma(elite) < shake_trauma(boss));
         assert_eq!(hit_stop_seconds(normal), 0.0);
         assert!(hit_stop_seconds(elite) < hit_stop_seconds(boss));
+    }
+
+    #[test]
+    fn post_process_chroma_vignette_and_streak_pitch_behave_smoothly() {
+        assert!((streak_pitch_multiplier(1) - 1.0).abs() < 1e-5);
+        assert!((streak_pitch_multiplier(5) - 1.12).abs() < 1e-5);
+        assert!((streak_pitch_multiplier(25) - 1.24).abs() < 1e-5);
+
+        assert!((impact_chroma_intensity(0.0) - 0.003).abs() < 1e-5);
+        assert!(impact_chroma_intensity(0.025) > 0.025);
+        assert!(impact_chroma_intensity(1.0) <= 0.036 + 1e-5);
+
+        let (base_i, base_c) = damage_vignette_params(0.0, 0.0, 0.0);
+        let (hurt_i, hurt_c) = damage_vignette_params(1.0, 0.0, 0.0);
+        let (low_i, low_c) = damage_vignette_params(0.0, 0.85, 0.3);
+        assert!(hurt_i > base_i && hurt_c.to_srgba().red > base_c.to_srgba().red + 0.3);
+        assert!(low_i > base_i && low_c.to_srgba().red > base_c.to_srgba().red + 0.1);
     }
 
     fn critical_feedback_app(speed: f32) -> (App, Entity) {

@@ -18,7 +18,7 @@ use bevy::{
     prelude::*,
 };
 
-use super::basic_attacks::{BasicWeapon, PendingSwing, weapon};
+use super::basic_attacks::{BasicAttackAim, BasicWeapon, PendingSwing, weapon};
 use super::bonds::DamageElement;
 use super::bosses::{BossAction, BossActionStage, BossPhaseCue};
 use super::combat::{AttackVolleyRuntime, CombatSet, EliteAffix};
@@ -29,8 +29,8 @@ use super::skills::SkillRuntime;
 use super::skills::infection::Infection;
 use super::ultimate_vfx::UltimateCues;
 use super::{
-    BossEnemy, DodgeState, Enemy, EnemyAttackCue, EnemyAttackKind, GameLanguage, GameSession, Hero,
-    HeroKind, HeroVisual, HeroVitals, MoveIntent, PlayerSummon, SelectedHero,
+    Autoplay, BossEnemy, DodgeState, Enemy, EnemyAttackCue, EnemyAttackKind, GameLanguage,
+    GameSession, Hero, HeroKind, HeroVisual, HeroVitals, MoveIntent, PlayerSummon, SelectedHero,
 };
 
 /// 62.5 Hz victim micro-tremor frequency during hitstop / hit-react (within 60–65 Hz).
@@ -63,6 +63,7 @@ pub(crate) struct MotionPlugin;
 impl Plugin for MotionPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<HeroMotionTracker>()
+            .init_resource::<HeroCastLock>()
             .init_resource::<VisceralVfxSequence>()
             .add_systems(Startup, (setup_visceral_vfx_art, setup_motion_hud_badge))
             .add_systems(First, restore_motion_visuals)
@@ -2409,6 +2410,182 @@ pub fn build_combo_smear_mesh(
     .with_inserted_indices(Indices::U32(indices))
 }
 
+/// Category of active cast commitment / cast stiffness ("施法僵滞") on the hero.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub(crate) enum CastLockKind {
+    #[default]
+    None,
+    /// Brief tactile attack-step windup & follow-through on basic attacks / swings.
+    BasicAttack,
+    /// Heavy spell cast lock (near-rooted windup -> recovery) on learned active skills.
+    SkillSpell,
+    /// Heroic full-root ultimate cast commitment & follow-through.
+    Ultimate,
+    /// Active `KeyC` focus-charge stance.
+    ChargeHold,
+}
+
+impl CastLockKind {
+    const fn priority(self) -> u8 {
+        match self {
+            Self::None => 0,
+            Self::BasicAttack => 1,
+            Self::ChargeHold => 2,
+            Self::SkillSpell => 3,
+            Self::Ultimate => 4,
+        }
+    }
+}
+
+/// Authoritative presentation + movement cast-stiffness state ("施法僵滞").
+///
+/// Engages windup root/slowdown, target facing lock, skeletal cast-apex hold,
+/// and follow-through easing whenever the hero swings, casts a learned spell,
+/// unleashes an ultimate, or holds charge. Always instantly cancellable via Dodge.
+#[derive(Resource, Debug, Clone, Copy, Default)]
+pub(crate) struct HeroCastLock {
+    pub(crate) kind: CastLockKind,
+    pub(crate) elapsed: f32,
+    pub(crate) total: f32,
+    pub(crate) windup: f32,
+    pub(crate) aim_dir: Vec3,
+    pub(crate) skill_index: Option<usize>,
+    pub(crate) cast_serial: u64,
+}
+
+impl HeroCastLock {
+    pub(crate) fn trigger(
+        &mut self,
+        kind: CastLockKind,
+        total: f32,
+        windup: f32,
+        aim_dir: Vec3,
+        skill_index: Option<usize>,
+    ) {
+        if self.is_active() && kind.priority() < self.kind.priority() {
+            return;
+        }
+        let dir = aim_dir.with_y(0.0).normalize_or_zero();
+        self.kind = kind;
+        self.elapsed = 0.0;
+        self.total = total.max(0.02);
+        self.windup = windup.clamp(0.0, self.total);
+        self.aim_dir = dir;
+        self.skill_index = skill_index;
+        self.cast_serial = self.cast_serial.wrapping_add(1);
+    }
+
+    pub(crate) fn maintain_charge(&mut self, aim_dir: Vec3) {
+        if self.is_active() && self.kind.priority() > CastLockKind::ChargeHold.priority() {
+            return;
+        }
+        self.kind = CastLockKind::ChargeHold;
+        self.elapsed = 0.0;
+        self.total = 0.2;
+        self.windup = 0.2;
+        self.aim_dir = aim_dir.with_y(0.0).normalize_or_zero();
+        self.skill_index = None;
+    }
+
+    pub(crate) fn release_charge(&mut self) {
+        if self.kind == CastLockKind::ChargeHold {
+            self.clear();
+        }
+    }
+
+    /// Dodge roll immediately breaks out of cast stiffness / follow-through recovery.
+    pub(crate) fn cancel_by_dodge(&mut self) {
+        self.clear();
+    }
+
+    pub(crate) fn clear(&mut self) {
+        self.kind = CastLockKind::None;
+        self.elapsed = 0.0;
+        self.total = 0.0;
+        self.windup = 0.0;
+        self.aim_dir = Vec3::ZERO;
+        self.skill_index = None;
+    }
+
+    pub(crate) fn tick(&mut self, dt: f32) {
+        if self.kind == CastLockKind::None || self.kind == CastLockKind::ChargeHold {
+            return;
+        }
+        self.elapsed += dt.max(0.0);
+        if self.elapsed >= self.total {
+            self.clear();
+        }
+    }
+
+    pub(crate) fn is_active(&self) -> bool {
+        self.kind != CastLockKind::None
+            && (self.kind == CastLockKind::ChargeHold || self.elapsed < self.total)
+    }
+
+    pub(crate) fn triggers_cast_pose(&self) -> bool {
+        matches!(self.kind, CastLockKind::SkillSpell | CastLockKind::Ultimate)
+    }
+
+    /// Horizontal movement speed multiplier during cast windup & recovery.
+    pub(crate) fn move_speed_scale(&self) -> f32 {
+        if !self.is_active() {
+            return 1.0;
+        }
+        let rec_len = (self.total - self.windup).max(0.001);
+        let rec_t = ((self.elapsed - self.windup) / rec_len).clamp(0.0, 1.0);
+        let smooth = rec_t * rec_t * (3.0 - 2.0 * rec_t);
+        match self.kind {
+            CastLockKind::None => 1.0,
+            CastLockKind::ChargeHold => 0.22,
+            CastLockKind::BasicAttack => {
+                if self.elapsed < self.windup {
+                    0.30
+                } else {
+                    0.30 + (0.88 - 0.30) * smooth
+                }
+            }
+            CastLockKind::SkillSpell => {
+                if self.elapsed < self.windup {
+                    0.08
+                } else {
+                    0.15 + (0.74 - 0.15) * smooth
+                }
+            }
+            CastLockKind::Ultimate => {
+                if self.elapsed < self.windup {
+                    0.0
+                } else {
+                    0.10 + (0.68 - 0.10) * smooth
+                }
+            }
+        }
+    }
+
+    /// Locks hero facing toward the spell/attack target during the cast commitment window.
+    pub(crate) fn locked_aim_dir(&self) -> Option<Vec3> {
+        if self.is_active() && self.aim_dir.length_squared() > 0.01 {
+            Some(self.aim_dir)
+        } else {
+            None
+        }
+    }
+
+    /// Brief apex stiffness slowdown on the authored GLTF Attack/Cast clip so
+    /// spell releases and ultimates read with unmistakable physical weight.
+    pub(crate) fn animation_speed_scale(&self) -> f32 {
+        if !self.is_active() {
+            return 1.0;
+        }
+        let in_apex = self.elapsed >= self.windup * 0.65 && self.elapsed <= self.windup + 0.06;
+        match self.kind {
+            CastLockKind::Ultimate if in_apex => 0.36,
+            CastLockKind::SkillSpell if in_apex => 0.52,
+            CastLockKind::BasicAttack if in_apex => 0.78,
+            _ => 1.0,
+        }
+    }
+}
+
 #[derive(Resource, Default)]
 struct HeroMotionTracker {
     prev_level: u32,
@@ -2418,6 +2595,7 @@ struct HeroMotionTracker {
     prev_hero_pos: Option<Vec3>,
     had_pending_swing: bool,
     last_ultimate_seen: u64,
+    last_spell_cast_seen: u64,
 }
 
 #[derive(Resource, Default)]
@@ -2653,9 +2831,23 @@ struct HeroMotionInputs<'w> {
     move_intent: Res<'w, MoveIntent>,
     keyboard: Option<Res<'w, ButtonInput<KeyCode>>>,
     volleys: Option<Res<'w, AttackVolleyRuntime>>,
+    attack_aim: Option<Res<'w, BasicAttackAim>>,
+    skills: Option<Res<'w, SkillRuntime>>,
     feedback: Option<Res<'w, HitFeedback>>,
     ultimates: Option<Res<'w, UltimateCues>>,
+    autoplay: Option<Res<'w, Autoplay>>,
     art: Option<Res<'w, VisceralVfxArt>>,
+}
+
+fn spell_cast_motion_for_skill(skill_index: usize) -> (MotionId, DamageElement) {
+    match skill_index % 6 {
+        0 => (MotionId::StormCastCombo1, DamageElement::Storm),
+        1 => (MotionId::FrostArcaneCast1, DamageElement::Frost),
+        2 => (MotionId::StormCastCombo2, DamageElement::Flame),
+        3 => (MotionId::SpiritStarCast2, DamageElement::Tide),
+        4 => (MotionId::StormCastCombo3, DamageElement::Arcane),
+        _ => (MotionId::SpellChannelLoop, DamageElement::Pure),
+    }
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -2664,6 +2856,7 @@ fn drive_hero_motion_and_smears(
     time: Res<Time>,
     inputs: HeroMotionInputs,
     mut tracker: ResMut<HeroMotionTracker>,
+    mut cast_lock: ResMut<HeroCastLock>,
     existing_vfx: Query<(), With<VisceralVfx>>,
     pending_swings: Query<&PendingSwing>,
     heroes: Query<&Transform, With<Hero>>,
@@ -2678,8 +2871,11 @@ fn drive_hero_motion_and_smears(
         move_intent,
         keyboard,
         volleys,
+        attack_aim,
+        skills,
         feedback,
         ultimates,
+        autoplay,
         art,
     } = inputs;
     if session.paused || session.finished {
@@ -2692,6 +2888,7 @@ fn drive_hero_motion_and_smears(
         return;
     };
     let dt = time.delta_secs().max(0.0);
+    cast_lock.tick(dt);
     let mut budget = MAX_VISCERAL_VFX.saturating_sub(existing_vfx.iter().len());
     let hero_pos = hero_transform.translation;
     let hero_fwd = hero_transform
@@ -2702,6 +2899,7 @@ fn drive_hero_motion_and_smears(
 
     // 1. Death / Revive transitions
     if !vitals.alive {
+        cast_lock.clear();
         if tracker.prev_alive {
             motion.force_play(MotionId::DeathCollapseBack, 1.2);
         }
@@ -2726,6 +2924,7 @@ fn drive_hero_motion_and_smears(
 
     // 3. Hero Stunned / Hurt directional hitstun + micro-tremor
     if vitals.stunned_remaining > 0.0 {
+        cast_lock.clear();
         motion.try_play(MotionId::AilmentStunnedDaze, 1.15);
     }
     if let Some(feedback) = feedback.as_deref()
@@ -2752,6 +2951,7 @@ fn drive_hero_motion_and_smears(
         || displacement.length() > 1.45;
     tracker.prev_dodge_cooldown = dodge.cooldown_remaining;
     if dodged {
+        cast_lock.cancel_by_dodge();
         let dir = displacement.normalize_or(hero_fwd);
         let fwd_dot = dir.dot(hero_fwd);
         let right_dot = dir.dot(hero_right);
@@ -2792,12 +2992,127 @@ fn drive_hero_motion_and_smears(
         }
     }
 
-    // 5. Ultimate burst cues
+    // 5. Ultimate burst cues -> Full-root ultimate cast lock ("终极施法僵直") + ground sigil
     if let Some(ultimates) = ultimates.as_deref() {
         if ultimates.serial > tracker.last_ultimate_seen {
-            motion.force_play(MotionId::UltimateUnleashBurst, 1.35);
+            let aim_dir = ultimates
+                .last_cast
+                .map(|(_, origin, target)| (target - origin).with_y(0.0))
+                .filter(|v| v.length_squared() > 0.01)
+                .map_or(hero_fwd, Vec3::normalize);
+            cast_lock.trigger(CastLockKind::Ultimate, 0.40, 0.16, aim_dir, None);
+            motion.force_play(MotionId::UltimateUnleashBurst, 1.38);
+            if let Some(art) = art.as_deref() {
+                spawn_visceral_entity(
+                    &mut commands,
+                    &mut budget,
+                    "Ultimate cast lock sigil",
+                    art.shock_ring.clone(),
+                    art.hero_smear_mats[vitals.kind.index()].clone(),
+                    Transform::from_translation(hero_pos.with_y(0.14))
+                        .with_scale(Vec3::new(0.45, 0.35, 0.45)),
+                    VisceralVfx {
+                        elapsed: 0.0,
+                        duration: 0.38,
+                        velocity: Vec3::ZERO,
+                        drag: 0.0,
+                        start_scale: Vec3::new(0.45, 0.35, 0.45),
+                        end_scale: Vec3::new(2.35, 0.08, 2.35),
+                        spin_y: 4.2,
+                    },
+                );
+                for i in 0..4 {
+                    let angle = i as f32 * FRAC_PI_2 + 0.35;
+                    let dir = Vec3::new(angle.cos(), 0.75, angle.sin()).normalize();
+                    spawn_visceral_entity(
+                        &mut commands,
+                        &mut budget,
+                        "Ultimate cast spark",
+                        art.razor_spark.clone(),
+                        art.crit_glint_mat.clone(),
+                        Transform::from_translation(hero_pos + Vec3::Y * 0.7)
+                            .looking_to(dir, Vec3::Y)
+                            .with_scale(Vec3::new(1.0, 1.0, 1.2)),
+                        VisceralVfx {
+                            elapsed: 0.0,
+                            duration: 0.24,
+                            velocity: dir * 4.6,
+                            drag: 5.0,
+                            start_scale: Vec3::new(1.0, 1.0, 1.2),
+                            end_scale: Vec3::new(0.15, 0.15, 0.2),
+                            spin_y: 0.0,
+                        },
+                    );
+                }
+            }
         }
         tracker.last_ultimate_seen = ultimates.serial;
+    }
+
+    // 5b. Learned Skill Spell Casts -> Authentic Spell Cast Lock ("施法僵滞") + Cast Sigil Ring
+    if let Some(skills) = skills.as_deref() {
+        let spell_count = skills.spell_cast_count();
+        if spell_count > tracker.last_spell_cast_seen && vitals.can_act() && !dodged {
+            let (skill_index, aim_dir) = skills
+                .last_spell_info()
+                .map(|(idx, center)| {
+                    let dir = (center - hero_pos)
+                        .with_y(0.0)
+                        .try_normalize()
+                        .unwrap_or(hero_fwd);
+                    (idx, dir)
+                })
+                .unwrap_or((0, hero_fwd));
+            let (cast_motion, element) = spell_cast_motion_for_skill(skill_index);
+            cast_lock.trigger(
+                CastLockKind::SkillSpell,
+                0.22,
+                0.08,
+                aim_dir,
+                Some(skill_index),
+            );
+            motion.force_play(cast_motion, 1.22);
+            if let Some(art) = art.as_deref() {
+                let mat = art.element_mats[element_slot(element)].clone();
+                spawn_visceral_entity(
+                    &mut commands,
+                    &mut budget,
+                    "Spell cast commitment ring",
+                    art.shock_ring.clone(),
+                    mat.clone(),
+                    Transform::from_translation(hero_pos.with_y(0.12))
+                        .with_scale(Vec3::new(0.32, 0.28, 0.32)),
+                    VisceralVfx {
+                        elapsed: 0.0,
+                        duration: 0.22,
+                        velocity: Vec3::ZERO,
+                        drag: 0.0,
+                        start_scale: Vec3::new(0.32, 0.28, 0.32),
+                        end_scale: Vec3::new(1.45, 0.06, 1.45),
+                        spin_y: 3.4,
+                    },
+                );
+                spawn_visceral_entity(
+                    &mut commands,
+                    &mut budget,
+                    "Spell release hand flash",
+                    art.flash_core.clone(),
+                    mat,
+                    Transform::from_translation(hero_pos + aim_dir * 0.55 + Vec3::Y * 0.92)
+                        .with_scale(Vec3::splat(0.34)),
+                    VisceralVfx {
+                        elapsed: 0.0,
+                        duration: CONTACT_FLASH_CORE_SECONDS,
+                        velocity: aim_dir * 1.4,
+                        drag: 6.0,
+                        start_scale: Vec3::splat(0.34),
+                        end_scale: Vec3::splat(0.04),
+                        spin_y: 0.0,
+                    },
+                );
+            }
+        }
+        tracker.last_spell_cast_seen = spell_count;
     }
 
     // 6. Active combat focus charge (`KeyC` hold) + Melee swing windup
@@ -2809,6 +3124,7 @@ fn drive_hero_motion_and_smears(
         .as_deref()
         .is_some_and(|keys| keys.just_released(KeyCode::KeyC));
     if holding_charge {
+        cast_lock.maintain_charge(hero_fwd);
         motion.charge_elapsed += dt;
         let charge_id = if motion.charge_elapsed >= 1.15 {
             MotionId::ChargePeakOverload
@@ -2820,6 +3136,8 @@ fn drive_hero_motion_and_smears(
         let charge_intensity = 1.0 + (motion.charge_elapsed * 0.35).min(0.5);
         motion.try_play(charge_id, charge_intensity);
     } else if released_charge && motion.charge_elapsed >= 0.25 {
+        cast_lock.release_charge();
+        cast_lock.trigger(CastLockKind::SkillSpell, 0.24, 0.06, hero_fwd, None);
         let finisher = class_combo_motion(vitals.kind, 2);
         motion.force_play(finisher, 1.35);
         if let Some(art) = art.as_deref() {
@@ -2836,21 +3154,34 @@ fn drive_hero_motion_and_smears(
         }
         motion.charge_elapsed = 0.0;
     } else {
+        cast_lock.release_charge();
         motion.charge_elapsed = 0.0;
     }
 
     let has_pending_swing = !pending_swings.is_empty();
+    let aim_dir = attack_aim
+        .as_deref()
+        .and_then(|aim| aim.0)
+        .map(|target| (target - hero_pos).with_y(0.0))
+        .and_then(Vec3::try_normalize)
+        .unwrap_or(hero_fwd);
     if has_pending_swing && !tracker.had_pending_swing && !holding_charge {
         motion.try_play(MotionId::HeavyOverheadWindup, 1.05);
+        if autoplay.is_none() {
+            cast_lock.trigger(CastLockKind::BasicAttack, 0.12, 0.05, aim_dir, None);
+        }
     }
     tracker.had_pending_swing = has_pending_swing;
 
-    // 7. 3-Hit Class Combos + Angled Blade/Projectile Smear Arcs
+    // 7. 3-Hit Class Combos + Angled Blade/Projectile Smear Arcs + Attack-Step Commitment
     if vitals.can_act()
         && volleys
             .as_deref()
             .is_some_and(|v| v.resolved_this_frame > 0)
     {
+        if autoplay.is_none() {
+            cast_lock.trigger(CastLockKind::BasicAttack, 0.11, 0.04, aim_dir, None);
+        }
         let step = motion.combo_step;
         let combo_id = class_combo_motion(vitals.kind, step);
         motion.try_play(combo_id, if step == 2 { 1.28 } else { 1.05 });
@@ -2861,7 +3192,7 @@ fn drive_hero_motion_and_smears(
                 art,
                 vitals.kind,
                 hero_pos,
-                hero_fwd,
+                aim_dir,
                 step,
                 if step == 2 { 1.28 } else { 1.0 },
             );
@@ -3468,6 +3799,7 @@ fn apply_motion_visuals(
 fn update_motion_hud_badge(
     session: Res<GameSession>,
     language: Res<GameLanguage>,
+    cast_lock: Option<Res<HeroCastLock>>,
     hero_motion: Query<&MotionState, With<HeroVisual>>,
     mut badge: Query<&mut Visibility, With<MotionHudBadge>>,
     mut label: Query<&mut Text, With<MotionHudText>>,
@@ -3482,12 +3814,34 @@ fn update_motion_hud_badge(
         vis.set_if_neq(Visibility::Hidden);
         return;
     };
-    let meta = motion.current.meta();
-    if session.finished || !meta.show_badge {
+    if session.finished {
         vis.set_if_neq(Visibility::Hidden);
         return;
     }
-    let next = if meta.category == MotionCategory::AllyEmote {
+    let meta = motion.current.meta();
+    let cast_lock_label = cast_lock.as_deref().and_then(|lock| {
+        if !lock.is_active() {
+            return None;
+        }
+        match lock.kind {
+            CastLockKind::Ultimate => Some(match *language {
+                GameLanguage::SimplifiedChinese => format!("施法僵直 · {}", meta.zh),
+                GameLanguage::English => format!("Cast Lock · {}", meta.en),
+            }),
+            CastLockKind::SkillSpell => Some(match *language {
+                GameLanguage::SimplifiedChinese => format!("施法僵直 · {}", meta.zh),
+                GameLanguage::English => format!("Cast Lock · {}", meta.en),
+            }),
+            _ => None,
+        }
+    });
+    if cast_lock_label.is_none() && !meta.show_badge {
+        vis.set_if_neq(Visibility::Hidden);
+        return;
+    }
+    let next = if let Some(lock_text) = cast_lock_label {
+        lock_text
+    } else if meta.category == MotionCategory::AllyEmote {
         format!("[0] {}", motion.current.bilingual_badge(*language))
     } else {
         motion.current.bilingual_badge(*language)
@@ -3498,6 +3852,7 @@ fn update_motion_hud_badge(
 
 pub(crate) fn reset_run(world: &mut World) {
     world.insert_resource(HeroMotionTracker::default());
+    world.insert_resource(HeroCastLock::default());
     world.insert_resource(VisceralVfxSequence::default());
     // Restore any active visual deltas before clearing motion states.
     for (mut transform, mut delta) in world
@@ -3756,6 +4111,7 @@ mod tests {
             .init_resource::<MoveIntent>()
             .init_resource::<ButtonInput<KeyCode>>()
             .init_resource::<HeroMotionTracker>()
+            .init_resource::<HeroCastLock>()
             .add_systems(Startup, setup_motion_hud_badge)
             .add_systems(
                 Update,
@@ -3873,5 +4229,47 @@ mod tests {
             app.world().get::<MotionState>(burned).unwrap().current,
             MotionId::AilmentBurning
         );
+    }
+
+    #[test]
+    fn cast_lock_enforces_windup_stiffness_priority_and_dodge_cancel() {
+        let mut lock = HeroCastLock::default();
+        assert!(!lock.is_active());
+        assert!((lock.move_speed_scale() - 1.0).abs() < 1e-5);
+        assert!(lock.locked_aim_dir().is_none());
+
+        // Spell cast engages near-rooted windup, locks facing, and slows cast apex clip.
+        lock.trigger(CastLockKind::SkillSpell, 0.22, 0.08, Vec3::X, Some(2));
+        assert!(lock.is_active());
+        assert!(lock.triggers_cast_pose());
+        assert!(lock.move_speed_scale() < 0.15);
+        assert_eq!(lock.locked_aim_dir(), Some(Vec3::X));
+
+        // Lower-priority basic attack cannot overwrite an active spell cast lock.
+        let serial_before = lock.cast_serial;
+        lock.trigger(CastLockKind::BasicAttack, 0.11, 0.04, Vec3::Z, None);
+        assert_eq!(lock.kind, CastLockKind::SkillSpell);
+        assert_eq!(lock.cast_serial, serial_before);
+
+        // Apex window applies tactile cast-stiffness animation hold.
+        lock.tick(0.07);
+        assert!(lock.animation_speed_scale() < 0.7);
+
+        // Recovery eases movement back up smoothly before expiring.
+        lock.tick(0.10);
+        assert!(lock.is_active());
+        assert!(lock.move_speed_scale() > 0.35 && lock.move_speed_scale() < 0.8);
+
+        // Higher-priority Ultimate overrides spell recovery and roots at 0.0 during windup.
+        lock.trigger(CastLockKind::Ultimate, 0.40, 0.16, Vec3::NEG_Z, None);
+        assert_eq!(lock.kind, CastLockKind::Ultimate);
+        assert_eq!(lock.move_speed_scale(), 0.0);
+        assert_eq!(lock.locked_aim_dir(), Some(Vec3::NEG_Z));
+
+        // Dodge roll immediately breaks out of cast stiffness.
+        lock.cancel_by_dodge();
+        assert!(!lock.is_active());
+        assert!((lock.move_speed_scale() - 1.0).abs() < 1e-5);
+        assert!(lock.locked_aim_dir().is_none());
     }
 }

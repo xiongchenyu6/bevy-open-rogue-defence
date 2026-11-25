@@ -220,6 +220,13 @@ impl SkillRuntime {
             .get(&target)
             .is_some_and(|remaining| *remaining > 0.0)
     }
+    pub(crate) fn spell_cast_count(&self) -> u64 {
+        self.spell_cast_count
+    }
+    pub(crate) fn last_spell_info(&self) -> Option<(usize, Vec3)> {
+        self.last_spell
+            .map(|record| (record.skill_index, record.center))
+    }
     pub(crate) fn has_seal(&self, target: Entity) -> bool {
         self.seals.get(&target).is_some_and(|stacks| *stacks > 0)
     }
