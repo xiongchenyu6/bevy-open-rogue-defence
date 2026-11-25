@@ -14,6 +14,7 @@ use super::hero_abilities::{
     AbilityGenerated, PassiveSpirit, SpiritOrbit, TimedSpeedEffect, VoidPull, WetMark,
 };
 use super::hit_feedback::HitPunch;
+use super::motion::{HitTremor, MotionState, MotionVisualDelta};
 use super::skill_lighting::GroundLightProfile;
 use super::skills::infection::Infection;
 use super::skills::{
@@ -625,9 +626,9 @@ impl DamageNumberPool {
                     let (minimum, maximum) = damage_number_bounds(size);
                     // Reserve peak pop dimensions, so animation does not reintroduce collisions.
                     let peak_font = if entry.critical {
-                        32.0 * 1.25
+                        32.0 * 1.46
                     } else {
-                        24.0 * 1.12
+                        24.0 * 1.22
                     };
                     let half_size = Vec2::new(
                         format_damage_number(entry.amount, entry.critical)
@@ -690,14 +691,36 @@ impl DamageNumberPool {
     }
 }
 
+fn damage_number_fade_alpha(age: f32) -> f32 {
+    let t = (age / DAMAGE_NUMBER_LIFETIME_SECONDS).clamp(0.0, 1.0);
+    // Hold crisp full readability through the ballistic peak, then snap-fade late.
+    if t <= 0.72 {
+        1.0
+    } else if t >= 1.0 {
+        0.0
+    } else {
+        let u = ((t - 0.72) / 0.28).clamp(0.0, 1.0);
+        (1.0 - u) * (1.0 - u)
+    }
+}
+
+fn damage_number_ballistic_offset(entry: DamageNumberEntry) -> Vec2 {
+    let t = entry.age.max(0.0);
+    // Deterministic golden-ratio fan scatter per hit serial so multi-hits fan cleanly.
+    let spread = ((entry.serial as f32 * 2.399_963).sin()).clamp(-1.0, 1.0);
+    let vx = spread * if entry.critical { 36.0 } else { 22.0 };
+    let vy = if entry.critical { 126.0 } else { 94.0 };
+    let gravity = 180.0;
+    Vec2::new(vx * t, vy * t - 0.5 * gravity * t * t)
+}
+
 fn write_damage_number(
     commands: &mut Commands,
     entity: Entity,
     entry: DamageNumberEntry,
     screen_position: Option<Vec2>,
 ) {
-    let remaining = DAMAGE_NUMBER_LIFETIME_SECONDS - entry.age;
-    let alpha = (remaining / 0.24).clamp(0.0, 1.0);
+    let alpha = damage_number_fade_alpha(entry.age);
     commands.entity(entity).insert((
         ActivePooledDamageNumber {
             target: entry.target,
@@ -731,9 +754,10 @@ fn damage_number_screen_position(
     let viewport = camera
         .world_to_viewport(camera_transform, entry.origin + Vec3::Y * 1.1)
         .ok()?;
+    let arc = damage_number_ballistic_offset(entry);
     Some(Vec2::new(
-        viewport.x - size.x * 0.5,
-        size.y * 0.5 - viewport.y + entry.age * 30.0,
+        viewport.x - size.x * 0.5 + arc.x,
+        size.y * 0.5 - viewport.y + arc.y,
     ))
 }
 
@@ -801,14 +825,22 @@ fn format_damage_number(amount: f32, critical: bool) -> String {
     }
 }
 
-/// Fresh numbers overshoot then settle; crits punch harder so they read at a glance.
+/// Ballistic crit-pop scale: rapid punch-up overshoot then elastic settle to 1.0.
 fn damage_number_pop_scale(entry: DamageNumberEntry) -> f32 {
-    let (overshoot, duration) = if entry.critical {
-        (0.25, 0.16)
+    let (peak, rise, settle) = if entry.critical {
+        (0.46, 0.055, 0.22)
     } else {
-        (0.12, 0.10)
+        (0.22, 0.045, 0.16)
     };
-    1.0 + overshoot * (1.0 - entry.age / duration).clamp(0.0, 1.0)
+    let age = entry.age.max(0.0);
+    if age < rise {
+        let u = (age / rise).clamp(0.0, 1.0);
+        0.72 + (0.28 + peak) * (u * std::f32::consts::FRAC_PI_2).sin()
+    } else {
+        let u = ((age - rise) / settle).clamp(0.0, 1.0);
+        let decay = (1.0 - u) * (1.0 - u);
+        1.0 + peak * decay
+    }
 }
 
 fn damage_number_color(entry: DamageNumberEntry) -> Color {
@@ -1423,6 +1455,9 @@ fn clear_enemy_gameplay_components(entity: &mut EntityCommands<'_>) {
             Name,
             DamageProfile,
             HitPunch,
+            HitTremor,
+            MotionState,
+            MotionVisualDelta,
         )>();
 }
 
@@ -1509,6 +1544,46 @@ mod tests {
         assert!((placed + half).cmple(maximum).all());
         assert_eq!(format_damage_number(12345.0, true), "12345!");
         assert_eq!(format_damage_number(12345.0, false), "12345");
+    }
+
+    #[test]
+    fn ballistic_crit_pop_overshoots_fans_arcs_and_snap_fades_late() {
+        let crit = DamageNumberEntry {
+            target: Entity::from_bits(1),
+            amount: 420.0,
+            element: DamageElement::Flame,
+            critical: true,
+            age: 0.055,
+            origin: Vec3::ZERO,
+            serial: 1,
+        };
+        let peak_scale = damage_number_pop_scale(crit);
+        assert!(
+            peak_scale > 1.4,
+            "crit pop must overshoot strongly: {peak_scale}"
+        );
+        let settled_scale = damage_number_pop_scale(DamageNumberEntry { age: 0.35, ..crit });
+        assert!((settled_scale - 1.0).abs() < 1e-4);
+
+        let early = damage_number_ballistic_offset(DamageNumberEntry { age: 0.25, ..crit });
+        let mid = damage_number_ballistic_offset(DamageNumberEntry { age: 0.55, ..crit });
+        assert!(early.y > 15.0, "ballistic arc must launch upward");
+        assert!(mid.y < early.y + 30.0, "gravity must bend the arc");
+        let neighbor = damage_number_ballistic_offset(DamageNumberEntry {
+            age: 0.25,
+            serial: 2,
+            ..crit
+        });
+        assert!(
+            (early.x - neighbor.x).abs() > 4.0,
+            "consecutive serials must fan horizontally"
+        );
+        assert_eq!(damage_number_fade_alpha(0.45), 1.0);
+        assert!(damage_number_fade_alpha(0.65) < 0.25);
+        assert_eq!(
+            damage_number_fade_alpha(DAMAGE_NUMBER_LIFETIME_SECONDS),
+            0.0
+        );
     }
 
     fn projectile(seed: f32) -> Projectile {

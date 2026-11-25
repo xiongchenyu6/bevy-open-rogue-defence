@@ -200,6 +200,29 @@ impl SkillRuntime {
             .get(&target)
             .is_some_and(|control| control.frozen_remaining > 0.0)
     }
+    pub(crate) fn is_stunned(&self, target: Entity) -> bool {
+        self.controls
+            .get(&target)
+            .is_some_and(|control| control.stunned_remaining > 0.0)
+    }
+    pub(crate) fn is_slowed(&self, target: Entity) -> bool {
+        self.controls
+            .get(&target)
+            .is_some_and(|control| control.slow_remaining > 0.0)
+    }
+    pub(crate) fn is_burning(&self, target: Entity) -> bool {
+        self.burns
+            .get(&target)
+            .is_some_and(|burn| burn.remaining > 0.0)
+    }
+    pub(crate) fn is_wet(&self, target: Entity) -> bool {
+        self.wet
+            .get(&target)
+            .is_some_and(|remaining| *remaining > 0.0)
+    }
+    pub(crate) fn has_seal(&self, target: Entity) -> bool {
+        self.seals.get(&target).is_some_and(|stacks| *stacks > 0)
+    }
 }
 
 #[derive(Debug, Clone, Copy)]

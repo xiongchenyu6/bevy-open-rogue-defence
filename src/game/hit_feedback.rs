@@ -52,6 +52,7 @@ impl Plugin for HitFeedbackPlugin {
         app.init_resource::<HitFeedback>()
             .init_resource::<enemy_flash::EnemyFlash>()
             .init_resource::<ScreenShake>()
+            .init_resource::<CameraZoomPunch>()
             .init_resource::<HitStop>()
             .configure_sets(Update, HitFeedbackSet.after(CombatSet).after(SurvivalSet))
             .add_systems(
@@ -75,6 +76,7 @@ impl Plugin for HitFeedbackPlugin {
                     animate_hit_punch,
                     apply_hit_stop,
                     apply_screen_shake,
+                    apply_camera_zoom_punch,
                     animate_hurt_flash,
                 )
                     .chain()
@@ -128,6 +130,10 @@ impl HitFeedback {
     pub(crate) const fn hero_hurt(&self) -> bool {
         self.hero_hurt
     }
+
+    pub(crate) const fn hero_push(&self) -> Vec3 {
+        self.hero_push
+    }
 }
 
 #[derive(Resource, Default, Debug)]
@@ -142,13 +148,37 @@ impl ScreenShake {
     }
 }
 
+/// Critically-damped spring zoom-in punch on heavy impacts; zero-drift on `OrthographicProjection::scale`.
+const MAX_ZOOM_PUNCH: f32 = 0.055;
+
 #[derive(Resource, Default, Debug)]
-struct HitStop {
+pub(crate) struct CameraZoomPunch {
+    pub(crate) offset: f32,
+    velocity: f32,
+    applied: f32,
+}
+
+impl CameraZoomPunch {
+    pub(crate) fn kick(&mut self, amount: f32) {
+        let clamped = amount.clamp(0.0, MAX_ZOOM_PUNCH);
+        self.offset = (self.offset + clamped).min(MAX_ZOOM_PUNCH);
+        self.velocity = self.velocity.max(clamped * 7.5);
+    }
+}
+
+#[derive(Resource, Default, Debug)]
+pub(crate) struct HitStop {
     remaining: f32,
     cooldown: f32,
     restore_speed: f32,
     applied_speed: f32,
     requested: f32,
+}
+
+impl HitStop {
+    pub(crate) fn active(&self) -> bool {
+        self.remaining > 0.0
+    }
 }
 
 #[derive(Component, Debug, Clone, Copy)]
@@ -300,6 +330,7 @@ fn react_to_hits(
     art: Option<Res<BurstArt>>,
     mut pools: ResMut<CombatPools>,
     mut shake: ResMut<ScreenShake>,
+    mut zoom_punch: Option<ResMut<CameraZoomPunch>>,
     mut hit_stop: ResMut<HitStop>,
     gate: Option<Res<GateImpact>>,
     mut enemies: Query<(&Transform, Option<&mut HitPunch>)>,
@@ -336,6 +367,7 @@ fn react_to_hits(
         }
     }
     let mut frame_trauma = 0.0_f32;
+    let mut frame_zoom = 0.0_f32;
     for event in feedback.events() {
         if let Some(art) = art.as_deref()
             && pools.impact_fx_metrics().active() < BURST_POOL_HEADROOM
@@ -344,11 +376,13 @@ fn react_to_hits(
         }
         if autoplay.is_none() {
             frame_trauma = frame_trauma.max(shake_trauma(*event));
+            frame_zoom = frame_zoom.max(zoom_punch_amount(*event));
             hit_stop.requested = hit_stop.requested.max(hit_stop_seconds(*event));
         }
     }
     if autoplay.is_none() && feedback.hero_hurt() {
         frame_trauma = frame_trauma.max(0.32);
+        frame_zoom = frame_zoom.max(0.024);
     }
     if let Some(strength) = gate.as_deref().and_then(GateImpact::struck)
         && autoplay.is_none()
@@ -358,6 +392,21 @@ fn react_to_hits(
     // A volley has one readable impact, not one camera impulse per projectile.
     // Keep the strongest hero, gate or enemy impact in this frame.
     shake.add(frame_trauma);
+    if frame_zoom > 0.0
+        && let Some(zoom) = zoom_punch.as_deref_mut()
+    {
+        zoom.kick(frame_zoom);
+    }
+}
+
+fn zoom_punch_amount(event: HitEvent) -> f32 {
+    match (event.killed, event.weight, event.critical) {
+        (true, HitWeight::Boss, _) => 0.055,
+        (true, HitWeight::Elite, _) => 0.032,
+        (false, HitWeight::Boss, true) => 0.022,
+        (_, _, true) => 0.014,
+        _ => 0.0,
+    }
 }
 
 fn punch_strength(event: HitEvent) -> f32 {
@@ -609,10 +658,16 @@ fn apply_hit_stop(
     virtual_time.set_relative_speed(hit_stop.applied_speed);
 }
 
+/// Damped multi-harmonic screen shake (3 incommensurate harmonics per axis,
+/// strictly normalized within `MAX_SHAKE_OFFSET`).
 fn shake_offset(trauma: f32, seconds: f32, right: Vec3, up: Vec3) -> Vec3 {
     let amount = trauma * trauma * MAX_SHAKE_OFFSET;
-    let x = (seconds * 61.0).sin() * 0.6 + (seconds * 37.0 + 1.3).sin() * 0.4;
-    let y = (seconds * 53.0 + 0.7).sin() * 0.6 + (seconds * 29.0 + 2.1).sin() * 0.4;
+    let x = (seconds * 61.0).sin() * 0.52
+        + (seconds * 37.0 + 1.3).sin() * 0.30
+        + (seconds * 19.0 + 2.7).sin() * 0.18;
+    let y = (seconds * 53.0 + 0.7).sin() * 0.52
+        + (seconds * 29.0 + 2.1).sin() * 0.30
+        + (seconds * 17.0 + 0.4).sin() * 0.18;
     (right * x + up * y) * amount
 }
 
@@ -646,6 +701,50 @@ fn apply_screen_shake(
     shake.trauma = (shake.trauma - SHAKE_DECAY_PER_SECOND * time.delta_secs()).max(0.0);
 }
 
+/// Zero-drift camera impact zoom punch on `OrthographicProjection::scale`.
+/// Skips mutating `Projection` completely while idle so unchanged frames stay clean.
+fn apply_camera_zoom_punch(
+    time: Res<Time<Real>>,
+    session: Res<GameSession>,
+    mut zoom: ResMut<CameraZoomPunch>,
+    mut cameras: Query<&mut Projection, With<Camera3d>>,
+) {
+    if zoom.offset <= 0.0 && zoom.applied == 0.0 {
+        return;
+    }
+    let Some(mut projection) = cameras.iter_mut().next() else {
+        return;
+    };
+    let Projection::Orthographic(orthographic) = &mut *projection else {
+        return;
+    };
+    // Exact zero-drift removal of last frame's zoom delta.
+    if zoom.applied != 0.0 {
+        orthographic.scale += zoom.applied;
+        zoom.applied = 0.0;
+    }
+    if session.paused || session.finished {
+        zoom.offset = 0.0;
+        zoom.velocity = 0.0;
+        return;
+    }
+    let applied = zoom.offset.clamp(0.0, MAX_ZOOM_PUNCH);
+    if applied > 1e-4 {
+        orthographic.scale = (orthographic.scale - applied).max(0.5);
+        zoom.applied = applied;
+    }
+    // Critically damped spring decay back to zero after presenting the impact frame.
+    let dt = time.delta_secs().min(0.05);
+    let omega = 18.0_f32;
+    let accel = -omega * omega * zoom.offset - 2.0 * omega * zoom.velocity;
+    zoom.velocity += accel * dt;
+    zoom.offset = (zoom.offset + zoom.velocity * dt).clamp(0.0, MAX_ZOOM_PUNCH);
+    if zoom.offset < 1e-4 && zoom.velocity.abs() < 1e-3 {
+        zoom.offset = 0.0;
+        zoom.velocity = 0.0;
+    }
+}
+
 fn animate_hurt_flash(
     time: Res<Time<Real>>,
     feedback: Res<HitFeedback>,
@@ -670,6 +769,7 @@ fn clear_frame_events(mut feedback: ResMut<HitFeedback>) {
 pub(crate) fn reset_run(world: &mut World) {
     world.insert_resource(HitFeedback::default());
     world.insert_resource(ScreenShake::default());
+    world.insert_resource(CameraZoomPunch::default());
     world.insert_resource(HitStop::default());
 }
 
@@ -1234,5 +1334,61 @@ mod tests {
         world.resource_mut::<HeroVitals>().health = 80.0;
         world.run_system_cached(detect_hero_hurt).unwrap();
         assert!(world.resource::<HitFeedback>().hero_hurt());
+    }
+
+    #[test]
+    fn camera_zoom_punch_zooms_in_on_impact_and_restores_exact_scale() {
+        let mut app = App::new();
+        app.init_resource::<Time<Real>>()
+            .init_resource::<GameSession>()
+            .init_resource::<CameraZoomPunch>()
+            .add_systems(Update, apply_camera_zoom_punch);
+        let camera = app
+            .world_mut()
+            .spawn((
+                Camera3d::default(),
+                Projection::from(OrthographicProjection::default_3d()),
+            ))
+            .id();
+        app.world_mut().resource_mut::<CameraZoomPunch>().kick(0.04);
+        app.world_mut()
+            .resource_mut::<Time<Real>>()
+            .advance_by(std::time::Duration::from_millis(16));
+        app.update();
+        let Projection::Orthographic(ortho) = app.world().get::<Projection>(camera).unwrap() else {
+            panic!("expected orthographic projection");
+        };
+        assert!(
+            ortho.scale < 1.0 && ortho.scale >= 1.0 - MAX_ZOOM_PUNCH - 1e-5,
+            "impact zoom punch must zoom in slightly: scale={}",
+            ortho.scale
+        );
+        for _ in 0..80 {
+            app.world_mut()
+                .resource_mut::<Time<Real>>()
+                .advance_by(std::time::Duration::from_millis(16));
+            app.update();
+        }
+        let Projection::Orthographic(ortho) = app.world().get::<Projection>(camera).unwrap() else {
+            panic!("expected orthographic projection");
+        };
+        assert!(
+            (ortho.scale - 1.0).abs() < 1e-5,
+            "zoom punch must return to exact 1.0 with zero drift: {}",
+            ortho.scale
+        );
+    }
+
+    #[test]
+    fn multi_harmonic_screen_shake_stays_within_max_offset_bound() {
+        for i in 0..200 {
+            let t = i as f32 * 0.017;
+            let offset = shake_offset(1.0, t, Vec3::X, Vec3::Y);
+            assert!(
+                offset.x.abs() <= MAX_SHAKE_OFFSET + 1e-5
+                    && offset.y.abs() <= MAX_SHAKE_OFFSET + 1e-5,
+                "shake exceeded safe bound: {offset:?}"
+            );
+        }
     }
 }

@@ -70,14 +70,15 @@ mod localization;
 mod market;
 mod material_finish;
 mod mobile_input;
-mod road_collision;
 mod mobile_layout;
 mod model_animation;
+mod motion;
 mod pooling;
 mod progression;
 mod rarity;
 mod resources;
 mod reward_feedback;
+mod road_collision;
 #[cfg(any(debug_assertions, feature = "dev-tools"))]
 pub use reward_feedback::capture_targets as capture_reward_targets;
 mod run_reset;
@@ -124,6 +125,11 @@ pub use hero_stats::HeroStatsSnapshot;
 pub use localization::{GameLanguage, LocalizationPlugin};
 pub use market::{prepare_attribute_growth_market, prepare_crafting_market};
 pub use mobile_layout::ControlScheme;
+pub use motion::{
+    HitTremor, MotionCategory, MotionId, MotionMeta, MotionPose, MotionState,
+    anticipation_release_overshoot, build_combo_smear_mesh, class_combo_motion,
+    combo_smear_roll_angle, critically_damped_alpha, directional_hit_motion,
+};
 pub use pooling::{CombatPoolSnapshot, CombatPools, DamageNumberPoolMetrics, PoolMetrics};
 #[cfg(any(debug_assertions, feature = "dev-tools"))]
 pub use progression::capture_open_draft;
@@ -181,6 +187,7 @@ impl Plugin for GamePlugin {
             .add_plugins(cultivation::CultivationPlugin)
             .add_plugins(hero_fusion::HeroFusionPlugin)
             .add_plugins(hit_feedback::HitFeedbackPlugin)
+            .add_plugins(motion::MotionPlugin)
             .add_plugins(reward_feedback::RewardFeedbackPlugin)
             .add_plugins(ui_response::UiResponsePlugin)
             .add_plugins(gate_feedback::GateFeedbackPlugin)

@@ -114,6 +114,7 @@ pub fn reset_run(world: &mut World, stage: usize) {
     skill_feedback::reset_run(world);
     audio::reset_run(world);
     hit_feedback::reset_run(world);
+    motion::reset_run(world);
     gate_feedback::reset_run(world);
     settings::reset_run(world);
     campaign_progress::reset_run_progress(world);
